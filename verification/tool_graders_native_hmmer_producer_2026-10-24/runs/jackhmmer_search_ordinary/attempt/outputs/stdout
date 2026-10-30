@@ -1,0 +1,192 @@
+# jackhmmer :: iteratively search a protein sequence against a protein database
+# HMMER 3.4 (Aug 2023); http://hmmer.org/
+# Copyright (C) 2023 Howard Hughes Medical Institute.
+# Freely distributed under the BSD open source license.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query sequence file:             /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/jackhmmer_search_ordinary/attempt/inputs/query_sequence.fa
+# target sequence database:        /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/jackhmmer_search_ordinary/attempt/inputs/sequence_database.fa
+# maximum iterations set to:       2
+# MSA of hits saved to file:       /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/jackhmmer_search_ordinary/attempt/outputs/included_msa
+# per-seq hits tabular output:     /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/jackhmmer_search_ordinary/attempt/outputs/tblout
+# per-dom hits tabular output:     /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/jackhmmer_search_ordinary/attempt/outputs/domtblout
+# HMM checkpoint files output:     /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/jackhmmer_search_ordinary/attempt/outputs/checkpoint_hmm-<i>.hmm
+# MSA checkpoint files output:     /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/jackhmmer_search_ordinary/attempt/outputs/checkpoint_msa-<i>.sto
+# max ASCII text line length:      unlimited
+# query <seqfile> format asserted: fasta
+# target <seqdb> format asserted:  fasta
+# number of worker threads:        1
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       test1  [L=20]
+
+Scores for complete sequences (score includes all domains):
+   --- full sequence ---   --- best 1 domain ---    -#dom-
+    E-value  score  bias    E-value  score  bias    exp  N  Sequence Description
+    ------- ------ -----    ------- ------ -----   ---- --  -------- -----------
++     2e-16   44.3   0.0    2.1e-16   44.3   0.0    1.0  1  test1     
++   5.1e-16   43.2   0.0    5.7e-16   43.0   0.0    1.1  1  test4     
++     5e-11   28.8   0.0    6.5e-11   28.5   0.0    1.2  1  test2     
++   1.8e-10   27.2   0.4    8.7e-10   25.3   0.4    1.8  1  test3     
+
+
+Domain annotation for each sequence (and alignments):
+>> test1  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   44.3   0.0   2.1e-16   2.1e-16       1      20 []       1      20 []       1      20 [] 0.98
+
+  Alignments for each domain:
+  == domain 1  score: 44.3 bits;  conditional E-value: 2.1e-16
+  test1  1 acdefghiklmnpqrstvwy 20
+           acdefghiklmnpqrstvwy
+  test1  1 ACDEFGHIKLMNPQRSTVWY 20
+           8******************9 PP
+
+>> test4  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   43.0   0.0   5.7e-16   5.7e-16       1      20 []       4      23 ..       4      23 .. 0.98
+
+  Alignments for each domain:
+  == domain 1  score: 43.0 bits;  conditional E-value: 5.7e-16
+  test1  1 acdefghiklmnpqrstvwy 20
+           acdefghiklmnpqrstvwy
+  test4  4 ACDEFGHIKLMNPQRSTVWY 23
+           8******************9 PP
+
+>> test2  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   28.5   0.0   6.5e-11   6.5e-11       1      20 []       5      25 .]       5      25 .] 0.88
+
+  Alignments for each domain:
+  == domain 1  score: 28.5 bits;  conditional E-value: 6.5e-11
+  test1  1 acdefghik.lmnpqrstvwy 20
+           acdefghi     pqrstvwy
+  test2  5 ACDEFGHIMnXXXPQRSTVWY 25
+           8******962678*******9 PP
+
+>> test3  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   25.3   0.4   8.7e-10   8.7e-10       1      20 []       1      24 [.       1      24 [. 0.77
+
+  Alignments for each domain:
+  == domain 1  score: 25.3 bits;  conditional E-value: 8.7e-10
+  test1  1 acdefghiklmn.....pqrstvwy 20
+           acdefghi + n     pqrstvwy
+  test3  1 ACDEFGHILM-NxxxxxPQRSTVWY 24
+           8******965.323444*******9 PP
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query model(s):                            1  (20 nodes)
+Target sequences:                          4  (99 residues searched)
+Passed MSV filter:                         4  (1); expected 0.1 (0.02)
+Passed bias filter:                        4  (1); expected 0.1 (0.02)
+Passed Vit filter:                         4  (1); expected 0.0 (0.001)
+Passed Fwd filter:                         4  (1); expected 0.0 (1e-05)
+Initial search space (Z):                  4  [actual number of targets]
+Domain search space  (domZ):               4  [number of targets reported over threshold]
+# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00
+# Mc/sec: 0.33
+
+@@ New targets included:   4
+@@ New alignment includes: 5 subseqs (was 1), including original query
+@@ Continuing to next round.
+
+@@
+@@ Round:                  2
+@@ Included in MSA:        5 subsequences (query + 4 subseqs from 4 targets)
+@@ Model size:             20 positions
+@@
+
+Scores for complete sequences (score includes all domains):
+   --- full sequence ---   --- best 1 domain ---    -#dom-
+    E-value  score  bias    E-value  score  bias    exp  N  Sequence Description
+    ------- ------ -----    ------- ------ -----   ---- --  -------- -----------
+    7.9e-23   68.2   0.0    8.2e-23   68.2   0.0    1.0  1  test1     
+    1.9e-22   67.0   0.0      2e-22   66.9   0.0    1.0  1  test4     
+    5.4e-19   55.9   0.3    5.9e-19   55.8   0.3    1.0  1  test2     
+    8.5e-19   55.3   0.2      1e-18   55.1   0.2    1.1  1  test3     
+
+
+Domain annotation for each sequence (and alignments):
+>> test1  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   68.2   0.0   8.2e-23   8.2e-23       1      20 []       1      20 []       1      20 [] 0.99
+
+  Alignments for each domain:
+  == domain 1  score: 68.2 bits;  conditional E-value: 8.2e-23
+              xxxxxxxxxxxxxxxxxxxx RF
+  test1-i1  1 ACDEFGHIklmnPQRSTVWY 20
+              ACDEFGHIklmnPQRSTVWY
+     test1  1 ACDEFGHIKLMNPQRSTVWY 20
+              9******************* PP
+
+>> test4  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   66.9   0.0     2e-22     2e-22       1      20 []       4      23 ..       4      23 .. 0.99
+
+  Alignments for each domain:
+  == domain 1  score: 66.9 bits;  conditional E-value: 2e-22
+              xxxxxxxxxxxxxxxxxxxx RF
+  test1-i1  1 ACDEFGHIklmnPQRSTVWY 20
+              ACDEFGHIklmnPQRSTVWY
+     test4  4 ACDEFGHIKLMNPQRSTVWY 23
+              9******************* PP
+
+>> test2  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   55.8   0.3   5.9e-19   5.9e-19       1      20 []       5      25 .]       5      25 .] 0.95
+
+  Alignments for each domain:
+  == domain 1  score: 55.8 bits;  conditional E-value: 5.9e-19
+              xxxxxxxxx.xxxxxxxxxxx RF
+  test1-i1  1 ACDEFGHIk.lmnPQRSTVWY 20
+              ACDEFGHI+    PQRSTVWY
+     test2  5 ACDEFGHIMnXXXPQRSTVWY 25
+              9********8788******** PP
+
+>> test3  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   55.1   0.2     1e-18     1e-18       1      20 []       1      24 [.       1      24 [. 0.95
+
+  Alignments for each domain:
+  == domain 1  score: 55.1 bits;  conditional E-value: 1e-18
+              xxxxxxxxxxxx.....xxxxxxxx RF
+  test1-i1  1 ACDEFGHIklmn.....PQRSTVWY 20
+              ACDEFGHI++ n     PQRSTVWY
+     test3  1 ACDEFGHILM-NxxxxxPQRSTVWY 24
+              9********9.66************ PP
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query model(s):                            1  (20 nodes)
+Target sequences:                          4  (99 residues searched)
+Passed MSV filter:                         4  (1); expected 0.1 (0.02)
+Passed bias filter:                        4  (1); expected 0.1 (0.02)
+Passed Vit filter:                         4  (1); expected 0.0 (0.001)
+Passed Fwd filter:                         4  (1); expected 0.0 (1e-05)
+Initial search space (Z):                  4  [actual number of targets]
+Domain search space  (domZ):               4  [number of targets reported over threshold]
+# CPU time: 0.01u 0.00s 00:00:00.01 Elapsed: 00:00:00.00
+# Mc/sec: 0.22
+
+@@ New targets included:   0
+@@ New alignment includes: 5 subseqs (was 5), including original query
+@@
+@@ CONVERGED (in 2 rounds). 
+@@
+
+# Alignment of 5 hits satisfying inclusion thresholds saved to: /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/jackhmmer_search_ordinary/attempt/outputs/included_msa
+//
+[ok]

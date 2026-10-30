@@ -1,0 +1,15 @@
+# GenomeAlignment return implementation: accepted F boundary
+
+This additive acceptance uses `../tool_graders_bvbrc_genome_alignment_provider_boundaries_2026-10-25/F_CONTRACT_001.md` without replacing it. The immutable user goal remains authoritative. F owns only the new `gene_annotation_episode/bvbrc_genome_alignment_returns.py`, its matching tests and `verification/tool_graders_bvbrc_genome_alignment_returns_2026-10-25/`.
+
+The twelve fact-source families, public signatures, saved-content checks, exact original requested fields, finite failure meanings and mandatory custody cases in F001 are the coding contract. Root owns all shared consumer wiring and accounting. E's actual delivered public modules and D's actual saved-sheet validators are inputs; no duplicate implementations or fake stand-ins.
+
+Corrections and explicit dependencies:
+
+1. E has **thirteen** `REFERENCE_KINDS`; F namespaces are the exact exported tuple with the documented prefix. The word fourteen in F001 is a count error, not another namespace.
+2. For current own facts, use `read_latest_adapter_result` from `bvbrc_appservice_saved_results.py` with the exact GenomeAlignment adapter ID. Preserve F's additional original selector and owner checks. The helper returns `(body, sheet, components)` after authenticating the selected saved publication and its contents. Do not call `own_results` followed by repeated `read_content_source` authentication. Newer partial/invalid/corrupt results must not fall back to an older success.
+3. For received historical facts, authenticate the publication named by each original frozen returned source, then validate that publication's own original selector, contents and requested fields. Do not validate an old admitted report by comparing it with the child's newest publication. Distinct saved publication sources stay distinct; equal redelivery stays the same contribution. Use existing publications.read and content-binding validation; no new persistence or controller machinery.
+4. E's `FACT_SCHEMAS` are closed scientific JSON schemas. F owns their exact expansion into communication's existing restricted form grammar, including nullable fields, finite member namespaces and typed references. Do not weaken a native member relationship to an unrestricted string or alter shared communication merely to accept E's schema syntax. Read the actual validator and prove positive and negative cases.
+5. The F pure projector only selects and validates saved numerical values. Patch parsers, source-comparison helpers and scientific calculators to fail in replay tests. Native data retention, parsing, association extraction and numerical calculation remain A/B/C/D/E responsibilities. Host authentication is distinct from pure saved-value validation.
+
+E is still completing native-format edge cases. F can implement independently against the existing closed public schema and named functions; final combined source hashes and integration tests must use E's delivered final files. Any newly discovered incompatible interface must be reported before changing this contract or another worker's files.

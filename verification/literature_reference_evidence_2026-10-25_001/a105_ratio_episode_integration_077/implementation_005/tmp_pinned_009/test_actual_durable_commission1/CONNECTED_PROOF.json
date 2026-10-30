@@ -1,0 +1,1632 @@
+{
+  "spec": {
+    "child": {
+      "episode_id": "episode_b33163b529fce203a62ce91ab1efa9184f225f90587090af2f615de846d5c8f0",
+      "key": "child_0",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "literature",
+          "child_0"
+        ]
+      ],
+      "request": {
+        "goal": {
+          "goal_id": "goal_061b6514221d2967cbf1c5b8",
+          "objective": "Evaluate the constructed protein-signal comparison in separate replacement arms.",
+          "parent_goal_id": "goal_032b14ce0e3712d8d12296e5",
+          "result_contract": {
+            "additionalProperties": false,
+            "properties": {
+              "requested_signal": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "arrangement": {
+                      "enum": [
+                        "single_preparation",
+                        "replacement",
+                        "coexistence",
+                        "not_applicable",
+                        "unknown",
+                        "conflicting"
+                      ],
+                      "type": "string"
+                    },
+                    "candidate_basis": {
+                      "const": "selected_received_source_representations",
+                      "type": "string"
+                    },
+                    "comparison_relation_states": {
+                      "items": {
+                        "enum": [
+                          "supported",
+                          "different",
+                          "unknown",
+                          "conflicting"
+                        ],
+                        "type": "string"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "component": {
+                      "enum": [
+                        "reported_ratio",
+                        "difference_from_reference",
+                        "log_reported_ratio",
+                        "calibrated_amount_ratio",
+                        "amount_adjusted_effect",
+                        "source_profile_log_ratio",
+                        "source_signed_index"
+                      ],
+                      "type": "string"
+                    },
+                    "condition_ref": {
+                      "format": "reference",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "x-reference-namespace": "context"
+                    },
+                    "conditional_on": {
+                      "items": {
+                        "enum": [
+                          "source_comparison_interpretation",
+                          "nominated_printed_signal_pair"
+                        ],
+                        "type": "string"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "construct_reference_ref": {
+                      "format": "reference",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "x-reference-namespace": "reference"
+                    },
+                    "construct_variant_ref": {
+                      "format": "reference",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "x-reference-namespace": "reference"
+                    },
+                    "endpoint_ref": {
+                      "format": "reference",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "x-reference-namespace": "reference"
+                    },
+                    "evidence_source_ref": {
+                      "format": "reference",
+                      "type": "string",
+                      "x-reference-namespace": "source"
+                    },
+                    "experiment_ref": {
+                      "format": "reference",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "x-reference-namespace": "reference"
+                    },
+                    "genotype_ref": {
+                      "format": "reference",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "x-reference-namespace": "reference"
+                    },
+                    "independent_preparation_count": {
+                      "type": "null"
+                    },
+                    "input_measurement_refs": {
+                      "items": {
+                        "format": "reference",
+                        "type": "string",
+                        "x-reference-namespace": "reference"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "interpretation_kind": {
+                      "const": "episode_source_interpretation",
+                      "type": "string"
+                    },
+                    "known_source_conflict": {
+                      "type": "boolean"
+                    },
+                    "meaning_statuses": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "condition": {
+                          "enum": [
+                            "known",
+                            "unknown",
+                            "conflicting"
+                          ],
+                          "type": "string"
+                        },
+                        "construct_reference": {
+                          "enum": [
+                            "known",
+                            "unknown",
+                            "conflicting"
+                          ],
+                          "type": "string"
+                        },
+                        "construct_variant": {
+                          "enum": [
+                            "known",
+                            "unknown",
+                            "conflicting"
+                          ],
+                          "type": "string"
+                        },
+                        "endpoint": {
+                          "enum": [
+                            "known",
+                            "unknown",
+                            "conflicting"
+                          ],
+                          "type": "string"
+                        },
+                        "experiment": {
+                          "enum": [
+                            "known",
+                            "unknown",
+                            "conflicting"
+                          ],
+                          "type": "string"
+                        },
+                        "genotype": {
+                          "enum": [
+                            "known",
+                            "unknown",
+                            "conflicting"
+                          ],
+                          "type": "string"
+                        },
+                        "normalization": {
+                          "enum": [
+                            "known",
+                            "unknown",
+                            "conflicting"
+                          ],
+                          "type": "string"
+                        },
+                        "organism": {
+                          "enum": [
+                            "known",
+                            "unknown",
+                            "conflicting"
+                          ],
+                          "type": "string"
+                        },
+                        "preparation_reference": {
+                          "enum": [
+                            "known",
+                            "unknown",
+                            "conflicting"
+                          ],
+                          "type": "string"
+                        },
+                        "preparation_variant": {
+                          "enum": [
+                            "known",
+                            "unknown",
+                            "conflicting"
+                          ],
+                          "type": "string"
+                        },
+                        "reference": {
+                          "enum": [
+                            "known",
+                            "unknown",
+                            "conflicting"
+                          ],
+                          "type": "string"
+                        },
+                        "subject": {
+                          "enum": [
+                            "known",
+                            "unknown",
+                            "conflicting"
+                          ],
+                          "type": "string"
+                        },
+                        "variant": {
+                          "enum": [
+                            "known",
+                            "unknown",
+                            "conflicting"
+                          ],
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "subject",
+                        "variant",
+                        "reference",
+                        "organism",
+                        "genotype",
+                        "construct_variant",
+                        "construct_reference",
+                        "preparation_variant",
+                        "preparation_reference",
+                        "experiment",
+                        "condition",
+                        "endpoint",
+                        "normalization"
+                      ],
+                      "type": "object"
+                    },
+                    "normalization_ref": {
+                      "format": "reference",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "x-reference-namespace": "reference"
+                    },
+                    "organism_ref": {
+                      "format": "reference",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "x-reference-namespace": "reference"
+                    },
+                    "origin": {
+                      "enum": [
+                        "reported",
+                        "visual_transcription",
+                        "derived",
+                        "proposed",
+                        "synthetic"
+                      ],
+                      "type": "string"
+                    },
+                    "physical_identity_states": {
+                      "items": {
+                        "enum": [
+                          "known",
+                          "unknown",
+                          "conflicting"
+                        ],
+                        "type": "string"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "point_candidate_set_complete": {
+                      "type": "boolean"
+                    },
+                    "preparation_reference_ref": {
+                      "format": "reference",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "x-reference-namespace": "reference"
+                    },
+                    "preparation_variant_ref": {
+                      "format": "reference",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "x-reference-namespace": "reference"
+                    },
+                    "reference_identity_states": {
+                      "items": {
+                        "enum": [
+                          "known",
+                          "unknown",
+                          "conflicting"
+                        ],
+                        "type": "string"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "reference_measurement_refs": {
+                      "items": {
+                        "format": "reference",
+                        "type": "string",
+                        "x-reference-namespace": "reference"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "reference_ref": {
+                      "format": "reference",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "x-reference-namespace": "reference"
+                    },
+                    "reference_role": {
+                      "enum": [
+                        "tagged_wt_complementation",
+                        "endogenous_wt",
+                        "other_reported_reference",
+                        "unknown",
+                        "conflicting"
+                      ],
+                      "type": "string"
+                    },
+                    "reported_domains": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "lower": {
+                            "type": [
+                              "number",
+                              "null"
+                            ]
+                          },
+                          "lower_closed": {
+                            "type": "boolean"
+                          },
+                          "lower_infinite": {
+                            "type": "boolean"
+                          },
+                          "meaning": {
+                            "const": "reported_estimate_domain",
+                            "type": "string"
+                          },
+                          "upper": {
+                            "type": [
+                              "number",
+                              "null"
+                            ]
+                          },
+                          "upper_closed": {
+                            "type": "boolean"
+                          },
+                          "upper_infinite": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "lower",
+                          "lower_infinite",
+                          "lower_closed",
+                          "upper",
+                          "upper_infinite",
+                          "upper_closed",
+                          "meaning"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "representation_reading_states": {
+                      "items": {
+                        "enum": [
+                          "exact",
+                          "ambiguous",
+                          "unreadable",
+                          "conflicting",
+                          "not_applicable"
+                        ],
+                        "type": "string"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "selected_roster_resolved": {
+                      "type": "boolean"
+                    },
+                    "sheet_ref": {
+                      "format": "reference",
+                      "type": "string",
+                      "x-reference-namespace": "source"
+                    },
+                    "signal_kind": {
+                      "enum": [
+                        "protein_band",
+                        "transcript_signal",
+                        "other_reported_signal",
+                        "unknown",
+                        "conflicting"
+                      ],
+                      "type": "string"
+                    },
+                    "signal_scale_states": {
+                      "items": {
+                        "enum": [
+                          "supported",
+                          "different",
+                          "unknown",
+                          "conflicting",
+                          "not_applicable"
+                        ],
+                        "type": "string"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "signal_use": {
+                      "enum": [
+                        "experimental_comparability",
+                        "measured_endpoint",
+                        "other",
+                        "unknown",
+                        "conflicting"
+                      ],
+                      "type": "string"
+                    },
+                    "source_origins": {
+                      "items": {
+                        "enum": [
+                          "reported",
+                          "visual_transcription",
+                          "synthetic"
+                        ],
+                        "type": "string"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "status": {
+                      "enum": [
+                        "populated",
+                        "conflicting",
+                        "unavailable"
+                      ],
+                      "type": "string"
+                    },
+                    "subject_ref": {
+                      "format": "reference",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "x-reference-namespace": "reference"
+                    },
+                    "unavailable_reason": {
+                      "enum": [
+                        "no_selected_representations",
+                        "source_dependency_unavailable",
+                        "unreadable_transcription",
+                        "ambiguous_transcription",
+                        "source_representation_conflict",
+                        "incomplete_conflicting_representations",
+                        "comparison_association_unresolved",
+                        "signal_scale_unresolved",
+                        "unsupported_expression",
+                        "negative_reported_signal_unsupported",
+                        "reported_limit_not_point",
+                        "positive_denominator_not_established",
+                        "zero_reported_ratio",
+                        "numerical_model_range",
+                        "jats_expression_capability_partial",
+                        "calibrated_amount_conversion_unimplemented",
+                        "functional_response_conversion_unimplemented",
+                        "observation_model_unimplemented",
+                        "different_reported_quantities",
+                        "signal_scales_differ",
+                        null
+                      ],
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "uncertainty_evaluation": {
+                      "const": "numeric_uncertainty_reader_unimplemented",
+                      "type": "string"
+                    },
+                    "uncertainty_kind": {
+                      "const": "unknown",
+                      "type": "string"
+                    },
+                    "unit": {
+                      "enum": [
+                        "fraction",
+                        "dimensionless",
+                        null
+                      ],
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "value": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "value_candidates": {
+                      "items": {
+                        "type": "number"
+                      },
+                      "type": "array",
+                      "uniqueItems": true
+                    },
+                    "variant_ref": {
+                      "format": "reference",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "x-reference-namespace": "reference"
+                    }
+                  },
+                  "required": [
+                    "value",
+                    "value_candidates",
+                    "reported_domains",
+                    "unit",
+                    "status",
+                    "origin",
+                    "unavailable_reason",
+                    "conditional_on",
+                    "sheet_ref",
+                    "evidence_source_ref",
+                    "component",
+                    "selected_roster_resolved",
+                    "point_candidate_set_complete",
+                    "known_source_conflict",
+                    "independent_preparation_count",
+                    "candidate_basis",
+                    "uncertainty_kind",
+                    "interpretation_kind",
+                    "source_origins",
+                    "representation_reading_states",
+                    "signal_kind",
+                    "reference_role",
+                    "arrangement",
+                    "subject_ref",
+                    "variant_ref",
+                    "reference_ref",
+                    "organism_ref",
+                    "genotype_ref",
+                    "construct_variant_ref",
+                    "construct_reference_ref",
+                    "preparation_variant_ref",
+                    "preparation_reference_ref",
+                    "experiment_ref",
+                    "condition_ref",
+                    "endpoint_ref",
+                    "normalization_ref",
+                    "input_measurement_refs",
+                    "reference_measurement_refs",
+                    "comparison_relation_states",
+                    "signal_scale_states",
+                    "signal_use",
+                    "meaning_statuses",
+                    "physical_identity_states",
+                    "reference_identity_states",
+                    "uncertainty_evaluation"
+                  ],
+                  "type": "object"
+                },
+                "type": "array",
+                "x-source": "literature_ratio_source_cells"
+              }
+            },
+            "required": [
+              "requested_signal"
+            ],
+            "type": "object"
+          },
+          "task_context": {
+            "root_objective": "Improve the annotation and biological interpretation of the supplied material through evidence-linked, context-dependent reasoning. Retain competing explanations, investigate useful distinctions and revise actual annotation state.",
+            "root_result_contract": {
+              "role": "annotation"
+            }
+          }
+        },
+        "message": {
+          "episode_assignment": {
+            "question_context_refs": [],
+            "requested_ratio_source_components": [
+              "reported_ratio"
+            ],
+            "source_refs": [
+              "source_70a030d5d216a9679a3ebf0b",
+              "source_14e31798ff6380b665e6d336",
+              "source_399a4acacfb63c65d1d7ec77"
+            ],
+            "version": "literature_assignment_v1"
+          },
+          "initial_report": {},
+          "knowledge_inheritance": {
+            "parent_episode_id": "episode_fc2a6d21032358a68901a1e4a00902c82d52cc382cd3cfa1a66449d30cbdcbc0",
+            "through_receipt_index": 10,
+            "version": "frozen_parent_receipt_prefix_v1"
+          },
+          "report_contract_declaration": {
+            "child_role": "literature",
+            "expanded_schema_sha256": "12990553971b8d22fc2d328bd7b81f5204d6a758a54b0a0b0434a0ddd55e4258",
+            "fact_references": [
+              {
+                "field": "requested_signal",
+                "schema_sha256": "01ab6362dba2b8e061aba0a7e9595c27b68500a83697b2bdc6ef3cea2097a9ff",
+                "source": "literature_ratio_source_cells",
+                "source_had_x_source": true
+              }
+            ],
+            "submitted_schema_json": "{\"type\": \"object\", \"properties\": {\"requested_signal\": {\"$ref\": \"episode-fact:literature_ratio_source_cells\"}}, \"required\": [\"requested_signal\"], \"additionalProperties\": false}",
+            "version": "episode_report_contract_declaration_v1"
+          },
+          "scope": {
+            "subject_refs": [
+              "input_0cf8c100d09446c95154fa4b"
+            ]
+          }
+        },
+        "report_contract": {
+          "decision": "Return only the requested source signal comparison and its scientific qualifications.",
+          "information": {
+            "requested_signal": "requested_signal"
+          },
+          "measurements": {
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "requested_signal": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "arrangement": {
+                        "enum": [
+                          "single_preparation",
+                          "replacement",
+                          "coexistence",
+                          "not_applicable",
+                          "unknown",
+                          "conflicting"
+                        ],
+                        "type": "string"
+                      },
+                      "candidate_basis": {
+                        "const": "selected_received_source_representations",
+                        "type": "string"
+                      },
+                      "comparison_relation_states": {
+                        "items": {
+                          "enum": [
+                            "supported",
+                            "different",
+                            "unknown",
+                            "conflicting"
+                          ],
+                          "type": "string"
+                        },
+                        "type": "array",
+                        "uniqueItems": true
+                      },
+                      "component": {
+                        "enum": [
+                          "reported_ratio",
+                          "difference_from_reference",
+                          "log_reported_ratio",
+                          "calibrated_amount_ratio",
+                          "amount_adjusted_effect",
+                          "source_profile_log_ratio",
+                          "source_signed_index"
+                        ],
+                        "type": "string"
+                      },
+                      "condition_ref": {
+                        "format": "reference",
+                        "type": [
+                          "string",
+                          "null"
+                        ],
+                        "x-reference-namespace": "context"
+                      },
+                      "conditional_on": {
+                        "items": {
+                          "enum": [
+                            "source_comparison_interpretation",
+                            "nominated_printed_signal_pair"
+                          ],
+                          "type": "string"
+                        },
+                        "type": "array",
+                        "uniqueItems": true
+                      },
+                      "construct_reference_ref": {
+                        "format": "reference",
+                        "type": [
+                          "string",
+                          "null"
+                        ],
+                        "x-reference-namespace": "reference"
+                      },
+                      "construct_variant_ref": {
+                        "format": "reference",
+                        "type": [
+                          "string",
+                          "null"
+                        ],
+                        "x-reference-namespace": "reference"
+                      },
+                      "endpoint_ref": {
+                        "format": "reference",
+                        "type": [
+                          "string",
+                          "null"
+                        ],
+                        "x-reference-namespace": "reference"
+                      },
+                      "evidence_source_ref": {
+                        "format": "reference",
+                        "type": "string",
+                        "x-reference-namespace": "source"
+                      },
+                      "experiment_ref": {
+                        "format": "reference",
+                        "type": [
+                          "string",
+                          "null"
+                        ],
+                        "x-reference-namespace": "reference"
+                      },
+                      "genotype_ref": {
+                        "format": "reference",
+                        "type": [
+                          "string",
+                          "null"
+                        ],
+                        "x-reference-namespace": "reference"
+                      },
+                      "independent_preparation_count": {
+                        "type": "null"
+                      },
+                      "input_measurement_refs": {
+                        "items": {
+                          "format": "reference",
+                          "type": "string",
+                          "x-reference-namespace": "reference"
+                        },
+                        "type": "array",
+                        "uniqueItems": true
+                      },
+                      "interpretation_kind": {
+                        "const": "episode_source_interpretation",
+                        "type": "string"
+                      },
+                      "known_source_conflict": {
+                        "type": "boolean"
+                      },
+                      "meaning_statuses": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "condition": {
+                            "enum": [
+                              "known",
+                              "unknown",
+                              "conflicting"
+                            ],
+                            "type": "string"
+                          },
+                          "construct_reference": {
+                            "enum": [
+                              "known",
+                              "unknown",
+                              "conflicting"
+                            ],
+                            "type": "string"
+                          },
+                          "construct_variant": {
+                            "enum": [
+                              "known",
+                              "unknown",
+                              "conflicting"
+                            ],
+                            "type": "string"
+                          },
+                          "endpoint": {
+                            "enum": [
+                              "known",
+                              "unknown",
+                              "conflicting"
+                            ],
+                            "type": "string"
+                          },
+                          "experiment": {
+                            "enum": [
+                              "known",
+                              "unknown",
+                              "conflicting"
+                            ],
+                            "type": "string"
+                          },
+                          "genotype": {
+                            "enum": [
+                              "known",
+                              "unknown",
+                              "conflicting"
+                            ],
+                            "type": "string"
+                          },
+                          "normalization": {
+                            "enum": [
+                              "known",
+                              "unknown",
+                              "conflicting"
+                            ],
+                            "type": "string"
+                          },
+                          "organism": {
+                            "enum": [
+                              "known",
+                              "unknown",
+                              "conflicting"
+                            ],
+                            "type": "string"
+                          },
+                          "preparation_reference": {
+                            "enum": [
+                              "known",
+                              "unknown",
+                              "conflicting"
+                            ],
+                            "type": "string"
+                          },
+                          "preparation_variant": {
+                            "enum": [
+                              "known",
+                              "unknown",
+                              "conflicting"
+                            ],
+                            "type": "string"
+                          },
+                          "reference": {
+                            "enum": [
+                              "known",
+                              "unknown",
+                              "conflicting"
+                            ],
+                            "type": "string"
+                          },
+                          "subject": {
+                            "enum": [
+                              "known",
+                              "unknown",
+                              "conflicting"
+                            ],
+                            "type": "string"
+                          },
+                          "variant": {
+                            "enum": [
+                              "known",
+                              "unknown",
+                              "conflicting"
+                            ],
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "subject",
+                          "variant",
+                          "reference",
+                          "organism",
+                          "genotype",
+                          "construct_variant",
+                          "construct_reference",
+                          "preparation_variant",
+                          "preparation_reference",
+                          "experiment",
+                          "condition",
+                          "endpoint",
+                          "normalization"
+                        ],
+                        "type": "object"
+                      },
+                      "normalization_ref": {
+                        "format": "reference",
+                        "type": [
+                          "string",
+                          "null"
+                        ],
+                        "x-reference-namespace": "reference"
+                      },
+                      "organism_ref": {
+                        "format": "reference",
+                        "type": [
+                          "string",
+                          "null"
+                        ],
+                        "x-reference-namespace": "reference"
+                      },
+                      "origin": {
+                        "enum": [
+                          "reported",
+                          "visual_transcription",
+                          "derived",
+                          "proposed",
+                          "synthetic"
+                        ],
+                        "type": "string"
+                      },
+                      "physical_identity_states": {
+                        "items": {
+                          "enum": [
+                            "known",
+                            "unknown",
+                            "conflicting"
+                          ],
+                          "type": "string"
+                        },
+                        "type": "array",
+                        "uniqueItems": true
+                      },
+                      "point_candidate_set_complete": {
+                        "type": "boolean"
+                      },
+                      "preparation_reference_ref": {
+                        "format": "reference",
+                        "type": [
+                          "string",
+                          "null"
+                        ],
+                        "x-reference-namespace": "reference"
+                      },
+                      "preparation_variant_ref": {
+                        "format": "reference",
+                        "type": [
+                          "string",
+                          "null"
+                        ],
+                        "x-reference-namespace": "reference"
+                      },
+                      "reference_identity_states": {
+                        "items": {
+                          "enum": [
+                            "known",
+                            "unknown",
+                            "conflicting"
+                          ],
+                          "type": "string"
+                        },
+                        "type": "array",
+                        "uniqueItems": true
+                      },
+                      "reference_measurement_refs": {
+                        "items": {
+                          "format": "reference",
+                          "type": "string",
+                          "x-reference-namespace": "reference"
+                        },
+                        "type": "array",
+                        "uniqueItems": true
+                      },
+                      "reference_ref": {
+                        "format": "reference",
+                        "type": [
+                          "string",
+                          "null"
+                        ],
+                        "x-reference-namespace": "reference"
+                      },
+                      "reference_role": {
+                        "enum": [
+                          "tagged_wt_complementation",
+                          "endogenous_wt",
+                          "other_reported_reference",
+                          "unknown",
+                          "conflicting"
+                        ],
+                        "type": "string"
+                      },
+                      "reported_domains": {
+                        "items": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "lower": {
+                              "type": [
+                                "number",
+                                "null"
+                              ]
+                            },
+                            "lower_closed": {
+                              "type": "boolean"
+                            },
+                            "lower_infinite": {
+                              "type": "boolean"
+                            },
+                            "meaning": {
+                              "const": "reported_estimate_domain",
+                              "type": "string"
+                            },
+                            "upper": {
+                              "type": [
+                                "number",
+                                "null"
+                              ]
+                            },
+                            "upper_closed": {
+                              "type": "boolean"
+                            },
+                            "upper_infinite": {
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "lower",
+                            "lower_infinite",
+                            "lower_closed",
+                            "upper",
+                            "upper_infinite",
+                            "upper_closed",
+                            "meaning"
+                          ],
+                          "type": "object"
+                        },
+                        "type": "array"
+                      },
+                      "representation_reading_states": {
+                        "items": {
+                          "enum": [
+                            "exact",
+                            "ambiguous",
+                            "unreadable",
+                            "conflicting",
+                            "not_applicable"
+                          ],
+                          "type": "string"
+                        },
+                        "type": "array",
+                        "uniqueItems": true
+                      },
+                      "selected_roster_resolved": {
+                        "type": "boolean"
+                      },
+                      "sheet_ref": {
+                        "format": "reference",
+                        "type": "string",
+                        "x-reference-namespace": "source"
+                      },
+                      "signal_kind": {
+                        "enum": [
+                          "protein_band",
+                          "transcript_signal",
+                          "other_reported_signal",
+                          "unknown",
+                          "conflicting"
+                        ],
+                        "type": "string"
+                      },
+                      "signal_scale_states": {
+                        "items": {
+                          "enum": [
+                            "supported",
+                            "different",
+                            "unknown",
+                            "conflicting",
+                            "not_applicable"
+                          ],
+                          "type": "string"
+                        },
+                        "type": "array",
+                        "uniqueItems": true
+                      },
+                      "signal_use": {
+                        "enum": [
+                          "experimental_comparability",
+                          "measured_endpoint",
+                          "other",
+                          "unknown",
+                          "conflicting"
+                        ],
+                        "type": "string"
+                      },
+                      "source_origins": {
+                        "items": {
+                          "enum": [
+                            "reported",
+                            "visual_transcription",
+                            "synthetic"
+                          ],
+                          "type": "string"
+                        },
+                        "type": "array",
+                        "uniqueItems": true
+                      },
+                      "status": {
+                        "enum": [
+                          "populated",
+                          "conflicting",
+                          "unavailable"
+                        ],
+                        "type": "string"
+                      },
+                      "subject_ref": {
+                        "format": "reference",
+                        "type": [
+                          "string",
+                          "null"
+                        ],
+                        "x-reference-namespace": "reference"
+                      },
+                      "unavailable_reason": {
+                        "enum": [
+                          "no_selected_representations",
+                          "source_dependency_unavailable",
+                          "unreadable_transcription",
+                          "ambiguous_transcription",
+                          "source_representation_conflict",
+                          "incomplete_conflicting_representations",
+                          "comparison_association_unresolved",
+                          "signal_scale_unresolved",
+                          "unsupported_expression",
+                          "negative_reported_signal_unsupported",
+                          "reported_limit_not_point",
+                          "positive_denominator_not_established",
+                          "zero_reported_ratio",
+                          "numerical_model_range",
+                          "jats_expression_capability_partial",
+                          "calibrated_amount_conversion_unimplemented",
+                          "functional_response_conversion_unimplemented",
+                          "observation_model_unimplemented",
+                          "different_reported_quantities",
+                          "signal_scales_differ",
+                          null
+                        ],
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "uncertainty_evaluation": {
+                        "const": "numeric_uncertainty_reader_unimplemented",
+                        "type": "string"
+                      },
+                      "uncertainty_kind": {
+                        "const": "unknown",
+                        "type": "string"
+                      },
+                      "unit": {
+                        "enum": [
+                          "fraction",
+                          "dimensionless",
+                          null
+                        ],
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "value": {
+                        "type": [
+                          "number",
+                          "null"
+                        ]
+                      },
+                      "value_candidates": {
+                        "items": {
+                          "type": "number"
+                        },
+                        "type": "array",
+                        "uniqueItems": true
+                      },
+                      "variant_ref": {
+                        "format": "reference",
+                        "type": [
+                          "string",
+                          "null"
+                        ],
+                        "x-reference-namespace": "reference"
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "value_candidates",
+                      "reported_domains",
+                      "unit",
+                      "status",
+                      "origin",
+                      "unavailable_reason",
+                      "conditional_on",
+                      "sheet_ref",
+                      "evidence_source_ref",
+                      "component",
+                      "selected_roster_resolved",
+                      "point_candidate_set_complete",
+                      "known_source_conflict",
+                      "independent_preparation_count",
+                      "candidate_basis",
+                      "uncertainty_kind",
+                      "interpretation_kind",
+                      "source_origins",
+                      "representation_reading_states",
+                      "signal_kind",
+                      "reference_role",
+                      "arrangement",
+                      "subject_ref",
+                      "variant_ref",
+                      "reference_ref",
+                      "organism_ref",
+                      "genotype_ref",
+                      "construct_variant_ref",
+                      "construct_reference_ref",
+                      "preparation_variant_ref",
+                      "preparation_reference_ref",
+                      "experiment_ref",
+                      "condition_ref",
+                      "endpoint_ref",
+                      "normalization_ref",
+                      "input_measurement_refs",
+                      "reference_measurement_refs",
+                      "comparison_relation_states",
+                      "signal_scale_states",
+                      "signal_use",
+                      "meaning_statuses",
+                      "physical_identity_states",
+                      "reference_identity_states",
+                      "uncertainty_evaluation"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "x-source": "literature_ratio_source_cells"
+                }
+              },
+              "required": [
+                "requested_signal"
+              ],
+              "type": "object"
+            }
+          }
+        }
+      },
+      "role": "literature",
+      "scope": {
+        "subject_refs": [
+          "input_0cf8c100d09446c95154fa4b"
+        ]
+      }
+    },
+    "constraints": {
+      "local_jobs": {
+        "memory_bytes": 21474836480,
+        "scratch_bytes": 4294967296,
+        "wall_seconds": null
+      }
+    },
+    "expectation_snapshot_refs": [],
+    "handle": "execution_ca30562b8ded654947e8ddb9b3a06d41da8f3446f6a9d81666216c7405328431",
+    "input_versions": [
+      {
+        "content_sha256": "24ab5833b4d7c18249d545d27147527c692e0bd888c7d3c2d2621ac44719775d",
+        "reference": "input_0cf8c100d09446c95154fa4b",
+        "version": null
+      },
+      {
+        "content_sha256": "34739942a11fb94429bb96606ad33786e20da35f904192f60fe6b50564dbf363",
+        "reference": "source_70a030d5d216a9679a3ebf0b",
+        "version": null
+      },
+      {
+        "content_sha256": "3fe51534feba64ee4da079a547ae4d78ff067dcda093c61a11b13263bb035937",
+        "reference": "source_14e31798ff6380b665e6d336",
+        "version": null
+      },
+      {
+        "content_sha256": "60eb61592286d74b5526953fb73112d0db6d4c4af95fb9a00741fd4ad304b8fb",
+        "reference": "source_399a4acacfb63c65d1d7ec77",
+        "version": null
+      }
+    ],
+    "operation_key": "commission_ca30562b8ded654947e8ddb9b3a06d41da8f3446f6a9d81666216c7405328431",
+    "parent": {
+      "episode_id": "episode_fc2a6d21032358a68901a1e4a00902c82d52cc382cd3cfa1a66449d30cbdcbc0",
+      "goal_id": "goal_032b14ce0e3712d8d12296e5",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ]
+      ]
+    },
+    "resource_selection": null,
+    "run_id": "run_a079f56fed1a48de9a5f4fa6385d6234",
+    "runtime_binding": {
+      "arguments": {
+        "configuration_file": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_ratio_episode_integration_077/implementation_005/tmp_pinned_009/test_actual_durable_commission1/run/constructed077.json"
+      },
+      "factory_module": "literature_ratio_source_worker_fixture_077",
+      "factory_name": "open_commission",
+      "implementation_sha256": "8c873540f40ab3ec4b79e32de2aba13825340888b5ccc880a223bf45ed13b82b",
+      "settings_sha256": "df1bc89fa80c73e73994d05c7165b76169613df9bce5a326ca3ae0d1668aeb67"
+    },
+    "version": "episode_commission_v1"
+  },
+  "returned": {
+    "commission_sha256": "0fa3c532db885e13b5d62b001e47f3725f6cd86dfd573d0a113f7cbbeea7f6fe",
+    "completion": {
+      "end_reason": "",
+      "ended_by": "yield_stop",
+      "units_consumed": 2
+    },
+    "episode_archive": {
+      "file": "8efbaeae4fff953aca40f9393bc5f96b5e04b690eabbc8786fa9b533d160f8c6.json",
+      "index_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "sha256": "0e7519f369993a97bc149e75434e0c496b808b23c91e40a8493bd0267f812716"
+    },
+    "facts_archive": {
+      "file": "2be49e3e5d444ac50178335e11775023b9db2c3562ed7b2bb18d6dee6f6dc723.json",
+      "index_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "sha256": "21e4e2444dab1124e967ab724607942f5f9db962fc812f18c08438b60b01c024"
+    },
+    "failure": null,
+    "form": {
+      "requested_signal": [
+        {
+          "arrangement": "replacement",
+          "candidate_basis": "selected_received_source_representations",
+          "comparison_relation_states": [
+            "supported"
+          ],
+          "component": "reported_ratio",
+          "condition_ref": "context_ba7bfb778e74c38dc006eb55",
+          "conditional_on": [
+            "source_comparison_interpretation",
+            "nominated_printed_signal_pair"
+          ],
+          "construct_reference_ref": "reference_ecda422691ddd8d10db46daa",
+          "construct_variant_ref": "reference_60f0e6c6f5fa88b45803e881",
+          "endpoint_ref": "reference_2954ecd64b24ef15246920aa",
+          "evidence_source_ref": "source_70a030d5d216a9679a3ebf0b",
+          "experiment_ref": null,
+          "genotype_ref": "reference_a8d48e1d2c1d4ab6c145f994",
+          "independent_preparation_count": null,
+          "input_measurement_refs": [],
+          "interpretation_kind": "episode_source_interpretation",
+          "known_source_conflict": false,
+          "meaning_statuses": {
+            "condition": "known",
+            "construct_reference": "known",
+            "construct_variant": "known",
+            "endpoint": "known",
+            "experiment": "unknown",
+            "genotype": "known",
+            "normalization": "known",
+            "organism": "known",
+            "preparation_reference": "unknown",
+            "preparation_variant": "unknown",
+            "reference": "known",
+            "subject": "known",
+            "variant": "known"
+          },
+          "normalization_ref": "reference_23c4bd8fed3404fe12baabd7",
+          "organism_ref": "reference_3fa1b7c9a4da779e375b8208",
+          "origin": "synthetic",
+          "physical_identity_states": [
+            "unknown"
+          ],
+          "point_candidate_set_complete": true,
+          "preparation_reference_ref": null,
+          "preparation_variant_ref": null,
+          "reference_identity_states": [
+            "unknown"
+          ],
+          "reference_measurement_refs": [],
+          "reference_ref": "reference_ccb02cccac66b3e49c6137ac",
+          "reference_role": "tagged_wt_complementation",
+          "reported_domains": [
+            {
+              "lower": 0.6399999999999999,
+              "lower_closed": true,
+              "lower_infinite": false,
+              "meaning": "reported_estimate_domain",
+              "upper": 0.64,
+              "upper_closed": true,
+              "upper_infinite": false
+            }
+          ],
+          "representation_reading_states": [
+            "exact"
+          ],
+          "selected_roster_resolved": true,
+          "sheet_ref": "source_d3abd47f0be41fe9a8f84f16",
+          "signal_kind": "protein_band",
+          "signal_scale_states": [
+            "supported"
+          ],
+          "signal_use": "experimental_comparability",
+          "source_origins": [
+            "synthetic"
+          ],
+          "status": "populated",
+          "subject_ref": "reference_abf866e6063685a2e42bbaf0",
+          "unavailable_reason": null,
+          "uncertainty_evaluation": "numeric_uncertainty_reader_unimplemented",
+          "uncertainty_kind": "unknown",
+          "unit": "fraction",
+          "value": 0.64,
+          "value_candidates": [
+            0.64
+          ],
+          "variant_ref": "reference_1bfb761111b98ea9fcdb8d59"
+        }
+      ]
+    },
+    "handle": "execution_ca30562b8ded654947e8ddb9b3a06d41da8f3446f6a9d81666216c7405328431",
+    "outcome": "closed",
+    "pending_handles": [],
+    "result_archive": {
+      "file": "29a59b99c5cad1148b08d6035d1c2189fb4260c16c79890dd379db76c941b8cc.json",
+      "index_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "sha256": "2e7828e02bd652e972a9811a2eb0c6761a42bb27ea47d087dd1e444c82065fd0"
+    },
+    "return_id": "a7324401f0ff8a91f4680b5e8ffe78453abc7f3c72aa21bfe0d01ff14cdf6d05",
+    "returned_at": "2026-10-27T00:42:43.838764+00:00",
+    "version": "returned_episode_v1"
+  },
+  "admission": {
+    "admission_id": "admission_784261c8b38fadac717741890ac41979aed900c4215e1a8dd796269244b05cc5",
+    "controller_input": {
+      "credit": 0.0,
+      "estimation_action_index": 0
+    },
+    "delivery_failure": null,
+    "handle": "execution_ca30562b8ded654947e8ddb9b3a06d41da8f3446f6a9d81666216c7405328431",
+    "original_decision_index": 0,
+    "parent_episode_id": "episode_fc2a6d21032358a68901a1e4a00902c82d52cc382cd3cfa1a66449d30cbdcbc0",
+    "received_record_refs": [
+      "context_ba7bfb778e74c38dc006eb55",
+      "reference_ecda422691ddd8d10db46daa",
+      "reference_60f0e6c6f5fa88b45803e881",
+      "reference_2954ecd64b24ef15246920aa",
+      "source_70a030d5d216a9679a3ebf0b",
+      "reference_a8d48e1d2c1d4ab6c145f994",
+      "reference_23c4bd8fed3404fe12baabd7",
+      "reference_3fa1b7c9a4da779e375b8208",
+      "reference_ccb02cccac66b3e49c6137ac",
+      "source_d3abd47f0be41fe9a8f84f16",
+      "reference_abf866e6063685a2e42bbaf0",
+      "reference_1bfb761111b98ea9fcdb8d59"
+    ],
+    "report": {
+      "requested_signal": [
+        {
+          "arrangement": "replacement",
+          "candidate_basis": "selected_received_source_representations",
+          "comparison_relation_states": [
+            "supported"
+          ],
+          "component": "reported_ratio",
+          "condition_ref": "context_ba7bfb778e74c38dc006eb55",
+          "conditional_on": [
+            "source_comparison_interpretation",
+            "nominated_printed_signal_pair"
+          ],
+          "construct_reference_ref": "reference_ecda422691ddd8d10db46daa",
+          "construct_variant_ref": "reference_60f0e6c6f5fa88b45803e881",
+          "endpoint_ref": "reference_2954ecd64b24ef15246920aa",
+          "evidence_source_ref": "source_70a030d5d216a9679a3ebf0b",
+          "experiment_ref": null,
+          "genotype_ref": "reference_a8d48e1d2c1d4ab6c145f994",
+          "independent_preparation_count": null,
+          "input_measurement_refs": [],
+          "interpretation_kind": "episode_source_interpretation",
+          "known_source_conflict": false,
+          "meaning_statuses": {
+            "condition": "known",
+            "construct_reference": "known",
+            "construct_variant": "known",
+            "endpoint": "known",
+            "experiment": "unknown",
+            "genotype": "known",
+            "normalization": "known",
+            "organism": "known",
+            "preparation_reference": "unknown",
+            "preparation_variant": "unknown",
+            "reference": "known",
+            "subject": "known",
+            "variant": "known"
+          },
+          "normalization_ref": "reference_23c4bd8fed3404fe12baabd7",
+          "organism_ref": "reference_3fa1b7c9a4da779e375b8208",
+          "origin": "synthetic",
+          "physical_identity_states": [
+            "unknown"
+          ],
+          "point_candidate_set_complete": true,
+          "preparation_reference_ref": null,
+          "preparation_variant_ref": null,
+          "reference_identity_states": [
+            "unknown"
+          ],
+          "reference_measurement_refs": [],
+          "reference_ref": "reference_ccb02cccac66b3e49c6137ac",
+          "reference_role": "tagged_wt_complementation",
+          "reported_domains": [
+            {
+              "lower": 0.6399999999999999,
+              "lower_closed": true,
+              "lower_infinite": false,
+              "meaning": "reported_estimate_domain",
+              "upper": 0.64,
+              "upper_closed": true,
+              "upper_infinite": false
+            }
+          ],
+          "representation_reading_states": [
+            "exact"
+          ],
+          "selected_roster_resolved": true,
+          "sheet_ref": "source_d3abd47f0be41fe9a8f84f16",
+          "signal_kind": "protein_band",
+          "signal_scale_states": [
+            "supported"
+          ],
+          "signal_use": "experimental_comparability",
+          "source_origins": [
+            "synthetic"
+          ],
+          "status": "populated",
+          "subject_ref": "reference_abf866e6063685a2e42bbaf0",
+          "unavailable_reason": null,
+          "uncertainty_evaluation": "numeric_uncertainty_reader_unimplemented",
+          "uncertainty_kind": "unknown",
+          "unit": "fraction",
+          "value": 0.64,
+          "value_candidates": [
+            0.64
+          ],
+          "variant_ref": "reference_1bfb761111b98ea9fcdb8d59"
+        }
+      ]
+    },
+    "return_id": "a7324401f0ff8a91f4680b5e8ffe78453abc7f3c72aa21bfe0d01ff14cdf6d05",
+    "state": "admitted",
+    "version": "episode_admission_v1"
+  },
+  "observation_identities": [
+    [
+      "episode_b33163b529fce203a62ce91ab1efa9184f225f90587090af2f615de846d5c8f0",
+      0,
+      0,
+      "tool:0"
+    ],
+    [
+      "episode_b33163b529fce203a62ce91ab1efa9184f225f90587090af2f615de846d5c8f0",
+      1,
+      1,
+      "tool:1"
+    ],
+    [
+      "episode_fc2a6d21032358a68901a1e4a00902c82d52cc382cd3cfa1a66449d30cbdcbc0",
+      0,
+      1,
+      "wait:1"
+    ],
+    [
+      "episode_fc2a6d21032358a68901a1e4a00902c82d52cc382cd3cfa1a66449d30cbdcbc0",
+      1,
+      0,
+      "child_0"
+    ],
+    [
+      "episode_fc2a6d21032358a68901a1e4a00902c82d52cc382cd3cfa1a66449d30cbdcbc0",
+      2,
+      2,
+      "reason:2"
+    ]
+  ],
+  "parent_steering": "\nOwn action yields\n\n| Category | Completed | Total signed yield | Expected next yield | Uncertainty or unavailable reason | Uncompleted attempts |\n| --- | --- | --- | --- | --- | --- |\n| episode_child/literature | 1 | unknown | unavailable | parameters_unbound | 0 |\n| wait | 1 | unknown | unavailable | parameters_unbound | 0 |\n\nYield information limits\n\n| Field | Supplied value |\n| --- | --- |\n| [0] | saved_marginal_credit_unavailable |\n\nLast selected action outcome\n\n| Field | Supplied value |\n| --- | --- |\n| status | completed |\n\nAdmitted requested source signal components\n\n| Component | Value | Unit | Status | Origin | Candidates | Reported-estimate domains | Unavailable reason |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| reported_ratio | 0.64 | fraction | populated | synthetic | 0.64 | [0.6399999999999999, 0.64] | unknown |\n\nSource signal comparison meaning\n\n| Field | Supplied value |\n| --- | --- |\n| signal_kind | protein_band |\n| reference_role | tagged_wt_complementation |\n| arrangement | replacement |\n| signal_use | experimental_comparability |\n| source_origins[0] | synthetic |\n| representation_reading_states[0] | exact |\n| comparison_relation_states[0] | supported |\n| signal_scale_states[0] | supported |\n| physical_identity_states[0] | unknown |\n| reference_identity_states[0] | unknown |\n| independent_preparation_count | unknown |\n| selected_roster_resolved | true |\n| point_candidate_set_complete | true |\n| known_source_conflict | false |\n| uncertainty_kind | unknown |\n| uncertainty_evaluation | numeric_uncertainty_reader_unimplemented |\n| candidate_basis | selected_received_source_representations |\n\nSource signal experimental definitions\n\n| Meaning | Status | Source definition |\n| --- | --- | --- |\n| subject | known | SyntheticProtein |\n| variant | known | K426A |\n| reference | known | tagged WT |\n| organism | known | Engineering bacterium |\n| genotype | known | \u0394geneX::kan |\n| construct_variant | known | His-tagged protein residues 1\u2013253 |\n| construct_reference | known | tagged WT counterpart |\n| preparation_variant | unknown | unknown |\n| preparation_reference | unknown | unknown |\n| experiment | unknown | unknown |\n| condition | known | 37 \u00b0C; pH 7.4 |\n| endpoint | known | immunoblot protein-band signal |\n| normalization | known | same-blot tagged WT reference |\n\nSource signal interpretation limits\n\nReported signal describes this comparison, not calibrated amount or isolated activity. Domains retain reported estimates and finite outward rounding, not sampling confidence. Dependent transforms do not add independent evidence. Numeric uncertainty, calibration, functional-response and observation-model readers remain unimplemented here.",
+  "evidence_class": "constructed engineering fixture"
+}

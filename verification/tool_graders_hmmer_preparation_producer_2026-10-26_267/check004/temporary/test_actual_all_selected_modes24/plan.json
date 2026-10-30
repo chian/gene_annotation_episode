@@ -1,0 +1,100 @@
+{
+  "version": "native_hmmer_preparation_run_plan_v1",
+  "identity": {
+    "run_id": "producer267-test",
+    "episode_id": "selected-local-child",
+    "resource_id": "local",
+    "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check004/temporary/test_actual_all_selected_modes24/native.json",
+    "operation_key": "selected-command",
+    "attempt_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e",
+    "requested_job_sha256": "53f8f3cdd58826625fce45663e73d074e0773ae3d77d46b4b6e61c688fdc593c"
+  },
+  "requested_job": {
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmerfm-exactmatch",
+      "--out",
+      "outputs/hits",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/queries.txt",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm"
+    ],
+    "environment": {},
+    "native_hmmer_preparation": {
+      "version": "native_hmmer_preparation_job_v1",
+      "program": "hmmerfm-exactmatch",
+      "mode": "locations",
+      "software": {
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmerfm-exactmatch",
+        "sha256": "dfa14a60deee1e5a28c22ceace000a5ffad8b08f6e882730a33540d72ee34959",
+        "engine_version": "3.4"
+      },
+      "environment": {},
+      "operands": [
+        {
+          "role": "queries",
+          "ordinal": 0,
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/queries.txt",
+          "format": "literal_query_lines",
+          "sha256": "a5bdfabf613fae8c4b1037e09b209a559312e6c5b00cc178bd0e361e1a6132f9",
+          "size_bytes": 35,
+          "artifact_ref": "fixture267:queries:0"
+        },
+        {
+          "role": "fm_database",
+          "ordinal": 0,
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/makehmmerdb_dna/index.fm",
+          "format": "hmmer_fm_3_4",
+          "sha256": "d413d3cb2f30d486c0a2a7214383614056d771bbfb89374fe0dd067cccd87354",
+          "size_bytes": 314,
+          "artifact_ref": "fixture267:fm_database:0"
+        },
+        {
+          "role": "source_sequences",
+          "ordinal": 0,
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/tiny.fa",
+          "format": "fasta",
+          "sha256": "79ac3da176b7a649fb3ca9d5cc6cb23cb06077e22872dbc2c671fdafce9db26b",
+          "size_bytes": 42,
+          "artifact_ref": "fixture267:source_sequences:0"
+        }
+      ],
+      "options": [],
+      "outputs": [
+        {
+          "role": "stdout",
+          "format": "hmmer_stdout",
+          "relative_path": "outputs/stdout"
+        },
+        {
+          "role": "stderr",
+          "format": "hmmer_stderr",
+          "relative_path": "outputs/stderr"
+        },
+        {
+          "role": "hits",
+          "format": "hmmerfm_exactmatch_hits",
+          "relative_path": "outputs/hits"
+        }
+      ],
+      "key": null,
+      "input_metadata": {
+        "producer_contract": {
+          "format": "hmmer_fm_3_4",
+          "engine_version": "3.4",
+          "byte_order": "little",
+          "uint8_bytes": 1,
+          "uint16_bytes": 2,
+          "uint32_bytes": 4,
+          "uint64_bytes": 8,
+          "int32_bytes": 4
+        }
+      },
+      "grading_parameters": {}
+    }
+  },
+  "attempt_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check004/temporary/test_actual_all_selected_modes24/hmmer-preparation-attempt",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  }
+}

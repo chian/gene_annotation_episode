@@ -1,0 +1,38 @@
+..........E
+==================================== ERRORS ====================================
+_ ERROR at setup of test_three_slots_selected_tools_and_actual_child_owners[selected_batch] _
+
+request = <SubRequest 'composed_rfam_run' for <Function test_three_slots_selected_tools_and_actual_child_owners[selected_batch]>>
+
+    @pytest.fixture(scope="module", params=("retained_single", "complete_empty", "selected_batch"))
+    def composed_rfam_run(request):
+        (EVIDENCE / "runs").mkdir(parents=True, exist_ok=True)
+        directory = Path(tempfile.mkdtemp(prefix=request.param + "-", dir=EVIDENCE / "runs"))
+        provenance = {"case": request.param, "status": "started", "live_api": False,
+            "configured_model": False, "native_program_executed": False, "hpc": False,
+            "fixture_overrides": ["scripted model choices", "root/scientific continuation only", "controlled Rfam HTTP responses"],
+            "production_overrides": [], "retained_native_sha256": hashlib.sha256(NATIVE_FILE.read_bytes()).hexdigest(),
+            "native_fixture": str(NATIVE_FILE.relative_to(ROOT)),
+            "qualification": "The retained single body is byte-exact; new request/submission custody is controlled. Empty and generated-header batch bodies are synthetic. No remote call occurs."}
+        _write(directory / "PROVENANCE.json", provenance)
+        native = ControlledRfam(request.param, directory)
+        with pytest.MonkeyPatch.context() as patch, Store(directory / "state") as store:
+            def forbidden(*args, **kwargs):
+                raise AssertionError("Composed Rfam verification attempted live transport, subprocess or hidden wait")
+            for name in ("socket.create_connection", "socket.socket.connect", "socket.socket.connect_ex",
+                         "urllib.request.OpenerDirector.open", "subprocess.run", "subprocess.Popen", "time.sleep"):
+                patch.setattr(name, forbidden)
+            tools = ToolRegistry(store, clients=native)
+            if request.param == "selected_batch":
+                supplied = directory / "public-occurrences.fa"
+                supplied.write_text(">original-first\n" + native.sequence + "\n>original-second\n" + native.sequence + "\n")
+                store.create_problem(supplied, molecule="dna")
+>               library_target, = store.targets()
+                ^^^^^^^^^^^^^^^
+E               ValueError: too many values to unpack (expected 1)
+
+../../../tests/test_rfam_composed_workflow.py:173: ValueError
+=========================== short test summary info ============================
+ERROR ../../../tests/test_rfam_composed_workflow.py::test_three_slots_selected_tools_and_actual_child_owners[selected_batch]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+10 passed, 1 error in 46.46s

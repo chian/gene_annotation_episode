@@ -1,0 +1,805 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "a105_ion_discrimination_sheet_v1"
+    },
+    "axis": {
+      "const": "A105"
+    },
+    "route": {
+      "type": "string",
+      "enum": [
+        "compiled_activity_pair",
+        "reported_ratio",
+        "reported_threshold_pair"
+      ]
+    },
+    "cells": {
+      "type": "object",
+      "properties": {
+        "preferred_activity": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Cell"
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "preferred_activity"
+                },
+                "formula_code": {
+                  "const": "selected_preferred_activity_or_limit"
+                }
+              }
+            }
+          ]
+        },
+        "alternative_activity": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Cell"
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "alternative_activity"
+                },
+                "formula_code": {
+                  "const": "selected_alternative_activity_or_limit"
+                }
+              }
+            }
+          ]
+        },
+        "activity_ratio": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Cell"
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "activity_ratio"
+                },
+                "formula_code": {
+                  "const": "preferred_activity/alternative_activity"
+                },
+                "unit": {
+                  "const": "dimensionless"
+                }
+              }
+            }
+          ]
+        },
+        "log_activity_ratio": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Cell"
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "log_activity_ratio"
+                },
+                "formula_code": {
+                  "const": "ln(activity_ratio)"
+                },
+                "unit": {
+                  "const": "dimensionless"
+                }
+              }
+            }
+          ]
+        },
+        "activity_ratio_variance": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Cell"
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "activity_ratio_variance"
+                },
+                "formula_code": {
+                  "const": "J_R*C*J_R_transpose"
+                },
+                "unit": {
+                  "const": "dimensionless_squared"
+                }
+              }
+            }
+          ]
+        },
+        "activity_ratio_standard_uncertainty": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Cell"
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "activity_ratio_standard_uncertainty"
+                },
+                "formula_code": {
+                  "const": "sqrt(activity_ratio_variance)"
+                },
+                "unit": {
+                  "const": "dimensionless"
+                }
+              }
+            }
+          ]
+        },
+        "log_activity_ratio_variance": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Cell"
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "log_activity_ratio_variance"
+                },
+                "formula_code": {
+                  "const": "J_log*C*J_log_transpose"
+                },
+                "unit": {
+                  "const": "dimensionless_squared"
+                }
+              }
+            }
+          ]
+        },
+        "log_activity_ratio_standard_uncertainty": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Cell"
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "log_activity_ratio_standard_uncertainty"
+                },
+                "formula_code": {
+                  "const": "sqrt(log_activity_ratio_variance)"
+                },
+                "unit": {
+                  "const": "dimensionless"
+                }
+              }
+            }
+          ]
+        },
+        "reported_selectivity": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Cell"
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "reported_selectivity"
+                },
+                "formula_code": {
+                  "const": "selected_original_reported_selectivity"
+                },
+                "unit": {
+                  "const": "dimensionless"
+                }
+              }
+            }
+          ]
+        },
+        "nominal_threshold_ratio": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Cell"
+            },
+            {
+              "properties": {
+                "component": {
+                  "const": "nominal_threshold_ratio"
+                },
+                "formula_code": {
+                  "const": "preferred_threshold/alternative_threshold"
+                },
+                "unit": {
+                  "const": "dimensionless"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": [
+        "preferred_activity",
+        "alternative_activity",
+        "activity_ratio",
+        "log_activity_ratio",
+        "activity_ratio_variance",
+        "activity_ratio_standard_uncertainty",
+        "log_activity_ratio_variance",
+        "log_activity_ratio_standard_uncertainty",
+        "reported_selectivity",
+        "nominal_threshold_ratio"
+      ],
+      "additionalProperties": false
+    },
+    "overall_quality_grade": {
+      "type": "null"
+    },
+    "annotation_credit": {
+      "type": "null"
+    }
+  },
+  "required": [
+    "version",
+    "axis",
+    "route",
+    "cells",
+    "overall_quality_grade",
+    "annotation_credit"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "Domain": {
+      "type": "object",
+      "properties": {
+        "meaning": {
+          "type": "string",
+          "enum": [
+            "reported_estimate_domain",
+            "derived_estimator_domain",
+            "nominal_threshold_arithmetic_domain",
+            "conditional_physical_parameter_domain"
+          ]
+        },
+        "lower": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "upper": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "lower_inclusive": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "upper_inclusive": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "lower_unbounded": {
+          "type": "boolean"
+        },
+        "upper_unbounded": {
+          "type": "boolean"
+        },
+        "lower_exact": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "numerator": {
+                  "type": "string",
+                  "pattern": "^-?[0-9]+$"
+                },
+                "denominator": {
+                  "type": "string",
+                  "pattern": "^[1-9][0-9]*$"
+                }
+              },
+              "required": [
+                "numerator",
+                "denominator"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "upper_exact": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "numerator": {
+                  "type": "string",
+                  "pattern": "^-?[0-9]+$"
+                },
+                "denominator": {
+                  "type": "string",
+                  "pattern": "^[1-9][0-9]*$"
+                }
+              },
+              "required": [
+                "numerator",
+                "denominator"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "meaning",
+        "lower",
+        "upper",
+        "lower_inclusive",
+        "upper_inclusive",
+        "lower_unbounded",
+        "upper_unbounded",
+        "lower_exact",
+        "upper_exact"
+      ],
+      "additionalProperties": false
+    },
+    "Dependency": {
+      "type": "object",
+      "properties": {
+        "role": {
+          "type": "string",
+          "enum": [
+            "preferred",
+            "alternative",
+            "reported"
+          ]
+        },
+        "source_ref": {
+          "type": "string",
+          "format": "reference",
+          "minLength": 1
+        },
+        "component_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "reference",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "namespace": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "literature_compiled_assay_cells"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "component": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "corrected_activity"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "physical_keys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "opaque_dependency_keys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "physical_identity_status": {
+          "type": "string",
+          "enum": [
+            "source_numeric_span",
+            "partly_canonical",
+            "cross_component_identity_unknown"
+          ]
+        }
+      },
+      "required": [
+        "role",
+        "source_ref",
+        "component_ref",
+        "namespace",
+        "component",
+        "physical_keys",
+        "opaque_dependency_keys",
+        "physical_identity_status"
+      ],
+      "additionalProperties": false
+    },
+    "Cell": {
+      "type": "object",
+      "properties": {
+        "component": {
+          "type": "string",
+          "enum": [
+            "preferred_activity",
+            "alternative_activity",
+            "activity_ratio",
+            "log_activity_ratio",
+            "activity_ratio_variance",
+            "activity_ratio_standard_uncertainty",
+            "log_activity_ratio_variance",
+            "log_activity_ratio_standard_uncertainty",
+            "reported_selectivity",
+            "nominal_threshold_ratio"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "threshold": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "dimensionless",
+                "per_min",
+                "per_s",
+                "ions_per_s",
+                "dimensionless_squared"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "populated",
+            "bounded",
+            "conditional_arithmetic",
+            "unavailable",
+            "conflicting"
+          ]
+        },
+        "origin": {
+          "type": "string",
+          "enum": [
+            "reported",
+            "author_inferred",
+            "derived",
+            "synthetic",
+            "graph_derived"
+          ]
+        },
+        "meaning": {
+          "type": "string",
+          "enum": [
+            "native_selected_activity_or_limit",
+            "ion_specific_rate_ratio",
+            "log_ion_specific_rate_ratio",
+            "first_order_ratio_variance",
+            "first_order_ratio_standard_uncertainty",
+            "first_order_log_ratio_variance",
+            "first_order_log_ratio_standard_uncertainty",
+            "source_reported_selectivity_limit",
+            "nominal_reported_threshold_division",
+            "signed_activity_estimator_ratio"
+          ]
+        },
+        "reported_domain": {
+          "anyOf": [
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Domain"
+                },
+                {
+                  "properties": {
+                    "meaning": {
+                      "const": "reported_estimate_domain"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "nominal_domain": {
+          "anyOf": [
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Domain"
+                },
+                {
+                  "properties": {
+                    "meaning": {
+                      "const": "nominal_threshold_arithmetic_domain"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "physical_domain": {
+          "anyOf": [
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Domain"
+                },
+                {
+                  "properties": {
+                    "meaning": {
+                      "const": "conditional_physical_parameter_domain"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "relation": {
+          "type": "string",
+          "enum": [
+            "point",
+            "lt",
+            "le",
+            "gt",
+            "ge",
+            "lower_limit",
+            "upper_limit",
+            "none"
+          ]
+        },
+        "approximation": {
+          "type": "string",
+          "enum": [
+            "source_qualified",
+            "not_explicitly_qualified",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "quantity_kind": {
+          "type": "string",
+          "enum": [
+            "ion_specific_rate",
+            "permeability_ratio",
+            "reported_transport_selectivity",
+            "author_cross_assay_summary",
+            "nominal_threshold_comparison",
+            "unknown",
+            "conflicting",
+            "source_activity_estimator_ratio"
+          ]
+        },
+        "scientific_applicability": {
+          "type": "string",
+          "enum": [
+            "supported_for_selected_comparison",
+            "conditional_source_report",
+            "unresolved",
+            "incompatible",
+            "estimator_comparison_only"
+          ]
+        },
+        "unavailable_reasons": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "source_number_not_selected",
+              "source_unit_not_selected",
+              "unsupported_source_expression",
+              "ambiguous_source_number_role",
+              "source_qualification_conflicting",
+              "source_quantity_meaning_unknown",
+              "selected_activity_unavailable",
+              "endpoint_not_transport_flux",
+              "ratio_not_positive",
+              "denominator_not_strictly_positive",
+              "different_subject_construct",
+              "subject_construct_unresolved",
+              "different_physical_quantities",
+              "quantity_relation_unresolved",
+              "different_molecular_basis",
+              "normalization_unresolved",
+              "nonintended_conditions_different",
+              "nonintended_conditions_unresolved",
+              "ion_attribution_unresolved",
+              "signed_estimator_not_physical_rate",
+              "approximation_model_missing",
+              "reported_estimate_not_physical_bound",
+              "physical_domain_support_missing",
+              "covariance_not_selected",
+              "covariance_status_unknown",
+              "covariance_owner_or_dependency_mismatch",
+              "covariance_units_incompatible",
+              "covariance_invalid",
+              "bounded_ratio_uncertainty_unimplemented",
+              "numerical_model_range",
+              "unrequested_route_component",
+              "reused_activity_not_ion_discrimination",
+              "intended_ions_not_distinct",
+              "zero_denominator_estimator",
+              "adjustment_binding_required",
+              "adjustment_not_in_compiled_activity",
+              "adjustment_scope_unresolved",
+              "physical_parameter_model_unimplemented",
+              "unimplemented_number_representation",
+              "route_not_applicable"
+            ]
+          }
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "no_annotation_credit",
+              "no_reliability_probability",
+              "no_ion_flux_from_charge",
+              "no_GHK_inversion",
+              "no_independence_from_distinct_refs",
+              "reported_and_calculated_not_separate_experiments",
+              "nominal_threshold_arithmetic_not_physical_bound",
+              "paper_summary_not_construct_specific",
+              "denominator_positive_condition",
+              "first_order_joint_covariance",
+              "approximate_source_inference",
+              "nonintended_protocol_differences_retained"
+            ]
+          }
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Dependency"
+          }
+        },
+        "variance_status": {
+          "type": "string",
+          "enum": [
+            "known",
+            "estimated",
+            "unknown"
+          ]
+        },
+        "annotation_credit": {
+          "type": "null"
+        },
+        "estimator_domain": {
+          "anyOf": [
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Domain"
+                },
+                {
+                  "properties": {
+                    "meaning": {
+                      "const": "derived_estimator_domain"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "formula_code": {
+          "type": "string",
+          "enum": [
+            "selected_preferred_activity_or_limit",
+            "selected_alternative_activity_or_limit",
+            "preferred_activity/alternative_activity",
+            "ln(activity_ratio)",
+            "J_R*C*J_R_transpose",
+            "sqrt(activity_ratio_variance)",
+            "J_log*C*J_log_transpose",
+            "sqrt(log_activity_ratio_variance)",
+            "selected_original_reported_selectivity",
+            "preferred_threshold/alternative_threshold"
+          ]
+        }
+      },
+      "required": [
+        "component",
+        "value",
+        "threshold",
+        "unit",
+        "status",
+        "origin",
+        "meaning",
+        "reported_domain",
+        "nominal_domain",
+        "physical_domain",
+        "relation",
+        "approximation",
+        "quantity_kind",
+        "scientific_applicability",
+        "unavailable_reasons",
+        "limitations",
+        "dependencies",
+        "variance_status",
+        "annotation_credit",
+        "estimator_domain",
+        "formula_code"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

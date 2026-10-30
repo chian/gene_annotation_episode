@@ -1,0 +1,143 @@
+{
+  "alphabet": "RNA",
+  "diagnostics": [],
+  "end_state": "eof",
+  "format": "afa",
+  "next_byte_offset": 32,
+  "records": [
+    {
+      "block_count": null,
+      "byte_end": 32,
+      "byte_start": 0,
+      "column_annotations": {},
+      "column_count": 12,
+      "declared_column_count": null,
+      "declared_row_count": null,
+      "diagnostics": [],
+      "events": [
+        {
+          "block_index": null,
+          "event_ordinal": 0,
+          "kind": "header",
+          "locator": {
+            "byte_end": 3,
+            "byte_start": 0,
+            "line": 1
+          },
+          "raw": ">a\n",
+          "row_ordinal": 0,
+          "tag": null,
+          "value": "a"
+        },
+        {
+          "block_index": null,
+          "event_ordinal": 1,
+          "kind": "sequence",
+          "locator": {
+            "byte_end": 16,
+            "byte_start": 3,
+            "line": 2
+          },
+          "raw": "ACGUACGUACGU\n",
+          "row_ordinal": 0,
+          "tag": null,
+          "value": "ACGUACGUACGU"
+        },
+        {
+          "block_index": null,
+          "event_ordinal": 2,
+          "kind": "header",
+          "locator": {
+            "byte_end": 19,
+            "byte_start": 16,
+            "line": 3
+          },
+          "raw": ">b\n",
+          "row_ordinal": 1,
+          "tag": null,
+          "value": "b"
+        },
+        {
+          "block_index": null,
+          "event_ordinal": 3,
+          "kind": "sequence",
+          "locator": {
+            "byte_end": 32,
+            "byte_start": 19,
+            "line": 4
+          },
+          "raw": "ACGUACGUACGU\n",
+          "row_ordinal": 1,
+          "tag": null,
+          "value": "ACGUACGUACGU"
+        }
+      ],
+      "header_valid": true,
+      "line_end": 4,
+      "line_start": 1,
+      "native_status_equivalent": 0,
+      "reader_state": "complete",
+      "record_ordinal": 0,
+      "rows": [
+        {
+          "aligned_sequence": "ACGUACGUACGU",
+          "annotation_fragments": [],
+          "column_annotations": {},
+          "description": null,
+          "diagnostics": [],
+          "geometry_valid": true,
+          "identity_unambiguous": true,
+          "name": "a",
+          "name_bytes_hex": "61",
+          "row_ordinal": 0,
+          "segments": [
+            {
+              "aligned_end": 12,
+              "aligned_start": 0,
+              "basis": "input_symbol",
+              "byte_end": 15,
+              "byte_start": 3,
+              "column_end": 12,
+              "column_start": 0,
+              "decoded_text": "ACGUACGUACGU",
+              "event_ordinal": 1,
+              "operation": "copy",
+              "source_text": "ACGUACGUACGU"
+            }
+          ],
+          "symbols_valid": true
+        },
+        {
+          "aligned_sequence": "ACGUACGUACGU",
+          "annotation_fragments": [],
+          "column_annotations": {},
+          "description": null,
+          "diagnostics": [],
+          "geometry_valid": true,
+          "identity_unambiguous": true,
+          "name": "b",
+          "name_bytes_hex": "62",
+          "row_ordinal": 1,
+          "segments": [
+            {
+              "aligned_end": 12,
+              "aligned_start": 0,
+              "basis": "input_symbol",
+              "byte_end": 31,
+              "byte_start": 19,
+              "column_end": 12,
+              "column_start": 0,
+              "decoded_text": "ACGUACGUACGU",
+              "event_ordinal": 3,
+              "operation": "copy",
+              "source_text": "ACGUACGUACGU"
+            }
+          ],
+          "symbols_valid": true
+        }
+      ]
+    }
+  ],
+  "trailing_range": null,
+  "version": "hmmer_native_alignment_decoding_v1"
+}

@@ -1,0 +1,383 @@
+{
+  "cases": [
+    {
+      "id": "01_rps_existing28row_profile",
+      "program": "makeprofiledb",
+      "arguments": [
+        "-in",
+        "profiles.list",
+        "-dbtype",
+        "rps",
+        "-out",
+        "profiles",
+        "-blastdb_version",
+        "5",
+        "-index",
+        "true",
+        "-threshold",
+        "9.82",
+        "-force",
+        "-max_smp_vol",
+        "2500"
+      ],
+      "verification_helper": false,
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/makeprofiledb",
+        "-in",
+        "profiles.list",
+        "-dbtype",
+        "rps",
+        "-out",
+        "profiles",
+        "-blastdb_version",
+        "5",
+        "-index",
+        "true",
+        "-threshold",
+        "9.82",
+        "-force",
+        "-max_smp_vol",
+        "2500"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644",
+      "executable": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/makeprofiledb",
+        "sha256": "d81da87fc0260ebea804fb8a36769a7d7ce8ee404bfd2dfb87da0c95036eff0a",
+        "size_bytes": 24818656
+      },
+      "environment_overrides": {
+        "BLAST_USAGE_REPORT": "false",
+        "NCBI_DONT_USE_NCBIRC": "1",
+        "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/tmp",
+        "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/tmp",
+        "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/tmp",
+        "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/cache"
+      },
+      "shell": false,
+      "started": true,
+      "returncode": 0,
+      "writer_closed": true,
+      "captured_bytes_complete": true,
+      "inventory_complete": true,
+      "inventory_before": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/INPUT_BINDINGS_003.json",
+          "sha256": "1f751392da201ba5e6e3a693704f7b85d6b2ab29ea255791c020339c97ea1058",
+          "size_bytes": 4067,
+          "relative_path": "INPUT_BINDINGS_003.json"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/INPUT_PINS_BEFORE_003.json",
+          "sha256": "edf24e972dadeb3b17c548e9a97bb81bbb5130bfe56391a061128d966b78b5f3",
+          "size_bytes": 5567,
+          "relative_path": "INPUT_PINS_BEFORE_003.json"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/inputs/SOURCE_MANIFEST.json",
+          "sha256": "c25386ad714d379ddc515f53fe08794d31c0f47dec6a18740c901306e333e30f",
+          "size_bytes": 7446,
+          "relative_path": "inputs/SOURCE_MANIFEST.json"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/inputs/TYPE_WRAPPER_003.json",
+          "sha256": "1fad23994648c0d91e4c65910f133caa711ef8d96889e913f28717f41f8a32c5",
+          "size_bytes": 60,
+          "relative_path": "inputs/TYPE_WRAPPER_003.json"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/inputs/blast.asn",
+          "sha256": "69f5b0a66b790806ea3de152e835baf3f2a4aa03e1a5f06a36aece8bcd6e3eff",
+          "size_bytes": 22436,
+          "relative_path": "inputs/blast.asn"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/inputs/pssm.object.asn",
+          "sha256": "a5997b2ac62c529701b148895cf9d409c204db431f564925c7df172998aff1a8",
+          "size_bytes": 420957,
+          "relative_path": "inputs/pssm.object.asn"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/inputs/webpsi.2ndround.pssm.asn",
+          "sha256": "a7ce96b9dae4e3a818c2dfb6e031606541791ba02840181fa1a9a83f9e30b85b",
+          "size_bytes": 420981,
+          "relative_path": "inputs/webpsi.2ndround.pssm.asn"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/inputs/webpsi.2ndround.ss.asn",
+          "sha256": "0862ae299a0223945ef7328500ef1e0aa242ccc328f401c408b27c396f08be48",
+          "size_bytes": 422925,
+          "relative_path": "inputs/webpsi.2ndround.ss.asn"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/profiles.list",
+          "sha256": "918878facdd61c8db123331ed43d6becb2e64132e1a996e028ae7f23fa6c20f7",
+          "size_bytes": 32,
+          "relative_path": "profiles.list"
+        }
+      ],
+      "inventory_after": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/INPUT_BINDINGS_003.json",
+          "sha256": "1f751392da201ba5e6e3a693704f7b85d6b2ab29ea255791c020339c97ea1058",
+          "size_bytes": 4067,
+          "relative_path": "INPUT_BINDINGS_003.json"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/INPUT_PINS_BEFORE_003.json",
+          "sha256": "edf24e972dadeb3b17c548e9a97bb81bbb5130bfe56391a061128d966b78b5f3",
+          "size_bytes": 5567,
+          "relative_path": "INPUT_PINS_BEFORE_003.json"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/inputs/SOURCE_MANIFEST.json",
+          "sha256": "c25386ad714d379ddc515f53fe08794d31c0f47dec6a18740c901306e333e30f",
+          "size_bytes": 7446,
+          "relative_path": "inputs/SOURCE_MANIFEST.json"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/inputs/TYPE_WRAPPER_003.json",
+          "sha256": "1fad23994648c0d91e4c65910f133caa711ef8d96889e913f28717f41f8a32c5",
+          "size_bytes": 60,
+          "relative_path": "inputs/TYPE_WRAPPER_003.json"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/inputs/blast.asn",
+          "sha256": "69f5b0a66b790806ea3de152e835baf3f2a4aa03e1a5f06a36aece8bcd6e3eff",
+          "size_bytes": 22436,
+          "relative_path": "inputs/blast.asn"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/inputs/pssm.object.asn",
+          "sha256": "a5997b2ac62c529701b148895cf9d409c204db431f564925c7df172998aff1a8",
+          "size_bytes": 420957,
+          "relative_path": "inputs/pssm.object.asn"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/inputs/webpsi.2ndround.pssm.asn",
+          "sha256": "a7ce96b9dae4e3a818c2dfb6e031606541791ba02840181fa1a9a83f9e30b85b",
+          "size_bytes": 420981,
+          "relative_path": "inputs/webpsi.2ndround.pssm.asn"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/inputs/webpsi.2ndround.ss.asn",
+          "sha256": "0862ae299a0223945ef7328500ef1e0aa242ccc328f401c408b27c396f08be48",
+          "size_bytes": 422925,
+          "relative_path": "inputs/webpsi.2ndround.ss.asn"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/logs/rps.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0,
+          "relative_path": "logs/rps.stderr"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/logs/rps.stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0,
+          "relative_path": "logs/rps.stdout"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/profiles.aux",
+          "sha256": "401c93841093d182aa9432af3d6775f3e05a1c1b72d9bdba11c120b671c1d9a3",
+          "size_bytes": 70,
+          "relative_path": "profiles.aux"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/profiles.freq",
+          "sha256": "f2fcc054b3fafde73d4466e32a27b0743a9e5224daec68ff8dce1d96a85a389a",
+          "size_bytes": 35968,
+          "relative_path": "profiles.freq"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/profiles.list",
+          "sha256": "918878facdd61c8db123331ed43d6becb2e64132e1a996e028ae7f23fa6c20f7",
+          "size_bytes": 32,
+          "relative_path": "profiles.list"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/profiles.loo",
+          "sha256": "e4c4dbbc61c6e55dcf1a2cb9e780989fff4863939c34b548fdb79d8a2c93ad84",
+          "size_bytes": 544812,
+          "relative_path": "profiles.loo"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/profiles.pdb",
+          "sha256": "5b1fa0d25a0dbd7a621a7c706eeb579f237327f1fea1757c715ef879b4dbea70",
+          "size_bytes": 32768,
+          "relative_path": "profiles.pdb"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/profiles.phr",
+          "sha256": "c8590e44f802b1844e2247a8958c841f568ce5c5976cc362a094be825972f0c6",
+          "size_bytes": 124,
+          "relative_path": "profiles.phr"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/profiles.pin",
+          "sha256": "0d3ac779bdf4a4387215d86a4ea4dbb5d37cf8804ba06b6d91b5755fe7363a07",
+          "size_bytes": 104,
+          "relative_path": "profiles.pin"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/profiles.pos",
+          "sha256": "fee4b28c147a0d52285b26459c3105ecc0130f69d3f08487ef16b3f7acd5d142",
+          "size_bytes": 22,
+          "relative_path": "profiles.pos"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/profiles.pot",
+          "sha256": "e2099cbf3445ac30a98dcc86f0b899eac91fd0a23cf2825f48bd01daadee347a",
+          "size_bytes": 20,
+          "relative_path": "profiles.pot"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/profiles.psq",
+          "sha256": "cd81a439eb30c529812bc47ab9d3d6875b91fe6990133f05ba8aecfee6fb0a52",
+          "size_bytes": 322,
+          "relative_path": "profiles.psq"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/profiles.ptf",
+          "sha256": "67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+          "size_bytes": 16384,
+          "relative_path": "profiles.ptf"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/profiles.pto",
+          "sha256": "7c9fa136d4413fa6173637e883b6998d32e1d675f88cddff9dcbcf331820f4b8",
+          "size_bytes": 8,
+          "relative_path": "profiles.pto"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/profiles.rps",
+          "sha256": "f89b401035182bbd20e813160902f200593961cf897928028a931af717e3bcf5",
+          "size_bytes": 35968,
+          "relative_path": "profiles.rps"
+        }
+      ],
+      "new_files": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/logs/rps.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0,
+          "relative_path": "logs/rps.stderr"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/logs/rps.stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0,
+          "relative_path": "logs/rps.stdout"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/profiles.aux",
+          "sha256": "401c93841093d182aa9432af3d6775f3e05a1c1b72d9bdba11c120b671c1d9a3",
+          "size_bytes": 70,
+          "relative_path": "profiles.aux"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/profiles.freq",
+          "sha256": "f2fcc054b3fafde73d4466e32a27b0743a9e5224daec68ff8dce1d96a85a389a",
+          "size_bytes": 35968,
+          "relative_path": "profiles.freq"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/profiles.loo",
+          "sha256": "e4c4dbbc61c6e55dcf1a2cb9e780989fff4863939c34b548fdb79d8a2c93ad84",
+          "size_bytes": 544812,
+          "relative_path": "profiles.loo"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/profiles.pdb",
+          "sha256": "5b1fa0d25a0dbd7a621a7c706eeb579f237327f1fea1757c715ef879b4dbea70",
+          "size_bytes": 32768,
+          "relative_path": "profiles.pdb"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/profiles.phr",
+          "sha256": "c8590e44f802b1844e2247a8958c841f568ce5c5976cc362a094be825972f0c6",
+          "size_bytes": 124,
+          "relative_path": "profiles.phr"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/profiles.pin",
+          "sha256": "0d3ac779bdf4a4387215d86a4ea4dbb5d37cf8804ba06b6d91b5755fe7363a07",
+          "size_bytes": 104,
+          "relative_path": "profiles.pin"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/profiles.pos",
+          "sha256": "fee4b28c147a0d52285b26459c3105ecc0130f69d3f08487ef16b3f7acd5d142",
+          "size_bytes": 22,
+          "relative_path": "profiles.pos"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/profiles.pot",
+          "sha256": "e2099cbf3445ac30a98dcc86f0b899eac91fd0a23cf2825f48bd01daadee347a",
+          "size_bytes": 20,
+          "relative_path": "profiles.pot"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/profiles.psq",
+          "sha256": "cd81a439eb30c529812bc47ab9d3d6875b91fe6990133f05ba8aecfee6fb0a52",
+          "size_bytes": 322,
+          "relative_path": "profiles.psq"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/profiles.ptf",
+          "sha256": "67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+          "size_bytes": 16384,
+          "relative_path": "profiles.ptf"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/profiles.pto",
+          "sha256": "7c9fa136d4413fa6173637e883b6998d32e1d675f88cddff9dcbcf331820f4b8",
+          "size_bytes": 8,
+          "relative_path": "profiles.pto"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/profiles.rps",
+          "sha256": "f89b401035182bbd20e813160902f200593961cf897928028a931af717e3bcf5",
+          "size_bytes": 35968,
+          "relative_path": "profiles.rps"
+        }
+      ],
+      "changed_files": [],
+      "removed_paths": [],
+      "stdout": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/logs/rps.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stderr": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102d_blast_profile_native/temporary/blast_profile28_native644/logs/rps.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stdout_utf8": "",
+      "stderr_utf8": "",
+      "native_aux_text": "BLOSUM62\n11\n1\n0.000000e+00\n0.000000e+00\n0\n0\n1.000000\n320\n3.756720e-02\n"
+    }
+  ],
+  "source_identity": {
+    "repository_path": "src/algo/blast/unit_tests/api/data/webpsi.2ndround.ss.asn",
+    "url": "https://raw.githubusercontent.com/ncbi/ncbi-cxx-toolkit-public/d4d56d4aa4fe16964e54c8c101fb1ec631ec6c05/src/algo/blast/unit_tests/api/data/webpsi.2ndround.ss.asn",
+    "path": "verification/tool_graders_blast_iteration_native_records_2026-10-26_315/sources/webpsi.2ndround.ss.asn",
+    "size_bytes": 422925,
+    "sha256": "0862ae299a0223945ef7328500ef1e0aa242ccc328f401c408b27c396f08be48"
+  },
+  "source_boundary": {
+    "source": "verification/tool_graders_blast_iteration_native_records_2026-10-26_315/sources/webpsi.2ndround.ss.asn",
+    "source_sha256": "0862ae299a0223945ef7328500ef1e0aa242ccc328f401c408b27c396f08be48",
+    "source_bytes": 422925,
+    "byte_start_inclusive": 101,
+    "byte_end_exclusive": 421058,
+    "object_sha256": "a5997b2ac62c529701b148895cf9d409c204db431f564925c7df172998aff1a8",
+    "object_bytes": 420957,
+    "wrapper_prefix": "PssmWithParameters ::= ",
+    "wrapper_suffix": "\n",
+    "wrapped_sha256": "a7ce96b9dae4e3a818c2dfb6e031606541791ba02840181fa1a9a83f9e30b85b",
+    "wrapped_bytes": 420981,
+    "qualification": "Exact existing nested PssmWithParameters object, standalone native preparation compatibility untested; no fields changed, scores recomputed, padding or new measurements"
+  },
+  "scope": "one selected native RPS preparation; no search or episode verification"
+}

@@ -1,0 +1,50 @@
+........................................................................ [ 35%]
+.........................................................F.............. [ 71%]
+.....F...................................................                [100%]
+=================================== FAILURES ===================================
+_____ test_actual_simulation_styles_and_auxiliary_artifacts[--fs-viterbi] ______
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check001/temporary/test_actual_simulation_styles_0')
+mode = 'viterbi', style = '--fs'
+
+    @pytest.mark.parametrize("mode", ["viterbi", "msv", "forward", "hybrid"])
+    @pytest.mark.parametrize("style", ["--fs", "--sw", "--ls", "--s"])
+    def test_actual_simulation_styles_and_auxiliary_artifacts(tmp_path, mode, style):
+        selected = job("hmmsim", mode)
+        selected["options"] += [style, "--tmin", ".1", "--tmax", ".1"]
+        selected["outputs"] += [{"role": role, "format": fmt, "relative_path": "outputs/" + role}
+            for role, fmt in (("filter", "hmmsim_filter"), ("survival", "hmmsim_xy"), ("expected_counts", "hmmsim_xy"))]
+        if mode == "viterbi":
+            selected["options"].append("-a")
+            selected["outputs"].append({"role": "alignments", "format": "hmmsim_alignments", "relative_path": "outputs/alignments"})
+        plan, bundle = run_actual(tmp_path, selected)
+        assert not bundle["failures"]
+        assert len(output_bytes(plan, bundle, "scores")) == 8000
+        if mode == "forward":
+            assert output_bytes(plan, bundle, "filter") == b""  # observed native defect, never a fabricated zero count
+        if (mode, style) == ("viterbi", "--fs"):
+            values = struct.unpack("=1000d", output_bytes(plan, bundle, "scores"))
+            assert sum(values) / len(values) == pytest.approx(-5.619071923450204)
+>           assert b"368" in output_bytes(plan, bundle, "filter")
+E           AssertionError: assert b'368' in b'tiny_dna\t48\t0.0480\n'
+E            +  where b'tiny_dna\t48\t0.0480\n' = output_bytes({'version': 'native_hmmer_preparation_run_plan_v1', 'identity': {'run_id': 'producer267-test', 'episode_id': 'selected...preparation_producer_2026-10-26_267/check001/temporary/test_actual_simulation_styles_0/hmmer-preparation-attempt', ...}, {'artifacts': [{'format': 'hmmer_stdout', 'relative_path': 'outputs/stdout', 'role': 'stdout', 'sha256': 'eae26ac0863a...ion_styles_0/hmmer-preparation-attempt/cache'}, 'failures': [], 'finished_at': '2026-10-26T08:51:36.343117+00:00', ...}, 'filter')
+
+../../../tests/test_native_hmmer_preparation_driver.py:125: AssertionError
+_____ test_actual_conversion_failure_preserves_complete_first_native_model _____
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check001/temporary/test_actual_conversion_failure0')
+
+    def test_actual_conversion_failure_preserves_complete_first_native_model(tmp_path):
+        selected = job()
+        source = tmp_path / "partly-malformed.hmm"
+        source.write_bytes(Path(selected["operands"][0]["path"]).read_bytes() + b"HMMER3/f\nBAD SECOND RECORD\n")
+        selected["operands"] = [operand("models", source, "hmmer3_ascii")]
+        plan, bundle = run_actual(tmp_path, selected)
+>       assert bundle["returncode"] == 1
+E       assert 0 == 1
+
+../../../tests/test_native_hmmer_preparation_driver.py:162: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_hmmer_preparation_driver.py::test_actual_simulation_styles_and_auxiliary_artifacts[--fs-viterbi]
+FAILED ../../../tests/test_native_hmmer_preparation_driver.py::test_actual_conversion_failure_preserves_complete_first_native_model
+2 failed, 199 passed in 81.75s (0:01:21)

@@ -1,0 +1,14 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_old_recorded_pending_exchange_and_completed_selection_replay_are_unchanged _
+source_snapshot/tests/test_composed_episode_assignment_transport.py:239: in test_old_recorded_pending_exchange_and_completed_selection_replay_are_unchanged
+    assert runtime._json(original_rows[0]['request']['output_schema']['properties']['response']['anyOf'][1]) == runtime._json(
+E   assert '{"additional...pe":"object"}' == '{"additional...pe":"object"}'
+E     
+E     Skipping 2097 identical leading characters in diff, use -v to show
+E     - quired":["hypothesis_ref","disposition","assessment_refs"],"type":"object"},"minItems":1,"type":"array"}},"required":["interpretations","context_refs"],"type":"object"},"type":"array"},"context_account_scope":{"anyOf":[{"additionalProperties":false,"description":"Fixed original material position set for a nonmolecular context interpretation. Frozen read selections of the same library union; segments restrict actual selected members. This is not a sequence mapping. {subject_refs: []} explicitly withdraws...
+E     
+E     ...Full output truncated (4 lines hidden), use '-vv' to show
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_composed_episode_assignment_transport.py::test_old_recorded_pending_exchange_and_completed_selection_replay_are_unchanged
+1 failed in 6.61s

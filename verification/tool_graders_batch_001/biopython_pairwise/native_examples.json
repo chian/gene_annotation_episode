@@ -1,0 +1,376 @@
+[
+  {
+    "name": "dna_global_gap",
+    "arguments": {
+      "query": "ACGTT",
+      "reference": "ACTT",
+      "molecule": "dna",
+      "mode": "global",
+      "gap_open": -2
+    },
+    "native": {
+      "aligned": true,
+      "native_score": 6.0,
+      "query_length": 5,
+      "reference_length": 4,
+      "paired_positions": 4,
+      "identical_positions": 4,
+      "identity_fraction": 1.0,
+      "query_coverage": 1.0,
+      "reference_coverage": 1.0,
+      "query_interval": [
+        0,
+        5
+      ],
+      "reference_interval": [
+        0,
+        4
+      ],
+      "coordinates": [
+        [
+          0,
+          2,
+          3,
+          5
+        ],
+        [
+          0,
+          2,
+          2,
+          4
+        ]
+      ],
+      "aligned_query": "ACGTT",
+      "aligned_reference": "AC-TT",
+      "mode": "global",
+      "matrix": "match_2_mismatch_minus_1",
+      "gap_open": -2,
+      "gap_extend": -0.5,
+      "biopython_version": "1.88",
+      "limitations": [
+        "pairwise_alignment_is_not_a_database_significance_test",
+        "one_alignment_is_not_an_orthology_or_function_assignment"
+      ]
+    }
+  },
+  {
+    "name": "dna_local_flanks",
+    "arguments": {
+      "query": "GGACGTCC",
+      "reference": "TTACGTAA",
+      "molecule": "dna",
+      "mode": "local"
+    },
+    "native": {
+      "aligned": true,
+      "native_score": 8.0,
+      "query_length": 8,
+      "reference_length": 8,
+      "paired_positions": 4,
+      "identical_positions": 4,
+      "identity_fraction": 1.0,
+      "query_coverage": 0.5,
+      "reference_coverage": 0.5,
+      "query_interval": [
+        2,
+        6
+      ],
+      "reference_interval": [
+        2,
+        6
+      ],
+      "coordinates": [
+        [
+          2,
+          6
+        ],
+        [
+          2,
+          6
+        ]
+      ],
+      "aligned_query": "ACGT",
+      "aligned_reference": "ACGT",
+      "mode": "local",
+      "matrix": "match_2_mismatch_minus_1",
+      "gap_open": -10.0,
+      "gap_extend": -0.5,
+      "biopython_version": "1.88",
+      "limitations": [
+        "pairwise_alignment_is_not_a_database_significance_test",
+        "one_alignment_is_not_an_orthology_or_function_assignment"
+      ]
+    }
+  },
+  {
+    "name": "rna_global_substitution",
+    "arguments": {
+      "query": "AUGC",
+      "reference": "AUAC",
+      "molecule": "rna",
+      "mode": "global"
+    },
+    "native": {
+      "aligned": true,
+      "native_score": 5.0,
+      "query_length": 4,
+      "reference_length": 4,
+      "paired_positions": 4,
+      "identical_positions": 3,
+      "identity_fraction": 0.75,
+      "query_coverage": 1.0,
+      "reference_coverage": 1.0,
+      "query_interval": [
+        0,
+        4
+      ],
+      "reference_interval": [
+        0,
+        4
+      ],
+      "coordinates": [
+        [
+          0,
+          4
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "aligned_query": "ATGC",
+      "aligned_reference": "ATAC",
+      "mode": "global",
+      "matrix": "match_2_mismatch_minus_1",
+      "gap_open": -10.0,
+      "gap_extend": -0.5,
+      "biopython_version": "1.88",
+      "limitations": [
+        "pairwise_alignment_is_not_a_database_significance_test",
+        "one_alignment_is_not_an_orthology_or_function_assignment"
+      ]
+    }
+  },
+  {
+    "name": "rna_local_flanks",
+    "arguments": {
+      "query": "GGAUGCCC",
+      "reference": "AAAUGCUU",
+      "molecule": "rna",
+      "mode": "local"
+    },
+    "native": {
+      "aligned": true,
+      "native_score": 8.0,
+      "query_length": 8,
+      "reference_length": 8,
+      "paired_positions": 4,
+      "identical_positions": 4,
+      "identity_fraction": 1.0,
+      "query_coverage": 0.5,
+      "reference_coverage": 0.5,
+      "query_interval": [
+        2,
+        6
+      ],
+      "reference_interval": [
+        2,
+        6
+      ],
+      "coordinates": [
+        [
+          2,
+          6
+        ],
+        [
+          2,
+          6
+        ]
+      ],
+      "aligned_query": "ATGC",
+      "aligned_reference": "ATGC",
+      "mode": "local",
+      "matrix": "match_2_mismatch_minus_1",
+      "gap_open": -10.0,
+      "gap_extend": -0.5,
+      "biopython_version": "1.88",
+      "limitations": [
+        "pairwise_alignment_is_not_a_database_significance_test",
+        "one_alignment_is_not_an_orthology_or_function_assignment"
+      ]
+    }
+  },
+  {
+    "name": "protein_global_gap",
+    "arguments": {
+      "query": "ACDE",
+      "reference": "ACE",
+      "molecule": "protein",
+      "mode": "global",
+      "gap_open": -2
+    },
+    "native": {
+      "aligned": true,
+      "native_score": 16.0,
+      "query_length": 4,
+      "reference_length": 3,
+      "paired_positions": 3,
+      "identical_positions": 3,
+      "identity_fraction": 1.0,
+      "query_coverage": 1.0,
+      "reference_coverage": 1.0,
+      "query_interval": [
+        0,
+        4
+      ],
+      "reference_interval": [
+        0,
+        3
+      ],
+      "coordinates": [
+        [
+          0,
+          2,
+          3,
+          4
+        ],
+        [
+          0,
+          2,
+          2,
+          3
+        ]
+      ],
+      "aligned_query": "ACDE",
+      "aligned_reference": "AC-E",
+      "mode": "global",
+      "matrix": "BLOSUM62",
+      "gap_open": -2,
+      "gap_extend": -0.5,
+      "biopython_version": "1.88",
+      "limitations": [
+        "pairwise_alignment_is_not_a_database_significance_test",
+        "one_alignment_is_not_an_orthology_or_function_assignment"
+      ]
+    }
+  },
+  {
+    "name": "protein_local_flanks",
+    "arguments": {
+      "query": "WWACDEWW",
+      "reference": "GGACDEGG",
+      "molecule": "protein",
+      "mode": "local"
+    },
+    "native": {
+      "aligned": true,
+      "native_score": 24.0,
+      "query_length": 8,
+      "reference_length": 8,
+      "paired_positions": 4,
+      "identical_positions": 4,
+      "identity_fraction": 1.0,
+      "query_coverage": 0.5,
+      "reference_coverage": 0.5,
+      "query_interval": [
+        2,
+        6
+      ],
+      "reference_interval": [
+        2,
+        6
+      ],
+      "coordinates": [
+        [
+          2,
+          6
+        ],
+        [
+          2,
+          6
+        ]
+      ],
+      "aligned_query": "ACDE",
+      "aligned_reference": "ACDE",
+      "mode": "local",
+      "matrix": "BLOSUM62",
+      "gap_open": -10.0,
+      "gap_extend": -0.5,
+      "biopython_version": "1.88",
+      "limitations": [
+        "pairwise_alignment_is_not_a_database_significance_test",
+        "one_alignment_is_not_an_orthology_or_function_assignment"
+      ]
+    }
+  },
+  {
+    "name": "dna_no_local_alignment",
+    "arguments": {
+      "query": "AAA",
+      "reference": "CCC",
+      "molecule": "dna",
+      "mode": "local"
+    },
+    "native": {
+      "aligned": false,
+      "query_length": 3,
+      "reference_length": 3,
+      "mode": "local",
+      "matrix": "match_2_mismatch_minus_1",
+      "biopython_version": "1.88"
+    }
+  },
+  {
+    "name": "dna_zero_paired_global_alignment",
+    "arguments": {
+      "query": "A",
+      "reference": "C",
+      "molecule": "dna",
+      "mode": "global",
+      "gap_open": -0.1,
+      "gap_extend": -0.1
+    },
+    "native": {
+      "aligned": true,
+      "native_score": -0.2,
+      "query_length": 1,
+      "reference_length": 1,
+      "paired_positions": 0,
+      "identical_positions": 0,
+      "identity_fraction": 0.0,
+      "query_coverage": 1.0,
+      "reference_coverage": 1.0,
+      "query_interval": [
+        0,
+        1
+      ],
+      "reference_interval": [
+        0,
+        1
+      ],
+      "coordinates": [
+        [
+          0,
+          1,
+          1
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "aligned_query": "A-",
+      "aligned_reference": "-C",
+      "mode": "global",
+      "matrix": "match_2_mismatch_minus_1",
+      "gap_open": -0.1,
+      "gap_extend": -0.1,
+      "biopython_version": "1.88",
+      "limitations": [
+        "pairwise_alignment_is_not_a_database_significance_test",
+        "one_alignment_is_not_an_orthology_or_function_assignment"
+      ]
+    }
+  }
+]

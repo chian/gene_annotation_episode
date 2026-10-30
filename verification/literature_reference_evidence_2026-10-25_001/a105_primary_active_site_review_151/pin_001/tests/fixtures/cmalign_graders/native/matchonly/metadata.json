@@ -1,0 +1,36 @@
+{
+  "operation": {
+    "program": "cmalign",
+    "native_version": "1.1.5",
+    "settings": {
+      "algorithm": "optacc",
+      "global": false,
+      "notrunc": false,
+      "matchonly": true,
+      "sub": false,
+      "noprob": false,
+      "miss": true,
+      "mapali": false,
+      "banding": "hbanded",
+      "cpu": 1,
+      "mxsize_mb": 256,
+      "verbose": false
+    }
+  },
+  "sequences": [
+    {
+      "name": "tRNA6",
+      "sequence": "GUCCCGCUGGUGUAAUGGAUAGCAUACGAUCCUUCUAAGUUUGCGGUCCUGGUUCGAUCCCAGGGCGGGAUA",
+      "origin": "newly_aligned"
+    },
+    {
+      "name": "tRNA6-trunc",
+      "sequence": "AGCAUACGAUCCUUCUAAGUUUGCGGUCCUGGUUC",
+      "origin": "newly_aligned"
+    }
+  ],
+  "model": {
+    "name": "tRNA5",
+    "consensus_length": 72
+  }
+}

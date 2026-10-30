@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="26" time="77.389" timestamp="2026-10-28T03:44:04.655280-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_exact_reviewed_contracts_and_no_discovery_state" time="3.432" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_exact_empty_and_ordered_roster[components0]" time="2.792" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_exact_empty_and_ordered_roster[components1]" time="2.923" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_exact_empty_and_ordered_roster[components2]" time="3.442" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_source_roster_and_closed_failure_preflight[roster]" time="1.278" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_source_roster_and_closed_failure_preflight[source]" time="1.194" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_source_roster_and_closed_failure_preflight[witness]" time="1.370" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_source_roster_and_closed_failure_preflight[field]" time="1.320" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_source_roster_and_closed_failure_preflight[scenario]" time="1.218" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_partial_source_units_preserve_correct_sd_se_and_count[missing_central_value]" time="3.883" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_partial_source_units_preserve_correct_sd_se_and_count[missing_parameter_unit]" time="3.690" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_partial_source_units_preserve_correct_sd_se_and_count[both_units_missing]" time="3.948" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_partial_source_units_preserve_correct_sd_se_and_count[different_native_time_units]" time="3.899" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_non_sd_complete_original_retention_without_inversion[sem]" time="2.988" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_non_sd_complete_original_retention_without_inversion[ci]" time="3.132" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_unresolved_dimension_preserves_originals_and_count[unknown]" time="3.552" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_unresolved_dimension_preserves_originals_and_count[conflicting]" time="3.110" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_explicit_scenario_never_rewrites_source_conditions" time="3.831" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_selected_valid_count_does_not_inherit_unrelated_unknown_extra_count" time="3.132" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_missing_physical_mapping_conditions_reach_selected_parent_view[False]" time="3.257" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_missing_physical_mapping_conditions_reach_selected_parent_view[True]" time="3.352" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_receiving_parent_sees_sampling_source_origin_and_approximation[False]" time="3.294" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_receiving_parent_sees_sampling_source_origin_and_approximation[True]" time="3.391" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_nonowner_exact_desired_order_intersection_and_private_alias_custody" time="4.059" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_narrow_context_rejects_selected_numeric_tokens" time="1.259" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_full_task_union_lookup_and_failed_history_no_input_dump" time="3.468"><failure message="AttributeError: 'NoneType' object has no attribute 'values'">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_summary_precision_binding_251/attempt_008/test_full_task_union_lookup_an0')
+
+    def test_full_task_union_lookup_and_failed_history_no_input_dump(tmp_path):
+        from gene_annotation_episode.episode_contract_information import operation_contract_information
+        store, ctx, args, binding, _ = setup(tmp_path/'state')
+        try:
+            current, out, rows = selected(store, ctx, args, binding)
+            state = {'literature_experimental_work': {'version': 'literature_experimental_task_v1', 'aspect': 'source_experimental_evidence'},
+                'literature_assignment': plain(ctx.assignment), 'working_state': {}, 'last_local_outcome': out,
+                **binding._summary_precision_display_context(current)}
+            task, steering = render_literature_experimental_prompt(state, 'Evaluate requested precision.').split('\n\nSTEERING\n')
+            for paragraph in KINETIC_SUMMARY_PRECISION_TASK.strip().split('\n\n'):
+                assert paragraph in task
+            assert KINETIC_MODEL_TASK not in task
+            assert 'source_count' not in steering and '600' not in steering
+            lookup = operation_contract_information(catalog=binding.catalog(ctx), operation='literature.kinetic.populate')
+            union = render_literature_experimental_prompt(state, 'Select a kinetic interpretation.', lookup_results=[lookup])
+            task = union.split('\n\nSTEERING\n')[0]
+            assert KINETIC_SUMMARY_PRECISION_TASK in task and KINETIC_MODEL_TASK in task
+            history = {'status': 'completed', 'result': {'view': 'records', 'records': [{'selection': {
+                'kind': 'tool', 'tool': 'literature.kinetic.populate', 'arguments': args},
+                'outcome': {'status': 'invalid', 'result': None, 'feedback': {'code': 'controlled_missing251'}}}]}}
+&gt;           prompt = render_literature_experimental_prompt({**state, 'last_local_outcome': None}, 'Repair the selected source.', lookup_results=[history])
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_kinetic_summary_precision_binding_251.py:371: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_experimental_prompt.py:1649: in render_literature_experimental_prompt
+    return _task(state, instructions) + "\n\n" + _steering(state, lookup_results)
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_experimental_prompt.py:1584: in _steering
+    _source_result(parts, result, "Requested information; continue this decision", controlled_records=controlled_records,
+gene_annotation_episode/literature_experimental_prompt.py:690: in _source_result
+    _source_result(parts, prior, "Requested prior action outcome", controlled_records=controlled_records,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+parts = ['STEERING', '', 'Own action yields', '', 'None supplied.', '', ...]
+value = {'status': 'invalid', 'result': None, 'feedback': {'code': 'controlled_missing251'}}
+title = 'Requested prior action outcome', controlled_records = {}
+controlled_bindings = None
+controlled_assignment = {'version': 'literature_assignment_v1', 'source_refs': ['source_04cfe2f3825839fa2affb307'], 'question_context_refs': [], 'requested_kinetic_summary_precision_components': ['source_mean_standard_error', 'source_reported_sd']}
+gel_bindings = None
+gel_assignment = {'version': 'literature_assignment_v1', 'source_refs': ['source_04cfe2f3825839fa2affb307'], 'question_context_refs': [], 'requested_kinetic_summary_precision_components': ['source_mean_standard_error', 'source_reported_sd']}
+gel_records = {}, native_rate_display = {'records': {}}
+native_rate_domain_display = {'records': {}}
+native_rate_meaning_display = {'records': {}}
+completion_assignment = {'version': 'literature_assignment_v1', 'source_refs': ['source_04cfe2f3825839fa2affb307'], 'question_context_refs': [], 'requested_kinetic_summary_precision_components': ['source_mean_standard_error', 'source_reported_sd']}
+values = &lt;function _steering.&lt;locals&gt;.semantic_values at 0x7fc3e5199620&gt;
+
+    def _source_result(parts, value, title, *, controlled_records=None, controlled_bindings=None,
+            controlled_assignment=None, gel_bindings=None, gel_assignment=None, gel_records=None,
+            native_rate_display=None, native_rate_domain_display=None, native_rate_meaning_display=None,
+            completion_assignment=None, values=_values):
+        if not isinstance(value, Mapping):
+            _section(parts, title, values(value))
+            return
+        content = value.get("result", value)
+        if isinstance(content, Mapping) and content.get('view') == 'kinetic_summary_precision_components':
+            _section(parts, title, values(_pick(value, ('status', 'selected_tool', 'feedback'))))
+            _summary_precision.render_received(parts, content['cells'], section=_section, table=_table)
+            return
+        if isinstance(content, Mapping) and content.get('view') == 'endpoint_signal_components':
+            _section(parts, title, values(_pick(value, ('status', 'selected_tool', 'feedback'))))
+            _endpoint_signal.render_received(parts, content['cells'], section=_section, table=_table)
+            return
+        if isinstance(content, Mapping) and content.get("view") == "product_coupling_components":
+            _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
+            _product_coupling.render_received(parts, content["cells"], section=_section, table=_table)
+            return
+        if isinstance(content, Mapping) and content.get("view") == "measurement_validation_components":
+            _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
+            _measurement_validation.render_received(parts, content["cells"], section=_section, table=_table)
+            return
+        if isinstance(content, Mapping) and content.get("view") == "ion_discrimination_components":
+            _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
+            _ion_discrimination.render_received(parts, content["cells"], section=_section, table=_table)
+            return
+        if isinstance(content, Mapping) and content.get("view") == "channel_components":
+            _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
+            _channel.render_received(parts, content["cells"], section=_section, table=_table)
+            return
+        if isinstance(content, Mapping) and content.get("view") == "compiled_assay_components":
+            _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
+            _compiled_assay.render_received(parts, content["cells"], section=_section, table=_table)
+            return
+        if isinstance(content, Mapping) and content.get("view") == "calibration_recovery_components":
+            _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
+            _calibration_recovery.render_received(parts, content["cells"], section=_section, table=_table)
+            return
+        if isinstance(content, Mapping) and content.get("view") in ("reported_rate_observation_components", "reported_curve_precision_components"):
+            _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
+            _rate_observations.render_received(parts, content["cells"], section=_section, table=_table)
+            return
+        if isinstance(content, Mapping) and content.get("view") == "raw_rate_replicate_components":
+            _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
+            _rate_replicates.render_received(parts, content["cells"], section=_section, table=_table)
+            return
+        if isinstance(content, Mapping) and content.get("view") == "reported_product_partition_components":
+            requested = (completion_assignment or {}).get("requested_product_partition_components", ())
+            rows = [row for row in content["cells"] if row["component"] in requested]
+            _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
+            _product_partition.render_received(parts, rows, controlled_records or {}, section=_section, table=_table)
+            return
+        if (isinstance(content, Mapping) and "sheet_ref" in content
+                and isinstance(content.get("cells"), (tuple, list)) and content["cells"]
+                and all(_completion_time.is_row(row) for row in content["cells"])):
+            requested = (completion_assignment or {}).get("requested_completion_time_components", ())
+            rows = [row for row in content["cells"] if row["component"] in requested]
+            _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
+            _completion_time.render_received(parts, rows, section=_section, table=_table)
+            return
+        if (isinstance(content, Mapping) and "sheet_ref" in content
+                and isinstance(content.get("cells"), (tuple, list)) and content["cells"]
+                and all(_active_site.is_row(row) for row in content["cells"])):
+            requested = (completion_assignment or {}).get("requested_active_site_components", ())
+            rows = [row for row in content["cells"] if row["component"] in requested]
+            _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
+            _active_site.render_received(parts, rows, section=_section, table=_table)
+            return
+        # A direct admitted form can contain several requested scientific families.
+        # Dispatch the complete form so recognizing one meaning view never drops
+        # its siblings. Nested history has its own explicit envelope below.
+&gt;       if (any(isinstance(v, (tuple, list)) and v and all(_summary_precision.is_row(r) for r in v) for v in content.values()) or list(_endpoint_signal.rows_from_reports([content])) or list(_product_coupling.rows_from_reports([content])) or list(_measurement_validation.rows_from_reports([content])) or list(_ion_discrimination.rows_from_reports([content])) or list(_channel.rows_from_reports([content])) or list(_compiled_assay.rows_from_reports([content])) or list(_calibration_recovery.rows_from_reports([content])) or list(_rate_observations.rows_from_reports([content])) or list(_rate_replicates.rows_from_reports([content])) or list(_rate_meanings.rows_from_reports([content])) or list(_completion_time.rows_from_reports([content])) or list(_active_site.rows_from_reports([content]))
+                                                                                                             ^^^^^^^^^^^^^^
+                or list(_product_partition.rows_from_reports([content]))):
+E               AttributeError: 'NoneType' object has no attribute 'values'
+
+gene_annotation_episode/literature_experimental_prompt.py:629: AttributeError</failure></testcase></testsuite></testsuites>

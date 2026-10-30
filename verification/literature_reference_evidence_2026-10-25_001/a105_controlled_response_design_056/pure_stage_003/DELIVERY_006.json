@@ -1,0 +1,148 @@
+{
+  "status": "bounded_pure_stage_delivered_full_workload_unfinished",
+  "owned_new_paths": {
+    "gene_annotation_episode/literature_controlled_response_calculations.py": {
+      "bytes": 33871,
+      "sha256": "a75b8f8ef4905d805be24e86236ef8303c97b5e4761acf0d849ca01aadaec023"
+    },
+    "tests/test_literature_controlled_response_calculations.py": {
+      "bytes": 31338,
+      "sha256": "b4ae70054b12e1699abfc190d2b0f708f450f203dc96e062422eeef85cd08bea"
+    }
+  },
+  "existing_dependencies_unchanged": {
+    "gene_annotation_episode/literature_experimental_contracts.py": {
+      "bytes": 7451,
+      "sha256": "0d7d4cb57f63c66ae36912e369fbcea557a6b9646c727ed1c60eac229ca3bccc"
+    },
+    "gene_annotation_episode/literature_rate_calculations.py": {
+      "bytes": 20072,
+      "sha256": "17163020eb4449360efd208174f06e6df6c92f375fedacf5f45267a84ee67545"
+    },
+    "gene_annotation_episode/literature_transport_calculations.py": {
+      "bytes": 10972,
+      "sha256": "afbc2c00c63ea56ff6790298ea3f9fb6b30fe54a696cc1f4fc9211df058d63e4"
+    },
+    "tests/test_literature_transport_calculations.py": {
+      "bytes": 19568,
+      "sha256": "476ac1c7b893ec6d19ba2d1d7cdcef1a52ca6267a9d7038a01ceafbf80944ab1"
+    }
+  },
+  "calculator_matches_root_review_hash": true,
+  "later_test_delta": "Final dedicated tests expanded from root-reported 574 lines to648; calculator source unchanged after root a75b8f8e audit. REVIEW_DELTA_006.patch contains complete differences from worker preserved initial83-case baseline, not a claimed root574-line snapshot.",
+  "frozen_input_matches_test_example": true,
+  "actual_final_test_result": {
+    "scope": "Observed prior tool invocation summary, not a fresh test run or full stdout reconstruction",
+    "command": ".venv/bin/python -B -m pytest -q -p no:cacheprovider tests/test_literature_controlled_response_calculations.py tests/test_literature_rate_calculations.py tests/test_literature_transport_calculations.py",
+    "exit_code": 0,
+    "summary": "209 passed in 0.95s",
+    "dedicated_cases": 93,
+    "existing_regression_cases": 116,
+    "scientific_source_or_model_run": false,
+    "runtime_observations": 0
+  },
+  "pure_reproduction_cases": 14,
+  "full_goal_complete": false,
+  "existing_production_or_test_writes": false,
+  "source_reader_or_native_integration_implemented": false,
+  "scientific_paper_packet_or_model_run": false,
+  "runtime_observations_or_credit": 0,
+  "artifacts": {
+    "API_006.json": {
+      "bytes": 4380,
+      "sha256": "967d048f7d713568b5021fa0a4a7590295587f21e9f31f186c60a20d2d33968e"
+    },
+    "BEFORE_003.json": {
+      "bytes": 985,
+      "sha256": "d0d06c7441e0a12dd8b065fdb66ec39cb610547dc9e31dff9a429af850676b08"
+    },
+    "BOUND_STATE_EXAMPLES_003.json": {
+      "bytes": 1147,
+      "sha256": "487aed007a733770e8e74fe728a1e7e1967c7340703422ce31fcb2f3b59d8bd1"
+    },
+    "CONTRACT_CLARIFICATIONS_004.md": {
+      "bytes": 1626,
+      "sha256": "553a163e62470b49688eda31231935571d7f0b695e441d421026209fbc8eeac7"
+    },
+    "CONTRACT_FREEZE_003.md": {
+      "bytes": 2533,
+      "sha256": "fb648599962681f66831d17854495ccee3ff506b5e6bf40b9362ca4756dde6c9"
+    },
+    "CROSS_DIMENSION_BEFORE_004.json": {
+      "bytes": 351,
+      "sha256": "83f80845551b603aedc02fe7610e1ae5c2ca8961b1a537a4b984a7e2e3a10245"
+    },
+    "CROSS_DIMENSION_BEFORE_004.txt": {
+      "bytes": 1204,
+      "sha256": "d735050f665b53b581a3cc55517d9e30d5bd7d4d55e2c4ed8c7a51b8a0e48849"
+    },
+    "HANDOFF_006.md": {
+      "bytes": 8376,
+      "sha256": "a41fe62e0f47e6abcc1ac92210abb93f4b791e79c2dc542889be648cc70f58fe"
+    },
+    "INPUT_CONTRACT_EXAMPLE_003.json": {
+      "bytes": 5109,
+      "sha256": "f384fae2e55ef86b3fb7249a0c7094be7e76c16c088d2d0e50a6ec0dbfa553f5"
+    },
+    "NEW_FILES_006.patch": {
+      "bytes": 66717,
+      "sha256": "774e0f3aeda65297ca6055013c6cedeba2ba0bb101031549fc1bfc10d59cc3fb"
+    },
+    "NUMERICAL_FIXTURES_005.json": {
+      "bytes": 195975,
+      "sha256": "d77baf77326748b13f33258585fd3c1dfccf3253ed8fd302cb2f679bff7343c2"
+    },
+    "NUMERICAL_FIXTURES_005.md": {
+      "bytes": 2523,
+      "sha256": "ef146e19f04b935102eaeab1f4165c90a7b0e432174ec6ad16786588813dc470"
+    },
+    "REVIEW_BASELINE_004.json": {
+      "bytes": 477,
+      "sha256": "2c92719277407698ad7ff750c4f0502062f5e89cd7a0ae0a2ce58486e46cdbee"
+    },
+    "REVIEW_DELTA_006.patch": {
+      "bytes": 8305,
+      "sha256": "4f2de1451f4ab4df69265a0971f0fceb048eaf69a023a0f2833e68ea7a5ce5c4"
+    },
+    "TEST_RUN_005.json": {
+      "bytes": 513,
+      "sha256": "df074a504a9c3b5ca8cb11da9fdb576c5b543491a05b02a4bb3717e1f5b08681"
+    },
+    "baseline/gene_annotation_episode/literature_experimental_contracts.py": {
+      "bytes": 7451,
+      "sha256": "0d7d4cb57f63c66ae36912e369fbcea557a6b9646c727ed1c60eac229ca3bccc"
+    },
+    "baseline/gene_annotation_episode/literature_rate_calculations.py": {
+      "bytes": 20072,
+      "sha256": "17163020eb4449360efd208174f06e6df6c92f375fedacf5f45267a84ee67545"
+    },
+    "baseline/gene_annotation_episode/literature_transport_calculations.py": {
+      "bytes": 10972,
+      "sha256": "afbc2c00c63ea56ff6790298ea3f9fb6b30fe54a696cc1f4fc9211df058d63e4"
+    },
+    "baseline/tests/test_literature_transport_calculations.py": {
+      "bytes": 19568,
+      "sha256": "476ac1c7b893ec6d19ba2d1d7cdcef1a52ca6267a9d7038a01ceafbf80944ab1"
+    },
+    "final_snapshot_006/gene_annotation_episode/literature_controlled_response_calculations.py": {
+      "bytes": 33871,
+      "sha256": "a75b8f8ef4905d805be24e86236ef8303c97b5e4761acf0d849ca01aadaec023"
+    },
+    "final_snapshot_006/tests/test_literature_controlled_response_calculations.py": {
+      "bytes": 31338,
+      "sha256": "b4ae70054b12e1699abfc190d2b0f708f450f203dc96e062422eeef85cd08bea"
+    },
+    "reproduce_calculator_005.py": {
+      "bytes": 6859,
+      "sha256": "8fef7d787d32a96a92ffa4189dfed50ae09dc4c23e5c6d5a18df39257e4c02ee"
+    },
+    "review_baseline_004/gene_annotation_episode/literature_controlled_response_calculations.py": {
+      "bytes": 33580,
+      "sha256": "5a3a493722e72f47b67b76a25bf56d8bbe02418e8b40ad97da003b17e93dfd92"
+    },
+    "review_baseline_004/tests/test_literature_controlled_response_calculations.py": {
+      "bytes": 25780,
+      "sha256": "66daae8f3c291b7b4c8ad41037e4dfbbf1e649232d7772c507084be6206a93eb"
+    }
+  }
+}

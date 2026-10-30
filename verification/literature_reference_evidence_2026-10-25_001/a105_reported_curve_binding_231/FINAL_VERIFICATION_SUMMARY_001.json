@@ -1,0 +1,69 @@
+{
+  "version": "reported_curve_selected_integration_verification_v1",
+  "final_pin": "PIN_004.json",
+  "pin_file_count": 2038,
+  "production_changed_since_first_pin": false,
+  "new_test_only_delta": "PIN_DELTA_002.json",
+  "retained_data_only_deltas": [
+    "PIN_DELTA_003.json",
+    "PIN_DELTA_004.json"
+  ],
+  "cohorts": [
+    {
+      "junit": "FINAL_JUNIT_002.xml",
+      "tests": 327,
+      "passed": 323,
+      "failed": 4
+    },
+    {
+      "junit": "FINAL_JUNIT_003.xml",
+      "tests": 1,
+      "passed": 1,
+      "failed": 0
+    },
+    {
+      "junit": "FINAL_JUNIT_004.xml",
+      "tests": 3,
+      "passed": 2,
+      "failed": 1
+    }
+  ],
+  "unique_checks": 328,
+  "unique_passed": 326,
+  "preexisting_fixture_failures": [
+    {
+      "id": "tests.test_literature_experimental_prompt_delivery::test_only_enabled_literature_binding_supplies_experimental_marker",
+      "status": "failed",
+      "latest_evidence": "FINAL_JUNIT_002.xml"
+    },
+    {
+      "id": "tests.test_literature_reference_parent_delivery::test_explicit_parent_sources_are_receipt_bound_fixed_and_reconstructed",
+      "status": "failed",
+      "latest_evidence": "FINAL_JUNIT_004.xml"
+    }
+  ],
+  "baseline_confirmations": [
+    {
+      "id": "tests.test_literature_experimental_prompt_delivery::test_only_enabled_literature_binding_supplies_experimental_marker",
+      "junit": "BASELINE_JUNIT_001.xml",
+      "same_pre231_failure_reproduced": true
+    },
+    {
+      "id": "tests.test_literature_reference_parent_delivery::test_explicit_parent_sources_are_receipt_bound_fixed_and_reconstructed",
+      "junit": "BASELINE_JUNIT_002.xml",
+      "same_pre231_failure_reproduced": true
+    }
+  ],
+  "new_integration_cases": 32,
+  "new_integration_passed": 32,
+  "affected_legacy_passed": 294,
+  "controlled_cold_proofs": 9,
+  "original_legacy_v1_readonly_state_unchanged": true,
+  "all_owned_processes_terminal_and_reaped": true,
+  "all_pin_and_original_external_state_hashes_unchanged": true,
+  "earlier_launcher_failure_preserved": "FINAL_RUN_001.log",
+  "actual_model_execution": false,
+  "goal_or_amendments_changed": false,
+  "A105_complete": false,
+  "full_goal_complete": false
+}

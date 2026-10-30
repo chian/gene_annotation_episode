@@ -1,0 +1,25 @@
+# A105 NfnAB comparison: current implementation audit
+
+2026-10-28. This is an additive status audit of retained case255 against current code. It does not redefine the fixed literature goal, adopt an overall grade, or change a saved run.
+
+## Source conversion and numerical cells
+
+The retained Wang et al. NfnAB packet reports rounded apparent Vmax values for different assay protocols: ferredoxin reduction about 23 U/mg (A430) and NADH formation about 8 U/mg (A380). Each U is one micromole of its named product per minute. The source reaction links one ferredoxin reduction and one NADH formation in the selected direction. Under that explicit stoichiometric re-expression, current comparison cells give the descriptive linked-protocol difference `8 - 23 = -15` reaction µmol/min/mg, ratio `8/23 = 0.347826...`, and log ratio about `-1.05605`. These three are representations of one pair, not independent support scores. They do not establish a common-condition inconsistency: ferredoxin concentration, hydrogenase, redox state, and readout differ.
+
+The reported A380 coefficients give the signed spectral sensitivity `alpha = 8.6/1.2 = 7.166666...` NADH-equivalent units per ferredoxin unit. Under the explicitly conditional scenario that the A380 true rate equals the reported A430 rate on the selected report scale, the missing nuisance rate required to explain the discrepancy is `(23 - 8)/alpha = 2.093023...` ferredoxin µmol/min/mg. This is a *required* value, not a measured ferredoxin rate. The paper does not provide that rate, a joint estimator covariance for the 8 and 23 reports, or a matched common-condition correction. Corrected NADH rate, standardized common-estimand discrepancy, and generalized least-squares common activity therefore remain unavailable. Source SD/SEM and independent preparation count for this pair are not established.
+
+## Current code and evidence
+
+The retained case255 proposal described these components as unimplemented. Current `literature_measurement_comparison_inputs.py` supplies source-bound selection/extraction contracts, including the two native quantities, stoichiometric conversions, relationship meanings, optical model, nuisance quantity, and optional joint covariance. `literature_measurement_comparison_calculations.py` calculates the descriptive pair, spectral sensitivity, correction when a measured nuisance is available, conditional required interference, covariance propagation, and common-estimand comparison only when its prerequisites are supported. `literature_measurement_comparison_storage.py` and `literature_episodes.py` expose selected persistence and typed delivery. The common A105 worksheet includes this section as `literature_measurement_comparison_cells`.
+
+Focused verification using the current virtual environment: `tests/test_literature_measurement_comparison_components_258.py::test_actual_original_nfn_mechanical_binding` and `tests/test_literature_measurement_comparison_binding_268.py::test_actual_parent_converted_source_assertion_and_valid_partials` both passed (`2 passed in 6.65s`). This is a focused test result, not a fresh configured-model literature run or a complete A105 scoring audit.
+
+The calculation sheet still emits `standalone_components_not_selected_integration` in its `remaining_limits` even though the selected binding exists. This status string is stale and should be corrected with its schema and tests as one bounded coding workload. The reported-curve precision sheet similarly emits `selected_typed_binding_unimplemented` despite its existing selected binding. Neither stale string changes the numerical cells, but both misreport implementation coverage.
+
+## Common sheet gap
+
+The common worksheet composes saved numerical sections and validates links. It explicitly does not calculate a new source-level experimental score. The case255 section supplies useful measurement, validity, and uncertainty operands, but no full reliability/validity/relevance combination follows from an unknown measured nuisance and unknown joint covariance. Missing information stays unknown. Target correspondence and final annotation-credit aggregation remain outside this literature work.
+
+## Reading and authority boundary
+
+Before this conversion, root reread the complete immutable user goal, the complete authority set enumerated in `research/experimental_scoring_review_2026-10-23/AGENTS.md`, the complete current common A105 worksheet, the complete inline JSON selection/extraction schema bundle from the current comparison input module in six untruncated chunks, and the complete current numerical calculator. The current user-provided AGENTS.md and latest request to keep going were considered last. The case255 retained research proposal was read completely; this audit has not independently reread every byte of the primary article, so the source interpretation is bounded by that retained packet and the original-source test named above. No private provider/model conversation or transport log was read.

@@ -1,0 +1,17 @@
+#                                                               --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name        accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+test1                -          test1                -            7.9e-23   68.2   0.0   8.2e-23   68.2   0.0   1.0   1   0   0   1   1   1   1 -
+test4                -          test1                -            1.9e-22   67.0   0.0     2e-22   66.9   0.0   1.0   1   0   0   1   1   1   1 -
+test2                -          test1                -            5.4e-19   55.9   0.3   5.9e-19   55.8   0.3   1.0   1   0   0   1   1   1   1 -
+test3                -          test1                -            8.5e-19   55.3   0.2     1e-18   55.1   0.2   1.1   1   0   0   1   1   1   1 -
+#
+# Program:         jackhmmer
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      query.fa
+# Target file:     targets.fa
+# Option settings: /home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/jackhmmer -N 3 -A jackhmmer.included.sto --tblout jackhmmer.tblout --domtblout jackhmmer.domtblout --chkhmm round-model --chkali round-included --max --cpu 1 query.fa targets.fa 
+# Current dir:     /home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_search_2026-10-24/native
+# Date:            Sat Oct 24 14:42:35 2026
+# [ok]

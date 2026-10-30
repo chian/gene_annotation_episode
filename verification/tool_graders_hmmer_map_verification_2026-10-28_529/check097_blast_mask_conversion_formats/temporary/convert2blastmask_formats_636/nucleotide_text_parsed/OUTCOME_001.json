@@ -1,0 +1,58 @@
+{
+  "case_id": "nucleotide_text_parsed",
+  "input_name": "nucleotide_four",
+  "native_format": "maskinfo_asn1_text",
+  "declared_molecule": "nucleotide",
+  "declared_upstream_algorithm": "dust",
+  "declared_upstream_options": "supplied lowercase; no detector run; fixture 636",
+  "parse_seqids": true,
+  "argv": [
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check097_blast_mask_conversion_formats/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/convert2blastmask",
+    "-in",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check097_blast_mask_conversion_formats/temporary/convert2blastmask_formats_636/inputs/nucleotide_four.fasta",
+    "-out",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check097_blast_mask_conversion_formats/temporary/convert2blastmask_formats_636/nucleotide_text_parsed/native_output.maskinfo_asn1_text",
+    "-outfmt",
+    "maskinfo_asn1_text",
+    "-masking_algorithm",
+    "dust",
+    "-masking_options",
+    "supplied lowercase; no detector run; fixture 636",
+    "-parse_seqids"
+  ],
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check097_blast_mask_conversion_formats/temporary/convert2blastmask_formats_636/nucleotide_text_parsed",
+  "shell": false,
+  "environment": {
+    "PATH": "/usr/bin:/bin",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "BLAST_USAGE_REPORT": "false",
+    "NCBI_DONT_USE_NCBIRC": "1",
+    "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check097_blast_mask_conversion_formats/temporary/convert2blastmask_formats_636/nucleotide_text_parsed/temporary",
+    "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check097_blast_mask_conversion_formats/temporary/convert2blastmask_formats_636/nucleotide_text_parsed/temporary",
+    "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check097_blast_mask_conversion_formats/temporary/convert2blastmask_formats_636/nucleotide_text_parsed/temporary",
+    "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check097_blast_mask_conversion_formats/temporary/convert2blastmask_formats_636/nucleotide_text_parsed/cache"
+  },
+  "executed": true,
+  "returncode": 0,
+  "launch_error": null,
+  "stdout": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check097_blast_mask_conversion_formats/temporary/convert2blastmask_formats_636/nucleotide_text_parsed/stdout.bin",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "size_bytes": 0
+  },
+  "stderr": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check097_blast_mask_conversion_formats/temporary/convert2blastmask_formats_636/nucleotide_text_parsed/stderr.bin",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "size_bytes": 0
+  },
+  "stdout_text": "",
+  "stderr_text": "",
+  "native_output_present": true,
+  "native_output": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check097_blast_mask_conversion_formats/temporary/convert2blastmask_formats_636/nucleotide_text_parsed/native_output.maskinfo_asn1_text",
+    "sha256": "5e02f4c72443117935a60bba4b9034112797efbd264314d5cfccc9eb8db79df3",
+    "size_bytes": 1123
+  },
+  "native_output_text": "Blast-db-mask-info ::= {\n  algo-id 0,\n  algo-program dust,\n  algo-options \"supplied lowercase; no detector run; fixture 636\",\n  masks {\n    masks {\n      packed-int {\n        {\n          from 2,\n          to 3,\n          id local str \"mask_a\"\n        },\n        {\n          from 6,\n          to 7,\n          id local str \"mask_a\"\n        },\n        {\n          from 11,\n          to 11,\n          id local str \"mask_a\"\n        }\n      },\n      packed-int {\n        {\n          from 0,\n          to 1,\n          id other {\n            accession \"NM_999999999\",\n            version 7\n          }\n        },\n        {\n          from 4,\n          to 5,\n          id other {\n            accession \"NM_999999999\",\n            version 7\n          }\n        }\n      },\n      packed-int {\n        {\n          from 2,\n          to 3,\n          id general {\n            db \"fixture636\",\n            tag str \"mask_general\"\n          }\n        },\n        {\n          from 6,\n          to 6,\n          id general {\n            db \"fixture636\",\n            tag str \"mask_general\"\n          }\n        }\n      }\n    },\n    more FALSE\n  }\n}\n"
+}

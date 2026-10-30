@@ -1,0 +1,222 @@
+{
+  "sheet": {
+    "schema": "prodigal_sheet_v1",
+    "status": "complete",
+    "native_result": {
+      "candidates": [
+        {
+          "start": 2,
+          "end": 305,
+          "strand": "+",
+          "code": 11,
+          "partial_begin": true,
+          "partial_end": true,
+          "protein_sequence": "EKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKI",
+          "native_confidence": 99.99933317172413,
+          "native_score": 51.84391561353229
+        }
+      ],
+      "mode": "meta",
+      "translation_code": 11,
+      "pyrodigal_version": "3.7.1",
+      "coordinate_system": "zero_based_half_open",
+      "limitations": [
+        "native_confidence_is_not_calibrated_annotation_accuracy",
+        "circular_origin_spanning_models_not_searched",
+        "programmed_recoding_not_resolved_by_this_operation"
+      ]
+    },
+    "mode": "meta",
+    "translation_code": 11,
+    "pyrodigal_version": "3.7.1",
+    "input_length": 306,
+    "input_start": 0,
+    "input_interval": [
+      0,
+      306
+    ],
+    "coordinate_system": "zero_based_half_open",
+    "coordinate_basis": "unshifted_sequence_ops_predict_genes_worker_contract",
+    "candidates": [
+      {
+        "candidate_index": 0,
+        "native_candidate": {
+          "start": 2,
+          "end": 305,
+          "strand": "+",
+          "code": 11,
+          "partial_begin": true,
+          "partial_end": true,
+          "protein_sequence": "EKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKI",
+          "native_confidence": 99.99933317172413,
+          "native_score": 51.84391561353229
+        },
+        "relative_interval": [
+          2,
+          305
+        ],
+        "parent_interval": [
+          2,
+          305
+        ],
+        "strand": "+",
+        "translation_code": 11,
+        "partial_begin": true,
+        "partial_end": true,
+        "protein_sequence": "EKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKI",
+        "native_confidence_percent": 99.99933317172413,
+        "native_score": 51.84391561353229,
+        "native_frame": null,
+        "component_status": {
+          "interval": "valid",
+          "strand": "valid",
+          "code": "valid",
+          "partial_begin": "valid",
+          "partial_end": "valid",
+          "protein_sequence": "valid",
+          "native_confidence": "valid",
+          "native_score": "valid"
+        },
+        "issues": [],
+        "status": "complete"
+      }
+    ],
+    "issues": [],
+    "measurement_meanings": {
+      "intervals": "predicted nucleotide spans; relative to submitted region and its supplied parent",
+      "partial_flags": "native overlap with lower/upper sequence boundary, not biological 5-prime/3-prime labels",
+      "native_confidence_percent": "native gene-calling confidence percentage in [0,100]; not function-annotation accuracy",
+      "native_score": "unaltered Pyrodigal Gene.score model score; not a calibrated probability",
+      "protein_sequence": "exact native translated symbols, including any literal stop markers",
+      "native_frame": "not reported by sequence_ops.predict_genes; remains unknown",
+      "uncertainty": "no interval or translation uncertainty reported beyond native confidence and partial flags"
+    }
+  },
+  "scores": {
+    "schema": "prodigal_scores_v1",
+    "status": "complete",
+    "mode": "meta",
+    "translation_code": 11,
+    "candidates": [
+      {
+        "candidate_index": 0,
+        "relative_interval": [
+          2,
+          305
+        ],
+        "parent_interval": [
+          2,
+          305
+        ],
+        "strand": "+",
+        "translation_code": 11,
+        "interval_length_nt": 303,
+        "translated_symbol_count": 101,
+        "protein_length_aa": 101,
+        "native_score": 51.84391561353229,
+        "native_confidence_percent": 99.99933317172413,
+        "partial_begin": true,
+        "partial_end": true,
+        "partial": true,
+        "internal_stop_positions": [],
+        "internal_stop_count": 0,
+        "terminal_stop": false,
+        "terminal_stop_count": 0,
+        "span_symbol_length_delta_nt": 0,
+        "component_status": {
+          "interval": "valid",
+          "strand": "valid",
+          "code": "valid",
+          "partial_begin": "valid",
+          "partial_end": "valid",
+          "protein_sequence": "valid",
+          "native_confidence": "valid",
+          "native_score": "valid"
+        },
+        "status": "complete",
+        "issues": []
+      }
+    ],
+    "summary": {
+      "reported_candidate_count": 1,
+      "valid_interval_candidate_count": 1,
+      "union_coding_bases": 303,
+      "coding_coverage": 0.9901960784313726,
+      "coding_coverage_denominator_nt": 306,
+      "coverage_complete_for_reported_candidates": true,
+      "relative_coding_intervals": [
+        [
+          2,
+          305
+        ]
+      ],
+      "partial_candidate_count": 1,
+      "partial_status_known_candidate_count": 1,
+      "partial_status_unknown_candidate_count": 0,
+      "complete_candidate_count": 1,
+      "candidate_with_invalid_component_count": 0,
+      "candidate_with_missing_component_count": 0,
+      "invalid_component_count": 0,
+      "missing_component_count": 0,
+      "component_counts": {
+        "interval": {
+          "valid": 1,
+          "missing": 0,
+          "invalid": 0
+        },
+        "strand": {
+          "valid": 1,
+          "missing": 0,
+          "invalid": 0
+        },
+        "code": {
+          "valid": 1,
+          "missing": 0,
+          "invalid": 0
+        },
+        "partial_begin": {
+          "valid": 1,
+          "missing": 0,
+          "invalid": 0
+        },
+        "partial_end": {
+          "valid": 1,
+          "missing": 0,
+          "invalid": 0
+        },
+        "protein_sequence": {
+          "valid": 1,
+          "missing": 0,
+          "invalid": 0
+        },
+        "native_confidence": {
+          "valid": 1,
+          "missing": 0,
+          "invalid": 0
+        },
+        "native_score": {
+          "valid": 1,
+          "missing": 0,
+          "invalid": 0
+        }
+      }
+    },
+    "calculations": {
+      "population": "all reported candidate rows, including duplicates and invalid rows; order preserved",
+      "interval_length_nt": "validated relative end - start; nt; null for missing/invalid interval",
+      "translated_symbol_count": "len(native protein_sequence); residue/stop symbols; null for missing/invalid string",
+      "protein_length_aa": "len(native protein_sequence) - count('*'); amino-acid symbols, including ambiguous symbols",
+      "native_score": "native_score; native model-score units; no aggregation or normalization",
+      "native_confidence_percent": "native_confidence; native prediction percent; null outside [0,100] or missing",
+      "internal_stop_count": "count('*' in protein_sequence[:-1]); literal markers; zero-based positions retained",
+      "terminal_stop_count": "1 if actual protein_sequence ends in '*' else 0; null if string unavailable",
+      "span_symbol_length_delta_nt": "interval_length_nt - 3 * translated_symbol_count; arithmetic consistency only, not codon verification",
+      "union_coding_bases": "size of union(valid relative candidate intervals), independent of strand; null if reported candidates exist but no interval is valid",
+      "coding_coverage": "union_coding_bases / input_length; dimensionless; null for zero denominator or unknown numerator",
+      "partial_candidate_count": "count with at least one native partial flag true; unknown flags are not false; known and unknown denominators retained",
+      "component_counts": "counts of valid/missing/invalid for each of eight independently validated candidate components",
+      "combinations": "interval union only; no overall score, annotation confidence or mean native score"
+    },
+    "issues": []
+  }
+}

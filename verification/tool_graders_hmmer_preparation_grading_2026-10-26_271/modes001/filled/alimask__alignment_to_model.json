@@ -1,0 +1,1143 @@
+{
+  "version": "native_hmmer_preparation_grading_v1",
+  "operation": {
+    "engine_version": "3.4",
+    "mode": "alignment_to_model",
+    "program": "alimask",
+    "settings": {
+      "--ali2model": "2-4",
+      "--amino": true,
+      "--fragthresh": 0.5,
+      "--hand": true,
+      "--informat": "Stockholm",
+      "--seed": 42,
+      "--symfrac": 0.5,
+      "--wid": 0.62,
+      "--wpb": true
+    }
+  },
+  "formats": {
+    "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0": "stockholm",
+    "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0": "hmmer_stdout",
+    "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stderr/0": "hmmer_stderr"
+  },
+  "metadata": {},
+  "native_abi": {
+    "byte_order": "little",
+    "bytes_per_float": 8,
+    "c_float_bytes": 4,
+    "c_int_bytes": 4,
+    "c_long_bytes": 8,
+    "float_format": "ieee754_binary64",
+    "int32_bytes": 4,
+    "uint16_bytes": 2,
+    "uint32_bytes": 4,
+    "uint64_bytes": 8,
+    "uint8_bytes": 1
+  },
+  "requested_parameters": {},
+  "sheet": {
+    "schema": "hmmer_alignment_preparation_sheet_v1",
+    "operation": {
+      "engine_version": "3.4",
+      "mode": "alignment_to_model",
+      "program": "alimask",
+      "settings": {
+        "--ali2model": "2-4",
+        "--amino": true,
+        "--fragthresh": 0.5,
+        "--hand": true,
+        "--informat": "Stockholm",
+        "--seed": 42,
+        "--symfrac": 0.5,
+        "--wid": 0.62,
+        "--wpb": true
+      }
+    },
+    "artifact_occurrences": [
+      {
+        "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0",
+        "direction": "input",
+        "role": "alignment",
+        "ordinal": 0,
+        "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+        "sha256": "11bee2b3a6f9b4470f24f2729d720cf2ea4b7d023bdc42f093b7b19e3f9403b0",
+        "size_bytes": 434,
+        "completeness": "complete"
+      },
+      {
+        "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0",
+        "direction": "output",
+        "role": "stdout",
+        "ordinal": 0,
+        "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/outputs/stdout",
+        "sha256": "b8b9b59074c95259acdc30fd999c94df0787f6171ef80140b11d2b5131a6345c",
+        "size_bytes": 849,
+        "completeness": "complete"
+      },
+      {
+        "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stderr/0",
+        "direction": "output",
+        "role": "stderr",
+        "ordinal": 0,
+        "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/outputs/stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0,
+        "completeness": "complete"
+      }
+    ],
+    "input_records": [
+      {
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#alignment/0",
+        "alignment_index": 0,
+        "locator": {
+          "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+          "record_ordinal": 0,
+          "byte_start": 0,
+          "byte_end": 202,
+          "line_start": 1,
+          "line_end": 9
+        },
+        "engine_version": "3.4",
+        "header_valid": true,
+        "complete": true,
+        "column_count": 14,
+        "block_count": 1,
+        "rows": [
+          {
+            "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#alignment/0/sequence/0",
+            "name": "seqA",
+            "occurrence": 0,
+            "row_index": 0,
+            "alignment_index": 0,
+            "locator": {
+              "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+              "record_ordinal": 0,
+              "byte_start": 116,
+              "byte_end": 136,
+              "line_start": 5,
+              "line_end": 5
+            },
+            "fragments": [
+              {
+                "raw": "seqA ACDEFGHIKLMN--\n",
+                "locator": {
+                  "artifact_role": "stockholm",
+                  "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+                  "line": 5,
+                  "byte_start": 116,
+                  "byte_end": 136
+                },
+                "kind": "sequence",
+                "name": "seqA",
+                "value": "ACDEFGHIKLMN--",
+                "block_index": 0
+              }
+            ],
+            "annotation_fragments": [],
+            "identity_unambiguous": true,
+            "aligned_sequence": "ACDEFGHIKLMN--",
+            "symbols_valid": true,
+            "geometry_valid": true,
+            "column_annotations": {},
+            "sequence_annotations": [],
+            "sequence_annotations_joined": true,
+            "native_issues": [],
+            "weight": {
+              "value": null,
+              "state": "missing",
+              "events": []
+            }
+          },
+          {
+            "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#alignment/0/sequence/1",
+            "name": "seqB",
+            "occurrence": 0,
+            "row_index": 1,
+            "alignment_index": 0,
+            "locator": {
+              "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+              "record_ordinal": 1,
+              "byte_start": 136,
+              "byte_end": 156,
+              "line_start": 6,
+              "line_end": 6
+            },
+            "fragments": [
+              {
+                "raw": "seqB ACDEYGHIKLMN--\n",
+                "locator": {
+                  "artifact_role": "stockholm",
+                  "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+                  "line": 6,
+                  "byte_start": 136,
+                  "byte_end": 156
+                },
+                "kind": "sequence",
+                "name": "seqB",
+                "value": "ACDEYGHIKLMN--",
+                "block_index": 0
+              }
+            ],
+            "annotation_fragments": [],
+            "identity_unambiguous": true,
+            "aligned_sequence": "ACDEYGHIKLMN--",
+            "symbols_valid": true,
+            "geometry_valid": true,
+            "column_annotations": {},
+            "sequence_annotations": [],
+            "sequence_annotations_joined": true,
+            "native_issues": [],
+            "weight": {
+              "value": null,
+              "state": "missing",
+              "events": []
+            }
+          },
+          {
+            "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#alignment/0/sequence/2",
+            "name": "seqC",
+            "occurrence": 0,
+            "row_index": 2,
+            "alignment_index": 0,
+            "locator": {
+              "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+              "record_ordinal": 2,
+              "byte_start": 156,
+              "byte_end": 176,
+              "line_start": 7,
+              "line_end": 7
+            },
+            "fragments": [
+              {
+                "raw": "seqC ACDEFGHIKLMN--\n",
+                "locator": {
+                  "artifact_role": "stockholm",
+                  "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+                  "line": 7,
+                  "byte_start": 156,
+                  "byte_end": 176
+                },
+                "kind": "sequence",
+                "name": "seqC",
+                "value": "ACDEFGHIKLMN--",
+                "block_index": 0
+              }
+            ],
+            "annotation_fragments": [],
+            "identity_unambiguous": true,
+            "aligned_sequence": "ACDEFGHIKLMN--",
+            "symbols_valid": true,
+            "geometry_valid": true,
+            "column_annotations": {},
+            "sequence_annotations": [],
+            "sequence_annotations_joined": true,
+            "native_issues": [],
+            "weight": {
+              "value": null,
+              "state": "missing",
+              "events": []
+            }
+          }
+        ],
+        "column_annotations": {
+          "RF": {
+            "text": "xxxxxxxxxxxx..",
+            "valid": true,
+            "fragments": [
+              {
+                "raw": "#=GC RF xxxxxxxxxxxx..\n",
+                "locator": {
+                  "artifact_role": "stockholm",
+                  "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+                  "line": 8,
+                  "byte_start": 176,
+                  "byte_end": 199
+                },
+                "kind": "GC",
+                "tag": "RF",
+                "value": "xxxxxxxxxxxx..",
+                "block_index": 0
+              }
+            ]
+          }
+        },
+        "original_events": [
+          {
+            "raw": "# STOCKHOLM 1.0\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+              "line": 1,
+              "byte_start": 0,
+              "byte_end": 16
+            },
+            "kind": "header",
+            "version": "1.0"
+          },
+          {
+            "raw": "#=GF ID tiny_protein\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+              "line": 2,
+              "byte_start": 16,
+              "byte_end": 37
+            },
+            "kind": "GF",
+            "tag": "ID",
+            "value": "tiny_protein"
+          },
+          {
+            "raw": "#=GF AC TINY001\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+              "line": 3,
+              "byte_start": 37,
+              "byte_end": 53
+            },
+            "kind": "GF",
+            "tag": "AC",
+            "value": "TINY001"
+          },
+          {
+            "raw": "#=GF DE Synthetic preparation example, not biological evidence\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+              "line": 4,
+              "byte_start": 53,
+              "byte_end": 116
+            },
+            "kind": "GF",
+            "tag": "DE",
+            "value": "Synthetic preparation example, not biological evidence"
+          },
+          {
+            "raw": "seqA ACDEFGHIKLMN--\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+              "line": 5,
+              "byte_start": 116,
+              "byte_end": 136
+            },
+            "kind": "sequence",
+            "name": "seqA",
+            "value": "ACDEFGHIKLMN--"
+          },
+          {
+            "raw": "seqB ACDEYGHIKLMN--\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+              "line": 6,
+              "byte_start": 136,
+              "byte_end": 156
+            },
+            "kind": "sequence",
+            "name": "seqB",
+            "value": "ACDEYGHIKLMN--"
+          },
+          {
+            "raw": "seqC ACDEFGHIKLMN--\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+              "line": 7,
+              "byte_start": 156,
+              "byte_end": 176
+            },
+            "kind": "sequence",
+            "name": "seqC",
+            "value": "ACDEFGHIKLMN--"
+          },
+          {
+            "raw": "#=GC RF xxxxxxxxxxxx..\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+              "line": 8,
+              "byte_start": 176,
+              "byte_end": 199
+            },
+            "kind": "GC",
+            "tag": "RF",
+            "value": "xxxxxxxxxxxx.."
+          },
+          {
+            "raw": "//\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+              "line": 9,
+              "byte_start": 199,
+              "byte_end": 202
+            },
+            "kind": "terminator"
+          }
+        ],
+        "kind": "alignment",
+        "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0",
+        "format": "stockholm",
+        "native_issues": [],
+        "issues": []
+      },
+      {
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#alignment/1",
+        "alignment_index": 1,
+        "locator": {
+          "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+          "record_ordinal": 1,
+          "byte_start": 202,
+          "byte_end": 404,
+          "line_start": 10,
+          "line_end": 18
+        },
+        "engine_version": "3.4",
+        "header_valid": true,
+        "complete": true,
+        "column_count": 14,
+        "block_count": 1,
+        "rows": [
+          {
+            "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#alignment/1/sequence/0",
+            "name": "seqA",
+            "occurrence": 0,
+            "row_index": 0,
+            "alignment_index": 1,
+            "locator": {
+              "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+              "record_ordinal": 0,
+              "byte_start": 318,
+              "byte_end": 338,
+              "line_start": 14,
+              "line_end": 14
+            },
+            "fragments": [
+              {
+                "raw": "seqA ACDEFGHIKLMN--\n",
+                "locator": {
+                  "artifact_role": "stockholm",
+                  "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+                  "line": 14,
+                  "byte_start": 318,
+                  "byte_end": 338
+                },
+                "kind": "sequence",
+                "name": "seqA",
+                "value": "ACDEFGHIKLMN--",
+                "block_index": 0
+              }
+            ],
+            "annotation_fragments": [],
+            "identity_unambiguous": true,
+            "aligned_sequence": "ACDEFGHIKLMN--",
+            "symbols_valid": true,
+            "geometry_valid": true,
+            "column_annotations": {},
+            "sequence_annotations": [],
+            "sequence_annotations_joined": true,
+            "native_issues": [],
+            "weight": {
+              "value": null,
+              "state": "missing",
+              "events": []
+            }
+          },
+          {
+            "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#alignment/1/sequence/1",
+            "name": "seqB",
+            "occurrence": 0,
+            "row_index": 1,
+            "alignment_index": 1,
+            "locator": {
+              "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+              "record_ordinal": 1,
+              "byte_start": 338,
+              "byte_end": 358,
+              "line_start": 15,
+              "line_end": 15
+            },
+            "fragments": [
+              {
+                "raw": "seqB ACDEYGHIKLMN--\n",
+                "locator": {
+                  "artifact_role": "stockholm",
+                  "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+                  "line": 15,
+                  "byte_start": 338,
+                  "byte_end": 358
+                },
+                "kind": "sequence",
+                "name": "seqB",
+                "value": "ACDEYGHIKLMN--",
+                "block_index": 0
+              }
+            ],
+            "annotation_fragments": [],
+            "identity_unambiguous": true,
+            "aligned_sequence": "ACDEYGHIKLMN--",
+            "symbols_valid": true,
+            "geometry_valid": true,
+            "column_annotations": {},
+            "sequence_annotations": [],
+            "sequence_annotations_joined": true,
+            "native_issues": [],
+            "weight": {
+              "value": null,
+              "state": "missing",
+              "events": []
+            }
+          },
+          {
+            "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#alignment/1/sequence/2",
+            "name": "seqC",
+            "occurrence": 0,
+            "row_index": 2,
+            "alignment_index": 1,
+            "locator": {
+              "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+              "record_ordinal": 2,
+              "byte_start": 358,
+              "byte_end": 378,
+              "line_start": 16,
+              "line_end": 16
+            },
+            "fragments": [
+              {
+                "raw": "seqC ACDEFGHIKLMN--\n",
+                "locator": {
+                  "artifact_role": "stockholm",
+                  "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+                  "line": 16,
+                  "byte_start": 358,
+                  "byte_end": 378
+                },
+                "kind": "sequence",
+                "name": "seqC",
+                "value": "ACDEFGHIKLMN--",
+                "block_index": 0
+              }
+            ],
+            "annotation_fragments": [],
+            "identity_unambiguous": true,
+            "aligned_sequence": "ACDEFGHIKLMN--",
+            "symbols_valid": true,
+            "geometry_valid": true,
+            "column_annotations": {},
+            "sequence_annotations": [],
+            "sequence_annotations_joined": true,
+            "native_issues": [],
+            "weight": {
+              "value": null,
+              "state": "missing",
+              "events": []
+            }
+          }
+        ],
+        "column_annotations": {
+          "RF": {
+            "text": "xxxxxxxxxxxx..",
+            "valid": true,
+            "fragments": [
+              {
+                "raw": "#=GC RF xxxxxxxxxxxx..\n",
+                "locator": {
+                  "artifact_role": "stockholm",
+                  "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+                  "line": 17,
+                  "byte_start": 378,
+                  "byte_end": 401
+                },
+                "kind": "GC",
+                "tag": "RF",
+                "value": "xxxxxxxxxxxx..",
+                "block_index": 0
+              }
+            ]
+          }
+        },
+        "original_events": [
+          {
+            "raw": "# STOCKHOLM 1.0\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+              "line": 10,
+              "byte_start": 202,
+              "byte_end": 218
+            },
+            "kind": "header",
+            "version": "1.0"
+          },
+          {
+            "raw": "#=GF ID tiny_protein\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+              "line": 11,
+              "byte_start": 218,
+              "byte_end": 239
+            },
+            "kind": "GF",
+            "tag": "ID",
+            "value": "tiny_protein"
+          },
+          {
+            "raw": "#=GF AC TINY001\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+              "line": 12,
+              "byte_start": 239,
+              "byte_end": 255
+            },
+            "kind": "GF",
+            "tag": "AC",
+            "value": "TINY001"
+          },
+          {
+            "raw": "#=GF DE Synthetic preparation example, not biological evidence\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+              "line": 13,
+              "byte_start": 255,
+              "byte_end": 318
+            },
+            "kind": "GF",
+            "tag": "DE",
+            "value": "Synthetic preparation example, not biological evidence"
+          },
+          {
+            "raw": "seqA ACDEFGHIKLMN--\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+              "line": 14,
+              "byte_start": 318,
+              "byte_end": 338
+            },
+            "kind": "sequence",
+            "name": "seqA",
+            "value": "ACDEFGHIKLMN--"
+          },
+          {
+            "raw": "seqB ACDEYGHIKLMN--\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+              "line": 15,
+              "byte_start": 338,
+              "byte_end": 358
+            },
+            "kind": "sequence",
+            "name": "seqB",
+            "value": "ACDEYGHIKLMN--"
+          },
+          {
+            "raw": "seqC ACDEFGHIKLMN--\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+              "line": 16,
+              "byte_start": 358,
+              "byte_end": 378
+            },
+            "kind": "sequence",
+            "name": "seqC",
+            "value": "ACDEFGHIKLMN--"
+          },
+          {
+            "raw": "#=GC RF xxxxxxxxxxxx..\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+              "line": 17,
+              "byte_start": 378,
+              "byte_end": 401
+            },
+            "kind": "GC",
+            "tag": "RF",
+            "value": "xxxxxxxxxxxx.."
+          },
+          {
+            "raw": "//\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/inputs/alignment/0",
+              "line": 18,
+              "byte_start": 401,
+              "byte_end": 404
+            },
+            "kind": "terminator"
+          }
+        ],
+        "kind": "alignment",
+        "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0",
+        "format": "stockholm",
+        "native_issues": [],
+        "issues": []
+      }
+    ],
+    "output_records": [],
+    "model_extraction": null,
+    "native_rows": [
+      {
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#population/0",
+        "kind": "population",
+        "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0",
+        "format": "stockholm",
+        "decoded_count": 2,
+        "complete": false,
+        "state": "partial"
+      },
+      {
+        "record_key": "request#interval/0",
+        "kind": "requested_interval",
+        "request_ordinal": 0,
+        "flag": "--ali2model",
+        "raw": "2-4",
+        "start": 2,
+        "end": 4,
+        "valid": true,
+        "coordinate_system": "alignment"
+      },
+      {
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0#mapping/0",
+        "kind": "mapping",
+        "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0",
+        "locator": {
+          "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/outputs/stdout",
+          "record_ordinal": 0,
+          "byte_start": 805,
+          "byte_end": 849,
+          "line_start": 13,
+          "line_end": 13
+        },
+        "raw": "          2..4        ->        2..4       \n",
+        "tokens": [
+          "2..4",
+          "->",
+          "2..4"
+        ],
+        "valid": true,
+        "request_ordinal": 0,
+        "requested_start": 2,
+        "requested_end": 4,
+        "returned_source_start": 2,
+        "returned_source_end": 4,
+        "target_start": 2,
+        "target_end": 4,
+        "source_coordinate_system": "alignment",
+        "target_coordinate_system": "model",
+        "native_state": "mapped"
+      }
+    ],
+    "associations": [
+      {
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#alignment/0",
+        "relation": "mask",
+        "source_record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#alignment/0",
+        "output_record_key": null,
+        "status": "selected_first_record"
+      },
+      {
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#alignment/1",
+        "relation": "unprocessed",
+        "source_record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#alignment/1",
+        "output_record_key": null,
+        "status": "unprocessed"
+      }
+    ],
+    "issues": [
+      {
+        "code": "text_encoding_invalid",
+        "stage": "extraction",
+        "record_key": null,
+        "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0",
+        "field": null,
+        "details": {}
+      },
+      {
+        "code": "first_record_only",
+        "stage": "extraction",
+        "record_key": null,
+        "occurrence_id": null,
+        "field": null,
+        "details": {
+          "processed": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#alignment/0",
+          "unprocessed": [
+            "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#alignment/1"
+          ]
+        }
+      }
+    ]
+  },
+  "calculations": {
+    "schema": "hmmer_alignment_preparation_components_v1",
+    "operation": {
+      "engine_version": "3.4",
+      "mode": "alignment_to_model",
+      "program": "alimask",
+      "settings": {
+        "--ali2model": "2-4",
+        "--amino": true,
+        "--fragthresh": 0.5,
+        "--hand": true,
+        "--informat": "Stockholm",
+        "--seed": 42,
+        "--symfrac": 0.5,
+        "--wid": 0.62,
+        "--wpb": true
+      }
+    },
+    "parameters": {
+      "background": null,
+      "probability_tolerance": 0.0001,
+      "summary_rounding_tolerance": {
+        "eff_nseq": 0.005001,
+        "re_per_position": 0.0006
+      }
+    },
+    "rows": [
+      {
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#alignment/0",
+        "kind": "mapping",
+        "source_record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#alignment/0",
+        "output_record_key": null,
+        "model_record_key": null,
+        "summary_record_key": null,
+        "components": {
+          "input_sequence_count": {
+            "value": 3,
+            "state": "present",
+            "unit": "sequence_count",
+            "inputs": [
+              {
+                "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#alignment/0",
+                "field": "rows"
+              }
+            ]
+          },
+          "input_column_count": {
+            "value": 14,
+            "state": "present",
+            "unit": "alignment_column_count",
+            "inputs": [
+              {
+                "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#alignment/0",
+                "field": "column_count"
+              }
+            ]
+          },
+          "rf_consensus_count": {
+            "value": 12,
+            "state": "present",
+            "unit": "RF_consensus_column_count",
+            "inputs": [
+              {
+                "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#alignment/0",
+                "field": "column_annotations.RF"
+              }
+            ]
+          },
+          "input_alignment_count": {
+            "value": 2,
+            "state": "incomplete",
+            "unit": "decoded_alignment_record_count",
+            "inputs": [
+              {
+                "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#population/0",
+                "field": "decoded_count"
+              }
+            ]
+          },
+          "processed_alignment_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "output_validated_alignment_record_count",
+            "inputs": [
+              {
+                "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0#mapping/0",
+                "field": "valid"
+              }
+            ]
+          },
+          "unprocessed_alignment_count": {
+            "value": 1,
+            "state": "incomplete",
+            "unit": "decoded_unprocessed_alignment_record_count",
+            "inputs": [
+              {
+                "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#population/0",
+                "field": "decoded_count"
+              },
+              {
+                "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0#mapping/0",
+                "field": "valid"
+              }
+            ]
+          },
+          "requested_interval_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "request_interval_count",
+            "inputs": [
+              {
+                "field": "native_rows.requested_interval"
+              }
+            ]
+          },
+          "native_mapping_row_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "decoded_mapping_row_count",
+            "inputs": [
+              {
+                "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0",
+                "field": "native_rows.mapping"
+              }
+            ]
+          },
+          "mapped_model_position_count": {
+            "value": 12,
+            "state": "present",
+            "unit": "model_position_count",
+            "inputs": [
+              {
+                "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#alignment/0",
+                "field": "rows"
+              },
+              {
+                "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#alignment/0",
+                "field": "column_annotations.RF"
+              },
+              {
+                "field": "operation.settings"
+              }
+            ]
+          },
+          "requested_union_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "alignment_column_count",
+            "inputs": []
+          }
+        },
+        "coordinates": null,
+        "model_components": null,
+        "source_symbol_counts": null,
+        "intervals": [
+          {
+            "request_record_key": "request#interval/0",
+            "request_ordinal": 0,
+            "requested_start": 2,
+            "requested_end": 4,
+            "requested_coordinate_system": "alignment",
+            "alignment_start": 2,
+            "alignment_end": 4,
+            "state": "present",
+            "inclusive_span": {
+              "value": 3,
+              "state": "present",
+              "unit": "alignment_column_count",
+              "inputs": [
+                {
+                  "record_key": "request#interval/0",
+                  "field": "start"
+                },
+                {
+                  "record_key": "request#interval/0",
+                  "field": "end"
+                },
+                {
+                  "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#alignment/0",
+                  "field": "reconstruction.map"
+                }
+              ]
+            },
+            "returned_source_span": {
+              "value": 3,
+              "state": "present",
+              "unit": "alignment_column_count",
+              "inputs": [
+                {
+                  "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0#mapping/0",
+                  "field": "returned_source_start"
+                },
+                {
+                  "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0#mapping/0",
+                  "field": "returned_source_end"
+                },
+                {
+                  "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0#mapping/0",
+                  "field": "native_state"
+                }
+              ]
+            },
+            "returned_target_span": {
+              "value": 3,
+              "state": "present",
+              "unit": "model_position_count",
+              "inputs": [
+                {
+                  "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0#mapping/0",
+                  "field": "target_start"
+                },
+                {
+                  "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0#mapping/0",
+                  "field": "target_end"
+                },
+                {
+                  "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0#mapping/0",
+                  "field": "native_state"
+                }
+              ]
+            }
+          }
+        ],
+        "input_mm": null,
+        "output_mm": null,
+        "reconstruction": {
+          "state": "present",
+          "map": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12
+          ],
+          "basis": "hand_RF_nongap",
+          "weights": null,
+          "marked_sequences": null,
+          "column_occupancy": null,
+          "pb_consensus_columns": null,
+          "issues": []
+        },
+        "native_mappings": [
+          {
+            "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0#mapping/0",
+            "kind": "mapping",
+            "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0",
+            "locator": {
+              "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt/outputs/stdout",
+              "record_ordinal": 0,
+              "byte_start": 805,
+              "byte_end": 849,
+              "line_start": 13,
+              "line_end": 13
+            },
+            "raw": "          2..4        ->        2..4       \n",
+            "tokens": [
+              "2..4",
+              "->",
+              "2..4"
+            ],
+            "valid": true,
+            "request_ordinal": 0,
+            "requested_start": 2,
+            "requested_end": 4,
+            "returned_source_start": 2,
+            "returned_source_end": 4,
+            "target_start": 2,
+            "target_end": 4,
+            "source_coordinate_system": "alignment",
+            "target_coordinate_system": "model",
+            "native_state": "mapped"
+          }
+        ]
+      }
+    ],
+    "checks": [
+      {
+        "code": "parameter_valid",
+        "state": "pass",
+        "record_key": null,
+        "inputs": [],
+        "details": {}
+      },
+      {
+        "code": "artifact_binding",
+        "state": "pass",
+        "record_key": null,
+        "inputs": [
+          {
+            "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0"
+          }
+        ],
+        "details": {}
+      },
+      {
+        "code": "artifact_binding",
+        "state": "pass",
+        "record_key": null,
+        "inputs": [
+          {
+            "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0"
+          }
+        ],
+        "details": {}
+      },
+      {
+        "code": "artifact_binding",
+        "state": "pass",
+        "record_key": null,
+        "inputs": [
+          {
+            "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stderr/0"
+          }
+        ],
+        "details": {}
+      },
+      {
+        "code": "source_geometry",
+        "state": "pass",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#alignment/0",
+        "inputs": [],
+        "details": {}
+      },
+      {
+        "code": "input_population_processed",
+        "state": "fail",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#alignment/0",
+        "inputs": [],
+        "details": {}
+      },
+      {
+        "code": "range_capacity",
+        "state": "pass",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#alignment/0",
+        "inputs": [],
+        "details": {
+          "capacity": 100,
+          "actual": 1
+        }
+      },
+      {
+        "code": "requested_ranges",
+        "state": "pass",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#alignment/0",
+        "inputs": [],
+        "details": {}
+      },
+      {
+        "code": "native_mapping",
+        "state": "pass",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/alignment/0#alignment/0",
+        "inputs": [],
+        "details": {}
+      }
+    ],
+    "issues": []
+  }
+}

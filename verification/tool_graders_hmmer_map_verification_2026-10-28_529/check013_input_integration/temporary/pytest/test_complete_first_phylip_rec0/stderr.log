@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py", line 774, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py", line 762, in main
+    result = run_native_hmmer_preparation(plan)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py", line 730, in run_native_hmmer_preparation
+    _preflight(root, job, bundle)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py", line 382, in _preflight
+    _alimask_preflight_shared(root, job, bundle)
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py", line 303, in _alimask_preflight_shared
+    _error("alimask_input_decoding_contract")
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py", line 127, in _error
+    raise ValueError(_PREFIX + reason)
+ValueError: native_hmmer_preparation_alimask_input_decoding_contract

@@ -1,0 +1,73 @@
+{
+  "status": "proposal only; no new function implemented",
+  "new_module": "gene_annotation_episode/literature_controlled_response_v2_inputs.py",
+  "public_v2_signatures": [
+    "controlled_response_v2_arguments_schema() -> dict",
+    "validate_controlled_response_v2_selection(arguments) -> dict",
+    "read_controlled_response_v2_inputs(arguments, *, read_source) -> dict",
+    "validate_controlled_response_v2_extraction(arguments, extraction) -> dict"
+  ],
+  "additive_public_stage_module": "gene_annotation_episode/literature_controlled_response_inputs.py",
+  "public_stage_signatures": [
+    "open_controlled_response_sources(arguments, *, read_source) -> SourceContext",
+    "read_controlled_response_arm_science(context, selected_arm) -> ArmScience",
+    "read_controlled_response_text_measurement(context, selected, *, endpoint) -> MeasurementReading",
+    "finish_controlled_response_arm(context, arm_science, *, measurement) -> ArmExtraction",
+    "finish_controlled_response_inputs(context, *, arms) -> SourceExtraction",
+    "validate_controlled_response_saved_science(arguments, extraction, *, measurement_checks) -> SourceExtraction"
+  ],
+  "callback": "read_source(source_ref, representation) -> exactly {artifact_ref: nonempty str, content: immutable bytes}",
+  "SourceContext_methods": [
+    "read_source(source_ref, representation)",
+    "close()",
+    "__enter__()",
+    "__exit__(exception_type, exception, traceback)"
+  ],
+  "ArmScience_fields": [
+    "selection",
+    "context",
+    "protein_arrangement",
+    "meanings",
+    "intended_factor_level"
+  ],
+  "MeasurementReading_fields": [
+    "selection",
+    "extraction",
+    "operand_projection",
+    "unit_semantics",
+    "exact_response",
+    "source_observation_id",
+    "graph_details"
+  ],
+  "UnitSemantics_fields": [
+    "canonical_unit",
+    "exact_scale",
+    "native_registry_unit",
+    "raw_unit",
+    "source_defined_unit"
+  ],
+  "ExactResponse_fields": [
+    "point",
+    "lower",
+    "upper",
+    "relation",
+    "approximate",
+    "unit"
+  ],
+  "shared_saved_callback": "validate_measurement(selected, saved_measurement, *, source_records, image_records) -> MeasurementReading",
+  "selection": "SELECTION_SCHEMA_001.json",
+  "closed_result": "CLOSED_RESULT_INTERFACE_001.json",
+  "complete_consumer_scope": "PROPOSAL_001.md native section plus TEST_PLAN_001.md",
+  "owner_calculator_extension": "OWNER_CANCELLATION_002.md; full closed schema not yet declared or released",
+  "v1_behavior": "All original exports/requests/results/errors unchanged; original pins untouched; meaningful equivalence proof required",
+  "source_closure": "full original v2 request before all helpers; one validated cache shared by scientific and063 graph stages",
+  "calculation": "separate populator; no source reader calls sheet calculator",
+  "four_primitive_roles": [
+    "protein_condition1",
+    "empty_condition1",
+    "protein_condition0",
+    "empty_condition0"
+  ],
+  "N_definition": "source covariance variable/owner roster size, not number of experimental arms",
+  "no_new_model_or_runtime_execution": true
+}

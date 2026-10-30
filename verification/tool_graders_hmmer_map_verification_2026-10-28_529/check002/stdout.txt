@@ -1,0 +1,134 @@
+...................................... [ 20%]
+........................................................................ [ 58%]
+........FFFFF................F.......................................... [ 96%]
+.....F                                                                   [100%]
+=================================== FAILURES ===================================
+_________ test_saved_projection_rejects_context_disagreement[metadata] _________
+source_snapshot/tests/test_hmmer_alignment_map_context.py:255: in test_saved_projection_rejects_context_disagreement
+    grading, occurrences = projection_fixture()
+                           ^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_hmmer_alignment_map_context.py:250: in projection_fixture
+    return prepared(args)
+           ^^^^^^^^^^^^^^
+source_snapshot/tests/test_hmmer_preparation_result_views.py:32: in prepared
+    grading = worker.grade_hmmer_preparation(**args)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_worker.py:303: in grade_hmmer_preparation
+    inputs, outputs, formats = _payloads(inputs, outputs, formats, operation)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_worker.py:241: in _payloads
+    _error("format_setting_mismatch", oid)
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_worker.py:80: in _error
+    raise ContractError("native_hmmer_preparation_grading_" + code + ":" + field)
+E   gene_annotation_episode.native_hmmer_preparation_worker.ContractError: native_hmmer_preparation_grading_format_setting_mismatch:input:alignment:0
+__________ test_saved_projection_rejects_context_disagreement[sheet] ___________
+source_snapshot/tests/test_hmmer_alignment_map_context.py:255: in test_saved_projection_rejects_context_disagreement
+    grading, occurrences = projection_fixture()
+                           ^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_hmmer_alignment_map_context.py:250: in projection_fixture
+    return prepared(args)
+           ^^^^^^^^^^^^^^
+source_snapshot/tests/test_hmmer_preparation_result_views.py:32: in prepared
+    grading = worker.grade_hmmer_preparation(**args)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_worker.py:303: in grade_hmmer_preparation
+    inputs, outputs, formats = _payloads(inputs, outputs, formats, operation)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_worker.py:241: in _payloads
+    _error("format_setting_mismatch", oid)
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_worker.py:80: in _error
+    raise ContractError("native_hmmer_preparation_grading_" + code + ":" + field)
+E   gene_annotation_episode.native_hmmer_preparation_worker.ContractError: native_hmmer_preparation_grading_format_setting_mismatch:input:alignment:0
+___________ test_saved_projection_rejects_context_disagreement[both] ___________
+source_snapshot/tests/test_hmmer_alignment_map_context.py:255: in test_saved_projection_rejects_context_disagreement
+    grading, occurrences = projection_fixture()
+                           ^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_hmmer_alignment_map_context.py:250: in projection_fixture
+    return prepared(args)
+           ^^^^^^^^^^^^^^
+source_snapshot/tests/test_hmmer_preparation_result_views.py:32: in prepared
+    grading = worker.grade_hmmer_preparation(**args)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_worker.py:303: in grade_hmmer_preparation
+    inputs, outputs, formats = _payloads(inputs, outputs, formats, operation)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_worker.py:241: in _payloads
+    _error("format_setting_mismatch", oid)
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_worker.py:80: in _error
+    raise ContractError("native_hmmer_preparation_grading_" + code + ":" + field)
+E   gene_annotation_episode.native_hmmer_preparation_worker.ContractError: native_hmmer_preparation_grading_format_setting_mismatch:input:alignment:0
+______ test_saved_projection_rejects_context_disagreement[artifact_only] _______
+source_snapshot/tests/test_hmmer_alignment_map_context.py:255: in test_saved_projection_rejects_context_disagreement
+    grading, occurrences = projection_fixture()
+                           ^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_hmmer_alignment_map_context.py:250: in projection_fixture
+    return prepared(args)
+           ^^^^^^^^^^^^^^
+source_snapshot/tests/test_hmmer_preparation_result_views.py:32: in prepared
+    grading = worker.grade_hmmer_preparation(**args)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_worker.py:303: in grade_hmmer_preparation
+    inputs, outputs, formats = _payloads(inputs, outputs, formats, operation)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_worker.py:241: in _payloads
+    _error("format_setting_mismatch", oid)
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_worker.py:80: in _error
+    raise ContractError("native_hmmer_preparation_grading_" + code + ":" + field)
+E   gene_annotation_episode.native_hmmer_preparation_worker.ContractError: native_hmmer_preparation_grading_format_setting_mismatch:input:alignment:0
+______ test_saved_projection_copies_frozen_values_without_reconstruction _______
+source_snapshot/tests/test_hmmer_alignment_map_context.py:267: in test_saved_projection_copies_frozen_values_without_reconstruction
+    grading, occurrences = projection_fixture()
+                           ^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_hmmer_alignment_map_context.py:250: in projection_fixture
+    return prepared(args)
+           ^^^^^^^^^^^^^^
+source_snapshot/tests/test_hmmer_preparation_result_views.py:32: in prepared
+    grading = worker.grade_hmmer_preparation(**args)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_worker.py:303: in grade_hmmer_preparation
+    inputs, outputs, formats = _payloads(inputs, outputs, formats, operation)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_worker.py:241: in _payloads
+    _error("format_setting_mismatch", oid)
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_worker.py:80: in _error
+    raise ContractError("native_hmmer_preparation_grading_" + code + ":" + field)
+E   gene_annotation_episode.native_hmmer_preparation_worker.ContractError: native_hmmer_preparation_grading_format_setting_mismatch:input:alignment:0
+_ test_direct_saved_projection_rejects_illegally_placed_context[alimask-native_rows] _
+source_snapshot/tests/test_hmmer_alignment_map_context.py:380: in test_direct_saved_projection_rejects_illegally_placed_context
+    grading, occurrences = projection_fixture()
+                           ^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_hmmer_alignment_map_context.py:250: in projection_fixture
+    return prepared(args)
+           ^^^^^^^^^^^^^^
+source_snapshot/tests/test_hmmer_preparation_result_views.py:32: in prepared
+    grading = worker.grade_hmmer_preparation(**args)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_worker.py:303: in grade_hmmer_preparation
+    inputs, outputs, formats = _payloads(inputs, outputs, formats, operation)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_worker.py:241: in _payloads
+    _error("format_setting_mismatch", oid)
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_worker.py:80: in _error
+    raise ContractError("native_hmmer_preparation_grading_" + code + ":" + field)
+E   gene_annotation_episode.native_hmmer_preparation_worker.ContractError: native_hmmer_preparation_grading_format_setting_mismatch:input:alignment:0
+_ test_effective_alimask_context_is_optional_only_for_saved_legacy_validation __
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:189: in test_effective_alimask_context_is_optional_only_for_saved_legacy_validation
+    _, _, bundle, _, capture = capture_native(store, tmp_path, monkeypatch, "alimask", "alignment_to_model")
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_result_worker.py:38: in capture_native
+    root, original_plan, bundle, target = synthetic_custody(
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:64: in synthetic_custody
+    plan, bundle = selected_native(program, mode) if retained_plan is None else read_native(retained_plan)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_acquisition.py:59: in selected_native
+    raise AssertionError("required retained native example missing")
+E   AssertionError: required retained native example missing
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_hmmer_alignment_map_context.py::test_saved_projection_rejects_context_disagreement[metadata]
+FAILED source_snapshot/tests/test_hmmer_alignment_map_context.py::test_saved_projection_rejects_context_disagreement[sheet]
+FAILED source_snapshot/tests/test_hmmer_alignment_map_context.py::test_saved_projection_rejects_context_disagreement[both]
+FAILED source_snapshot/tests/test_hmmer_alignment_map_context.py::test_saved_projection_rejects_context_disagreement[artifact_only]
+FAILED source_snapshot/tests/test_hmmer_alignment_map_context.py::test_saved_projection_copies_frozen_values_without_reconstruction
+FAILED source_snapshot/tests/test_hmmer_alignment_map_context.py::test_direct_saved_projection_rejects_illegally_placed_context[alimask-native_rows]
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_worker.py::test_effective_alimask_context_is_optional_only_for_saved_legacy_validation
+7 failed, 181 passed, 34 subtests passed in 97.21s (0:01:37)

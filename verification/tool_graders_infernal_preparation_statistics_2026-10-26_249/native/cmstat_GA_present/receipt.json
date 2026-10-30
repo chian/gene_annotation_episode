@@ -1,0 +1,83 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmstat",
+    "--cut_ga",
+    "model.cm"
+  ],
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "inputs": [
+    {
+      "path": "model.cm",
+      "sha256": "c5c341a891852484be032a04cb1560c3948708bba10f1934dd7ccc2555345816",
+      "size_bytes": 10271
+    }
+  ],
+  "binary_sha256": "8026921664009d269955f4ff05bf9a3c55a89cc51313ac434cae502b8bf5ddae",
+  "started_at": "2026-10-26T05:07:35.524636+00:00",
+  "returncode": 0,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "success",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "ended": {
+        "at": "2026-10-26T05:07:35.966262+00:00",
+        "monotonic_ns": 804817663593626,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 0.348176983,
+    "native_returncode": 0,
+    "observed_scratch_bytes": 32768
+  },
+  "finished_at": "2026-10-26T05:07:36.232739+00:00",
+  "files": [
+    {
+      "path": "model.cm",
+      "sha256": "c5c341a891852484be032a04cb1560c3948708bba10f1934dd7ccc2555345816",
+      "size_bytes": 10271
+    },
+    {
+      "path": "request.json",
+      "sha256": "ee464285906bb25354a4270805aa12642a9d91cd93b943cf86978617a2781258",
+      "size_bytes": 571
+    },
+    {
+      "path": "stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "stdout.txt",
+      "sha256": "dc17aaa727491ead0dca80b24e22d17cb92af844824842a52ec06c94545bbc4d",
+      "size_bytes": 734
+    }
+  ]
+}

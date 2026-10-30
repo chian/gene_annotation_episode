@@ -1,0 +1,82 @@
+......................F................................................. [ 51%]
+...................................................................      [100%]
+=================================== FAILURES ===================================
+_ test_actual_runtime_digest_and_complete_alternate_wrapper_cannot_replace_selected_output _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/controlled_episode_integration_095/focused_tests_001/test_actual_runtime_digest_and0')
+
+    def test_actual_runtime_digest_and_complete_alternate_wrapper_cannot_replace_selected_output(tmp_path):
+        from dataclasses import replace
+        from gene_annotation_episode.domain import ContractError, canonical
+        from test_literature_controlled_response_episode_integration import actual_context
+        store,case=make_case(tmp_path/'state')
+        try:
+            asyncio.run(run_case(store,case,tmp_path/'run'))
+            run=json.loads((tmp_path/'run/run.json').read_text())['run_id']
+            action=store.db.execute("SELECT * FROM runtime_actions WHERE json_extract(action,'$.tool')='literature.controlled_response.source_v3.populate'").fetchone()
+            context=actual_context(store,case,run,action['episode_id'])
+            repository=LiteratureControlledResponseRepository(store,run,evidence_origin='synthetic_fixture')
+            operation=store.db.execute('SELECT * FROM literature_controlled_response_operations').fetchone()
+            outcome=json.loads(operation['outcome']);original_runtime=json.loads(action['result'])
+            assert 'pending_work_after_action' in original_runtime
+            assert store.db.execute('SELECT count(*) FROM '+repository.runtime_binding_table).fetchone()[0]==1
+            observations=[tuple(row) for row in store.db.execute('SELECT * FROM runtime_observations')]
+            changed=deepcopy(original_runtime);changed['pending_work_after_action']={'controlled_fixture_tampering':True}
+            try:
+                store.db.execute('UPDATE runtime_actions SET result=? WHERE run_id=? AND episode_id=? AND decision_index=?',
+                    (canonical(changed),run,context.episode_id,action['decision_index']))
+                with pytest.raises(ContractError,match='original_runtime_digest_mismatch'):
+                    repository.read(outcome['result']['sheet_ref'])
+            finally:
+                store.db.execute('UPDATE runtime_actions SET result=? WHERE run_id=? AND episode_id=? AND decision_index=?',
+                    (action['result'],run,context.episode_id,action['decision_index']))
+            # Produce a wholly coherent alternate adapter payload/request/source and
+            # private operation outcome under the original operation key. This is
+            # deliberate DB tampering in a test, never a manually seeded native
+            # execution proof. The actual selected runtime record stays unchanged.
+            arguments=deepcopy(case['arguments']);arguments['variance_status']={'value':'unknown','witnesses':[]}
+            try:
+                store.db.execute('DELETE FROM literature_controlled_response_operations WHERE run_id=? AND episode_id=? AND operation_key=?',
+                    (run,context.episode_id,operation['operation_key']))
+>               alternate=repository.populate_v3(context,arguments,operation['operation_key'])
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_controlled_response_consumer.py:225: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_controlled_response_storage.py:572: in populate_v3
+    populated=population.populate_controlled_response_v3(extraction)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_v3_population.py:65: in populate_controlled_response_v3
+    source.validate_controlled_response_v3_extraction(extraction['selection'], extraction)
+gene_annotation_episode/literature_controlled_response_v3_inputs.py:578: in validate_controlled_response_v3_extraction
+    return shared.validate_controlled_response_saved_science(arguments, extraction, measurement_checks=check)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_inputs.py:2198: in validate_controlled_response_saved_science
+    return _validate_v3_saved_science(arguments, extraction, measurement_checks=measurement_checks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_inputs.py:2957: in _validate_v3_saved_science
+    expected = finish_controlled_response_inputs(context, arms=arms, companion_arms=companions, covariance_scopes=scopes)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_inputs.py:2154: in finish_controlled_response_inputs
+    return _finish_v3(context, arms=arms, companion_arms=companion_arms, covariance_scopes=covariance_scopes)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_v3_inputs.py:540: in _finish_v3
+    variance = shared._interpretation(context, pair['variance_status'], 'local_pair_assignments.variance_status')['effective_value']
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_inputs.py:417: in _interpretation
+    witnesses = [context.witness(w, field) for w in selected["witnesses"]]
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_controlled_response_inputs.py:2236: in witness
+    _fail("saved_witness_missing", field)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'saved_witness_missing', field = 'local_pair_assignments.variance_status'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: saved_witness_missing:local_pair_assignments.variance_status
+
+gene_annotation_episode/literature_controlled_response_inputs.py:158: ExperimentalContractError
+=========================== short test summary info ============================
+FAILED tests/test_literature_controlled_response_consumer.py::test_actual_runtime_digest_and_complete_alternate_wrapper_cannot_replace_selected_output
+1 failed, 138 passed in 1148.18s (0:19:08)

@@ -1,0 +1,12 @@
+--- before/gene_annotation_episode/literature_numerical_return_presentation.py
++++ after/gene_annotation_episode/literature_numerical_return_presentation.py
+@@ -80,7 +80,8 @@
+         if source in MEANINGS:
+             return source
+     if result.get('information_kind') == 'operation_contract_information_v1':
+-        return {'literature.measurement_validation.populate': 'literature_measurement_validation_cells',
++        return {'literature.product_coupling.populate': 'literature_product_coupling_cells',
++            'literature.measurement_validation.populate': 'literature_measurement_validation_cells',
+             'literature.channel.populate': 'literature_channel_cells',
+             'literature.ion_discrimination.populate': 'literature_ion_discrimination_cells',
+             'literature.assay.components.populate': 'literature_compiled_assay_cells'}.get(result.get('operation'))

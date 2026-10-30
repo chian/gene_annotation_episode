@@ -1,0 +1,1 @@
+raxml -s test9_genome_8taxa_10cds_10proteins_codonAndProteins.phy -n test9_genome_8taxa_10cds_10proteins_codonAndProteins -m GTRGAMMA -q test9_genome_8taxa_10cds_10proteins_codonAndProteins.partitions -p 12345 -T 1 -f a -x 12345 -N 100

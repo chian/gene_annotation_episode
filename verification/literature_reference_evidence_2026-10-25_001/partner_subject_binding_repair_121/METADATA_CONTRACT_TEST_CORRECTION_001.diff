@@ -1,0 +1,18 @@
+--- test_literature_partner_operand_information.py.before
++++ tests/test_literature_partner_operand_information.py
+@@ -304,13 +304,14 @@
+ def test_metadata_module_bytes_participate_in_actual_binding_identity(monkeypatch):
+     binding = LiteratureEpisodes(None, rate_population=True)
+     original = binding.as_record()
++    original_fact_sources = binding.fact_sources("literature")
+     read_bytes = Path.read_bytes
+     def altered(path):
+         value = read_bytes(path)
+         return value + b"\n# synthetic identity probe\n" if path.name == "literature_partner_operand_information.py" else value
+     monkeypatch.setattr(Path, "read_bytes", altered)
+     assert original["implementation_sha256"] != binding.as_record()["implementation_sha256"]
+-    assert len(binding.fact_sources("literature")) == 18
++    assert binding.fact_sources("literature") == original_fact_sources
+ 
+ 
+ def test_dispatch_probe_proves_only_one_selected_repository_route():

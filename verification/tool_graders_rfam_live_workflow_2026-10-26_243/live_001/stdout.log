@@ -1,0 +1,188 @@
+{"submitted_original_job": {"job_id": "infernal_cmscan-R20261026-041949-0621-14761545-p2m", "result_url": "https://batch.rfam.org/result/infernal_cmscan-R20261026-041949-0621-14761545-p2m"}}
+{
+  "actions": [
+    {
+      "actions": [
+        "episode_child:scientific_process"
+      ],
+      "actual_gains": [
+        0.0
+      ],
+      "episode_id": "episode_e57fd0a8dec6cbbda575acf1441fd07c8b75bcdc00397090240063bfea72f2df",
+      "observation_count": 1,
+      "role": "annotation",
+      "terminal_expected_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      }
+    },
+    {
+      "actions": [
+        "episode_child:launch",
+        "episode_child:results"
+      ],
+      "actual_gains": [
+        0.0,
+        0.0
+      ],
+      "episode_id": "episode_96e7a7c7ef716b0192af215f7ed982fa3bafc27085a1a9355402ec3afcefcc75",
+      "observation_count": 2,
+      "role": "scientific_process",
+      "terminal_expected_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      }
+    },
+    {
+      "actions": [
+        "episode_child:launch_api"
+      ],
+      "actual_gains": [
+        3.0
+      ],
+      "episode_id": "episode_3d7fdeae7571ff849555003bfe24602a9c16c6ce74282aeece1919f23a2a6315",
+      "observation_count": 1,
+      "role": "launch",
+      "terminal_expected_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      }
+    },
+    {
+      "actions": [
+        "api.rfam.submit"
+      ],
+      "actual_gains": [
+        3.0
+      ],
+      "episode_id": "episode_399b109b2d90bd326fc34b8b71076767d254cbec3f859420e40110d47a67700c",
+      "observation_count": 1,
+      "role": "launch_api",
+      "terminal_expected_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      }
+    },
+    {
+      "actions": [
+        "api.rfam.status",
+        "api.rfam.fetch"
+      ],
+      "actual_gains": [
+        0.0,
+        2.0
+      ],
+      "episode_id": "episode_a007dce89a19e3dcbeb00cf9f080a4abeca92a6f9808905158c3fb1f89bf2bfc",
+      "observation_count": 2,
+      "role": "results",
+      "terminal_expected_gain": {
+        "alpha": 0.0,
+        "lower": 0.0,
+        "status_code": 0,
+        "uncertainty_code": 0,
+        "upper": 0.0,
+        "value": 0.0
+      }
+    }
+  ],
+  "http_requests": 3,
+  "job": "infernal_cmscan-R20261026-041949-0621-14761545-p2m",
+  "population": {
+    "available_row_count": 3,
+    "family": "hit",
+    "more_rows": false,
+    "population_complete": true,
+    "selected_row_count": 3,
+    "source_ref": "source_311268c8aad5f2b5a637fe78"
+  },
+  "qualification": "Real remote Rfam scientific execution through current Workflow with explicit scripted engineering episode decisions",
+  "replay": {
+    "archive_unchanged": true,
+    "calculator_calls": 0,
+    "completed_history_unchanged": true,
+    "model_calls": 0,
+    "network_calls": 0,
+    "original_outcomes_equal": true,
+    "original_typed_returns_equal": true,
+    "parser_calls": 0,
+    "saved_recalculation_equal": true
+  },
+  "rows": [
+    {
+      "family_accession": "RF00001",
+      "native_end_1i": 119,
+      "native_evalue": 1.4e-24,
+      "native_score_bits": 104.6,
+      "native_start_1i": 1,
+      "query_length_nt": 119,
+      "query_occurrence_key": "rfam_query_be1f6894c37a54b6ca98a147ea1e5af864933419876b63a88edfaa11f6b2808f",
+      "query_span_fraction": 1.0,
+      "query_span_nt": 119,
+      "selection_ordinal": 0,
+      "strand": "+",
+      "subject_ref": "input_402b3110d9d0c52779303fd9",
+      "unavailable": [
+        {
+          "name": "model_coverage_fraction",
+          "reason": "model_length_unavailable"
+        }
+      ]
+    },
+    {
+      "family_accession": "RF00001",
+      "native_end_1i": 119,
+      "native_evalue": 1.4e-24,
+      "native_score_bits": 104.6,
+      "native_start_1i": 1,
+      "query_length_nt": 119,
+      "query_occurrence_key": "rfam_query_48f3749421a769579d965a06dff8ba8b764477917bc8546825fcc433428117ee",
+      "query_span_fraction": 1.0,
+      "query_span_nt": 119,
+      "selection_ordinal": 1,
+      "strand": "+",
+      "subject_ref": "input_402b3110d9d0c52779303fd9",
+      "unavailable": [
+        {
+          "name": "model_coverage_fraction",
+          "reason": "model_length_unavailable"
+        }
+      ]
+    },
+    {
+      "family_accession": "RF00001",
+      "native_end_1i": 1,
+      "native_evalue": 1.4e-24,
+      "native_score_bits": 104.6,
+      "native_start_1i": 119,
+      "query_length_nt": 119,
+      "query_occurrence_key": "rfam_query_23efcfb189ef85dbec7cb7c12a26a33318ad1bc0b6f83199420e85bc9826493b",
+      "query_span_fraction": 1.0,
+      "query_span_nt": 119,
+      "selection_ordinal": 2,
+      "strand": "-",
+      "subject_ref": "input_6d474f9d648cc148599a39fd",
+      "unavailable": [
+        {
+          "name": "model_coverage_fraction",
+          "reason": "model_length_unavailable"
+        }
+      ]
+    }
+  ]
+}

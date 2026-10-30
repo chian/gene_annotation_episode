@@ -1,0 +1,117 @@
+{
+  "version": "a105_kinetic_summary_precision_inputs_v1",
+  "source_kind": "primary_source",
+  "parameter_kind": "catalytic_efficiency",
+  "source_origin": "reported",
+  "source_parameter_status": "point",
+  "source_parameter_reason": null,
+  "parameter_approximate": false,
+  "parameter_native_exact": {
+    "numerator": "31",
+    "denominator": "10"
+  },
+  "sd_native_exact": {
+    "numerator": "1",
+    "denominator": "10"
+  },
+  "canonical_scale_exact": {
+    "numerator": "3",
+    "denominator": "50000"
+  },
+  "canonical_unit": "uM^-1min^-1",
+  "sd_scale_exact": {
+    "numerator": "3",
+    "denominator": "50000"
+  },
+  "sd_canonical_unit": "uM^-1min^-1",
+  "sd_unit_basis": "inherited_parameter_unit",
+  "uncertainty_statistic": "sd",
+  "uncertainty_reason": null,
+  "source_count": {
+    "selector": {
+      "witness": {
+        "source_ref": "@elife2015AP",
+        "representation": "text",
+        "start": 32165,
+        "end": 32353,
+        "quote": "#The mutant was expressed in two independent enzyme preparations and standard deviations are from activity\n                                   measurements for the independent preparations.",
+        "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924"
+      },
+      "number_start": 29,
+      "number_end": 32
+    },
+    "raw_number": "two",
+    "value": 2,
+    "notation": "english_cardinal",
+    "relation": "point",
+    "approximate": false,
+    "status": "exact",
+    "unavailable_reason": null
+  },
+  "source_statistical_count": null,
+  "source_count_meaning": "physical_preparation_count",
+  "repetition_basis": "biological_preparations",
+  "estimate_basis": "unknown",
+  "assessments": {
+    "row_footnote_applicability": "source_supported",
+    "statistical_count_matches_sd": "unknown",
+    "one_estimate_per_preparation": "unknown",
+    "equal_weight_arithmetic_mean": "unknown",
+    "sample_sd_n_minus_one": "unknown",
+    "iid_common_mean_finite_variance": "unknown",
+    "normal_sampling_units": "unknown",
+    "reported_sd_summarizes_counted_preparation_estimates": "unknown"
+  },
+  "scenario": {
+    "version": "a105_summary_precision_scenario_v1",
+    "count_rule": "one_per_physical_preparation",
+    "stipulated_assumptions": [
+      "one_estimate_per_preparation",
+      "reported_sd_summarizes_counted_preparation_estimates",
+      "equal_weight_arithmetic_mean",
+      "sample_sd_n_minus_one",
+      "iid_common_mean_finite_variance",
+      "normal_sampling_units"
+    ]
+  },
+  "interval_request": "student_t_95",
+  "dependencies": {
+    "parameter_source": {
+      "source_ref": "@elife2015AP",
+      "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+      "representation": "text",
+      "start": 24116,
+      "end": 24119
+    },
+    "spread_source": {
+      "source_ref": "@elife2015AP",
+      "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+      "representation": "text",
+      "start": 24121,
+      "end": 24124
+    },
+    "count_source": {
+      "source_ref": "@elife2015AP",
+      "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+      "representation": "text",
+      "start": 32194,
+      "end": 32197
+    },
+    "statistical_count_source": null,
+    "physical_measurement_id": null,
+    "parameter_unit_source": {
+      "source_ref": "@elife2015AP",
+      "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+      "representation": "text",
+      "start": 22176,
+      "end": 22186
+    },
+    "spread_unit_source": {
+      "source_ref": "@elife2015AP",
+      "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+      "representation": "text",
+      "start": 22176,
+      "end": 22186
+    }
+  }
+}

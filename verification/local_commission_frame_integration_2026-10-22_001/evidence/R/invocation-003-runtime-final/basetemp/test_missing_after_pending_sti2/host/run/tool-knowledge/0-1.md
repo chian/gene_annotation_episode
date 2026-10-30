@@ -1,0 +1,7 @@
+The parent assigns the query, CPU allocation and enabled search mode. The configured executable, reference database and local resource limits belong to the caller's job registry. Read the actual assignment and available tool schemas; this manual supplies no executable path or substitute allocation.
+
+homology.environment exposes whether the configured executable and reference database exist, the assigned CPU, staging state, submission intent and limits. homology.configure checks and applies that assignment; it does not choose a new CPU allocation. homology.stage prepares or repairs private query/reference snapshots and reuses unchanged inputs. It preserves the original database for reuse.
+
+homology.submit submits this registered job with its existing identity. Native inputs and executable must match their recorded digests. Replaying a submission does not authorize a second physical job. homology.resume_start repairs the existing startup reservation rather than creating another search. Inspect the actual returned state and specific failure before selecting repair; this is not a mandatory sequence or retry policy.
+
+homology.check_handoff exercises a fresh persistent receiver, including job identity, status, elapsed time and output availability. Its usable handoff can cross the parent's requested typed form. If it is unavailable, preserve the same job and communicate the actual failure. Numerical yield still governs episode continuation; an unusable handoff is not scientific rejection.

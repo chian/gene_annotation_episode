@@ -1,0 +1,23 @@
+..................................FF....                                 [100%]
+=================================== FAILURES ===================================
+_ test_old_recorded_pending_exchange_and_completed_selection_replay_are_unchanged _
+source_snapshot/tests/test_composed_episode_assignment_transport.py:241: in test_old_recorded_pending_exchange_and_completed_selection_replay_are_unchanged
+    assert json.loads(selected['action']) == historical.decode(response, schema)['selection']
+E   AssertionError: assert {'assignment'...e_child', ...} == {'kind': 'epi...958b9']}, ...}
+E     
+E     Omitting 7 identical items, use -vv to show
+E     Differing items:
+E     {'assignment': {'assignment_id': 'fixed-request-here', 'completion_keys': ['handoff'], 'constraints': {}, 'endpoint': 'usable_handoff', ...}} != {'assignment': {'version': 'practical_assignment_v1', 'assignment_id': 'fixed-request-here', 'resource_id': 'here', 'resource_kind': 'local', ...}}
+E     Use -v to get more diff
+___ test_expanded_invalid_object_without_historical_proof_is_not_normalized ____
+source_snapshot/tests/test_composed_episode_assignment_transport.py:269: in test_expanded_invalid_object_without_historical_proof_is_not_normalized
+    assert case.source.apply_response(response, 0, {'visible_record_refs': []}, case.schema) is None
+E   AssertionError: assert TimedChildUnit(child=FeedbackEpisode(grain=Grain(name='launch_local', unit='One completed selected improvement action'...isode_id='episode_1fdb90822d748e937c17ab7e38d29cb006616a2b04f812377805a0698b1adc53', decision_index=0, scheduled=False) is None
+E    +  where TimedChildUnit(child=FeedbackEpisode(grain=Grain(name='launch_local', unit='One completed selected improvement action'...isode_id='episode_1fdb90822d748e937c17ab7e38d29cb006616a2b04f812377805a0698b1adc53', decision_index=0, scheduled=False) = apply_response({'selection': {'kind': 'episode_child', 'role': 'launch_local', 'goal': 'Prepare the exact fixture request', 'scope': ...t_refs': ['input_c1fce35e47a699aa8c6958b9'], 'read_selection_refs': None, 'segments': None}, ...}, 'report_update': {}}, 0, {'visible_record_refs': []}, {'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False})
+E    +    where apply_response = <gene_annotation_episode.runtime.DecisionSource object at 0x706240e120f0>.apply_response
+E    +      where <gene_annotation_episode.runtime.DecisionSource object at 0x706240e120f0> = namespace(store=<gene_annotation_episode.state.Store object at 0x706242352ea0>, workflow=<gene_annotation_episode.runt...onment': {}}, 'inventory_snapshot': {}, 'constraints': {}}, scope={'subject_refs': ['input_c1fce35e47a699aa8c6958b9']}).source
+E    +    and   {'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False} = namespace(store=<gene_annotation_episode.state.Store object at 0x706242352ea0>, workflow=<gene_annotation_episode.runt...onment': {}}, 'inventory_snapshot': {}, 'constraints': {}}, scope={'subject_refs': ['input_c1fce35e47a699aa8c6958b9']}).schema
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_composed_episode_assignment_transport.py::test_old_recorded_pending_exchange_and_completed_selection_replay_are_unchanged
+FAILED source_snapshot/tests/test_composed_episode_assignment_transport.py::test_expanded_invalid_object_without_historical_proof_is_not_normalized
+2 failed, 38 passed in 32.10s

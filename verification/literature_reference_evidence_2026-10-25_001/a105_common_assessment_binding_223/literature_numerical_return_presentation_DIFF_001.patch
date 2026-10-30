@@ -1,0 +1,18 @@
+--- before/gene_annotation_episode/literature_numerical_return_presentation.py
++++ final/gene_annotation_episode/literature_numerical_return_presentation.py
+@@ -101,5 +101,14 @@
+     return MEANINGS[source] + '\n\n' + _declaration_text(source)
+ 
+ 
++def common_assessment_lookup(outcome):
++    result = outcome.get('result') if isinstance(outcome, Mapping) else None
++    return bool(isinstance(result, Mapping) and outcome.get('status') == 'completed' and (
++        result.get('information_kind') == 'return_contract_information_v1'
++        and result.get('source') == 'literature_compiled_assay_v3_cells'
++        or result.get('information_kind') == 'operation_contract_information_v1'
++        and result.get('operation') == 'literature.assay.components.populate'))
+ 
+-__all__ = ['return_schema_view', 'state_view', 'lookup_task_kind', 'requested_return_text']
++
++
++__all__ = ['return_schema_view', 'state_view', 'lookup_task_kind', 'requested_return_text', 'common_assessment_lookup']

@@ -1,0 +1,337 @@
+{
+  "case_id": "protein_xml",
+  "input_name": "protein_mixed",
+  "native_format": "maskinfo_xml",
+  "declared_molecule": "protein",
+  "declared_upstream_algorithm": "seg",
+  "declared_upstream_options": "supplied lowercase; no detector run; fixture 636",
+  "parse_seqids": true,
+  "argv": [
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check097_blast_mask_conversion_formats/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/convert2blastmask",
+    "-in",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check097_blast_mask_conversion_formats/temporary/convert2blastmask_formats_636/inputs/protein_mixed.fasta",
+    "-out",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check097_blast_mask_conversion_formats/temporary/convert2blastmask_formats_636/protein_xml/native_output.maskinfo_xml",
+    "-outfmt",
+    "maskinfo_xml",
+    "-masking_algorithm",
+    "seg",
+    "-masking_options",
+    "supplied lowercase; no detector run; fixture 636",
+    "-parse_seqids"
+  ],
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check097_blast_mask_conversion_formats/temporary/convert2blastmask_formats_636/protein_xml",
+  "shell": false,
+  "environment": {
+    "PATH": "/usr/bin:/bin",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "BLAST_USAGE_REPORT": "false",
+    "NCBI_DONT_USE_NCBIRC": "1",
+    "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check097_blast_mask_conversion_formats/temporary/convert2blastmask_formats_636/protein_xml/temporary",
+    "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check097_blast_mask_conversion_formats/temporary/convert2blastmask_formats_636/protein_xml/temporary",
+    "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check097_blast_mask_conversion_formats/temporary/convert2blastmask_formats_636/protein_xml/temporary",
+    "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check097_blast_mask_conversion_formats/temporary/convert2blastmask_formats_636/protein_xml/cache"
+  },
+  "executed": true,
+  "returncode": 0,
+  "launch_error": null,
+  "stdout": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check097_blast_mask_conversion_formats/temporary/convert2blastmask_formats_636/protein_xml/stdout.bin",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "size_bytes": 0
+  },
+  "stderr": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check097_blast_mask_conversion_formats/temporary/convert2blastmask_formats_636/protein_xml/stderr.bin",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "size_bytes": 0
+  },
+  "stdout_text": "",
+  "stderr_text": "",
+  "native_output_present": true,
+  "native_output": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check097_blast_mask_conversion_formats/temporary/convert2blastmask_formats_636/protein_xml/native_output.maskinfo_xml",
+    "sha256": "abee9c6e5540184f2f18dbc6643de7b1733d74f53e216e7056ae10640bb979d7",
+    "size_bytes": 2328
+  },
+  "native_output_text": "<?xml version=\"1.0\"?>\n<!DOCTYPE Blast-db-mask-info PUBLIC \"-//NCBI//NCBI BlastDL/EN\" \"NCBI_BlastDL.dtd\">\n<Blast-db-mask-info>\n  <Blast-db-mask-info_algo-id>0</Blast-db-mask-info_algo-id>\n  <Blast-db-mask-info_algo-program>\n    <Blast-filter-program value=\"seg\">20</Blast-filter-program>\n  </Blast-db-mask-info_algo-program>\n  <Blast-db-mask-info_algo-options>supplied lowercase; no detector run; fixture 636</Blast-db-mask-info_algo-options>\n  <Blast-db-mask-info_masks>\n    <Blast-mask-list>\n      <Blast-mask-list_masks>\n        <Seq-loc>\n          <Seq-loc_packed-int>\n            <Packed-seqint>\n              <Seq-interval>\n                <Seq-interval_from>4</Seq-interval_from>\n                <Seq-interval_to>5</Seq-interval_to>\n                <Seq-interval_id>\n                  <Seq-id>\n                    <Seq-id_local>\n                      <Object-id>\n                        <Object-id_str>protein_a</Object-id_str>\n                      </Object-id>\n                    </Seq-id_local>\n                  </Seq-id>\n                </Seq-interval_id>\n              </Seq-interval>\n              <Seq-interval>\n                <Seq-interval_from>10</Seq-interval_from>\n                <Seq-interval_to>11</Seq-interval_to>\n                <Seq-interval_id>\n                  <Seq-id>\n                    <Seq-id_local>\n                      <Object-id>\n                        <Object-id_str>protein_a</Object-id_str>\n                      </Object-id>\n                    </Seq-id_local>\n                  </Seq-id>\n                </Seq-interval_id>\n              </Seq-interval>\n              <Seq-interval>\n                <Seq-interval_from>15</Seq-interval_from>\n                <Seq-interval_to>17</Seq-interval_to>\n                <Seq-interval_id>\n                  <Seq-id>\n                    <Seq-id_local>\n                      <Object-id>\n                        <Object-id_str>protein_a</Object-id_str>\n                      </Object-id>\n                    </Seq-id_local>\n                  </Seq-id>\n                </Seq-interval_id>\n              </Seq-interval>\n            </Packed-seqint>\n          </Seq-loc_packed-int>\n        </Seq-loc>\n      </Blast-mask-list_masks>\n      <Blast-mask-list_more value=\"false\"/>\n    </Blast-mask-list>\n  </Blast-db-mask-info_masks>\n</Blast-db-mask-info>\n",
+  "xml_element_tree": {
+    "tag": "Blast-db-mask-info",
+    "attributes": {},
+    "text": "\n  ",
+    "tail": null,
+    "children": [
+      {
+        "tag": "Blast-db-mask-info_algo-id",
+        "attributes": {},
+        "text": "0",
+        "tail": "\n  ",
+        "children": []
+      },
+      {
+        "tag": "Blast-db-mask-info_algo-program",
+        "attributes": {},
+        "text": "\n    ",
+        "tail": "\n  ",
+        "children": [
+          {
+            "tag": "Blast-filter-program",
+            "attributes": {
+              "value": "seg"
+            },
+            "text": "20",
+            "tail": "\n  ",
+            "children": []
+          }
+        ]
+      },
+      {
+        "tag": "Blast-db-mask-info_algo-options",
+        "attributes": {},
+        "text": "supplied lowercase; no detector run; fixture 636",
+        "tail": "\n  ",
+        "children": []
+      },
+      {
+        "tag": "Blast-db-mask-info_masks",
+        "attributes": {},
+        "text": "\n    ",
+        "tail": "\n",
+        "children": [
+          {
+            "tag": "Blast-mask-list",
+            "attributes": {},
+            "text": "\n      ",
+            "tail": "\n  ",
+            "children": [
+              {
+                "tag": "Blast-mask-list_masks",
+                "attributes": {},
+                "text": "\n        ",
+                "tail": "\n      ",
+                "children": [
+                  {
+                    "tag": "Seq-loc",
+                    "attributes": {},
+                    "text": "\n          ",
+                    "tail": "\n      ",
+                    "children": [
+                      {
+                        "tag": "Seq-loc_packed-int",
+                        "attributes": {},
+                        "text": "\n            ",
+                        "tail": "\n        ",
+                        "children": [
+                          {
+                            "tag": "Packed-seqint",
+                            "attributes": {},
+                            "text": "\n              ",
+                            "tail": "\n          ",
+                            "children": [
+                              {
+                                "tag": "Seq-interval",
+                                "attributes": {},
+                                "text": "\n                ",
+                                "tail": "\n              ",
+                                "children": [
+                                  {
+                                    "tag": "Seq-interval_from",
+                                    "attributes": {},
+                                    "text": "4",
+                                    "tail": "\n                ",
+                                    "children": []
+                                  },
+                                  {
+                                    "tag": "Seq-interval_to",
+                                    "attributes": {},
+                                    "text": "5",
+                                    "tail": "\n                ",
+                                    "children": []
+                                  },
+                                  {
+                                    "tag": "Seq-interval_id",
+                                    "attributes": {},
+                                    "text": "\n                  ",
+                                    "tail": "\n              ",
+                                    "children": [
+                                      {
+                                        "tag": "Seq-id",
+                                        "attributes": {},
+                                        "text": "\n                    ",
+                                        "tail": "\n                ",
+                                        "children": [
+                                          {
+                                            "tag": "Seq-id_local",
+                                            "attributes": {},
+                                            "text": "\n                      ",
+                                            "tail": "\n                  ",
+                                            "children": [
+                                              {
+                                                "tag": "Object-id",
+                                                "attributes": {},
+                                                "text": "\n                        ",
+                                                "tail": "\n                    ",
+                                                "children": [
+                                                  {
+                                                    "tag": "Object-id_str",
+                                                    "attributes": {},
+                                                    "text": "protein_a",
+                                                    "tail": "\n                      ",
+                                                    "children": []
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "tag": "Seq-interval",
+                                "attributes": {},
+                                "text": "\n                ",
+                                "tail": "\n              ",
+                                "children": [
+                                  {
+                                    "tag": "Seq-interval_from",
+                                    "attributes": {},
+                                    "text": "10",
+                                    "tail": "\n                ",
+                                    "children": []
+                                  },
+                                  {
+                                    "tag": "Seq-interval_to",
+                                    "attributes": {},
+                                    "text": "11",
+                                    "tail": "\n                ",
+                                    "children": []
+                                  },
+                                  {
+                                    "tag": "Seq-interval_id",
+                                    "attributes": {},
+                                    "text": "\n                  ",
+                                    "tail": "\n              ",
+                                    "children": [
+                                      {
+                                        "tag": "Seq-id",
+                                        "attributes": {},
+                                        "text": "\n                    ",
+                                        "tail": "\n                ",
+                                        "children": [
+                                          {
+                                            "tag": "Seq-id_local",
+                                            "attributes": {},
+                                            "text": "\n                      ",
+                                            "tail": "\n                  ",
+                                            "children": [
+                                              {
+                                                "tag": "Object-id",
+                                                "attributes": {},
+                                                "text": "\n                        ",
+                                                "tail": "\n                    ",
+                                                "children": [
+                                                  {
+                                                    "tag": "Object-id_str",
+                                                    "attributes": {},
+                                                    "text": "protein_a",
+                                                    "tail": "\n                      ",
+                                                    "children": []
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "tag": "Seq-interval",
+                                "attributes": {},
+                                "text": "\n                ",
+                                "tail": "\n            ",
+                                "children": [
+                                  {
+                                    "tag": "Seq-interval_from",
+                                    "attributes": {},
+                                    "text": "15",
+                                    "tail": "\n                ",
+                                    "children": []
+                                  },
+                                  {
+                                    "tag": "Seq-interval_to",
+                                    "attributes": {},
+                                    "text": "17",
+                                    "tail": "\n                ",
+                                    "children": []
+                                  },
+                                  {
+                                    "tag": "Seq-interval_id",
+                                    "attributes": {},
+                                    "text": "\n                  ",
+                                    "tail": "\n              ",
+                                    "children": [
+                                      {
+                                        "tag": "Seq-id",
+                                        "attributes": {},
+                                        "text": "\n                    ",
+                                        "tail": "\n                ",
+                                        "children": [
+                                          {
+                                            "tag": "Seq-id_local",
+                                            "attributes": {},
+                                            "text": "\n                      ",
+                                            "tail": "\n                  ",
+                                            "children": [
+                                              {
+                                                "tag": "Object-id",
+                                                "attributes": {},
+                                                "text": "\n                        ",
+                                                "tail": "\n                    ",
+                                                "children": [
+                                                  {
+                                                    "tag": "Object-id_str",
+                                                    "attributes": {},
+                                                    "text": "protein_a",
+                                                    "tail": "\n                      ",
+                                                    "children": []
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "tag": "Blast-mask-list_more",
+                "attributes": {
+                  "value": "false"
+                },
+                "text": null,
+                "tail": "\n    ",
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

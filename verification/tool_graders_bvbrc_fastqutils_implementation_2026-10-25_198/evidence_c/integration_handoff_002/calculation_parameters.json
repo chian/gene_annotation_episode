@@ -1,0 +1,79 @@
+{
+  "version": "fastqutils_calculators_v2",
+  "analysis_id": "testC198",
+  "calculations": [
+    {
+      "calculation_id": "composition_reads",
+      "method": "composition_v1",
+      "state": "ready",
+      "population_refs": [
+        "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+        "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0"
+      ],
+      "operand_measurement_refs": [
+        "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F0",
+        "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F1",
+        "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F2",
+        "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F3",
+        "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F4",
+        "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F5",
+        "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F6",
+        "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F7",
+        "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F8"
+      ],
+      "comparison_kind": null,
+      "quality_thresholds": [],
+      "read_key_rule": null,
+      "lineage_ref": null,
+      "lineage_basis": null,
+      "requirement_refs": [],
+      "diagnostic_codes": []
+    },
+    {
+      "calculation_id": "quality_reads",
+      "method": "quality_phred_v1",
+      "state": "ready",
+      "population_refs": [
+        "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0"
+      ],
+      "operand_measurement_refs": [
+        "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F12"
+      ],
+      "comparison_kind": null,
+      "quality_thresholds": [
+        30
+      ],
+      "read_key_rule": null,
+      "lineage_ref": null,
+      "lineage_basis": null,
+      "requirement_refs": [],
+      "diagnostic_codes": []
+    },
+    {
+      "calculation_id": "retention_hostile",
+      "method": "retention_v1",
+      "state": "ready",
+      "population_refs": [
+        "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+        "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_out%2F0"
+      ],
+      "operand_measurement_refs": [
+        "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F0",
+        "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F1"
+      ],
+      "comparison_kind": "native_report_retention",
+      "quality_thresholds": [],
+      "read_key_rule": null,
+      "lineage_ref": "bvbrc_fastqutils_lineage:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flineage%2F0",
+      "lineage_basis": {
+        "basis": "native_report",
+        "metadata_id": null,
+        "evidence": null,
+        "declaration": null,
+        "native_lineage_ref": "bvbrc_fastqutils_lineage:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flineage%2F0"
+      },
+      "requirement_refs": [],
+      "diagnostic_codes": []
+    }
+  ]
+}

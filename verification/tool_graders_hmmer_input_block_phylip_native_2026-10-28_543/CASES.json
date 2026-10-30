@@ -1,0 +1,3903 @@
+{
+  "authorship_status": "authored_not_executed",
+  "case_counts_by_format": {
+    "clustal": 20,
+    "clustallike": 6,
+    "phylip": 57,
+    "phylips": 42,
+    "psiblast": 23,
+    "selex": 29
+  },
+  "case_counts_by_source_expected_status": {
+    "0": 76,
+    "3": 13,
+    "7": 88
+  },
+  "cases": [
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "psiblast",
+      "id": "psi_duplicate_blocks",
+      "native_checks": {
+        "read_line_number": 5
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/psi_duplicate_blocks.bytes",
+      "python_checks": {
+        "annotations": {
+          "RF": "x-.-x-"
+        },
+        "block_count": 2,
+        "names": [
+          "dup",
+          "dup"
+        ],
+        "rows": [
+          "A-c-T-",
+          "G-t-C-"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "e5acbdceec2dbc14aef7ee9042899e993f6c710af57976ec07c8e9b8e67f9ee7",
+      "size_bytes": 37,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": "Unmodified authored input bytes from packet 540 AUTHORED_NATIVE_CASES.json."
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "psiblast",
+      "id": "psi_case_conflict",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/psi_case_conflict.bytes",
+      "python_checks": {
+        "diagnostic_code": "psiblast_case_conflict",
+        "rows": [
+          "Aa"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "251ace2f49d2a8d2267a75c3169b444922485e9d4df1f3c9917c1dbfcdbbb4a3",
+      "size_bytes": 10,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": "Unmodified authored input bytes from packet 540 AUTHORED_NATIVE_CASES.json."
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "psiblast",
+      "id": "psi_bad_start",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/psi_bad_start.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "051fc192b4766d266fce108845786383a4101861ed51f8cb3b1404a476ddc6a0",
+      "size_bytes": 11,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": "Unmodified authored input bytes from packet 540 AUTHORED_NATIVE_CASES.json."
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "psiblast",
+      "id": "psi_forbidden_dot",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/psi_forbidden_dot.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "32cced25e5563464482413e6045e1befa7184b8d74cb19704c5178cef5f10edb",
+      "size_bytes": 5,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": "Unmodified authored input bytes from packet 540 AUTHORED_NATIVE_CASES.json."
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "psiblast",
+      "id": "psi_forbidden_o",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/psi_forbidden_o.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "e79ee4a1c8bec27bf42647b08f5d963b2fe42f08de97da560e4f4820a34f01f8",
+      "size_bytes": 5,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": "Unmodified authored input bytes from packet 540 AUTHORED_NATIVE_CASES.json."
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "psiblast",
+      "id": "psi_coordinate_suffix",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/psi_coordinate_suffix.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "24403df1ebdbd3fcc014a1d42151cdf98e85ce331f9272a2d9cf9cff3baa5bd5",
+      "size_bytes": 7,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": "Unmodified authored input bytes from packet 540 AUTHORED_NATIVE_CASES.json."
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "psiblast",
+      "id": "psi_nul_unknown",
+      "native_checks": {
+        "read_line_number": 1
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/psi_nul_unknown.bytes",
+      "python_checks": {
+        "annotations": {
+          "RF": "x--"
+        },
+        "rows": [
+          "AN-"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "a37a75b58dad7c05873a5b2800354e3598326a1f29fefc5cea966e2253a5db7a",
+      "size_bytes": 6,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": "Unmodified authored input bytes from packet 540 AUTHORED_NATIVE_CASES.json."
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "psiblast",
+      "id": "psi_name_nul_prefix",
+      "native_checks": {
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/psi_name_nul_prefix.bytes",
+      "python_checks": {
+        "names": [
+          "a"
+        ],
+        "rows": [
+          "ACGT"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "6b045f7a6c11549483679b7b700a2f32e3b2c291a533ed82dc73da9a2292886c",
+      "size_bytes": 13,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": "Unmodified authored input bytes from packet 540 AUTHORED_NATIVE_CASES.json."
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "psiblast",
+      "id": "psi_name_nul_repeat",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/psi_name_nul_repeat.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "ebeda4e7108cbdb90325e01c7cc8c9467a51a5e7793f44ac37643aa09a462e86",
+      "size_bytes": 15,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": "Unmodified authored input bytes from packet 540 AUTHORED_NATIVE_CASES.json."
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "selex",
+      "id": "selex_physical",
+      "native_checks": {
+        "read_line_number": 8
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/selex_physical.bytes",
+      "python_checks": {
+        "annotations": {
+          "MM": "..m..m",
+          "RF": "..x..x",
+          "SS_cons": "..>..<"
+        },
+        "column_count": 6,
+        "first_row_annotations": {
+          "SA": "..1234",
+          "SS": "..(..)"
+        },
+        "rows": [
+          "--AC-G",
+          "ATCGTT",
+          "------"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "39fac949d5bdedb3b0074250eecb904f56959bfa9fbd04c6d8ccda3255389960",
+      "size_bytes": 90,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": "Unmodified authored input bytes from packet 540 AUTHORED_NATIVE_CASES.json."
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "selex",
+      "id": "selex_mm_overwrite",
+      "native_checks": {
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/selex_mm_overwrite.bytes",
+      "python_checks": {
+        "annotations": {
+          "MM": "cd"
+        }
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "0ff0e96ce594bf54a759185c843c99092c4fa0800c84226d929387de9a42b38d",
+      "size_bytes": 24,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": "Unmodified authored input bytes from packet 540 AUTHORED_NATIVE_CASES.json."
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "selex",
+      "id": "selex_internal_tab",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/selex_internal_tab.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "e257811a9ba5be1c6b23ff12c6530feb63cc772267eba55c4c5dd1f4f752237d",
+      "size_bytes": 7,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": "Unmodified authored input bytes from packet 540 AUTHORED_NATIVE_CASES.json."
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "selex",
+      "id": "selex_ss_rewind",
+      "native_checks": {
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/selex_ss_rewind.bytes",
+      "python_checks": {
+        "diagnostic_code": "annotation_cardinality_mismatch",
+        "next_byte_offset": 25
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "8643d065c8eee5fb453ca49fb96afaf6ec67e5db852c7751908e082e0c0f4e13",
+      "size_bytes": 38,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": "Unmodified authored input bytes from packet 540 AUTHORED_NATIVE_CASES.json."
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "selex",
+      "id": "selex_later_missing",
+      "native_checks": {
+        "read_line_number": 2
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/selex_later_missing.bytes",
+      "python_checks": {
+        "column_count": 10,
+        "rows": [
+          "AC--------",
+          "----------"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "624a840a4e73063829cf41ad8bd68ceb6f204acdc11bf980dd558a78b7c02385",
+      "size_bytes": 18,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": "Unmodified authored input bytes from packet 540 AUTHORED_NATIVE_CASES.json."
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "clustal",
+      "id": "clustal_trailing_tokens",
+      "native_checks": {
+        "read_line_number": 4
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/clustal_trailing_tokens.bytes",
+      "python_checks": {
+        "annotations": {
+          "RF": null
+        },
+        "consensus_event_count": 1,
+        "rows": [
+          "AC",
+          "GT"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "d1ed334d02bf7e0a8eaa0a676fddefa63e7b26ea5c3222fe1e734328e9d97a94",
+      "size_bytes": 47,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": "Unmodified authored input bytes from packet 540 AUTHORED_NATIVE_CASES.json."
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "clustal",
+      "id": "clustal_missing_consensus",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/clustal_missing_consensus.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "c1e84bb7803609cae50b7cb0fa66bdd21a08f6ed164c34f2fe8634e3d4fc7b54",
+      "size_bytes": 23,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": "Unmodified authored input bytes from packet 540 AUTHORED_NATIVE_CASES.json."
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "clustal",
+      "id": "clustal_tab_consensus",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/clustal_tab_consensus.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "00b59f7d035df9dee7d5bb88597bd026c73ec23aac009ca85ccf0f5edee8bdcb",
+      "size_bytes": 25,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": "Unmodified authored input bytes from packet 540 AUTHORED_NATIVE_CASES.json."
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "clustallike",
+      "id": "clustal_like_header",
+      "native_checks": {
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/clustal_like_header.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "5631bde7edfd9a0cbf6d4d6f30d4e81963c6f7fd0555e5e86962e9f7d4e719c3",
+      "size_bytes": 26,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": "Unmodified authored input bytes from packet 540 AUTHORED_NATIVE_CASES.json."
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "clustal",
+      "id": "clustal_strict_rejects_muscle",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/clustal_strict_rejects_muscle.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "5631bde7edfd9a0cbf6d4d6f30d4e81963c6f7fd0555e5e86962e9f7d4e719c3",
+      "size_bytes": 26,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": "Unmodified authored input bytes from packet 540 AUTHORED_NATIVE_CASES.json."
+    },
+    {
+      "alphabet": "RNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "clustal",
+      "id": "clustal_nul_unknown",
+      "native_checks": {
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/clustal_nul_unknown.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "4b164b2ffd8ea229f649bf58e4b2a76e09679b32b3e026ceb4a323bdc24f104f",
+      "size_bytes": 29,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": "Unmodified authored input bytes from packet 540 AUTHORED_NATIVE_CASES.json."
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "psiblast",
+      "id": "psiblast_empty",
+      "native_checks": {
+        "read_line_number": 0
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/psiblast_empty.bytes",
+      "python_checks": {
+        "end_state": "eof",
+        "next_byte_offset": 0,
+        "record_count": 0
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source_expected_geometry": null,
+      "source_expected_status": 3,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "psiblast",
+      "id": "psiblast_blank_nul_crlf",
+      "native_checks": {
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/psiblast_blank_nul_crlf.bytes",
+      "python_checks": {
+        "end_state": "eof",
+        "next_byte_offset": 7,
+        "record_count": 0
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "0c2f40178bd1d360b43b73b12a51baee09a92d15b9d87cd487e51b601561fa5c",
+      "size_bytes": 7,
+      "source_expected_geometry": null,
+      "source_expected_status": 3,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "selex",
+      "id": "selex_empty",
+      "native_checks": {
+        "read_line_number": 0
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/selex_empty.bytes",
+      "python_checks": {
+        "end_state": "eof",
+        "next_byte_offset": 0,
+        "record_count": 0
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source_expected_geometry": null,
+      "source_expected_status": 3,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "selex",
+      "id": "selex_blank_nul_crlf",
+      "native_checks": {
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/selex_blank_nul_crlf.bytes",
+      "python_checks": {
+        "end_state": "eof",
+        "next_byte_offset": 7,
+        "record_count": 0
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "0c2f40178bd1d360b43b73b12a51baee09a92d15b9d87cd487e51b601561fa5c",
+      "size_bytes": 7,
+      "source_expected_geometry": null,
+      "source_expected_status": 3,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "clustal",
+      "id": "clustal_empty",
+      "native_checks": {
+        "read_line_number": 0
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/clustal_empty.bytes",
+      "python_checks": {
+        "end_state": "eof",
+        "next_byte_offset": 0,
+        "record_count": 0
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source_expected_geometry": null,
+      "source_expected_status": 3,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "clustal",
+      "id": "clustal_blank_nul_crlf",
+      "native_checks": {
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/clustal_blank_nul_crlf.bytes",
+      "python_checks": {
+        "end_state": "eof",
+        "next_byte_offset": 7,
+        "record_count": 0
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "0c2f40178bd1d360b43b73b12a51baee09a92d15b9d87cd487e51b601561fa5c",
+      "size_bytes": 7,
+      "source_expected_geometry": null,
+      "source_expected_status": 3,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "clustallike",
+      "id": "clustallike_empty",
+      "native_checks": {
+        "read_line_number": 0
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/clustallike_empty.bytes",
+      "python_checks": {
+        "end_state": "eof",
+        "next_byte_offset": 0,
+        "record_count": 0
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source_expected_geometry": null,
+      "source_expected_status": 3,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "clustallike",
+      "id": "clustallike_blank_nul_crlf",
+      "native_checks": {
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/clustallike_blank_nul_crlf.bytes",
+      "python_checks": {
+        "end_state": "eof",
+        "next_byte_offset": 7,
+        "record_count": 0
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "0c2f40178bd1d360b43b73b12a51baee09a92d15b9d87cd487e51b601561fa5c",
+      "size_bytes": 7,
+      "source_expected_geometry": null,
+      "source_expected_status": 3,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_empty",
+      "native_checks": {
+        "read_line_number": 0
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_empty.bytes",
+      "python_checks": {
+        "end_state": "eof",
+        "next_byte_offset": 0,
+        "record_count": 0
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source_expected_geometry": null,
+      "source_expected_status": 3,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_blank_nul_crlf",
+      "native_checks": {
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_blank_nul_crlf.bytes",
+      "python_checks": {
+        "end_state": "eof",
+        "next_byte_offset": 7,
+        "record_count": 0
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "0c2f40178bd1d360b43b73b12a51baee09a92d15b9d87cd487e51b601561fa5c",
+      "size_bytes": 7,
+      "source_expected_geometry": null,
+      "source_expected_status": 3,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_empty",
+      "native_checks": {
+        "read_line_number": 0
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_empty.bytes",
+      "python_checks": {
+        "end_state": "eof",
+        "next_byte_offset": 0,
+        "record_count": 0
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source_expected_geometry": null,
+      "source_expected_status": 3,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_blank_nul_crlf",
+      "native_checks": {
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_blank_nul_crlf.bytes",
+      "python_checks": {
+        "end_state": "eof",
+        "next_byte_offset": 7,
+        "record_count": 0
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "0c2f40178bd1d360b43b73b12a51baee09a92d15b9d87cd487e51b601561fa5c",
+      "size_bytes": 7,
+      "source_expected_geometry": null,
+      "source_expected_status": 3,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "psiblast",
+      "id": "psi_all_gap_rf",
+      "native_checks": {
+        "read_line_number": 2
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/psi_all_gap_rf.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "72683674063c1010ea4594f31be2ba64a1c7e4d21b10c7e5b2ececadf72ee1f2",
+      "size_bytes": 10,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "psiblast",
+      "id": "psi_crlf_unterminated",
+      "native_checks": {
+        "read_line_number": 5
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/psi_crlf_unterminated.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "ef32ca8a5c774d214d6d52b2ada1734375d677b89f38b089b54e8370cbb4e18e",
+      "size_bytes": 36,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "psiblast",
+      "id": "psi_trailing_bare_cr_trimmed",
+      "native_checks": {
+        "read_line_number": 1
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/psi_trailing_bare_cr_trimmed.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "e532719b05e7c2f4158e4a5421ab594e82f939c1b32046c278bb8e7652cfb661",
+      "size_bytes": 5,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "psiblast",
+      "id": "psi_forbidden_underscore",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/psi_forbidden_underscore.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "689cc2b19d371a5dc21c623f690e7635d9506de7fa16bc4a7d54c63a1ba85dc4",
+      "size_bytes": 5,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "psiblast",
+      "id": "psi_forbidden_star",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/psi_forbidden_star.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "e1765000116d9866e9418f8cae88792d58e389534f53972eb654c2494a469e88",
+      "size_bytes": 5,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "psiblast",
+      "id": "psi_forbidden_missing",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/psi_forbidden_missing.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "0202b4ee066e3674317a1c9157ce25576d83ccf0033ebf3bda61308b6acb7b3a",
+      "size_bytes": 5,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "psiblast",
+      "id": "psi_forbidden_lower_o",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/psi_forbidden_lower_o.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "e55268098fffd7863c502326e9a55b9140aef3903303edb60392a15df3c2c5c2",
+      "size_bytes": 5,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "psiblast",
+      "id": "psi_later_row_order",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/psi_later_row_order.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "98eeb6571e711a0d6c4af060f12ce767f03b4c51e57895ad173d9c1b3b408f5b",
+      "size_bytes": 21,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "psiblast",
+      "id": "psi_later_row_count",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/psi_later_row_count.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "7ff4e21b90395ce7e833e9075bb1a1097b41e7ccca94cee2e889ca7fe6138123",
+      "size_bytes": 16,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "psiblast",
+      "id": "psi_later_extra_allocated_row",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/psi_later_extra_allocated_row.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "a5ab081353bb6c2f439499983299946b75217657f3a7e760510ad4b5a10bbd8a",
+      "size_bytes": 16,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "selex",
+      "id": "selex_comments_and_indented_row",
+      "native_checks": {
+        "read_line_number": 4
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/selex_comments_and_indented_row.bytes",
+      "python_checks": {
+        "names": [
+          "a",
+          "#"
+        ],
+        "rows": [
+          "AC-",
+          "-XX"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "073171649c7c07cb94df31451076e0c89deb3955f0be283d0a92f1a154f78fb1",
+      "size_bytes": 37,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "selex",
+      "id": "selex_mm_two_blocks",
+      "native_checks": {
+        "read_line_number": 7
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/selex_mm_two_blocks.bytes",
+      "python_checks": {
+        "annotations": {
+          "MM": "cdgh"
+        },
+        "block_count": 2
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "724fb8a50600b157a158e13276d915aaad5d9bd8f666a0a2ea733beff535dce4",
+      "size_bytes": 49,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "selex",
+      "id": "selex_reversible_byte_name",
+      "native_checks": {
+        "read_line_number": 1
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/selex_reversible_byte_name.bytes",
+      "python_checks": {
+        "rows": [
+          "ANC"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "c50b09a8ccaf214099a7a8334191785ac8e0482f2c0c6e78f60aeb736d799a35",
+      "size_bytes": 8,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": "High bytes occur only in a memtok name; the last sequence byte tested by ctype is ASCII C."
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "selex",
+      "id": "selex_internal_highbyte_rejected",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/selex_internal_highbyte_rejected.bytes",
+      "python_checks": {
+        "diagnostic_code": "invalid_sequence_byte",
+        "rows": [
+          "A"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "87c126c4ca96bd3b426b0354fb298b95948069ef2b2b48398ff13e2534ab96ab",
+      "size_bytes": 6,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": "Safe ASCII right edge stops ctype; internal high byte reaches the explicit digital isascii rejection."
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "selex",
+      "id": "selex_annotation_before_failure",
+      "native_checks": {
+        "read_line_number": 4
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/selex_annotation_before_failure.bytes",
+      "python_checks": {
+        "annotations": {
+          "MM": "def",
+          "RF": "xxx"
+        },
+        "rows": [
+          "AC"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "8112ae8f0ba16ff0271fc9e91315ee70854c4a0ebfc0bdbfb7c5582708026839",
+      "size_bytes": 36,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "clustal",
+      "id": "clustal_nul_name_prefix",
+      "native_checks": {
+        "read_line_number": 6
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/clustal_nul_name_prefix.bytes",
+      "python_checks": {
+        "names": [
+          "a"
+        ],
+        "rows": [
+          "ACGT"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "65e1a07d8949c1ac1ad1cfa5e17b2c5dad0728473327e143ed6b7bef9dcedf13",
+      "size_bytes": 39,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "clustal",
+      "id": "clustal_nul_name_repeat",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/clustal_nul_name_repeat.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "c5f4b31ae112a55196ecbda4274b4608de711a330e6e156d39b6925bf6f26df3",
+      "size_bytes": 41,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "clustal",
+      "id": "clustal_digital_aliases",
+      "native_checks": {
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/clustal_digital_aliases.bytes",
+      "python_checks": {
+        "annotations": {
+          "RF": null
+        }
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "365f86905d9202c90878d37c37cf57c646f35d243776817d2cc98101f2bc6c75",
+      "size_bytes": 39,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "clustal",
+      "id": "clustal_ignored_trailing_highbyte",
+      "native_checks": {
+        "read_line_number": 4
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/clustal_ignored_trailing_highbyte.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "fb891506aa95677ff7fd1d9e0493c75d99ebc27453ab378ee6193b3e2934a1b7",
+      "size_bytes": 52,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": "Byte after a sequence-delimiting ASCII space is ignored trailing syntax and never reaches ctype."
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "clustal",
+      "id": "clustal_empty_consensus",
+      "native_checks": {
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/clustal_empty_consensus.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "c1c6e0f368b30f2c65ec7ab1ab6e52258a7c9309a0b60cdff0485a60236b1110",
+      "size_bytes": 24,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "clustal",
+      "id": "clustal_nul_consensus",
+      "native_checks": {
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/clustal_nul_consensus.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "888b5ccd721911dbb81ccbe35e1f59bae53eb4cf25f7d9824fd26c0925a5f3ce",
+      "size_bytes": 25,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "clustal",
+      "id": "clustal_header_nul_delimiter",
+      "native_checks": {
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/clustal_header_nul_delimiter.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "ef161bf37065b71823a103559f266430c5b7415e78cc0d8d22aa3a10fe38b000",
+      "size_bytes": 27,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "clustal",
+      "id": "clustal_header_case_sensitive",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/clustal_header_case_sensitive.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "4fffcaa7e2b38c99e0fee5dbaee1be4519a45b9202f9e0e5023b13d0a0c05fa8",
+      "size_bytes": 27,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "clustal",
+      "id": "clustal_later_extra_allocated_row",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/clustal_later_extra_allocated_row.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "255852c007fa505e115bb6c0393beb3e02de5483103e1f64dbd5a626fcc52a6e",
+      "size_bytes": 42,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "clustallike",
+      "id": "clustallike_duplicate_blocks",
+      "native_checks": {
+        "read_line_number": 8
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/clustallike_duplicate_blocks.bytes",
+      "python_checks": {
+        "consensus_event_count": 2,
+        "names": [
+          "dup",
+          "dup"
+        ],
+        "rows": [
+          "ACDE",
+          "GTFG"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "b555807c328b0e77e129b1475dbdb2ddab4ff64557290a188903c7d816a669ee",
+      "size_bytes": 54,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "clustallike",
+      "id": "clustallike_missing_alignment_word",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/clustallike_missing_alignment_word.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "86aa48b6e8a30fadf3796ffedabc434dbebe258af95b9de7a13ebeea344305c6",
+      "size_bytes": 16,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_strict_positional_names",
+      "native_checks": {
+        "read_line_number": 5
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_strict_positional_names.bytes",
+      "python_checks": {
+        "names": [
+          "with_space",
+          "with_space",
+          "",
+          "abcdefghij"
+        ],
+        "rows": [
+          "ACGT",
+          "A-GT",
+          "AC-T",
+          "ACGT"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "f6f334f5132d9050c81dfa1b54fee59112e8a6216ec826d1ac6397ed01b1c049",
+      "size_bytes": 64,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_trim_literal_spaces",
+      "native_checks": {
+        "read_line_number": 2
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_trim_literal_spaces.bytes",
+      "python_checks": {
+        "names": [
+          "a_b"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "0dc0e10b45df7f3fb9f8285871763cba0bc1afc25c714ea56ad106f3cd1e9112",
+      "size_bytes": 17,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_short_name",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_short_name.bytes",
+      "python_checks": {
+        "rows": []
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "4452c16e08ca6242e79ef600449579e4d9aeb4b9d2ced195f538d16c65f43676",
+      "size_bytes": 15,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_name_tab",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_name_tab.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "349fad32c554bcb7bff40a100d1adcccb9ead00f3491f0091ab60722a71e9994",
+      "size_bytes": 17,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_name_nul",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_name_nul.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "7a0b1b80e96821ed77713ab56389dd87d3aee3fa340911e00c4624bb34536414",
+      "size_bytes": 17,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_name_cr",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_name_cr.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "3ec94024b9f9ca100e4de487a278688f65f19f8e54956546b6741444713296d9",
+      "size_bytes": 17,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_name_del",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_name_del.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "bcf29ea98462197532036b173493b4642a586d8a36d9c42acd37e2c7f0ec70f0",
+      "size_bytes": 17,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_native_aliases_dna",
+      "native_checks": {
+        "read_line_number": 2
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_native_aliases_dna.bytes",
+      "python_checks": {
+        "rows": [
+          "A~-.*uxI-"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "21878500a97142c17a0ebc8e4deff67cdb65ed190fd7b9c950ed91647d5ff7af",
+      "size_bytes": 35,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "RNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_native_aliases_rna",
+      "native_checks": {
+        "read_line_number": 2
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_native_aliases_rna.bytes",
+      "python_checks": {
+        "rows": [
+          "A~-.*uxI-"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "21878500a97142c17a0ebc8e4deff67cdb65ed190fd7b9c950ed91647d5ff7af",
+      "size_bytes": 35,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_amino_o_residues",
+      "native_checks": {
+        "read_line_number": 2
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_amino_o_residues.bytes",
+      "python_checks": {
+        "rows": [
+          "Oo~."
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "ad914c672e264843863f74eb330e88c9472a7ea89b6776616c40e89835f13839",
+      "size_bytes": 19,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_sequence_nul_dna",
+      "native_checks": {
+        "read_line_number": 2
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_sequence_nul_dna.bytes",
+      "python_checks": {
+        "rows": [
+          "ANC"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "38209c4b65c4e061a5161671a71dafa13805ef9cd6434dd72d0e777d4621bc45",
+      "size_bytes": 18,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "RNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_sequence_nul_rna",
+      "native_checks": {
+        "read_line_number": 2
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_sequence_nul_rna.bytes",
+      "python_checks": {
+        "rows": [
+          "ANC"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "38209c4b65c4e061a5161671a71dafa13805ef9cd6434dd72d0e777d4621bc45",
+      "size_bytes": 18,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_sequence_nul_amino",
+      "native_checks": {
+        "read_line_number": 2
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_sequence_nul_amino.bytes",
+      "python_checks": {
+        "rows": [
+          "AXC"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "38209c4b65c4e061a5161671a71dafa13805ef9cd6434dd72d0e777d4621bc45",
+      "size_bytes": 18,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_bad_symbol_digit9",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_bad_symbol_digit9.bytes",
+      "python_checks": {
+        "diagnostic_code": "invalid_sequence_byte",
+        "next_byte_offset": 22,
+        "rows": [
+          "AC"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "6a34381afd3395e0ddf2abf214a7a1253e3ec8446172fe48aca11ab1cae4f36c",
+      "size_bytes": 29,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_bad_symbol_underscore",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_bad_symbol_underscore.bytes",
+      "python_checks": {
+        "diagnostic_code": "invalid_sequence_byte",
+        "next_byte_offset": 22,
+        "rows": [
+          "AC"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "c2829fa9339f5bef17306140fb84f4066c9e9969e9291cd0a3f44e50faa4d9c3",
+      "size_bytes": 29,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_bad_symbol_tilde",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_bad_symbol_tilde.bytes",
+      "python_checks": {
+        "diagnostic_code": "invalid_sequence_byte",
+        "next_byte_offset": 22,
+        "rows": [
+          "AC"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "7226cafb67cfed1f5255ec61bcc9171a95199fa982002585ca0fc2a6bdef8dff",
+      "size_bytes": 29,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_bad_symbol_lower_o",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_bad_symbol_lower_o.bytes",
+      "python_checks": {
+        "diagnostic_code": "invalid_sequence_byte",
+        "next_byte_offset": 22,
+        "rows": [
+          "AC"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "03071cf52e7cb9575088cba36e68c9ff1855c71badb5aae579e7fdc6ba01e7ff",
+      "size_bytes": 29,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_bad_symbol_bare_cr",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_bad_symbol_bare_cr.bytes",
+      "python_checks": {
+        "diagnostic_code": "invalid_sequence_byte",
+        "next_byte_offset": 22,
+        "rows": [
+          "AC"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "bc22f41549e3064d8862efece5e71c617bb4e10b6627798a599b3455a63cbe85",
+      "size_bytes": 29,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_bad_symbol_highbyte",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_bad_symbol_highbyte.bytes",
+      "python_checks": {
+        "diagnostic_code": "invalid_sequence_byte",
+        "next_byte_offset": 22,
+        "rows": [
+          "AC"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "4d66e2d534809d4fa3ed2e11be354f826cc9021c4d93bfd9c4cee3e9c32fb71b",
+      "size_bytes": 29,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_dimensions_octal",
+      "native_checks": {
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_dimensions_octal.bytes",
+      "python_checks": {
+        "declared_column_count": 4
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "241076dd81f89dd43518418a2b11b9cedfe3407ae8ee3eb7336b0e7ae15ed0c6",
+      "size_bytes": 36,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_dimensions_hex",
+      "native_checks": {
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_dimensions_hex.bytes",
+      "python_checks": {
+        "declared_column_count": 4
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "38678766e21e355cd279ef09bae973643fd792f4cd363d7dccc03b0051cd9c90",
+      "size_bytes": 38,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_dimensions_prefix_suffix",
+      "native_checks": {
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_dimensions_prefix_suffix.bytes",
+      "python_checks": {
+        "declared_column_count": 4
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "0f4ab2e9e4841072e97a49b4eaf8419e1462735621203c24a6a53f1fcd6db48b",
+      "size_bytes": 48,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_dimensions_cspace",
+      "native_checks": {
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_dimensions_cspace.bytes",
+      "python_checks": {
+        "declared_column_count": 4
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "3a25b7ba1d08fd2ea26db0a3c1b5efec5ea9f550095423ed1414ff5a6cf1b0dd",
+      "size_bytes": 36,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_dimensions_nul_delimiter",
+      "native_checks": {
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_dimensions_nul_delimiter.bytes",
+      "python_checks": {
+        "declared_column_count": 4
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "186a0f4c809c0c40a9e666476421d871b1f7cbd8035e5416c90e8721c02f4c7a",
+      "size_bytes": 34,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_invalid_header_plus",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_invalid_header_plus.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "0b60c8a059d73bb50b91ead3e51f295d3dffec26e10f795490bcfc1bdad67905",
+      "size_bytes": 5,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": "Rejected by integer/header parsing before esl_msa_CreateDigital; no huge or nonpositive allocation is attempted."
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_invalid_header_only_one_field",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_invalid_header_only_one_field.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "size_bytes": 2,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": "Rejected by integer/header parsing before esl_msa_CreateDigital; no huge or nonpositive allocation is attempted."
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_invalid_header_hex_no_digits",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_invalid_header_hex_no_digits.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "9f9bd753d292acffd2f25f9b34844d705afadf36900aae3e7ca07e89375cb300",
+      "size_bytes": 5,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": "Rejected by integer/header parsing before esl_msa_CreateDigital; no huge or nonpositive allocation is attempted."
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_invalid_header_int32_positive_overflow",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_invalid_header_int32_positive_overflow.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "a02332de61df03100220a5d2fe33a8c7653ba12c9ee32ed108743b181e32abe0",
+      "size_bytes": 13,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": "Rejected by integer/header parsing before esl_msa_CreateDigital; no huge or nonpositive allocation is attempted."
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_invalid_header_int32_negative_overflow",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_invalid_header_int32_negative_overflow.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "25e3edba9224f6a74b2fe9b08ed69d7bf982c2057794dfab3c158c83779c781f",
+      "size_bytes": 14,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": "Rejected by integer/header parsing before esl_msa_CreateDigital; no huge or nonpositive allocation is attempted."
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_first_of_two_complete",
+      "native_checks": {
+        "alen": 2,
+        "nseq": 1,
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "first_record_only",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_first_of_two_complete.bytes",
+      "python_checks": {
+        "end_state": "eof",
+        "first_record_end_byte": 23,
+        "record_count": 2,
+        "record_states": [
+          "complete",
+          "complete"
+        ],
+        "record_statuses": [
+          0,
+          0
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "a5b6754c8c4a923efb0c6fbcb35fb2f16e4e048b13739a68275c5625801911d0",
+      "size_bytes": 39,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": "Only the first record is compared to native. Second-record state and boundary are source-derived Python assertions."
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_first_before_malformed_second",
+      "native_checks": {
+        "alen": 2,
+        "nseq": 1,
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "first_record_only",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_first_before_malformed_second.bytes",
+      "python_checks": {
+        "end_state": "parse_error",
+        "first_record_end_byte": 23,
+        "next_byte_offset": 30,
+        "record_states": [
+          "complete",
+          "invalid"
+        ],
+        "record_statuses": [
+          0,
+          7
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "0b2a4eae7b123c999adfeb2f5f033372ede5ba29f8de96f3b2a64c225fb37a52",
+      "size_bytes": 46,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": "Native does not read the malformed second record; no second-record native conformance claim."
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_strict_positional_names",
+      "native_checks": {
+        "read_line_number": 5
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_strict_positional_names.bytes",
+      "python_checks": {
+        "names": [
+          "with_space",
+          "with_space",
+          "",
+          "abcdefghij"
+        ],
+        "rows": [
+          "ACGT",
+          "A-GT",
+          "AC-T",
+          "ACGT"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "f6f334f5132d9050c81dfa1b54fee59112e8a6216ec826d1ac6397ed01b1c049",
+      "size_bytes": 64,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_trim_literal_spaces",
+      "native_checks": {
+        "read_line_number": 2
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_trim_literal_spaces.bytes",
+      "python_checks": {
+        "names": [
+          "a_b"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "0dc0e10b45df7f3fb9f8285871763cba0bc1afc25c714ea56ad106f3cd1e9112",
+      "size_bytes": 17,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_short_name",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_short_name.bytes",
+      "python_checks": {
+        "rows": []
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "4452c16e08ca6242e79ef600449579e4d9aeb4b9d2ced195f538d16c65f43676",
+      "size_bytes": 15,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_name_tab",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_name_tab.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "349fad32c554bcb7bff40a100d1adcccb9ead00f3491f0091ab60722a71e9994",
+      "size_bytes": 17,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_name_nul",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_name_nul.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "7a0b1b80e96821ed77713ab56389dd87d3aee3fa340911e00c4624bb34536414",
+      "size_bytes": 17,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_name_cr",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_name_cr.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "3ec94024b9f9ca100e4de487a278688f65f19f8e54956546b6741444713296d9",
+      "size_bytes": 17,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_name_del",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_name_del.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "bcf29ea98462197532036b173493b4642a586d8a36d9c42acd37e2c7f0ec70f0",
+      "size_bytes": 17,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_native_aliases_dna",
+      "native_checks": {
+        "read_line_number": 2
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_native_aliases_dna.bytes",
+      "python_checks": {
+        "rows": [
+          "A~-.*uxI-"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "21878500a97142c17a0ebc8e4deff67cdb65ed190fd7b9c950ed91647d5ff7af",
+      "size_bytes": 35,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "RNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_native_aliases_rna",
+      "native_checks": {
+        "read_line_number": 2
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_native_aliases_rna.bytes",
+      "python_checks": {
+        "rows": [
+          "A~-.*uxI-"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "21878500a97142c17a0ebc8e4deff67cdb65ed190fd7b9c950ed91647d5ff7af",
+      "size_bytes": 35,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_amino_o_residues",
+      "native_checks": {
+        "read_line_number": 2
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_amino_o_residues.bytes",
+      "python_checks": {
+        "rows": [
+          "Oo~."
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "ad914c672e264843863f74eb330e88c9472a7ea89b6776616c40e89835f13839",
+      "size_bytes": 19,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_sequence_nul_dna",
+      "native_checks": {
+        "read_line_number": 2
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_sequence_nul_dna.bytes",
+      "python_checks": {
+        "rows": [
+          "ANC"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "38209c4b65c4e061a5161671a71dafa13805ef9cd6434dd72d0e777d4621bc45",
+      "size_bytes": 18,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "RNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_sequence_nul_rna",
+      "native_checks": {
+        "read_line_number": 2
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_sequence_nul_rna.bytes",
+      "python_checks": {
+        "rows": [
+          "ANC"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "38209c4b65c4e061a5161671a71dafa13805ef9cd6434dd72d0e777d4621bc45",
+      "size_bytes": 18,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_sequence_nul_amino",
+      "native_checks": {
+        "read_line_number": 2
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_sequence_nul_amino.bytes",
+      "python_checks": {
+        "rows": [
+          "AXC"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "38209c4b65c4e061a5161671a71dafa13805ef9cd6434dd72d0e777d4621bc45",
+      "size_bytes": 18,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_bad_symbol_digit9",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_bad_symbol_digit9.bytes",
+      "python_checks": {
+        "diagnostic_code": "invalid_sequence_byte",
+        "next_byte_offset": 22,
+        "rows": [
+          "AC"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "6a34381afd3395e0ddf2abf214a7a1253e3ec8446172fe48aca11ab1cae4f36c",
+      "size_bytes": 29,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_bad_symbol_underscore",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_bad_symbol_underscore.bytes",
+      "python_checks": {
+        "diagnostic_code": "invalid_sequence_byte",
+        "next_byte_offset": 22,
+        "rows": [
+          "AC"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "c2829fa9339f5bef17306140fb84f4066c9e9969e9291cd0a3f44e50faa4d9c3",
+      "size_bytes": 29,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_bad_symbol_tilde",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_bad_symbol_tilde.bytes",
+      "python_checks": {
+        "diagnostic_code": "invalid_sequence_byte",
+        "next_byte_offset": 22,
+        "rows": [
+          "AC"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "7226cafb67cfed1f5255ec61bcc9171a95199fa982002585ca0fc2a6bdef8dff",
+      "size_bytes": 29,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_bad_symbol_lower_o",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_bad_symbol_lower_o.bytes",
+      "python_checks": {
+        "diagnostic_code": "invalid_sequence_byte",
+        "next_byte_offset": 22,
+        "rows": [
+          "AC"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "03071cf52e7cb9575088cba36e68c9ff1855c71badb5aae579e7fdc6ba01e7ff",
+      "size_bytes": 29,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_bad_symbol_bare_cr",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_bad_symbol_bare_cr.bytes",
+      "python_checks": {
+        "diagnostic_code": "invalid_sequence_byte",
+        "next_byte_offset": 22,
+        "rows": [
+          "AC"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "bc22f41549e3064d8862efece5e71c617bb4e10b6627798a599b3455a63cbe85",
+      "size_bytes": 29,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_bad_symbol_highbyte",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_bad_symbol_highbyte.bytes",
+      "python_checks": {
+        "diagnostic_code": "invalid_sequence_byte",
+        "next_byte_offset": 22,
+        "rows": [
+          "AC"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "4d66e2d534809d4fa3ed2e11be354f826cc9021c4d93bfd9c4cee3e9c32fb71b",
+      "size_bytes": 29,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_dimensions_octal",
+      "native_checks": {
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_dimensions_octal.bytes",
+      "python_checks": {
+        "declared_column_count": 4
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "241076dd81f89dd43518418a2b11b9cedfe3407ae8ee3eb7336b0e7ae15ed0c6",
+      "size_bytes": 36,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_dimensions_hex",
+      "native_checks": {
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_dimensions_hex.bytes",
+      "python_checks": {
+        "declared_column_count": 4
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "38678766e21e355cd279ef09bae973643fd792f4cd363d7dccc03b0051cd9c90",
+      "size_bytes": 38,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_dimensions_prefix_suffix",
+      "native_checks": {
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_dimensions_prefix_suffix.bytes",
+      "python_checks": {
+        "declared_column_count": 4
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "0f4ab2e9e4841072e97a49b4eaf8419e1462735621203c24a6a53f1fcd6db48b",
+      "size_bytes": 48,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_dimensions_cspace",
+      "native_checks": {
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_dimensions_cspace.bytes",
+      "python_checks": {
+        "declared_column_count": 4
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "3a25b7ba1d08fd2ea26db0a3c1b5efec5ea9f550095423ed1414ff5a6cf1b0dd",
+      "size_bytes": 36,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_dimensions_nul_delimiter",
+      "native_checks": {
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_dimensions_nul_delimiter.bytes",
+      "python_checks": {
+        "declared_column_count": 4
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "186a0f4c809c0c40a9e666476421d871b1f7cbd8035e5416c90e8721c02f4c7a",
+      "size_bytes": 34,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_invalid_header_plus",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_invalid_header_plus.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "0b60c8a059d73bb50b91ead3e51f295d3dffec26e10f795490bcfc1bdad67905",
+      "size_bytes": 5,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": "Rejected by integer/header parsing before esl_msa_CreateDigital; no huge or nonpositive allocation is attempted."
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_invalid_header_only_one_field",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_invalid_header_only_one_field.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "size_bytes": 2,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": "Rejected by integer/header parsing before esl_msa_CreateDigital; no huge or nonpositive allocation is attempted."
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_invalid_header_hex_no_digits",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_invalid_header_hex_no_digits.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "9f9bd753d292acffd2f25f9b34844d705afadf36900aae3e7ca07e89375cb300",
+      "size_bytes": 5,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": "Rejected by integer/header parsing before esl_msa_CreateDigital; no huge or nonpositive allocation is attempted."
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_invalid_header_int32_positive_overflow",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_invalid_header_int32_positive_overflow.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "a02332de61df03100220a5d2fe33a8c7653ba12c9ee32ed108743b181e32abe0",
+      "size_bytes": 13,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": "Rejected by integer/header parsing before esl_msa_CreateDigital; no huge or nonpositive allocation is attempted."
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_invalid_header_int32_negative_overflow",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_invalid_header_int32_negative_overflow.bytes",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "25e3edba9224f6a74b2fe9b08ed69d7bf982c2057794dfab3c158c83779c781f",
+      "size_bytes": 14,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": "Rejected by integer/header parsing before esl_msa_CreateDigital; no huge or nonpositive allocation is attempted."
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_first_of_two_complete",
+      "native_checks": {
+        "alen": 2,
+        "nseq": 1,
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "first_record_only",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_first_of_two_complete.bytes",
+      "python_checks": {
+        "end_state": "eof",
+        "first_record_end_byte": 23,
+        "record_count": 2,
+        "record_states": [
+          "complete",
+          "complete"
+        ],
+        "record_statuses": [
+          0,
+          0
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "a5b6754c8c4a923efb0c6fbcb35fb2f16e4e048b13739a68275c5625801911d0",
+      "size_bytes": 39,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": "Only the first record is compared to native. Second-record state and boundary are source-derived Python assertions."
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_first_before_malformed_second",
+      "native_checks": {
+        "alen": 2,
+        "nseq": 1,
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "first_record_only",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_first_before_malformed_second.bytes",
+      "python_checks": {
+        "end_state": "parse_error",
+        "first_record_end_byte": 23,
+        "next_byte_offset": 30,
+        "record_states": [
+          "complete",
+          "invalid"
+        ],
+        "record_statuses": [
+          0,
+          7
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "0b2a4eae7b123c999adfeb2f5f033372ede5ba29f8de96f3b2a64c225fb37a52",
+      "size_bytes": 46,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": "Native does not read the malformed second record; no second-record native conformance claim."
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_interleaved_unnamed_blocks",
+      "native_checks": {
+        "read_line_number": 6
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_interleaved_unnamed_blocks.bytes",
+      "python_checks": {
+        "block_count": 2,
+        "rows": [
+          "ACGT",
+          "A-G-"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "0c34d172346653d7650da9dfeb812bae176a99541d7567799d50e05d8fa5b07b",
+      "size_bytes": 37,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_relaxed_looking_name",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_relaxed_looking_name.bytes",
+      "python_checks": {
+        "names": [
+          "alpha_ACGT"
+        ],
+        "rows": [
+          ""
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "358aba52de3f0ac1d43094e6eaa075f0c12c66bfb6b37111a6f5b4ac882b3f7f",
+      "size_bytes": 15,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_missing_block_row",
+      "native_checks": {
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_missing_block_row.bytes",
+      "python_checks": {
+        "block_count": 0,
+        "next_byte_offset": 18
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "2dc55081a0ff7e679bce73ee87a51352b99e1f5fe6499623c4f574ee9e561199",
+      "size_bytes": 31,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_block_width_mismatch",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_block_width_mismatch.bytes",
+      "python_checks": {
+        "diagnostic_code": "block_geometry_mismatch",
+        "rows": [
+          "AC",
+          "A"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "6d3f975270b1cfe1d6ea6daf81c6889c5399a9a641ec6d95f64cee546e70bbed",
+      "size_bytes": 35,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_overwidth_at_eof",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_overwidth_at_eof.bytes",
+      "python_checks": {
+        "column_count": 4,
+        "declared_column_count": 2,
+        "rows": [
+          "ACGT"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "752b3913310e4c90300852888372b453636a0d202541f09148321651d2abdab3",
+      "size_bytes": 19,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylip",
+      "id": "phylip_overwidth_with_lookahead",
+      "native_checks": {
+        "alen": 4,
+        "nseq": 1,
+        "read_line_number": 2
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "first_record_only",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylip_overwidth_with_lookahead.bytes",
+      "python_checks": {
+        "column_count": 4,
+        "declared_column_count": 2,
+        "first_record_end_byte": 19,
+        "record_states": [
+          "invalid",
+          "complete"
+        ],
+        "record_statuses": [
+          0,
+          0
+        ],
+        "rows": [
+          "ACGT"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "12c4cef44ed01bcf3c3e022a8808c245559e8c257850065194f09dd1091b118b",
+      "size_bytes": 36,
+      "source_expected_geometry": "invalid",
+      "source_expected_status": 0,
+      "source_note": "Rectangular initialized first row is safe for this observer, but declared geometry is invalid. No MAP is executed."
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_zero_length_name_replacement",
+      "native_checks": {
+        "read_line_number": 7
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_zero_length_name_replacement.bytes",
+      "python_checks": {
+        "block_count": null,
+        "names": [
+          "replaced",
+          "second"
+        ],
+        "rows": [
+          "ACGT",
+          "A-G-"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "b2ba2a6e311327a4965ebc9512f3a787173ead869d76399f5377148ca0a88c1d",
+      "size_bytes": 54,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_zero_length_short_followup",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_zero_length_short_followup.bytes",
+      "python_checks": {
+        "names": [
+          "first"
+        ],
+        "rows": [
+          ""
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "a0e6126a6e3cbc2984df8695c02d6e5a901e6cb45fc07c57f341f302e670cc61",
+      "size_bytes": 23,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_short_nonfinal_eof",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_short_nonfinal_eof.bytes",
+      "python_checks": {
+        "rows": [
+          "AC"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "b27dd4a5aea9d87e0b5ffc0c3a0c537d7a35f2aa3aa461f3f4b10acafd43b19c",
+      "size_bytes": 17,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_overwidth_consumed_lookahead",
+      "native_checks": {
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_overwidth_consumed_lookahead.bytes",
+      "python_checks": {
+        "end_state": "parse_error",
+        "next_byte_offset": 23,
+        "rows": [
+          "ACGT"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "12c4cef44ed01bcf3c3e022a8808c245559e8c257850065194f09dd1091b118b",
+      "size_bytes": 36,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_short_last_eof_safe_prefix",
+      "native_checks": {
+        "alen": 2,
+        "nseq": 2,
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_short_last_eof_safe_prefix.bytes",
+      "python_checks": {
+        "column_count": 2,
+        "declared_column_count": 4,
+        "record_states": [
+          "invalid"
+        ],
+        "rows": [
+          "AAAA",
+          "CC"
+        ]
+      },
+      "row_comparison_scope": "native_alen_prefixes",
+      "sha256": "a2ef9b024074d8d9558ae90f734f32458242aa12707281a1b2ea45a5f7a764fb",
+      "size_bytes": 32,
+      "source_expected_geometry": "invalid",
+      "source_expected_status": 0,
+      "source_note": "esl_msafile_phylip.c:587-598 sets native alen to final length 2. Observer print_msa and esl_msa_Checksum access only 1..2, initialized in both rows. Only displayed prefixes AA/CC are native comparisons; full unequal Python rows remain invalid."
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "authored_edge_input_not_native_emission",
+      "format": "phylips",
+      "id": "phylips_single_short_eof",
+      "native_checks": {
+        "read_line_number": 2
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_hmmer_input_block_phylip_native_2026-10-28_543/fixtures/phylips_single_short_eof.bytes",
+      "python_checks": {
+        "column_count": 2,
+        "declared_column_count": 4,
+        "rows": [
+          "AC"
+        ]
+      },
+      "row_comparison_scope": "whole_rows",
+      "sha256": "1edf4e65233dbff134b43aba4f7c9a9bb9821b3a0370751e69bb65c068d92a1b",
+      "size_bytes": 17,
+      "source_expected_geometry": "invalid",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "psiblast",
+      "id": "upstream_psiblast_good_1",
+      "native_checks": {
+        "read_line_number": 14
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/psiblast/psiblast.good.1",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "cbd57eab6959a8a9ef8d7de7aff80b1f3eb08e297e02bf9d605382311b68a2e3",
+      "size_bytes": 818,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "RNA",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "psiblast",
+      "id": "upstream_psiblast_good_2",
+      "native_checks": {
+        "read_line_number": 11
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/psiblast/psiblast.good.2",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "4bdcc103bc1e48fc94fde761e92805029e3d3db179735f3c317053bee23188df",
+      "size_bytes": 446,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "selex",
+      "id": "upstream_selex_good_1",
+      "native_checks": {
+        "read_line_number": 5
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.good.1",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "6b689ba1c0c6830a6e4738d712f35afa949aeb316a9d7767242128cc4734d2a0",
+      "size_bytes": 130,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "selex",
+      "id": "upstream_selex_good_2",
+      "native_checks": {
+        "read_line_number": 37
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.good.2",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "bc1a9b240181e162d57284fbd94b74b3a0d44ed4076ff4b5c9e4ca05bff0efe2",
+      "size_bytes": 974,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "RNA",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "selex",
+      "id": "upstream_selex_good_4",
+      "native_checks": {
+        "read_line_number": 19
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.good.4",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "2c583468c2268306feef69bb9c62cd90e4727738e93a6d24f2d8338ef6fd1d62",
+      "size_bytes": 557,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "selex",
+      "id": "upstream_selex_bad_1",
+      "native_checks": {
+        "read_line_number": 4
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.bad.1",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "b58aa5d191937cb690cab54aae5b5a03fc7998809e2eb378d182b72eac4c24f3",
+      "size_bytes": 44,
+      "source_expected_geometry": null,
+      "source_expected_status": 3,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "selex",
+      "id": "upstream_selex_bad_2",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.bad.2",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "9b6ab1bb69f231682fcd3dd254b8f71040e063525e030262263fbacd762ebc18",
+      "size_bytes": 241,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "selex",
+      "id": "upstream_selex_bad_3",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.bad.3",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "6a8b4b2e1a205c0d24975226b79412d336f44f4aeb3cc527b6f938806a1e22fb",
+      "size_bytes": 163,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "selex",
+      "id": "upstream_selex_bad_4",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.bad.4",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "e08dbc49d92d2e4c64c4c184bbfc3e14470f81f380bc97052d19a9322cb5ce49",
+      "size_bytes": 169,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "selex",
+      "id": "upstream_selex_bad_5",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.bad.5",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "19929707b60548a2774fc5228e3e77cda8199120463a2b28f258b338c64706de",
+      "size_bytes": 196,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "selex",
+      "id": "upstream_selex_bad_6",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.bad.6",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "9a98eff753c182a9d930215cd90054ba5d6b4c1bd81cbba8030b4b61a25477fe",
+      "size_bytes": 190,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "selex",
+      "id": "upstream_selex_bad_7",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.bad.7",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "5bbde9a2516033ede19e67292e00269949d89a38afc8c1ecfc80852c90e4ac36",
+      "size_bytes": 298,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "selex",
+      "id": "upstream_selex_bad_8",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.bad.8",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "b9d137c08110f1577073d23a1f5e4ac35023660629ba5e44a293932058bd63b5",
+      "size_bytes": 190,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "selex",
+      "id": "upstream_selex_bad_9",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.bad.9",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "d8be9cb690c3fafd59a9863c48126cf189ea735a045bb0dccd75e0c9368ffa39",
+      "size_bytes": 326,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "selex",
+      "id": "upstream_selex_bad_10",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.bad.10",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "b5e07ba27f5de3a471efb26e4d8268d429355fc1ea0efa588aacfc41ee449d92",
+      "size_bytes": 328,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "selex",
+      "id": "upstream_selex_bad_11",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.bad.11",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "40d363351c1e3cec043ed37652a7a8dc3f1db01c2e8880d692f217b963deda6d",
+      "size_bytes": 327,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "selex",
+      "id": "upstream_selex_bad_12",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.bad.12",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "8490f86403281a66672dbd533b54e8cb11bf22c7e7361d4f76f49cd23d5d63cd",
+      "size_bytes": 327,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "selex",
+      "id": "upstream_selex_bad_13",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.bad.13",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "7e444c8a3f4914496b5baa5801f2733e6a5cfb8fe17b2138442e9f405ecc678b",
+      "size_bytes": 327,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "selex",
+      "id": "upstream_selex_bad_14",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.bad.14",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "17bd19a25e6a3b047bf32985fc0d97559a407f25308f9a4d7797347812febd60",
+      "size_bytes": 274,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "phylip",
+      "id": "upstream_phylip_good_1",
+      "native_checks": {
+        "read_line_number": 12
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.good.1",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "1129cebe3bc89b90026bdb456971e141ceb167682f6998c78e340128214b95ec",
+      "size_bytes": 296,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "phylip",
+      "id": "upstream_phylip_good_2",
+      "native_checks": {
+        "read_line_number": 8
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.good.2",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "e298afc6c6da6b2b906068a23974c4ac343b9a04971b077f4c8d84bae55bad24",
+      "size_bytes": 441,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "phylip",
+      "id": "upstream_phylip_good_3",
+      "native_checks": {
+        "read_line_number": 28
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.good.3",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "d396df9b55e4e3516c87286f4074e200443e55ebd3b755815870587466fc4869",
+      "size_bytes": 1575,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "phylip",
+      "id": "upstream_phylip_ambig_1",
+      "native_checks": {
+        "read_line_number": 9
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.ambig.1",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "f0c1a09036749535a93afb09bd5a458efa3480062e5553bb86414149cd18f15c",
+      "size_bytes": 139,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "phylip",
+      "id": "upstream_phylip_bad_1",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.bad.1",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "7142b9307fedc44f6e2f805e846858314764732cd77ad593ff3d23e380a3e1d0",
+      "size_bytes": 76,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "phylip",
+      "id": "upstream_phylip_bad_2",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.bad.2",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "c9920be7669baee73919ce7ae35a919948fe1ad0a69dd89b07ee720c82970b8a",
+      "size_bytes": 77,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "phylip",
+      "id": "upstream_phylip_bad_3",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.bad.3",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "f93f14cfaa7f8fa9c47ac6621f6d967430f6b8be4654714477556d7963b50e48",
+      "size_bytes": 73,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "phylip",
+      "id": "upstream_phylip_bad_4",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.bad.4",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "228796cd7d13016935b2c3a20b69f51364c812e6d8d44e374ee7ec2d8fe1a463",
+      "size_bytes": 68,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "phylip",
+      "id": "upstream_phylip_bad_5",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.bad.5",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "b58481de95289b1de1931ea8fa3bcb7a49f9a256556a14aac16a8bb7ede46076",
+      "size_bytes": 9,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "phylip",
+      "id": "upstream_phylip_bad_6",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.bad.6",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "08ab082f5f7b8f82b512a77224e2de4c5959aaac74b6aa6799d5f6f5382e592d",
+      "size_bytes": 39,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "phylip",
+      "id": "upstream_phylip_bad_7",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.bad.7",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "c6a4f53c4dc3da8b461531e18c6e6be4ba7c750b4b449b56ca19f4d01d847c34",
+      "size_bytes": 74,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "phylip",
+      "id": "upstream_phylip_bad_8",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.bad.8",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "465b78f5987ddc5eb39ba456d9ac823bac91980d6bafc8a5a2254841237058a3",
+      "size_bytes": 73,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "phylip",
+      "id": "upstream_phylip_bad_9",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.bad.9",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "9764eeee08b97d81c483194086092ca520fe6039611a4972a8b4ba0027226198",
+      "size_bytes": 72,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "phylip",
+      "id": "upstream_phylip_bad_10",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.bad.10",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "413f494fe6513a7df01e9d5261df28a4025cd25e5d628309dc95263f139349f5",
+      "size_bytes": 116,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "phylip",
+      "id": "upstream_phylip_bad_11",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.bad.11",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "fe61059cb1d60422ce905093eb49727bf34c3760175b908b54f753d0f1a064f2",
+      "size_bytes": 141,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "DNA",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "phylips",
+      "id": "upstream_phylips_good_1",
+      "native_checks": {
+        "read_line_number": 11
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylips/phylips.good.1",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "eb02748583ebb035d1f566eb6b263d9b021886ef20e99ae6fceb1813bc7c12af",
+      "size_bytes": 295,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "phylips",
+      "id": "upstream_phylips_good_2",
+      "native_checks": {
+        "read_line_number": 17
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylips/phylips.good.2",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "d4fee1f92a4d5646cd617f4acdd9a57893df3b372b6b411ae8550fb988f3aeb8",
+      "size_bytes": 1205,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "clustallike",
+      "id": "upstream_clustal_good_1_clustallike",
+      "native_checks": {
+        "read_line_number": 20
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/clustal/clustal.good.1",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "6c6602092db1eb5497067eb550b02836fef66d99f1d1c9f1a6cf076c4a6b4acb",
+      "size_bytes": 1125,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "clustal",
+      "id": "upstream_clustal_good_1_clustal",
+      "native_checks": {},
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/clustal/clustal.good.1",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "6c6602092db1eb5497067eb550b02836fef66d99f1d1c9f1a6cf076c4a6b4acb",
+      "size_bytes": 1125,
+      "source_expected_geometry": null,
+      "source_expected_status": 7,
+      "source_note": null
+    },
+    {
+      "alphabet": "RNA",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "clustal",
+      "id": "upstream_clustal_good_2_clustal",
+      "native_checks": {
+        "read_line_number": 15
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/clustal/clustal.good.2",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "e77c3caf4d18118927d7ff33aee38ff531e38922b5d56d2a93c5fc7cdd81fb3b",
+      "size_bytes": 689,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "amino",
+      "basis": "unchanged_upstream_Easel_fixture_not_workflow_emission",
+      "format": "phylips",
+      "id": "upstream_phylip_ambig_1_as_phylips",
+      "native_checks": {
+        "read_line_number": 9
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/phylip/phylip.ambig.1",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "f0c1a09036749535a93afb09bd5a458efa3480062e5553bb86414149cd18f15c",
+      "size_bytes": 139,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "RNA",
+      "basis": "unchanged_retained_native_cmemit_emission_new_reader_comparison",
+      "format": "clustal",
+      "id": "retained_cmemit_aligned_clustal",
+      "native_checks": {
+        "read_line_number": 6
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_clustal/emitted.out",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "aacde9e96408bb894a79665ab28dc3c3bbf2a87976123f69052a6f361701821a",
+      "size_bytes": 169,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "RNA",
+      "basis": "unchanged_retained_native_cmemit_emission_new_reader_comparison",
+      "format": "clustal",
+      "id": "retained_cmemit_clustal_long_interleaved",
+      "native_checks": {
+        "read_line_number": 9
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/emitted.out",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "38e73055c801d84b0bafbbbbe35093d7740e324194ef626cbd2268efd20f5c1e",
+      "size_bytes": 354,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "RNA",
+      "basis": "unchanged_retained_native_cmemit_emission_new_reader_comparison",
+      "format": "phylip",
+      "id": "retained_cmemit_aligned_phylip",
+      "native_checks": {
+        "read_line_number": 4
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_phylip/emitted.out",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "2080aeba7e96b2b39127ae483c66b61ff53394a6e2c696203fff88dcb470d649",
+      "size_bytes": 78,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "RNA",
+      "basis": "unchanged_retained_native_cmemit_emission_new_reader_comparison",
+      "format": "phylip",
+      "id": "retained_cmemit_phylip_interleaved",
+      "native_checks": {
+        "read_line_number": 3
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/phylip_interleaved/emitted.out",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "f328a9f75340fa0286ffc31428dad984199b09651982d6b8ae50613f52e4342a",
+      "size_bytes": 60,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    },
+    {
+      "alphabet": "RNA",
+      "basis": "unchanged_retained_native_cmemit_emission_new_reader_comparison",
+      "format": "phylip",
+      "id": "retained_cmemit_phylip_long_interleaved",
+      "native_checks": {
+        "read_line_number": 6
+      },
+      "native_oracle_eligible": true,
+      "native_record_scope": "single_record",
+      "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/phylip_long_interleaved/emitted.out",
+      "python_checks": {},
+      "row_comparison_scope": "whole_rows",
+      "sha256": "1da160dadc5a685c83856a689d40443a2050aecf1c49188ec3b64ae7473ecc75",
+      "size_bytes": 181,
+      "source_expected_geometry": "complete",
+      "source_expected_status": 0,
+      "source_note": null
+    }
+  ],
+  "cursor_limit": "read_line_number observable; byte offset source-derived only",
+  "excluded_from_native_execution": [
+    {
+      "basis": "packet_540_source_only",
+      "content_sha256": "9786d7e243a0aef993bed0832ff6ea6c4b5c20fd364cc6636a766837712216a5",
+      "id": "selex_first_missing_unavailable",
+      "reason": "unsafe_SELEX_pointer_or_negative_copy_geometry"
+    },
+    {
+      "basis": "packet_540_source_only",
+      "content_sha256": "54d64b27a3691d8ffa4e1db50436187961e8d61a747c1dac2d0489cb895fc7d8",
+      "id": "selex_negative_ntext_unavailable",
+      "reason": "unsafe_SELEX_pointer_or_negative_copy_geometry"
+    },
+    {
+      "id": "upstream_selex_good_3",
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/selex.good.3",
+      "reason": "first retained missing-data annotation gives unestablished native pointer/width semantics; upstream good label is not safety proof",
+      "sha256": "f5144577fc39aa34e1dfbb97e8686df4d479d58016c5a28bbfaf553ea7795a4f",
+      "size_bytes": 420
+    },
+    {
+      "id": "selex_no_sequence_rows",
+      "reason": "zero-sequence native allocation path remains source-only"
+    },
+    {
+      "id": "psi_clustal_row_storage_overrun",
+      "reason": "later-block row index beyond growable allocated array is undefined access; only still-allocated-null-name rejection is selected"
+    },
+    {
+      "id": "signed_char_nonascii_ctype",
+      "reason": "no execution where a high byte reaches isspace/isupper/islower/isgraph; explicitly safe byte-name/digital/ignored-tail cases are separate"
+    },
+    {
+      "id": "selex_surviving_nul_or_highbyte_annotation",
+      "reason": "observer strlen/print_hex cannot prove full position-indexed annotation bytes; existing pure lossless cases retain them"
+    },
+    {
+      "id": "phylip_nonpositive_or_huge_accepted_dimensions",
+      "reason": "no unsafe or oversized allocation; rejected out-of-range integer tokens are safe because Read returns before allocation"
+    },
+    {
+      "id": "phylips_final_row_longer_than_prior_rows",
+      "reason": "observer/checksum would access sentinel or uninitialized/out-of-bounds storage in shorter earlier rows"
+    },
+    {
+      "id": "phylips_final_zero_length",
+      "reason": "zero/native-null digital geometry is excluded from diagnostic execution"
+    },
+    {
+      "id": "unsafe_native_MAP",
+      "reason": "no alignment-to-model tool or native MAP calculation is invoked anywhere in this suite"
+    }
+  ],
+  "expected_native_comparison_count": 177,
+  "native_record_limit": "one Read per observer call; only first record compared",
+  "observer": {
+    "path": "verification/tool_graders_hmmer_input_native_oracle_2026-10-28_539/input_observer.c",
+    "sha256": "77209e2b39ad293448d5680d5fbe92e8d54dbd25bc91ce4a3c152bc45327791f",
+    "size_bytes": 9286
+  },
+  "original_source_pin_manifest": {
+    "path": "verification/tool_graders_hmmer_input_native_oracle_2026-10-28_539/SOURCE_PINS.json",
+    "sha256": "abfdd88c0020beb52275bc63237686a474e067341a41cc5aa5a72b8edf7ce3fe",
+    "size_bytes": 64419
+  },
+  "provenance_pins": [
+    {
+      "path": "resources/software/infernal-1.1.5/easel/esl_msa_testfiles/selex/00MANIFEST",
+      "sha256": "9e2e831c5d365ac12eb9e348721cdec64ed99c0657bdce8390129cbab9a5dddf",
+      "size_bytes": 1472
+    },
+    {
+      "path": "verification/tool_graders_hmmer_input_blocks_2026-10-28_540/AUTHORED_NATIVE_CASES.json",
+      "sha256": "c9ea5f91b4d990f711d7e266eabf6d3782b064a24e8728cc7f29d953ef40b510",
+      "size_bytes": 5488
+    },
+    {
+      "path": "verification/tool_graders_hmmer_input_blocks_2026-10-28_540/FIXTURE_INDEX.json",
+      "sha256": "8d4eedb4d98843c5576fe1f6224cdc221da9a57f6d68356b264058341ebd031c",
+      "size_bytes": 7949
+    },
+    {
+      "path": "verification/tool_graders_hmmer_input_phylip_2026-10-28_541/EVIDENCE.json",
+      "sha256": "02e0f6f8d197d37ef206158feaf3ff8103cfbbb9845851606dfc2366324d57e9",
+      "size_bytes": 11612
+    },
+    {
+      "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_clustal/receipt.json",
+      "sha256": "c06b4e88f4297548677960b50d8719d15f0e600d374ad52c958d176997917f67",
+      "size_bytes": 3355
+    },
+    {
+      "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_clustal/request.json",
+      "sha256": "d524cbf555ae8e8538dee99eed3534183ae28b6e9b9f7615e628b5765137ce8a",
+      "size_bytes": 1300
+    },
+    {
+      "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_clustal/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_clustal/stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_phylip/receipt.json",
+      "sha256": "c7355198801d8a0d885a058d8d2b60a48770a3cf44fd3e40b261c76997ad181a",
+      "size_bytes": 3351
+    },
+    {
+      "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_phylip/request.json",
+      "sha256": "ed0c702fd8b02c719bb99d1153c2ec705160ba66bec31f4d346f57866561a19f",
+      "size_bytes": 1297
+    },
+    {
+      "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_phylip/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/aligned_phylip/stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/receipt.json",
+      "sha256": "47e928b427828f30eb2cf74a53e385d681565cf120a3b533ba877fd49eefd73c",
+      "size_bytes": 3321
+    },
+    {
+      "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/request.json",
+      "sha256": "c51c3fc17e01a0fa185ea6b413ce30b8e03857e8b9fb4eea15fec8e0930f18ae",
+      "size_bytes": 1266
+    },
+    {
+      "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/clustal_long_interleaved/stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/phylip_interleaved/receipt.json",
+      "sha256": "740938e35763c99702936233fbf4e2ee2515ed9ca4b2573dc420b89d5077aa7e",
+      "size_bytes": 3383
+    },
+    {
+      "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/phylip_interleaved/request.json",
+      "sha256": "837fba5bc99abe57e13e61d805871e7f411957c2eff9fa0e17b52741331834b2",
+      "size_bytes": 1329
+    },
+    {
+      "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/phylip_interleaved/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/phylip_interleaved/stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/phylip_long_interleaved/receipt.json",
+      "sha256": "08cb2b604ed4dcc5419d455c6beeb7d16d2985f15474f3fdfc937401b054d045",
+      "size_bytes": 3318
+    },
+    {
+      "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/phylip_long_interleaved/request.json",
+      "sha256": "be985a223a3b45e6d7ef3352ae299ea399cb41b568d36a2f75847e1bb1fa1091",
+      "size_bytes": 1263
+    },
+    {
+      "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/phylip_long_interleaved/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/phylip_long_interleaved/stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    }
+  ],
+  "reused_fixture_module": {
+    "path": "tests/test_hmmer_alignment_input_native_oracle.py",
+    "sha256": "836d5bbcdf7ed03e300bd00f5ae91b40d9b8ddbc8c19f2c85a44e4a2fcd39d6e",
+    "size_bytes": 14799
+  },
+  "schema": "hmmer_six_format_native_comparison_cases_v1",
+  "scientific_producers_executed": false,
+  "scoring_added": false
+}

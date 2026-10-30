@@ -1,0 +1,162 @@
+--- a/gene_annotation_episode/literature_controlled_response_calculations.py
++++ b/gene_annotation_episode/literature_controlled_response_calculations.py
+@@ -379,6 +379,10 @@
+     arms = [inputs["arms"][name] for name in PRIMITIVE_ORDER]
+     relationships = inputs["relationships"]
+     reasons = set().union(*pair_reasons)
++    # Two internally compatible pairs can still have different dimensions.
++    # Canonical endpoint/normalization IDs do not authorize dimensional mixing.
++    if len({RATE_UNITS[arm["unit"]][0] for arm in arms if arm and arm["unit"]}) > 1:
++        reasons.add("incompatible_unit_dimension")
+     for meaning in ("endpoint", "normalization"):
+         reasons |= _identity_reasons(arms, meaning)
+     reasons |= _identity_reasons([arms[0], arms[2]], "subject_construct")
+--- a/tests/test_literature_controlled_response_calculations.py
++++ b/tests/test_literature_controlled_response_calculations.py
+@@ -99,7 +99,8 @@
+     for name, cell in result["cells"].items():
+         assert set(cell) == set(CELL_FIELDS)
+         assert cell["origin"] == "synthetic"
+-        assert cell["bound_state"] == {"lower": "not_applicable", "upper": "not_applicable"} if cell["value"] is not None else cell["bound_state"] == {"lower": "unknown", "upper": "unknown"}
++        expected_bound_state = dict.fromkeys(("lower", "upper"), "not_applicable" if cell["value"] is not None else "unknown")
++        assert cell["bound_state"] == expected_bound_state
+         assert set(cell["unavailable_reason"] or ()) <= set(REASONS)
+         assert cell["formula_code"]
+     assert result["cells"][COMPONENTS[10]]["value"] is None
+@@ -185,6 +186,20 @@
+     assert result[COMPONENTS[6]]["value"] is None
+ 
+ 
++def test_cross_pair_dimensions_must_agree_even_when_local_pairs_and_ids_agree():
++    inputs = no_covariance(example())
++    for index, unit in enumerate(("umol/min", "umol/min", "uM/min", "uM/min")):
++        inputs["arms"][PRIMITIVE_ORDER[index]]["unit"] = unit
++    result = cells(inputs)
++    assert result[COMPONENTS[4]]["value"] == 10
++    assert result[COMPONENTS[4]]["unit"] == "umol/min"
++    assert result[COMPONENTS[5]]["value"] == 4
++    assert result[COMPONENTS[5]]["unit"] == "uM/min"
++    for name in COMPONENTS[6:]:
++        assert result[name]["value"] is None
++        assert "incompatible_unit_dimension" in result[name]["unavailable_reason"]
++
++
+ @pytest.mark.parametrize("field,value", [
+     ("subject_construct_across_conditions", "unknown"),
+     ("subject_construct_across_conditions", "different"),
+@@ -258,6 +273,29 @@
+     assert cells(inputs)[COMPONENTS[6]]["value"] is None
+ 
+ 
++def test_unknown_reuse_cannot_create_alias_but_explicit_owner_identity_can():
++    inputs = no_covariance(shared_control())
++    inputs["relationships"]["control_reference_reuse"] = "unknown"
++    observed_bound(inputs, 1, "ge", 2)
++    observed_bound(inputs, 3, "ge", 2)
++    result = cells(inputs)
++    # Cancellation is established by consistent actual owner identity and the
++    # explicit shared application, not by the unresolved reuse category.
++    assert result[COMPONENTS[6]]["value"] == .007
++    assert "unknown_control_reuse" in result[COMPONENTS[6]]["conditional_on"]
++    for index in (1, 3):
++        meaning_state(inputs, index, "physical_observation", "unknown")
++    result = cells(inputs)
++    assert result[COMPONENTS[6]]["value"] is None
++    assert result[COMPONENTS[6]]["unavailable_reason"] == ["uninformative_bounds"]
++    # Equal thresholds under different actual owners do not supply identity.
++    for index in (1, 3):
++        arm = inputs["arms"][PRIMITIVE_ORDER[index]]
++        arm["meaning_statuses"]["physical_observation"] = "known"
++        arm["physical_observation_id"] = "synthetic_distinct_control_" + str(index)
++    assert cells(inputs)[COMPONENTS[6]]["value"] is None
++
++
+ def test_conflicting_reused_source_value_without_covariance_preserves_raw_and_local_pairs():
+     inputs = no_covariance(shared_control())
+     inputs["arms"][PRIMITIVE_ORDER[3]]["value"] = 3
+@@ -459,11 +497,85 @@
+     inputs = no_covariance(example())
+     for arm in inputs["arms"].values():
+         arm.update(unit="mmol/min", value=1e308)
++        arm["normalization_id"] = "synthetic_common_unscaled_assay_basis"
+     result = cells(inputs)
+     assert all(result[name]["value"] is None for name in COMPONENTS[:4])
+     assert result[COMPONENTS[4]]["value"] == 0
+     assert result[COMPONENTS[5]]["value"] == 0
+     assert result[COMPONENTS[6]]["value"] == 0
++
++
++def test_variance_overflow_keeps_representable_uncertainty_precision_and_profile():
++    inputs = example()
++    inputs["model_kind"] = "known_joint_normal_source_means"
++    for arm in inputs["arms"].values():
++        arm.update(unit="mmol/min", normalization_id="synthetic_common_unscaled_assay_basis")
++    inputs["covariance"]["units"] = ["mmol/min"] * 4
++    inputs["covariance"]["matrix"] = [[1e308 if i == j else 0 for j in range(4)] for i in range(4)]
++    result = cells(inputs)
++    assert result[COMPONENTS[6]]["value"] == 6000
++    assert result[COMPONENTS[7]]["value"] is None
++    assert result[COMPONENTS[8]]["value"] == 2e157
++    assert result[COMPONENTS[9]]["value"] == pytest.approx(2.5e-315, rel=1e-8, abs=0)
++    assert result[COMPONENTS[10]]["value"] == pytest.approx(4.5e-308, rel=1e-14, abs=0)
++    assert result[COMPONENTS[11]]["value"] == pytest.approx(2.25e-308, rel=1e-14, abs=0)
++    # The exact effect itself can exceed float range while S remains finite.
++    for i, name in enumerate(PRIMITIVE_ORDER):
++        inputs["arms"][name]["value"] = 1e308 if i == 0 else 0
++    result = cells(inputs)
++    assert result[COMPONENTS[6]]["value"] is None
++    assert result[COMPONENTS[10]]["value"] == 1.25e307
++    assert result[COMPONENTS[11]]["value"] == 1
++
++
++def test_tiny_nonzero_profile_and_index_do_not_silently_become_zero():
++    inputs = example()
++    inputs["model_kind"] = "known_joint_normal_source_means"
++    for i, name in enumerate(PRIMITIVE_ORDER):
++        inputs["arms"][name]["value"] = 1e-170 if i == 0 else 0
++    result = cells(inputs)
++    assert result[COMPONENTS[6]]["value"] == 1e-173
++    for name in COMPONENTS[10:]:
++        assert result[name]["value"] is None
++        assert result[name]["unavailable_reason"] == ["numeric_range_failure"]
++
++
++@pytest.mark.parametrize("status,reason", [("missing", "missing_arm"),
++    ("ambiguous", "ambiguous_source_literal"), ("conflicting", "conflicting_source_literal"),
++    ("unsupported", "unsupported_source_expression")])
++def test_unavailable_parsed_measurement_retains_other_raw_and_pair(status, reason):
++    inputs = example()
++    arm = inputs["arms"][PRIMITIVE_ORDER[3]]
++    arm.update(status=status, value=None, relation="none")
++    if status == "missing":
++        arm["source_observation_id"] = None
++    result = cells(inputs)
++    assert result[COMPONENTS[4]]["value"] == .010
++    assert result[COMPONENTS[0]]["value"] == .012
++    assert result[COMPONENTS[3]]["value"] is None
++    assert reason in result[COMPONENTS[3]]["unavailable_reason"]
++    assert reason in result[COMPONENTS[6]]["unavailable_reason"]
++
++
++def test_unknown_unit_preserves_native_input_without_a_dimensionless_numeric_cell():
++    inputs = no_covariance(example())
++    inputs["arms"][PRIMITIVE_ORDER[3]]["unit"] = None
++    result = populate_controlled_response(inputs)
++    raw = result["cells"][COMPONENTS[3]]
++    assert raw["value"] is None and raw["unit"] is None and raw["status"] == "partial"
++    assert result["inputs"]["arms"][PRIMITIVE_ORDER[3]]["value"] == 1
++    assert result["cells"][COMPONENTS[4]]["value"] == .010
++    assert result["cells"][COMPONENTS[5]]["value"] is None
++
++
++def test_one_source_observation_cannot_be_relabelled_as_distinct_actual_measurements():
++    inputs = no_covariance(shared_control())
++    left = inputs["arms"][PRIMITIVE_ORDER[1]]
++    right = inputs["arms"][PRIMITIVE_ORDER[3]]
++    right["source_observation_id"] = left["source_observation_id"]
++    right["physical_observation_id"] = "synthetic_false_distinct_owner"
++    inputs["relationships"]["control_reference_reuse"] = "distinct_observations"
++    assert cells(inputs)[COMPONENTS[6]]["status"] == "conflicting"
+ 
+ 
+ def test_bounded_range_partial_keeps_each_representable_endpoint_and_its_meaning():

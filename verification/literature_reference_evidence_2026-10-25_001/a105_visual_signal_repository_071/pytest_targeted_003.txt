@@ -1,0 +1,580 @@
+...FFFFFFF....F...                                                       [100%]
+=================================== FAILURES ===================================
+__________ test_saved_valid_shape_forgery_is_rejected[payload_value] ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1698/test_saved_valid_shape_forgery0')
+fault = 'payload_value'
+
+    @pytest.mark.parametrize('fault', ['payload_value', 'payload_origin', 'payload_reason', 'payload_domain', 'owner', 'reference', 'roster', 'source_identity', 'operation_ref', 'request_owner', 'request_selection', 'calculation'])
+    def test_saved_valid_shape_forgery_is_rejected(tmp_path, fault):
+        store, context, selection, _ = native_case(tmp_path, known=True)
+        try:
+            repo = repository(store, context); outcome = repo.populate(context, selection, 'original')
+            reference = outcome['result']['sheet_ref']; row = store.get(reference)
+            if fault == 'source_identity':
+                row['provider'] = 'forged.provider'
+                store.db.execute('UPDATE records SET data=? WHERE id=?', (canonical(row), reference))
+            elif fault == 'operation_ref':
+                outcome['operation_ref'] = identity('operation', {'forged': True})
+                store.db.execute('UPDATE literature_ratio_source_operations SET outcome=?', (canonical(outcome),))
+            elif fault.startswith('request_'):
+                request = json.loads(store.get_artifact(row['request_ref']))
+                if fault == 'request_owner': request['episode_id'] = 'different-owner'
+                else: request['arguments']['representations'][0]['representation_id'] = 'different-request'
+                row['request_ref'] = store.artifact(canonical(request), 'application/json')
+                store.db.execute('UPDATE records SET data=? WHERE id=?', (canonical(row), reference))
+            else:
+                payload = repo.read(reference)
+                if fault.startswith('payload_'):
+                    cell = payload['sheet']['cells']['reported_ratio']
+                    if fault == 'payload_value': cell['value'] = .9
+                    if fault == 'payload_origin': cell['origin'] = 'reported'
+                    if fault == 'payload_reason': cell['unavailable_reason'] = 'reported_limit_not_point'
+                    if fault == 'payload_domain': cell['reported_domains'][0]['upper'] = .9
+                elif fault == 'owner': payload['experimental_bindings']['subject_ref'] = payload['experimental_bindings']['variant_ref']
+                elif fault == 'reference': payload['measurement_bindings'][0]['reference_measurement_ref'] = payload['experimental_bindings']['reference_ref']
+                elif fault == 'roster': payload['direct_input_source_refs'].reverse()
+                elif fault == 'calculation':
+                    calc = json.loads(store.get_artifact(payload['calculation_artifact_ref']))
+                    calc['input_extraction_sha256'] = 'a' * 64
+                    payload['calculation_artifact_ref'] = store.artifact(canonical(calc), 'application/json')
+                # Create a correctly content-addressed but forged output and alter
+                # the fixture's selected-output pointer as well. Deep association
+                # checks must reject it, rather than only spotting an old record ID.
+                body = {key: value for key, value in row.items() if key not in ('id', 'record_type', 'origin')}
+                body['artifact_ref'] = store.artifact(canonical(payload), 'application/json')
+                body['text_ref'] = body['artifact_ref']
+>               forged = store.put('source', body, origin='tool', scope=dict(context.scope))['id']
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_ratio_source_storage.py:395: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/state.py:1543: in put
+    if scope is not None and "context_account_scope" not in record and not set(roots) <= set(self.validate_scope(scope)["subject_refs"]):
+                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x703e28738830>
+scope = {'subject_refs': ('input_0cf8c100d09446c95154fa4b',)}
+parent_scope = None
+
+    def validate_scope(store, scope=None, parent_scope=None):
+        available = set(store.problem()["subject_refs"])
+        if scope is None:
+            scope = {"subject_refs": sorted(available)}
+        if (not isinstance(scope, dict) or not {"subject_refs"} <= set(scope) <= {"subject_refs", "segments", "read_selection_refs"}
+                or not isinstance(scope["subject_refs"], list) or not all(isinstance(ref, str) for ref in scope["subject_refs"])):
+>           raise ContractError("invalid_scope")
+E           gene_annotation_episode.domain.ContractError: invalid_scope
+
+gene_annotation_episode/library_targets.py:302: ContractError
+__________ test_saved_valid_shape_forgery_is_rejected[payload_origin] __________
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1698/test_saved_valid_shape_forgery1')
+fault = 'payload_origin'
+
+    @pytest.mark.parametrize('fault', ['payload_value', 'payload_origin', 'payload_reason', 'payload_domain', 'owner', 'reference', 'roster', 'source_identity', 'operation_ref', 'request_owner', 'request_selection', 'calculation'])
+    def test_saved_valid_shape_forgery_is_rejected(tmp_path, fault):
+        store, context, selection, _ = native_case(tmp_path, known=True)
+        try:
+            repo = repository(store, context); outcome = repo.populate(context, selection, 'original')
+            reference = outcome['result']['sheet_ref']; row = store.get(reference)
+            if fault == 'source_identity':
+                row['provider'] = 'forged.provider'
+                store.db.execute('UPDATE records SET data=? WHERE id=?', (canonical(row), reference))
+            elif fault == 'operation_ref':
+                outcome['operation_ref'] = identity('operation', {'forged': True})
+                store.db.execute('UPDATE literature_ratio_source_operations SET outcome=?', (canonical(outcome),))
+            elif fault.startswith('request_'):
+                request = json.loads(store.get_artifact(row['request_ref']))
+                if fault == 'request_owner': request['episode_id'] = 'different-owner'
+                else: request['arguments']['representations'][0]['representation_id'] = 'different-request'
+                row['request_ref'] = store.artifact(canonical(request), 'application/json')
+                store.db.execute('UPDATE records SET data=? WHERE id=?', (canonical(row), reference))
+            else:
+                payload = repo.read(reference)
+                if fault.startswith('payload_'):
+                    cell = payload['sheet']['cells']['reported_ratio']
+                    if fault == 'payload_value': cell['value'] = .9
+                    if fault == 'payload_origin': cell['origin'] = 'reported'
+                    if fault == 'payload_reason': cell['unavailable_reason'] = 'reported_limit_not_point'
+                    if fault == 'payload_domain': cell['reported_domains'][0]['upper'] = .9
+                elif fault == 'owner': payload['experimental_bindings']['subject_ref'] = payload['experimental_bindings']['variant_ref']
+                elif fault == 'reference': payload['measurement_bindings'][0]['reference_measurement_ref'] = payload['experimental_bindings']['reference_ref']
+                elif fault == 'roster': payload['direct_input_source_refs'].reverse()
+                elif fault == 'calculation':
+                    calc = json.loads(store.get_artifact(payload['calculation_artifact_ref']))
+                    calc['input_extraction_sha256'] = 'a' * 64
+                    payload['calculation_artifact_ref'] = store.artifact(canonical(calc), 'application/json')
+                # Create a correctly content-addressed but forged output and alter
+                # the fixture's selected-output pointer as well. Deep association
+                # checks must reject it, rather than only spotting an old record ID.
+                body = {key: value for key, value in row.items() if key not in ('id', 'record_type', 'origin')}
+                body['artifact_ref'] = store.artifact(canonical(payload), 'application/json')
+                body['text_ref'] = body['artifact_ref']
+>               forged = store.put('source', body, origin='tool', scope=dict(context.scope))['id']
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_ratio_source_storage.py:395: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/state.py:1543: in put
+    if scope is not None and "context_account_scope" not in record and not set(roots) <= set(self.validate_scope(scope)["subject_refs"]):
+                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x703e0a1dbda0>
+scope = {'subject_refs': ('input_0cf8c100d09446c95154fa4b',)}
+parent_scope = None
+
+    def validate_scope(store, scope=None, parent_scope=None):
+        available = set(store.problem()["subject_refs"])
+        if scope is None:
+            scope = {"subject_refs": sorted(available)}
+        if (not isinstance(scope, dict) or not {"subject_refs"} <= set(scope) <= {"subject_refs", "segments", "read_selection_refs"}
+                or not isinstance(scope["subject_refs"], list) or not all(isinstance(ref, str) for ref in scope["subject_refs"])):
+>           raise ContractError("invalid_scope")
+E           gene_annotation_episode.domain.ContractError: invalid_scope
+
+gene_annotation_episode/library_targets.py:302: ContractError
+__________ test_saved_valid_shape_forgery_is_rejected[payload_reason] __________
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1698/test_saved_valid_shape_forgery2')
+fault = 'payload_reason'
+
+    @pytest.mark.parametrize('fault', ['payload_value', 'payload_origin', 'payload_reason', 'payload_domain', 'owner', 'reference', 'roster', 'source_identity', 'operation_ref', 'request_owner', 'request_selection', 'calculation'])
+    def test_saved_valid_shape_forgery_is_rejected(tmp_path, fault):
+        store, context, selection, _ = native_case(tmp_path, known=True)
+        try:
+            repo = repository(store, context); outcome = repo.populate(context, selection, 'original')
+            reference = outcome['result']['sheet_ref']; row = store.get(reference)
+            if fault == 'source_identity':
+                row['provider'] = 'forged.provider'
+                store.db.execute('UPDATE records SET data=? WHERE id=?', (canonical(row), reference))
+            elif fault == 'operation_ref':
+                outcome['operation_ref'] = identity('operation', {'forged': True})
+                store.db.execute('UPDATE literature_ratio_source_operations SET outcome=?', (canonical(outcome),))
+            elif fault.startswith('request_'):
+                request = json.loads(store.get_artifact(row['request_ref']))
+                if fault == 'request_owner': request['episode_id'] = 'different-owner'
+                else: request['arguments']['representations'][0]['representation_id'] = 'different-request'
+                row['request_ref'] = store.artifact(canonical(request), 'application/json')
+                store.db.execute('UPDATE records SET data=? WHERE id=?', (canonical(row), reference))
+            else:
+                payload = repo.read(reference)
+                if fault.startswith('payload_'):
+                    cell = payload['sheet']['cells']['reported_ratio']
+                    if fault == 'payload_value': cell['value'] = .9
+                    if fault == 'payload_origin': cell['origin'] = 'reported'
+                    if fault == 'payload_reason': cell['unavailable_reason'] = 'reported_limit_not_point'
+                    if fault == 'payload_domain': cell['reported_domains'][0]['upper'] = .9
+                elif fault == 'owner': payload['experimental_bindings']['subject_ref'] = payload['experimental_bindings']['variant_ref']
+                elif fault == 'reference': payload['measurement_bindings'][0]['reference_measurement_ref'] = payload['experimental_bindings']['reference_ref']
+                elif fault == 'roster': payload['direct_input_source_refs'].reverse()
+                elif fault == 'calculation':
+                    calc = json.loads(store.get_artifact(payload['calculation_artifact_ref']))
+                    calc['input_extraction_sha256'] = 'a' * 64
+                    payload['calculation_artifact_ref'] = store.artifact(canonical(calc), 'application/json')
+                # Create a correctly content-addressed but forged output and alter
+                # the fixture's selected-output pointer as well. Deep association
+                # checks must reject it, rather than only spotting an old record ID.
+                body = {key: value for key, value in row.items() if key not in ('id', 'record_type', 'origin')}
+                body['artifact_ref'] = store.artifact(canonical(payload), 'application/json')
+                body['text_ref'] = body['artifact_ref']
+>               forged = store.put('source', body, origin='tool', scope=dict(context.scope))['id']
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_ratio_source_storage.py:395: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/state.py:1543: in put
+    if scope is not None and "context_account_scope" not in record and not set(roots) <= set(self.validate_scope(scope)["subject_refs"]):
+                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x703e0a1b7a40>
+scope = {'subject_refs': ('input_0cf8c100d09446c95154fa4b',)}
+parent_scope = None
+
+    def validate_scope(store, scope=None, parent_scope=None):
+        available = set(store.problem()["subject_refs"])
+        if scope is None:
+            scope = {"subject_refs": sorted(available)}
+        if (not isinstance(scope, dict) or not {"subject_refs"} <= set(scope) <= {"subject_refs", "segments", "read_selection_refs"}
+                or not isinstance(scope["subject_refs"], list) or not all(isinstance(ref, str) for ref in scope["subject_refs"])):
+>           raise ContractError("invalid_scope")
+E           gene_annotation_episode.domain.ContractError: invalid_scope
+
+gene_annotation_episode/library_targets.py:302: ContractError
+__________ test_saved_valid_shape_forgery_is_rejected[payload_domain] __________
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1698/test_saved_valid_shape_forgery3')
+fault = 'payload_domain'
+
+    @pytest.mark.parametrize('fault', ['payload_value', 'payload_origin', 'payload_reason', 'payload_domain', 'owner', 'reference', 'roster', 'source_identity', 'operation_ref', 'request_owner', 'request_selection', 'calculation'])
+    def test_saved_valid_shape_forgery_is_rejected(tmp_path, fault):
+        store, context, selection, _ = native_case(tmp_path, known=True)
+        try:
+            repo = repository(store, context); outcome = repo.populate(context, selection, 'original')
+            reference = outcome['result']['sheet_ref']; row = store.get(reference)
+            if fault == 'source_identity':
+                row['provider'] = 'forged.provider'
+                store.db.execute('UPDATE records SET data=? WHERE id=?', (canonical(row), reference))
+            elif fault == 'operation_ref':
+                outcome['operation_ref'] = identity('operation', {'forged': True})
+                store.db.execute('UPDATE literature_ratio_source_operations SET outcome=?', (canonical(outcome),))
+            elif fault.startswith('request_'):
+                request = json.loads(store.get_artifact(row['request_ref']))
+                if fault == 'request_owner': request['episode_id'] = 'different-owner'
+                else: request['arguments']['representations'][0]['representation_id'] = 'different-request'
+                row['request_ref'] = store.artifact(canonical(request), 'application/json')
+                store.db.execute('UPDATE records SET data=? WHERE id=?', (canonical(row), reference))
+            else:
+                payload = repo.read(reference)
+                if fault.startswith('payload_'):
+                    cell = payload['sheet']['cells']['reported_ratio']
+                    if fault == 'payload_value': cell['value'] = .9
+                    if fault == 'payload_origin': cell['origin'] = 'reported'
+                    if fault == 'payload_reason': cell['unavailable_reason'] = 'reported_limit_not_point'
+                    if fault == 'payload_domain': cell['reported_domains'][0]['upper'] = .9
+                elif fault == 'owner': payload['experimental_bindings']['subject_ref'] = payload['experimental_bindings']['variant_ref']
+                elif fault == 'reference': payload['measurement_bindings'][0]['reference_measurement_ref'] = payload['experimental_bindings']['reference_ref']
+                elif fault == 'roster': payload['direct_input_source_refs'].reverse()
+                elif fault == 'calculation':
+                    calc = json.loads(store.get_artifact(payload['calculation_artifact_ref']))
+                    calc['input_extraction_sha256'] = 'a' * 64
+                    payload['calculation_artifact_ref'] = store.artifact(canonical(calc), 'application/json')
+                # Create a correctly content-addressed but forged output and alter
+                # the fixture's selected-output pointer as well. Deep association
+                # checks must reject it, rather than only spotting an old record ID.
+                body = {key: value for key, value in row.items() if key not in ('id', 'record_type', 'origin')}
+                body['artifact_ref'] = store.artifact(canonical(payload), 'application/json')
+                body['text_ref'] = body['artifact_ref']
+>               forged = store.put('source', body, origin='tool', scope=dict(context.scope))['id']
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_ratio_source_storage.py:395: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/state.py:1543: in put
+    if scope is not None and "context_account_scope" not in record and not set(roots) <= set(self.validate_scope(scope)["subject_refs"]):
+                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x703e0a09f6e0>
+scope = {'subject_refs': ('input_0cf8c100d09446c95154fa4b',)}
+parent_scope = None
+
+    def validate_scope(store, scope=None, parent_scope=None):
+        available = set(store.problem()["subject_refs"])
+        if scope is None:
+            scope = {"subject_refs": sorted(available)}
+        if (not isinstance(scope, dict) or not {"subject_refs"} <= set(scope) <= {"subject_refs", "segments", "read_selection_refs"}
+                or not isinstance(scope["subject_refs"], list) or not all(isinstance(ref, str) for ref in scope["subject_refs"])):
+>           raise ContractError("invalid_scope")
+E           gene_annotation_episode.domain.ContractError: invalid_scope
+
+gene_annotation_episode/library_targets.py:302: ContractError
+______________ test_saved_valid_shape_forgery_is_rejected[owner] _______________
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1698/test_saved_valid_shape_forgery4')
+fault = 'owner'
+
+    @pytest.mark.parametrize('fault', ['payload_value', 'payload_origin', 'payload_reason', 'payload_domain', 'owner', 'reference', 'roster', 'source_identity', 'operation_ref', 'request_owner', 'request_selection', 'calculation'])
+    def test_saved_valid_shape_forgery_is_rejected(tmp_path, fault):
+        store, context, selection, _ = native_case(tmp_path, known=True)
+        try:
+            repo = repository(store, context); outcome = repo.populate(context, selection, 'original')
+            reference = outcome['result']['sheet_ref']; row = store.get(reference)
+            if fault == 'source_identity':
+                row['provider'] = 'forged.provider'
+                store.db.execute('UPDATE records SET data=? WHERE id=?', (canonical(row), reference))
+            elif fault == 'operation_ref':
+                outcome['operation_ref'] = identity('operation', {'forged': True})
+                store.db.execute('UPDATE literature_ratio_source_operations SET outcome=?', (canonical(outcome),))
+            elif fault.startswith('request_'):
+                request = json.loads(store.get_artifact(row['request_ref']))
+                if fault == 'request_owner': request['episode_id'] = 'different-owner'
+                else: request['arguments']['representations'][0]['representation_id'] = 'different-request'
+                row['request_ref'] = store.artifact(canonical(request), 'application/json')
+                store.db.execute('UPDATE records SET data=? WHERE id=?', (canonical(row), reference))
+            else:
+                payload = repo.read(reference)
+                if fault.startswith('payload_'):
+                    cell = payload['sheet']['cells']['reported_ratio']
+                    if fault == 'payload_value': cell['value'] = .9
+                    if fault == 'payload_origin': cell['origin'] = 'reported'
+                    if fault == 'payload_reason': cell['unavailable_reason'] = 'reported_limit_not_point'
+                    if fault == 'payload_domain': cell['reported_domains'][0]['upper'] = .9
+                elif fault == 'owner': payload['experimental_bindings']['subject_ref'] = payload['experimental_bindings']['variant_ref']
+                elif fault == 'reference': payload['measurement_bindings'][0]['reference_measurement_ref'] = payload['experimental_bindings']['reference_ref']
+                elif fault == 'roster': payload['direct_input_source_refs'].reverse()
+                elif fault == 'calculation':
+                    calc = json.loads(store.get_artifact(payload['calculation_artifact_ref']))
+                    calc['input_extraction_sha256'] = 'a' * 64
+                    payload['calculation_artifact_ref'] = store.artifact(canonical(calc), 'application/json')
+                # Create a correctly content-addressed but forged output and alter
+                # the fixture's selected-output pointer as well. Deep association
+                # checks must reject it, rather than only spotting an old record ID.
+                body = {key: value for key, value in row.items() if key not in ('id', 'record_type', 'origin')}
+                body['artifact_ref'] = store.artifact(canonical(payload), 'application/json')
+                body['text_ref'] = body['artifact_ref']
+>               forged = store.put('source', body, origin='tool', scope=dict(context.scope))['id']
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_ratio_source_storage.py:395: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/state.py:1543: in put
+    if scope is not None and "context_account_scope" not in record and not set(roots) <= set(self.validate_scope(scope)["subject_refs"]):
+                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x703e0a81db80>
+scope = {'subject_refs': ('input_0cf8c100d09446c95154fa4b',)}
+parent_scope = None
+
+    def validate_scope(store, scope=None, parent_scope=None):
+        available = set(store.problem()["subject_refs"])
+        if scope is None:
+            scope = {"subject_refs": sorted(available)}
+        if (not isinstance(scope, dict) or not {"subject_refs"} <= set(scope) <= {"subject_refs", "segments", "read_selection_refs"}
+                or not isinstance(scope["subject_refs"], list) or not all(isinstance(ref, str) for ref in scope["subject_refs"])):
+>           raise ContractError("invalid_scope")
+E           gene_annotation_episode.domain.ContractError: invalid_scope
+
+gene_annotation_episode/library_targets.py:302: ContractError
+____________ test_saved_valid_shape_forgery_is_rejected[reference] _____________
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1698/test_saved_valid_shape_forgery5')
+fault = 'reference'
+
+    @pytest.mark.parametrize('fault', ['payload_value', 'payload_origin', 'payload_reason', 'payload_domain', 'owner', 'reference', 'roster', 'source_identity', 'operation_ref', 'request_owner', 'request_selection', 'calculation'])
+    def test_saved_valid_shape_forgery_is_rejected(tmp_path, fault):
+        store, context, selection, _ = native_case(tmp_path, known=True)
+        try:
+            repo = repository(store, context); outcome = repo.populate(context, selection, 'original')
+            reference = outcome['result']['sheet_ref']; row = store.get(reference)
+            if fault == 'source_identity':
+                row['provider'] = 'forged.provider'
+                store.db.execute('UPDATE records SET data=? WHERE id=?', (canonical(row), reference))
+            elif fault == 'operation_ref':
+                outcome['operation_ref'] = identity('operation', {'forged': True})
+                store.db.execute('UPDATE literature_ratio_source_operations SET outcome=?', (canonical(outcome),))
+            elif fault.startswith('request_'):
+                request = json.loads(store.get_artifact(row['request_ref']))
+                if fault == 'request_owner': request['episode_id'] = 'different-owner'
+                else: request['arguments']['representations'][0]['representation_id'] = 'different-request'
+                row['request_ref'] = store.artifact(canonical(request), 'application/json')
+                store.db.execute('UPDATE records SET data=? WHERE id=?', (canonical(row), reference))
+            else:
+                payload = repo.read(reference)
+                if fault.startswith('payload_'):
+                    cell = payload['sheet']['cells']['reported_ratio']
+                    if fault == 'payload_value': cell['value'] = .9
+                    if fault == 'payload_origin': cell['origin'] = 'reported'
+                    if fault == 'payload_reason': cell['unavailable_reason'] = 'reported_limit_not_point'
+                    if fault == 'payload_domain': cell['reported_domains'][0]['upper'] = .9
+                elif fault == 'owner': payload['experimental_bindings']['subject_ref'] = payload['experimental_bindings']['variant_ref']
+                elif fault == 'reference': payload['measurement_bindings'][0]['reference_measurement_ref'] = payload['experimental_bindings']['reference_ref']
+                elif fault == 'roster': payload['direct_input_source_refs'].reverse()
+                elif fault == 'calculation':
+                    calc = json.loads(store.get_artifact(payload['calculation_artifact_ref']))
+                    calc['input_extraction_sha256'] = 'a' * 64
+                    payload['calculation_artifact_ref'] = store.artifact(canonical(calc), 'application/json')
+                # Create a correctly content-addressed but forged output and alter
+                # the fixture's selected-output pointer as well. Deep association
+                # checks must reject it, rather than only spotting an old record ID.
+                body = {key: value for key, value in row.items() if key not in ('id', 'record_type', 'origin')}
+                body['artifact_ref'] = store.artifact(canonical(payload), 'application/json')
+                body['text_ref'] = body['artifact_ref']
+>               forged = store.put('source', body, origin='tool', scope=dict(context.scope))['id']
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_ratio_source_storage.py:395: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/state.py:1543: in put
+    if scope is not None and "context_account_scope" not in record and not set(roots) <= set(self.validate_scope(scope)["subject_refs"]):
+                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x703e0a09fb30>
+scope = {'subject_refs': ('input_0cf8c100d09446c95154fa4b',)}
+parent_scope = None
+
+    def validate_scope(store, scope=None, parent_scope=None):
+        available = set(store.problem()["subject_refs"])
+        if scope is None:
+            scope = {"subject_refs": sorted(available)}
+        if (not isinstance(scope, dict) or not {"subject_refs"} <= set(scope) <= {"subject_refs", "segments", "read_selection_refs"}
+                or not isinstance(scope["subject_refs"], list) or not all(isinstance(ref, str) for ref in scope["subject_refs"])):
+>           raise ContractError("invalid_scope")
+E           gene_annotation_episode.domain.ContractError: invalid_scope
+
+gene_annotation_episode/library_targets.py:302: ContractError
+______________ test_saved_valid_shape_forgery_is_rejected[roster] ______________
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1698/test_saved_valid_shape_forgery6')
+fault = 'roster'
+
+    @pytest.mark.parametrize('fault', ['payload_value', 'payload_origin', 'payload_reason', 'payload_domain', 'owner', 'reference', 'roster', 'source_identity', 'operation_ref', 'request_owner', 'request_selection', 'calculation'])
+    def test_saved_valid_shape_forgery_is_rejected(tmp_path, fault):
+        store, context, selection, _ = native_case(tmp_path, known=True)
+        try:
+            repo = repository(store, context); outcome = repo.populate(context, selection, 'original')
+            reference = outcome['result']['sheet_ref']; row = store.get(reference)
+            if fault == 'source_identity':
+                row['provider'] = 'forged.provider'
+                store.db.execute('UPDATE records SET data=? WHERE id=?', (canonical(row), reference))
+            elif fault == 'operation_ref':
+                outcome['operation_ref'] = identity('operation', {'forged': True})
+                store.db.execute('UPDATE literature_ratio_source_operations SET outcome=?', (canonical(outcome),))
+            elif fault.startswith('request_'):
+                request = json.loads(store.get_artifact(row['request_ref']))
+                if fault == 'request_owner': request['episode_id'] = 'different-owner'
+                else: request['arguments']['representations'][0]['representation_id'] = 'different-request'
+                row['request_ref'] = store.artifact(canonical(request), 'application/json')
+                store.db.execute('UPDATE records SET data=? WHERE id=?', (canonical(row), reference))
+            else:
+                payload = repo.read(reference)
+                if fault.startswith('payload_'):
+                    cell = payload['sheet']['cells']['reported_ratio']
+                    if fault == 'payload_value': cell['value'] = .9
+                    if fault == 'payload_origin': cell['origin'] = 'reported'
+                    if fault == 'payload_reason': cell['unavailable_reason'] = 'reported_limit_not_point'
+                    if fault == 'payload_domain': cell['reported_domains'][0]['upper'] = .9
+                elif fault == 'owner': payload['experimental_bindings']['subject_ref'] = payload['experimental_bindings']['variant_ref']
+                elif fault == 'reference': payload['measurement_bindings'][0]['reference_measurement_ref'] = payload['experimental_bindings']['reference_ref']
+                elif fault == 'roster': payload['direct_input_source_refs'].reverse()
+                elif fault == 'calculation':
+                    calc = json.loads(store.get_artifact(payload['calculation_artifact_ref']))
+                    calc['input_extraction_sha256'] = 'a' * 64
+                    payload['calculation_artifact_ref'] = store.artifact(canonical(calc), 'application/json')
+                # Create a correctly content-addressed but forged output and alter
+                # the fixture's selected-output pointer as well. Deep association
+                # checks must reject it, rather than only spotting an old record ID.
+                body = {key: value for key, value in row.items() if key not in ('id', 'record_type', 'origin')}
+                body['artifact_ref'] = store.artifact(canonical(payload), 'application/json')
+                body['text_ref'] = body['artifact_ref']
+>               forged = store.put('source', body, origin='tool', scope=dict(context.scope))['id']
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_ratio_source_storage.py:395: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/state.py:1543: in put
+    if scope is not None and "context_account_scope" not in record and not set(roots) <= set(self.validate_scope(scope)["subject_refs"]):
+                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x703e0a0fcec0>
+scope = {'subject_refs': ('input_0cf8c100d09446c95154fa4b',)}
+parent_scope = None
+
+    def validate_scope(store, scope=None, parent_scope=None):
+        available = set(store.problem()["subject_refs"])
+        if scope is None:
+            scope = {"subject_refs": sorted(available)}
+        if (not isinstance(scope, dict) or not {"subject_refs"} <= set(scope) <= {"subject_refs", "segments", "read_selection_refs"}
+                or not isinstance(scope["subject_refs"], list) or not all(isinstance(ref, str) for ref in scope["subject_refs"])):
+>           raise ContractError("invalid_scope")
+E           gene_annotation_episode.domain.ContractError: invalid_scope
+
+gene_annotation_episode/library_targets.py:302: ContractError
+___________ test_saved_valid_shape_forgery_is_rejected[calculation] ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1698/test_saved_valid_shape_forgery11')
+fault = 'calculation'
+
+    @pytest.mark.parametrize('fault', ['payload_value', 'payload_origin', 'payload_reason', 'payload_domain', 'owner', 'reference', 'roster', 'source_identity', 'operation_ref', 'request_owner', 'request_selection', 'calculation'])
+    def test_saved_valid_shape_forgery_is_rejected(tmp_path, fault):
+        store, context, selection, _ = native_case(tmp_path, known=True)
+        try:
+            repo = repository(store, context); outcome = repo.populate(context, selection, 'original')
+            reference = outcome['result']['sheet_ref']; row = store.get(reference)
+            if fault == 'source_identity':
+                row['provider'] = 'forged.provider'
+                store.db.execute('UPDATE records SET data=? WHERE id=?', (canonical(row), reference))
+            elif fault == 'operation_ref':
+                outcome['operation_ref'] = identity('operation', {'forged': True})
+                store.db.execute('UPDATE literature_ratio_source_operations SET outcome=?', (canonical(outcome),))
+            elif fault.startswith('request_'):
+                request = json.loads(store.get_artifact(row['request_ref']))
+                if fault == 'request_owner': request['episode_id'] = 'different-owner'
+                else: request['arguments']['representations'][0]['representation_id'] = 'different-request'
+                row['request_ref'] = store.artifact(canonical(request), 'application/json')
+                store.db.execute('UPDATE records SET data=? WHERE id=?', (canonical(row), reference))
+            else:
+                payload = repo.read(reference)
+                if fault.startswith('payload_'):
+                    cell = payload['sheet']['cells']['reported_ratio']
+                    if fault == 'payload_value': cell['value'] = .9
+                    if fault == 'payload_origin': cell['origin'] = 'reported'
+                    if fault == 'payload_reason': cell['unavailable_reason'] = 'reported_limit_not_point'
+                    if fault == 'payload_domain': cell['reported_domains'][0]['upper'] = .9
+                elif fault == 'owner': payload['experimental_bindings']['subject_ref'] = payload['experimental_bindings']['variant_ref']
+                elif fault == 'reference': payload['measurement_bindings'][0]['reference_measurement_ref'] = payload['experimental_bindings']['reference_ref']
+                elif fault == 'roster': payload['direct_input_source_refs'].reverse()
+                elif fault == 'calculation':
+                    calc = json.loads(store.get_artifact(payload['calculation_artifact_ref']))
+                    calc['input_extraction_sha256'] = 'a' * 64
+                    payload['calculation_artifact_ref'] = store.artifact(canonical(calc), 'application/json')
+                # Create a correctly content-addressed but forged output and alter
+                # the fixture's selected-output pointer as well. Deep association
+                # checks must reject it, rather than only spotting an old record ID.
+                body = {key: value for key, value in row.items() if key not in ('id', 'record_type', 'origin')}
+                body['artifact_ref'] = store.artifact(canonical(payload), 'application/json')
+                body['text_ref'] = body['artifact_ref']
+>               forged = store.put('source', body, origin='tool', scope=dict(context.scope))['id']
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_ratio_source_storage.py:395: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/state.py:1543: in put
+    if scope is not None and "context_account_scope" not in record and not set(roots) <= set(self.validate_scope(scope)["subject_refs"]):
+                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/state.py:336: in validate_scope
+    return libraries.validate_scope(self, scope, parent_scope)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x703e0a1dbc20>
+scope = {'subject_refs': ('input_0cf8c100d09446c95154fa4b',)}
+parent_scope = None
+
+    def validate_scope(store, scope=None, parent_scope=None):
+        available = set(store.problem()["subject_refs"])
+        if scope is None:
+            scope = {"subject_refs": sorted(available)}
+        if (not isinstance(scope, dict) or not {"subject_refs"} <= set(scope) <= {"subject_refs", "segments", "read_selection_refs"}
+                or not isinstance(scope["subject_refs"], list) or not all(isinstance(ref, str) for ref in scope["subject_refs"])):
+>           raise ContractError("invalid_scope")
+E           gene_annotation_episode.domain.ContractError: invalid_scope
+
+gene_annotation_episode/library_targets.py:302: ContractError
+=========================== short test summary info ============================
+FAILED tests/test_literature_ratio_source_storage.py::test_saved_valid_shape_forgery_is_rejected[payload_value]
+FAILED tests/test_literature_ratio_source_storage.py::test_saved_valid_shape_forgery_is_rejected[payload_origin]
+FAILED tests/test_literature_ratio_source_storage.py::test_saved_valid_shape_forgery_is_rejected[payload_reason]
+FAILED tests/test_literature_ratio_source_storage.py::test_saved_valid_shape_forgery_is_rejected[payload_domain]
+FAILED tests/test_literature_ratio_source_storage.py::test_saved_valid_shape_forgery_is_rejected[owner]
+FAILED tests/test_literature_ratio_source_storage.py::test_saved_valid_shape_forgery_is_rejected[reference]
+FAILED tests/test_literature_ratio_source_storage.py::test_saved_valid_shape_forgery_is_rejected[roster]
+FAILED tests/test_literature_ratio_source_storage.py::test_saved_valid_shape_forgery_is_rejected[calculation]
+8 failed, 10 passed, 31 deselected in 41.04s

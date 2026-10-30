@@ -1,0 +1,1722 @@
+{
+  "packet_version": "genomic_overlap_hand_worked_payload_v1",
+  "evidence_label": "hand_worked_synthetic",
+  "execution_claim": "none",
+  "retention_claim": "none",
+  "scope": "Planning fixture only. All command, receipt, closure and capture rows below are hand-authored examples. No bedtools process ran and no Store capture occurred. File digests identify the shown exact UTF-8 strings, not an observed scientific run.",
+  "schema_file": "DATA_CONTRACT.json",
+  "schemas": {
+    "request": "Request",
+    "parsed_sets": "ParsedRegionSet[]",
+    "native_driver_manifest": "NativeDriverManifest",
+    "file_capture_rows": "NativeFileCapture[]",
+    "native_pair_metadata": "NativePairReceipt",
+    "supplied_output_metadata_example": "NativePairReceipt",
+    "parsed_pairs": "ParsedOverlapPairs",
+    "sheet": "Sheet",
+    "components": "Components",
+    "selector": "Selector",
+    "requested_return": "RequestedReturn",
+    "standalone_failure_shape_example": "Failure"
+  },
+  "raw_artifacts": [
+    {
+      "key": "input_a",
+      "utf8_text": "chr1\t0\t10\tgene_window\nchr1\t5\t15\tsecond_window\n",
+      "identity": {
+        "artifact_ref": "artifact_56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+        "sha256": "56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+        "size_bytes": 46,
+        "format": "bed_outer_span_v1"
+      }
+    },
+    {
+      "key": "input_b",
+      "utf8_text": "chr1\t7\t12\tregulatory_interval\t42\t+\n",
+      "identity": {
+        "artifact_ref": "artifact_150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+        "sha256": "150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+        "size_bytes": 35,
+        "format": "bed_outer_span_v1"
+      }
+    },
+    {
+      "key": "canonical_a",
+      "utf8_text": "chr1\t0\t10\ts0_r0\nchr1\t5\t15\ts0_r1\n",
+      "identity": {
+        "artifact_ref": "artifact_4e46461342664cb44c0f8aeea6fc8d590957d7914687d94d1649899eb4039ade",
+        "sha256": "4e46461342664cb44c0f8aeea6fc8d590957d7914687d94d1649899eb4039ade",
+        "size_bytes": 32,
+        "format": "bed4_occurrence_v1"
+      }
+    },
+    {
+      "key": "canonical_b",
+      "utf8_text": "chr1\t7\t12\ts1_r0\n",
+      "identity": {
+        "artifact_ref": "artifact_e1d4b55a46ebb15d0e24f87229b021c531608cea788ba33de4dafef3729ed2a1",
+        "sha256": "e1d4b55a46ebb15d0e24f87229b021c531608cea788ba33de4dafef3729ed2a1",
+        "size_bytes": 16,
+        "format": "bed4_occurrence_v1"
+      }
+    },
+    {
+      "key": "native",
+      "utf8_text": "chr1\t0\t10\ts0_r0\tchr1\t7\t12\ts1_r0\t3\nchr1\t5\t15\ts0_r1\tchr1\t7\t12\ts1_r0\t5\n",
+      "identity": {
+        "artifact_ref": "artifact_a1b61db5383b72a85125972327e6e0f289a6c07eb865cf74fa32c6ce060c6370",
+        "sha256": "a1b61db5383b72a85125972327e6e0f289a6c07eb865cf74fa32c6ce060c6370",
+        "size_bytes": 68,
+        "format": "bedtools_intersect_wo_bed4_v1"
+      }
+    },
+    {
+      "key": "stderr",
+      "utf8_text": "",
+      "identity": {
+        "artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0,
+        "format": "native_stderr_text_v1"
+      }
+    }
+  ],
+  "request": {
+    "version": "genomic_overlap_request_v1",
+    "operation": "analyze_genomic_region_overlap",
+    "mode": "unstranded_outer_span",
+    "region_sets": [
+      {
+        "set_key": "A",
+        "display_label": "supplied A intervals",
+        "source": {
+          "kind": "bed_artifact",
+          "source_ref": "synthetic:source:A",
+          "file": {
+            "artifact_ref": "artifact_56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+            "sha256": "56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+            "size_bytes": 46,
+            "format": "bed_outer_span_v1"
+          }
+        },
+        "reference": null,
+        "format": "bed_outer_span_v1"
+      },
+      {
+        "set_key": "B",
+        "display_label": "supplied B intervals",
+        "source": {
+          "kind": "bed_artifact",
+          "source_ref": "synthetic:source:B",
+          "file": {
+            "artifact_ref": "artifact_150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+            "sha256": "150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+            "size_bytes": 35,
+            "format": "bed_outer_span_v1"
+          }
+        },
+        "reference": null,
+        "format": "bed_outer_span_v1"
+      }
+    ],
+    "comparisons": [
+      {
+        "comparison_key": "comparison_0",
+        "ordinal": 0,
+        "a_set_key": "A",
+        "b_set_key": "B"
+      }
+    ],
+    "output_prefix": "overlap_analysis"
+  },
+  "parsed_sets": [
+    {
+      "version": "genomic_overlap_parsed_set_v1",
+      "set_key": "A",
+      "source_file": {
+        "artifact_ref": "artifact_56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+        "sha256": "56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+        "size_bytes": 46,
+        "format": "bed_outer_span_v1"
+      },
+      "parsed_byte_count": 46,
+      "result_extent": "complete",
+      "input_data_row_count": 2,
+      "regions": [
+        {
+          "occurrence_key": "r0",
+          "data_ordinal": 0,
+          "native_token": "s0_r0",
+          "locator": {
+            "kind": "bed_line",
+            "line_number": 1,
+            "byte_start": 0,
+            "byte_end": 22
+          },
+          "original_fields": [
+            "chr1",
+            "0",
+            "10",
+            "gene_window"
+          ],
+          "chromosome": "chr1",
+          "start": 0,
+          "end": 10,
+          "name": "gene_window",
+          "raw_strand": null
+        },
+        {
+          "occurrence_key": "r1",
+          "data_ordinal": 1,
+          "native_token": "s0_r1",
+          "locator": {
+            "kind": "bed_line",
+            "line_number": 2,
+            "byte_start": 22,
+            "byte_end": 46
+          },
+          "original_fields": [
+            "chr1",
+            "5",
+            "15",
+            "second_window"
+          ],
+          "chromosome": "chr1",
+          "start": 5,
+          "end": 15,
+          "name": "second_window",
+          "raw_strand": null
+        }
+      ],
+      "ignored_records": [],
+      "invalid_records": [],
+      "canonical_order": [
+        "r0",
+        "r1"
+      ],
+      "coordinate_groups": [
+        {
+          "group_key": "A:coordinate:0",
+          "chromosome": "chr1",
+          "start": 0,
+          "end": 10,
+          "occurrence_keys": [
+            "r0"
+          ]
+        },
+        {
+          "group_key": "A:coordinate:1",
+          "chromosome": "chr1",
+          "start": 5,
+          "end": 15,
+          "occurrence_keys": [
+            "r1"
+          ]
+        }
+      ],
+      "full_record_groups": [
+        {
+          "group_key": "A:full_record:0",
+          "original_fields": [
+            "chr1",
+            "0",
+            "10",
+            "gene_window"
+          ],
+          "occurrence_keys": [
+            "r0"
+          ]
+        },
+        {
+          "group_key": "A:full_record:1",
+          "original_fields": [
+            "chr1",
+            "5",
+            "15",
+            "second_window"
+          ],
+          "occurrence_keys": [
+            "r1"
+          ]
+        }
+      ],
+      "issues": []
+    },
+    {
+      "version": "genomic_overlap_parsed_set_v1",
+      "set_key": "B",
+      "source_file": {
+        "artifact_ref": "artifact_150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+        "sha256": "150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+        "size_bytes": 35,
+        "format": "bed_outer_span_v1"
+      },
+      "parsed_byte_count": 35,
+      "result_extent": "complete",
+      "input_data_row_count": 1,
+      "regions": [
+        {
+          "occurrence_key": "r0",
+          "data_ordinal": 0,
+          "native_token": "s1_r0",
+          "locator": {
+            "kind": "bed_line",
+            "line_number": 1,
+            "byte_start": 0,
+            "byte_end": 35
+          },
+          "original_fields": [
+            "chr1",
+            "7",
+            "12",
+            "regulatory_interval",
+            "42",
+            "+"
+          ],
+          "chromosome": "chr1",
+          "start": 7,
+          "end": 12,
+          "name": "regulatory_interval",
+          "raw_strand": "+"
+        }
+      ],
+      "ignored_records": [],
+      "invalid_records": [],
+      "canonical_order": [
+        "r0"
+      ],
+      "coordinate_groups": [
+        {
+          "group_key": "B:coordinate:0",
+          "chromosome": "chr1",
+          "start": 7,
+          "end": 12,
+          "occurrence_keys": [
+            "r0"
+          ]
+        }
+      ],
+      "full_record_groups": [
+        {
+          "group_key": "B:full_record:0",
+          "original_fields": [
+            "chr1",
+            "7",
+            "12",
+            "regulatory_interval",
+            "42",
+            "+"
+          ],
+          "occurrence_keys": [
+            "r0"
+          ]
+        }
+      ],
+      "issues": []
+    }
+  ],
+  "native_driver_manifest": {
+    "version": "genomic_overlap_native_manifest_v1",
+    "comparison_key": "comparison_0",
+    "identity": {
+      "run_id": "synthetic:run:418",
+      "origin_episode_id": "synthetic:local_child:418",
+      "resource_id": "synthetic:local_resource",
+      "execution_id": "/synthetic/attempt/native.json",
+      "attempt_id": "synthetic:attempt:418",
+      "operation_key": "synthetic:run:418:local:0"
+    },
+    "a_set_key": "A",
+    "b_set_key": "B",
+    "input_fingerprints": [
+      {
+        "set_key": "A",
+        "format": "bed_outer_span_v1",
+        "sha256": "56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+        "size_bytes": 46
+      },
+      {
+        "set_key": "B",
+        "format": "bed_outer_span_v1",
+        "sha256": "150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+        "size_bytes": 35
+      }
+    ],
+    "derivation": "bedtools_intersect",
+    "outcome": "succeeded",
+    "software": {
+      "executable": "/synthetic/bin/bedtools",
+      "declared_version": "2.31.1",
+      "observed_version": "2.31.1",
+      "executable_sha256": null
+    },
+    "realized_argv": [
+      "/synthetic/bin/bedtools",
+      "intersect",
+      "-a",
+      "/synthetic/attempt/A.bed",
+      "-b",
+      "/synthetic/attempt/B.bed",
+      "-wo",
+      "-sorted"
+    ],
+    "environment": {
+      "LC_ALL": "C",
+      "TMPDIR": "/synthetic/attempt/tmp"
+    },
+    "returncode": 0,
+    "started_at": "2000-01-01T00:00:00Z",
+    "finished_at": "2000-01-01T00:00:01Z",
+    "writer_closed": true,
+    "files": [
+      {
+        "file_key": "comparison_0:file:0",
+        "role": "canonical_a",
+        "declaration": {
+          "relative_path": "A.bed",
+          "format": "bed4_occurrence_v1",
+          "state": "present",
+          "sha256": "4e46461342664cb44c0f8aeea6fc8d590957d7914687d94d1649899eb4039ade",
+          "size_bytes": 32
+        }
+      },
+      {
+        "file_key": "comparison_0:file:1",
+        "role": "canonical_b",
+        "declaration": {
+          "relative_path": "B.bed",
+          "format": "bed4_occurrence_v1",
+          "state": "present",
+          "sha256": "e1d4b55a46ebb15d0e24f87229b021c531608cea788ba33de4dafef3729ed2a1",
+          "size_bytes": 16
+        }
+      },
+      {
+        "file_key": "comparison_0:file:2",
+        "role": "overlap_stdout",
+        "declaration": {
+          "relative_path": "comparison_0.wo.tsv",
+          "format": "bedtools_intersect_wo_bed4_v1",
+          "state": "present",
+          "sha256": "a1b61db5383b72a85125972327e6e0f289a6c07eb865cf74fa32c6ce060c6370",
+          "size_bytes": 68
+        }
+      },
+      {
+        "file_key": "comparison_0:file:3",
+        "role": "overlap_stderr",
+        "declaration": {
+          "relative_path": "comparison_0.stderr.txt",
+          "format": "native_stderr_text_v1",
+          "state": "present",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      }
+    ]
+  },
+  "file_capture_rows": [
+    {
+      "declared": {
+        "relative_path": "A.bed",
+        "format": "bed4_occurrence_v1",
+        "state": "present",
+        "sha256": "4e46461342664cb44c0f8aeea6fc8d590957d7914687d94d1649899eb4039ade",
+        "size_bytes": 32
+      },
+      "observed": {
+        "artifact_ref": "artifact_4e46461342664cb44c0f8aeea6fc8d590957d7914687d94d1649899eb4039ade",
+        "sha256": "4e46461342664cb44c0f8aeea6fc8d590957d7914687d94d1649899eb4039ade",
+        "size_bytes": 32,
+        "format": "bed4_occurrence_v1"
+      },
+      "outcome": "verified",
+      "failure": null
+    },
+    {
+      "declared": {
+        "relative_path": "B.bed",
+        "format": "bed4_occurrence_v1",
+        "state": "present",
+        "sha256": "e1d4b55a46ebb15d0e24f87229b021c531608cea788ba33de4dafef3729ed2a1",
+        "size_bytes": 16
+      },
+      "observed": {
+        "artifact_ref": "artifact_e1d4b55a46ebb15d0e24f87229b021c531608cea788ba33de4dafef3729ed2a1",
+        "sha256": "e1d4b55a46ebb15d0e24f87229b021c531608cea788ba33de4dafef3729ed2a1",
+        "size_bytes": 16,
+        "format": "bed4_occurrence_v1"
+      },
+      "outcome": "verified",
+      "failure": null
+    },
+    {
+      "declared": {
+        "relative_path": "comparison_0.wo.tsv",
+        "format": "bedtools_intersect_wo_bed4_v1",
+        "state": "present",
+        "sha256": "a1b61db5383b72a85125972327e6e0f289a6c07eb865cf74fa32c6ce060c6370",
+        "size_bytes": 68
+      },
+      "observed": {
+        "artifact_ref": "artifact_a1b61db5383b72a85125972327e6e0f289a6c07eb865cf74fa32c6ce060c6370",
+        "sha256": "a1b61db5383b72a85125972327e6e0f289a6c07eb865cf74fa32c6ce060c6370",
+        "size_bytes": 68,
+        "format": "bedtools_intersect_wo_bed4_v1"
+      },
+      "outcome": "verified",
+      "failure": null
+    },
+    {
+      "declared": {
+        "relative_path": "comparison_0.stderr.txt",
+        "format": "native_stderr_text_v1",
+        "state": "present",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "observed": {
+        "artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0,
+        "format": "native_stderr_text_v1"
+      },
+      "outcome": "verified",
+      "failure": null
+    }
+  ],
+  "capture_to_parser_join": [
+    {
+      "declaration_index": 0,
+      "role": "canonical_a",
+      "file_key": "comparison_0:file:0",
+      "parser_field": "a.canonical_file",
+      "retained_identity": {
+        "artifact_ref": "artifact_4e46461342664cb44c0f8aeea6fc8d590957d7914687d94d1649899eb4039ade",
+        "sha256": "4e46461342664cb44c0f8aeea6fc8d590957d7914687d94d1649899eb4039ade",
+        "size_bytes": 32,
+        "format": "bed4_occurrence_v1"
+      }
+    },
+    {
+      "declaration_index": 1,
+      "role": "canonical_b",
+      "file_key": "comparison_0:file:1",
+      "parser_field": "b.canonical_file",
+      "retained_identity": {
+        "artifact_ref": "artifact_e1d4b55a46ebb15d0e24f87229b021c531608cea788ba33de4dafef3729ed2a1",
+        "sha256": "e1d4b55a46ebb15d0e24f87229b021c531608cea788ba33de4dafef3729ed2a1",
+        "size_bytes": 16,
+        "format": "bed4_occurrence_v1"
+      }
+    },
+    {
+      "declaration_index": 2,
+      "role": "overlap_stdout",
+      "file_key": "comparison_0:file:2",
+      "parser_field": "stdout",
+      "retained_identity": {
+        "artifact_ref": "artifact_a1b61db5383b72a85125972327e6e0f289a6c07eb865cf74fa32c6ce060c6370",
+        "sha256": "a1b61db5383b72a85125972327e6e0f289a6c07eb865cf74fa32c6ce060c6370",
+        "size_bytes": 68,
+        "format": "bedtools_intersect_wo_bed4_v1"
+      }
+    },
+    {
+      "declaration_index": 3,
+      "role": "overlap_stderr",
+      "file_key": "comparison_0:file:3",
+      "parser_field": "stderr",
+      "retained_identity": {
+        "artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0,
+        "format": "native_stderr_text_v1"
+      }
+    }
+  ],
+  "native_pair_metadata": {
+    "version": "genomic_overlap_native_pair_receipt_v1",
+    "comparison_key": "comparison_0",
+    "identity": {
+      "run_id": "synthetic:run:418",
+      "origin_episode_id": "synthetic:local_child:418",
+      "resource_id": "synthetic:local_resource",
+      "execution_id": "/synthetic/attempt/native.json",
+      "attempt_id": "synthetic:attempt:418",
+      "operation_key": "synthetic:run:418:local:0"
+    },
+    "derivation": "bedtools_intersect",
+    "outcome": "succeeded",
+    "software": {
+      "executable": "/synthetic/bin/bedtools",
+      "declared_version": "2.31.1",
+      "observed_version": "2.31.1",
+      "executable_sha256": null
+    },
+    "a": {
+      "set_key": "A",
+      "original_file": {
+        "artifact_ref": "artifact_56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+        "sha256": "56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+        "size_bytes": 46,
+        "format": "bed_outer_span_v1"
+      },
+      "canonical_file": {
+        "artifact_ref": "artifact_4e46461342664cb44c0f8aeea6fc8d590957d7914687d94d1649899eb4039ade",
+        "sha256": "4e46461342664cb44c0f8aeea6fc8d590957d7914687d94d1649899eb4039ade",
+        "size_bytes": 32,
+        "format": "bed4_occurrence_v1"
+      }
+    },
+    "b": {
+      "set_key": "B",
+      "original_file": {
+        "artifact_ref": "artifact_150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+        "sha256": "150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+        "size_bytes": 35,
+        "format": "bed_outer_span_v1"
+      },
+      "canonical_file": {
+        "artifact_ref": "artifact_e1d4b55a46ebb15d0e24f87229b021c531608cea788ba33de4dafef3729ed2a1",
+        "sha256": "e1d4b55a46ebb15d0e24f87229b021c531608cea788ba33de4dafef3729ed2a1",
+        "size_bytes": 16,
+        "format": "bed4_occurrence_v1"
+      }
+    },
+    "realized_argv": [
+      "/synthetic/bin/bedtools",
+      "intersect",
+      "-a",
+      "/synthetic/attempt/A.bed",
+      "-b",
+      "/synthetic/attempt/B.bed",
+      "-wo",
+      "-sorted"
+    ],
+    "environment": {
+      "LC_ALL": "C",
+      "TMPDIR": "/synthetic/attempt/tmp"
+    },
+    "returncode": 0,
+    "started_at": "2000-01-01T00:00:00Z",
+    "finished_at": "2000-01-01T00:00:01Z",
+    "stdout": {
+      "artifact_ref": "artifact_a1b61db5383b72a85125972327e6e0f289a6c07eb865cf74fa32c6ce060c6370",
+      "sha256": "a1b61db5383b72a85125972327e6e0f289a6c07eb865cf74fa32c6ce060c6370",
+      "size_bytes": 68,
+      "format": "bedtools_intersect_wo_bed4_v1"
+    },
+    "stderr": {
+      "artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "format": "native_stderr_text_v1"
+    },
+    "writer_closed": true,
+    "capture_extent": "complete",
+    "issues": [],
+    "native_result_extent": "complete",
+    "completeness_basis": "closed_successful_native_attempt",
+    "completeness_source_refs": [
+      "synthetic:original_closed_receipt:418",
+      "synthetic:sealed_manifest:418"
+    ]
+  },
+  "supplied_output_metadata_example": {
+    "version": "genomic_overlap_native_pair_receipt_v1",
+    "comparison_key": "comparison_0",
+    "identity": null,
+    "derivation": "supplied_native_output",
+    "outcome": "unknown",
+    "software": null,
+    "a": {
+      "set_key": "A",
+      "original_file": {
+        "artifact_ref": "artifact_56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+        "sha256": "56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+        "size_bytes": 46,
+        "format": "bed_outer_span_v1"
+      },
+      "canonical_file": {
+        "artifact_ref": "artifact_4e46461342664cb44c0f8aeea6fc8d590957d7914687d94d1649899eb4039ade",
+        "sha256": "4e46461342664cb44c0f8aeea6fc8d590957d7914687d94d1649899eb4039ade",
+        "size_bytes": 32,
+        "format": "bed4_occurrence_v1"
+      }
+    },
+    "b": {
+      "set_key": "B",
+      "original_file": {
+        "artifact_ref": "artifact_150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+        "sha256": "150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+        "size_bytes": 35,
+        "format": "bed_outer_span_v1"
+      },
+      "canonical_file": {
+        "artifact_ref": "artifact_e1d4b55a46ebb15d0e24f87229b021c531608cea788ba33de4dafef3729ed2a1",
+        "sha256": "e1d4b55a46ebb15d0e24f87229b021c531608cea788ba33de4dafef3729ed2a1",
+        "size_bytes": 16,
+        "format": "bed4_occurrence_v1"
+      }
+    },
+    "realized_argv": [],
+    "environment": {},
+    "returncode": null,
+    "started_at": null,
+    "finished_at": null,
+    "stdout": {
+      "artifact_ref": "artifact_a1b61db5383b72a85125972327e6e0f289a6c07eb865cf74fa32c6ce060c6370",
+      "sha256": "a1b61db5383b72a85125972327e6e0f289a6c07eb865cf74fa32c6ce060c6370",
+      "size_bytes": 68,
+      "format": "bedtools_intersect_wo_bed4_v1"
+    },
+    "stderr": {
+      "artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "format": "native_stderr_text_v1"
+    },
+    "writer_closed": null,
+    "capture_extent": "complete",
+    "issues": [],
+    "native_result_extent": "complete",
+    "completeness_basis": "supplied_full_output_declaration",
+    "completeness_source_refs": [
+      "synthetic:fixture:complete_pair_table"
+    ]
+  },
+  "supplied_output_example_meaning": "Alternative pure-parser input for the same supplied complete table; no workflow execution, version or closure facts are inferred. Its source declaration says the full table was supplied. It is not the metadata used in the primary sheet below.",
+  "parsed_pairs": {
+    "version": "genomic_overlap_parsed_pairs_v1",
+    "format": "bedtools_intersect_wo_bed4_v1",
+    "comparison_key": "comparison_0",
+    "receipt": {
+      "version": "genomic_overlap_native_pair_receipt_v1",
+      "comparison_key": "comparison_0",
+      "identity": {
+        "run_id": "synthetic:run:418",
+        "origin_episode_id": "synthetic:local_child:418",
+        "resource_id": "synthetic:local_resource",
+        "execution_id": "/synthetic/attempt/native.json",
+        "attempt_id": "synthetic:attempt:418",
+        "operation_key": "synthetic:run:418:local:0"
+      },
+      "derivation": "bedtools_intersect",
+      "outcome": "succeeded",
+      "software": {
+        "executable": "/synthetic/bin/bedtools",
+        "declared_version": "2.31.1",
+        "observed_version": "2.31.1",
+        "executable_sha256": null
+      },
+      "a": {
+        "set_key": "A",
+        "original_file": {
+          "artifact_ref": "artifact_56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+          "sha256": "56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+          "size_bytes": 46,
+          "format": "bed_outer_span_v1"
+        },
+        "canonical_file": {
+          "artifact_ref": "artifact_4e46461342664cb44c0f8aeea6fc8d590957d7914687d94d1649899eb4039ade",
+          "sha256": "4e46461342664cb44c0f8aeea6fc8d590957d7914687d94d1649899eb4039ade",
+          "size_bytes": 32,
+          "format": "bed4_occurrence_v1"
+        }
+      },
+      "b": {
+        "set_key": "B",
+        "original_file": {
+          "artifact_ref": "artifact_150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+          "sha256": "150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+          "size_bytes": 35,
+          "format": "bed_outer_span_v1"
+        },
+        "canonical_file": {
+          "artifact_ref": "artifact_e1d4b55a46ebb15d0e24f87229b021c531608cea788ba33de4dafef3729ed2a1",
+          "sha256": "e1d4b55a46ebb15d0e24f87229b021c531608cea788ba33de4dafef3729ed2a1",
+          "size_bytes": 16,
+          "format": "bed4_occurrence_v1"
+        }
+      },
+      "realized_argv": [
+        "/synthetic/bin/bedtools",
+        "intersect",
+        "-a",
+        "/synthetic/attempt/A.bed",
+        "-b",
+        "/synthetic/attempt/B.bed",
+        "-wo",
+        "-sorted"
+      ],
+      "environment": {
+        "LC_ALL": "C",
+        "TMPDIR": "/synthetic/attempt/tmp"
+      },
+      "returncode": 0,
+      "started_at": "2000-01-01T00:00:00Z",
+      "finished_at": "2000-01-01T00:00:01Z",
+      "stdout": {
+        "artifact_ref": "artifact_a1b61db5383b72a85125972327e6e0f289a6c07eb865cf74fa32c6ce060c6370",
+        "sha256": "a1b61db5383b72a85125972327e6e0f289a6c07eb865cf74fa32c6ce060c6370",
+        "size_bytes": 68,
+        "format": "bedtools_intersect_wo_bed4_v1"
+      },
+      "stderr": {
+        "artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0,
+        "format": "native_stderr_text_v1"
+      },
+      "writer_closed": true,
+      "capture_extent": "complete",
+      "issues": [],
+      "native_result_extent": "complete",
+      "completeness_basis": "closed_successful_native_attempt",
+      "completeness_source_refs": [
+        "synthetic:original_closed_receipt:418",
+        "synthetic:sealed_manifest:418"
+      ]
+    },
+    "result_extent": "complete",
+    "parsed_byte_count": 68,
+    "valid_pairs": [
+      {
+        "pair_key": "p0:a0:b0",
+        "comparison_key": "comparison_0",
+        "native_row_ordinal": 0,
+        "locator": {
+          "kind": "bed_line",
+          "line_number": 1,
+          "byte_start": 0,
+          "byte_end": 34
+        },
+        "a": {
+          "set_key": "A",
+          "occurrence_key": "r0",
+          "native_token": "s0_r0",
+          "chromosome": "chr1",
+          "start": 0,
+          "end": 10
+        },
+        "b": {
+          "set_key": "B",
+          "occurrence_key": "r0",
+          "native_token": "s1_r0",
+          "chromosome": "chr1",
+          "start": 7,
+          "end": 12
+        },
+        "native_overlap_bp": 3
+      },
+      {
+        "pair_key": "p0:a1:b0",
+        "comparison_key": "comparison_0",
+        "native_row_ordinal": 1,
+        "locator": {
+          "kind": "bed_line",
+          "line_number": 2,
+          "byte_start": 34,
+          "byte_end": 68
+        },
+        "a": {
+          "set_key": "A",
+          "occurrence_key": "r1",
+          "native_token": "s0_r1",
+          "chromosome": "chr1",
+          "start": 5,
+          "end": 15
+        },
+        "b": {
+          "set_key": "B",
+          "occurrence_key": "r0",
+          "native_token": "s1_r0",
+          "chromosome": "chr1",
+          "start": 7,
+          "end": 12
+        },
+        "native_overlap_bp": 5
+      }
+    ],
+    "rejected_rows": [],
+    "issues": []
+  },
+  "sheet": {
+    "version": "genomic_region_overlap_sheet_v1",
+    "request": {
+      "version": "genomic_overlap_request_v1",
+      "operation": "analyze_genomic_region_overlap",
+      "mode": "unstranded_outer_span",
+      "region_sets": [
+        {
+          "set_key": "A",
+          "display_label": "supplied A intervals",
+          "source": {
+            "kind": "bed_artifact",
+            "source_ref": "synthetic:source:A",
+            "file": {
+              "artifact_ref": "artifact_56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+              "sha256": "56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+              "size_bytes": 46,
+              "format": "bed_outer_span_v1"
+            }
+          },
+          "reference": null,
+          "format": "bed_outer_span_v1"
+        },
+        {
+          "set_key": "B",
+          "display_label": "supplied B intervals",
+          "source": {
+            "kind": "bed_artifact",
+            "source_ref": "synthetic:source:B",
+            "file": {
+              "artifact_ref": "artifact_150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+              "sha256": "150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+              "size_bytes": 35,
+              "format": "bed_outer_span_v1"
+            }
+          },
+          "reference": null,
+          "format": "bed_outer_span_v1"
+        }
+      ],
+      "comparisons": [
+        {
+          "comparison_key": "comparison_0",
+          "ordinal": 0,
+          "a_set_key": "A",
+          "b_set_key": "B"
+        }
+      ],
+      "output_prefix": "overlap_analysis"
+    },
+    "sets": [
+      {
+        "version": "genomic_overlap_parsed_set_v1",
+        "set_key": "A",
+        "source_file": {
+          "artifact_ref": "artifact_56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+          "sha256": "56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+          "size_bytes": 46,
+          "format": "bed_outer_span_v1"
+        },
+        "parsed_byte_count": 46,
+        "result_extent": "complete",
+        "input_data_row_count": 2,
+        "regions": [
+          {
+            "occurrence_key": "r0",
+            "data_ordinal": 0,
+            "native_token": "s0_r0",
+            "locator": {
+              "kind": "bed_line",
+              "line_number": 1,
+              "byte_start": 0,
+              "byte_end": 22
+            },
+            "original_fields": [
+              "chr1",
+              "0",
+              "10",
+              "gene_window"
+            ],
+            "chromosome": "chr1",
+            "start": 0,
+            "end": 10,
+            "name": "gene_window",
+            "raw_strand": null
+          },
+          {
+            "occurrence_key": "r1",
+            "data_ordinal": 1,
+            "native_token": "s0_r1",
+            "locator": {
+              "kind": "bed_line",
+              "line_number": 2,
+              "byte_start": 22,
+              "byte_end": 46
+            },
+            "original_fields": [
+              "chr1",
+              "5",
+              "15",
+              "second_window"
+            ],
+            "chromosome": "chr1",
+            "start": 5,
+            "end": 15,
+            "name": "second_window",
+            "raw_strand": null
+          }
+        ],
+        "ignored_records": [],
+        "invalid_records": [],
+        "canonical_order": [
+          "r0",
+          "r1"
+        ],
+        "coordinate_groups": [
+          {
+            "group_key": "A:coordinate:0",
+            "chromosome": "chr1",
+            "start": 0,
+            "end": 10,
+            "occurrence_keys": [
+              "r0"
+            ]
+          },
+          {
+            "group_key": "A:coordinate:1",
+            "chromosome": "chr1",
+            "start": 5,
+            "end": 15,
+            "occurrence_keys": [
+              "r1"
+            ]
+          }
+        ],
+        "full_record_groups": [
+          {
+            "group_key": "A:full_record:0",
+            "original_fields": [
+              "chr1",
+              "0",
+              "10",
+              "gene_window"
+            ],
+            "occurrence_keys": [
+              "r0"
+            ]
+          },
+          {
+            "group_key": "A:full_record:1",
+            "original_fields": [
+              "chr1",
+              "5",
+              "15",
+              "second_window"
+            ],
+            "occurrence_keys": [
+              "r1"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      {
+        "version": "genomic_overlap_parsed_set_v1",
+        "set_key": "B",
+        "source_file": {
+          "artifact_ref": "artifact_150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+          "sha256": "150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+          "size_bytes": 35,
+          "format": "bed_outer_span_v1"
+        },
+        "parsed_byte_count": 35,
+        "result_extent": "complete",
+        "input_data_row_count": 1,
+        "regions": [
+          {
+            "occurrence_key": "r0",
+            "data_ordinal": 0,
+            "native_token": "s1_r0",
+            "locator": {
+              "kind": "bed_line",
+              "line_number": 1,
+              "byte_start": 0,
+              "byte_end": 35
+            },
+            "original_fields": [
+              "chr1",
+              "7",
+              "12",
+              "regulatory_interval",
+              "42",
+              "+"
+            ],
+            "chromosome": "chr1",
+            "start": 7,
+            "end": 12,
+            "name": "regulatory_interval",
+            "raw_strand": "+"
+          }
+        ],
+        "ignored_records": [],
+        "invalid_records": [],
+        "canonical_order": [
+          "r0"
+        ],
+        "coordinate_groups": [
+          {
+            "group_key": "B:coordinate:0",
+            "chromosome": "chr1",
+            "start": 7,
+            "end": 12,
+            "occurrence_keys": [
+              "r0"
+            ]
+          }
+        ],
+        "full_record_groups": [
+          {
+            "group_key": "B:full_record:0",
+            "original_fields": [
+              "chr1",
+              "7",
+              "12",
+              "regulatory_interval",
+              "42",
+              "+"
+            ],
+            "occurrence_keys": [
+              "r0"
+            ]
+          }
+        ],
+        "issues": []
+      }
+    ],
+    "comparisons": [
+      {
+        "version": "genomic_overlap_parsed_pairs_v1",
+        "format": "bedtools_intersect_wo_bed4_v1",
+        "comparison_key": "comparison_0",
+        "receipt": {
+          "version": "genomic_overlap_native_pair_receipt_v1",
+          "comparison_key": "comparison_0",
+          "identity": {
+            "run_id": "synthetic:run:418",
+            "origin_episode_id": "synthetic:local_child:418",
+            "resource_id": "synthetic:local_resource",
+            "execution_id": "/synthetic/attempt/native.json",
+            "attempt_id": "synthetic:attempt:418",
+            "operation_key": "synthetic:run:418:local:0"
+          },
+          "derivation": "bedtools_intersect",
+          "outcome": "succeeded",
+          "software": {
+            "executable": "/synthetic/bin/bedtools",
+            "declared_version": "2.31.1",
+            "observed_version": "2.31.1",
+            "executable_sha256": null
+          },
+          "a": {
+            "set_key": "A",
+            "original_file": {
+              "artifact_ref": "artifact_56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+              "sha256": "56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+              "size_bytes": 46,
+              "format": "bed_outer_span_v1"
+            },
+            "canonical_file": {
+              "artifact_ref": "artifact_4e46461342664cb44c0f8aeea6fc8d590957d7914687d94d1649899eb4039ade",
+              "sha256": "4e46461342664cb44c0f8aeea6fc8d590957d7914687d94d1649899eb4039ade",
+              "size_bytes": 32,
+              "format": "bed4_occurrence_v1"
+            }
+          },
+          "b": {
+            "set_key": "B",
+            "original_file": {
+              "artifact_ref": "artifact_150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+              "sha256": "150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+              "size_bytes": 35,
+              "format": "bed_outer_span_v1"
+            },
+            "canonical_file": {
+              "artifact_ref": "artifact_e1d4b55a46ebb15d0e24f87229b021c531608cea788ba33de4dafef3729ed2a1",
+              "sha256": "e1d4b55a46ebb15d0e24f87229b021c531608cea788ba33de4dafef3729ed2a1",
+              "size_bytes": 16,
+              "format": "bed4_occurrence_v1"
+            }
+          },
+          "realized_argv": [
+            "/synthetic/bin/bedtools",
+            "intersect",
+            "-a",
+            "/synthetic/attempt/A.bed",
+            "-b",
+            "/synthetic/attempt/B.bed",
+            "-wo",
+            "-sorted"
+          ],
+          "environment": {
+            "LC_ALL": "C",
+            "TMPDIR": "/synthetic/attempt/tmp"
+          },
+          "returncode": 0,
+          "started_at": "2000-01-01T00:00:00Z",
+          "finished_at": "2000-01-01T00:00:01Z",
+          "stdout": {
+            "artifact_ref": "artifact_a1b61db5383b72a85125972327e6e0f289a6c07eb865cf74fa32c6ce060c6370",
+            "sha256": "a1b61db5383b72a85125972327e6e0f289a6c07eb865cf74fa32c6ce060c6370",
+            "size_bytes": 68,
+            "format": "bedtools_intersect_wo_bed4_v1"
+          },
+          "stderr": {
+            "artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size_bytes": 0,
+            "format": "native_stderr_text_v1"
+          },
+          "writer_closed": true,
+          "capture_extent": "complete",
+          "issues": [],
+          "native_result_extent": "complete",
+          "completeness_basis": "closed_successful_native_attempt",
+          "completeness_source_refs": [
+            "synthetic:original_closed_receipt:418",
+            "synthetic:sealed_manifest:418"
+          ]
+        },
+        "result_extent": "complete",
+        "parsed_byte_count": 68,
+        "valid_pairs": [
+          {
+            "pair_key": "p0:a0:b0",
+            "comparison_key": "comparison_0",
+            "native_row_ordinal": 0,
+            "locator": {
+              "kind": "bed_line",
+              "line_number": 1,
+              "byte_start": 0,
+              "byte_end": 34
+            },
+            "a": {
+              "set_key": "A",
+              "occurrence_key": "r0",
+              "native_token": "s0_r0",
+              "chromosome": "chr1",
+              "start": 0,
+              "end": 10
+            },
+            "b": {
+              "set_key": "B",
+              "occurrence_key": "r0",
+              "native_token": "s1_r0",
+              "chromosome": "chr1",
+              "start": 7,
+              "end": 12
+            },
+            "native_overlap_bp": 3
+          },
+          {
+            "pair_key": "p0:a1:b0",
+            "comparison_key": "comparison_0",
+            "native_row_ordinal": 1,
+            "locator": {
+              "kind": "bed_line",
+              "line_number": 2,
+              "byte_start": 34,
+              "byte_end": 68
+            },
+            "a": {
+              "set_key": "A",
+              "occurrence_key": "r1",
+              "native_token": "s0_r1",
+              "chromosome": "chr1",
+              "start": 5,
+              "end": 15
+            },
+            "b": {
+              "set_key": "B",
+              "occurrence_key": "r0",
+              "native_token": "s1_r0",
+              "chromosome": "chr1",
+              "start": 7,
+              "end": 12
+            },
+            "native_overlap_bp": 5
+          }
+        ],
+        "rejected_rows": [],
+        "issues": []
+      }
+    ],
+    "reference_relations": [
+      {
+        "comparison_key": "comparison_0",
+        "a_set_key": "A",
+        "b_set_key": "B",
+        "relation": "unknown",
+        "basis": "insufficient_supplied_identity",
+        "a_reference": null,
+        "b_reference": null,
+        "issues": []
+      }
+    ],
+    "issues": []
+  },
+  "components": {
+    "version": "genomic_region_overlap_components_v1",
+    "source_sheet_sha256": "b36953f8fe57696b8f2eecdae51abe622d5cb20cabd541550a38078c265e51dc",
+    "parameters": {
+      "version": "genomic_overlap_calculation_parameters_v1",
+      "minimum_overlap_bp": 4,
+      "minimum_a_fraction": {
+        "numerator": 0,
+        "denominator": 1
+      },
+      "minimum_b_fraction": {
+        "numerator": 0,
+        "denominator": 1
+      }
+    },
+    "sets": [
+      {
+        "set_key": "A",
+        "result_extent": "complete",
+        "input_data_row_count": 2,
+        "valid_region_count": 2,
+        "region_count": 2,
+        "summed_region_bp": 20,
+        "union_bp": 15,
+        "coordinate_locus_count": 2,
+        "duplicate_coordinate_excess": 0,
+        "issues": [],
+        "union_segments": [
+          {
+            "chromosome": "chr1",
+            "start": 0,
+            "end": 15
+          }
+        ],
+        "region_geometry": [
+          {
+            "set_key": "A",
+            "occurrence_key": "r0",
+            "span_bp": 10
+          },
+          {
+            "set_key": "A",
+            "occurrence_key": "r1",
+            "span_bp": 10
+          }
+        ]
+      },
+      {
+        "set_key": "B",
+        "result_extent": "complete",
+        "input_data_row_count": 1,
+        "valid_region_count": 1,
+        "region_count": 1,
+        "summed_region_bp": 5,
+        "union_bp": 5,
+        "coordinate_locus_count": 1,
+        "duplicate_coordinate_excess": 0,
+        "issues": [],
+        "union_segments": [
+          {
+            "chromosome": "chr1",
+            "start": 7,
+            "end": 12
+          }
+        ],
+        "region_geometry": [
+          {
+            "set_key": "B",
+            "occurrence_key": "r0",
+            "span_bp": 5
+          }
+        ]
+      }
+    ],
+    "pairs": [
+      {
+        "comparison_key": "comparison_0",
+        "a_set_key": "A",
+        "b_set_key": "B",
+        "result_extent": "complete",
+        "reference_relation": "unknown",
+        "observed": {
+          "observed_pair_count": 2,
+          "observed_pairwise_bp_sum": 8,
+          "observed_intersection_union_bp": 5,
+          "interpretation": "exact_complete_result"
+        },
+        "unfiltered": {
+          "native_pair_count": 2,
+          "pairwise_overlap_bp_sum": 8,
+          "intersection_union_bp": 5,
+          "combined_union_bp": 15,
+          "jaccard_bp": {
+            "numerator": 5,
+            "denominator": 15,
+            "value": 0.3333333333333333,
+            "missing_reason": null
+          },
+          "a_union_coverage_fraction": {
+            "numerator": 5,
+            "denominator": 15,
+            "value": 0.3333333333333333,
+            "missing_reason": null
+          },
+          "b_union_coverage_fraction": {
+            "numerator": 5,
+            "denominator": 5,
+            "value": 1,
+            "missing_reason": null
+          },
+          "a_regions_with_overlap": 2,
+          "b_regions_with_overlap": 1,
+          "a_region_overlap_fraction": {
+            "numerator": 2,
+            "denominator": 2,
+            "value": 1,
+            "missing_reason": null
+          },
+          "b_region_overlap_fraction": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1,
+            "missing_reason": null
+          }
+        },
+        "selected": {
+          "selected_pair_count": 1,
+          "selected_pairwise_bp_sum": 5,
+          "selected_intersection_union_bp": 5,
+          "selected_shared_union_fraction": {
+            "numerator": 5,
+            "denominator": 15,
+            "value": 0.3333333333333333,
+            "missing_reason": null
+          },
+          "a_union_coverage_fraction": {
+            "numerator": 5,
+            "denominator": 15,
+            "value": 0.3333333333333333,
+            "missing_reason": null
+          },
+          "b_union_coverage_fraction": {
+            "numerator": 5,
+            "denominator": 5,
+            "value": 1,
+            "missing_reason": null
+          },
+          "a_regions_with_overlap": 1,
+          "b_regions_with_overlap": 1,
+          "a_region_overlap_fraction": {
+            "numerator": 1,
+            "denominator": 2,
+            "value": 0.5,
+            "missing_reason": null
+          },
+          "b_region_overlap_fraction": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1,
+            "missing_reason": null
+          }
+        },
+        "issues": [],
+        "intersection_union_segments": [
+          {
+            "chromosome": "chr1",
+            "start": 7,
+            "end": 12
+          }
+        ],
+        "selected_intersection_union_segments": [
+          {
+            "chromosome": "chr1",
+            "start": 7,
+            "end": 12
+          }
+        ],
+        "edges": [
+          {
+            "pair_key": "p0:a0:b0",
+            "a_set_key": "A",
+            "a_occurrence_key": "r0",
+            "b_set_key": "B",
+            "b_occurrence_key": "r0",
+            "intersection": {
+              "chromosome": "chr1",
+              "start": 7,
+              "end": 10
+            },
+            "overlap_bp": 3,
+            "a_overlap_fraction": {
+              "numerator": 3,
+              "denominator": 10,
+              "value": 0.3,
+              "missing_reason": null
+            },
+            "b_overlap_fraction": {
+              "numerator": 3,
+              "denominator": 5,
+              "value": 0.6,
+              "missing_reason": null
+            },
+            "selected": false
+          },
+          {
+            "pair_key": "p0:a1:b0",
+            "a_set_key": "A",
+            "a_occurrence_key": "r1",
+            "b_set_key": "B",
+            "b_occurrence_key": "r0",
+            "intersection": {
+              "chromosome": "chr1",
+              "start": 7,
+              "end": 12
+            },
+            "overlap_bp": 5,
+            "a_overlap_fraction": {
+              "numerator": 5,
+              "denominator": 10,
+              "value": 0.5,
+              "missing_reason": null
+            },
+            "b_overlap_fraction": {
+              "numerator": 5,
+              "denominator": 5,
+              "value": 1,
+              "missing_reason": null
+            },
+            "selected": true
+          }
+        ],
+        "occurrences": [
+          {
+            "comparison_key": "comparison_0",
+            "population": "unfiltered",
+            "set_key": "A",
+            "occurrence_key": "r0",
+            "span_bp": 10,
+            "partner_count": 1,
+            "covered_bp": 3,
+            "coverage_fraction": {
+              "numerator": 3,
+              "denominator": 10,
+              "value": 0.3,
+              "missing_reason": null
+            },
+            "pair_keys": [
+              "p0:a0:b0"
+            ],
+            "result_extent": "complete"
+          },
+          {
+            "comparison_key": "comparison_0",
+            "population": "unfiltered",
+            "set_key": "A",
+            "occurrence_key": "r1",
+            "span_bp": 10,
+            "partner_count": 1,
+            "covered_bp": 5,
+            "coverage_fraction": {
+              "numerator": 5,
+              "denominator": 10,
+              "value": 0.5,
+              "missing_reason": null
+            },
+            "pair_keys": [
+              "p0:a1:b0"
+            ],
+            "result_extent": "complete"
+          },
+          {
+            "comparison_key": "comparison_0",
+            "population": "unfiltered",
+            "set_key": "B",
+            "occurrence_key": "r0",
+            "span_bp": 5,
+            "partner_count": 2,
+            "covered_bp": 5,
+            "coverage_fraction": {
+              "numerator": 5,
+              "denominator": 5,
+              "value": 1,
+              "missing_reason": null
+            },
+            "pair_keys": [
+              "p0:a0:b0",
+              "p0:a1:b0"
+            ],
+            "result_extent": "complete"
+          },
+          {
+            "comparison_key": "comparison_0",
+            "population": "selected",
+            "set_key": "A",
+            "occurrence_key": "r0",
+            "span_bp": 10,
+            "partner_count": 0,
+            "covered_bp": 0,
+            "coverage_fraction": {
+              "numerator": 0,
+              "denominator": 10,
+              "value": 0,
+              "missing_reason": null
+            },
+            "pair_keys": [],
+            "result_extent": "complete"
+          },
+          {
+            "comparison_key": "comparison_0",
+            "population": "selected",
+            "set_key": "A",
+            "occurrence_key": "r1",
+            "span_bp": 10,
+            "partner_count": 1,
+            "covered_bp": 5,
+            "coverage_fraction": {
+              "numerator": 5,
+              "denominator": 10,
+              "value": 0.5,
+              "missing_reason": null
+            },
+            "pair_keys": [
+              "p0:a1:b0"
+            ],
+            "result_extent": "complete"
+          },
+          {
+            "comparison_key": "comparison_0",
+            "population": "selected",
+            "set_key": "B",
+            "occurrence_key": "r0",
+            "span_bp": 5,
+            "partner_count": 1,
+            "covered_bp": 5,
+            "coverage_fraction": {
+              "numerator": 5,
+              "denominator": 5,
+              "value": 1,
+              "missing_reason": null
+            },
+            "pair_keys": [
+              "p0:a1:b0"
+            ],
+            "result_extent": "complete"
+          }
+        ]
+      }
+    ],
+    "issues": []
+  },
+  "selector": {
+    "version": "genomic_overlap_result_selector_v1",
+    "mode": "native_result",
+    "comparison_keys": [
+      "comparison_0"
+    ],
+    "saved_sheet_file": null,
+    "parameters": {
+      "version": "genomic_overlap_calculation_parameters_v1",
+      "minimum_overlap_bp": 4,
+      "minimum_a_fraction": {
+        "numerator": 0,
+        "denominator": 1
+      },
+      "minimum_b_fraction": {
+        "numerator": 0,
+        "denominator": 1
+      }
+    },
+    "projection": {
+      "kind": "pair_metrics",
+      "offset": 0,
+      "limit": 1,
+      "measurement_fields": [
+        "unfiltered.jaccard_bp"
+      ],
+      "occurrence_keys": []
+    }
+  },
+  "requested_return": {
+    "overlap": {
+      "version": "genomic_overlap_projection_v1",
+      "source_sheet_sha256": "b36953f8fe57696b8f2eecdae51abe622d5cb20cabd541550a38078c265e51dc",
+      "parameters": {
+        "version": "genomic_overlap_calculation_parameters_v1",
+        "minimum_overlap_bp": 4,
+        "minimum_a_fraction": {
+          "numerator": 0,
+          "denominator": 1
+        },
+        "minimum_b_fraction": {
+          "numerator": 0,
+          "denominator": 1
+        }
+      },
+      "kind": "pair_metrics",
+      "page": {
+        "offset": 0,
+        "limit": 1,
+        "total_rows": 1,
+        "returned_rows": 1
+      },
+      "result_extent": "complete",
+      "reference_relations": [
+        {
+          "comparison_key": "comparison_0",
+          "a_set_key": "A",
+          "b_set_key": "B",
+          "relation": "unknown",
+          "basis": "insufficient_supplied_identity",
+          "a_reference": null,
+          "b_reference": null,
+          "issues": []
+        }
+      ],
+      "pair_rows": [
+        {
+          "comparison_key": "comparison_0",
+          "a_set_key": "A",
+          "b_set_key": "B",
+          "result_extent": "complete",
+          "reference_relation": "unknown",
+          "observed_interpretation": "exact_complete_result",
+          "measurements": {
+            "unfiltered.jaccard_bp": {
+              "numerator": 5,
+              "denominator": 15,
+              "value": 0.3333333333333333,
+              "missing_reason": null
+            }
+          },
+          "issues": []
+        }
+      ],
+      "set_rows": [],
+      "occurrence_rows": [],
+      "failures": [],
+      "measurement_fields": [
+        "unfiltered.jaccard_bp"
+      ]
+    }
+  },
+  "standalone_failure_shape_example": {
+    "code": "overlap_width_conflict",
+    "stage": "parse",
+    "set_key": null,
+    "comparison_key": "comparison_0",
+    "artifact_ref": null,
+    "locator": null,
+    "field_path": "/native_overlap_bp",
+    "expected_value": 3,
+    "observed_value": 4,
+    "partial_artifact_refs": [],
+    "requirement": "complete_native_output"
+  },
+  "standalone_failure_example_meaning": "Separate shape example for a hypothetical width 4 where geometry requires 3; it is not a failure asserted about the primary fixture bytes.",
+  "hand_calculation": {
+    "unfiltered_pair_widths": [
+      3,
+      5
+    ],
+    "pairwise_overlap_bp_sum": "3 + 5 = 8",
+    "set_a_union": "[0,10) union [5,15) = [0,15): 15 bp",
+    "set_b_union": "[7,12): 5 bp",
+    "intersection_union": "[7,10) union [7,12) = [7,12): 5 bp",
+    "combined_union": "15 + 5 - 5 = 15 bp",
+    "jaccard": "5 / 15 = 1/3",
+    "minimum_overlap_bp_4": "First pair is excluded; second width-5 pair remains. Selected pair sum=5, selected union=5, affected A occurrences=1/2. Unfiltered Jaccard and native rows stay unchanged.",
+    "selected_return": "Only unfiltered.jaccard_bp is requested. Pairwise sum 8, selected metrics and all edge/occurrence tables stay retained in components and are absent from requested_return."
+  }
+}

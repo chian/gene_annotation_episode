@@ -1,0 +1,108 @@
+{
+  "attempt_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check004/temporary/test_actual_supplied_matrix_an1/hmmer-preparation-attempt",
+  "identity": {
+    "attempt_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e",
+    "episode_id": "selected-local-child",
+    "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check004/temporary/test_actual_supplied_matrix_an1/native.json",
+    "operation_key": "selected-command",
+    "requested_job_sha256": "d98d755f79509d24061a929dccb0770da93cff1adff3af7b7651951bf0aaaf6e",
+    "resource_id": "local",
+    "run_id": "producer267-test"
+  },
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "requested_job": {
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmbuild",
+      "--amino",
+      "--cpu",
+      "1",
+      "--seed",
+      "42",
+      "--singlemx",
+      "--informat",
+      "Stockholm",
+      "--mxfile",
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/easel/formats/BLOSUM62",
+      "-o",
+      "outputs/summary",
+      "-O",
+      "outputs/resaved",
+      "outputs/models",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/protein_single.sto"
+    ],
+    "environment": {},
+    "native_hmmer_preparation": {
+      "environment": {},
+      "grading_parameters": {},
+      "input_metadata": {},
+      "key": null,
+      "mode": "build_single_sequence_matrix",
+      "operands": [
+        {
+          "artifact_ref": "fixture267:alignment:0",
+          "format": "stockholm",
+          "ordinal": 0,
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/protein_single.sto",
+          "role": "alignment",
+          "sha256": "709abcece191645c06f53a9779d97309250464f09f2e61722ef17eaa7a3506ea",
+          "size_bytes": 105
+        },
+        {
+          "artifact_ref": "fixture267:matrix:0",
+          "format": "substitution_matrix",
+          "ordinal": 0,
+          "path": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/easel/formats/BLOSUM62",
+          "role": "matrix",
+          "sha256": "85510d3846ee6d5f4778e425cf8daf6e0dbb889b306f2d13434e1254780efb40",
+          "size_bytes": 2122
+        }
+      ],
+      "options": [
+        "--amino",
+        "--cpu",
+        "1",
+        "--seed",
+        "42"
+      ],
+      "outputs": [
+        {
+          "format": "hmmer_stdout",
+          "relative_path": "outputs/stdout",
+          "role": "stdout"
+        },
+        {
+          "format": "hmmer_stderr",
+          "relative_path": "outputs/stderr",
+          "role": "stderr"
+        },
+        {
+          "format": "hmmer3_ascii",
+          "relative_path": "outputs/models",
+          "role": "models"
+        },
+        {
+          "format": "stockholm",
+          "relative_path": "outputs/resaved",
+          "role": "resaved_alignment"
+        },
+        {
+          "format": "hmmbuild_summary",
+          "relative_path": "outputs/summary",
+          "role": "summary"
+        }
+      ],
+      "program": "hmmbuild",
+      "software": {
+        "engine_version": "3.4",
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmbuild",
+        "sha256": "f3b383266d3b817d8018be1b3c9ccb73823368b4f1557ad015d518d18788d8a6"
+      },
+      "version": "native_hmmer_preparation_job_v1"
+    }
+  },
+  "version": "native_hmmer_preparation_run_plan_v1"
+}

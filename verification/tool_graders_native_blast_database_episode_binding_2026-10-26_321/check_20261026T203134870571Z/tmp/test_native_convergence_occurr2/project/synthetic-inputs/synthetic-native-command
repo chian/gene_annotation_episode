@@ -1,0 +1,7 @@
+#!/home/chia/repos/gene_annotation_episode/.venv/bin/python
+import pathlib, sys
+print("synthetic stdout")
+sys.stderr.write("synthetic stderr\n")
+pathlib.Path(sys.argv[sys.argv.index("-out")+1]).write_bytes(b'# PSIBLAST 2.17.0+\n# Query: q\n# Database: synthetic_db\n# 2 hits found\nq\tA\t8\t8\t1\t4\t1\t4\tACDE\tACDE\t40\nq\tB\t8\t8\t1\t4\t1\t4\tACDE\tACDE\t39\nSearch has CONVERGED!\nSearch has CONVERGED!\r\n')
+pathlib.Path("synthetic-emitter-invoked").write_text("one synthetic emission")
+raise SystemExit(7)

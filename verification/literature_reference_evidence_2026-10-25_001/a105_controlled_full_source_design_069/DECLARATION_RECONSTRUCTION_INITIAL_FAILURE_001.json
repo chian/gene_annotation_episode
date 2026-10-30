@@ -1,0 +1,11 @@
+{
+  "operation": "verify_declarations_001.py initial execution",
+  "exit_code": 1,
+  "failure": "FileNotFoundError during example-builder output-directory AST redirection",
+  "cause": "The fixture builder read declaration inputs through HERE.parent rather than a separately redirectable BASE path.",
+  "correction": "The builder now declares BASE explicitly; reconstruction changes only HERE/BASE/ROOT path assignments while preserving construction and arithmetic.",
+  "scientific_failure": false,
+  "source_reader_executed": false,
+  "native_executed": false,
+  "model_executed": false
+}

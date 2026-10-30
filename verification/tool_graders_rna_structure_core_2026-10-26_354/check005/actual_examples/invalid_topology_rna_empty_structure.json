@@ -1,0 +1,1097 @@
+{
+  "components": {
+    "calculator_version": "rna_structure_calculations_v1",
+    "issues": [
+      {
+        "artifact_role": null,
+        "code": "rna_sequence_structure_length_mismatch",
+        "field": "/sequence",
+        "index": null,
+        "record_key": "synthetic-rna",
+        "stage": "input"
+      },
+      {
+        "artifact_role": null,
+        "code": "rna_empty_structure",
+        "field": "/dot_bracket",
+        "index": null,
+        "record_key": "synthetic-rna",
+        "stage": "input"
+      }
+    ],
+    "pairs": [],
+    "parameters": {
+      "energy": {
+        "normalization": "per_nt"
+      },
+      "pair_composition": {
+        "accepted_ordered_pair_types": [
+          "AU",
+          "UA",
+          "GC",
+          "CG",
+          "GU",
+          "UG"
+        ],
+        "denominator": "unambiguous_pairs"
+      },
+      "schema": "rna_calculation_parameters_v1",
+      "topology": {
+        "include_exterior_in_loop_size_statistics": false,
+        "long_stem_min_pairs": 3
+      }
+    },
+    "record_key": "synthetic-rna",
+    "regions": [],
+    "schema": "rna_structure_components_v1",
+    "sheet_schema": "rna_supplied_structure_feature_sheet_v1",
+    "stems": [],
+    "summary": [
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:n_nt",
+        "input_fields": [
+          "/topology"
+        ],
+        "name": "n_nt",
+        "numerator": null,
+        "origin": "derived_topology",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "nt",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:pair_count",
+        "input_fields": [
+          "/topology"
+        ],
+        "name": "pair_count",
+        "numerator": null,
+        "origin": "derived_topology",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "pairs",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:paired_nt",
+        "input_fields": [
+          "/topology"
+        ],
+        "name": "paired_nt",
+        "numerator": null,
+        "origin": "derived_topology",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "nt",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:unpaired_nt",
+        "input_fields": [
+          "/topology"
+        ],
+        "name": "unpaired_nt",
+        "numerator": null,
+        "origin": "derived_topology",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "nt",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:paired_fraction",
+        "input_fields": [
+          "/topology"
+        ],
+        "name": "paired_fraction",
+        "numerator": null,
+        "origin": "derived_topology",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "dimensionless",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:unpaired_fraction",
+        "input_fields": [
+          "/topology"
+        ],
+        "name": "unpaired_fraction",
+        "numerator": null,
+        "origin": "derived_topology",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "dimensionless",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:mean_pair_span_nt",
+        "input_fields": [
+          "/topology"
+        ],
+        "name": "mean_pair_span_nt",
+        "numerator": null,
+        "origin": "derived_topology",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "nt",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:stem_count",
+        "input_fields": [
+          "/topology"
+        ],
+        "name": "stem_count",
+        "numerator": null,
+        "origin": "derived_topology",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "stems",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:longest_stem_pairs",
+        "input_fields": [
+          "/topology"
+        ],
+        "name": "longest_stem_pairs",
+        "numerator": null,
+        "origin": "derived_topology",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "pairs",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:mean_stem_pairs",
+        "input_fields": [
+          "/topology"
+        ],
+        "name": "mean_stem_pairs",
+        "numerator": null,
+        "origin": "derived_topology",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "pairs/stem",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:stack_count",
+        "input_fields": [
+          "/topology"
+        ],
+        "name": "stack_count",
+        "numerator": null,
+        "origin": "derived_topology",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "stacks",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:long_stem_count",
+        "input_fields": [
+          "/topology"
+        ],
+        "name": "long_stem_count",
+        "numerator": null,
+        "origin": "derived_topology",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "stems",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:long_stem_fraction",
+        "input_fields": [
+          "/topology"
+        ],
+        "name": "long_stem_fraction",
+        "numerator": null,
+        "origin": "derived_topology",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "dimensionless",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:hairpin_count",
+        "input_fields": [
+          "/topology"
+        ],
+        "name": "hairpin_count",
+        "numerator": null,
+        "origin": "derived_topology",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "regions",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:bulge_count",
+        "input_fields": [
+          "/topology"
+        ],
+        "name": "bulge_count",
+        "numerator": null,
+        "origin": "derived_topology",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "regions",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:internal_loop_count",
+        "input_fields": [
+          "/topology"
+        ],
+        "name": "internal_loop_count",
+        "numerator": null,
+        "origin": "derived_topology",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "regions",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:multibranch_count",
+        "input_fields": [
+          "/topology"
+        ],
+        "name": "multibranch_count",
+        "numerator": null,
+        "origin": "derived_topology",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "regions",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:loop_mean_unpaired_nt",
+        "input_fields": [
+          "/topology"
+        ],
+        "name": "loop_mean_unpaired_nt",
+        "numerator": null,
+        "origin": "derived_topology",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "nt",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:loop_max_unpaired_nt",
+        "input_fields": [
+          "/topology"
+        ],
+        "name": "loop_max_unpaired_nt",
+        "numerator": null,
+        "origin": "derived_topology",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "nt",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:external_unpaired_nt",
+        "input_fields": [
+          "/topology"
+        ],
+        "name": "external_unpaired_nt",
+        "numerator": null,
+        "origin": "derived_topology",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "nt",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:unambiguous_pair_count",
+        "input_fields": [
+          "/sequence_pairs"
+        ],
+        "name": "unambiguous_pair_count",
+        "numerator": null,
+        "origin": "derived_sequence_composition",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "pairs",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:ambiguous_pair_count",
+        "input_fields": [
+          "/sequence_pairs"
+        ],
+        "name": "ambiguous_pair_count",
+        "numerator": null,
+        "origin": "derived_sequence_composition",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "pairs",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:accepted_pair_count",
+        "input_fields": [
+          "/sequence_pairs"
+        ],
+        "name": "accepted_pair_count",
+        "numerator": null,
+        "origin": "derived_sequence_composition",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "pairs",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:accepted_pair_fraction",
+        "input_fields": [
+          "/sequence_pairs"
+        ],
+        "name": "accepted_pair_fraction",
+        "numerator": null,
+        "origin": "derived_sequence_composition",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "dimensionless",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:pair_count_AA",
+        "input_fields": [
+          "/sequence_pairs"
+        ],
+        "name": "pair_count_AA",
+        "numerator": null,
+        "origin": "derived_sequence_composition",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "pairs",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:pair_count_AC",
+        "input_fields": [
+          "/sequence_pairs"
+        ],
+        "name": "pair_count_AC",
+        "numerator": null,
+        "origin": "derived_sequence_composition",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "pairs",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:pair_count_AG",
+        "input_fields": [
+          "/sequence_pairs"
+        ],
+        "name": "pair_count_AG",
+        "numerator": null,
+        "origin": "derived_sequence_composition",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "pairs",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:pair_count_AU",
+        "input_fields": [
+          "/sequence_pairs"
+        ],
+        "name": "pair_count_AU",
+        "numerator": null,
+        "origin": "derived_sequence_composition",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "pairs",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:pair_count_CA",
+        "input_fields": [
+          "/sequence_pairs"
+        ],
+        "name": "pair_count_CA",
+        "numerator": null,
+        "origin": "derived_sequence_composition",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "pairs",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:pair_count_CC",
+        "input_fields": [
+          "/sequence_pairs"
+        ],
+        "name": "pair_count_CC",
+        "numerator": null,
+        "origin": "derived_sequence_composition",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "pairs",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:pair_count_CG",
+        "input_fields": [
+          "/sequence_pairs"
+        ],
+        "name": "pair_count_CG",
+        "numerator": null,
+        "origin": "derived_sequence_composition",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "pairs",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:pair_count_CU",
+        "input_fields": [
+          "/sequence_pairs"
+        ],
+        "name": "pair_count_CU",
+        "numerator": null,
+        "origin": "derived_sequence_composition",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "pairs",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:pair_count_GA",
+        "input_fields": [
+          "/sequence_pairs"
+        ],
+        "name": "pair_count_GA",
+        "numerator": null,
+        "origin": "derived_sequence_composition",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "pairs",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:pair_count_GC",
+        "input_fields": [
+          "/sequence_pairs"
+        ],
+        "name": "pair_count_GC",
+        "numerator": null,
+        "origin": "derived_sequence_composition",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "pairs",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:pair_count_GG",
+        "input_fields": [
+          "/sequence_pairs"
+        ],
+        "name": "pair_count_GG",
+        "numerator": null,
+        "origin": "derived_sequence_composition",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "pairs",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:pair_count_GU",
+        "input_fields": [
+          "/sequence_pairs"
+        ],
+        "name": "pair_count_GU",
+        "numerator": null,
+        "origin": "derived_sequence_composition",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "pairs",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:pair_count_UA",
+        "input_fields": [
+          "/sequence_pairs"
+        ],
+        "name": "pair_count_UA",
+        "numerator": null,
+        "origin": "derived_sequence_composition",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "pairs",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:pair_count_UC",
+        "input_fields": [
+          "/sequence_pairs"
+        ],
+        "name": "pair_count_UC",
+        "numerator": null,
+        "origin": "derived_sequence_composition",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "pairs",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:pair_count_UG",
+        "input_fields": [
+          "/sequence_pairs"
+        ],
+        "name": "pair_count_UG",
+        "numerator": null,
+        "origin": "derived_sequence_composition",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "pairs",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:pair_count_UU",
+        "input_fields": [
+          "/sequence_pairs"
+        ],
+        "name": "pair_count_UU",
+        "numerator": null,
+        "origin": "derived_sequence_composition",
+        "reason": "rna_empty_structure",
+        "state": "invalid_input",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "pairs",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "native:mfe",
+        "input_fields": [
+          "/native_mfe/value"
+        ],
+        "name": "mfe_kcal_mol",
+        "numerator": null,
+        "origin": "native_prediction",
+        "reason": "not_requested",
+        "state": "not_requested",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "kcal/mol",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "native:eval_structure",
+        "input_fields": [
+          "/native_evaluation/value"
+        ],
+        "name": "evaluated_energy_kcal_mol",
+        "numerator": null,
+        "origin": "native_evaluation",
+        "reason": "not_requested",
+        "state": "not_requested",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "kcal/mol",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:mfe_per_nt",
+        "input_fields": [
+          "/native_mfe/value",
+          "/topology/length_nt",
+          "/parameters/energy/normalization"
+        ],
+        "name": "mfe_per_nt",
+        "numerator": null,
+        "origin": "native_prediction",
+        "reason": "not_requested",
+        "state": "not_requested",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "kcal/mol/nt",
+        "value": null
+      },
+      {
+        "denominator": null,
+        "formula_id": "rna_v1:evaluated_energy_per_nt",
+        "input_fields": [
+          "/native_evaluation/value",
+          "/topology/length_nt",
+          "/parameters/energy/normalization"
+        ],
+        "name": "evaluated_energy_per_nt",
+        "numerator": null,
+        "origin": "native_evaluation",
+        "reason": "not_requested",
+        "state": "not_requested",
+        "uncertainty": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "unit": "kcal/mol/nt",
+        "value": null
+      }
+    ],
+    "unused_native_fields": [
+      "/native_uncertainty",
+      "/model",
+      "/subject_binding",
+      "/native_input",
+      "/legacy_quantities",
+      "/native_mfe/numeric_text",
+      "/native_mfe/engine",
+      "/native_mfe/engine_version",
+      "/native_mfe/model_key",
+      "/native_evaluation/numeric_text",
+      "/native_evaluation/engine",
+      "/native_evaluation/engine_version",
+      "/native_evaluation/model_key",
+      "/analysis_sequence/symbol_counts",
+      "/original_input/sequence_id"
+    ],
+    "used_native_fields": [
+      "/native_evaluation/value",
+      "/native_mfe/value",
+      "/sequence_pairs",
+      "/topology",
+      "/topology/length_nt"
+    ]
+  },
+  "original_input": {
+    "dot_bracket": "",
+    "energy_mode": "none",
+    "normalization": "exact",
+    "record_key": "synthetic-rna",
+    "schema": "rna_feature_input_v1",
+    "sequence": "GGGAAACCC",
+    "sequence_id": null,
+    "structure_id": null,
+    "structure_origin": "supplied_unknown",
+    "structure_source_ref": null,
+    "subject_binding": null
+  },
+  "sheet": {
+    "analysis_sequence": {
+      "alphabet": "RNA_IUPAC",
+      "ambiguous_indices": [],
+      "analysis_sequence": "GGGAAACCC",
+      "case_operation": "exact",
+      "length_nt": 9,
+      "original_sequence": "GGGAAACCC",
+      "original_to_analysis_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "symbol_counts": {
+        "A": 3,
+        "B": 0,
+        "C": 3,
+        "D": 0,
+        "G": 3,
+        "H": 0,
+        "K": 0,
+        "M": 0,
+        "N": 0,
+        "R": 0,
+        "S": 0,
+        "U": 0,
+        "V": 0,
+        "W": 0,
+        "Y": 0
+      }
+    },
+    "coordinate_system": "zero_based_sequence_indices_and_half_open_intervals",
+    "issues": [
+      {
+        "artifact_role": null,
+        "code": "rna_sequence_structure_length_mismatch",
+        "field": "/sequence",
+        "index": null,
+        "record_key": "synthetic-rna",
+        "stage": "input"
+      },
+      {
+        "artifact_role": null,
+        "code": "rna_empty_structure",
+        "field": "/dot_bracket",
+        "index": null,
+        "record_key": "synthetic-rna",
+        "stage": "input"
+      }
+    ],
+    "legacy_quantities": null,
+    "mode": "supplied_features",
+    "model": null,
+    "native_evaluation": {
+      "engine": null,
+      "engine_version": null,
+      "model_key": null,
+      "numeric_text": null,
+      "reason": "not_requested",
+      "state": "not_requested",
+      "structure_key": null,
+      "unit": "kcal/mol",
+      "value": null
+    },
+    "native_input": {
+      "byte_count": 2991,
+      "format": "rna_native_record_json_v1",
+      "sha256": "4f163451f6e3f860e8005e2e20359838f911f6992f71b66cc1de3e778925ab3e"
+    },
+    "native_mfe": {
+      "engine": null,
+      "engine_version": null,
+      "model_key": null,
+      "numeric_text": null,
+      "reason": "not_requested",
+      "state": "not_requested",
+      "structure_key": null,
+      "unit": "kcal/mol",
+      "value": null
+    },
+    "native_uncertainty": {
+      "energy_interval": {
+        "reason": "selected_algorithm_does_not_produce_uncertainty",
+        "state": "not_produced",
+        "value": null
+      },
+      "energy_standard_error": {
+        "reason": "selected_algorithm_does_not_produce_uncertainty",
+        "state": "not_produced",
+        "value": null
+      },
+      "ensemble_diversity": {
+        "reason": "selected_algorithm_does_not_produce_uncertainty",
+        "state": "not_produced",
+        "value": null
+      },
+      "ensemble_free_energy_kcal_mol": {
+        "reason": "selected_algorithm_does_not_produce_uncertainty",
+        "state": "not_produced",
+        "value": null
+      },
+      "mfe_frequency": {
+        "reason": "selected_algorithm_does_not_produce_uncertainty",
+        "state": "not_produced",
+        "value": null
+      },
+      "pair_probabilities": {
+        "reason": "selected_algorithm_does_not_produce_uncertainty",
+        "state": "not_produced",
+        "value": null
+      }
+    },
+    "operation": "analyze_rna_secondary_structure_features",
+    "original_input": {
+      "dot_bracket": "",
+      "energy_mode": "none",
+      "normalization": "exact",
+      "record_key": "synthetic-rna",
+      "schema": "rna_feature_input_v1",
+      "sequence": "GGGAAACCC",
+      "sequence_id": null,
+      "structure_id": null,
+      "structure_origin": "supplied_unknown",
+      "structure_source_ref": null,
+      "subject_binding": null
+    },
+    "record_key": "synthetic-rna",
+    "schema": "rna_supplied_structure_feature_sheet_v1",
+    "sequence_pairs": null,
+    "status": "invalid",
+    "structure": {
+      "dot_bracket": "",
+      "energy_conversion": null,
+      "energy_dot_bracket": null,
+      "origin": "supplied_unknown",
+      "source_ref": null,
+      "structure_id": null,
+      "structure_key": "synthetic-rna:structure"
+    },
+    "subject_binding": null,
+    "topology": {
+      "coordinate_system": "zero_based_sequence_indices_and_half_open_intervals",
+      "dot_bracket": "",
+      "issues": [
+        {
+          "artifact_role": null,
+          "code": "rna_empty_structure",
+          "field": "/dot_bracket",
+          "index": null,
+          "record_key": null,
+          "stage": "input"
+        }
+      ],
+      "length_nt": 0,
+      "pairs": null,
+      "positions": null,
+      "regions": null,
+      "schema": "rna_topology_v1",
+      "status": "invalid",
+      "stems": null
+    }
+  }
+}

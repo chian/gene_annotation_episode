@@ -1,0 +1,43 @@
+{
+  "request": {
+    "mode": "sequence_batch",
+    "subject_refs": [
+      "input_402b3110d9d0c52779303fd9",
+      "input_402b3110d9d0c52779303fd9",
+      "input_6d474f9d648cc148599a39fd"
+    ],
+    "version": "rfam_batch_request_v2"
+  },
+  "scope": {
+    "subject_refs": [
+      "input_402b3110d9d0c52779303fd9",
+      "input_6d474f9d648cc148599a39fd"
+    ]
+  },
+  "selector": {
+    "model_metadata_ref": null,
+    "projection": {
+      "family": "hit",
+      "metrics": [
+        "native_score_bits",
+        "native_evalue",
+        "native_bias_bits",
+        "query_span_nt",
+        "native_model_span_positions",
+        "represented_model_positions",
+        "represented_query_positions",
+        "model_consensus_compared_count",
+        "model_consensus_equal_count",
+        "query_insert_count",
+        "model_delete_count",
+        "model_coverage_fraction"
+      ],
+      "rows": {
+        "limit": 2,
+        "offset": 1
+      }
+    },
+    "representation": "out",
+    "version": "rfam_batch_result_selector_v3"
+  }
+}

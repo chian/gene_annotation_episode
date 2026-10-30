@@ -1,0 +1,150 @@
+{
+  "version": "native_blast_run_plan_v1",
+  "identity": {
+    "run_id": "verification294",
+    "episode_id": "explicit-example-selection",
+    "resource_id": "local",
+    "execution_id": "tblastx_frames_tabular7",
+    "attempt_id": "tblastx_frames_tabular7",
+    "operation_key": "selected:tblastx_frames_tabular7",
+    "requested_job_sha256": "ce45c758e993a61a463fa6a3c2f6a45aef4acd9026151e69f0b4ffda20ee71c2"
+  },
+  "requested_job": {
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/tblastx",
+      "-strand",
+      "plus",
+      "-query_gencode",
+      "11",
+      "-db_gencode",
+      "11",
+      "-seg",
+      "no",
+      "-num_threads",
+      "1",
+      "-query",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastx_frames_tabular7/query_sequence.fa",
+      "-subject",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastx_frames_tabular7/subject_sequence.fa",
+      "-outfmt",
+      "7 delim=@ qseqid sseqid qlen slen qstart qend sstart send qframe sframe length nident gaps mismatch score bitscore evalue qseq sseq btop",
+      "-out",
+      "report.tsv"
+    ],
+    "environment": {},
+    "native_blast": {
+      "version": "native_blast_job_v1",
+      "program": "tblastx",
+      "mode": "pairwise",
+      "software": {
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/tblastx",
+        "sha256": "583e5d60bbd444ac455d20e0956c5aa0aeef675da8daee8204d8f9376ddb8804",
+        "engine_version": "2.17.0+"
+      },
+      "environment": {},
+      "operands": [
+        {
+          "role": "query_sequence",
+          "format": "fasta",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastx_frames_tabular7/query_sequence.fa",
+          "sha256": "9492699364815efe4b07d4e54db495ffe3caa16f505493f5a77f9328a146b6f3",
+          "size_bytes": 266,
+          "artifact_ref": null
+        },
+        {
+          "role": "subject_sequence",
+          "format": "fasta",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastx_frames_tabular7/subject_sequence.fa",
+          "sha256": "eb6f64182f1dbfa935d66cf86ad6ef36523cbe9942408e91cc25893b6fd6ef1c",
+          "size_bytes": 268,
+          "artifact_ref": null
+        }
+      ],
+      "operand_bindings": [
+        {
+          "operand_role": "query_sequence",
+          "record_ordinal": 0,
+          "native_name": "query_tblastx_frames",
+          "native_accession": null,
+          "subject_ref": "query_subject",
+          "reference_ref": null
+        },
+        {
+          "operand_role": "subject_sequence",
+          "record_ordinal": 0,
+          "native_name": "subject_tblastx_frames",
+          "native_accession": null,
+          "subject_ref": null,
+          "reference_ref": "paired_reference"
+        }
+      ],
+      "options": [
+        "-strand",
+        "plus",
+        "-query_gencode",
+        "11",
+        "-db_gencode",
+        "11",
+        "-seg",
+        "no",
+        "-num_threads",
+        "1"
+      ],
+      "outputs": [
+        {
+          "role": "stdout",
+          "format": "text",
+          "relative_path": "stdout.txt",
+          "fields": null,
+          "delimiter": null
+        },
+        {
+          "role": "stderr",
+          "format": "text",
+          "relative_path": "stderr.txt",
+          "fields": null,
+          "delimiter": null
+        },
+        {
+          "role": "primary_report",
+          "format": "tabular7",
+          "relative_path": "report.tsv",
+          "fields": [
+            "qseqid",
+            "sseqid",
+            "qlen",
+            "slen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "qframe",
+            "sframe",
+            "length",
+            "nident",
+            "gaps",
+            "mismatch",
+            "score",
+            "bitscore",
+            "evalue",
+            "qseq",
+            "sseq",
+            "btop"
+          ],
+          "delimiter": "@"
+        }
+      ],
+      "metadata": {
+        "engineering_example": "tblastx_frames_tabular7",
+        "input_kind": "synthetic_derivative_of_retained_public_sequence"
+      },
+      "grading_parameters": {}
+    }
+  },
+  "attempt_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastx_frames_tabular7/attempt",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  }
+}

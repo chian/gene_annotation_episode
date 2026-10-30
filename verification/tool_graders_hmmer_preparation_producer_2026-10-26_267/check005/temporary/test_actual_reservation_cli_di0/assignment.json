@@ -1,0 +1,63 @@
+{
+  "requested_job": {
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmemit",
+      "--seed",
+      "42",
+      "-c",
+      "-o",
+      "outputs/generated_sequences",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_protein/profile.hmm"
+    ],
+    "environment": {},
+    "native_hmmer_preparation": {
+      "version": "native_hmmer_preparation_job_v1",
+      "program": "hmmemit",
+      "mode": "consensus_simple",
+      "software": {
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmemit",
+        "sha256": "a8cb98a6716ea40f959e06d7b643e21879d009d47c82673761634b3157ca79e1",
+        "engine_version": "3.4"
+      },
+      "environment": {},
+      "operands": [
+        {
+          "role": "models",
+          "ordinal": 0,
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_protein/profile.hmm",
+          "format": "hmmer3_ascii",
+          "sha256": "f744b16d69df05ddf8239af3bc4a68d36a6e2764f31ad1b8274507e958056ea5",
+          "size_bytes": 6670,
+          "artifact_ref": "fixture267:models:0"
+        }
+      ],
+      "options": [
+        "--seed",
+        "42"
+      ],
+      "outputs": [
+        {
+          "role": "stdout",
+          "format": "hmmer_stdout",
+          "relative_path": "outputs/stdout"
+        },
+        {
+          "role": "stderr",
+          "format": "hmmer_stderr",
+          "relative_path": "outputs/stderr"
+        },
+        {
+          "role": "generated_sequences",
+          "format": "fasta",
+          "relative_path": "outputs/generated_sequences"
+        }
+      ],
+      "key": null,
+      "input_metadata": {},
+      "grading_parameters": {}
+    }
+  },
+  "workspace": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_reservation_cli_di0",
+  "resource_kind": "local",
+  "resource_id": "local267"
+}

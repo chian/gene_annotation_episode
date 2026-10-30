@@ -1,0 +1,207 @@
+{
+  "scope": "Actual project-local bedtools v2.31.1 on synthetic interval examples, default -wo -sorted; no grader or episode integration",
+  "binary_sha256": "b6c6e44b79180f0c9f64f916010c71bcd44baf81e5abe71b63f19aa9d4bc9fb6",
+  "original_input_pins_unchanged": true,
+  "original_input_pins": {
+    "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/overlapping_a.CHECK.json": "220d83cee06db543686b2c860ef111a5b23fe2b790f6d4062310dc42ed547312",
+    "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/overlapping_a.A.bed": "3ceacb6ab762a572e080403a0f056fcab13d814645f0ae5c56dd1db6b58e59db",
+    "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/overlapping_a.B.bed": "dafdde334d800152edec33a8f0692309d882040704c454201202759e9f281069",
+    "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/overlapping_both.CHECK.json": "2493c81132bdd6d9c333bbbe30e36cc8c60cfc859506f290b73b7a8d72977b83",
+    "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/overlapping_both.A.bed": "3ceacb6ab762a572e080403a0f056fcab13d814645f0ae5c56dd1db6b58e59db",
+    "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/overlapping_both.B.bed": "77238fcfc0f4efd8328d0b9711b50837178583e1fae55960a6f117aea88162b4",
+    "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/duplicate_occurrences.CHECK.json": "76cc5f32e8991551057736ed6f18ccec1f798b0ec949475e7482f24409c80e26",
+    "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/duplicate_occurrences.A.bed": "8428a24a8dcf41c79d532a1309104c6620e91d4a969c217c19ac221087fb8c22",
+    "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/duplicate_occurrences.B.bed": "5d79eacb021a0d7bd9fe6c90d6f09c254a05afd6afadf98234215e4d19e69ce3",
+    "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/touching_endpoints.CHECK.json": "0fe80a978bb433ad9e97cb086c3afc59ec3e6e2c2acd59758a448fcd23b6f7f9",
+    "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/touching_endpoints.A.bed": "4cb122d6418e48d6874e9e914d63e796109ea7b004d4168ea94d0ab30638b46b",
+    "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/touching_endpoints.B.bed": "e96a3aa86e27374bfe501ea6b3960ccc5b5e9d96177b8be8182387c5aecd9480",
+    "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/different_chromosomes.CHECK.json": "9542a005223403c33f31fb31e81d289bed9ccc36c3eb9af816590ee0225f8e58",
+    "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/different_chromosomes.A.bed": "4cb122d6418e48d6874e9e914d63e796109ea7b004d4168ea94d0ab30638b46b",
+    "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/different_chromosomes.B.bed": "5be021530b1a79983fb7461bd655a8a06ff179a00b2506d088856a9175b8b1a5",
+    "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/long_interval_one_bp.CHECK.json": "de41aa57581256b7a9e32d3564d96bb66d9f13b9241da6403a480c56c1863cb9",
+    "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/long_interval_one_bp.A.bed": "fb2df8f0e377d0757fbeb5facf8ae326e4163690854b8633a1ee20d5dfa33506",
+    "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/long_interval_one_bp.B.bed": "c8149c9ffc9b2f99256bb2b8bdf7caab4edad7326a9e8562323b7060b7ab4d2f"
+  },
+  "cases": [
+    {
+      "case": "overlapping_a",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/installation/usr/bin/bedtools",
+        "intersect",
+        "-a",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_native_2026-10-27_421/run002/work/overlapping_a.A.bed",
+        "-b",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_native_2026-10-27_421/run002/work/overlapping_a.B.bed",
+        "-wo",
+        "-sorted"
+      ],
+      "returncode": 0,
+      "subprocess_wall_seconds": 0.0015455520479008555,
+      "expected_lines": [
+        "chr1\t0\t10\tA1\tchr1\t7\t12\tB1\t3",
+        "chr1\t5\t15\tA2\tchr1\t7\t12\tB1\t5"
+      ],
+      "actual_lines": [
+        "chr1\t0\t10\tA1\tchr1\t7\t12\tB1\t3",
+        "chr1\t5\t15\tA2\tchr1\t7\t12\tB1\t5"
+      ],
+      "exact_match": true,
+      "native_pair_count": 2,
+      "native_pairwise_width_sum": 8,
+      "stdout_sha256": "363d108caac15ca99a4850892b890693fd2b9f1b9d16e41c9a566e05cecf9edb"
+    },
+    {
+      "case": "overlapping_both",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/installation/usr/bin/bedtools",
+        "intersect",
+        "-a",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_native_2026-10-27_421/run002/work/overlapping_both.A.bed",
+        "-b",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_native_2026-10-27_421/run002/work/overlapping_both.B.bed",
+        "-wo",
+        "-sorted"
+      ],
+      "returncode": 0,
+      "subprocess_wall_seconds": 0.0013937309850007296,
+      "expected_lines": [
+        "chr1\t0\t10\tA1\tchr1\t7\t12\tB1\t3",
+        "chr1\t5\t15\tA2\tchr1\t7\t12\tB1\t5",
+        "chr1\t5\t15\tA2\tchr1\t10\t20\tB2\t5"
+      ],
+      "actual_lines": [
+        "chr1\t0\t10\tA1\tchr1\t7\t12\tB1\t3",
+        "chr1\t5\t15\tA2\tchr1\t7\t12\tB1\t5",
+        "chr1\t5\t15\tA2\tchr1\t10\t20\tB2\t5"
+      ],
+      "exact_match": true,
+      "native_pair_count": 3,
+      "native_pairwise_width_sum": 13,
+      "stdout_sha256": "a5f68122887d00e2effdeca4bfaed18a71784999a5ae608dad82959e44bda93a"
+    },
+    {
+      "case": "duplicate_occurrences",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/installation/usr/bin/bedtools",
+        "intersect",
+        "-a",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_native_2026-10-27_421/run002/work/duplicate_occurrences.A.bed",
+        "-b",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_native_2026-10-27_421/run002/work/duplicate_occurrences.B.bed",
+        "-wo",
+        "-sorted"
+      ],
+      "returncode": 0,
+      "subprocess_wall_seconds": 0.0012780310353264213,
+      "expected_lines": [
+        "chr1\t0\t10\tA1\tchr1\t5\t15\tB1\t5",
+        "chr1\t0\t10\tA1\tchr1\t5\t15\tB2\t5",
+        "chr1\t0\t10\tA2\tchr1\t5\t15\tB1\t5",
+        "chr1\t0\t10\tA2\tchr1\t5\t15\tB2\t5"
+      ],
+      "actual_lines": [
+        "chr1\t0\t10\tA1\tchr1\t5\t15\tB1\t5",
+        "chr1\t0\t10\tA1\tchr1\t5\t15\tB2\t5",
+        "chr1\t0\t10\tA2\tchr1\t5\t15\tB1\t5",
+        "chr1\t0\t10\tA2\tchr1\t5\t15\tB2\t5"
+      ],
+      "exact_match": true,
+      "native_pair_count": 4,
+      "native_pairwise_width_sum": 20,
+      "stdout_sha256": "0e845140e74b9db0a6444548e5f8a6910c40e3e875892c7e8a0e3ea1b4d57748"
+    },
+    {
+      "case": "touching_endpoints",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/installation/usr/bin/bedtools",
+        "intersect",
+        "-a",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_native_2026-10-27_421/run002/work/touching_endpoints.A.bed",
+        "-b",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_native_2026-10-27_421/run002/work/touching_endpoints.B.bed",
+        "-wo",
+        "-sorted"
+      ],
+      "returncode": 0,
+      "subprocess_wall_seconds": 0.0012193180155009031,
+      "expected_lines": [],
+      "actual_lines": [],
+      "exact_match": true,
+      "native_pair_count": 0,
+      "native_pairwise_width_sum": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "different_chromosomes",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/installation/usr/bin/bedtools",
+        "intersect",
+        "-a",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_native_2026-10-27_421/run002/work/different_chromosomes.A.bed",
+        "-b",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_native_2026-10-27_421/run002/work/different_chromosomes.B.bed",
+        "-wo",
+        "-sorted"
+      ],
+      "returncode": 0,
+      "subprocess_wall_seconds": 0.0012194160372018814,
+      "expected_lines": [],
+      "actual_lines": [],
+      "exact_match": true,
+      "native_pair_count": 0,
+      "native_pairwise_width_sum": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "long_interval_one_bp",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/installation/usr/bin/bedtools",
+        "intersect",
+        "-a",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_native_2026-10-27_421/run002/work/long_interval_one_bp.A.bed",
+        "-b",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_native_2026-10-27_421/run002/work/long_interval_one_bp.B.bed",
+        "-wo",
+        "-sorted"
+      ],
+      "returncode": 0,
+      "subprocess_wall_seconds": 0.0012000220594927669,
+      "expected_lines": [
+        "chr1\t0\t2000000000\tA1\tchr1\t1999999999\t2000000000\tB1\t1"
+      ],
+      "actual_lines": [
+        "chr1\t0\t2000000000\tA1\tchr1\t1999999999\t2000000000\tB1\t1"
+      ],
+      "exact_match": true,
+      "native_pair_count": 1,
+      "native_pairwise_width_sum": 1,
+      "stdout_sha256": "f8c7855a39fd242df58460d15b5aac6646df2335ff65fd4a45d876fd45aed8ba"
+    },
+    {
+      "case": "signed_64bit_endpoint",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/installation/usr/bin/bedtools",
+        "intersect",
+        "-a",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_native_2026-10-27_421/run002/work/signed_64bit_endpoint.A.bed",
+        "-b",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_native_2026-10-27_421/run002/work/signed_64bit_endpoint.B.bed",
+        "-wo",
+        "-sorted"
+      ],
+      "returncode": 0,
+      "subprocess_wall_seconds": 0.0011949909385293722,
+      "expected_lines": [
+        "chr1\t0\t9223372036854775807\tA1\tchr1\t9223372036854775806\t9223372036854775807\tB1\t1"
+      ],
+      "actual_lines": [
+        "chr1\t0\t9223372036854775807\tA1\tchr1\t9223372036854775806\t9223372036854775807\tB1\t1"
+      ],
+      "exact_match": true,
+      "native_pair_count": 1,
+      "native_pairwise_width_sum": 1,
+      "stdout_sha256": "0821a029d27498b10afc1493fd59f51c34e1e6a9261fbb3e6ae9af21036885d7"
+    }
+  ],
+  "correction": "run001 expected default fraction options to omit a long-interval 1-bp overlap. That expectation was false; native defaults preserve it. run001 is unchanged."
+}

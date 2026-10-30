@@ -1,0 +1,157 @@
+{
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "a105_endpoint_signal_covariance_v1"
+    },
+    "basis": {
+      "enum": [
+        "joint_manual_reading_error",
+        "joint_physical_ordinate_estimates"
+      ]
+    },
+    "primitive_order": {
+      "const": [
+        "initial",
+        "baseline_at_addition",
+        "late"
+      ]
+    },
+    "primitive_owners": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "primitive_units": {
+      "const": [
+        "native_ordinate_pixel",
+        "native_ordinate_pixel",
+        "native_ordinate_pixel"
+      ]
+    },
+    "covariance": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 3,
+        "maxItems": 3
+      },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "variance_status": {
+      "enum": [
+        "known",
+        "estimated",
+        "unknown"
+      ]
+    },
+    "origin": {
+      "enum": [
+        "source_reported",
+        "source_derived",
+        "synthetic"
+      ]
+    },
+    "provenance_witnesses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "source_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "representation": {
+            "enum": [
+              "original",
+              "text"
+            ]
+          },
+          "start": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "end": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "quote": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "source_ref",
+          "representation",
+          "start",
+          "end",
+          "quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "native_coordinate_basis_witnesses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "source_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "representation": {
+            "enum": [
+              "original",
+              "text"
+            ]
+          },
+          "start": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "end": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "quote": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "source_ref",
+          "representation",
+          "start",
+          "end",
+          "quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "coordinate_units_status": {
+      "const": "already_in_declared_native_coordinate_units"
+    }
+  },
+  "required": [
+    "version",
+    "basis",
+    "primitive_order",
+    "primitive_owners",
+    "primitive_units",
+    "covariance",
+    "variance_status",
+    "origin",
+    "provenance_witnesses",
+    "native_coordinate_basis_witnesses",
+    "coordinate_units_status"
+  ],
+  "additionalProperties": false
+}

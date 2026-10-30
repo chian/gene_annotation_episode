@@ -1,0 +1,2400 @@
+{
+  "operation": "literature.rate.observations.populate",
+  "operation_schema": {
+    "type": "object",
+    "anyOf": [
+      {
+        "type": "object",
+        "properties": {
+          "source_ref": {
+            "type": "string",
+            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+          },
+          "source_kind": {
+            "enum": [
+              "primary_source",
+              "retained_extraction",
+              "synthetic_fixture"
+            ]
+          },
+          "worksheet": {
+            "type": "string",
+            "minLength": 1
+          },
+          "panel": {
+            "type": "object",
+            "properties": {
+              "cell": {
+                "type": "string",
+                "pattern": "^[A-Z]+[1-9][0-9]*$"
+              },
+              "expected_text": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "cell",
+              "expected_text"
+            ],
+            "additionalProperties": false
+          },
+          "subject": {
+            "type": "object",
+            "properties": {
+              "cell": {
+                "type": "string",
+                "pattern": "^[A-Z]+[1-9][0-9]*$"
+              },
+              "expected_text": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "cell",
+              "expected_text"
+            ],
+            "additionalProperties": false
+          },
+          "native_unit": {
+            "type": "object",
+            "properties": {
+              "cell": {
+                "type": "string",
+                "pattern": "^[A-Z]+[1-9][0-9]*$"
+              },
+              "expected_text": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "cell",
+              "expected_text"
+            ],
+            "additionalProperties": false
+          },
+          "groups": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "object",
+                  "properties": {
+                    "cell": {
+                      "type": "string",
+                      "pattern": "^[A-Z]+[1-9][0-9]*$"
+                    },
+                    "expected_text": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "cell",
+                    "expected_text"
+                  ],
+                  "additionalProperties": false
+                },
+                "observations": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "label": {
+                        "type": "object",
+                        "properties": {
+                          "cell": {
+                            "type": "string",
+                            "pattern": "^[A-Z]+[1-9][0-9]*$"
+                          },
+                          "expected_text": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "cell",
+                          "expected_text"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "value_cell": {
+                        "type": "string",
+                        "pattern": "^[A-Z]+[1-9][0-9]*$"
+                      }
+                    },
+                    "required": [
+                      "label",
+                      "value_cell"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "label",
+                "observations"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "reference_group": {
+            "type": "string",
+            "minLength": 1
+          },
+          "test_group": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "source_ref",
+          "source_kind",
+          "worksheet",
+          "panel",
+          "subject",
+          "native_unit",
+          "groups",
+          "reference_group",
+          "test_group"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "version": {
+            "const": "a105_reported_curve_population_v1"
+          },
+          "grid": {
+            "type": "object",
+            "properties": {
+              "version": {
+                "const": "a105_reported_rate_grid_v1"
+              },
+              "source_ref": {
+                "type": "string",
+                "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+              },
+              "source_kind": {
+                "enum": [
+                  "primary_source",
+                  "retained_extraction",
+                  "synthetic_fixture"
+                ]
+              },
+              "worksheet": {
+                "type": "string",
+                "minLength": 1
+              },
+              "panel": {
+                "type": "object",
+                "properties": {
+                  "cell": {
+                    "type": "string",
+                    "pattern": "^[A-Z]+[1-9][0-9]*$"
+                  },
+                  "expected_text": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "cell",
+                  "expected_text"
+                ],
+                "additionalProperties": false
+              },
+              "subject": {
+                "type": "object",
+                "properties": {
+                  "cell": {
+                    "type": "string",
+                    "pattern": "^[A-Z]+[1-9][0-9]*$"
+                  },
+                  "expected_text": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "cell",
+                  "expected_text"
+                ],
+                "additionalProperties": false
+              },
+              "native_rate_label": {
+                "type": "object",
+                "properties": {
+                  "cell": {
+                    "type": "string",
+                    "pattern": "^[A-Z]+[1-9][0-9]*$"
+                  },
+                  "expected_text": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "cell",
+                  "expected_text"
+                ],
+                "additionalProperties": false
+              },
+              "curves": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "header": {
+                      "type": "object",
+                      "properties": {
+                        "cell": {
+                          "type": "string",
+                          "pattern": "^[A-Z]+[1-9][0-9]*$"
+                        },
+                        "expected_text": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "cell",
+                        "expected_text"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "header"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "points": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "concentration_cell": {
+                      "type": "string",
+                      "pattern": "^[A-Z]+[1-9][0-9]*$"
+                    },
+                    "rate_cells": {
+                      "type": "array",
+                      "minItems": 1,
+                      "items": {
+                        "type": "string",
+                        "pattern": "^[A-Z]+[1-9][0-9]*$"
+                      }
+                    }
+                  },
+                  "required": [
+                    "concentration_cell",
+                    "rate_cells"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "rate_unit": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "umol/min",
+                      "nmol/min",
+                      "mmol/min"
+                    ]
+                  },
+                  "witness": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "kind": {
+                            "const": "xlsx_label"
+                          },
+                          "cell": {
+                            "type": "string",
+                            "pattern": "^[A-Z]+[1-9][0-9]*$"
+                          },
+                          "expected_text": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "kind",
+                          "cell",
+                          "expected_text"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "kind": {
+                            "const": "context_span"
+                          },
+                          "source_ref": {
+                            "type": "string",
+                            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                          },
+                          "artifact_ref": {
+                            "type": "string",
+                            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                            "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                          },
+                          "start": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "end": {
+                            "type": "integer",
+                            "minimum": 1
+                          },
+                          "quote": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "kind",
+                          "source_ref",
+                          "artifact_ref",
+                          "start",
+                          "end",
+                          "quote"
+                        ],
+                        "additionalProperties": false
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "code",
+                  "witness"
+                ],
+                "additionalProperties": false
+              },
+              "concentration_unit": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "enum": [
+                      "M",
+                      "mM",
+                      "uM",
+                      "nM",
+                      "unknown"
+                    ]
+                  },
+                  "witness": {
+                    "anyOf": [
+                      {
+                        "anyOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "kind": {
+                                "const": "xlsx_label"
+                              },
+                              "cell": {
+                                "type": "string",
+                                "pattern": "^[A-Z]+[1-9][0-9]*$"
+                              },
+                              "expected_text": {
+                                "type": "string",
+                                "minLength": 1
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "cell",
+                              "expected_text"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "kind": {
+                                "const": "context_span"
+                              },
+                              "source_ref": {
+                                "type": "string",
+                                "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                              },
+                              "artifact_ref": {
+                                "type": "string",
+                                "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                                "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                              },
+                              "start": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "end": {
+                                "type": "integer",
+                                "minimum": 1
+                              },
+                              "quote": {
+                                "type": "string",
+                                "minLength": 1
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "source_ref",
+                              "artifact_ref",
+                              "start",
+                              "end",
+                              "quote"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "code",
+                  "witness"
+                ],
+                "additionalProperties": false
+              },
+              "endpoint_relationship": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "reported_convention_only",
+                      "supported",
+                      "unknown",
+                      "conflicting"
+                    ]
+                  },
+                  "witnesses": {
+                    "type": "array",
+                    "minItems": 0,
+                    "items": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "xlsx_label"
+                            },
+                            "cell": {
+                              "type": "string",
+                              "pattern": "^[A-Z]+[1-9][0-9]*$"
+                            },
+                            "expected_text": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "cell",
+                            "expected_text"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "context_span"
+                            },
+                            "source_ref": {
+                              "type": "string",
+                              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                              "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                            },
+                            "artifact_ref": {
+                              "type": "string",
+                              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                              "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                            },
+                            "start": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "end": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "source_ref",
+                            "artifact_ref",
+                            "start",
+                            "end",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "status",
+                  "witnesses"
+                ],
+                "additionalProperties": false
+              },
+              "curve_sampling": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "supported",
+                      "stipulated_sensitivity",
+                      "unknown",
+                      "conflicting"
+                    ]
+                  },
+                  "assumption": {
+                    "enum": [
+                      "none",
+                      "iid_reported_curve_vectors"
+                    ]
+                  },
+                  "source_claim": {
+                    "enum": [
+                      "iid_reporting_vectors_supported",
+                      "not_established",
+                      "unknown",
+                      "conflicting"
+                    ]
+                  },
+                  "witnesses": {
+                    "type": "array",
+                    "minItems": 0,
+                    "items": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "xlsx_label"
+                            },
+                            "cell": {
+                              "type": "string",
+                              "pattern": "^[A-Z]+[1-9][0-9]*$"
+                            },
+                            "expected_text": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "cell",
+                            "expected_text"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "const": "context_span"
+                            },
+                            "source_ref": {
+                              "type": "string",
+                              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                              "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                            },
+                            "artifact_ref": {
+                              "type": "string",
+                              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                              "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                            },
+                            "start": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "end": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "source_ref",
+                            "artifact_ref",
+                            "start",
+                            "end",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "status",
+                  "assumption",
+                  "source_claim",
+                  "witnesses"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "version",
+              "source_ref",
+              "source_kind",
+              "worksheet",
+              "panel",
+              "subject",
+              "native_rate_label",
+              "curves",
+              "points",
+              "rate_unit",
+              "concentration_unit",
+              "endpoint_relationship",
+              "curve_sampling"
+            ],
+            "additionalProperties": false
+          },
+          "calculation": {
+            "type": "object",
+            "properties": {
+              "version": {
+                "const": "a105_reported_curve_precision_request_v1"
+              },
+              "fit_model": {
+                "enum": [
+                  "none",
+                  "unweighted_positive_km_mm"
+                ]
+              },
+              "requested_components": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "scope": {
+                          "const": "point"
+                        },
+                        "concentration_cell": {
+                          "type": "string",
+                          "pattern": "^[A-Z]+[1-9][0-9]*$"
+                        },
+                        "component": {
+                          "enum": [
+                            "mean",
+                            "sample_variance",
+                            "sample_sd",
+                            "cv",
+                            "available_point_mean",
+                            "available_point_variance",
+                            "available_point_sd",
+                            "available_point_cv",
+                            "selected_entry_count",
+                            "available_point_count"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "scope",
+                        "concentration_cell",
+                        "component"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "scope": {
+                          "const": "curve"
+                        },
+                        "curve_header_cell": {
+                          "type": "string",
+                          "pattern": "^[A-Z]+[1-9][0-9]*$"
+                        },
+                        "component": {
+                          "enum": [
+                            "Vmax",
+                            "Km",
+                            "SSE",
+                            "stationarity_error",
+                            "selected_point_count",
+                            "available_point_count"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "scope",
+                        "curve_header_cell",
+                        "component"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "scope": {
+                          "const": "estimator"
+                        },
+                        "estimator": {
+                          "enum": [
+                            "mean_of_reported_curve_fits",
+                            "fit_of_point_means"
+                          ]
+                        },
+                        "component": {
+                          "enum": [
+                            "Vmax",
+                            "Km",
+                            "native_efficiency",
+                            "SSE",
+                            "log_efficiency_variance",
+                            "log_efficiency_standard_uncertainty",
+                            "diagonal_only_log_efficiency_variance"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "scope",
+                        "estimator",
+                        "component"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "scope": {
+                          "const": "reported_curve_covariance"
+                        },
+                        "left_concentration_cell": {
+                          "type": "string",
+                          "pattern": "^[A-Z]+[1-9][0-9]*$"
+                        },
+                        "right_concentration_cell": {
+                          "type": "string",
+                          "pattern": "^[A-Z]+[1-9][0-9]*$"
+                        },
+                        "component": {
+                          "enum": [
+                            "sample_covariance",
+                            "conditional_mean_curve_covariance"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "scope",
+                        "left_concentration_cell",
+                        "right_concentration_cell",
+                        "component"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "scope": {
+                          "const": "parameter_covariance"
+                        },
+                        "estimator": {
+                          "enum": [
+                            "reported_curve_fit_distribution",
+                            "mean_of_reported_curve_fits",
+                            "fit_of_point_means"
+                          ]
+                        },
+                        "left_parameter": {
+                          "enum": [
+                            "Vmax",
+                            "Km"
+                          ]
+                        },
+                        "right_parameter": {
+                          "enum": [
+                            "Vmax",
+                            "Km"
+                          ]
+                        },
+                        "component": {
+                          "enum": [
+                            "covariance",
+                            "correlation"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "scope",
+                        "estimator",
+                        "left_parameter",
+                        "right_parameter",
+                        "component"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "scope": {
+                          "const": "sensitivity"
+                        },
+                        "estimator": {
+                          "const": "fit_of_point_means"
+                        },
+                        "parameter": {
+                          "enum": [
+                            "Vmax",
+                            "Km"
+                          ]
+                        },
+                        "concentration_cell": {
+                          "type": "string",
+                          "pattern": "^[A-Z]+[1-9][0-9]*$"
+                        },
+                        "component": {
+                          "const": "d_parameter_d_point_mean"
+                        }
+                      },
+                      "required": [
+                        "scope",
+                        "estimator",
+                        "parameter",
+                        "concentration_cell",
+                        "component"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "scope": {
+                          "const": "variance_term"
+                        },
+                        "estimator": {
+                          "enum": [
+                            "mean_of_reported_curve_fits",
+                            "fit_of_point_means"
+                          ]
+                        },
+                        "left_parameter": {
+                          "enum": [
+                            "Vmax",
+                            "Km"
+                          ]
+                        },
+                        "right_parameter": {
+                          "enum": [
+                            "Vmax",
+                            "Km"
+                          ]
+                        },
+                        "component": {
+                          "const": "signed_log_efficiency_variance_term"
+                        }
+                      },
+                      "required": [
+                        "scope",
+                        "estimator",
+                        "left_parameter",
+                        "right_parameter",
+                        "component"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "scope": {
+                          "const": "grid"
+                        },
+                        "component": {
+                          "enum": [
+                            "all_reported_residual_SS",
+                            "within_concentration_reported_entry_SS",
+                            "mean_curve_fit_residual_SS_times_curve_count",
+                            "reported_curve_count",
+                            "complete_curve_count"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "scope",
+                        "component"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ]
+                }
+              }
+            },
+            "required": [
+              "version",
+              "fit_model",
+              "requested_components"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "version",
+          "grid",
+          "calculation"
+        ],
+        "additionalProperties": false
+      }
+    ]
+  },
+  "assignment_selector_field": "requested_rate_grid_components",
+  "assignment_selector_schema": {
+    "type": "array",
+    "uniqueItems": true,
+    "items": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "scope": {
+              "const": "point"
+            },
+            "concentration_cell": {
+              "type": "string",
+              "pattern": "^[A-Z]+[1-9][0-9]*$"
+            },
+            "component": {
+              "enum": [
+                "mean",
+                "sample_variance",
+                "sample_sd",
+                "cv",
+                "available_point_mean",
+                "available_point_variance",
+                "available_point_sd",
+                "available_point_cv",
+                "selected_entry_count",
+                "available_point_count"
+              ]
+            }
+          },
+          "required": [
+            "scope",
+            "concentration_cell",
+            "component"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "scope": {
+              "const": "curve"
+            },
+            "curve_header_cell": {
+              "type": "string",
+              "pattern": "^[A-Z]+[1-9][0-9]*$"
+            },
+            "component": {
+              "enum": [
+                "Vmax",
+                "Km",
+                "SSE",
+                "stationarity_error",
+                "selected_point_count",
+                "available_point_count"
+              ]
+            }
+          },
+          "required": [
+            "scope",
+            "curve_header_cell",
+            "component"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "scope": {
+              "const": "estimator"
+            },
+            "estimator": {
+              "enum": [
+                "mean_of_reported_curve_fits",
+                "fit_of_point_means"
+              ]
+            },
+            "component": {
+              "enum": [
+                "Vmax",
+                "Km",
+                "native_efficiency",
+                "SSE",
+                "log_efficiency_variance",
+                "log_efficiency_standard_uncertainty",
+                "diagonal_only_log_efficiency_variance"
+              ]
+            }
+          },
+          "required": [
+            "scope",
+            "estimator",
+            "component"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "scope": {
+              "const": "reported_curve_covariance"
+            },
+            "left_concentration_cell": {
+              "type": "string",
+              "pattern": "^[A-Z]+[1-9][0-9]*$"
+            },
+            "right_concentration_cell": {
+              "type": "string",
+              "pattern": "^[A-Z]+[1-9][0-9]*$"
+            },
+            "component": {
+              "enum": [
+                "sample_covariance",
+                "conditional_mean_curve_covariance"
+              ]
+            }
+          },
+          "required": [
+            "scope",
+            "left_concentration_cell",
+            "right_concentration_cell",
+            "component"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "scope": {
+              "const": "parameter_covariance"
+            },
+            "estimator": {
+              "enum": [
+                "reported_curve_fit_distribution",
+                "mean_of_reported_curve_fits",
+                "fit_of_point_means"
+              ]
+            },
+            "left_parameter": {
+              "enum": [
+                "Vmax",
+                "Km"
+              ]
+            },
+            "right_parameter": {
+              "enum": [
+                "Vmax",
+                "Km"
+              ]
+            },
+            "component": {
+              "enum": [
+                "covariance",
+                "correlation"
+              ]
+            }
+          },
+          "required": [
+            "scope",
+            "estimator",
+            "left_parameter",
+            "right_parameter",
+            "component"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "scope": {
+              "const": "sensitivity"
+            },
+            "estimator": {
+              "const": "fit_of_point_means"
+            },
+            "parameter": {
+              "enum": [
+                "Vmax",
+                "Km"
+              ]
+            },
+            "concentration_cell": {
+              "type": "string",
+              "pattern": "^[A-Z]+[1-9][0-9]*$"
+            },
+            "component": {
+              "const": "d_parameter_d_point_mean"
+            }
+          },
+          "required": [
+            "scope",
+            "estimator",
+            "parameter",
+            "concentration_cell",
+            "component"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "scope": {
+              "const": "variance_term"
+            },
+            "estimator": {
+              "enum": [
+                "mean_of_reported_curve_fits",
+                "fit_of_point_means"
+              ]
+            },
+            "left_parameter": {
+              "enum": [
+                "Vmax",
+                "Km"
+              ]
+            },
+            "right_parameter": {
+              "enum": [
+                "Vmax",
+                "Km"
+              ]
+            },
+            "component": {
+              "const": "signed_log_efficiency_variance_term"
+            }
+          },
+          "required": [
+            "scope",
+            "estimator",
+            "left_parameter",
+            "right_parameter",
+            "component"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "scope": {
+              "const": "grid"
+            },
+            "component": {
+              "enum": [
+                "all_reported_residual_SS",
+                "within_concentration_reported_entry_SS",
+                "mean_curve_fit_residual_SS_times_curve_count",
+                "reported_curve_count",
+                "complete_curve_count"
+              ]
+            }
+          },
+          "required": [
+            "scope",
+            "component"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "return_schema": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "sheet_ref": {
+          "type": "string",
+          "format": "reference",
+          "x-reference-namespace": "source"
+        },
+        "evidence_source_ref": {
+          "type": "string",
+          "format": "reference",
+          "x-reference-namespace": "source"
+        },
+        "record_version": {
+          "const": "literature_reported_rate_observation_record_v2"
+        },
+        "scientific_sheet_version": {
+          "const": "a105_reported_curve_precision_v1"
+        },
+        "evaluation_scope": {
+          "const": "source_reported_curve_precision"
+        },
+        "component": {
+          "type": "string",
+          "minLength": 1
+        },
+        "selector": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "scope": {
+                  "const": "point"
+                },
+                "concentration_cell": {
+                  "type": "string",
+                  "pattern": "^[A-Z]+[1-9][0-9]*$"
+                },
+                "component": {
+                  "enum": [
+                    "mean",
+                    "sample_variance",
+                    "sample_sd",
+                    "cv",
+                    "available_point_mean",
+                    "available_point_variance",
+                    "available_point_sd",
+                    "available_point_cv",
+                    "selected_entry_count",
+                    "available_point_count"
+                  ]
+                }
+              },
+              "required": [
+                "scope",
+                "concentration_cell",
+                "component"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "scope": {
+                  "const": "curve"
+                },
+                "curve_header_cell": {
+                  "type": "string",
+                  "pattern": "^[A-Z]+[1-9][0-9]*$"
+                },
+                "component": {
+                  "enum": [
+                    "Vmax",
+                    "Km",
+                    "SSE",
+                    "stationarity_error",
+                    "selected_point_count",
+                    "available_point_count"
+                  ]
+                }
+              },
+              "required": [
+                "scope",
+                "curve_header_cell",
+                "component"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "scope": {
+                  "const": "estimator"
+                },
+                "estimator": {
+                  "enum": [
+                    "mean_of_reported_curve_fits",
+                    "fit_of_point_means"
+                  ]
+                },
+                "component": {
+                  "enum": [
+                    "Vmax",
+                    "Km",
+                    "native_efficiency",
+                    "SSE",
+                    "log_efficiency_variance",
+                    "log_efficiency_standard_uncertainty",
+                    "diagonal_only_log_efficiency_variance"
+                  ]
+                }
+              },
+              "required": [
+                "scope",
+                "estimator",
+                "component"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "scope": {
+                  "const": "reported_curve_covariance"
+                },
+                "left_concentration_cell": {
+                  "type": "string",
+                  "pattern": "^[A-Z]+[1-9][0-9]*$"
+                },
+                "right_concentration_cell": {
+                  "type": "string",
+                  "pattern": "^[A-Z]+[1-9][0-9]*$"
+                },
+                "component": {
+                  "enum": [
+                    "sample_covariance",
+                    "conditional_mean_curve_covariance"
+                  ]
+                }
+              },
+              "required": [
+                "scope",
+                "left_concentration_cell",
+                "right_concentration_cell",
+                "component"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "scope": {
+                  "const": "parameter_covariance"
+                },
+                "estimator": {
+                  "enum": [
+                    "reported_curve_fit_distribution",
+                    "mean_of_reported_curve_fits",
+                    "fit_of_point_means"
+                  ]
+                },
+                "left_parameter": {
+                  "enum": [
+                    "Vmax",
+                    "Km"
+                  ]
+                },
+                "right_parameter": {
+                  "enum": [
+                    "Vmax",
+                    "Km"
+                  ]
+                },
+                "component": {
+                  "enum": [
+                    "covariance",
+                    "correlation"
+                  ]
+                }
+              },
+              "required": [
+                "scope",
+                "estimator",
+                "left_parameter",
+                "right_parameter",
+                "component"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "scope": {
+                  "const": "sensitivity"
+                },
+                "estimator": {
+                  "const": "fit_of_point_means"
+                },
+                "parameter": {
+                  "enum": [
+                    "Vmax",
+                    "Km"
+                  ]
+                },
+                "concentration_cell": {
+                  "type": "string",
+                  "pattern": "^[A-Z]+[1-9][0-9]*$"
+                },
+                "component": {
+                  "const": "d_parameter_d_point_mean"
+                }
+              },
+              "required": [
+                "scope",
+                "estimator",
+                "parameter",
+                "concentration_cell",
+                "component"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "scope": {
+                  "const": "variance_term"
+                },
+                "estimator": {
+                  "enum": [
+                    "mean_of_reported_curve_fits",
+                    "fit_of_point_means"
+                  ]
+                },
+                "left_parameter": {
+                  "enum": [
+                    "Vmax",
+                    "Km"
+                  ]
+                },
+                "right_parameter": {
+                  "enum": [
+                    "Vmax",
+                    "Km"
+                  ]
+                },
+                "component": {
+                  "const": "signed_log_efficiency_variance_term"
+                }
+              },
+              "required": [
+                "scope",
+                "estimator",
+                "left_parameter",
+                "right_parameter",
+                "component"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "scope": {
+                  "const": "grid"
+                },
+                "component": {
+                  "enum": [
+                    "all_reported_residual_SS",
+                    "within_concentration_reported_entry_SS",
+                    "mean_curve_fit_residual_SS_times_curve_count",
+                    "reported_curve_count",
+                    "complete_curve_count"
+                  ]
+                }
+              },
+              "required": [
+                "scope",
+                "component"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "cell_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "value": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "exact_value": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "numerator": {
+                  "type": "string",
+                  "pattern": "^-?[0-9]+$"
+                },
+                "denominator": {
+                  "type": "string",
+                  "pattern": "^[1-9][0-9]*$"
+                }
+              },
+              "required": [
+                "numerator",
+                "denominator"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "conditional_value": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "conditional_exact_value": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "numerator": {
+                  "type": "string",
+                  "pattern": "^-?[0-9]+$"
+                },
+                "denominator": {
+                  "type": "string",
+                  "pattern": "^[1-9][0-9]*$"
+                }
+              },
+              "required": [
+                "numerator",
+                "denominator"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "formula_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "meaning_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "numeric_basis": {
+          "enum": [
+            "source_decimal_arithmetic",
+            "canonical_numeric_fit_operands_not_exact_fits"
+          ]
+        },
+        "status": {
+          "enum": [
+            "populated",
+            "conditional_scenario",
+            "unavailable"
+          ]
+        },
+        "source_missing_reasons": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "enum": [
+              "incomplete_selected_roster",
+              "no_point_observations",
+              "insufficient_entry_count",
+              "nonpositive_mean",
+              "numerical_model_range",
+              "model_not_selected",
+              "concentration_unit_unknown",
+              "positive_concentrations_required",
+              "insufficient_distinct_concentrations",
+              "fit_nonpositive_response",
+              "fit_domain_exhausted",
+              "fit_solution_unresolved",
+              "fit_nonidentifiable",
+              "fit_solver_failed",
+              "sampling_model_unknown",
+              "sampling_model_conflicting",
+              "not_applicable_to_estimator",
+              "zero_covariance_variance",
+              "source_measurement_unavailable",
+              "nondetection_without_point",
+              "censored_measurement",
+              "formula_measurement_unsupported",
+              "numeric_cell_type_required",
+              "source_cell_error",
+              "source_error_cell",
+              "invalid_numeric_lexeme"
+            ]
+          }
+        },
+        "relationship_reasons": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "enum": [
+              "incomplete_selected_roster",
+              "no_point_observations",
+              "insufficient_entry_count",
+              "nonpositive_mean",
+              "numerical_model_range",
+              "model_not_selected",
+              "concentration_unit_unknown",
+              "positive_concentrations_required",
+              "insufficient_distinct_concentrations",
+              "fit_nonpositive_response",
+              "fit_domain_exhausted",
+              "fit_solution_unresolved",
+              "fit_nonidentifiable",
+              "fit_solver_failed",
+              "sampling_model_unknown",
+              "sampling_model_conflicting",
+              "not_applicable_to_estimator",
+              "zero_covariance_variance",
+              "source_measurement_unavailable",
+              "nondetection_without_point",
+              "censored_measurement",
+              "formula_measurement_unsupported",
+              "numeric_cell_type_required",
+              "source_cell_error",
+              "source_error_cell",
+              "invalid_numeric_lexeme"
+            ]
+          }
+        },
+        "implementation_reasons": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "enum": [
+              "incomplete_selected_roster",
+              "no_point_observations",
+              "insufficient_entry_count",
+              "nonpositive_mean",
+              "numerical_model_range",
+              "model_not_selected",
+              "concentration_unit_unknown",
+              "positive_concentrations_required",
+              "insufficient_distinct_concentrations",
+              "fit_nonpositive_response",
+              "fit_domain_exhausted",
+              "fit_solution_unresolved",
+              "fit_nonidentifiable",
+              "fit_solver_failed",
+              "sampling_model_unknown",
+              "sampling_model_conflicting",
+              "not_applicable_to_estimator",
+              "zero_covariance_variance",
+              "source_measurement_unavailable",
+              "nondetection_without_point",
+              "censored_measurement",
+              "formula_measurement_unsupported",
+              "numeric_cell_type_required",
+              "source_cell_error",
+              "source_error_cell",
+              "invalid_numeric_lexeme"
+            ]
+          }
+        },
+        "input_measurement_keys": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "input_origins": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "enum": [
+              "reported",
+              "synthetic"
+            ]
+          }
+        },
+        "estimator_key": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "model_keys": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "contribution_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "variance_status": {
+          "enum": [
+            "not_applicable",
+            "estimated",
+            "unknown"
+          ]
+        },
+        "count_basis": {
+          "const": "distinct_reported_cells_and_columns_not_physical_preparations"
+        },
+        "scope": {
+          "enum": [
+            "full_selected_roster",
+            "available_points",
+            "not_applicable"
+          ]
+        },
+        "origin": {
+          "const": "derived"
+        },
+        "source_context": {
+          "type": "object",
+          "properties": {
+            "subject": {
+              "type": "object",
+              "properties": {
+                "display_text": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "status": {
+                  "enum": [
+                    "exact_source_label",
+                    "unrequested_numbers_withheld",
+                    "numerical_scope_unresolved"
+                  ]
+                },
+                "implementation_reason": {
+                  "enum": [
+                    null,
+                    "unrequested_numerical_scope_unresolved"
+                  ]
+                },
+                "location": {
+                  "type": "object",
+                  "properties": {
+                    "source_ref": {
+                      "type": "string",
+                      "format": "reference",
+                      "x-reference-namespace": "source"
+                    },
+                    "artifact_ref": {
+                      "type": "string",
+                      "format": "reference",
+                      "x-reference-namespace": "artifact"
+                    },
+                    "member": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "cell": {
+                      "type": "string",
+                      "pattern": "^[A-Z]+[1-9][0-9]*$"
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "artifact_ref",
+                    "member",
+                    "cell"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "display_text",
+                "status",
+                "implementation_reason",
+                "location"
+              ],
+              "additionalProperties": false
+            },
+            "panel": {
+              "type": "object",
+              "properties": {
+                "display_text": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "status": {
+                  "enum": [
+                    "exact_source_label",
+                    "unrequested_numbers_withheld",
+                    "numerical_scope_unresolved"
+                  ]
+                },
+                "implementation_reason": {
+                  "enum": [
+                    null,
+                    "unrequested_numerical_scope_unresolved"
+                  ]
+                },
+                "location": {
+                  "type": "object",
+                  "properties": {
+                    "source_ref": {
+                      "type": "string",
+                      "format": "reference",
+                      "x-reference-namespace": "source"
+                    },
+                    "artifact_ref": {
+                      "type": "string",
+                      "format": "reference",
+                      "x-reference-namespace": "artifact"
+                    },
+                    "member": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "cell": {
+                      "type": "string",
+                      "pattern": "^[A-Z]+[1-9][0-9]*$"
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "artifact_ref",
+                    "member",
+                    "cell"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "display_text",
+                "status",
+                "implementation_reason",
+                "location"
+              ],
+              "additionalProperties": false
+            },
+            "native_endpoint": {
+              "type": "object",
+              "properties": {
+                "display_text": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "status": {
+                  "enum": [
+                    "exact_source_label",
+                    "unrequested_numbers_withheld",
+                    "numerical_scope_unresolved"
+                  ]
+                },
+                "implementation_reason": {
+                  "enum": [
+                    null,
+                    "unrequested_numerical_scope_unresolved"
+                  ]
+                },
+                "location": {
+                  "type": "object",
+                  "properties": {
+                    "source_ref": {
+                      "type": "string",
+                      "format": "reference",
+                      "x-reference-namespace": "source"
+                    },
+                    "artifact_ref": {
+                      "type": "string",
+                      "format": "reference",
+                      "x-reference-namespace": "artifact"
+                    },
+                    "member": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "cell": {
+                      "type": "string",
+                      "pattern": "^[A-Z]+[1-9][0-9]*$"
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "artifact_ref",
+                    "member",
+                    "cell"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "display_text",
+                "status",
+                "implementation_reason",
+                "location"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "subject",
+            "panel",
+            "native_endpoint"
+          ],
+          "additionalProperties": false
+        },
+        "coordinate_context": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "role": {
+                "enum": [
+                  "point",
+                  "left",
+                  "right"
+                ]
+              },
+              "location": {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "format": "reference",
+                    "x-reference-namespace": "source"
+                  },
+                  "artifact_ref": {
+                    "type": "string",
+                    "format": "reference",
+                    "x-reference-namespace": "artifact"
+                  },
+                  "member": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "cell": {
+                    "type": "string",
+                    "pattern": "^[A-Z]+[1-9][0-9]*$"
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "artifact_ref",
+                  "member",
+                  "cell"
+                ],
+                "additionalProperties": false
+              },
+              "measurement_key": {
+                "type": "string",
+                "minLength": 1
+              },
+              "unit": {
+                "enum": [
+                  "M",
+                  "mM",
+                  "uM",
+                  "nM",
+                  "unknown"
+                ]
+              },
+              "status": {
+                "enum": [
+                  "observed",
+                  "missing",
+                  "not_detected",
+                  "censored",
+                  "unsupported_cell"
+                ]
+              },
+              "exact_value": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "numerator": {
+                        "type": "string",
+                        "pattern": "^-?[0-9]+$"
+                      },
+                      "denominator": {
+                        "type": "string",
+                        "pattern": "^[1-9][0-9]*$"
+                      }
+                    },
+                    "required": [
+                      "numerator",
+                      "denominator"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "exact_limit": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "numerator": {
+                        "type": "string",
+                        "pattern": "^-?[0-9]+$"
+                      },
+                      "denominator": {
+                        "type": "string",
+                        "pattern": "^[1-9][0-9]*$"
+                      }
+                    },
+                    "required": [
+                      "numerator",
+                      "denominator"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "bound": {
+                "enum": [
+                  "none",
+                  "<",
+                  ">",
+                  "<=",
+                  ">=",
+                  "\u2264",
+                  "\u2265"
+                ]
+              },
+              "origin": {
+                "enum": [
+                  "reported",
+                  "synthetic"
+                ]
+              }
+            },
+            "required": [
+              "role",
+              "location",
+              "measurement_key",
+              "unit",
+              "status",
+              "exact_value",
+              "exact_limit",
+              "bound",
+              "origin"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "sampling": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": [
+                "supported",
+                "stipulated_sensitivity",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "assumption": {
+              "enum": [
+                "none",
+                "iid_reported_curve_vectors"
+              ]
+            },
+            "source_claim": {
+              "enum": [
+                "iid_reporting_vectors_supported",
+                "not_established",
+                "unknown",
+                "conflicting"
+              ]
+            }
+          },
+          "required": [
+            "status",
+            "assumption",
+            "source_claim"
+          ],
+          "additionalProperties": false
+        },
+        "reporting_counts": {
+          "type": "object",
+          "properties": {
+            "selected_reporting_entries": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "available_numeric_entries": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "selected_concentrations": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "reporting_curves": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            }
+          },
+          "required": [
+            "selected_reporting_entries",
+            "available_numeric_entries",
+            "selected_concentrations",
+            "reporting_curves"
+          ],
+          "additionalProperties": false
+        },
+        "model_meaning": {
+          "type": "object",
+          "properties": {
+            "fit_model": {
+              "enum": [
+                "none",
+                "unweighted_positive_km_mm"
+              ]
+            },
+            "estimator": {
+              "enum": [
+                "not_applicable",
+                "per_reported_curve_fit",
+                "mean_of_reported_curve_fits",
+                "fit_of_point_means",
+                "reported_curve_fit_distribution"
+              ]
+            },
+            "weighting": {
+              "enum": [
+                "not_applicable",
+                "unweighted"
+              ]
+            },
+            "solver_scope": {
+              "const": "finite_numerical_domain_not_global_certification"
+            }
+          },
+          "required": [
+            "fit_model",
+            "estimator",
+            "weighting",
+            "solver_scope"
+          ],
+          "additionalProperties": false
+        },
+        "scientific_scope": {
+          "type": "object",
+          "properties": {
+            "concentration_basis": {
+              "const": "fixed_reported_concentrations_when_fitted"
+            },
+            "precision_basis": {
+              "enum": [
+                "not_applicable",
+                "descriptive_reported_entries",
+                "descriptive_fitted_curve_distribution",
+                "conditional_iid_reporting_curve_vectors"
+              ]
+            },
+            "physical_preparation_count": {
+              "type": "null"
+            },
+            "published_estimate_covariance": {
+              "type": "null"
+            },
+            "excluded_uncertainty": {
+              "const": "blank_recovery_active_amount_and_concentration_uncertainty_not_propagated"
+            },
+            "endpoint_meaning": {
+              "const": "reporter_to_product_meaning_not_resolved_by_precision"
+            },
+            "endpoint_relationship": {
+              "enum": [
+                "reported_convention_only",
+                "supported",
+                "unknown",
+                "conflicting"
+              ]
+            }
+          },
+          "required": [
+            "concentration_basis",
+            "precision_basis",
+            "physical_preparation_count",
+            "published_estimate_covariance",
+            "excluded_uncertainty",
+            "endpoint_meaning",
+            "endpoint_relationship"
+          ],
+          "additionalProperties": false
+        },
+        "host_custody": {
+          "type": "object",
+          "properties": {
+            "context_locations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "format": "reference",
+                    "x-reference-namespace": "source"
+                  },
+                  "artifact_ref": {
+                    "type": "string",
+                    "format": "reference",
+                    "x-reference-namespace": "artifact"
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "artifact_ref",
+                  "start",
+                  "end"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "selected_cell_locations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "format": "reference",
+                    "x-reference-namespace": "source"
+                  },
+                  "artifact_ref": {
+                    "type": "string",
+                    "format": "reference",
+                    "x-reference-namespace": "artifact"
+                  },
+                  "member": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "cell": {
+                    "type": "string",
+                    "pattern": "^[A-Z]+[1-9][0-9]*$"
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "artifact_ref",
+                  "member",
+                  "cell"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "context_locations",
+            "selected_cell_locations"
+          ],
+          "additionalProperties": false
+        },
+        "source_kind": {
+          "enum": [
+            "primary_source",
+            "retained_extraction",
+            "synthetic_fixture"
+          ]
+        }
+      },
+      "required": [
+        "sheet_ref",
+        "evidence_source_ref",
+        "record_version",
+        "scientific_sheet_version",
+        "evaluation_scope",
+        "component",
+        "selector",
+        "cell_key",
+        "value",
+        "exact_value",
+        "conditional_value",
+        "conditional_exact_value",
+        "unit",
+        "formula_id",
+        "meaning_id",
+        "numeric_basis",
+        "status",
+        "source_missing_reasons",
+        "relationship_reasons",
+        "implementation_reasons",
+        "input_measurement_keys",
+        "input_origins",
+        "estimator_key",
+        "model_keys",
+        "contribution_key",
+        "variance_status",
+        "count_basis",
+        "scope",
+        "origin",
+        "source_context",
+        "coordinate_context",
+        "sampling",
+        "reporting_counts",
+        "model_meaning",
+        "scientific_scope",
+        "host_custody",
+        "source_kind"
+      ],
+      "additionalProperties": false
+    },
+    "x-source": "literature_rate_grid_cells"
+  }
+}

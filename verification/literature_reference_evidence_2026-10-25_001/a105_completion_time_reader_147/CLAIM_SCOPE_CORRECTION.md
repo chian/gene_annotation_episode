@@ -1,0 +1,11 @@
+Additive clarification after the synthetic cross-family audit probe.
+
+The earlier handoff's exact-subset and operand-masking statements concern the requested calculated components and this sheet's own selected time operands. They must not be read as a promise that every other number is absent from a requested scientific definition.
+
+The parent explicitly requests literal scientific meanings in the registered completion-time return. Such a definition can legitimately contain numerical endpoint criteria, protocol conditions or chemical names. For example, the retained primary HFP endpoint is an equilibrium mixture reported as 39.7%/60.3%; heating at 90 °C for 2 min is a different protocol fact. These facts must not disappear merely because another component family can also use the same source positions as numerical operands. A compound name containing a number is also still a name.
+
+The synthetic `a105_partition_time_integration_audit_149/CROSS_FAMILY_MEANING_PROBE_001.json` correctly observes that a requested completion-time endpoint quotation contains the separately selected partition numbers 71.234567%/28.765433%. Its observation is preserved as a qualification of the presentation claim. It does not demonstrate that an unrequested calculated partition cell was returned, or establish a universal rule against numerical scientific context.
+
+Root accepted this scientific distinction and corrected the broader overstatement in conversation. No production mask, schema, saved source witness, typed row, receipt or replay behavior was changed in response to the probe. No universal numeric-privacy rule, later-state scan, retrospective return rewrite or new runtime instruction amendment was introduced. Exact source custody remains distinct from scientific interpretation: selecting a quotation alone does not prove that its proposed endpoint meaning is correct.
+
+The implemented guarantee is deliberately bounded: explicit component selection governs the numerical sheet cells; this family's own unrequested time operands are not automatically expanded by those cells; the parent's explicitly requested source meanings retain their necessary scientific context. No complete A105, W04, W05 or persistent-goal completion claim follows.

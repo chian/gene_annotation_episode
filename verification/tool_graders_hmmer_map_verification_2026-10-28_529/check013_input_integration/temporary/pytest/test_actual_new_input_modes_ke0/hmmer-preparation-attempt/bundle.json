@@ -1,0 +1,180 @@
+{
+  "artifacts": [
+    {
+      "format": "hmmer_stdout",
+      "relative_path": "outputs/stdout",
+      "role": "stdout",
+      "sha256": "d60e87561759754a1d6779e8285300899892b985f88bc19af35d1ba4de31ee28",
+      "size_bytes": 1020
+    },
+    {
+      "format": "hmmer_stderr",
+      "relative_path": "outputs/stderr",
+      "role": "stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "format": "stockholm",
+      "relative_path": "outputs/masked_alignment",
+      "role": "masked_alignment",
+      "sha256": "d095051b2794e03b54144695c9cd34a60fe193c7b75743aea47ef30381f06eb0",
+      "size_bytes": 83
+    }
+  ],
+  "environment": {
+    "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/temporary/pytest/test_actual_new_input_modes_ke0/hmmer-preparation-attempt/tmp",
+    "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/temporary/pytest/test_actual_new_input_modes_ke0/hmmer-preparation-attempt/tmp",
+    "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/temporary/pytest/test_actual_new_input_modes_ke0/hmmer-preparation-attempt/tmp",
+    "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/temporary/pytest/test_actual_new_input_modes_ke0/hmmer-preparation-attempt/cache"
+  },
+  "failures": [],
+  "finished_at": "2026-10-28T08:46:12.065718+00:00",
+  "identity": {
+    "attempt_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e",
+    "episode_id": "selected-local-child",
+    "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/temporary/pytest/test_actual_new_input_modes_ke0/native.json",
+    "operation_key": "selected-command",
+    "requested_job_sha256": "c8d33002f3d72f95f64aa3da78027a8a6e16d8fdddab1454ea63fe6cc0c6c36f",
+    "resource_id": "local",
+    "run_id": "producer267-test"
+  },
+  "inputs": [
+    {
+      "artifact_ref": "fixture267:alignment:0",
+      "expected_sha256": "824a8ce36203927eafe75d6c6b8be163c47c07f3423f588d5f434bd0b89af645",
+      "expected_size_bytes": 32,
+      "final_sha256": "824a8ce36203927eafe75d6c6b8be163c47c07f3423f588d5f434bd0b89af645",
+      "final_size_bytes": 32,
+      "format": "afa",
+      "ordinal": 0,
+      "original_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/source_snapshot/verification/tool_graders_hmmer_input_native_oracle_2026-10-28_539/fixtures/afa_auto_dna.input",
+      "relative_path": "inputs/alignment/0",
+      "role": "alignment",
+      "staged_sha256": "824a8ce36203927eafe75d6c6b8be163c47c07f3423f588d5f434bd0b89af645",
+      "staged_size_bytes": 32
+    }
+  ],
+  "mode": "mask_alignment",
+  "native_abi": {
+    "byte_order": "little",
+    "bytes_per_float": 8,
+    "c_float_bytes": 4,
+    "c_int_bytes": 4,
+    "c_long_bytes": 8,
+    "float_format": "ieee754_binary64",
+    "int32_bytes": 4,
+    "uint16_bytes": 2,
+    "uint32_bytes": 4,
+    "uint64_bytes": 8,
+    "uint8_bytes": 1
+  },
+  "operation": {
+    "engine_version": "3.4",
+    "mode": "mask_alignment",
+    "program": "alimask",
+    "settings": {
+      "--alirange": "1-2",
+      "--dna": true,
+      "--fast": true,
+      "--fragthresh": 0.5,
+      "--informat": "AFA",
+      "--outformat": "Stockholm",
+      "--seed": 42,
+      "--symfrac": 0.5,
+      "--wid": 0.62,
+      "--wnone": true
+    }
+  },
+  "program": "alimask",
+  "realized_argv": [
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/source_snapshot/resources/software/infernal-1.1.5/hmmer/src/alimask",
+    "--dna",
+    "--fast",
+    "--wnone",
+    "--alirange",
+    "1-2",
+    "--informat",
+    "AFA",
+    "--outformat",
+    "Stockholm",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/temporary/pytest/test_actual_new_input_modes_ke0/hmmer-preparation-attempt/inputs/alignment/0",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/temporary/pytest/test_actual_new_input_modes_ke0/hmmer-preparation-attempt/outputs/masked_alignment"
+  ],
+  "requested_job": {
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/source_snapshot/resources/software/infernal-1.1.5/hmmer/src/alimask",
+      "--dna",
+      "--fast",
+      "--wnone",
+      "--alirange",
+      "1-2",
+      "--informat",
+      "AFA",
+      "--outformat",
+      "Stockholm",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/source_snapshot/verification/tool_graders_hmmer_input_native_oracle_2026-10-28_539/fixtures/afa_auto_dna.input",
+      "outputs/masked_alignment"
+    ],
+    "environment": {},
+    "native_hmmer_preparation": {
+      "environment": {},
+      "grading_parameters": {},
+      "input_metadata": {},
+      "key": null,
+      "mode": "mask_alignment",
+      "operands": [
+        {
+          "artifact_ref": "fixture267:alignment:0",
+          "format": "afa",
+          "ordinal": 0,
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/source_snapshot/verification/tool_graders_hmmer_input_native_oracle_2026-10-28_539/fixtures/afa_auto_dna.input",
+          "role": "alignment",
+          "sha256": "824a8ce36203927eafe75d6c6b8be163c47c07f3423f588d5f434bd0b89af645",
+          "size_bytes": 32
+        }
+      ],
+      "options": [
+        "--dna",
+        "--fast",
+        "--wnone",
+        "--alirange",
+        "1-2"
+      ],
+      "outputs": [
+        {
+          "format": "hmmer_stdout",
+          "relative_path": "outputs/stdout",
+          "role": "stdout"
+        },
+        {
+          "format": "hmmer_stderr",
+          "relative_path": "outputs/stderr",
+          "role": "stderr"
+        },
+        {
+          "format": "stockholm",
+          "relative_path": "outputs/masked_alignment",
+          "role": "masked_alignment"
+        }
+      ],
+      "program": "alimask",
+      "software": {
+        "engine_version": "3.4",
+        "executable": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/source_snapshot/resources/software/infernal-1.1.5/hmmer/src/alimask",
+        "sha256": "4cf273b7b4b52363468b758a39bedf8f00540b01983bf6641ffd36140afad547"
+      },
+      "version": "native_hmmer_preparation_job_v1"
+    }
+  },
+  "returncode": 0,
+  "software": {
+    "actual_sha256": "4cf273b7b4b52363468b758a39bedf8f00540b01983bf6641ffd36140afad547",
+    "declared_engine_version": "3.4",
+    "executable": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/source_snapshot/resources/software/infernal-1.1.5/hmmer/src/alimask",
+    "expected_sha256": "4cf273b7b4b52363468b758a39bedf8f00540b01983bf6641ffd36140afad547"
+  },
+  "started_at": "2026-10-28T08:46:11.993030+00:00",
+  "version": "native_hmmer_preparation_bundle_v1",
+  "working_copies": []
+}

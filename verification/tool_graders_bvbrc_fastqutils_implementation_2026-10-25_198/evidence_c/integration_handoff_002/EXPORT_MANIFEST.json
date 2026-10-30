@@ -1,0 +1,114 @@
+[
+  {
+    "module": "gene_annotation_episode.bvbrc_fastqutils_native",
+    "export": "parse_fastqutils_artifact",
+    "signature": "(raw: bytes, *, context: dict) -> dict",
+    "path": "frozen_001/source/gene_annotation_episode/bvbrc_fastqutils_native.py",
+    "sha256": "0cc478fde70b203c2b3a26fd9375ebda1f921fde27ea1b7e33a92cf20bc8ca85"
+  },
+  {
+    "module": "gene_annotation_episode.bvbrc_fastqutils_native",
+    "export": "parse_unsupported_artifact",
+    "signature": "(raw: bytes, *, context: dict) -> dict",
+    "path": "frozen_001/source/gene_annotation_episode/bvbrc_fastqutils_native.py",
+    "sha256": "0cc478fde70b203c2b3a26fd9375ebda1f921fde27ea1b7e33a92cf20bc8ca85"
+  },
+  {
+    "module": "gene_annotation_episode.bvbrc_fastqutils_metadata",
+    "export": "select_metadata",
+    "signature": "(inputs: 'dict') -> 'tuple[list[dict], list[dict], list[dict]]'",
+    "path": "frozen_001/source/gene_annotation_episode/bvbrc_fastqutils_metadata.py",
+    "sha256": "a3b1524dd257402b2b46f52c196c45153613cc67eeff57af52be7050bb0b3381"
+  },
+  {
+    "module": "gene_annotation_episode.bvbrc_fastqutils_metadata",
+    "export": "extract_fastqutils_metadata",
+    "signature": "(original_task: 'dict', *, analysis_id: 'str', metadata_bindings: 'list[dict]', supplied_values: 'list[dict]', documents: 'list[dict]') -> 'dict'",
+    "path": "frozen_001/source/gene_annotation_episode/bvbrc_fastqutils_metadata.py",
+    "sha256": "a3b1524dd257402b2b46f52c196c45153613cc67eeff57af52be7050bb0b3381"
+  },
+  {
+    "module": "gene_annotation_episode.bvbrc_fastqutils_sheet",
+    "export": "populate_fastqutils_sheet",
+    "signature": "(documents: list[dict], *, metadata: dict, document_resolutions: list[dict]) -> dict",
+    "path": "frozen_001/source/gene_annotation_episode/bvbrc_fastqutils_sheet.py",
+    "sha256": "e72e1ec6a3335fc391bf8ededb403c6fd45f3b4cb2deb41ef38c1415ffbac44c"
+  },
+  {
+    "module": "gene_annotation_episode.bvbrc_fastqutils_resolution",
+    "export": "resolve_documents",
+    "signature": "(bundle: 'dict', *, artifact_bytes: 'dict[str, bytes]', parameters: 'dict') -> 'tuple[list[dict], list[dict], list[dict]]'",
+    "path": "frozen_001/source/gene_annotation_episode/bvbrc_fastqutils_resolution.py",
+    "sha256": "968632c89d248a7341e3bff3f19f142a1fdd8d7cf9bfb93c1b8dab8339974a7a"
+  },
+  {
+    "module": "gene_annotation_episode.bvbrc_fastqutils_resolution",
+    "export": "resolve_calculation_inputs",
+    "signature": "(sheet: 'dict', *, requests: 'list[dict]') -> 'dict'",
+    "path": "frozen_001/source/gene_annotation_episode/bvbrc_fastqutils_resolution.py",
+    "sha256": "968632c89d248a7341e3bff3f19f142a1fdd8d7cf9bfb93c1b8dab8339974a7a"
+  },
+  {
+    "module": "gene_annotation_episode.bvbrc_fastqutils_calculators",
+    "export": "calculate_fastqutils",
+    "signature": "(sheet: dict, *, parameters: dict) -> dict",
+    "path": "frozen_001/source/gene_annotation_episode/bvbrc_fastqutils_calculators.py",
+    "sha256": "c6fbeb1a7c3d1a4c682316c907a8d77ae13e1b31835f627cb594d63f4c3e3e1d"
+  },
+  {
+    "module": "gene_annotation_episode.bvbrc_fastqutils_bundle_adapter",
+    "export": "FastqUtilsBundleAdapter",
+    "signature": "(self, bundle: 'dict', *, artifact_bytes: 'dict[str, bytes]', supplied_values: 'list[dict]', requested_form: 'dict', parameters: 'dict') -> 'dict'",
+    "path": "frozen_001/source/gene_annotation_episode/bvbrc_fastqutils_bundle_adapter.py",
+    "sha256": "81758fe5dd59bfceca180e9872cb44c5b023d79bbdd04799f49e021d0b0f954a"
+  },
+  {
+    "module": "gene_annotation_episode.bvbrc_fastqutils_bundle_adapter",
+    "export": "consume_bundle",
+    "signature": "(bundle: 'dict', *, artifact_bytes: 'dict[str, bytes]', supplied_values: 'list[dict]', requested_form: 'dict', parameters: 'dict') -> 'dict'",
+    "path": "frozen_001/source/gene_annotation_episode/bvbrc_fastqutils_bundle_adapter.py",
+    "sha256": "81758fe5dd59bfceca180e9872cb44c5b023d79bbdd04799f49e021d0b0f954a"
+  },
+  {
+    "module": "gene_annotation_episode.bvbrc_fastqutils_bundle_adapter",
+    "export": "implementation_sha256",
+    "signature": "() -> 'str'",
+    "path": "frozen_001/source/gene_annotation_episode/bvbrc_fastqutils_bundle_adapter.py",
+    "sha256": "81758fe5dd59bfceca180e9872cb44c5b023d79bbdd04799f49e021d0b0f954a"
+  },
+  {
+    "module": "gene_annotation_episode.bvbrc_fastqutils_projection",
+    "export": "project_fastqutils_facts",
+    "signature": "(sheet: 'dict | None', components: 'dict | None', *, requested_form: 'dict', parameters: 'dict', failure_context: 'dict') -> 'dict'",
+    "path": "frozen_001/source/gene_annotation_episode/bvbrc_fastqutils_projection.py",
+    "sha256": "6dcef45541a24612e2c5353ee88a45e663cacd96205933f6883824c116efba97"
+  },
+  {
+    "module": "gene_annotation_episode.bvbrc_fastqutils_saved_codec",
+    "export": "encode_failures",
+    "signature": "(requirements: 'list[dict]', diagnostics: 'list[dict]') -> 'dict'",
+    "path": "frozen_001/source/gene_annotation_episode/bvbrc_fastqutils_saved_codec.py",
+    "sha256": "645874f7ca5c48539133e902f28732b4ce95629b19329ad24f90cbd13e896ffd"
+  },
+  {
+    "module": "gene_annotation_episode.bvbrc_fastqutils_saved_codec",
+    "export": "encode_saved_components",
+    "signature": "(calculations: 'dict | None', *, projection_failure_context: 'dict', native_requirements: 'list[dict]', native_diagnostics: 'list[dict]') -> 'dict'",
+    "path": "frozen_001/source/gene_annotation_episode/bvbrc_fastqutils_saved_codec.py",
+    "sha256": "645874f7ca5c48539133e902f28732b4ce95629b19329ad24f90cbd13e896ffd"
+  },
+  {
+    "module": "gene_annotation_episode.bvbrc_fastqutils_saved_codec",
+    "export": "decode_saved_components",
+    "signature": "(value: 'dict') -> 'dict'",
+    "path": "frozen_001/source/gene_annotation_episode/bvbrc_fastqutils_saved_codec.py",
+    "sha256": "645874f7ca5c48539133e902f28732b4ce95629b19329ad24f90cbd13e896ffd"
+  },
+  {
+    "module": "gene_annotation_episode.bvbrc_fastqutils_saved_codec",
+    "export": "validate_saved_projection",
+    "signature": "(sheet: 'dict | None', saved_components: 'dict', *, facts: 'dict', status: 'str', missing_requirements: 'list[dict]', diagnostics: 'list[dict]', requested_form: 'dict', parameters: 'dict', original_task: 'dict', bundle: 'dict') -> 'None'",
+    "path": "frozen_001/source/gene_annotation_episode/bvbrc_fastqutils_saved_codec.py",
+    "sha256": "645874f7ca5c48539133e902f28732b4ce95629b19329ad24f90cbd13e896ffd"
+  }
+]

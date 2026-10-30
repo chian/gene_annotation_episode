@@ -1,0 +1,38 @@
+{
+  "status": "research arithmetic only, no production execution",
+  "endpoint_specific_U_to_umol_per_min": 1,
+  "unit_denominator": "mg purified Bcd/Etf complex protein, not mg ferredoxin/hydrogenase",
+  "nadh_25C": {
+    "W_U_per_mg": 7,
+    "O_U_per_mg": 0.1,
+    "A": null,
+    "loss_U_per_mg": 6.9,
+    "loss_fraction_exact": "69/70",
+    "loss_fraction": 0.9857142857142858,
+    "W_pmol_per_min_per_mg": 7000000,
+    "O_pmol_per_min_per_mg": 100000,
+    "loss_pmol_per_min_per_mg": 6900000
+  },
+  "h2_37C": {
+    "W_U_per_mg": 5,
+    "O_relation": "lt",
+    "O_upper_U_per_mg": 0.01,
+    "A": null,
+    "loss_outer_domain_U_per_mg": [
+      4.99,
+      5
+    ],
+    "loss_fraction_outer_domain": [
+      0.998,
+      1
+    ],
+    "W_pmol_per_min_per_mg": 5000000,
+    "O_upper_pmol_per_min_per_mg": 10000,
+    "loss_outer_domain_pmol_per_min_per_mg": [
+      4990000,
+      5000000
+    ]
+  },
+  "conditions": "conditional on table descriptions and printed values; no sampling/rounding uncertainty inferred",
+  "unsupported_reader_input": "Native source helper currently cannot read U/mg with a separate endpoint-specific U definition; do not relabel the source as literal umol/min/mg."
+}

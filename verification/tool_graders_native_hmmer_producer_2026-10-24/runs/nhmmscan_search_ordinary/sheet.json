@@ -1,0 +1,3038 @@
+{
+  "schema": "nhmmer_sheet_v1",
+  "operation": {
+    "program": "nhmmscan",
+    "format": "hmmer3_nucleotide_native",
+    "engine_version": "3.4",
+    "alphabet": "DNA",
+    "mode": "sequence_to_profile_database",
+    "query_construction_mode": null
+  },
+  "inputs": {
+    "targets": [
+      {
+        "name": "model",
+        "accession": null,
+        "kind": "profile",
+        "alphabet": "DNA",
+        "length": 100
+      }
+    ],
+    "acquisition": {
+      "output_complete": true,
+      "hit_population_complete": true
+    },
+    "native_parameters": {
+      "argv": [
+        "--cpu",
+        "1",
+        "--notextw"
+      ]
+    }
+  },
+  "native": {
+    "schema": "nhmmer_native_v1",
+    "operation": {
+      "program": "nhmmscan",
+      "format": "hmmer3_nucleotide_native",
+      "engine_version": "3.4",
+      "alphabet": null,
+      "mode": "sequence_to_profile_database"
+    },
+    "artifacts": {
+      "stdout": {
+        "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+        "text": "# nhmmscan :: search DNA sequence(s) against a DNA profile database\n# HMMER 3.4 (Aug 2023); http://hmmer.org/\n# Copyright (C) 2023 Howard Hughes Medical Institute.\n# Freely distributed under the BSD open source license.\n# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n# query sequence file:             /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmscan_search_ordinary/attempt/inputs/query_sequence.fa\n# target HMM database:             /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmscan_search_ordinary/attempt/inputs/profile_database.hmm\n# per-seq hits tabular output:     /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmscan_search_ordinary/attempt/outputs/tblout\n# max ASCII text line length:      unlimited\n# input seqfile format asserted:   fasta\n# multithread parallelization:     1 workers\n# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n\nQuery:       forward  [L=120]\nScores for complete hit:\n    E-value  score  bias  Model     start    end  Description\n    ------- ------ -----  --------  -----  -----  -----------\n      2e-39  120.9   0.9  model        11    110 \n\n\nAnnotation for each hit  (and alignments):\n>> model  \n    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc\n   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----\n !  120.9   0.9     2e-39         1       100 []        11       110 ..        11       110 ..       100    0.99\n\n  Alignment:\n  score: 120.9 bits\n    model   1 ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg 100\n              ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg\n  forward  11 GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG 110\n              79***********************************************************************************************986 PP\n\n\n\nInternal pipeline statistics summary:\n-------------------------------------\nQuery sequence(s):                         1  (240 residues searched)\nTarget model(s):                           1  (100 nodes)\nResidues passing SSV filter:             120  (0.5); expected (0.02)\nResidues passing bias filter:            120  (0.5); expected (0.02)\nResidues passing Vit filter:             120  (0.5); expected (0.003)\nResidues passing Fwd filter:             120  (0.5); expected (3e-05)\nTotal number of hits:                      1  (0.417)\n# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00\n# Mc/sec: 51.44\n//\nQuery:       reverse  [L=120]\nScores for complete hit:\n    E-value  score  bias  Model     start    end  Description\n    ------- ------ -----  --------  -----  -----  -----------\n      2e-39  120.9   0.9  model       110     11 \n\n\nAnnotation for each hit  (and alignments):\n>> model  \n    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc\n   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----\n !  120.9   0.9     2e-39         1       100 []       110        11 ..       110        11 ..       100    0.99\n\n  Alignment:\n  score: 120.9 bits\n    model   1 ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg 100\n              ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg\n  reverse 110 GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG 11 \n              79***********************************************************************************************986 PP\n\n\n\nInternal pipeline statistics summary:\n-------------------------------------\nQuery sequence(s):                         1  (240 residues searched)\nTarget model(s):                           1  (100 nodes)\nResidues passing SSV filter:             120  (0.5); expected (0.02)\nResidues passing bias filter:            120  (0.5); expected (0.02)\nResidues passing Vit filter:             120  (0.5); expected (0.003)\nResidues passing Fwd filter:             120  (0.5); expected (3e-05)\nTotal number of hits:                      1  (0.417)\n# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00\n# Mc/sec: 75.03\n//\nQuery:       gapped  [L=121]\nScores for complete hit:\n    E-value  score  bias  Model     start    end  Description\n    ------- ------ -----  --------  -----  -----  -----------\n    1.1e-34  105.7   0.7  model        11    111 \n\n\nAnnotation for each hit  (and alignments):\n>> model  \n    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc\n   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----\n !  105.7   0.7   1.1e-34         1       100 []        11       111 ..        11       111 ..       100    0.95\n\n  Alignment:\n  score: 105.7 bits\n   model   1 ggcagtggcgtgtcaacctccctttacgataagtccatca...ctaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg 100\n             ggcagtggcgtgtcaacctccctttacgataagtccatca   ctaacagtaagcctgacgggggcaagatct  ctttttggcagactcactcttcccattg\n  gapped  11 GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCAgtaCTAACAGTAAGCCTGACGGGGGCAAGATCT--CTTTTTGGCAGACTCACTCTTCCCATTG 111\n             79************************************95444899************************998..599**********************986 PP\n\n\n\nInternal pipeline statistics summary:\n-------------------------------------\nQuery sequence(s):                         1  (242 residues searched)\nTarget model(s):                           1  (100 nodes)\nResidues passing SSV filter:             121  (0.5); expected (0.02)\nResidues passing bias filter:            121  (0.5); expected (0.02)\nResidues passing Vit filter:             121  (0.5); expected (0.003)\nResidues passing Fwd filter:             121  (0.5); expected (3e-05)\nTotal number of hits:                      1  (0.417)\n# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00\n# Mc/sec: 61.31\n//\n[ok]\n",
+        "native_complete": true,
+        "byte_length": 6331,
+        "completion_marker_observed": true,
+        "status": "complete",
+        "format": "stdout"
+      },
+      "tblout": {
+        "artifact_ref": "fixture:sha256:9408e22bbb76c50876de1303d7932a0404abb68167afa50f216ef77da6cf0f12",
+        "text": "# target name        accession  query name           accession  hmmfrom hmm to alifrom  ali to envfrom  env to  modlen strand   E-value  score  bias  description of target\n#------------------- ---------- -------------------- ---------- ------- ------- ------- ------- ------- ------- ------- ------ --------- ------ ----- ---------------------\nmodel                -          forward              -                1     100      11     110      11     110     100    +       2e-39  120.9   0.9  -\nmodel                -          reverse              -                1     100     110      11     110      11     100    -       2e-39  120.9   0.9  -\nmodel                -          gapped               -                1     100      11     111      11     111     100    +     1.1e-34  105.7   0.7  -\n#\n# Program:         nhmmscan\n# Version:         3.4 (Aug 2023)\n# Pipeline mode:   SCAN\n# Query file:      /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmscan_search_ordinary/attempt/inputs/query_sequence.fa\n# Target file:     /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmscan_search_ordinary/attempt/inputs/profile_database.hmm\n# Option settings: /home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/nhmmscan --tblout /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmscan_search_ordinary/attempt/outputs/tblout --notextw --qformat fasta --cpu 1 /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmscan_search_ordinary/attempt/inputs/profile_database.hmm /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmscan_search_ordinary/attempt/inputs/query_sequence.fa \n# Current dir:     /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmscan_search_ordinary/attempt\n# Date:            Sat Oct 24 15:32:15 2026\n# [ok]\n",
+        "native_complete": true,
+        "byte_length": 2105,
+        "completion_marker_observed": true,
+        "status": "complete",
+        "format": "tblout"
+      }
+    },
+    "table_rows": [
+      {
+        "record_key": "tblout:line:3",
+        "locator": {
+          "artifact_role": "tblout",
+          "artifact_ref": "fixture:sha256:9408e22bbb76c50876de1303d7932a0404abb68167afa50f216ef77da6cf0f12",
+          "line_number": 3,
+          "byte_start": 344,
+          "byte_end": 497,
+          "row_occurrence": 1
+        },
+        "status": "valid",
+        "native": {
+          "target_name": "model",
+          "target_accession": null,
+          "query_name": "forward",
+          "query_accession": null,
+          "hmm_from": 1,
+          "hmm_to": 100,
+          "ali_from": 11,
+          "ali_to": 110,
+          "env_from": 11,
+          "env_to": 110,
+          "length_field": 100,
+          "evalue": 2e-39,
+          "score_bits": 120.9,
+          "bias_bits": 0.9,
+          "strand": "+",
+          "description": "-",
+          "length_field_meaning": "model_length",
+          "reported": true,
+          "included": null
+        },
+        "coordinates": {
+          "convention": "zero_based_half_open",
+          "native_convention": "one_based_inclusive",
+          "model_interval": [
+            0,
+            100
+          ],
+          "sequence_interval": [
+            10,
+            110
+          ],
+          "sequence_envelope_interval": [
+            10,
+            110
+          ]
+        },
+        "raw": "model                -          forward              -                1     100      11     110      11     110     100    +       2e-39  120.9   0.9  -\n",
+        "raw_fields": {
+          "target_name": "model",
+          "target_accession": "-",
+          "query_name": "forward",
+          "query_accession": "-",
+          "hmm_from": "1",
+          "hmm_to": "100",
+          "ali_from": "11",
+          "ali_to": "110",
+          "env_from": "11",
+          "env_to": "110",
+          "length_field": "100",
+          "strand": "+",
+          "evalue": "2e-39",
+          "score_bits": "120.9",
+          "bias_bits": "0.9"
+        },
+        "query_occurrence": null,
+        "target_occurrence": null,
+        "issues": []
+      },
+      {
+        "record_key": "tblout:line:4",
+        "locator": {
+          "artifact_role": "tblout",
+          "artifact_ref": "fixture:sha256:9408e22bbb76c50876de1303d7932a0404abb68167afa50f216ef77da6cf0f12",
+          "line_number": 4,
+          "byte_start": 497,
+          "byte_end": 650,
+          "row_occurrence": 2
+        },
+        "status": "valid",
+        "native": {
+          "target_name": "model",
+          "target_accession": null,
+          "query_name": "reverse",
+          "query_accession": null,
+          "hmm_from": 1,
+          "hmm_to": 100,
+          "ali_from": 110,
+          "ali_to": 11,
+          "env_from": 110,
+          "env_to": 11,
+          "length_field": 100,
+          "evalue": 2e-39,
+          "score_bits": 120.9,
+          "bias_bits": 0.9,
+          "strand": "-",
+          "description": "-",
+          "length_field_meaning": "model_length",
+          "reported": true,
+          "included": null
+        },
+        "coordinates": {
+          "convention": "zero_based_half_open",
+          "native_convention": "one_based_inclusive",
+          "model_interval": [
+            0,
+            100
+          ],
+          "sequence_interval": [
+            10,
+            110
+          ],
+          "sequence_envelope_interval": [
+            10,
+            110
+          ]
+        },
+        "raw": "model                -          reverse              -                1     100     110      11     110      11     100    -       2e-39  120.9   0.9  -\n",
+        "raw_fields": {
+          "target_name": "model",
+          "target_accession": "-",
+          "query_name": "reverse",
+          "query_accession": "-",
+          "hmm_from": "1",
+          "hmm_to": "100",
+          "ali_from": "110",
+          "ali_to": "11",
+          "env_from": "110",
+          "env_to": "11",
+          "length_field": "100",
+          "strand": "-",
+          "evalue": "2e-39",
+          "score_bits": "120.9",
+          "bias_bits": "0.9"
+        },
+        "query_occurrence": null,
+        "target_occurrence": null,
+        "issues": []
+      },
+      {
+        "record_key": "tblout:line:5",
+        "locator": {
+          "artifact_role": "tblout",
+          "artifact_ref": "fixture:sha256:9408e22bbb76c50876de1303d7932a0404abb68167afa50f216ef77da6cf0f12",
+          "line_number": 5,
+          "byte_start": 650,
+          "byte_end": 803,
+          "row_occurrence": 3
+        },
+        "status": "valid",
+        "native": {
+          "target_name": "model",
+          "target_accession": null,
+          "query_name": "gapped",
+          "query_accession": null,
+          "hmm_from": 1,
+          "hmm_to": 100,
+          "ali_from": 11,
+          "ali_to": 111,
+          "env_from": 11,
+          "env_to": 111,
+          "length_field": 100,
+          "evalue": 1.1e-34,
+          "score_bits": 105.7,
+          "bias_bits": 0.7,
+          "strand": "+",
+          "description": "-",
+          "length_field_meaning": "model_length",
+          "reported": true,
+          "included": null
+        },
+        "coordinates": {
+          "convention": "zero_based_half_open",
+          "native_convention": "one_based_inclusive",
+          "model_interval": [
+            0,
+            100
+          ],
+          "sequence_interval": [
+            10,
+            111
+          ],
+          "sequence_envelope_interval": [
+            10,
+            111
+          ]
+        },
+        "raw": "model                -          gapped               -                1     100      11     111      11     111     100    +     1.1e-34  105.7   0.7  -\n",
+        "raw_fields": {
+          "target_name": "model",
+          "target_accession": "-",
+          "query_name": "gapped",
+          "query_accession": "-",
+          "hmm_from": "1",
+          "hmm_to": "100",
+          "ali_from": "11",
+          "ali_to": "111",
+          "env_from": "11",
+          "env_to": "111",
+          "length_field": "100",
+          "strand": "+",
+          "evalue": "1.1e-34",
+          "score_bits": "105.7",
+          "bias_bits": "0.7"
+        },
+        "query_occurrence": null,
+        "target_occurrence": null,
+        "issues": []
+      }
+    ],
+    "stdout_loci": [
+      {
+        "kind": "locus",
+        "record_key": "stdout:query:1:locus:1",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+          "line_number": 22,
+          "byte_start": 1361,
+          "byte_end": 2219,
+          "end_line_number": 35,
+          "query_occurrence": 1,
+          "target_occurrence": 1
+        },
+        "query_record_key": "stdout:query:1",
+        "query_occurrence": 1,
+        "target_occurrence": 1,
+        "native": {
+          "target_name": "model",
+          "target_accession": null,
+          "query_name": "forward",
+          "query_accession": null,
+          "hmm_from": 1,
+          "hmm_to": 100,
+          "ali_from": 11,
+          "ali_to": 110,
+          "env_from": 11,
+          "env_to": 110,
+          "length_field": 100,
+          "strand": "+",
+          "evalue": 2e-39,
+          "score_bits": 120.9,
+          "bias_bits": 0.9,
+          "target_display_id": "model",
+          "description": "",
+          "reported": true,
+          "included": true,
+          "length_field_meaning": "model_length",
+          "inclusion_flag": "!",
+          "accuracy": 0.99,
+          "boundary_flags": [
+            "[]",
+            "..",
+            ".."
+          ]
+        },
+        "coordinates": {
+          "convention": "zero_based_half_open",
+          "native_convention": "one_based_inclusive",
+          "model_interval": [
+            0,
+            100
+          ],
+          "sequence_interval": [
+            10,
+            110
+          ],
+          "sequence_envelope_interval": [
+            10,
+            110
+          ]
+        },
+        "alignment": {
+          "model_aligned": "ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+          "sequence_aligned": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG",
+          "posterior": "79***********************************************************************************************986",
+          "chunks": [
+            {
+              "model": {
+                "label": "model",
+                "from": 1,
+                "text": "ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+                "to": 100,
+                "locator": {
+                  "artifact_role": "stdout",
+                  "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+                  "line_number": 29,
+                  "byte_start": 1745,
+                  "byte_end": 1864
+                },
+                "column_offset": 14
+              },
+              "sequence": {
+                "label": "forward",
+                "from": 11,
+                "text": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG",
+                "to": 110,
+                "locator": {
+                  "artifact_role": "stdout",
+                  "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+                  "line_number": 31,
+                  "byte_start": 1979,
+                  "byte_end": 2098
+                },
+                "column_offset": 14
+              },
+              "posterior": "79***********************************************************************************************986",
+              "annotations": [
+                {
+                  "raw": "              ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg\n",
+                  "locator": {
+                    "artifact_role": "stdout",
+                    "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+                    "line_number": 30,
+                    "byte_start": 1864,
+                    "byte_end": 1979
+                  }
+                }
+              ],
+              "posterior_locator": {
+                "artifact_role": "stdout",
+                "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+                "line_number": 32,
+                "byte_start": 2098,
+                "byte_end": 2216
+              }
+            }
+          ],
+          "valid": true,
+          "posterior_valid": true,
+          "issues": []
+        },
+        "raw": ">> model  \n    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc\n   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----\n !  120.9   0.9     2e-39         1       100 []        11       110 ..        11       110 ..       100    0.99\n\n  Alignment:\n  score: 120.9 bits\n    model   1 ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg 100\n              ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg\n  forward  11 GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG 110\n              79***********************************************************************************************986 PP\n\n\n\n",
+        "status": "valid",
+        "issues": []
+      },
+      {
+        "kind": "locus",
+        "record_key": "stdout:query:2:locus:1",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+          "line_number": 56,
+          "byte_start": 3105,
+          "byte_end": 3963,
+          "end_line_number": 69,
+          "query_occurrence": 2,
+          "target_occurrence": 1
+        },
+        "query_record_key": "stdout:query:2",
+        "query_occurrence": 2,
+        "target_occurrence": 1,
+        "native": {
+          "target_name": "model",
+          "target_accession": null,
+          "query_name": "reverse",
+          "query_accession": null,
+          "hmm_from": 1,
+          "hmm_to": 100,
+          "ali_from": 110,
+          "ali_to": 11,
+          "env_from": 110,
+          "env_to": 11,
+          "length_field": 100,
+          "strand": "-",
+          "evalue": 2e-39,
+          "score_bits": 120.9,
+          "bias_bits": 0.9,
+          "target_display_id": "model",
+          "description": "",
+          "reported": true,
+          "included": true,
+          "length_field_meaning": "model_length",
+          "inclusion_flag": "!",
+          "accuracy": 0.99,
+          "boundary_flags": [
+            "[]",
+            "..",
+            ".."
+          ]
+        },
+        "coordinates": {
+          "convention": "zero_based_half_open",
+          "native_convention": "one_based_inclusive",
+          "model_interval": [
+            0,
+            100
+          ],
+          "sequence_interval": [
+            10,
+            110
+          ],
+          "sequence_envelope_interval": [
+            10,
+            110
+          ]
+        },
+        "alignment": {
+          "model_aligned": "ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+          "sequence_aligned": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG",
+          "posterior": "79***********************************************************************************************986",
+          "chunks": [
+            {
+              "model": {
+                "label": "model",
+                "from": 1,
+                "text": "ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+                "to": 100,
+                "locator": {
+                  "artifact_role": "stdout",
+                  "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+                  "line_number": 63,
+                  "byte_start": 3489,
+                  "byte_end": 3608
+                },
+                "column_offset": 14
+              },
+              "sequence": {
+                "label": "reverse",
+                "from": 110,
+                "text": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG",
+                "to": 11,
+                "locator": {
+                  "artifact_role": "stdout",
+                  "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+                  "line_number": 65,
+                  "byte_start": 3723,
+                  "byte_end": 3842
+                },
+                "column_offset": 14
+              },
+              "posterior": "79***********************************************************************************************986",
+              "annotations": [
+                {
+                  "raw": "              ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg\n",
+                  "locator": {
+                    "artifact_role": "stdout",
+                    "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+                    "line_number": 64,
+                    "byte_start": 3608,
+                    "byte_end": 3723
+                  }
+                }
+              ],
+              "posterior_locator": {
+                "artifact_role": "stdout",
+                "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+                "line_number": 66,
+                "byte_start": 3842,
+                "byte_end": 3960
+              }
+            }
+          ],
+          "valid": true,
+          "posterior_valid": true,
+          "issues": []
+        },
+        "raw": ">> model  \n    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc\n   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----\n !  120.9   0.9     2e-39         1       100 []       110        11 ..       110        11 ..       100    0.99\n\n  Alignment:\n  score: 120.9 bits\n    model   1 ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg 100\n              ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg\n  reverse 110 GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG 11 \n              79***********************************************************************************************986 PP\n\n\n\n",
+        "status": "valid",
+        "issues": []
+      },
+      {
+        "kind": "locus",
+        "record_key": "stdout:query:3:locus:1",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+          "line_number": 90,
+          "byte_start": 4848,
+          "byte_end": 5714,
+          "end_line_number": 103,
+          "query_occurrence": 3,
+          "target_occurrence": 1
+        },
+        "query_record_key": "stdout:query:3",
+        "query_occurrence": 3,
+        "target_occurrence": 1,
+        "native": {
+          "target_name": "model",
+          "target_accession": null,
+          "query_name": "gapped",
+          "query_accession": null,
+          "hmm_from": 1,
+          "hmm_to": 100,
+          "ali_from": 11,
+          "ali_to": 111,
+          "env_from": 11,
+          "env_to": 111,
+          "length_field": 100,
+          "strand": "+",
+          "evalue": 1.1e-34,
+          "score_bits": 105.7,
+          "bias_bits": 0.7,
+          "target_display_id": "model",
+          "description": "",
+          "reported": true,
+          "included": true,
+          "length_field_meaning": "model_length",
+          "inclusion_flag": "!",
+          "accuracy": 0.95,
+          "boundary_flags": [
+            "[]",
+            "..",
+            ".."
+          ]
+        },
+        "coordinates": {
+          "convention": "zero_based_half_open",
+          "native_convention": "one_based_inclusive",
+          "model_interval": [
+            0,
+            100
+          ],
+          "sequence_interval": [
+            10,
+            111
+          ],
+          "sequence_envelope_interval": [
+            10,
+            111
+          ]
+        },
+        "alignment": {
+          "model_aligned": "ggcagtggcgtgtcaacctccctttacgataagtccatca...ctaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+          "sequence_aligned": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCAgtaCTAACAGTAAGCCTGACGGGGGCAAGATCT--CTTTTTGGCAGACTCACTCTTCCCATTG",
+          "posterior": "79************************************95444899************************998..599**********************986",
+          "chunks": [
+            {
+              "model": {
+                "label": "model",
+                "from": 1,
+                "text": "ggcagtggcgtgtcaacctccctttacgataagtccatca...ctaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+                "to": 100,
+                "locator": {
+                  "artifact_role": "stdout",
+                  "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+                  "line_number": 97,
+                  "byte_start": 5232,
+                  "byte_end": 5353
+                },
+                "column_offset": 13
+              },
+              "sequence": {
+                "label": "gapped",
+                "from": 11,
+                "text": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCAgtaCTAACAGTAAGCCTGACGGGGGCAAGATCT--CTTTTTGGCAGACTCACTCTTCCCATTG",
+                "to": 111,
+                "locator": {
+                  "artifact_role": "stdout",
+                  "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+                  "line_number": 99,
+                  "byte_start": 5470,
+                  "byte_end": 5591
+                },
+                "column_offset": 13
+              },
+              "posterior": "79************************************95444899************************998..599**********************986",
+              "annotations": [
+                {
+                  "raw": "             ggcagtggcgtgtcaacctccctttacgataagtccatca   ctaacagtaagcctgacgggggcaagatct  ctttttggcagactcactcttcccattg\n",
+                  "locator": {
+                    "artifact_role": "stdout",
+                    "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+                    "line_number": 98,
+                    "byte_start": 5353,
+                    "byte_end": 5470
+                  }
+                }
+              ],
+              "posterior_locator": {
+                "artifact_role": "stdout",
+                "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+                "line_number": 100,
+                "byte_start": 5591,
+                "byte_end": 5711
+              }
+            }
+          ],
+          "valid": true,
+          "posterior_valid": true,
+          "issues": []
+        },
+        "raw": ">> model  \n    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc\n   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----\n !  105.7   0.7   1.1e-34         1       100 []        11       111 ..        11       111 ..       100    0.95\n\n  Alignment:\n  score: 105.7 bits\n   model   1 ggcagtggcgtgtcaacctccctttacgataagtccatca...ctaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg 100\n             ggcagtggcgtgtcaacctccctttacgataagtccatca   ctaacagtaagcctgacgggggcaagatct  ctttttggcagactcactcttcccattg\n  gapped  11 GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCAgtaCTAACAGTAAGCCTGACGGGGGCAAGATCT--CTTTTTGGCAGACTCACTCTTCCCATTG 111\n             79************************************95444899************************998..599**********************986 PP\n\n\n\n",
+        "status": "valid",
+        "issues": []
+      }
+    ],
+    "queries": [
+      {
+        "kind": "query_end",
+        "record_key": "stdout:query:1",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+          "line_number": 14,
+          "byte_start": 1087,
+          "byte_end": 2831,
+          "end_line_number": 47
+        },
+        "name": "forward",
+        "accession": null,
+        "occurrence": 1,
+        "length": 120,
+        "length_axis": "sequence",
+        "statistics": [
+          {
+            "name": "Query sequence(s)",
+            "count": 1,
+            "count_unit": "sequences",
+            "positions": 240,
+            "positions_unit": "nucleotides_searched",
+            "raw": "Query sequence(s):                         1  (240 residues searched)\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 38,
+              "byte_start": 2295,
+              "byte_end": 2365
+            }
+          },
+          {
+            "name": "Target model(s)",
+            "count": 1,
+            "count_unit": "models",
+            "positions": 100,
+            "positions_unit": "model_nodes",
+            "raw": "Target model(s):                           1  (100 nodes)\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 39,
+              "byte_start": 2365,
+              "byte_end": 2423
+            }
+          },
+          {
+            "name": "Residues passing SSV filter",
+            "count": 120,
+            "count_unit": "nucleotide_positions",
+            "native_fraction": 0.5,
+            "expected_fraction": 0.02,
+            "raw": "Residues passing SSV filter:             120  (0.5); expected (0.02)\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 40,
+              "byte_start": 2423,
+              "byte_end": 2492
+            },
+            "issues": [],
+            "fraction_numerator": 120,
+            "fraction_denominator": 240,
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "fraction_input_fields": [
+              "native.filter_position_count",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator_unavailable_reason": null,
+            "fraction_precision": "native_rounded_three_significant_digits"
+          },
+          {
+            "name": "Residues passing bias filter",
+            "count": 120,
+            "count_unit": "nucleotide_positions",
+            "native_fraction": 0.5,
+            "expected_fraction": 0.02,
+            "raw": "Residues passing bias filter:            120  (0.5); expected (0.02)\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 41,
+              "byte_start": 2492,
+              "byte_end": 2561
+            },
+            "issues": [],
+            "fraction_numerator": 120,
+            "fraction_denominator": 240,
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "fraction_input_fields": [
+              "native.filter_position_count",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator_unavailable_reason": null,
+            "fraction_precision": "native_rounded_three_significant_digits"
+          },
+          {
+            "name": "Residues passing Vit filter",
+            "count": 120,
+            "count_unit": "nucleotide_positions",
+            "native_fraction": 0.5,
+            "expected_fraction": 0.003,
+            "raw": "Residues passing Vit filter:             120  (0.5); expected (0.003)\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 42,
+              "byte_start": 2561,
+              "byte_end": 2631
+            },
+            "issues": [],
+            "fraction_numerator": 120,
+            "fraction_denominator": 240,
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "fraction_input_fields": [
+              "native.filter_position_count",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator_unavailable_reason": null,
+            "fraction_precision": "native_rounded_three_significant_digits"
+          },
+          {
+            "name": "Residues passing Fwd filter",
+            "count": 120,
+            "count_unit": "nucleotide_positions",
+            "native_fraction": 0.5,
+            "expected_fraction": 3e-05,
+            "raw": "Residues passing Fwd filter:             120  (0.5); expected (3e-05)\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 43,
+              "byte_start": 2631,
+              "byte_end": 2701
+            },
+            "issues": [],
+            "fraction_numerator": 120,
+            "fraction_denominator": 240,
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "fraction_input_fields": [
+              "native.filter_position_count",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator_unavailable_reason": null,
+            "fraction_precision": "native_rounded_three_significant_digits"
+          },
+          {
+            "name": "Total number of hits",
+            "count": 1,
+            "count_unit": "loci",
+            "native_fraction": 0.417,
+            "expected_fraction": null,
+            "raw": "Total number of hits:                      1  (0.417)\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 44,
+              "byte_start": 2701,
+              "byte_end": 2755
+            },
+            "issues": [],
+            "fraction_numerator": null,
+            "fraction_denominator": 240,
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "fraction_input_fields": [
+              "native.pos_output",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator_unavailable_reason": "summed_aligned_position_count_not_printed",
+            "fraction_precision": "native_rounded_three_significant_digits"
+          },
+          {
+            "name": null,
+            "raw": "# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 45,
+              "byte_start": 2755,
+              "byte_end": 2812
+            }
+          },
+          {
+            "name": null,
+            "raw": "# Mc/sec: 51.44\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 46,
+              "byte_start": 2812,
+              "byte_end": 2828
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "raw": "Scores for complete hit:\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 15,
+              "byte_start": 1117,
+              "byte_end": 1142
+            }
+          },
+          {
+            "raw": "    E-value  score  bias  Model     start    end  Description\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 16,
+              "byte_start": 1142,
+              "byte_end": 1204
+            }
+          },
+          {
+            "raw": "    ------- ------ -----  --------  -----  -----  -----------\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 17,
+              "byte_start": 1204,
+              "byte_end": 1266
+            }
+          },
+          {
+            "raw": "      2e-39  120.9   0.9  model        11    110 \n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 18,
+              "byte_start": 1266,
+              "byte_end": 1316
+            }
+          },
+          {
+            "raw": "Annotation for each hit  (and alignments):\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 21,
+              "byte_start": 1318,
+              "byte_end": 1361
+            }
+          },
+          {
+            "raw": "-------------------------------------\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 37,
+              "byte_start": 2257,
+              "byte_end": 2295
+            }
+          }
+        ],
+        "locus_count": 1,
+        "issues": [],
+        "terminated": true
+      },
+      {
+        "kind": "query_end",
+        "record_key": "stdout:query:2",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+          "line_number": 48,
+          "byte_start": 2831,
+          "byte_end": 4575,
+          "end_line_number": 81
+        },
+        "name": "reverse",
+        "accession": null,
+        "occurrence": 2,
+        "length": 120,
+        "length_axis": "sequence",
+        "statistics": [
+          {
+            "name": "Query sequence(s)",
+            "count": 1,
+            "count_unit": "sequences",
+            "positions": 240,
+            "positions_unit": "nucleotides_searched",
+            "raw": "Query sequence(s):                         1  (240 residues searched)\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 72,
+              "byte_start": 4039,
+              "byte_end": 4109
+            }
+          },
+          {
+            "name": "Target model(s)",
+            "count": 1,
+            "count_unit": "models",
+            "positions": 100,
+            "positions_unit": "model_nodes",
+            "raw": "Target model(s):                           1  (100 nodes)\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 73,
+              "byte_start": 4109,
+              "byte_end": 4167
+            }
+          },
+          {
+            "name": "Residues passing SSV filter",
+            "count": 120,
+            "count_unit": "nucleotide_positions",
+            "native_fraction": 0.5,
+            "expected_fraction": 0.02,
+            "raw": "Residues passing SSV filter:             120  (0.5); expected (0.02)\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 74,
+              "byte_start": 4167,
+              "byte_end": 4236
+            },
+            "issues": [],
+            "fraction_numerator": 120,
+            "fraction_denominator": 240,
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "fraction_input_fields": [
+              "native.filter_position_count",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator_unavailable_reason": null,
+            "fraction_precision": "native_rounded_three_significant_digits"
+          },
+          {
+            "name": "Residues passing bias filter",
+            "count": 120,
+            "count_unit": "nucleotide_positions",
+            "native_fraction": 0.5,
+            "expected_fraction": 0.02,
+            "raw": "Residues passing bias filter:            120  (0.5); expected (0.02)\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 75,
+              "byte_start": 4236,
+              "byte_end": 4305
+            },
+            "issues": [],
+            "fraction_numerator": 120,
+            "fraction_denominator": 240,
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "fraction_input_fields": [
+              "native.filter_position_count",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator_unavailable_reason": null,
+            "fraction_precision": "native_rounded_three_significant_digits"
+          },
+          {
+            "name": "Residues passing Vit filter",
+            "count": 120,
+            "count_unit": "nucleotide_positions",
+            "native_fraction": 0.5,
+            "expected_fraction": 0.003,
+            "raw": "Residues passing Vit filter:             120  (0.5); expected (0.003)\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 76,
+              "byte_start": 4305,
+              "byte_end": 4375
+            },
+            "issues": [],
+            "fraction_numerator": 120,
+            "fraction_denominator": 240,
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "fraction_input_fields": [
+              "native.filter_position_count",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator_unavailable_reason": null,
+            "fraction_precision": "native_rounded_three_significant_digits"
+          },
+          {
+            "name": "Residues passing Fwd filter",
+            "count": 120,
+            "count_unit": "nucleotide_positions",
+            "native_fraction": 0.5,
+            "expected_fraction": 3e-05,
+            "raw": "Residues passing Fwd filter:             120  (0.5); expected (3e-05)\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 77,
+              "byte_start": 4375,
+              "byte_end": 4445
+            },
+            "issues": [],
+            "fraction_numerator": 120,
+            "fraction_denominator": 240,
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "fraction_input_fields": [
+              "native.filter_position_count",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator_unavailable_reason": null,
+            "fraction_precision": "native_rounded_three_significant_digits"
+          },
+          {
+            "name": "Total number of hits",
+            "count": 1,
+            "count_unit": "loci",
+            "native_fraction": 0.417,
+            "expected_fraction": null,
+            "raw": "Total number of hits:                      1  (0.417)\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 78,
+              "byte_start": 4445,
+              "byte_end": 4499
+            },
+            "issues": [],
+            "fraction_numerator": null,
+            "fraction_denominator": 240,
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "fraction_input_fields": [
+              "native.pos_output",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator_unavailable_reason": "summed_aligned_position_count_not_printed",
+            "fraction_precision": "native_rounded_three_significant_digits"
+          },
+          {
+            "name": null,
+            "raw": "# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 79,
+              "byte_start": 4499,
+              "byte_end": 4556
+            }
+          },
+          {
+            "name": null,
+            "raw": "# Mc/sec: 75.03\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 80,
+              "byte_start": 4556,
+              "byte_end": 4572
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "raw": "Scores for complete hit:\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 49,
+              "byte_start": 2861,
+              "byte_end": 2886
+            }
+          },
+          {
+            "raw": "    E-value  score  bias  Model     start    end  Description\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 50,
+              "byte_start": 2886,
+              "byte_end": 2948
+            }
+          },
+          {
+            "raw": "    ------- ------ -----  --------  -----  -----  -----------\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 51,
+              "byte_start": 2948,
+              "byte_end": 3010
+            }
+          },
+          {
+            "raw": "      2e-39  120.9   0.9  model       110     11 \n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 52,
+              "byte_start": 3010,
+              "byte_end": 3060
+            }
+          },
+          {
+            "raw": "Annotation for each hit  (and alignments):\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 55,
+              "byte_start": 3062,
+              "byte_end": 3105
+            }
+          },
+          {
+            "raw": "-------------------------------------\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 71,
+              "byte_start": 4001,
+              "byte_end": 4039
+            }
+          }
+        ],
+        "locus_count": 1,
+        "issues": [],
+        "terminated": true
+      },
+      {
+        "kind": "query_end",
+        "record_key": "stdout:query:3",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+          "line_number": 82,
+          "byte_start": 4575,
+          "byte_end": 6326,
+          "end_line_number": 115
+        },
+        "name": "gapped",
+        "accession": null,
+        "occurrence": 3,
+        "length": 121,
+        "length_axis": "sequence",
+        "statistics": [
+          {
+            "name": "Query sequence(s)",
+            "count": 1,
+            "count_unit": "sequences",
+            "positions": 242,
+            "positions_unit": "nucleotides_searched",
+            "raw": "Query sequence(s):                         1  (242 residues searched)\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 106,
+              "byte_start": 5790,
+              "byte_end": 5860
+            }
+          },
+          {
+            "name": "Target model(s)",
+            "count": 1,
+            "count_unit": "models",
+            "positions": 100,
+            "positions_unit": "model_nodes",
+            "raw": "Target model(s):                           1  (100 nodes)\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 107,
+              "byte_start": 5860,
+              "byte_end": 5918
+            }
+          },
+          {
+            "name": "Residues passing SSV filter",
+            "count": 121,
+            "count_unit": "nucleotide_positions",
+            "native_fraction": 0.5,
+            "expected_fraction": 0.02,
+            "raw": "Residues passing SSV filter:             121  (0.5); expected (0.02)\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 108,
+              "byte_start": 5918,
+              "byte_end": 5987
+            },
+            "issues": [],
+            "fraction_numerator": 121,
+            "fraction_denominator": 242,
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "fraction_input_fields": [
+              "native.filter_position_count",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator_unavailable_reason": null,
+            "fraction_precision": "native_rounded_three_significant_digits"
+          },
+          {
+            "name": "Residues passing bias filter",
+            "count": 121,
+            "count_unit": "nucleotide_positions",
+            "native_fraction": 0.5,
+            "expected_fraction": 0.02,
+            "raw": "Residues passing bias filter:            121  (0.5); expected (0.02)\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 109,
+              "byte_start": 5987,
+              "byte_end": 6056
+            },
+            "issues": [],
+            "fraction_numerator": 121,
+            "fraction_denominator": 242,
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "fraction_input_fields": [
+              "native.filter_position_count",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator_unavailable_reason": null,
+            "fraction_precision": "native_rounded_three_significant_digits"
+          },
+          {
+            "name": "Residues passing Vit filter",
+            "count": 121,
+            "count_unit": "nucleotide_positions",
+            "native_fraction": 0.5,
+            "expected_fraction": 0.003,
+            "raw": "Residues passing Vit filter:             121  (0.5); expected (0.003)\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 110,
+              "byte_start": 6056,
+              "byte_end": 6126
+            },
+            "issues": [],
+            "fraction_numerator": 121,
+            "fraction_denominator": 242,
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "fraction_input_fields": [
+              "native.filter_position_count",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator_unavailable_reason": null,
+            "fraction_precision": "native_rounded_three_significant_digits"
+          },
+          {
+            "name": "Residues passing Fwd filter",
+            "count": 121,
+            "count_unit": "nucleotide_positions",
+            "native_fraction": 0.5,
+            "expected_fraction": 3e-05,
+            "raw": "Residues passing Fwd filter:             121  (0.5); expected (3e-05)\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 111,
+              "byte_start": 6126,
+              "byte_end": 6196
+            },
+            "issues": [],
+            "fraction_numerator": 121,
+            "fraction_denominator": 242,
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "fraction_input_fields": [
+              "native.filter_position_count",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator_unavailable_reason": null,
+            "fraction_precision": "native_rounded_three_significant_digits"
+          },
+          {
+            "name": "Total number of hits",
+            "count": 1,
+            "count_unit": "loci",
+            "native_fraction": 0.417,
+            "expected_fraction": null,
+            "raw": "Total number of hits:                      1  (0.417)\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 112,
+              "byte_start": 6196,
+              "byte_end": 6250
+            },
+            "issues": [],
+            "fraction_numerator": null,
+            "fraction_denominator": 242,
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "fraction_input_fields": [
+              "native.pos_output",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator_unavailable_reason": "summed_aligned_position_count_not_printed",
+            "fraction_precision": "native_rounded_three_significant_digits"
+          },
+          {
+            "name": null,
+            "raw": "# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 113,
+              "byte_start": 6250,
+              "byte_end": 6307
+            }
+          },
+          {
+            "name": null,
+            "raw": "# Mc/sec: 61.31\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 114,
+              "byte_start": 6307,
+              "byte_end": 6323
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "raw": "Scores for complete hit:\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 83,
+              "byte_start": 4604,
+              "byte_end": 4629
+            }
+          },
+          {
+            "raw": "    E-value  score  bias  Model     start    end  Description\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 84,
+              "byte_start": 4629,
+              "byte_end": 4691
+            }
+          },
+          {
+            "raw": "    ------- ------ -----  --------  -----  -----  -----------\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 85,
+              "byte_start": 4691,
+              "byte_end": 4753
+            }
+          },
+          {
+            "raw": "    1.1e-34  105.7   0.7  model        11    111 \n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 86,
+              "byte_start": 4753,
+              "byte_end": 4803
+            }
+          },
+          {
+            "raw": "Annotation for each hit  (and alignments):\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 89,
+              "byte_start": 4805,
+              "byte_end": 4848
+            }
+          },
+          {
+            "raw": "-------------------------------------\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 105,
+              "byte_start": 5752,
+              "byte_end": 5790
+            }
+          }
+        ],
+        "locus_count": 1,
+        "issues": [],
+        "terminated": true
+      }
+    ],
+    "headers": [
+      {
+        "kind": "header",
+        "raw": "# nhmmscan :: search DNA sequence(s) against a DNA profile database\n",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+          "line_number": 1,
+          "byte_start": 0,
+          "byte_end": 68
+        },
+        "issues": []
+      },
+      {
+        "kind": "header",
+        "raw": "# HMMER 3.4 (Aug 2023); http://hmmer.org/\n",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+          "line_number": 2,
+          "byte_start": 68,
+          "byte_end": 110
+        },
+        "issues": []
+      },
+      {
+        "kind": "header",
+        "raw": "# Copyright (C) 2023 Howard Hughes Medical Institute.\n",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+          "line_number": 3,
+          "byte_start": 110,
+          "byte_end": 164
+        },
+        "issues": []
+      },
+      {
+        "kind": "header",
+        "raw": "# Freely distributed under the BSD open source license.\n",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+          "line_number": 4,
+          "byte_start": 164,
+          "byte_end": 220
+        },
+        "issues": []
+      },
+      {
+        "kind": "header",
+        "raw": "# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+          "line_number": 5,
+          "byte_start": 220,
+          "byte_end": 294
+        },
+        "issues": []
+      },
+      {
+        "kind": "header",
+        "raw": "# query sequence file:             /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmscan_search_ordinary/attempt/inputs/query_sequence.fa\n",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+          "line_number": 6,
+          "byte_start": 294,
+          "byte_end": 492
+        },
+        "issues": []
+      },
+      {
+        "kind": "header",
+        "raw": "# target HMM database:             /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmscan_search_ordinary/attempt/inputs/profile_database.hmm\n",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+          "line_number": 7,
+          "byte_start": 492,
+          "byte_end": 693
+        },
+        "issues": []
+      },
+      {
+        "kind": "header",
+        "raw": "# per-seq hits tabular output:     /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmscan_search_ordinary/attempt/outputs/tblout\n",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+          "line_number": 8,
+          "byte_start": 693,
+          "byte_end": 881
+        },
+        "issues": []
+      },
+      {
+        "kind": "header",
+        "raw": "# max ASCII text line length:      unlimited\n",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+          "line_number": 9,
+          "byte_start": 881,
+          "byte_end": 926
+        },
+        "issues": []
+      },
+      {
+        "kind": "header",
+        "raw": "# input seqfile format asserted:   fasta\n",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+          "line_number": 10,
+          "byte_start": 926,
+          "byte_end": 967
+        },
+        "issues": []
+      },
+      {
+        "kind": "header",
+        "raw": "# multithread parallelization:     1 workers\n",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+          "line_number": 11,
+          "byte_start": 967,
+          "byte_end": 1012
+        },
+        "issues": []
+      },
+      {
+        "kind": "header",
+        "raw": "# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+          "line_number": 12,
+          "byte_start": 1012,
+          "byte_end": 1086
+        },
+        "issues": []
+      }
+    ],
+    "native_settings": [],
+    "observed_engine_versions": [
+      {
+        "artifact_role": "stdout",
+        "version": "3.4"
+      },
+      {
+        "artifact_role": "tblout",
+        "version": "3.4"
+      }
+    ],
+    "issues": []
+  },
+  "loci": [
+    {
+      "record_key": "tblout:line:3",
+      "locator": {
+        "artifact_role": "tblout",
+        "artifact_ref": "fixture:sha256:9408e22bbb76c50876de1303d7932a0404abb68167afa50f216ef77da6cf0f12",
+        "line_number": 3,
+        "byte_start": 344,
+        "byte_end": 497,
+        "row_occurrence": 1
+      },
+      "status": "valid",
+      "native": {
+        "target_name": "model",
+        "target_accession": null,
+        "query_name": "forward",
+        "query_accession": null,
+        "hmm_from": 1,
+        "hmm_to": 100,
+        "ali_from": 11,
+        "ali_to": 110,
+        "env_from": 11,
+        "env_to": 110,
+        "length_field": 100,
+        "evalue": 2e-39,
+        "score_bits": 120.9,
+        "bias_bits": 0.9,
+        "strand": "+",
+        "description": "-",
+        "length_field_meaning": "model_length",
+        "reported": true,
+        "included": true,
+        "inclusion_flag": "!",
+        "accuracy": 0.99,
+        "boundary_flags": [
+          "[]",
+          "..",
+          ".."
+        ]
+      },
+      "coordinates": {
+        "convention": "zero_based_half_open",
+        "native_convention": "one_based_inclusive",
+        "model_interval": [
+          0,
+          100
+        ],
+        "sequence_interval": [
+          10,
+          110
+        ],
+        "sequence_envelope_interval": [
+          10,
+          110
+        ]
+      },
+      "raw": "model                -          forward              -                1     100      11     110      11     110     100    +       2e-39  120.9   0.9  -\n",
+      "raw_fields": {
+        "target_name": "model",
+        "target_accession": "-",
+        "query_name": "forward",
+        "query_accession": "-",
+        "hmm_from": "1",
+        "hmm_to": "100",
+        "ali_from": "11",
+        "ali_to": "110",
+        "env_from": "11",
+        "env_to": "110",
+        "length_field": "100",
+        "strand": "+",
+        "evalue": "2e-39",
+        "score_bits": "120.9",
+        "bias_bits": "0.9"
+      },
+      "query_occurrence": 1,
+      "target_occurrence": 1,
+      "issues": [],
+      "source_records": [
+        {
+          "record_key": "tblout:line:3",
+          "locator": {
+            "artifact_role": "tblout",
+            "artifact_ref": "fixture:sha256:9408e22bbb76c50876de1303d7932a0404abb68167afa50f216ef77da6cf0f12",
+            "line_number": 3,
+            "byte_start": 344,
+            "byte_end": 497,
+            "row_occurrence": 1
+          }
+        },
+        {
+          "record_key": "stdout:query:1:locus:1",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 22,
+            "byte_start": 1361,
+            "byte_end": 2219,
+            "end_line_number": 35,
+            "query_occurrence": 1,
+            "target_occurrence": 1
+          }
+        }
+      ],
+      "joins": {
+        "stdout": "stdout:query:1:locus:1",
+        "query": "stdout:query:1",
+        "target_metadata": "inputs/targets/0"
+      },
+      "query_record_key": "stdout:query:1",
+      "alignment": {
+        "model_aligned": "ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+        "sequence_aligned": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG",
+        "posterior": "79***********************************************************************************************986",
+        "chunks": [
+          {
+            "model": {
+              "label": "model",
+              "from": 1,
+              "text": "ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+              "to": 100,
+              "locator": {
+                "artifact_role": "stdout",
+                "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+                "line_number": 29,
+                "byte_start": 1745,
+                "byte_end": 1864
+              },
+              "column_offset": 14
+            },
+            "sequence": {
+              "label": "forward",
+              "from": 11,
+              "text": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG",
+              "to": 110,
+              "locator": {
+                "artifact_role": "stdout",
+                "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+                "line_number": 31,
+                "byte_start": 1979,
+                "byte_end": 2098
+              },
+              "column_offset": 14
+            },
+            "posterior": "79***********************************************************************************************986",
+            "annotations": [
+              {
+                "raw": "              ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg\n",
+                "locator": {
+                  "artifact_role": "stdout",
+                  "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+                  "line_number": 30,
+                  "byte_start": 1864,
+                  "byte_end": 1979
+                }
+              }
+            ],
+            "posterior_locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 32,
+              "byte_start": 2098,
+              "byte_end": 2216
+            }
+          }
+        ],
+        "valid": true,
+        "posterior_valid": true,
+        "issues": []
+      },
+      "model_metadata": {
+        "name": "model",
+        "accession": null,
+        "kind": "profile",
+        "alphabet": "DNA",
+        "length": 100
+      },
+      "sequence_metadata": null,
+      "length_sources": {
+        "model_length": [
+          {
+            "value": 100,
+            "field": "native.length_field"
+          },
+          {
+            "value": 100,
+            "field": "inputs.model.length_or_sequence"
+          }
+        ],
+        "sequence_length": [
+          {
+            "value": 120,
+            "field": "stdout:query:1.length"
+          }
+        ]
+      },
+      "model_length": 100,
+      "sequence_length": 120,
+      "sequence_metadata_alignment_validated": null,
+      "union_identity": {
+        "query": "stdout:query:1",
+        "target": "inputs/targets/0",
+        "strand": "+",
+        "iteration": null
+      }
+    },
+    {
+      "record_key": "tblout:line:4",
+      "locator": {
+        "artifact_role": "tblout",
+        "artifact_ref": "fixture:sha256:9408e22bbb76c50876de1303d7932a0404abb68167afa50f216ef77da6cf0f12",
+        "line_number": 4,
+        "byte_start": 497,
+        "byte_end": 650,
+        "row_occurrence": 2
+      },
+      "status": "valid",
+      "native": {
+        "target_name": "model",
+        "target_accession": null,
+        "query_name": "reverse",
+        "query_accession": null,
+        "hmm_from": 1,
+        "hmm_to": 100,
+        "ali_from": 110,
+        "ali_to": 11,
+        "env_from": 110,
+        "env_to": 11,
+        "length_field": 100,
+        "evalue": 2e-39,
+        "score_bits": 120.9,
+        "bias_bits": 0.9,
+        "strand": "-",
+        "description": "-",
+        "length_field_meaning": "model_length",
+        "reported": true,
+        "included": true,
+        "inclusion_flag": "!",
+        "accuracy": 0.99,
+        "boundary_flags": [
+          "[]",
+          "..",
+          ".."
+        ]
+      },
+      "coordinates": {
+        "convention": "zero_based_half_open",
+        "native_convention": "one_based_inclusive",
+        "model_interval": [
+          0,
+          100
+        ],
+        "sequence_interval": [
+          10,
+          110
+        ],
+        "sequence_envelope_interval": [
+          10,
+          110
+        ]
+      },
+      "raw": "model                -          reverse              -                1     100     110      11     110      11     100    -       2e-39  120.9   0.9  -\n",
+      "raw_fields": {
+        "target_name": "model",
+        "target_accession": "-",
+        "query_name": "reverse",
+        "query_accession": "-",
+        "hmm_from": "1",
+        "hmm_to": "100",
+        "ali_from": "110",
+        "ali_to": "11",
+        "env_from": "110",
+        "env_to": "11",
+        "length_field": "100",
+        "strand": "-",
+        "evalue": "2e-39",
+        "score_bits": "120.9",
+        "bias_bits": "0.9"
+      },
+      "query_occurrence": 2,
+      "target_occurrence": 1,
+      "issues": [],
+      "source_records": [
+        {
+          "record_key": "tblout:line:4",
+          "locator": {
+            "artifact_role": "tblout",
+            "artifact_ref": "fixture:sha256:9408e22bbb76c50876de1303d7932a0404abb68167afa50f216ef77da6cf0f12",
+            "line_number": 4,
+            "byte_start": 497,
+            "byte_end": 650,
+            "row_occurrence": 2
+          }
+        },
+        {
+          "record_key": "stdout:query:2:locus:1",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 56,
+            "byte_start": 3105,
+            "byte_end": 3963,
+            "end_line_number": 69,
+            "query_occurrence": 2,
+            "target_occurrence": 1
+          }
+        }
+      ],
+      "joins": {
+        "stdout": "stdout:query:2:locus:1",
+        "query": "stdout:query:2",
+        "target_metadata": "inputs/targets/0"
+      },
+      "query_record_key": "stdout:query:2",
+      "alignment": {
+        "model_aligned": "ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+        "sequence_aligned": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG",
+        "posterior": "79***********************************************************************************************986",
+        "chunks": [
+          {
+            "model": {
+              "label": "model",
+              "from": 1,
+              "text": "ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+              "to": 100,
+              "locator": {
+                "artifact_role": "stdout",
+                "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+                "line_number": 63,
+                "byte_start": 3489,
+                "byte_end": 3608
+              },
+              "column_offset": 14
+            },
+            "sequence": {
+              "label": "reverse",
+              "from": 110,
+              "text": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG",
+              "to": 11,
+              "locator": {
+                "artifact_role": "stdout",
+                "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+                "line_number": 65,
+                "byte_start": 3723,
+                "byte_end": 3842
+              },
+              "column_offset": 14
+            },
+            "posterior": "79***********************************************************************************************986",
+            "annotations": [
+              {
+                "raw": "              ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg\n",
+                "locator": {
+                  "artifact_role": "stdout",
+                  "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+                  "line_number": 64,
+                  "byte_start": 3608,
+                  "byte_end": 3723
+                }
+              }
+            ],
+            "posterior_locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 66,
+              "byte_start": 3842,
+              "byte_end": 3960
+            }
+          }
+        ],
+        "valid": true,
+        "posterior_valid": true,
+        "issues": []
+      },
+      "model_metadata": {
+        "name": "model",
+        "accession": null,
+        "kind": "profile",
+        "alphabet": "DNA",
+        "length": 100
+      },
+      "sequence_metadata": null,
+      "length_sources": {
+        "model_length": [
+          {
+            "value": 100,
+            "field": "native.length_field"
+          },
+          {
+            "value": 100,
+            "field": "inputs.model.length_or_sequence"
+          }
+        ],
+        "sequence_length": [
+          {
+            "value": 120,
+            "field": "stdout:query:2.length"
+          }
+        ]
+      },
+      "model_length": 100,
+      "sequence_length": 120,
+      "sequence_metadata_alignment_validated": null,
+      "union_identity": {
+        "query": "stdout:query:2",
+        "target": "inputs/targets/0",
+        "strand": "-",
+        "iteration": null
+      }
+    },
+    {
+      "record_key": "tblout:line:5",
+      "locator": {
+        "artifact_role": "tblout",
+        "artifact_ref": "fixture:sha256:9408e22bbb76c50876de1303d7932a0404abb68167afa50f216ef77da6cf0f12",
+        "line_number": 5,
+        "byte_start": 650,
+        "byte_end": 803,
+        "row_occurrence": 3
+      },
+      "status": "valid",
+      "native": {
+        "target_name": "model",
+        "target_accession": null,
+        "query_name": "gapped",
+        "query_accession": null,
+        "hmm_from": 1,
+        "hmm_to": 100,
+        "ali_from": 11,
+        "ali_to": 111,
+        "env_from": 11,
+        "env_to": 111,
+        "length_field": 100,
+        "evalue": 1.1e-34,
+        "score_bits": 105.7,
+        "bias_bits": 0.7,
+        "strand": "+",
+        "description": "-",
+        "length_field_meaning": "model_length",
+        "reported": true,
+        "included": true,
+        "inclusion_flag": "!",
+        "accuracy": 0.95,
+        "boundary_flags": [
+          "[]",
+          "..",
+          ".."
+        ]
+      },
+      "coordinates": {
+        "convention": "zero_based_half_open",
+        "native_convention": "one_based_inclusive",
+        "model_interval": [
+          0,
+          100
+        ],
+        "sequence_interval": [
+          10,
+          111
+        ],
+        "sequence_envelope_interval": [
+          10,
+          111
+        ]
+      },
+      "raw": "model                -          gapped               -                1     100      11     111      11     111     100    +     1.1e-34  105.7   0.7  -\n",
+      "raw_fields": {
+        "target_name": "model",
+        "target_accession": "-",
+        "query_name": "gapped",
+        "query_accession": "-",
+        "hmm_from": "1",
+        "hmm_to": "100",
+        "ali_from": "11",
+        "ali_to": "111",
+        "env_from": "11",
+        "env_to": "111",
+        "length_field": "100",
+        "strand": "+",
+        "evalue": "1.1e-34",
+        "score_bits": "105.7",
+        "bias_bits": "0.7"
+      },
+      "query_occurrence": 3,
+      "target_occurrence": 1,
+      "issues": [],
+      "source_records": [
+        {
+          "record_key": "tblout:line:5",
+          "locator": {
+            "artifact_role": "tblout",
+            "artifact_ref": "fixture:sha256:9408e22bbb76c50876de1303d7932a0404abb68167afa50f216ef77da6cf0f12",
+            "line_number": 5,
+            "byte_start": 650,
+            "byte_end": 803,
+            "row_occurrence": 3
+          }
+        },
+        {
+          "record_key": "stdout:query:3:locus:1",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 90,
+            "byte_start": 4848,
+            "byte_end": 5714,
+            "end_line_number": 103,
+            "query_occurrence": 3,
+            "target_occurrence": 1
+          }
+        }
+      ],
+      "joins": {
+        "stdout": "stdout:query:3:locus:1",
+        "query": "stdout:query:3",
+        "target_metadata": "inputs/targets/0"
+      },
+      "query_record_key": "stdout:query:3",
+      "alignment": {
+        "model_aligned": "ggcagtggcgtgtcaacctccctttacgataagtccatca...ctaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+        "sequence_aligned": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCAgtaCTAACAGTAAGCCTGACGGGGGCAAGATCT--CTTTTTGGCAGACTCACTCTTCCCATTG",
+        "posterior": "79************************************95444899************************998..599**********************986",
+        "chunks": [
+          {
+            "model": {
+              "label": "model",
+              "from": 1,
+              "text": "ggcagtggcgtgtcaacctccctttacgataagtccatca...ctaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+              "to": 100,
+              "locator": {
+                "artifact_role": "stdout",
+                "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+                "line_number": 97,
+                "byte_start": 5232,
+                "byte_end": 5353
+              },
+              "column_offset": 13
+            },
+            "sequence": {
+              "label": "gapped",
+              "from": 11,
+              "text": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCAgtaCTAACAGTAAGCCTGACGGGGGCAAGATCT--CTTTTTGGCAGACTCACTCTTCCCATTG",
+              "to": 111,
+              "locator": {
+                "artifact_role": "stdout",
+                "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+                "line_number": 99,
+                "byte_start": 5470,
+                "byte_end": 5591
+              },
+              "column_offset": 13
+            },
+            "posterior": "79************************************95444899************************998..599**********************986",
+            "annotations": [
+              {
+                "raw": "             ggcagtggcgtgtcaacctccctttacgataagtccatca   ctaacagtaagcctgacgggggcaagatct  ctttttggcagactcactcttcccattg\n",
+                "locator": {
+                  "artifact_role": "stdout",
+                  "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+                  "line_number": 98,
+                  "byte_start": 5353,
+                  "byte_end": 5470
+                }
+              }
+            ],
+            "posterior_locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+              "line_number": 100,
+              "byte_start": 5591,
+              "byte_end": 5711
+            }
+          }
+        ],
+        "valid": true,
+        "posterior_valid": true,
+        "issues": []
+      },
+      "model_metadata": {
+        "name": "model",
+        "accession": null,
+        "kind": "profile",
+        "alphabet": "DNA",
+        "length": 100
+      },
+      "sequence_metadata": null,
+      "length_sources": {
+        "model_length": [
+          {
+            "value": 100,
+            "field": "native.length_field"
+          },
+          {
+            "value": 100,
+            "field": "inputs.model.length_or_sequence"
+          }
+        ],
+        "sequence_length": [
+          {
+            "value": 121,
+            "field": "stdout:query:3.length"
+          }
+        ]
+      },
+      "model_length": 100,
+      "sequence_length": 121,
+      "sequence_metadata_alignment_validated": null,
+      "union_identity": {
+        "query": "stdout:query:3",
+        "target": "inputs/targets/0",
+        "strand": "+",
+        "iteration": null
+      }
+    }
+  ],
+  "queries": [
+    {
+      "kind": "query_end",
+      "record_key": "stdout:query:1",
+      "locator": {
+        "artifact_role": "stdout",
+        "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+        "line_number": 14,
+        "byte_start": 1087,
+        "byte_end": 2831,
+        "end_line_number": 47
+      },
+      "name": "forward",
+      "accession": null,
+      "occurrence": 1,
+      "length": 120,
+      "length_axis": "sequence",
+      "statistics": [
+        {
+          "name": "Query sequence(s)",
+          "count": 1,
+          "count_unit": "sequences",
+          "positions": 240,
+          "positions_unit": "nucleotides_searched",
+          "raw": "Query sequence(s):                         1  (240 residues searched)\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 38,
+            "byte_start": 2295,
+            "byte_end": 2365
+          }
+        },
+        {
+          "name": "Target model(s)",
+          "count": 1,
+          "count_unit": "models",
+          "positions": 100,
+          "positions_unit": "model_nodes",
+          "raw": "Target model(s):                           1  (100 nodes)\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 39,
+            "byte_start": 2365,
+            "byte_end": 2423
+          }
+        },
+        {
+          "name": "Residues passing SSV filter",
+          "count": 120,
+          "count_unit": "nucleotide_positions",
+          "native_fraction": 0.5,
+          "expected_fraction": 0.02,
+          "raw": "Residues passing SSV filter:             120  (0.5); expected (0.02)\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 40,
+            "byte_start": 2423,
+            "byte_end": 2492
+          },
+          "issues": [],
+          "fraction_numerator": 120,
+          "fraction_denominator": 240,
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "fraction_input_fields": [
+            "native.filter_position_count",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator_unavailable_reason": null,
+          "fraction_precision": "native_rounded_three_significant_digits"
+        },
+        {
+          "name": "Residues passing bias filter",
+          "count": 120,
+          "count_unit": "nucleotide_positions",
+          "native_fraction": 0.5,
+          "expected_fraction": 0.02,
+          "raw": "Residues passing bias filter:            120  (0.5); expected (0.02)\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 41,
+            "byte_start": 2492,
+            "byte_end": 2561
+          },
+          "issues": [],
+          "fraction_numerator": 120,
+          "fraction_denominator": 240,
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "fraction_input_fields": [
+            "native.filter_position_count",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator_unavailable_reason": null,
+          "fraction_precision": "native_rounded_three_significant_digits"
+        },
+        {
+          "name": "Residues passing Vit filter",
+          "count": 120,
+          "count_unit": "nucleotide_positions",
+          "native_fraction": 0.5,
+          "expected_fraction": 0.003,
+          "raw": "Residues passing Vit filter:             120  (0.5); expected (0.003)\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 42,
+            "byte_start": 2561,
+            "byte_end": 2631
+          },
+          "issues": [],
+          "fraction_numerator": 120,
+          "fraction_denominator": 240,
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "fraction_input_fields": [
+            "native.filter_position_count",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator_unavailable_reason": null,
+          "fraction_precision": "native_rounded_three_significant_digits"
+        },
+        {
+          "name": "Residues passing Fwd filter",
+          "count": 120,
+          "count_unit": "nucleotide_positions",
+          "native_fraction": 0.5,
+          "expected_fraction": 3e-05,
+          "raw": "Residues passing Fwd filter:             120  (0.5); expected (3e-05)\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 43,
+            "byte_start": 2631,
+            "byte_end": 2701
+          },
+          "issues": [],
+          "fraction_numerator": 120,
+          "fraction_denominator": 240,
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "fraction_input_fields": [
+            "native.filter_position_count",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator_unavailable_reason": null,
+          "fraction_precision": "native_rounded_three_significant_digits"
+        },
+        {
+          "name": "Total number of hits",
+          "count": 1,
+          "count_unit": "loci",
+          "native_fraction": 0.417,
+          "expected_fraction": null,
+          "raw": "Total number of hits:                      1  (0.417)\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 44,
+            "byte_start": 2701,
+            "byte_end": 2755
+          },
+          "issues": [],
+          "fraction_numerator": null,
+          "fraction_denominator": 240,
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "fraction_input_fields": [
+            "native.pos_output",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator_unavailable_reason": "summed_aligned_position_count_not_printed",
+          "fraction_precision": "native_rounded_three_significant_digits"
+        },
+        {
+          "name": null,
+          "raw": "# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 45,
+            "byte_start": 2755,
+            "byte_end": 2812
+          }
+        },
+        {
+          "name": null,
+          "raw": "# Mc/sec: 51.44\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 46,
+            "byte_start": 2812,
+            "byte_end": 2828
+          }
+        }
+      ],
+      "annotations": [
+        {
+          "raw": "Scores for complete hit:\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 15,
+            "byte_start": 1117,
+            "byte_end": 1142
+          }
+        },
+        {
+          "raw": "    E-value  score  bias  Model     start    end  Description\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 16,
+            "byte_start": 1142,
+            "byte_end": 1204
+          }
+        },
+        {
+          "raw": "    ------- ------ -----  --------  -----  -----  -----------\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 17,
+            "byte_start": 1204,
+            "byte_end": 1266
+          }
+        },
+        {
+          "raw": "      2e-39  120.9   0.9  model        11    110 \n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 18,
+            "byte_start": 1266,
+            "byte_end": 1316
+          }
+        },
+        {
+          "raw": "Annotation for each hit  (and alignments):\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 21,
+            "byte_start": 1318,
+            "byte_end": 1361
+          }
+        },
+        {
+          "raw": "-------------------------------------\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 37,
+            "byte_start": 2257,
+            "byte_end": 2295
+          }
+        }
+      ],
+      "locus_count": 1,
+      "issues": [],
+      "terminated": true
+    },
+    {
+      "kind": "query_end",
+      "record_key": "stdout:query:2",
+      "locator": {
+        "artifact_role": "stdout",
+        "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+        "line_number": 48,
+        "byte_start": 2831,
+        "byte_end": 4575,
+        "end_line_number": 81
+      },
+      "name": "reverse",
+      "accession": null,
+      "occurrence": 2,
+      "length": 120,
+      "length_axis": "sequence",
+      "statistics": [
+        {
+          "name": "Query sequence(s)",
+          "count": 1,
+          "count_unit": "sequences",
+          "positions": 240,
+          "positions_unit": "nucleotides_searched",
+          "raw": "Query sequence(s):                         1  (240 residues searched)\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 72,
+            "byte_start": 4039,
+            "byte_end": 4109
+          }
+        },
+        {
+          "name": "Target model(s)",
+          "count": 1,
+          "count_unit": "models",
+          "positions": 100,
+          "positions_unit": "model_nodes",
+          "raw": "Target model(s):                           1  (100 nodes)\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 73,
+            "byte_start": 4109,
+            "byte_end": 4167
+          }
+        },
+        {
+          "name": "Residues passing SSV filter",
+          "count": 120,
+          "count_unit": "nucleotide_positions",
+          "native_fraction": 0.5,
+          "expected_fraction": 0.02,
+          "raw": "Residues passing SSV filter:             120  (0.5); expected (0.02)\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 74,
+            "byte_start": 4167,
+            "byte_end": 4236
+          },
+          "issues": [],
+          "fraction_numerator": 120,
+          "fraction_denominator": 240,
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "fraction_input_fields": [
+            "native.filter_position_count",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator_unavailable_reason": null,
+          "fraction_precision": "native_rounded_three_significant_digits"
+        },
+        {
+          "name": "Residues passing bias filter",
+          "count": 120,
+          "count_unit": "nucleotide_positions",
+          "native_fraction": 0.5,
+          "expected_fraction": 0.02,
+          "raw": "Residues passing bias filter:            120  (0.5); expected (0.02)\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 75,
+            "byte_start": 4236,
+            "byte_end": 4305
+          },
+          "issues": [],
+          "fraction_numerator": 120,
+          "fraction_denominator": 240,
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "fraction_input_fields": [
+            "native.filter_position_count",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator_unavailable_reason": null,
+          "fraction_precision": "native_rounded_three_significant_digits"
+        },
+        {
+          "name": "Residues passing Vit filter",
+          "count": 120,
+          "count_unit": "nucleotide_positions",
+          "native_fraction": 0.5,
+          "expected_fraction": 0.003,
+          "raw": "Residues passing Vit filter:             120  (0.5); expected (0.003)\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 76,
+            "byte_start": 4305,
+            "byte_end": 4375
+          },
+          "issues": [],
+          "fraction_numerator": 120,
+          "fraction_denominator": 240,
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "fraction_input_fields": [
+            "native.filter_position_count",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator_unavailable_reason": null,
+          "fraction_precision": "native_rounded_three_significant_digits"
+        },
+        {
+          "name": "Residues passing Fwd filter",
+          "count": 120,
+          "count_unit": "nucleotide_positions",
+          "native_fraction": 0.5,
+          "expected_fraction": 3e-05,
+          "raw": "Residues passing Fwd filter:             120  (0.5); expected (3e-05)\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 77,
+            "byte_start": 4375,
+            "byte_end": 4445
+          },
+          "issues": [],
+          "fraction_numerator": 120,
+          "fraction_denominator": 240,
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "fraction_input_fields": [
+            "native.filter_position_count",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator_unavailable_reason": null,
+          "fraction_precision": "native_rounded_three_significant_digits"
+        },
+        {
+          "name": "Total number of hits",
+          "count": 1,
+          "count_unit": "loci",
+          "native_fraction": 0.417,
+          "expected_fraction": null,
+          "raw": "Total number of hits:                      1  (0.417)\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 78,
+            "byte_start": 4445,
+            "byte_end": 4499
+          },
+          "issues": [],
+          "fraction_numerator": null,
+          "fraction_denominator": 240,
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "fraction_input_fields": [
+            "native.pos_output",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator_unavailable_reason": "summed_aligned_position_count_not_printed",
+          "fraction_precision": "native_rounded_three_significant_digits"
+        },
+        {
+          "name": null,
+          "raw": "# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 79,
+            "byte_start": 4499,
+            "byte_end": 4556
+          }
+        },
+        {
+          "name": null,
+          "raw": "# Mc/sec: 75.03\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 80,
+            "byte_start": 4556,
+            "byte_end": 4572
+          }
+        }
+      ],
+      "annotations": [
+        {
+          "raw": "Scores for complete hit:\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 49,
+            "byte_start": 2861,
+            "byte_end": 2886
+          }
+        },
+        {
+          "raw": "    E-value  score  bias  Model     start    end  Description\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 50,
+            "byte_start": 2886,
+            "byte_end": 2948
+          }
+        },
+        {
+          "raw": "    ------- ------ -----  --------  -----  -----  -----------\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 51,
+            "byte_start": 2948,
+            "byte_end": 3010
+          }
+        },
+        {
+          "raw": "      2e-39  120.9   0.9  model       110     11 \n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 52,
+            "byte_start": 3010,
+            "byte_end": 3060
+          }
+        },
+        {
+          "raw": "Annotation for each hit  (and alignments):\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 55,
+            "byte_start": 3062,
+            "byte_end": 3105
+          }
+        },
+        {
+          "raw": "-------------------------------------\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 71,
+            "byte_start": 4001,
+            "byte_end": 4039
+          }
+        }
+      ],
+      "locus_count": 1,
+      "issues": [],
+      "terminated": true
+    },
+    {
+      "kind": "query_end",
+      "record_key": "stdout:query:3",
+      "locator": {
+        "artifact_role": "stdout",
+        "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+        "line_number": 82,
+        "byte_start": 4575,
+        "byte_end": 6326,
+        "end_line_number": 115
+      },
+      "name": "gapped",
+      "accession": null,
+      "occurrence": 3,
+      "length": 121,
+      "length_axis": "sequence",
+      "statistics": [
+        {
+          "name": "Query sequence(s)",
+          "count": 1,
+          "count_unit": "sequences",
+          "positions": 242,
+          "positions_unit": "nucleotides_searched",
+          "raw": "Query sequence(s):                         1  (242 residues searched)\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 106,
+            "byte_start": 5790,
+            "byte_end": 5860
+          }
+        },
+        {
+          "name": "Target model(s)",
+          "count": 1,
+          "count_unit": "models",
+          "positions": 100,
+          "positions_unit": "model_nodes",
+          "raw": "Target model(s):                           1  (100 nodes)\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 107,
+            "byte_start": 5860,
+            "byte_end": 5918
+          }
+        },
+        {
+          "name": "Residues passing SSV filter",
+          "count": 121,
+          "count_unit": "nucleotide_positions",
+          "native_fraction": 0.5,
+          "expected_fraction": 0.02,
+          "raw": "Residues passing SSV filter:             121  (0.5); expected (0.02)\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 108,
+            "byte_start": 5918,
+            "byte_end": 5987
+          },
+          "issues": [],
+          "fraction_numerator": 121,
+          "fraction_denominator": 242,
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "fraction_input_fields": [
+            "native.filter_position_count",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator_unavailable_reason": null,
+          "fraction_precision": "native_rounded_three_significant_digits"
+        },
+        {
+          "name": "Residues passing bias filter",
+          "count": 121,
+          "count_unit": "nucleotide_positions",
+          "native_fraction": 0.5,
+          "expected_fraction": 0.02,
+          "raw": "Residues passing bias filter:            121  (0.5); expected (0.02)\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 109,
+            "byte_start": 5987,
+            "byte_end": 6056
+          },
+          "issues": [],
+          "fraction_numerator": 121,
+          "fraction_denominator": 242,
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "fraction_input_fields": [
+            "native.filter_position_count",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator_unavailable_reason": null,
+          "fraction_precision": "native_rounded_three_significant_digits"
+        },
+        {
+          "name": "Residues passing Vit filter",
+          "count": 121,
+          "count_unit": "nucleotide_positions",
+          "native_fraction": 0.5,
+          "expected_fraction": 0.003,
+          "raw": "Residues passing Vit filter:             121  (0.5); expected (0.003)\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 110,
+            "byte_start": 6056,
+            "byte_end": 6126
+          },
+          "issues": [],
+          "fraction_numerator": 121,
+          "fraction_denominator": 242,
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "fraction_input_fields": [
+            "native.filter_position_count",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator_unavailable_reason": null,
+          "fraction_precision": "native_rounded_three_significant_digits"
+        },
+        {
+          "name": "Residues passing Fwd filter",
+          "count": 121,
+          "count_unit": "nucleotide_positions",
+          "native_fraction": 0.5,
+          "expected_fraction": 3e-05,
+          "raw": "Residues passing Fwd filter:             121  (0.5); expected (3e-05)\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 111,
+            "byte_start": 6126,
+            "byte_end": 6196
+          },
+          "issues": [],
+          "fraction_numerator": 121,
+          "fraction_denominator": 242,
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "fraction_input_fields": [
+            "native.filter_position_count",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator_unavailable_reason": null,
+          "fraction_precision": "native_rounded_three_significant_digits"
+        },
+        {
+          "name": "Total number of hits",
+          "count": 1,
+          "count_unit": "loci",
+          "native_fraction": 0.417,
+          "expected_fraction": null,
+          "raw": "Total number of hits:                      1  (0.417)\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 112,
+            "byte_start": 6196,
+            "byte_end": 6250
+          },
+          "issues": [],
+          "fraction_numerator": null,
+          "fraction_denominator": 242,
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "fraction_input_fields": [
+            "native.pos_output",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator_unavailable_reason": "summed_aligned_position_count_not_printed",
+          "fraction_precision": "native_rounded_three_significant_digits"
+        },
+        {
+          "name": null,
+          "raw": "# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 113,
+            "byte_start": 6250,
+            "byte_end": 6307
+          }
+        },
+        {
+          "name": null,
+          "raw": "# Mc/sec: 61.31\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 114,
+            "byte_start": 6307,
+            "byte_end": 6323
+          }
+        }
+      ],
+      "annotations": [
+        {
+          "raw": "Scores for complete hit:\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 83,
+            "byte_start": 4604,
+            "byte_end": 4629
+          }
+        },
+        {
+          "raw": "    E-value  score  bias  Model     start    end  Description\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 84,
+            "byte_start": 4629,
+            "byte_end": 4691
+          }
+        },
+        {
+          "raw": "    ------- ------ -----  --------  -----  -----  -----------\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 85,
+            "byte_start": 4691,
+            "byte_end": 4753
+          }
+        },
+        {
+          "raw": "    1.1e-34  105.7   0.7  model        11    111 \n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 86,
+            "byte_start": 4753,
+            "byte_end": 4803
+          }
+        },
+        {
+          "raw": "Annotation for each hit  (and alignments):\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 89,
+            "byte_start": 4805,
+            "byte_end": 4848
+          }
+        },
+        {
+          "raw": "-------------------------------------\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:8b03c26653a19e87db49ca7c1ca88998875181442dffbae1144b65a01511081a",
+            "line_number": 105,
+            "byte_start": 5752,
+            "byte_end": 5790
+          }
+        }
+      ],
+      "locus_count": 1,
+      "issues": [],
+      "terminated": true
+    }
+  ],
+  "native_settings": [],
+  "completeness": {
+    "native_artifacts": {
+      "stdout": true,
+      "tblout": true
+    },
+    "acquisition": {
+      "output_complete": true,
+      "hit_population_complete": true
+    },
+    "status": "complete",
+    "hit_population_complete": true
+  },
+  "issues": []
+}

@@ -1,0 +1,90 @@
+{
+  "changed_pair_recalculation_without_parsing": true,
+  "counts_after": {
+    "runtime_actions": 12,
+    "runtime_model_calls": 12,
+    "runtime_observations": 12,
+    "runtime_record_receipts": 121,
+    "runtime_report_attempts": 4
+  },
+  "counts_before": {
+    "runtime_actions": 12,
+    "runtime_model_calls": 12,
+    "runtime_observations": 12,
+    "runtime_record_receipts": 121,
+    "runtime_report_attempts": 4
+  },
+  "durable_action_unchanged": true,
+  "native_calls_added": 0,
+  "operation_key": "phylogeny-composed-gene_tree-1:episode_ad697857312edf92897b5fc2b58b937bf8a3c7929b4f5bef0bbfe014491ee573:3",
+  "raw_host_outcome": {
+    "changed_record_refs": [
+      "source_9edf307529725531173e0bdc",
+      "source_9a7515831d8795fe76c1be9b",
+      "source_7f61908ac1cb9247d2cab930",
+      "source_c4c817b3311e553612b13a85",
+      "source_b89fb4a5f57066b7cc799cbe",
+      "source_f7282bd155dcd59d1628e8df",
+      "source_f9542d92e350be79fe7dab09"
+    ],
+    "feedback": null,
+    "operation_ref": "api_operation_82bfd7523efe1b1cdb1d6c79",
+    "record_refs": [
+      "source_9edf307529725531173e0bdc",
+      "source_9a7515831d8795fe76c1be9b",
+      "source_7f61908ac1cb9247d2cab930",
+      "source_c4c817b3311e553612b13a85",
+      "source_b89fb4a5f57066b7cc799cbe",
+      "source_f7282bd155dcd59d1628e8df",
+      "source_f9542d92e350be79fe7dab09"
+    ],
+    "result": {
+      "event": {
+        "facts": {
+          "body_complete": true,
+          "diagnostics": [],
+          "failure": null,
+          "http_status": 200,
+          "operation": "api.bvbrc_appservice.download",
+          "parse_status": "ok",
+          "projection": {
+            "body_complete": true,
+            "byte_count": 39,
+            "metadata_size": null,
+            "object_complete": "yes",
+            "observed_range": null,
+            "received_range": null,
+            "requested_range": null,
+            "sha256": "619812b4d487ec324c12654e2205fd477db3ad8896fbb39bf007afde64b516f8",
+            "total_size": 39
+          }
+        },
+        "failure_code": null,
+        "handoff_ready": false,
+        "kind": "response",
+        "native_handle": {
+          "task_id": "123"
+        },
+        "result_available": true,
+        "state": "completed"
+      },
+      "missing_requirements": [],
+      "publication_ref": "source_b89fb4a5f57066b7cc799cbe",
+      "receipt_contract": "AcquisitionReceipt",
+      "result_record_refs": [
+        "source_c4c817b3311e553612b13a85"
+      ],
+      "service": "bvbrc_appservice",
+      "source_ref": "source_c4c817b3311e553612b13a85",
+      "support_receipt_ref": "source_9edf307529725531173e0bdc"
+    },
+    "status": "completed"
+  },
+  "saved_recalculation_equal": true,
+  "typed_read_and_admission_without_calculation": true,
+  "workflow_pending_work_after_action": {
+    "captured_at": "2026-10-25T05:27:25.813831+00:00",
+    "items": [],
+    "version": "pending_work_v1"
+  }
+}

@@ -1,0 +1,277 @@
+{
+  "returncode": 0,
+  "terminal": true,
+  "quiescent": true,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "success",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "ended": {
+        "at": "2026-10-27T18:43:47.164847+00:00",
+        "monotonic_ns": 940188862177716,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 2951.495771124,
+    "native_returncode": 0,
+    "observed_scratch_bytes": 217788416
+  },
+  "source_pins_unchanged": true,
+  "binary_pins_unchanged": true,
+  "checkout_drift": [
+    {
+      "before": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_contracts.py",
+        "sha256": "038fa08566f0f3fc078d42925db425c6a2cfa4db2a6f985341df58f8d45680b7",
+        "size_bytes": 123853
+      },
+      "after": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/chromatin_interaction_contracts.py",
+        "sha256": "8615d46130306a8c7c774f88d75f655ccf35e69afae1252839bd70b1ba621a49",
+        "size_bytes": 124216
+      }
+    },
+    {
+      "before": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_inputs.py",
+        "sha256": "8b3e945ebf765daef52fd657ea69dbed2f78ca9b5dab01f89ac81e2117b81e63",
+        "size_bytes": 33130
+      },
+      "after": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/chromatin_interaction_inputs.py",
+        "sha256": "ddd2c63e45bc274be38e9ae19f4a1ee222503008de4abf59f7c1d5068a62591e",
+        "size_bytes": 33853
+      }
+    },
+    {
+      "before": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_return_views.py",
+        "sha256": "abcbf1b6bfaf1859a6af1dd2a92db173420573a8510c354f8747dfef8ddcf1dd",
+        "size_bytes": 4948
+      },
+      "after": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/chromatin_interaction_return_views.py",
+        "sha256": "9af0b739bd129c01794ab97c5b130c6eb8f84e8b8bf3fd85322d0366f0f5a58a",
+        "size_bytes": 6364
+      }
+    },
+    {
+      "before": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check001/source_snapshot/gene_annotation_episode/chromatin_interaction_tables.py",
+        "sha256": "8a54648815bf5cb2c061874314c5db6d3ee4fd04ec7bd1cf9eb04a448cbf04af",
+        "size_bytes": 13893
+      },
+      "after": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/chromatin_interaction_tables.py",
+        "sha256": "f53faf8ba5e6979a6eba19394237842bd3c2334c999ac4bdf25104507e98c680",
+        "size_bytes": 14130
+      }
+    },
+    {
+      "before": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check001/source_snapshot/gene_annotation_episode/communication.py",
+        "sha256": "1467b7d41825667b02ac7cba3a451a42667cd7178580cdf0270e340df8048f93",
+        "size_bytes": 31725
+      },
+      "after": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/communication.py",
+        "sha256": "25e3158e9c813e876fdf5a69fa83b96855bbe935fdab8e186182dd52172d5f1c",
+        "size_bytes": 31795
+      }
+    },
+    {
+      "before": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check001/source_snapshot/gene_annotation_episode/literature_completion_time_calculations.py",
+        "sha256": "bd94688c9f64188dfc922c7cffbce43793381de5bf1374b8c74eacc508a82e4c",
+        "size_bytes": 6468
+      },
+      "after": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_completion_time_calculations.py",
+        "sha256": "2c1c4429899af6388139edf1399f20135e4b4217ddc533b1a27b42df19897872",
+        "size_bytes": 6500
+      }
+    },
+    {
+      "before": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check001/source_snapshot/gene_annotation_episode/literature_completion_time_inputs.py",
+        "sha256": "447615f96253a72be64a38faf8b9bc92ccbbe8ae1822e615d393564241df7762",
+        "size_bytes": 12901
+      },
+      "after": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_completion_time_inputs.py",
+        "sha256": "77f941697de07a8de8c250c2d39d7508e165275bc081acce745ffd0950d98905",
+        "size_bytes": 14712
+      }
+    },
+    {
+      "before": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check001/source_snapshot/gene_annotation_episode/literature_completion_time_render.py",
+        "sha256": "5cbe7a7bcfae377a0ec7640a1e33c62795720dfa417887775f73cca80fec3623",
+        "size_bytes": 4320
+      },
+      "after": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_completion_time_render.py",
+        "sha256": "388238c64dc375f2dfbc8640ec8d6fcd1ac4495be5ada10afdda57a8c6da9e74",
+        "size_bytes": 4547
+      }
+    },
+    {
+      "before": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check001/source_snapshot/gene_annotation_episode/literature_episodes.py",
+        "sha256": "8b1c065e00ad54f52b35098ee280db6adbb73ab1b41bbaae0599874775eafc21",
+        "size_bytes": 132040
+      },
+      "after": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_episodes.py",
+        "sha256": "e6dca3ab2b19d9bf7e83074f131a2f703b2670d8aff8e25d64e2e0d4c177228e",
+        "size_bytes": 136598
+      }
+    },
+    {
+      "before": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check001/source_snapshot/gene_annotation_episode/literature_experimental_prompt.py",
+        "sha256": "8cc1bb61b2da7de691d338f66015f90736de1e03dda2b8bd083de16e03adadf3",
+        "size_bytes": 92180
+      },
+      "after": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_experimental_prompt.py",
+        "sha256": "855d8df203fd9ed92201e2c1f69c58f61a34dee18ac17c4c6f83b76642575ae7",
+        "size_bytes": 94356
+      }
+    },
+    {
+      "before": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check001/source_snapshot/gene_annotation_episode/literature_product_partition_inputs.py",
+        "sha256": "0b85fc81ff08ac8925ec214f4a4364800ed727d87a793ffe7fe1b16f6123226f",
+        "size_bytes": 14157
+      },
+      "after": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_product_partition_inputs.py",
+        "sha256": "099894b097e2755a6275622b3d43375e85609a72243d4c68c32ec0c29f2bcd29",
+        "size_bytes": 14826
+      }
+    },
+    {
+      "before": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check001/source_snapshot/gene_annotation_episode/literature_product_partition_render.py",
+        "sha256": "9205aa6413c23ebc9a193746fa2226a2841244a860d195cc8933266764efe457",
+        "size_bytes": 3120
+      },
+      "after": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_product_partition_render.py",
+        "sha256": "1ca0c826eea324e430046417e5989ef61d2f7041c00f12a3018154c2532f7e6f",
+        "size_bytes": 4418
+      }
+    },
+    {
+      "before": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check001/source_snapshot/gene_annotation_episode/literature_product_partition_storage.py",
+        "sha256": "0604496e033dc45ba9d0d1deb7d0d52111f3f6972c5d3e24698dca4d83bf36a0",
+        "size_bytes": 15675
+      },
+      "after": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_product_partition_storage.py",
+        "sha256": "9894244dcf626ba357f9ab0dd30e9192918fe765ba13e876a53442ebe0f6b46c",
+        "size_bytes": 18313
+      }
+    },
+    {
+      "before": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check001/source_snapshot/gene_annotation_episode/literature_reference_parent_prompt.py",
+        "sha256": "6b98ac818d5a73ee4df6e46d31ce8c736addcd0e04af74b5cbe02efb8900b527",
+        "size_bytes": 12906
+      },
+      "after": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_reference_parent_prompt.py",
+        "sha256": "80896a7a53d766bff17c288d81d663d660ceb739a3335216f71e9d884da4b0f6",
+        "size_bytes": 13153
+      }
+    },
+    {
+      "before": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check001/source_snapshot/gene_annotation_episode/native_chromatin_interaction_contracts.py",
+        "sha256": "bd3f1351f411e0ebd15ca01c815cef1e79d1f15e06fc4fade023185c0c2f5b24",
+        "size_bytes": 17761
+      },
+      "after": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/native_chromatin_interaction_contracts.py",
+        "sha256": "1f1081d9acc2cb0bc27388cf075480c8763341ed2773f093895d228440eb07d5",
+        "size_bytes": 19053
+      }
+    },
+    {
+      "before": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check001/source_snapshot/gene_annotation_episode/native_chromatin_interaction_driver.py",
+        "sha256": "babca27a65fc45309ce0c37556e8de1bc2de2725da5dd083234a9a2dd441697d",
+        "size_bytes": 17093
+      },
+      "after": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/native_chromatin_interaction_driver.py",
+        "sha256": "892201a21499fa9a3f46bbe6e9cebe3071672928eca4d1a58b43a0b48104348f",
+        "size_bytes": 17599
+      }
+    },
+    {
+      "before": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check001/source_snapshot/gene_annotation_episode/native_chromatin_interaction_preparation.py",
+        "sha256": "2c95291b431b05a1cd1587547b35433923dc8b919ac6a2f8769942cbebe4ad91",
+        "size_bytes": 18476
+      },
+      "after": {
+        "path": "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/native_chromatin_interaction_preparation.py",
+        "sha256": "4e102ca7bf4aa4725ddb07eefb30eb8267a456beb8bdb8fc75c7c5c11c31bd00",
+        "size_bytes": 19172
+      }
+    },
+    {
+      "before": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check001/source_snapshot/tests/test_native_chromatin_interaction_workflow.py",
+        "sha256": "5cf10d4f7a4101c2967690e368dc706836d30ff549cda40d6e8132b2467d9e36",
+        "size_bytes": 21447
+      },
+      "after": {
+        "path": "/home/chia/repos/gene_annotation_episode/tests/test_native_chromatin_interaction_workflow.py",
+        "sha256": "45171a96f10fc42f3e40109b771f308c339555c3b831e3587375e0e1cc3de73c",
+        "size_bytes": 28932
+      }
+    },
+    {
+      "before": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check001/source_snapshot/verification/tool_graders_chromatin_workflow_2026-10-27_451/fixture_helpers.py",
+        "sha256": "4451a92fbbc470f4548c83d96ffdb3c471ec3dbce6f586fff40a6e476769f607",
+        "size_bytes": 21475
+      },
+      "after": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/fixture_helpers.py",
+        "sha256": "66d52415fd3832042c99c7104a5749c2daa503b4498473b87b65417caeb24783",
+        "size_bytes": 21626
+      }
+    }
+  ],
+  "handle": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check001/handle.json",
+  "unit": "gene-local-job-5b5eff92a6c54f4d9ee14da9635a8406.service"
+}

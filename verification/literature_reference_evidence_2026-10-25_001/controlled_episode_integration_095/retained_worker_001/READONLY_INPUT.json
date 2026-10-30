@@ -1,0 +1,2054 @@
+{
+  "run": "run_4c39f436c3e84ad5a41fec8354ce4bbd",
+  "parent": "episode_d58c1578017bdf6f754743ca21e819152f24e2d2082e7d2de72f1d34ca601209",
+  "path": [
+    [
+      "annotation",
+      "root"
+    ]
+  ],
+  "scope": {
+    "subject_refs": [
+      "input_0cf8c100d09446c95154fa4b"
+    ]
+  },
+  "known": [
+    "artifact_0bf9e965b2541cef5e6192aec11c837065fa1f8de20c9a747868c87f4842ebe3",
+    "artifact_75aeed084c2719116593927f9e30b7e311058bc1e63f1f3387aa8af4667ad678",
+    "artifact_7ae8535eb4955105896f0ad6b2ec22188af122266865fc8de00cbf6a7af1e9ae",
+    "artifact_c64110f11cdac9aabe6788298547b9d38e46b684db210955b59d2198fa9044a2",
+    "artifact_f151d9fb37a32bfe5c8e5386b17c67142369f18bf77e64d0438756345d2da2f5",
+    "artifact_f9c23138d122cf84239be7fd072f1ca2b0569b9e298ccf27860366f8a84fe2db",
+    "artifact_fdf65fef42a3f339bd777466569bc4d9da2ee96700f29fbbc3a2c1dc1a2a2696",
+    "input_0cf8c100d09446c95154fa4b",
+    "material_0fa139234021ad47c408ca39",
+    "reference_1806b540399bd60d6828e2fb",
+    "reference_1bd8806e4cf4e503c1f2721a",
+    "reference_296bd81b2ae263de685d089e",
+    "reference_3ed44e06629140f1d60b6a94",
+    "reference_6c157e78e876a4cd61d20369",
+    "reference_7990e6f080fb0d6aedc5a34c",
+    "reference_92b7ed536dec91da85bd52bf",
+    "reference_9a212ee42ae52e5da9c4b30c",
+    "reference_9dd27c64cbaa5cb4734a1259",
+    "reference_ac97e66f81ecf6d0c65602d5",
+    "reference_aedcecdd6b98b345fbe28e49",
+    "reference_bb4d37032314168048c110f7",
+    "reference_d2eb44d0c34ebe62061f5377",
+    "reference_e2a2d43a19c7fe81cd33ec32",
+    "reference_f07fad89573fa9b166b13751",
+    "source_170d96ee6be90c3b9485e4b0",
+    "source_4a473713ec3134556e08d29b",
+    "source_9fc6e4021cea9024e29e3889",
+    "source_b05c4ead5958458e091ba29e",
+    "source_b557bee718c63c97ad72ff3a",
+    "source_ca4b21931819f38dd4c0d823"
+  ],
+  "sheet": "source_4a473713ec3134556e08d29b",
+  "keys": [
+    "local:condition0-real:difference",
+    "joint:0:controlled_response_difference",
+    "joint:1:controlled_response_difference",
+    "joint:2:controlled_response_difference",
+    "joint:3:controlled_response_difference"
+  ],
+  "admitted": [
+    {
+      "cell": {
+        "approximate": true,
+        "bound_kind": "conditional_digitization",
+        "bound_state": {
+          "lower": "available",
+          "upper": "available"
+        },
+        "conditional_on": [
+          "approximate_source_reading",
+          "conditional_digitization",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "formula_code": "condition_control_difference",
+        "lower": 0.00385,
+        "origin": "synthetic",
+        "relation": "interval",
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "umol/min",
+        "upper": 0.00405,
+        "value": 0.00395
+      },
+      "component": "local_difference",
+      "component_key": "local:condition0-real:difference",
+      "context": {
+        "condition_control_applications": {
+          "condition0": "shared_reference_assumption",
+          "condition1": null
+        },
+        "condition_ids": [
+          "controlled_condition_0cb74839b6df1b3f39013009",
+          "controlled_condition_e8ec5821ed8e962782d29103"
+        ],
+        "condition_state": "known",
+        "control_application": "shared_reference_assumption",
+        "control_reuse": null,
+        "endpoint_id": "controlled_endpoint_a5943492dbd5ebb3f25ec799",
+        "endpoint_state": "known",
+        "measurement_methods": [
+          "text",
+          "graph"
+        ],
+        "model_kind": "none",
+        "normalization_id": "controlled_normalization_655297e09fecdd11367545ec",
+        "normalization_state": "known",
+        "original_origins": [
+          "synthetic"
+        ],
+        "owner_ids": [
+          "controlled_physical_observation_e7430d03578e94af3324fc56",
+          "controlled_physical_observation_f9bf7dc0446f5237294795b8"
+        ],
+        "owner_state": "known",
+        "protein_arrangements": [
+          "protein_present",
+          "protein_free_control"
+        ],
+        "representation_state": "single",
+        "source_kinds": [
+          "synthetic_fixture"
+        ],
+        "subject_construct_ids": [
+          "controlled_subject_construct_05fc9367a7d33c59f1b0ac5f",
+          "controlled_subject_construct_d6909a64c33aa18deb015621"
+        ],
+        "subject_construct_state": "known",
+        "variance_status": "unknown"
+      },
+      "dependencies": {
+        "covariance_index": null,
+        "covariance_owner_ids": [],
+        "full_source_covariance_required": false,
+        "model_readings": [],
+        "numeric_fields": [
+          {
+            "fields": [
+              "value",
+              "threshold",
+              "relation",
+              "approximate",
+              "unit",
+              "status",
+              "origin",
+              "digitization_interval"
+            ],
+            "reading": {
+              "reading_key": null,
+              "role": "protein_condition0"
+            }
+          },
+          {
+            "fields": [
+              "value",
+              "threshold",
+              "relation",
+              "approximate",
+              "unit",
+              "status",
+              "origin",
+              "digitization_interval"
+            ],
+            "reading": {
+              "reading_key": null,
+              "role": "empty_condition0"
+            }
+          }
+        ],
+        "numeric_readings": [
+          {
+            "reading_key": null,
+            "role": "protein_condition0"
+          },
+          {
+            "reading_key": null,
+            "role": "empty_condition0"
+          }
+        ],
+        "scientific_readings": [
+          {
+            "reading_key": null,
+            "role": "protein_condition0"
+          },
+          {
+            "reading_key": null,
+            "role": "empty_condition0"
+          }
+        ],
+        "source_variable_indices": [],
+        "uncertainty_readings": [],
+        "unresolved_readings": []
+      },
+      "joint_scope_context": null,
+      "kind": "local_difference",
+      "native_reading": null,
+      "numeric_locations": [
+        {
+          "end": 523,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 519
+        },
+        {
+          "end": 532,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 531
+        },
+        {
+          "end": 541,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 540
+        },
+        {
+          "end": 550,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 549
+        },
+        {
+          "end": 571,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 570
+        },
+        {
+          "end": 582,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 579
+        },
+        {
+          "end": 594,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 590
+        },
+        {
+          "end": 603,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 602
+        },
+        {
+          "end": 624,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 623
+        },
+        {
+          "end": 636,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 632
+        },
+        {
+          "end": 648,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 644
+        },
+        {
+          "end": 657,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 656
+        },
+        {
+          "end": 678,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 677
+        },
+        {
+          "end": 687,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 686
+        },
+        {
+          "end": 691,
+          "kind": "utf8_span",
+          "source_ref": "source_b05c4ead5958458e091ba29e",
+          "start": 689
+        },
+        {
+          "end": 696,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 695
+        },
+        {
+          "end": 707,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 704
+        },
+        {
+          "end": 718,
+          "kind": "utf8_span",
+          "source_ref": "source_b05c4ead5958458e091ba29e",
+          "start": 717
+        },
+        {
+          "end": 782,
+          "kind": "utf8_span",
+          "source_ref": "source_b05c4ead5958458e091ba29e",
+          "start": 781
+        },
+        {
+          "kind": "image_region",
+          "region": [
+            20,
+            10,
+            30,
+            205
+          ],
+          "source_ref": "source_b557bee718c63c97ad72ff3a"
+        }
+      ],
+      "pair_key": "condition0-real",
+      "reading": null,
+      "reading_assignment": null,
+      "reported_uncertainty": null,
+      "reported_uncertainty_unit": null,
+      "sheet_ref": "source_4a473713ec3134556e08d29b",
+      "version": "literature_controlled_response_component_fact_v3"
+    },
+    {
+      "cell": {
+        "approximate": false,
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        },
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "formula_code": "four_arm_condition_difference",
+        "lower": null,
+        "origin": "synthetic",
+        "relation": "eq",
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "umol/min",
+        "upper": null,
+        "value": 0.002
+      },
+      "component": "controlled_response_difference",
+      "component_key": "joint:0:controlled_response_difference",
+      "context": {
+        "condition_control_applications": {
+          "condition0": "shared_reference_assumption",
+          "condition1": "shared_reference_assumption"
+        },
+        "condition_ids": [
+          "controlled_condition_744027ed2e161107ebb24016",
+          "controlled_condition_e8ec5821ed8e962782d29103",
+          "controlled_condition_0cb74839b6df1b3f39013009"
+        ],
+        "condition_state": "known",
+        "control_application": "shared_reference_assumption",
+        "control_reuse": "same_reference_with_stated_invariance",
+        "endpoint_id": "controlled_endpoint_a5943492dbd5ebb3f25ec799",
+        "endpoint_state": "known",
+        "measurement_methods": [
+          "text",
+          "graph"
+        ],
+        "model_kind": "none",
+        "normalization_id": "controlled_normalization_655297e09fecdd11367545ec",
+        "normalization_state": "known",
+        "original_origins": [
+          "synthetic"
+        ],
+        "owner_ids": [
+          "controlled_physical_observation_7eca4af7794e8d1388c06aa7",
+          "controlled_physical_observation_f9bf7dc0446f5237294795b8",
+          "controlled_physical_observation_e7430d03578e94af3324fc56"
+        ],
+        "owner_state": "known",
+        "protein_arrangements": [
+          "protein_present",
+          "protein_free_control"
+        ],
+        "representation_state": "conditional",
+        "source_kinds": [
+          "synthetic_fixture"
+        ],
+        "subject_construct_ids": [
+          "controlled_subject_construct_05fc9367a7d33c59f1b0ac5f",
+          "controlled_subject_construct_d6909a64c33aa18deb015621"
+        ],
+        "subject_construct_state": "known",
+        "variance_status": "unknown"
+      },
+      "dependencies": {
+        "covariance_index": null,
+        "covariance_owner_ids": [],
+        "full_source_covariance_required": false,
+        "model_readings": [],
+        "numeric_fields": [
+          {
+            "fields": [
+              "value",
+              "threshold",
+              "relation",
+              "approximate",
+              "unit",
+              "status",
+              "origin",
+              "digitization_interval"
+            ],
+            "reading": {
+              "reading_key": null,
+              "role": "protein_condition1"
+            }
+          },
+          {
+            "fields": [
+              "value",
+              "threshold",
+              "relation",
+              "approximate",
+              "unit",
+              "status",
+              "origin",
+              "digitization_interval"
+            ],
+            "reading": {
+              "reading_key": null,
+              "role": "protein_condition0"
+            }
+          }
+        ],
+        "numeric_readings": [
+          {
+            "reading_key": null,
+            "role": "protein_condition1"
+          },
+          {
+            "reading_key": null,
+            "role": "protein_condition0"
+          }
+        ],
+        "scientific_readings": [
+          {
+            "reading_key": null,
+            "role": "protein_condition1"
+          },
+          {
+            "reading_key": null,
+            "role": "empty_condition1"
+          },
+          {
+            "reading_key": null,
+            "role": "protein_condition0"
+          },
+          {
+            "reading_key": null,
+            "role": "empty_condition0"
+          }
+        ],
+        "source_variable_indices": [],
+        "uncertainty_readings": [],
+        "unresolved_readings": []
+      },
+      "joint_scope_context": {
+        "assignment_admissibility": {
+          "effective_value": "compatible",
+          "selected_value": "compatible",
+          "witnesses": [
+            {
+              "attribution": "literal_source_record",
+              "authentication": "exact_utf8_byte_span",
+              "witness_ref": "reference_d2eb44d0c34ebe62061f5377"
+            }
+          ]
+        },
+        "calibration": {
+          "effective_value": "same",
+          "selected_value": "same",
+          "witnesses": [
+            {
+              "attribution": "literal_source_record",
+              "authentication": "exact_utf8_byte_span",
+              "witness_ref": "reference_d2eb44d0c34ebe62061f5377"
+            }
+          ]
+        },
+        "covariance_context": {
+          "projection_state": "available",
+          "source_model": {
+            "model_kind": "known_joint_normal_source_means",
+            "origin": "synthetic",
+            "variance_status": "known"
+          },
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "source_validation": "valid"
+        },
+        "covariance_scope": {
+          "effective_value": "same",
+          "selected_value": "same",
+          "witnesses": [
+            {
+              "attribution": "literal_source_record",
+              "authentication": "exact_utf8_byte_span",
+              "witness_ref": "reference_d2eb44d0c34ebe62061f5377"
+            }
+          ]
+        },
+        "effective_admissibility": "compatible",
+        "effective_model": {
+          "diagnostics": [],
+          "model_kind": "known_joint_normal_source_means",
+          "variance_status": "known"
+        },
+        "model_scope": {
+          "effective_value": "same",
+          "selected_value": "same",
+          "witnesses": [
+            {
+              "attribution": "literal_source_record",
+              "authentication": "exact_utf8_byte_span",
+              "witness_ref": "reference_d2eb44d0c34ebe62061f5377"
+            }
+          ]
+        },
+        "normalization": {
+          "effective_value": "same",
+          "selected_value": "same",
+          "witnesses": [
+            {
+              "attribution": "literal_source_record",
+              "authentication": "exact_utf8_byte_span",
+              "witness_ref": "reference_d2eb44d0c34ebe62061f5377"
+            }
+          ]
+        },
+        "reading_assignment": {
+          "empty_condition0": null,
+          "empty_condition1": null,
+          "protein_condition0": null,
+          "protein_condition1": null
+        },
+        "requested_model": {
+          "model_kind": {
+            "effective_value": "known_joint_normal_source_means",
+            "selected_value": "known_joint_normal_source_means",
+            "witnesses": [
+              {
+                "attribution": "literal_source_record",
+                "authentication": "exact_utf8_byte_span",
+                "witness_ref": "reference_aedcecdd6b98b345fbe28e49"
+              }
+            ]
+          },
+          "variance_status": {
+            "effective_value": "known",
+            "selected_value": "known",
+            "witnesses": [
+              {
+                "attribution": "literal_source_record",
+                "authentication": "exact_utf8_byte_span",
+                "witness_ref": "reference_9dd27c64cbaa5cb4734a1259"
+              }
+            ]
+          }
+        },
+        "revision": {
+          "effective_value": "same",
+          "selected_value": "same",
+          "witnesses": [
+            {
+              "attribution": "literal_source_record",
+              "authentication": "exact_utf8_byte_span",
+              "witness_ref": "reference_d2eb44d0c34ebe62061f5377"
+            }
+          ]
+        }
+      },
+      "kind": "conditional",
+      "native_reading": null,
+      "numeric_locations": [
+        {
+          "end": 523,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 519
+        },
+        {
+          "end": 532,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 531
+        },
+        {
+          "end": 541,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 540
+        },
+        {
+          "end": 550,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 549
+        },
+        {
+          "end": 571,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 570
+        },
+        {
+          "end": 582,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 579
+        },
+        {
+          "end": 594,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 590
+        },
+        {
+          "end": 603,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 602
+        },
+        {
+          "end": 624,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 623
+        },
+        {
+          "end": 636,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 632
+        },
+        {
+          "end": 648,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 644
+        },
+        {
+          "end": 657,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 656
+        },
+        {
+          "end": 678,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 677
+        },
+        {
+          "end": 687,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 686
+        },
+        {
+          "end": 691,
+          "kind": "utf8_span",
+          "source_ref": "source_b05c4ead5958458e091ba29e",
+          "start": 689
+        },
+        {
+          "end": 696,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 695
+        },
+        {
+          "end": 707,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 704
+        },
+        {
+          "end": 718,
+          "kind": "utf8_span",
+          "source_ref": "source_b05c4ead5958458e091ba29e",
+          "start": 717
+        },
+        {
+          "end": 782,
+          "kind": "utf8_span",
+          "source_ref": "source_b05c4ead5958458e091ba29e",
+          "start": 781
+        },
+        {
+          "kind": "image_region",
+          "region": [
+            20,
+            10,
+            30,
+            205
+          ],
+          "source_ref": "source_b557bee718c63c97ad72ff3a"
+        }
+      ],
+      "pair_key": null,
+      "reading": null,
+      "reading_assignment": {
+        "empty_condition0": null,
+        "empty_condition1": null,
+        "protein_condition0": null,
+        "protein_condition1": null
+      },
+      "reported_uncertainty": null,
+      "reported_uncertainty_unit": null,
+      "sheet_ref": "source_4a473713ec3134556e08d29b",
+      "version": "literature_controlled_response_component_fact_v3"
+    },
+    {
+      "cell": {
+        "approximate": false,
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        },
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "formula_code": "four_arm_condition_difference",
+        "lower": null,
+        "origin": "synthetic",
+        "relation": "eq",
+        "status": "available",
+        "unavailable_reason": null,
+        "unit": "umol/min",
+        "upper": null,
+        "value": 0.002
+      },
+      "component": "controlled_response_difference",
+      "component_key": "joint:1:controlled_response_difference",
+      "context": {
+        "condition_control_applications": {
+          "condition0": "shared_reference_assumption",
+          "condition1": "shared_reference_assumption"
+        },
+        "condition_ids": [
+          "controlled_condition_744027ed2e161107ebb24016",
+          "controlled_condition_e8ec5821ed8e962782d29103",
+          "controlled_condition_0cb74839b6df1b3f39013009"
+        ],
+        "condition_state": "known",
+        "control_application": "shared_reference_assumption",
+        "control_reuse": "same_reference_with_stated_invariance",
+        "endpoint_id": "controlled_endpoint_a5943492dbd5ebb3f25ec799",
+        "endpoint_state": "known",
+        "measurement_methods": [
+          "text",
+          "graph"
+        ],
+        "model_kind": "none",
+        "normalization_id": "controlled_normalization_655297e09fecdd11367545ec",
+        "normalization_state": "known",
+        "original_origins": [
+          "synthetic"
+        ],
+        "owner_ids": [
+          "controlled_physical_observation_7eca4af7794e8d1388c06aa7",
+          "controlled_physical_observation_f9bf7dc0446f5237294795b8",
+          "controlled_physical_observation_e7430d03578e94af3324fc56"
+        ],
+        "owner_state": "known",
+        "protein_arrangements": [
+          "protein_present",
+          "protein_free_control"
+        ],
+        "representation_state": "conditional",
+        "source_kinds": [
+          "synthetic_fixture"
+        ],
+        "subject_construct_ids": [
+          "controlled_subject_construct_05fc9367a7d33c59f1b0ac5f",
+          "controlled_subject_construct_d6909a64c33aa18deb015621"
+        ],
+        "subject_construct_state": "known",
+        "variance_status": "unknown"
+      },
+      "dependencies": {
+        "covariance_index": null,
+        "covariance_owner_ids": [],
+        "full_source_covariance_required": false,
+        "model_readings": [],
+        "numeric_fields": [
+          {
+            "fields": [
+              "value",
+              "threshold",
+              "relation",
+              "approximate",
+              "unit",
+              "status",
+              "origin",
+              "digitization_interval"
+            ],
+            "reading": {
+              "reading_key": "same:reading / \u03b1",
+              "role": "protein_condition1"
+            }
+          },
+          {
+            "fields": [
+              "value",
+              "threshold",
+              "relation",
+              "approximate",
+              "unit",
+              "status",
+              "origin",
+              "digitization_interval"
+            ],
+            "reading": {
+              "reading_key": null,
+              "role": "protein_condition0"
+            }
+          }
+        ],
+        "numeric_readings": [
+          {
+            "reading_key": "same:reading / \u03b1",
+            "role": "protein_condition1"
+          },
+          {
+            "reading_key": null,
+            "role": "protein_condition0"
+          }
+        ],
+        "scientific_readings": [
+          {
+            "reading_key": "same:reading / \u03b1",
+            "role": "protein_condition1"
+          },
+          {
+            "reading_key": null,
+            "role": "empty_condition1"
+          },
+          {
+            "reading_key": null,
+            "role": "protein_condition0"
+          },
+          {
+            "reading_key": null,
+            "role": "empty_condition0"
+          }
+        ],
+        "source_variable_indices": [],
+        "uncertainty_readings": [],
+        "unresolved_readings": []
+      },
+      "joint_scope_context": {
+        "assignment_admissibility": {
+          "effective_value": "compatible",
+          "selected_value": "compatible",
+          "witnesses": [
+            {
+              "attribution": "literal_source_record",
+              "authentication": "exact_utf8_byte_span",
+              "witness_ref": "reference_d2eb44d0c34ebe62061f5377"
+            }
+          ]
+        },
+        "calibration": {
+          "effective_value": "same",
+          "selected_value": "same",
+          "witnesses": [
+            {
+              "attribution": "literal_source_record",
+              "authentication": "exact_utf8_byte_span",
+              "witness_ref": "reference_d2eb44d0c34ebe62061f5377"
+            }
+          ]
+        },
+        "covariance_context": {
+          "projection_state": "available",
+          "source_model": {
+            "model_kind": "known_joint_normal_source_means",
+            "origin": "synthetic",
+            "variance_status": "known"
+          },
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "source_validation": "valid"
+        },
+        "covariance_scope": {
+          "effective_value": "same",
+          "selected_value": "same",
+          "witnesses": [
+            {
+              "attribution": "literal_source_record",
+              "authentication": "exact_utf8_byte_span",
+              "witness_ref": "reference_d2eb44d0c34ebe62061f5377"
+            }
+          ]
+        },
+        "effective_admissibility": "compatible",
+        "effective_model": {
+          "diagnostics": [],
+          "model_kind": "known_joint_normal_source_means",
+          "variance_status": "known"
+        },
+        "model_scope": {
+          "effective_value": "same",
+          "selected_value": "same",
+          "witnesses": [
+            {
+              "attribution": "literal_source_record",
+              "authentication": "exact_utf8_byte_span",
+              "witness_ref": "reference_d2eb44d0c34ebe62061f5377"
+            }
+          ]
+        },
+        "normalization": {
+          "effective_value": "same",
+          "selected_value": "same",
+          "witnesses": [
+            {
+              "attribution": "literal_source_record",
+              "authentication": "exact_utf8_byte_span",
+              "witness_ref": "reference_d2eb44d0c34ebe62061f5377"
+            }
+          ]
+        },
+        "reading_assignment": {
+          "empty_condition0": null,
+          "empty_condition1": null,
+          "protein_condition0": null,
+          "protein_condition1": "same:reading / \u03b1"
+        },
+        "requested_model": {
+          "model_kind": {
+            "effective_value": "known_joint_normal_source_means",
+            "selected_value": "known_joint_normal_source_means",
+            "witnesses": [
+              {
+                "attribution": "literal_source_record",
+                "authentication": "exact_utf8_byte_span",
+                "witness_ref": "reference_aedcecdd6b98b345fbe28e49"
+              }
+            ]
+          },
+          "variance_status": {
+            "effective_value": "known",
+            "selected_value": "known",
+            "witnesses": [
+              {
+                "attribution": "literal_source_record",
+                "authentication": "exact_utf8_byte_span",
+                "witness_ref": "reference_9dd27c64cbaa5cb4734a1259"
+              }
+            ]
+          }
+        },
+        "revision": {
+          "effective_value": "same",
+          "selected_value": "same",
+          "witnesses": [
+            {
+              "attribution": "literal_source_record",
+              "authentication": "exact_utf8_byte_span",
+              "witness_ref": "reference_d2eb44d0c34ebe62061f5377"
+            }
+          ]
+        }
+      },
+      "kind": "conditional",
+      "native_reading": null,
+      "numeric_locations": [
+        {
+          "end": 523,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 519
+        },
+        {
+          "end": 532,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 531
+        },
+        {
+          "end": 541,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 540
+        },
+        {
+          "end": 550,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 549
+        },
+        {
+          "end": 571,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 570
+        },
+        {
+          "end": 582,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 579
+        },
+        {
+          "end": 594,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 590
+        },
+        {
+          "end": 603,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 602
+        },
+        {
+          "end": 624,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 623
+        },
+        {
+          "end": 636,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 632
+        },
+        {
+          "end": 648,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 644
+        },
+        {
+          "end": 657,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 656
+        },
+        {
+          "end": 678,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 677
+        },
+        {
+          "end": 687,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 686
+        },
+        {
+          "end": 691,
+          "kind": "utf8_span",
+          "source_ref": "source_b05c4ead5958458e091ba29e",
+          "start": 689
+        },
+        {
+          "end": 696,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 695
+        },
+        {
+          "end": 707,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 704
+        },
+        {
+          "end": 718,
+          "kind": "utf8_span",
+          "source_ref": "source_b05c4ead5958458e091ba29e",
+          "start": 717
+        },
+        {
+          "end": 782,
+          "kind": "utf8_span",
+          "source_ref": "source_b05c4ead5958458e091ba29e",
+          "start": 781
+        },
+        {
+          "kind": "image_region",
+          "region": [
+            20,
+            10,
+            30,
+            205
+          ],
+          "source_ref": "source_b557bee718c63c97ad72ff3a"
+        }
+      ],
+      "pair_key": null,
+      "reading": null,
+      "reading_assignment": {
+        "empty_condition0": null,
+        "empty_condition1": null,
+        "protein_condition0": null,
+        "protein_condition1": "same:reading / \u03b1"
+      },
+      "reported_uncertainty": null,
+      "reported_uncertainty_unit": null,
+      "sheet_ref": "source_4a473713ec3134556e08d29b",
+      "version": "literature_controlled_response_component_fact_v3"
+    },
+    {
+      "cell": {
+        "approximate": true,
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        },
+        "conditional_on": [
+          "synthetic_fixture",
+          "approximate_source_reading",
+          "conditional_digitization"
+        ],
+        "formula_code": "four_arm_condition_difference",
+        "lower": null,
+        "origin": null,
+        "relation": "none",
+        "status": "unavailable",
+        "unavailable_reason": [
+          "unknown_joint_applicability"
+        ],
+        "unit": null,
+        "upper": null,
+        "value": null
+      },
+      "component": "controlled_response_difference",
+      "component_key": "joint:2:controlled_response_difference",
+      "context": {
+        "condition_control_applications": {
+          "condition0": "shared_reference_assumption",
+          "condition1": "shared_reference_assumption"
+        },
+        "condition_ids": [
+          "controlled_condition_744027ed2e161107ebb24016",
+          "controlled_condition_e8ec5821ed8e962782d29103",
+          "controlled_condition_0cb74839b6df1b3f39013009"
+        ],
+        "condition_state": "known",
+        "control_application": "shared_reference_assumption",
+        "control_reuse": "same_reference_with_stated_invariance",
+        "endpoint_id": "controlled_endpoint_a5943492dbd5ebb3f25ec799",
+        "endpoint_state": "known",
+        "measurement_methods": [
+          "text",
+          "graph"
+        ],
+        "model_kind": "none",
+        "normalization_id": "controlled_normalization_655297e09fecdd11367545ec",
+        "normalization_state": "known",
+        "original_origins": [
+          "synthetic"
+        ],
+        "owner_ids": [
+          "controlled_physical_observation_7eca4af7794e8d1388c06aa7",
+          "controlled_physical_observation_f9bf7dc0446f5237294795b8",
+          "controlled_physical_observation_e7430d03578e94af3324fc56"
+        ],
+        "owner_state": "known",
+        "protein_arrangements": [
+          "protein_present",
+          "protein_free_control"
+        ],
+        "representation_state": "conditional",
+        "source_kinds": [
+          "synthetic_fixture"
+        ],
+        "subject_construct_ids": [
+          "controlled_subject_construct_05fc9367a7d33c59f1b0ac5f",
+          "controlled_subject_construct_d6909a64c33aa18deb015621"
+        ],
+        "subject_construct_state": "known",
+        "variance_status": "unknown"
+      },
+      "dependencies": {
+        "covariance_index": null,
+        "covariance_owner_ids": [],
+        "full_source_covariance_required": false,
+        "model_readings": [],
+        "numeric_fields": [],
+        "numeric_readings": [],
+        "scientific_readings": [
+          {
+            "reading_key": "unknown scope / \u03b2",
+            "role": "protein_condition1"
+          },
+          {
+            "reading_key": null,
+            "role": "empty_condition1"
+          },
+          {
+            "reading_key": null,
+            "role": "protein_condition0"
+          },
+          {
+            "reading_key": null,
+            "role": "empty_condition0"
+          }
+        ],
+        "source_variable_indices": [],
+        "uncertainty_readings": [],
+        "unresolved_readings": []
+      },
+      "joint_scope_context": {
+        "assignment_admissibility": {
+          "effective_value": "unknown",
+          "selected_value": "unknown",
+          "witnesses": []
+        },
+        "calibration": {
+          "effective_value": "same",
+          "selected_value": "same",
+          "witnesses": [
+            {
+              "attribution": "literal_source_record",
+              "authentication": "exact_utf8_byte_span",
+              "witness_ref": "reference_d2eb44d0c34ebe62061f5377"
+            }
+          ]
+        },
+        "covariance_context": {
+          "projection_state": "available",
+          "source_model": {
+            "model_kind": "known_joint_normal_source_means",
+            "origin": "synthetic",
+            "variance_status": "known"
+          },
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "source_validation": "valid"
+        },
+        "covariance_scope": {
+          "effective_value": "same",
+          "selected_value": "same",
+          "witnesses": [
+            {
+              "attribution": "literal_source_record",
+              "authentication": "exact_utf8_byte_span",
+              "witness_ref": "reference_d2eb44d0c34ebe62061f5377"
+            }
+          ]
+        },
+        "effective_admissibility": "unknown",
+        "effective_model": {
+          "diagnostics": [],
+          "model_kind": "known_joint_normal_source_means",
+          "variance_status": "known"
+        },
+        "model_scope": {
+          "effective_value": "same",
+          "selected_value": "same",
+          "witnesses": [
+            {
+              "attribution": "literal_source_record",
+              "authentication": "exact_utf8_byte_span",
+              "witness_ref": "reference_d2eb44d0c34ebe62061f5377"
+            }
+          ]
+        },
+        "normalization": {
+          "effective_value": "same",
+          "selected_value": "same",
+          "witnesses": [
+            {
+              "attribution": "literal_source_record",
+              "authentication": "exact_utf8_byte_span",
+              "witness_ref": "reference_d2eb44d0c34ebe62061f5377"
+            }
+          ]
+        },
+        "reading_assignment": {
+          "empty_condition0": null,
+          "empty_condition1": null,
+          "protein_condition0": null,
+          "protein_condition1": "unknown scope / \u03b2"
+        },
+        "requested_model": {
+          "model_kind": {
+            "effective_value": "known_joint_normal_source_means",
+            "selected_value": "known_joint_normal_source_means",
+            "witnesses": [
+              {
+                "attribution": "literal_source_record",
+                "authentication": "exact_utf8_byte_span",
+                "witness_ref": "reference_aedcecdd6b98b345fbe28e49"
+              }
+            ]
+          },
+          "variance_status": {
+            "effective_value": "known",
+            "selected_value": "known",
+            "witnesses": [
+              {
+                "attribution": "literal_source_record",
+                "authentication": "exact_utf8_byte_span",
+                "witness_ref": "reference_9dd27c64cbaa5cb4734a1259"
+              }
+            ]
+          }
+        },
+        "revision": {
+          "effective_value": "same",
+          "selected_value": "same",
+          "witnesses": [
+            {
+              "attribution": "literal_source_record",
+              "authentication": "exact_utf8_byte_span",
+              "witness_ref": "reference_d2eb44d0c34ebe62061f5377"
+            }
+          ]
+        }
+      },
+      "kind": "conditional",
+      "native_reading": null,
+      "numeric_locations": [
+        {
+          "end": 523,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 519
+        },
+        {
+          "end": 532,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 531
+        },
+        {
+          "end": 541,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 540
+        },
+        {
+          "end": 550,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 549
+        },
+        {
+          "end": 571,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 570
+        },
+        {
+          "end": 582,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 579
+        },
+        {
+          "end": 594,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 590
+        },
+        {
+          "end": 603,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 602
+        },
+        {
+          "end": 624,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 623
+        },
+        {
+          "end": 636,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 632
+        },
+        {
+          "end": 648,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 644
+        },
+        {
+          "end": 657,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 656
+        },
+        {
+          "end": 678,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 677
+        },
+        {
+          "end": 687,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 686
+        },
+        {
+          "end": 691,
+          "kind": "utf8_span",
+          "source_ref": "source_b05c4ead5958458e091ba29e",
+          "start": 689
+        },
+        {
+          "end": 696,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 695
+        },
+        {
+          "end": 707,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 704
+        },
+        {
+          "end": 718,
+          "kind": "utf8_span",
+          "source_ref": "source_b05c4ead5958458e091ba29e",
+          "start": 717
+        },
+        {
+          "end": 782,
+          "kind": "utf8_span",
+          "source_ref": "source_b05c4ead5958458e091ba29e",
+          "start": 781
+        },
+        {
+          "kind": "image_region",
+          "region": [
+            20,
+            10,
+            30,
+            205
+          ],
+          "source_ref": "source_b557bee718c63c97ad72ff3a"
+        }
+      ],
+      "pair_key": null,
+      "reading": null,
+      "reading_assignment": {
+        "empty_condition0": null,
+        "empty_condition1": null,
+        "protein_condition0": null,
+        "protein_condition1": "unknown scope / \u03b2"
+      },
+      "reported_uncertainty": null,
+      "reported_uncertainty_unit": null,
+      "sheet_ref": "source_4a473713ec3134556e08d29b",
+      "version": "literature_controlled_response_component_fact_v3"
+    },
+    {
+      "cell": {
+        "approximate": true,
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        },
+        "conditional_on": [
+          "synthetic_fixture",
+          "approximate_source_reading",
+          "conditional_digitization"
+        ],
+        "formula_code": "four_arm_condition_difference",
+        "lower": null,
+        "origin": null,
+        "relation": "none",
+        "status": "unavailable",
+        "unavailable_reason": [
+          "conflicting_joint_applicability"
+        ],
+        "unit": null,
+        "upper": null,
+        "value": null
+      },
+      "component": "controlled_response_difference",
+      "component_key": "joint:3:controlled_response_difference",
+      "context": {
+        "condition_control_applications": {
+          "condition0": "shared_reference_assumption",
+          "condition1": "shared_reference_assumption"
+        },
+        "condition_ids": [
+          "controlled_condition_744027ed2e161107ebb24016",
+          "controlled_condition_e8ec5821ed8e962782d29103",
+          "controlled_condition_0cb74839b6df1b3f39013009"
+        ],
+        "condition_state": "known",
+        "control_application": "shared_reference_assumption",
+        "control_reuse": "same_reference_with_stated_invariance",
+        "endpoint_id": "controlled_endpoint_a5943492dbd5ebb3f25ec799",
+        "endpoint_state": "known",
+        "measurement_methods": [
+          "text",
+          "graph"
+        ],
+        "model_kind": "none",
+        "normalization_id": "controlled_normalization_655297e09fecdd11367545ec",
+        "normalization_state": "known",
+        "original_origins": [
+          "synthetic"
+        ],
+        "owner_ids": [
+          "controlled_physical_observation_7eca4af7794e8d1388c06aa7",
+          "controlled_physical_observation_f9bf7dc0446f5237294795b8",
+          "controlled_physical_observation_e7430d03578e94af3324fc56"
+        ],
+        "owner_state": "known",
+        "protein_arrangements": [
+          "protein_present",
+          "protein_free_control"
+        ],
+        "representation_state": "conditional",
+        "source_kinds": [
+          "synthetic_fixture"
+        ],
+        "subject_construct_ids": [
+          "controlled_subject_construct_05fc9367a7d33c59f1b0ac5f",
+          "controlled_subject_construct_d6909a64c33aa18deb015621"
+        ],
+        "subject_construct_state": "known",
+        "variance_status": "unknown"
+      },
+      "dependencies": {
+        "covariance_index": null,
+        "covariance_owner_ids": [],
+        "full_source_covariance_required": false,
+        "model_readings": [],
+        "numeric_fields": [],
+        "numeric_readings": [],
+        "scientific_readings": [
+          {
+            "reading_key": "conflicting scope : \u03b3",
+            "role": "protein_condition1"
+          },
+          {
+            "reading_key": null,
+            "role": "empty_condition1"
+          },
+          {
+            "reading_key": null,
+            "role": "protein_condition0"
+          },
+          {
+            "reading_key": null,
+            "role": "empty_condition0"
+          }
+        ],
+        "source_variable_indices": [],
+        "uncertainty_readings": [],
+        "unresolved_readings": []
+      },
+      "joint_scope_context": {
+        "assignment_admissibility": {
+          "effective_value": "conflicting",
+          "selected_value": "conflicting",
+          "witnesses": [
+            {
+              "attribution": "literal_source_record",
+              "authentication": "exact_utf8_byte_span",
+              "witness_ref": "reference_d2eb44d0c34ebe62061f5377"
+            },
+            {
+              "attribution": "literal_source_record",
+              "authentication": "exact_utf8_byte_span",
+              "witness_ref": "reference_6c157e78e876a4cd61d20369"
+            }
+          ]
+        },
+        "calibration": {
+          "effective_value": "same",
+          "selected_value": "same",
+          "witnesses": [
+            {
+              "attribution": "literal_source_record",
+              "authentication": "exact_utf8_byte_span",
+              "witness_ref": "reference_d2eb44d0c34ebe62061f5377"
+            }
+          ]
+        },
+        "covariance_context": {
+          "projection_state": "available",
+          "source_model": {
+            "model_kind": "known_joint_normal_source_means",
+            "origin": "synthetic",
+            "variance_status": "known"
+          },
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "source_validation": "valid"
+        },
+        "covariance_scope": {
+          "effective_value": "same",
+          "selected_value": "same",
+          "witnesses": [
+            {
+              "attribution": "literal_source_record",
+              "authentication": "exact_utf8_byte_span",
+              "witness_ref": "reference_d2eb44d0c34ebe62061f5377"
+            }
+          ]
+        },
+        "effective_admissibility": "conflicting",
+        "effective_model": {
+          "diagnostics": [],
+          "model_kind": "known_joint_normal_source_means",
+          "variance_status": "known"
+        },
+        "model_scope": {
+          "effective_value": "same",
+          "selected_value": "same",
+          "witnesses": [
+            {
+              "attribution": "literal_source_record",
+              "authentication": "exact_utf8_byte_span",
+              "witness_ref": "reference_d2eb44d0c34ebe62061f5377"
+            }
+          ]
+        },
+        "normalization": {
+          "effective_value": "same",
+          "selected_value": "same",
+          "witnesses": [
+            {
+              "attribution": "literal_source_record",
+              "authentication": "exact_utf8_byte_span",
+              "witness_ref": "reference_d2eb44d0c34ebe62061f5377"
+            }
+          ]
+        },
+        "reading_assignment": {
+          "empty_condition0": null,
+          "empty_condition1": null,
+          "protein_condition0": null,
+          "protein_condition1": "conflicting scope : \u03b3"
+        },
+        "requested_model": {
+          "model_kind": {
+            "effective_value": "known_joint_normal_source_means",
+            "selected_value": "known_joint_normal_source_means",
+            "witnesses": [
+              {
+                "attribution": "literal_source_record",
+                "authentication": "exact_utf8_byte_span",
+                "witness_ref": "reference_aedcecdd6b98b345fbe28e49"
+              }
+            ]
+          },
+          "variance_status": {
+            "effective_value": "known",
+            "selected_value": "known",
+            "witnesses": [
+              {
+                "attribution": "literal_source_record",
+                "authentication": "exact_utf8_byte_span",
+                "witness_ref": "reference_9dd27c64cbaa5cb4734a1259"
+              }
+            ]
+          }
+        },
+        "revision": {
+          "effective_value": "same",
+          "selected_value": "same",
+          "witnesses": [
+            {
+              "attribution": "literal_source_record",
+              "authentication": "exact_utf8_byte_span",
+              "witness_ref": "reference_d2eb44d0c34ebe62061f5377"
+            }
+          ]
+        }
+      },
+      "kind": "conditional",
+      "native_reading": null,
+      "numeric_locations": [
+        {
+          "end": 523,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 519
+        },
+        {
+          "end": 532,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 531
+        },
+        {
+          "end": 541,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 540
+        },
+        {
+          "end": 550,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 549
+        },
+        {
+          "end": 571,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 570
+        },
+        {
+          "end": 582,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 579
+        },
+        {
+          "end": 594,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 590
+        },
+        {
+          "end": 603,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 602
+        },
+        {
+          "end": 624,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 623
+        },
+        {
+          "end": 636,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 632
+        },
+        {
+          "end": 648,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 644
+        },
+        {
+          "end": 657,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 656
+        },
+        {
+          "end": 678,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 677
+        },
+        {
+          "end": 687,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 686
+        },
+        {
+          "end": 691,
+          "kind": "utf8_span",
+          "source_ref": "source_b05c4ead5958458e091ba29e",
+          "start": 689
+        },
+        {
+          "end": 696,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 695
+        },
+        {
+          "end": 707,
+          "kind": "utf8_span",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 704
+        },
+        {
+          "end": 718,
+          "kind": "utf8_span",
+          "source_ref": "source_b05c4ead5958458e091ba29e",
+          "start": 717
+        },
+        {
+          "end": 782,
+          "kind": "utf8_span",
+          "source_ref": "source_b05c4ead5958458e091ba29e",
+          "start": 781
+        },
+        {
+          "kind": "image_region",
+          "region": [
+            20,
+            10,
+            30,
+            205
+          ],
+          "source_ref": "source_b557bee718c63c97ad72ff3a"
+        }
+      ],
+      "pair_key": null,
+      "reading": null,
+      "reading_assignment": {
+        "empty_condition0": null,
+        "empty_condition1": null,
+        "protein_condition0": null,
+        "protein_condition1": "conflicting scope : \u03b3"
+      },
+      "reported_uncertainty": null,
+      "reported_uncertainty_unit": null,
+      "sheet_ref": "source_4a473713ec3134556e08d29b",
+      "version": "literature_controlled_response_component_fact_v3"
+    }
+  ],
+  "bindings": {
+    "source_4a473713ec3134556e08d29b": {
+      "controlled_endpoint_a5943492dbd5ebb3f25ec799": {
+        "record_ref": "reference_3ed44e06629140f1d60b6a94",
+        "category": "endpoint",
+        "canonical_witness_location": {
+          "artifact_ref": "artifact_7ae8535eb4955105896f0ad6b2ec22188af122266865fc8de00cbf6a7af1e9ae",
+          "byte_sha256": "7ae8535eb4955105896f0ad6b2ec22188af122266865fc8de00cbf6a7af1e9ae",
+          "end": 314,
+          "kind": "text",
+          "source_ref": "source_b05c4ead5958458e091ba29e",
+          "start": 286
+        }
+      },
+      "controlled_normalization_655297e09fecdd11367545ec": {
+        "record_ref": "reference_296bd81b2ae263de685d089e",
+        "category": "normalization",
+        "canonical_witness_location": {
+          "artifact_ref": "artifact_7ae8535eb4955105896f0ad6b2ec22188af122266865fc8de00cbf6a7af1e9ae",
+          "byte_sha256": "7ae8535eb4955105896f0ad6b2ec22188af122266865fc8de00cbf6a7af1e9ae",
+          "end": 363,
+          "kind": "text",
+          "source_ref": "source_b05c4ead5958458e091ba29e",
+          "start": 322
+        }
+      },
+      "controlled_subject_construct_05fc9367a7d33c59f1b0ac5f": {
+        "record_ref": "reference_ac97e66f81ecf6d0c65602d5",
+        "category": "subject_construct",
+        "canonical_witness_location": {
+          "artifact_ref": "artifact_7ae8535eb4955105896f0ad6b2ec22188af122266865fc8de00cbf6a7af1e9ae",
+          "byte_sha256": "7ae8535eb4955105896f0ad6b2ec22188af122266865fc8de00cbf6a7af1e9ae",
+          "end": 164,
+          "kind": "text",
+          "source_ref": "source_b05c4ead5958458e091ba29e",
+          "start": 143
+        }
+      },
+      "controlled_subject_construct_d6909a64c33aa18deb015621": {
+        "record_ref": "reference_e2a2d43a19c7fe81cd33ec32",
+        "category": "subject_construct",
+        "canonical_witness_location": {
+          "artifact_ref": "artifact_7ae8535eb4955105896f0ad6b2ec22188af122266865fc8de00cbf6a7af1e9ae",
+          "byte_sha256": "7ae8535eb4955105896f0ad6b2ec22188af122266865fc8de00cbf6a7af1e9ae",
+          "end": 194,
+          "kind": "text",
+          "source_ref": "source_b05c4ead5958458e091ba29e",
+          "start": 172
+        }
+      },
+      "controlled_condition_0cb74839b6df1b3f39013009": {
+        "record_ref": "reference_f07fad89573fa9b166b13751",
+        "category": "condition",
+        "canonical_witness_location": {
+          "artifact_ref": "artifact_7ae8535eb4955105896f0ad6b2ec22188af122266865fc8de00cbf6a7af1e9ae",
+          "byte_sha256": "7ae8535eb4955105896f0ad6b2ec22188af122266865fc8de00cbf6a7af1e9ae",
+          "end": 465,
+          "kind": "text",
+          "source_ref": "source_b05c4ead5958458e091ba29e",
+          "start": 450
+        }
+      },
+      "controlled_condition_e8ec5821ed8e962782d29103": {
+        "record_ref": "reference_7990e6f080fb0d6aedc5a34c",
+        "category": "condition",
+        "canonical_witness_location": {
+          "artifact_ref": "artifact_7ae8535eb4955105896f0ad6b2ec22188af122266865fc8de00cbf6a7af1e9ae",
+          "byte_sha256": "7ae8535eb4955105896f0ad6b2ec22188af122266865fc8de00cbf6a7af1e9ae",
+          "end": 493,
+          "kind": "text",
+          "source_ref": "source_b05c4ead5958458e091ba29e",
+          "start": 473
+        }
+      },
+      "controlled_physical_observation_e7430d03578e94af3324fc56": {
+        "record_ref": "reference_bb4d37032314168048c110f7",
+        "category": "physical_observation",
+        "canonical_witness_location": {
+          "artifact_ref": "artifact_7ae8535eb4955105896f0ad6b2ec22188af122266865fc8de00cbf6a7af1e9ae",
+          "byte_sha256": "7ae8535eb4955105896f0ad6b2ec22188af122266865fc8de00cbf6a7af1e9ae",
+          "end": 550,
+          "kind": "text",
+          "source_ref": "source_b05c4ead5958458e091ba29e",
+          "start": 539
+        }
+      },
+      "controlled_physical_observation_f9bf7dc0446f5237294795b8": {
+        "record_ref": "reference_9a212ee42ae52e5da9c4b30c",
+        "category": "physical_observation",
+        "canonical_witness_location": {
+          "artifact_ref": "artifact_7ae8535eb4955105896f0ad6b2ec22188af122266865fc8de00cbf6a7af1e9ae",
+          "byte_sha256": "7ae8535eb4955105896f0ad6b2ec22188af122266865fc8de00cbf6a7af1e9ae",
+          "end": 531,
+          "kind": "text",
+          "source_ref": "source_b05c4ead5958458e091ba29e",
+          "start": 520
+        }
+      },
+      "controlled_condition_744027ed2e161107ebb24016": {
+        "record_ref": "reference_1bd8806e4cf4e503c1f2721a",
+        "category": "condition",
+        "canonical_witness_location": {
+          "artifact_ref": "artifact_7ae8535eb4955105896f0ad6b2ec22188af122266865fc8de00cbf6a7af1e9ae",
+          "byte_sha256": "7ae8535eb4955105896f0ad6b2ec22188af122266865fc8de00cbf6a7af1e9ae",
+          "end": 442,
+          "kind": "text",
+          "source_ref": "source_b05c4ead5958458e091ba29e",
+          "start": 428
+        }
+      },
+      "controlled_physical_observation_7eca4af7794e8d1388c06aa7": {
+        "record_ref": "reference_92b7ed536dec91da85bd52bf",
+        "category": "physical_observation",
+        "canonical_witness_location": {
+          "artifact_ref": "artifact_7ae8535eb4955105896f0ad6b2ec22188af122266865fc8de00cbf6a7af1e9ae",
+          "byte_sha256": "7ae8535eb4955105896f0ad6b2ec22188af122266865fc8de00cbf6a7af1e9ae",
+          "end": 512,
+          "kind": "text",
+          "source_ref": "source_b05c4ead5958458e091ba29e",
+          "start": 501
+        }
+      },
+      "reference_d2eb44d0c34ebe62061f5377": {
+        "record_ref": "reference_d2eb44d0c34ebe62061f5377",
+        "category": "joint_scope_witness",
+        "canonical_witness_location": {
+          "artifact_ref": "artifact_7ae8535eb4955105896f0ad6b2ec22188af122266865fc8de00cbf6a7af1e9ae",
+          "byte_sha256": "7ae8535eb4955105896f0ad6b2ec22188af122266865fc8de00cbf6a7af1e9ae",
+          "end": 700,
+          "kind": "text",
+          "source_ref": "source_b05c4ead5958458e091ba29e",
+          "start": 692
+        }
+      },
+      "reference_aedcecdd6b98b345fbe28e49": {
+        "record_ref": "reference_aedcecdd6b98b345fbe28e49",
+        "category": "joint_scope_witness",
+        "canonical_witness_location": {
+          "artifact_ref": "artifact_0bf9e965b2541cef5e6192aec11c837065fa1f8de20c9a747868c87f4842ebe3",
+          "byte_sha256": "0bf9e965b2541cef5e6192aec11c837065fa1f8de20c9a747868c87f4842ebe3",
+          "end": 823,
+          "kind": "text",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 790
+        }
+      },
+      "reference_9dd27c64cbaa5cb4734a1259": {
+        "record_ref": "reference_9dd27c64cbaa5cb4734a1259",
+        "category": "joint_scope_witness",
+        "canonical_witness_location": {
+          "artifact_ref": "artifact_0bf9e965b2541cef5e6192aec11c837065fa1f8de20c9a747868c87f4842ebe3",
+          "byte_sha256": "0bf9e965b2541cef5e6192aec11c837065fa1f8de20c9a747868c87f4842ebe3",
+          "end": 772,
+          "kind": "text",
+          "source_ref": "source_ca4b21931819f38dd4c0d823",
+          "start": 765
+        }
+      },
+      "reference_6c157e78e876a4cd61d20369": {
+        "record_ref": "reference_6c157e78e876a4cd61d20369",
+        "category": "joint_scope_witness",
+        "canonical_witness_location": {
+          "artifact_ref": "artifact_7ae8535eb4955105896f0ad6b2ec22188af122266865fc8de00cbf6a7af1e9ae",
+          "byte_sha256": "7ae8535eb4955105896f0ad6b2ec22188af122266865fc8de00cbf6a7af1e9ae",
+          "end": 164,
+          "kind": "text",
+          "source_ref": "source_b05c4ead5958458e091ba29e",
+          "start": 143
+        }
+      }
+    }
+  },
+  "banned": [
+    "artifact_c64110f11cdac9aabe6788298547b9d38e46b684db210955b59d2198fa9044a2",
+    "artifact_7ae8535eb4955105896f0ad6b2ec22188af122266865fc8de00cbf6a7af1e9ae",
+    "artifact_75aeed084c2719116593927f9e30b7e311058bc1e63f1f3387aa8af4667ad678",
+    "artifact_0bf9e965b2541cef5e6192aec11c837065fa1f8de20c9a747868c87f4842ebe3"
+  ],
+  "observations": [
+    [
+      "run_4c39f436c3e84ad5a41fec8354ce4bbd",
+      "episode_320374b0563eb8e5c83e00eb7452f6d1cc79ef3c7b6a2673646b3184ae7f66ca",
+      0,
+      "{\"credit\":{\"credit\":0.0,\"estimation_action_index\":0},\"decision_index\":0,\"label\":\"tool:0\",\"step\":{\"delta\":0.0,\"requests_transition\":false,\"stop\":false},\"unit_ref\":{\"episode_id\":\"episode_320374b0563eb8e5c83e00eb7452f6d1cc79ef3c7b6a2673646b3184ae7f66ca\",\"unit_id\":\"unit_f54fc955315e18e206ddffc02a4a7c04f00735c715dbcfece0a39f9e386505ab\",\"unit_index\":0}}"
+    ],
+    [
+      "run_4c39f436c3e84ad5a41fec8354ce4bbd",
+      "episode_320374b0563eb8e5c83e00eb7452f6d1cc79ef3c7b6a2673646b3184ae7f66ca",
+      1,
+      "{\"credit\":{\"credit\":0.0,\"estimation_action_index\":1},\"decision_index\":1,\"label\":\"tool:1\",\"step\":{\"delta\":0.0,\"requests_transition\":false,\"stop\":false},\"unit_ref\":{\"episode_id\":\"episode_320374b0563eb8e5c83e00eb7452f6d1cc79ef3c7b6a2673646b3184ae7f66ca\",\"unit_id\":\"unit_57e4cd19fe9f9d2d671234f184178e6c3a0ae64a93fc4772b5e7cfd4fbaf3fbf\",\"unit_index\":1}}"
+    ],
+    [
+      "run_4c39f436c3e84ad5a41fec8354ce4bbd",
+      "episode_320374b0563eb8e5c83e00eb7452f6d1cc79ef3c7b6a2673646b3184ae7f66ca",
+      2,
+      "{\"credit\":{\"credit\":0.0,\"estimation_action_index\":2},\"decision_index\":2,\"label\":\"reason:2\",\"step\":{\"delta\":0.0,\"requests_transition\":false,\"stop\":true},\"unit_ref\":{\"episode_id\":\"episode_320374b0563eb8e5c83e00eb7452f6d1cc79ef3c7b6a2673646b3184ae7f66ca\",\"unit_id\":\"unit_82e9e1c29e4ee5792bec767897f2318abb97400d1457f21e0a3a73b8820c2e80\",\"unit_index\":2}}"
+    ],
+    [
+      "run_4c39f436c3e84ad5a41fec8354ce4bbd",
+      "episode_d58c1578017bdf6f754743ca21e819152f24e2d2082e7d2de72f1d34ca601209",
+      0,
+      "{\"credit\":{\"credit\":0.0,\"estimation_action_index\":1},\"decision_index\":1,\"label\":\"wait:1\",\"step\":{\"delta\":0.0,\"requests_transition\":false,\"stop\":false},\"unit_ref\":{\"episode_id\":\"episode_d58c1578017bdf6f754743ca21e819152f24e2d2082e7d2de72f1d34ca601209\",\"unit_id\":\"unit_e6f1f0baf8e43cf095d5be538ede8640e0b24f2f2f6145aeed1c908efd3343a0\",\"unit_index\":0}}"
+    ],
+    [
+      "run_4c39f436c3e84ad5a41fec8354ce4bbd",
+      "episode_d58c1578017bdf6f754743ca21e819152f24e2d2082e7d2de72f1d34ca601209",
+      1,
+      "{\"credit\":{\"credit\":0.0,\"estimation_action_index\":0},\"decision_index\":0,\"label\":\"child_0\",\"step\":{\"delta\":0.0,\"requests_transition\":false,\"stop\":false},\"unit_ref\":{\"episode_id\":\"episode_d58c1578017bdf6f754743ca21e819152f24e2d2082e7d2de72f1d34ca601209\",\"unit_id\":\"unit_40855d4626136a4d7c6823fd0db4e40dbb4bbb1455d38fd2c5a481c8c615e815\",\"unit_index\":1}}"
+    ],
+    [
+      "run_4c39f436c3e84ad5a41fec8354ce4bbd",
+      "episode_d58c1578017bdf6f754743ca21e819152f24e2d2082e7d2de72f1d34ca601209",
+      2,
+      "{\"credit\":{\"credit\":0.0,\"estimation_action_index\":2},\"decision_index\":2,\"label\":\"reason:2\",\"step\":{\"delta\":0.0,\"requests_transition\":false,\"stop\":true},\"unit_ref\":{\"episode_id\":\"episode_d58c1578017bdf6f754743ca21e819152f24e2d2082e7d2de72f1d34ca601209\",\"unit_id\":\"unit_cfe8858bca15a2c8882e7a53e9a6d060b2a9e4f8a0a6a07b39e99b8e51ea0549\",\"unit_index\":2}}"
+    ]
+  ]
+}

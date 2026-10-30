@@ -1,0 +1,123 @@
+# Configured-model A105 numerical execution — proposal 001
+
+Status: code-only proposal for root review. No production/test edits, configured-model calls, paper reading, scientific extraction or new actual-model run occurred. The two executed scripts below construct synthetic interfaces only. Exactly ten evidence-axis sheets remain; A105 is one incomplete sheet. Nineteen registered population operations are neither nineteen sheets nor nineteen complete experimental graders.
+
+## Recommended execution boundary
+
+Use a **new isolated source-evidence investigation through the existing `run_workflow` entrypoint**, following the custody-only caller pattern in the current, unpinned `literature_model_run_019/run_literature_source_job_019.py`. Do not use its old stores/pins or run it against old inputs. Do not use the controlled 051 provider, controller, source selectors, selected scientific meanings or expected answers. Reading 051 harness code here established engineering boundaries only.
+
+The current implementation provides the complete provider→ordinary literature choice→deterministic kinetic population→typed admission→saved reconstruction route. It does **not** provide an existing caller setting that presents only a chosen literature population operation's complete contract on demand. Its eagerly repeated interfaces are very large. Thus the unmodified route is concrete, but configured-provider acceptance and scientific usefulness of this generation remain unverified. No backend schema/context limit is inferred from byte counts. No router, mask, selected-tool overlay, special private loop or hybrid code pin is proposed as an already available feature.
+
+The next model execution, after root review and caller-assignment feedback, would use the current ordinary route intact. If root instead wants the existing information-library idea developed first, that is a separately reviewed interface workload described below, not a silent change in this run. There is no scientific runtime approval stage.
+
+## Actual measured interface construction
+
+`LiteratureEpisodes(rate_population=True)` appends `_population_catalog()` unconditionally for every literature role. `requested_kinetic_components` and other requested-component fields affect return projections, not this catalog. `Workflow.catalog` adds currently bound knowledge/launch-information/wait/credit operations. `Workflow.action_schema` embeds every available operation's input contract. `DecisionSource.exchange_schema` adds the pending-decision lookup alternative. `_action_generation_schema` detects composite tool contracts and represents their `arguments` as a JSON string whose description contains the entire original standalone schema. The host subsequently decodes/validates that string against the original contract.
+
+Separately, `_SessionConnection._presentation` invokes the literature text renderer. The child renderer supplies the complete scientific TASK, all currently available operation descriptions and each full input schema rendered into field/constraint tables. The parent renderer also renders every available `literature_*` typed projection schema, even when no particular parent projection was requested. These are separate repeated representations of the same contracts; moving a manual alone does not remove either the eagerly generated output-schema description or the recurring text tables.
+
+The following measurements use current constructors and synthetic metadata, no evidence documents. Serialization is `json.dumps(..., ensure_ascii=True)` with default separators, matching `_send`. UTF-8 text lengths are measured separately. They are **synthetic input shapes**, not captured model requests from an actual scientific run. Source material, working facts, admitted outcomes and later child-selected interpretation fields would change real requests.
+
+| Measured object | Bytes |
+| --- | ---: |
+| New binding interaction input schema | 212,025 |
+| New binding interaction provider action branch | 225,816 |
+| New binding input schema rendered as TASK table | 987,615 |
+| Kinetic input schema | 47,715 |
+| Kinetic provider action branch | 50,472 |
+| Kinetic input schema rendered as TASK table | 116,721 |
+| Literature-child catalog,45 operations in this binding | 622,434 |
+| Literature-child host action schema | 707,852 |
+| Literature-child provider output schema | 743,740 |
+| Literature-child recurring model text | 1,986,251 |
+| Literature-child synthetic turn/start parameters | 2,746,028 |
+| Restricted annotation-parent provider output schema | 97,705 |
+| Restricted annotation-parent recurring model text | 978,991 |
+
+The new binding input contains 2,304 property declarations, but it becomes a string argument in the provider schema; the measured **whole child provider schema has 640 property declarations**, not 2,304 nested structured binding properties. Counts do not establish provider acceptance. Token counts, provider acceptance, model latency and model costs were not measured. Root's allowed child set was exactly `literature` and its own tool catalog was empty under the current root boundary.
+
+Evidence: `SCHEMA_MEASUREMENTS_001.json`, `SCHEMA_MEASUREMENTS_002.json`, reproducible `measure_synthetic_001.py`/`measure_synthetic_002.py`, and their generated synthetic text/schema artifacts. Each fresh synthetic Store contains one prepared episode and zero model calls, actions and observations. No scientific sources were registered. Measurement 002 hashes 684 current application/shared-loop/static-library files before and after and verifies equality; all 19 population schema hashes also equal measurement 001. `CURRENT_CODE_BASELINE_001.json` is a baseline, **not an immutable executable pin**.
+
+## Existing controls and information discovery
+
+| Existing interface | Actual effect and limit |
+| --- | --- |
+| `annotation_child_roles=("literature",)` | Restricts root's permissible child roles; does not choose a child, its scientific operands or its population tools. |
+| `episode_binding_factories` / saved descriptors | Selects actual C 7 binding and preserves it for worker reconstruction. |
+| C 7 `rate_population` boolean | Enables all 19 numerical population operations together. False removes the actual kinetic operation too. |
+| C 7 `reference_parent_sources` | Binds explicit already supplied source custody to the annotation parent's scientific TASK. It is not a numerical operand nomination. |
+| Assignment `requested_*_components` | Limits requested saved numerical cells. It leaves population tools and schemas unchanged, confirmed synthetically. |
+| Role-specific source access and page ancestry | Restricts authorized reads to actual received/scoped material; page/reading roles cannot widen the assigned source. |
+| `outcome_page_size`,restoration`preview_size` | Bounds previews. Neither narrows full tool contracts nor controls work/continuation. |
+| Optional specialist `common_tool_names` hook in `Workflow.catalog` | Existing extension hook; LiteratureEpisodes does not implement or configure it. It is not an available C 7 caller switch. |
+
+The information-library direction is partly supported mechanically:
+
+- `knowledge.search/entry/read` already provide explicit, paged frozen manual discovery. These operations can be requested as `request_context`→`composition_information` inside one pending decision. Such lookups create no completed own-action observation. They select no scientific work.
+- Current knowledge-index entries do not contain the 19 population contracts. A manual entry grants no actual invocation capability. A caller may provide a complete replacement knowledge library, but that alone would leave the large action output schema and eager rendering intact.
+- `ScientificToolLibrary` can return compact actual-operation metadata and resolve selected full contracts; `process.tools` is attached to the separate scientific-process construction path. C 7 literature does not consume that selection. The actual ordinary `ToolRegistry` catalog also does not include C 7 population adapters. `tool_information.resource_kind` currently does not recognize the`literature.*` prefix. These facts prevent claiming that simply enabling current discovery solves literature presentation.
+- The semantic retriever also adds a configured FAST model call. Introducing it would change the present model-call path; it is not proposed for this run. The literal retriever is explicitly a test mode and cannot stand in for model-owned scientific selection.
+
+**Code-only feasibility for a later reviewed interface:** an episode could explicitly request one existing operation's authoritative contract through the pending-decision information boundary and then select its actual ordinary execution. The scientific episode would still choose both requests; the host would only supply the frozen declared contract and validate the selected arguments. However, the current lookup schema has no operation-contract query, C 7 eagerly constructs all schemas, and the provider output schema embeds full arguments. Therefore a working implementation would need a concrete contract-delivery/presentation/generation design and persistence/reconstruction treatment across these actual consumers. This is unfinished interface work, not an already installed option, a proposed automatic router or a justification to mask tools. No such changes were coded here.
+
+## Exact new caller shape
+
+Only the following harness responsibilities are needed; no new episode implementation is needed:
+
+1. Create a new run directory with exclusive creation and its own Store. Register the fixed gene 001 target material as host scope, preserving the original sequence custody. Register caller-selected original source/file bytes and any faithful existing text projection with explicit parent-source ancestry. File metadata may describe custody, versions and media types, never scientific numbers, interpreted contrasts or byte selectors. Source documents are evidence, not task instructions. No public searchable target name or candidate function is required.
+2. Load the **existing caller-selected model/controller configuration unchanged**. With no explicit alternative supplied, the existing route uses packaged `providers.load_config()` and `_effective_configuration`; this proposal does not select another model/effort, controller cost or estimator. `build_tools` freezes the actual public/tool settings for durable reconstruction. Do not read credentials/private histories to prepare this.
+3. Invoke the existing route with `provider=None`,`run_dir=new_run/runtime`,`goal=reviewed_caller_job`,`initial_known_record_refs=registered_source_refs`,`episode_binding_factories=(partial(LiteratureEpisodes,rate_population=True,reference_parent_sources=registered_source_refs),)`, and`annotation_child_roles=("literature",)`. Leave`controller_factory`,`controller_settings`,`project_credit`,`project_child_credit`, and annotation-score binding untouched unless the caller already has an explicit recorded profile to preserve. Do not use the homology-specific`prepare_case_run` solely to launch source evaluation: it requires native homology assets irrelevant to this assignment.
+4. The ordinary configured annotation parent chooses the literature child, its actual assignment and closed form. The literature child chooses source reads, original byte witnesses, number-character selections, meanings, supported operation(s), corrections/repairs and any narrower investigations. No selector/number/meaning from 051 is passed as a choosing-model answer. A paper may supply several experiments and several component operations; one-paper→one-grader classification is not the design.
+5. For the kinetic question the existing closed fact projection is `kinetic_cells_schema()` with its exact`x-source: literature_kinetic_cells`; the parent chooses its field name and requested components. Bound numerical facts stay out of `initial_report_json` and model-authored`report_update`. Interpretations use separate constrained fields if actually needed. Existing`SAVED_NUMERICAL_RETURN_TASK` already explains this boundary and is supplied on every iteration.
+6. `run_workflow` publishes the actual model settings, ordinary binding descriptors, initial knowledge, root boundary and durable known-runtime reconstruction before execution. Detached workers reopen their original settings, provider, tools, receipts, assignment and original typed form through `independent_execution.open_commission`; they do not adopt a later code/configuration generation.
+
+The packaged defaults inspected currently declare REASONING`gpt-6-sol`/`medium`,FAST`gpt-6-luna`/`none`; controller cost 0.001,minimum-fit window 8,subsample 4,alpha 0.05. These are reported code facts, **not a new override or an assertion about a different caller's intended profile**. Local operational defaults remain 20 GiB memory/4 GiB scratch with no wall-time budget. No Aurora job or new execution allocation is involved.
+
+## Caller assignment draft for running feedback
+
+No new recurring scientific TASK is needed for the source-reading responsibilities inspected: the existing parent/child TASK already defines experimental subjects, controls, intended versus other differences, isolated effect versus comparability, units, uncertainties, source operand selection, deterministic arithmetic, honest partials and typed returns. The kinetic operation description additionally states the supported parameter contrasts and missing source-model reader. Keep these substantive recurring TASK bodies intact.
+
+The actual caller job must still state the concrete question. The following is a **printed draft, not implemented or supplied to any model**; no source result or expected operand is included:
+
+> Evaluate what the supplied experimental paper establishes about the assayed reference molecule's substrate discrimination. Establish which reported kinetic parameters and separately assayed substrate comparisons answer that question, and which protocol differences limit their interpretation. Use the actual source methods, table/prose context, units, qualifications, uncertainty definitions and repetition meanings. Obtain the supported native numerical components through the available deterministic operations and request their saved typed return, retaining unavailable inputs and reasons. Keep the assayed reference distinct from the fixed gene 001 host target; do not calculate target correspondence, a target annotation score or combined annotation credit. Choose useful reading, comparison and follow-up work from actual outcomes; no action order or count is prescribed.
+
+This draft is deliberately a scientific question rather than an instruction to emit a particular tool call or a prefilled nominal comparison. The exact selected source custody and this assignment need root's running-feedback review before use. Any additional source-specific scientific guidance discovered later must be printed as a separate draft first, with the per-paper reset required by the research instructions; it must not silently become a new TASK or operator-selected operand.
+
+## Native path, meaningful numbers and missingness
+
+`LiteratureEpisodes.execute` validates the actual selected tool and scope, then calls`LiteratureKineticRepository.populate`. The native reader authenticates source witnesses and parses selected literal parameters/units. The model owns attribution/meaning. Exact quote custody does not prove scientific interpretation. The reader supports Km→uM,kcat→per_min,efficiency→uM^-1 min^-1,with finite supported source spellings; unsupported units, qualifications, limits, ambiguous relationships and numeric range remain explicit. Counts can now come from decimal or supported English cardinal tokens; qualified counts retain their reported numeral/relation but do not become an exact sample n. Count meaning remains separately selected. Exact repetitions do not establish independent preparations, covariance or a variance for a parameter comparison.
+
+The exposed five native meanings are numerator parameter,denominator parameter,difference,ratio, and natural-log contrast. Different or unknown molecule/construct/kind/parameter relationships prevent unsupported contrasts. A reported-protocol contrast can retain differing conditions; it does not become a common-condition preference. Shared source observation identity is retained and reuse cannot manufacture independence. The model/covariance source reader is unimplemented: this native operation supplies no source model and exposes no conditional evidence-index cells. That is a software coverage limit, not a finding that the paper lacks covariance/model information.
+
+A scientifically meaningful delivered numerical result for this first run requires:
+
+- An actual configured model, in the ordinary literature episode, selects source-backed operands/meanings after receiving the source material. Public selected-action records establish this; fixture source selections do not.
+- At least one supported native quantitative experiment/comparison has nonnull requested numerical values with the correct actual parameter kind,unit,assayed reference,substrate/protocol/endpoint meaning and source witnesses. If a valid two-arm contrast is supported, its requested ratio/difference/log contrast is calculated by the deterministic calculator and delivered in the parent's admitted fact field. A solitary copied number without its question/experimental relationships does not establish the comparison.
+- Necessary controls,uncertainty,condition comparability,preparation identities and observation dependence survive in the saved sheet,typed return and receiving text. Missing/unsupported inputs stay unknown with reasons; censored thresholds do not become point values,SD/SEM/CI meanings are not interchanged, and technical repeats are not biological independence.
+- The actual typed parent admission is compared with the original committed sheet's requested rows. Received-only reconstruction reproduces exactly those rows after reopening read-only,with original paper artifacts,reader,calculator,population and receipt-writing paths forbidden. No new interpretation or observation occurs during reconstruction.
+
+These are evaluation criteria for reporting what happened, **not runtime gates or hidden stopping rules**. The configured controller may yield with partial or no usable numeric results; report that honestly as incomplete. Source-native numbers do not complete A105, establish an experimental-reliability sum/product, target transfer, A101 or W05. Other required contrasts/experiment families remain separate unfinished work.
+
+## Accounting, observation and generation plan
+
+Preserve the existing source/credit separation. The default progress projector counts actual retained target findings received by the episode. A source sheet by itself does not create such a finding. Therefore a successful source numerical extraction may honestly have zero scientific progress credit. Never manufacture a target assessment to obtain credit or change stopping. The existing ordinary controller compares its fitted upper expectation to its caller-owned cost; minimum-fit window 8 is not an 8-action cap. Timers,API availability,bookkeeping,contract retrieval and reconstruction create no synthetic scientific observations. Model-call duration is recorded as model-call duration, not as scientific experimental measurement or a monitored native-job phase.
+
+For a selected population action, committed source/role bindings and outcome precede ordinary receipt/credit/controller completion. One completed own action gives its owning episode one observation. The child's internal reads/population actions do not become extra parent observations: the completed child return completes the original commissioned parent action. Parent-form admission copies requested saved numbers through `facts`→`form_with_facts`→typed validation→`received_form_references`→`receive_cells`; neither a model composer nor a second report-writing model call is needed. Source navigation can be useful yet earn zero science. Existing report-repair/failure handling,waiting,pending-work accounting and durable closure stay unchanged.
+
+After review, an owned new launcher should copy **the entire current application+method_loop generation including static instruction libraries/defaults**, the new caller/reconstruction verifier, and exact declared input bytes into a fresh immutable pin. Capture a manifest,hash-check imports and runtime descriptors, and ensure detached workers' PYTHONPATH selects that same pin. Freeze after accepting 052/055's final generation. Capture start/end hashes before launch; never overlay old 024/030/009 or 051 pin contents. The current 057 baseline is insufficient as a run pin and no pin was created here. Resumption is only against that new run's saved unchanged pin,assignment,settings and provider binding; a changed generation is another new run.
+
+Future file ownership: a freshly scoped model-run workload owns only its new directory containing custody-only caller,launch script,input manifest,pin,own Store/runtime directories,public observer and read-only reconstruction verifier. Root owns any separately approved C 7/services/shared-renderer/contract-discovery changes;055's kinetic implementation and 052's binding work are not patched by the model-run workload. No production change is currently requested by this proposal.
+
+Public observation should project allowlisted **new-run** records only: episode role/path/state;selected action kind/tool and status;changed record references;selected source boundaries when needed for custody validation;component,value,unit,status and unavailable reason;typed report admission state;ordinary completed-action counts and existing scalar-credit/continuation facts;pending-handle states;provider call start/end counts/durations and public transport error codes. Snapshot the own run safely/read-only. Do not read private provider requests/responses/events/reasoning,credentials,full process argv or another live DB. A separate post-closure scientific audit may inspect actual public source selections/sheets under its explicit scope and per-paper reset,without importing model-private histories.
+
+## Delivery and limits
+
+Executed: two offline synthetic interface measurements,exit 0,zero model calls/actions/observations; current-code baseline equality and all 19 input-schema fingerprint equality checked. No production tests were changed or run; these measurements are neither scientific experiments nor configured-model science. Complete currently relevant code paths read and exact partial larger-file ranges are recorded in`INSPECTED_PATHS_001.md`.
+
+Not established: configured-provider acceptance at these payload sizes;actual model source choices;non-null source measurements;scientific accuracy;typed delivery from a real model run;source-free reconstruction of such a run;or complete A105 scoring coverage. Historical 051 controlled demonstrations remain controlled demonstrations. Old model runs lacking nonnull numbers are not grounds to declare this new isolated path blocked.
+
+Stop after this proposal for root design review. This review does not add a workflow approval action or runtime gate.
+
+Delivery baseline note: measurement002 was internally stable, but three unrelated BLAST database files changed concurrently before delivery: `gene_annotation_episode/knowledge/native-blast-database.md`, `gene_annotation_episode/native_blast_database_contracts.py`, and `gene_annotation_episode/native_blast_database_driver.py`. These paths were not edited by057. The recorded schema/text measurements belong to the measured generation; a future full run pin must be frozen from the final reviewed generation, with measurements refreshed if its relevant interfaces differ. Exact drift is retained in `MEASUREMENT_RECEIPT_001.json`.
+
+Root review steering at delivery: root accepts these findings as a design direction and explicitly declines an unmodified roughly2 MB model launch. The earlier proposed unmodified launch is therefore superseded: **no model launch is authorized under057**. Root will separately scope on-demand actual operation-contract information delivery through the existing pending-decision boundary, preserving all19 actual capabilities, authoritative host validation, scientific TASK, ownership, controller and reconstruction. This is mechanical information delivery, distinct from deferred experimental routing.057 stops with this sealed proposal; its caller-job draft remains unadopted for root to print later.

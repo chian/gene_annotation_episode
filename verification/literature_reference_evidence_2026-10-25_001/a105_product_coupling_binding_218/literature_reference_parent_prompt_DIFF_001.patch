@@ -1,0 +1,13 @@
+--- before/gene_annotation_episode/literature_reference_parent_prompt.py
++++ after/gene_annotation_episode/literature_reference_parent_prompt.py
+@@ -69,6 +69,10 @@
+     if state.get("literature_product_partition_work", {}).get("version") == "literature_product_partition_task_v1":
+         from .literature_product_partition_prompt import PRODUCT_PARTITION_TASK
+         parts.extend(["", PRODUCT_PARTITION_TASK])
++    from .literature_product_coupling_render import task_relevant as coupling_task_relevant
++    from .literature_product_coupling_prompt import PRODUCT_COUPLING_TASK
++    if coupling_task_relevant(state) and PRODUCT_COUPLING_TASK not in normalized:
++        parts.extend(["", PRODUCT_COUPLING_TASK])
+     from .literature_measurement_validation_render import task_relevant as validation_task_relevant
+     from .literature_measurement_validation_prompt import MEASUREMENT_VALIDATION_TASK
+     if validation_task_relevant(state) and MEASUREMENT_VALIDATION_TASK not in normalized:

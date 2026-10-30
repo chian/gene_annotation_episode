@@ -1,0 +1,5187 @@
+{
+  "schema": "hmmalign_sheet_v1",
+  "operation": {
+    "program": "hmmalign",
+    "format": "stockholm",
+    "engine_version": "3.4",
+    "alphabet": "amino",
+    "mode": "mapali"
+  },
+  "inputs": {
+    "profile": {
+      "name": "fragment_profile",
+      "length": 20,
+      "alphabet": "amino",
+      "checksum": 1589892361,
+      "map": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24
+      ]
+    },
+    "sequences": [
+      {
+        "name": "new",
+        "occurrence": 0,
+        "sequence": "ACDEFGHIKLMNPQRSTVWY",
+        "length": 20,
+        "origin": "new"
+      }
+    ],
+    "trim": false,
+    "acquisition": {
+      "output_complete": true
+    },
+    "native_parameters": {
+      "program": "hmmalign",
+      "trim": false,
+      "mapali": true
+    },
+    "mapali": {
+      "artifact_ref": "fixture:fragment_seed.sto",
+      "stockholm": "# STOCKHOLM 1.0\n#=GF ID fragment_profile\n#=GS inherited DE preserved description\ninherited ggACDEFGaaHIKLMNPQRSTVWYhh\ncopy ggACDEFGaaHIKLMNPQRSTVWYhh\nfragment ~~~~~~FG..HIKLMNPQRSTV~~~~\n#=GC RF ..xxxxxx..xxxxxxxxxxxxxx..\n//\n"
+    }
+  },
+  "artifact_refs": {
+    "stockholm": "fixture:fragment_mapali/stdout.txt"
+  },
+  "native_result": {
+    "schema": "hmmalign_native_v1",
+    "operation": {
+      "program": "hmmalign",
+      "format": "stockholm",
+      "engine_version": "3.4",
+      "alphabet": null,
+      "mode": "profile_alignment"
+    },
+    "artifacts": {
+      "stockholm": "# STOCKHOLM 1.0\n\n#=GS inherited DE preserved description\n\ninherited         ggACDEFGaaHIKLMNPQRSTVWYhh\ncopy              ggACDEFGaaHIKLMNPQRSTVWYhh\nfragment          ~~~~~~FG..HIKLMNPQRSTV~~~~\nnew               ..ACDEFG..HIKLMNPQRSTVWY..\n#=GR new       PP ..9*****..**************..\n#=GC PP_cons      ..9*****..**************..\n#=GC RF           ..xxxxxx..xxxxxxxxxxxxxx..\n//\n"
+    },
+    "artifact_refs": {
+      "stockholm": "fixture:fragment_mapali/stdout.txt"
+    },
+    "alignments": [
+      {
+        "record_key": "alignment:0",
+        "alignment_index": 0,
+        "locator": {
+          "artifact_role": "stockholm",
+          "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+          "line": 1,
+          "byte_start": 0,
+          "byte_end": 16
+        },
+        "engine_version": "3.4",
+        "header_valid": true,
+        "complete": true,
+        "column_count": 26,
+        "block_count": 1,
+        "rows": [
+          {
+            "record_key": "alignment:0/sequence:0",
+            "name": "inherited",
+            "occurrence": 0,
+            "row_index": 0,
+            "alignment_index": 0,
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+              "line": 5,
+              "byte_start": 58,
+              "byte_end": 103,
+              "alignment_index": 0,
+              "row_index": 0,
+              "name_occurrence": 0
+            },
+            "fragments": [
+              {
+                "raw": "inherited         ggACDEFGaaHIKLMNPQRSTVWYhh\n",
+                "locator": {
+                  "artifact_role": "stockholm",
+                  "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+                  "line": 5,
+                  "byte_start": 58,
+                  "byte_end": 103
+                },
+                "kind": "sequence",
+                "name": "inherited",
+                "value": "ggACDEFGaaHIKLMNPQRSTVWYhh",
+                "block_index": 0
+              }
+            ],
+            "annotation_fragments": [],
+            "issues": [],
+            "identity_unambiguous": true,
+            "aligned_sequence": "ggACDEFGaaHIKLMNPQRSTVWYhh",
+            "symbols_valid": true,
+            "geometry_valid": true,
+            "column_annotations": {},
+            "sequence_annotations": [
+              {
+                "raw": "#=GS inherited DE preserved description\n",
+                "locator": {
+                  "artifact_role": "stockholm",
+                  "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+                  "line": 3,
+                  "byte_start": 17,
+                  "byte_end": 57
+                },
+                "kind": "GS",
+                "tag": "DE",
+                "value": "preserved description",
+                "name": "inherited"
+              }
+            ],
+            "sequence_annotations_joined": true
+          },
+          {
+            "record_key": "alignment:0/sequence:1",
+            "name": "copy",
+            "occurrence": 0,
+            "row_index": 1,
+            "alignment_index": 0,
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+              "line": 6,
+              "byte_start": 103,
+              "byte_end": 148,
+              "alignment_index": 0,
+              "row_index": 1,
+              "name_occurrence": 0
+            },
+            "fragments": [
+              {
+                "raw": "copy              ggACDEFGaaHIKLMNPQRSTVWYhh\n",
+                "locator": {
+                  "artifact_role": "stockholm",
+                  "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+                  "line": 6,
+                  "byte_start": 103,
+                  "byte_end": 148
+                },
+                "kind": "sequence",
+                "name": "copy",
+                "value": "ggACDEFGaaHIKLMNPQRSTVWYhh",
+                "block_index": 0
+              }
+            ],
+            "annotation_fragments": [],
+            "issues": [],
+            "identity_unambiguous": true,
+            "aligned_sequence": "ggACDEFGaaHIKLMNPQRSTVWYhh",
+            "symbols_valid": true,
+            "geometry_valid": true,
+            "column_annotations": {},
+            "sequence_annotations": [],
+            "sequence_annotations_joined": true
+          },
+          {
+            "record_key": "alignment:0/sequence:2",
+            "name": "fragment",
+            "occurrence": 0,
+            "row_index": 2,
+            "alignment_index": 0,
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+              "line": 7,
+              "byte_start": 148,
+              "byte_end": 193,
+              "alignment_index": 0,
+              "row_index": 2,
+              "name_occurrence": 0
+            },
+            "fragments": [
+              {
+                "raw": "fragment          ~~~~~~FG..HIKLMNPQRSTV~~~~\n",
+                "locator": {
+                  "artifact_role": "stockholm",
+                  "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+                  "line": 7,
+                  "byte_start": 148,
+                  "byte_end": 193
+                },
+                "kind": "sequence",
+                "name": "fragment",
+                "value": "~~~~~~FG..HIKLMNPQRSTV~~~~",
+                "block_index": 0
+              }
+            ],
+            "annotation_fragments": [],
+            "issues": [],
+            "identity_unambiguous": true,
+            "aligned_sequence": "~~~~~~FG..HIKLMNPQRSTV~~~~",
+            "symbols_valid": true,
+            "geometry_valid": true,
+            "column_annotations": {},
+            "sequence_annotations": [],
+            "sequence_annotations_joined": true
+          },
+          {
+            "record_key": "alignment:0/sequence:3",
+            "name": "new",
+            "occurrence": 0,
+            "row_index": 3,
+            "alignment_index": 0,
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+              "line": 8,
+              "byte_start": 193,
+              "byte_end": 238,
+              "alignment_index": 0,
+              "row_index": 3,
+              "name_occurrence": 0
+            },
+            "fragments": [
+              {
+                "raw": "new               ..ACDEFG..HIKLMNPQRSTVWY..\n",
+                "locator": {
+                  "artifact_role": "stockholm",
+                  "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+                  "line": 8,
+                  "byte_start": 193,
+                  "byte_end": 238
+                },
+                "kind": "sequence",
+                "name": "new",
+                "value": "..ACDEFG..HIKLMNPQRSTVWY..",
+                "block_index": 0
+              }
+            ],
+            "annotation_fragments": [
+              {
+                "raw": "#=GR new       PP ..9*****..**************..\n",
+                "locator": {
+                  "artifact_role": "stockholm",
+                  "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+                  "line": 9,
+                  "byte_start": 238,
+                  "byte_end": 283
+                },
+                "kind": "GR",
+                "tag": "PP",
+                "value": "..9*****..**************..",
+                "name": "new",
+                "block_index": 0
+              }
+            ],
+            "issues": [],
+            "identity_unambiguous": true,
+            "aligned_sequence": "..ACDEFG..HIKLMNPQRSTVWY..",
+            "symbols_valid": true,
+            "geometry_valid": true,
+            "column_annotations": {
+              "PP": {
+                "text": "..9*****..**************..",
+                "valid": true,
+                "fragments": [
+                  {
+                    "raw": "#=GR new       PP ..9*****..**************..\n",
+                    "locator": {
+                      "artifact_role": "stockholm",
+                      "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+                      "line": 9,
+                      "byte_start": 238,
+                      "byte_end": 283
+                    },
+                    "kind": "GR",
+                    "tag": "PP",
+                    "value": "..9*****..**************..",
+                    "name": "new",
+                    "block_index": 0
+                  }
+                ]
+              }
+            },
+            "sequence_annotations": [],
+            "sequence_annotations_joined": true
+          }
+        ],
+        "column_annotations": {
+          "PP_cons": {
+            "text": "..9*****..**************..",
+            "valid": true,
+            "fragments": [
+              {
+                "raw": "#=GC PP_cons      ..9*****..**************..\n",
+                "locator": {
+                  "artifact_role": "stockholm",
+                  "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+                  "line": 10,
+                  "byte_start": 283,
+                  "byte_end": 328
+                },
+                "kind": "GC",
+                "tag": "PP_cons",
+                "value": "..9*****..**************..",
+                "block_index": 0
+              }
+            ]
+          },
+          "RF": {
+            "text": "..xxxxxx..xxxxxxxxxxxxxx..",
+            "valid": true,
+            "fragments": [
+              {
+                "raw": "#=GC RF           ..xxxxxx..xxxxxxxxxxxxxx..\n",
+                "locator": {
+                  "artifact_role": "stockholm",
+                  "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+                  "line": 11,
+                  "byte_start": 328,
+                  "byte_end": 373
+                },
+                "kind": "GC",
+                "tag": "RF",
+                "value": "..xxxxxx..xxxxxxxxxxxxxx..",
+                "block_index": 0
+              }
+            ]
+          }
+        },
+        "original_events": [
+          {
+            "raw": "# STOCKHOLM 1.0\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+              "line": 1,
+              "byte_start": 0,
+              "byte_end": 16
+            },
+            "kind": "header",
+            "version": "1.0"
+          },
+          {
+            "raw": "\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+              "line": 2,
+              "byte_start": 16,
+              "byte_end": 17
+            },
+            "kind": "blank"
+          },
+          {
+            "raw": "#=GS inherited DE preserved description\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+              "line": 3,
+              "byte_start": 17,
+              "byte_end": 57
+            },
+            "kind": "GS",
+            "tag": "DE",
+            "value": "preserved description",
+            "name": "inherited"
+          },
+          {
+            "raw": "\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+              "line": 4,
+              "byte_start": 57,
+              "byte_end": 58
+            },
+            "kind": "blank"
+          },
+          {
+            "raw": "inherited         ggACDEFGaaHIKLMNPQRSTVWYhh\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+              "line": 5,
+              "byte_start": 58,
+              "byte_end": 103
+            },
+            "kind": "sequence",
+            "name": "inherited",
+            "value": "ggACDEFGaaHIKLMNPQRSTVWYhh"
+          },
+          {
+            "raw": "copy              ggACDEFGaaHIKLMNPQRSTVWYhh\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+              "line": 6,
+              "byte_start": 103,
+              "byte_end": 148
+            },
+            "kind": "sequence",
+            "name": "copy",
+            "value": "ggACDEFGaaHIKLMNPQRSTVWYhh"
+          },
+          {
+            "raw": "fragment          ~~~~~~FG..HIKLMNPQRSTV~~~~\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+              "line": 7,
+              "byte_start": 148,
+              "byte_end": 193
+            },
+            "kind": "sequence",
+            "name": "fragment",
+            "value": "~~~~~~FG..HIKLMNPQRSTV~~~~"
+          },
+          {
+            "raw": "new               ..ACDEFG..HIKLMNPQRSTVWY..\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+              "line": 8,
+              "byte_start": 193,
+              "byte_end": 238
+            },
+            "kind": "sequence",
+            "name": "new",
+            "value": "..ACDEFG..HIKLMNPQRSTVWY.."
+          },
+          {
+            "raw": "#=GR new       PP ..9*****..**************..\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+              "line": 9,
+              "byte_start": 238,
+              "byte_end": 283
+            },
+            "kind": "GR",
+            "tag": "PP",
+            "value": "..9*****..**************..",
+            "name": "new"
+          },
+          {
+            "raw": "#=GC PP_cons      ..9*****..**************..\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+              "line": 10,
+              "byte_start": 283,
+              "byte_end": 328
+            },
+            "kind": "GC",
+            "tag": "PP_cons",
+            "value": "..9*****..**************.."
+          },
+          {
+            "raw": "#=GC RF           ..xxxxxx..xxxxxxxxxxxxxx..\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+              "line": 11,
+              "byte_start": 328,
+              "byte_end": 373
+            },
+            "kind": "GC",
+            "tag": "RF",
+            "value": "..xxxxxx..xxxxxxxxxxxxxx.."
+          },
+          {
+            "raw": "//\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+              "line": 12,
+              "byte_start": 373,
+              "byte_end": 376
+            },
+            "kind": "terminator"
+          }
+        ],
+        "issues": []
+      }
+    ],
+    "status": "completed",
+    "issues": []
+  },
+  "status": "completed",
+  "acquisition": {
+    "output_complete": true
+  },
+  "mapali": {
+    "selected": true,
+    "status": "compatible",
+    "computed_checksum": 1589892361,
+    "profile_checksum": 1589892361,
+    "rows": [
+      {
+        "record_key": "alignment:0/sequence:0",
+        "name": "inherited",
+        "occurrence": 0,
+        "row_index": 0,
+        "alignment_index": 0,
+        "locator": {
+          "artifact_role": "stockholm",
+          "artifact_ref": "fixture:fragment_seed.sto",
+          "line": 4,
+          "byte_start": 81,
+          "byte_end": 118,
+          "alignment_index": 0,
+          "row_index": 0,
+          "name_occurrence": 0
+        },
+        "fragments": [
+          {
+            "raw": "inherited ggACDEFGaaHIKLMNPQRSTVWYhh\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "fixture:fragment_seed.sto",
+              "line": 4,
+              "byte_start": 81,
+              "byte_end": 118
+            },
+            "kind": "sequence",
+            "name": "inherited",
+            "value": "ggACDEFGaaHIKLMNPQRSTVWYhh",
+            "block_index": 0
+          }
+        ],
+        "annotation_fragments": [],
+        "issues": [],
+        "identity_unambiguous": true,
+        "aligned_sequence": "ggACDEFGaaHIKLMNPQRSTVWYhh",
+        "symbols_valid": true,
+        "geometry_valid": true,
+        "column_annotations": {},
+        "sequence_annotations": [
+          {
+            "raw": "#=GS inherited DE preserved description\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "fixture:fragment_seed.sto",
+              "line": 3,
+              "byte_start": 41,
+              "byte_end": 81
+            },
+            "kind": "GS",
+            "tag": "DE",
+            "value": "preserved description",
+            "name": "inherited"
+          }
+        ],
+        "sequence_annotations_joined": true
+      },
+      {
+        "record_key": "alignment:0/sequence:1",
+        "name": "copy",
+        "occurrence": 0,
+        "row_index": 1,
+        "alignment_index": 0,
+        "locator": {
+          "artifact_role": "stockholm",
+          "artifact_ref": "fixture:fragment_seed.sto",
+          "line": 5,
+          "byte_start": 118,
+          "byte_end": 150,
+          "alignment_index": 0,
+          "row_index": 1,
+          "name_occurrence": 0
+        },
+        "fragments": [
+          {
+            "raw": "copy ggACDEFGaaHIKLMNPQRSTVWYhh\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "fixture:fragment_seed.sto",
+              "line": 5,
+              "byte_start": 118,
+              "byte_end": 150
+            },
+            "kind": "sequence",
+            "name": "copy",
+            "value": "ggACDEFGaaHIKLMNPQRSTVWYhh",
+            "block_index": 0
+          }
+        ],
+        "annotation_fragments": [],
+        "issues": [],
+        "identity_unambiguous": true,
+        "aligned_sequence": "ggACDEFGaaHIKLMNPQRSTVWYhh",
+        "symbols_valid": true,
+        "geometry_valid": true,
+        "column_annotations": {},
+        "sequence_annotations": [],
+        "sequence_annotations_joined": true
+      },
+      {
+        "record_key": "alignment:0/sequence:2",
+        "name": "fragment",
+        "occurrence": 0,
+        "row_index": 2,
+        "alignment_index": 0,
+        "locator": {
+          "artifact_role": "stockholm",
+          "artifact_ref": "fixture:fragment_seed.sto",
+          "line": 6,
+          "byte_start": 150,
+          "byte_end": 186,
+          "alignment_index": 0,
+          "row_index": 2,
+          "name_occurrence": 0
+        },
+        "fragments": [
+          {
+            "raw": "fragment ~~~~~~FG..HIKLMNPQRSTV~~~~\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "fixture:fragment_seed.sto",
+              "line": 6,
+              "byte_start": 150,
+              "byte_end": 186
+            },
+            "kind": "sequence",
+            "name": "fragment",
+            "value": "~~~~~~FG..HIKLMNPQRSTV~~~~",
+            "block_index": 0
+          }
+        ],
+        "annotation_fragments": [],
+        "issues": [],
+        "identity_unambiguous": true,
+        "aligned_sequence": "~~~~~~FG..HIKLMNPQRSTV~~~~",
+        "symbols_valid": true,
+        "geometry_valid": true,
+        "column_annotations": {},
+        "sequence_annotations": [],
+        "sequence_annotations_joined": true
+      }
+    ],
+    "model_columns": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23
+    ],
+    "artifact_ref": "fixture:fragment_seed.sto",
+    "issues": [],
+    "native_alignment": {
+      "schema": "hmmalign_native_v1",
+      "operation": {
+        "program": "hmmalign",
+        "format": "stockholm",
+        "engine_version": "3.4",
+        "alphabet": null,
+        "mode": "profile_alignment"
+      },
+      "artifacts": {
+        "stockholm": "# STOCKHOLM 1.0\n#=GF ID fragment_profile\n#=GS inherited DE preserved description\ninherited ggACDEFGaaHIKLMNPQRSTVWYhh\ncopy ggACDEFGaaHIKLMNPQRSTVWYhh\nfragment ~~~~~~FG..HIKLMNPQRSTV~~~~\n#=GC RF ..xxxxxx..xxxxxxxxxxxxxx..\n//\n"
+      },
+      "artifact_refs": {
+        "stockholm": "fixture:fragment_seed.sto"
+      },
+      "alignments": [
+        {
+          "record_key": "alignment:0",
+          "alignment_index": 0,
+          "locator": {
+            "artifact_role": "stockholm",
+            "artifact_ref": "fixture:fragment_seed.sto",
+            "line": 1,
+            "byte_start": 0,
+            "byte_end": 16
+          },
+          "engine_version": "3.4",
+          "header_valid": true,
+          "complete": true,
+          "column_count": 26,
+          "block_count": 1,
+          "rows": [
+            {
+              "record_key": "alignment:0/sequence:0",
+              "name": "inherited",
+              "occurrence": 0,
+              "row_index": 0,
+              "alignment_index": 0,
+              "locator": {
+                "artifact_role": "stockholm",
+                "artifact_ref": "fixture:fragment_seed.sto",
+                "line": 4,
+                "byte_start": 81,
+                "byte_end": 118,
+                "alignment_index": 0,
+                "row_index": 0,
+                "name_occurrence": 0
+              },
+              "fragments": [
+                {
+                  "raw": "inherited ggACDEFGaaHIKLMNPQRSTVWYhh\n",
+                  "locator": {
+                    "artifact_role": "stockholm",
+                    "artifact_ref": "fixture:fragment_seed.sto",
+                    "line": 4,
+                    "byte_start": 81,
+                    "byte_end": 118
+                  },
+                  "kind": "sequence",
+                  "name": "inherited",
+                  "value": "ggACDEFGaaHIKLMNPQRSTVWYhh",
+                  "block_index": 0
+                }
+              ],
+              "annotation_fragments": [],
+              "issues": [],
+              "identity_unambiguous": true,
+              "aligned_sequence": "ggACDEFGaaHIKLMNPQRSTVWYhh",
+              "symbols_valid": true,
+              "geometry_valid": true,
+              "column_annotations": {},
+              "sequence_annotations": [
+                {
+                  "raw": "#=GS inherited DE preserved description\n",
+                  "locator": {
+                    "artifact_role": "stockholm",
+                    "artifact_ref": "fixture:fragment_seed.sto",
+                    "line": 3,
+                    "byte_start": 41,
+                    "byte_end": 81
+                  },
+                  "kind": "GS",
+                  "tag": "DE",
+                  "value": "preserved description",
+                  "name": "inherited"
+                }
+              ],
+              "sequence_annotations_joined": true
+            },
+            {
+              "record_key": "alignment:0/sequence:1",
+              "name": "copy",
+              "occurrence": 0,
+              "row_index": 1,
+              "alignment_index": 0,
+              "locator": {
+                "artifact_role": "stockholm",
+                "artifact_ref": "fixture:fragment_seed.sto",
+                "line": 5,
+                "byte_start": 118,
+                "byte_end": 150,
+                "alignment_index": 0,
+                "row_index": 1,
+                "name_occurrence": 0
+              },
+              "fragments": [
+                {
+                  "raw": "copy ggACDEFGaaHIKLMNPQRSTVWYhh\n",
+                  "locator": {
+                    "artifact_role": "stockholm",
+                    "artifact_ref": "fixture:fragment_seed.sto",
+                    "line": 5,
+                    "byte_start": 118,
+                    "byte_end": 150
+                  },
+                  "kind": "sequence",
+                  "name": "copy",
+                  "value": "ggACDEFGaaHIKLMNPQRSTVWYhh",
+                  "block_index": 0
+                }
+              ],
+              "annotation_fragments": [],
+              "issues": [],
+              "identity_unambiguous": true,
+              "aligned_sequence": "ggACDEFGaaHIKLMNPQRSTVWYhh",
+              "symbols_valid": true,
+              "geometry_valid": true,
+              "column_annotations": {},
+              "sequence_annotations": [],
+              "sequence_annotations_joined": true
+            },
+            {
+              "record_key": "alignment:0/sequence:2",
+              "name": "fragment",
+              "occurrence": 0,
+              "row_index": 2,
+              "alignment_index": 0,
+              "locator": {
+                "artifact_role": "stockholm",
+                "artifact_ref": "fixture:fragment_seed.sto",
+                "line": 6,
+                "byte_start": 150,
+                "byte_end": 186,
+                "alignment_index": 0,
+                "row_index": 2,
+                "name_occurrence": 0
+              },
+              "fragments": [
+                {
+                  "raw": "fragment ~~~~~~FG..HIKLMNPQRSTV~~~~\n",
+                  "locator": {
+                    "artifact_role": "stockholm",
+                    "artifact_ref": "fixture:fragment_seed.sto",
+                    "line": 6,
+                    "byte_start": 150,
+                    "byte_end": 186
+                  },
+                  "kind": "sequence",
+                  "name": "fragment",
+                  "value": "~~~~~~FG..HIKLMNPQRSTV~~~~",
+                  "block_index": 0
+                }
+              ],
+              "annotation_fragments": [],
+              "issues": [],
+              "identity_unambiguous": true,
+              "aligned_sequence": "~~~~~~FG..HIKLMNPQRSTV~~~~",
+              "symbols_valid": true,
+              "geometry_valid": true,
+              "column_annotations": {},
+              "sequence_annotations": [],
+              "sequence_annotations_joined": true
+            }
+          ],
+          "column_annotations": {
+            "RF": {
+              "text": "..xxxxxx..xxxxxxxxxxxxxx..",
+              "valid": true,
+              "fragments": [
+                {
+                  "raw": "#=GC RF ..xxxxxx..xxxxxxxxxxxxxx..\n",
+                  "locator": {
+                    "artifact_role": "stockholm",
+                    "artifact_ref": "fixture:fragment_seed.sto",
+                    "line": 7,
+                    "byte_start": 186,
+                    "byte_end": 221
+                  },
+                  "kind": "GC",
+                  "tag": "RF",
+                  "value": "..xxxxxx..xxxxxxxxxxxxxx..",
+                  "block_index": 0
+                }
+              ]
+            }
+          },
+          "original_events": [
+            {
+              "raw": "# STOCKHOLM 1.0\n",
+              "locator": {
+                "artifact_role": "stockholm",
+                "artifact_ref": "fixture:fragment_seed.sto",
+                "line": 1,
+                "byte_start": 0,
+                "byte_end": 16
+              },
+              "kind": "header",
+              "version": "1.0"
+            },
+            {
+              "raw": "#=GF ID fragment_profile\n",
+              "locator": {
+                "artifact_role": "stockholm",
+                "artifact_ref": "fixture:fragment_seed.sto",
+                "line": 2,
+                "byte_start": 16,
+                "byte_end": 41
+              },
+              "kind": "GF",
+              "tag": "ID",
+              "value": "fragment_profile"
+            },
+            {
+              "raw": "#=GS inherited DE preserved description\n",
+              "locator": {
+                "artifact_role": "stockholm",
+                "artifact_ref": "fixture:fragment_seed.sto",
+                "line": 3,
+                "byte_start": 41,
+                "byte_end": 81
+              },
+              "kind": "GS",
+              "tag": "DE",
+              "value": "preserved description",
+              "name": "inherited"
+            },
+            {
+              "raw": "inherited ggACDEFGaaHIKLMNPQRSTVWYhh\n",
+              "locator": {
+                "artifact_role": "stockholm",
+                "artifact_ref": "fixture:fragment_seed.sto",
+                "line": 4,
+                "byte_start": 81,
+                "byte_end": 118
+              },
+              "kind": "sequence",
+              "name": "inherited",
+              "value": "ggACDEFGaaHIKLMNPQRSTVWYhh"
+            },
+            {
+              "raw": "copy ggACDEFGaaHIKLMNPQRSTVWYhh\n",
+              "locator": {
+                "artifact_role": "stockholm",
+                "artifact_ref": "fixture:fragment_seed.sto",
+                "line": 5,
+                "byte_start": 118,
+                "byte_end": 150
+              },
+              "kind": "sequence",
+              "name": "copy",
+              "value": "ggACDEFGaaHIKLMNPQRSTVWYhh"
+            },
+            {
+              "raw": "fragment ~~~~~~FG..HIKLMNPQRSTV~~~~\n",
+              "locator": {
+                "artifact_role": "stockholm",
+                "artifact_ref": "fixture:fragment_seed.sto",
+                "line": 6,
+                "byte_start": 150,
+                "byte_end": 186
+              },
+              "kind": "sequence",
+              "name": "fragment",
+              "value": "~~~~~~FG..HIKLMNPQRSTV~~~~"
+            },
+            {
+              "raw": "#=GC RF ..xxxxxx..xxxxxxxxxxxxxx..\n",
+              "locator": {
+                "artifact_role": "stockholm",
+                "artifact_ref": "fixture:fragment_seed.sto",
+                "line": 7,
+                "byte_start": 186,
+                "byte_end": 221
+              },
+              "kind": "GC",
+              "tag": "RF",
+              "value": "..xxxxxx..xxxxxxxxxxxxxx.."
+            },
+            {
+              "raw": "//\n",
+              "locator": {
+                "artifact_role": "stockholm",
+                "artifact_ref": "fixture:fragment_seed.sto",
+                "line": 8,
+                "byte_start": 221,
+                "byte_end": 224
+              },
+              "kind": "terminator"
+            }
+          ],
+          "issues": []
+        }
+      ],
+      "status": "completed",
+      "issues": []
+    }
+  },
+  "sequences": [
+    {
+      "record_key": "alignment:0/sequence:0",
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "line": 5,
+        "byte_start": 58,
+        "byte_end": 103,
+        "alignment_index": 0,
+        "row_index": 0,
+        "name_occurrence": 0
+      },
+      "name": "inherited",
+      "occurrence": 0,
+      "alignment_index": 0,
+      "native": {
+        "record_key": "alignment:0/sequence:0",
+        "name": "inherited",
+        "occurrence": 0,
+        "row_index": 0,
+        "alignment_index": 0,
+        "locator": {
+          "artifact_role": "stockholm",
+          "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+          "line": 5,
+          "byte_start": 58,
+          "byte_end": 103,
+          "alignment_index": 0,
+          "row_index": 0,
+          "name_occurrence": 0
+        },
+        "fragments": [
+          {
+            "raw": "inherited         ggACDEFGaaHIKLMNPQRSTVWYhh\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+              "line": 5,
+              "byte_start": 58,
+              "byte_end": 103
+            },
+            "kind": "sequence",
+            "name": "inherited",
+            "value": "ggACDEFGaaHIKLMNPQRSTVWYhh",
+            "block_index": 0
+          }
+        ],
+        "annotation_fragments": [],
+        "issues": [],
+        "identity_unambiguous": true,
+        "aligned_sequence": "ggACDEFGaaHIKLMNPQRSTVWYhh",
+        "symbols_valid": true,
+        "geometry_valid": true,
+        "column_annotations": {},
+        "sequence_annotations": [
+          {
+            "raw": "#=GS inherited DE preserved description\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+              "line": 3,
+              "byte_start": 17,
+              "byte_end": 57
+            },
+            "kind": "GS",
+            "tag": "DE",
+            "value": "preserved description",
+            "name": "inherited"
+          }
+        ],
+        "sequence_annotations_joined": true
+      },
+      "origin": "inherited",
+      "fragment": "not_declared",
+      "inherited_join": {
+        "seed_record_key": "alignment:0/sequence:0",
+        "artifact_ref": "fixture:fragment_seed.sto",
+        "status": "verified"
+      },
+      "metadata_join": {
+        "mapali_row_index": 0,
+        "supplied": {
+          "name": "inherited",
+          "occurrence": 0,
+          "sequence": "ggACDEFGaaHIKLMNPQRSTVWYhh",
+          "length": 26,
+          "origin": "inherited"
+        },
+        "status": "verified",
+        "sequence_mapping_status": "unique"
+      },
+      "mapping": {
+        "status": "unique",
+        "original_length": 26,
+        "candidate_intervals": [
+          [
+            0,
+            26
+          ]
+        ],
+        "original_interval": [
+          0,
+          26
+        ],
+        "trimmed_residues": 0,
+        "normalization": "native_alphabet_case_insensitive"
+      },
+      "measurements": {
+        "retained_residues": 26,
+        "match_state_residues": 20,
+        "deleted_model_positions": 0,
+        "insert_state_residues": 2,
+        "terminal_unaligned_residues": 4,
+        "missing_model_positions": 0,
+        "nonresidue_model_positions": 0
+      },
+      "model_length": 20,
+      "rf_model_positions": 20,
+      "native_rf": "..xxxxxx..xxxxxxxxxxxxxx..",
+      "posterior": {
+        "columns": [
+          {
+            "column_index": 0,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 1,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 2,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 3,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 4,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 5,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 6,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 7,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 8,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 9,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 10,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 11,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 12,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 13,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 14,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 15,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 16,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 17,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 18,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 19,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 20,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 21,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 22,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 23,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 24,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 25,
+            "symbol": null,
+            "bounds": null
+          }
+        ],
+        "bin_counts": {},
+        "residue_population": 26,
+        "bounded_residue_count": 0,
+        "unavailable_residue_count": 26,
+        "lower_sum_hundredths": 0,
+        "upper_sum_hundredths": 0,
+        "mean_upper_inclusive": true,
+        "population": "retained_residues_with_available_native_PP",
+        "native_pp": null
+      },
+      "correspondence": [
+        {
+          "column_index": 0,
+          "model_position": null,
+          "retained_sequence_position": 0,
+          "original_sequence_position": 0,
+          "symbol": "g",
+          "relationship": "terminal_unaligned"
+        },
+        {
+          "column_index": 1,
+          "model_position": null,
+          "retained_sequence_position": 1,
+          "original_sequence_position": 1,
+          "symbol": "g",
+          "relationship": "terminal_unaligned"
+        },
+        {
+          "column_index": 2,
+          "model_position": 1,
+          "retained_sequence_position": 2,
+          "original_sequence_position": 2,
+          "symbol": "A",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 3,
+          "model_position": 2,
+          "retained_sequence_position": 3,
+          "original_sequence_position": 3,
+          "symbol": "C",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 4,
+          "model_position": 3,
+          "retained_sequence_position": 4,
+          "original_sequence_position": 4,
+          "symbol": "D",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 5,
+          "model_position": 4,
+          "retained_sequence_position": 5,
+          "original_sequence_position": 5,
+          "symbol": "E",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 6,
+          "model_position": 5,
+          "retained_sequence_position": 6,
+          "original_sequence_position": 6,
+          "symbol": "F",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 7,
+          "model_position": 6,
+          "retained_sequence_position": 7,
+          "original_sequence_position": 7,
+          "symbol": "G",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 8,
+          "model_position": null,
+          "retained_sequence_position": 8,
+          "original_sequence_position": 8,
+          "symbol": "a",
+          "relationship": "internal_insertion"
+        },
+        {
+          "column_index": 9,
+          "model_position": null,
+          "retained_sequence_position": 9,
+          "original_sequence_position": 9,
+          "symbol": "a",
+          "relationship": "internal_insertion"
+        },
+        {
+          "column_index": 10,
+          "model_position": 7,
+          "retained_sequence_position": 10,
+          "original_sequence_position": 10,
+          "symbol": "H",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 11,
+          "model_position": 8,
+          "retained_sequence_position": 11,
+          "original_sequence_position": 11,
+          "symbol": "I",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 12,
+          "model_position": 9,
+          "retained_sequence_position": 12,
+          "original_sequence_position": 12,
+          "symbol": "K",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 13,
+          "model_position": 10,
+          "retained_sequence_position": 13,
+          "original_sequence_position": 13,
+          "symbol": "L",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 14,
+          "model_position": 11,
+          "retained_sequence_position": 14,
+          "original_sequence_position": 14,
+          "symbol": "M",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 15,
+          "model_position": 12,
+          "retained_sequence_position": 15,
+          "original_sequence_position": 15,
+          "symbol": "N",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 16,
+          "model_position": 13,
+          "retained_sequence_position": 16,
+          "original_sequence_position": 16,
+          "symbol": "P",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 17,
+          "model_position": 14,
+          "retained_sequence_position": 17,
+          "original_sequence_position": 17,
+          "symbol": "Q",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 18,
+          "model_position": 15,
+          "retained_sequence_position": 18,
+          "original_sequence_position": 18,
+          "symbol": "R",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 19,
+          "model_position": 16,
+          "retained_sequence_position": 19,
+          "original_sequence_position": 19,
+          "symbol": "S",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 20,
+          "model_position": 17,
+          "retained_sequence_position": 20,
+          "original_sequence_position": 20,
+          "symbol": "T",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 21,
+          "model_position": 18,
+          "retained_sequence_position": 21,
+          "original_sequence_position": 21,
+          "symbol": "V",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 22,
+          "model_position": 19,
+          "retained_sequence_position": 22,
+          "original_sequence_position": 22,
+          "symbol": "W",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 23,
+          "model_position": 20,
+          "retained_sequence_position": 23,
+          "original_sequence_position": 23,
+          "symbol": "Y",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 24,
+          "model_position": null,
+          "retained_sequence_position": 24,
+          "original_sequence_position": 24,
+          "symbol": "h",
+          "relationship": "terminal_unaligned"
+        },
+        {
+          "column_index": 25,
+          "model_position": null,
+          "retained_sequence_position": 25,
+          "original_sequence_position": 25,
+          "symbol": "h",
+          "relationship": "terminal_unaligned"
+        }
+      ],
+      "availability": {
+        "geometry": true,
+        "rf": true,
+        "pp": false,
+        "original_mapping": "unique"
+      },
+      "issues": []
+    },
+    {
+      "record_key": "alignment:0/sequence:1",
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "line": 6,
+        "byte_start": 103,
+        "byte_end": 148,
+        "alignment_index": 0,
+        "row_index": 1,
+        "name_occurrence": 0
+      },
+      "name": "copy",
+      "occurrence": 0,
+      "alignment_index": 0,
+      "native": {
+        "record_key": "alignment:0/sequence:1",
+        "name": "copy",
+        "occurrence": 0,
+        "row_index": 1,
+        "alignment_index": 0,
+        "locator": {
+          "artifact_role": "stockholm",
+          "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+          "line": 6,
+          "byte_start": 103,
+          "byte_end": 148,
+          "alignment_index": 0,
+          "row_index": 1,
+          "name_occurrence": 0
+        },
+        "fragments": [
+          {
+            "raw": "copy              ggACDEFGaaHIKLMNPQRSTVWYhh\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+              "line": 6,
+              "byte_start": 103,
+              "byte_end": 148
+            },
+            "kind": "sequence",
+            "name": "copy",
+            "value": "ggACDEFGaaHIKLMNPQRSTVWYhh",
+            "block_index": 0
+          }
+        ],
+        "annotation_fragments": [],
+        "issues": [],
+        "identity_unambiguous": true,
+        "aligned_sequence": "ggACDEFGaaHIKLMNPQRSTVWYhh",
+        "symbols_valid": true,
+        "geometry_valid": true,
+        "column_annotations": {},
+        "sequence_annotations": [],
+        "sequence_annotations_joined": true
+      },
+      "origin": "inherited",
+      "fragment": "not_declared",
+      "inherited_join": {
+        "seed_record_key": "alignment:0/sequence:1",
+        "artifact_ref": "fixture:fragment_seed.sto",
+        "status": "verified"
+      },
+      "metadata_join": {
+        "mapali_row_index": 1,
+        "supplied": {
+          "name": "copy",
+          "occurrence": 0,
+          "sequence": "ggACDEFGaaHIKLMNPQRSTVWYhh",
+          "length": 26,
+          "origin": "inherited"
+        },
+        "status": "verified",
+        "sequence_mapping_status": "unique"
+      },
+      "mapping": {
+        "status": "unique",
+        "original_length": 26,
+        "candidate_intervals": [
+          [
+            0,
+            26
+          ]
+        ],
+        "original_interval": [
+          0,
+          26
+        ],
+        "trimmed_residues": 0,
+        "normalization": "native_alphabet_case_insensitive"
+      },
+      "measurements": {
+        "retained_residues": 26,
+        "match_state_residues": 20,
+        "deleted_model_positions": 0,
+        "insert_state_residues": 2,
+        "terminal_unaligned_residues": 4,
+        "missing_model_positions": 0,
+        "nonresidue_model_positions": 0
+      },
+      "model_length": 20,
+      "rf_model_positions": 20,
+      "native_rf": "..xxxxxx..xxxxxxxxxxxxxx..",
+      "posterior": {
+        "columns": [
+          {
+            "column_index": 0,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 1,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 2,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 3,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 4,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 5,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 6,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 7,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 8,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 9,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 10,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 11,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 12,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 13,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 14,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 15,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 16,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 17,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 18,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 19,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 20,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 21,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 22,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 23,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 24,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 25,
+            "symbol": null,
+            "bounds": null
+          }
+        ],
+        "bin_counts": {},
+        "residue_population": 26,
+        "bounded_residue_count": 0,
+        "unavailable_residue_count": 26,
+        "lower_sum_hundredths": 0,
+        "upper_sum_hundredths": 0,
+        "mean_upper_inclusive": true,
+        "population": "retained_residues_with_available_native_PP",
+        "native_pp": null
+      },
+      "correspondence": [
+        {
+          "column_index": 0,
+          "model_position": null,
+          "retained_sequence_position": 0,
+          "original_sequence_position": 0,
+          "symbol": "g",
+          "relationship": "terminal_unaligned"
+        },
+        {
+          "column_index": 1,
+          "model_position": null,
+          "retained_sequence_position": 1,
+          "original_sequence_position": 1,
+          "symbol": "g",
+          "relationship": "terminal_unaligned"
+        },
+        {
+          "column_index": 2,
+          "model_position": 1,
+          "retained_sequence_position": 2,
+          "original_sequence_position": 2,
+          "symbol": "A",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 3,
+          "model_position": 2,
+          "retained_sequence_position": 3,
+          "original_sequence_position": 3,
+          "symbol": "C",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 4,
+          "model_position": 3,
+          "retained_sequence_position": 4,
+          "original_sequence_position": 4,
+          "symbol": "D",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 5,
+          "model_position": 4,
+          "retained_sequence_position": 5,
+          "original_sequence_position": 5,
+          "symbol": "E",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 6,
+          "model_position": 5,
+          "retained_sequence_position": 6,
+          "original_sequence_position": 6,
+          "symbol": "F",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 7,
+          "model_position": 6,
+          "retained_sequence_position": 7,
+          "original_sequence_position": 7,
+          "symbol": "G",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 8,
+          "model_position": null,
+          "retained_sequence_position": 8,
+          "original_sequence_position": 8,
+          "symbol": "a",
+          "relationship": "internal_insertion"
+        },
+        {
+          "column_index": 9,
+          "model_position": null,
+          "retained_sequence_position": 9,
+          "original_sequence_position": 9,
+          "symbol": "a",
+          "relationship": "internal_insertion"
+        },
+        {
+          "column_index": 10,
+          "model_position": 7,
+          "retained_sequence_position": 10,
+          "original_sequence_position": 10,
+          "symbol": "H",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 11,
+          "model_position": 8,
+          "retained_sequence_position": 11,
+          "original_sequence_position": 11,
+          "symbol": "I",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 12,
+          "model_position": 9,
+          "retained_sequence_position": 12,
+          "original_sequence_position": 12,
+          "symbol": "K",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 13,
+          "model_position": 10,
+          "retained_sequence_position": 13,
+          "original_sequence_position": 13,
+          "symbol": "L",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 14,
+          "model_position": 11,
+          "retained_sequence_position": 14,
+          "original_sequence_position": 14,
+          "symbol": "M",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 15,
+          "model_position": 12,
+          "retained_sequence_position": 15,
+          "original_sequence_position": 15,
+          "symbol": "N",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 16,
+          "model_position": 13,
+          "retained_sequence_position": 16,
+          "original_sequence_position": 16,
+          "symbol": "P",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 17,
+          "model_position": 14,
+          "retained_sequence_position": 17,
+          "original_sequence_position": 17,
+          "symbol": "Q",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 18,
+          "model_position": 15,
+          "retained_sequence_position": 18,
+          "original_sequence_position": 18,
+          "symbol": "R",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 19,
+          "model_position": 16,
+          "retained_sequence_position": 19,
+          "original_sequence_position": 19,
+          "symbol": "S",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 20,
+          "model_position": 17,
+          "retained_sequence_position": 20,
+          "original_sequence_position": 20,
+          "symbol": "T",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 21,
+          "model_position": 18,
+          "retained_sequence_position": 21,
+          "original_sequence_position": 21,
+          "symbol": "V",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 22,
+          "model_position": 19,
+          "retained_sequence_position": 22,
+          "original_sequence_position": 22,
+          "symbol": "W",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 23,
+          "model_position": 20,
+          "retained_sequence_position": 23,
+          "original_sequence_position": 23,
+          "symbol": "Y",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 24,
+          "model_position": null,
+          "retained_sequence_position": 24,
+          "original_sequence_position": 24,
+          "symbol": "h",
+          "relationship": "terminal_unaligned"
+        },
+        {
+          "column_index": 25,
+          "model_position": null,
+          "retained_sequence_position": 25,
+          "original_sequence_position": 25,
+          "symbol": "h",
+          "relationship": "terminal_unaligned"
+        }
+      ],
+      "availability": {
+        "geometry": true,
+        "rf": true,
+        "pp": false,
+        "original_mapping": "unique"
+      },
+      "issues": []
+    },
+    {
+      "record_key": "alignment:0/sequence:2",
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "line": 7,
+        "byte_start": 148,
+        "byte_end": 193,
+        "alignment_index": 0,
+        "row_index": 2,
+        "name_occurrence": 0
+      },
+      "name": "fragment",
+      "occurrence": 0,
+      "alignment_index": 0,
+      "native": {
+        "record_key": "alignment:0/sequence:2",
+        "name": "fragment",
+        "occurrence": 0,
+        "row_index": 2,
+        "alignment_index": 0,
+        "locator": {
+          "artifact_role": "stockholm",
+          "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+          "line": 7,
+          "byte_start": 148,
+          "byte_end": 193,
+          "alignment_index": 0,
+          "row_index": 2,
+          "name_occurrence": 0
+        },
+        "fragments": [
+          {
+            "raw": "fragment          ~~~~~~FG..HIKLMNPQRSTV~~~~\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+              "line": 7,
+              "byte_start": 148,
+              "byte_end": 193
+            },
+            "kind": "sequence",
+            "name": "fragment",
+            "value": "~~~~~~FG..HIKLMNPQRSTV~~~~",
+            "block_index": 0
+          }
+        ],
+        "annotation_fragments": [],
+        "issues": [],
+        "identity_unambiguous": true,
+        "aligned_sequence": "~~~~~~FG..HIKLMNPQRSTV~~~~",
+        "symbols_valid": true,
+        "geometry_valid": true,
+        "column_annotations": {},
+        "sequence_annotations": [],
+        "sequence_annotations_joined": true
+      },
+      "origin": "inherited",
+      "fragment": "native_missing_data",
+      "inherited_join": {
+        "seed_record_key": "alignment:0/sequence:2",
+        "artifact_ref": "fixture:fragment_seed.sto",
+        "status": "verified"
+      },
+      "metadata_join": {
+        "mapali_row_index": 2,
+        "supplied": {
+          "name": "fragment",
+          "occurrence": 0,
+          "sequence": "FGHIKLMNPQRSTV",
+          "length": 14,
+          "origin": "inherited"
+        },
+        "status": "verified",
+        "sequence_mapping_status": "unique"
+      },
+      "mapping": {
+        "status": "unique",
+        "original_length": 14,
+        "candidate_intervals": [
+          [
+            0,
+            14
+          ]
+        ],
+        "original_interval": [
+          0,
+          14
+        ],
+        "trimmed_residues": 0,
+        "normalization": "native_alphabet_case_insensitive"
+      },
+      "measurements": {
+        "retained_residues": 14,
+        "match_state_residues": 14,
+        "deleted_model_positions": 0,
+        "insert_state_residues": 0,
+        "terminal_unaligned_residues": 0,
+        "missing_model_positions": 6,
+        "nonresidue_model_positions": 0
+      },
+      "model_length": 20,
+      "rf_model_positions": 20,
+      "native_rf": "..xxxxxx..xxxxxxxxxxxxxx..",
+      "posterior": {
+        "columns": [
+          {
+            "column_index": 0,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 1,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 2,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 3,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 4,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 5,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 6,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 7,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 8,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 9,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 10,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 11,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 12,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 13,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 14,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 15,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 16,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 17,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 18,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 19,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 20,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 21,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 22,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 23,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 24,
+            "symbol": null,
+            "bounds": null
+          },
+          {
+            "column_index": 25,
+            "symbol": null,
+            "bounds": null
+          }
+        ],
+        "bin_counts": {},
+        "residue_population": 14,
+        "bounded_residue_count": 0,
+        "unavailable_residue_count": 14,
+        "lower_sum_hundredths": 0,
+        "upper_sum_hundredths": 0,
+        "mean_upper_inclusive": true,
+        "population": "retained_residues_with_available_native_PP",
+        "native_pp": null
+      },
+      "correspondence": [
+        {
+          "column_index": 0,
+          "model_position": null,
+          "retained_sequence_position": null,
+          "original_sequence_position": null,
+          "symbol": "~",
+          "relationship": "missing"
+        },
+        {
+          "column_index": 1,
+          "model_position": null,
+          "retained_sequence_position": null,
+          "original_sequence_position": null,
+          "symbol": "~",
+          "relationship": "missing"
+        },
+        {
+          "column_index": 2,
+          "model_position": 1,
+          "retained_sequence_position": null,
+          "original_sequence_position": null,
+          "symbol": "~",
+          "relationship": "missing"
+        },
+        {
+          "column_index": 3,
+          "model_position": 2,
+          "retained_sequence_position": null,
+          "original_sequence_position": null,
+          "symbol": "~",
+          "relationship": "missing"
+        },
+        {
+          "column_index": 4,
+          "model_position": 3,
+          "retained_sequence_position": null,
+          "original_sequence_position": null,
+          "symbol": "~",
+          "relationship": "missing"
+        },
+        {
+          "column_index": 5,
+          "model_position": 4,
+          "retained_sequence_position": null,
+          "original_sequence_position": null,
+          "symbol": "~",
+          "relationship": "missing"
+        },
+        {
+          "column_index": 6,
+          "model_position": 5,
+          "retained_sequence_position": 0,
+          "original_sequence_position": 0,
+          "symbol": "F",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 7,
+          "model_position": 6,
+          "retained_sequence_position": 1,
+          "original_sequence_position": 1,
+          "symbol": "G",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 8,
+          "model_position": null,
+          "retained_sequence_position": null,
+          "original_sequence_position": null,
+          "symbol": ".",
+          "relationship": "insertion_gap"
+        },
+        {
+          "column_index": 9,
+          "model_position": null,
+          "retained_sequence_position": null,
+          "original_sequence_position": null,
+          "symbol": ".",
+          "relationship": "insertion_gap"
+        },
+        {
+          "column_index": 10,
+          "model_position": 7,
+          "retained_sequence_position": 2,
+          "original_sequence_position": 2,
+          "symbol": "H",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 11,
+          "model_position": 8,
+          "retained_sequence_position": 3,
+          "original_sequence_position": 3,
+          "symbol": "I",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 12,
+          "model_position": 9,
+          "retained_sequence_position": 4,
+          "original_sequence_position": 4,
+          "symbol": "K",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 13,
+          "model_position": 10,
+          "retained_sequence_position": 5,
+          "original_sequence_position": 5,
+          "symbol": "L",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 14,
+          "model_position": 11,
+          "retained_sequence_position": 6,
+          "original_sequence_position": 6,
+          "symbol": "M",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 15,
+          "model_position": 12,
+          "retained_sequence_position": 7,
+          "original_sequence_position": 7,
+          "symbol": "N",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 16,
+          "model_position": 13,
+          "retained_sequence_position": 8,
+          "original_sequence_position": 8,
+          "symbol": "P",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 17,
+          "model_position": 14,
+          "retained_sequence_position": 9,
+          "original_sequence_position": 9,
+          "symbol": "Q",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 18,
+          "model_position": 15,
+          "retained_sequence_position": 10,
+          "original_sequence_position": 10,
+          "symbol": "R",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 19,
+          "model_position": 16,
+          "retained_sequence_position": 11,
+          "original_sequence_position": 11,
+          "symbol": "S",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 20,
+          "model_position": 17,
+          "retained_sequence_position": 12,
+          "original_sequence_position": 12,
+          "symbol": "T",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 21,
+          "model_position": 18,
+          "retained_sequence_position": 13,
+          "original_sequence_position": 13,
+          "symbol": "V",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 22,
+          "model_position": 19,
+          "retained_sequence_position": null,
+          "original_sequence_position": null,
+          "symbol": "~",
+          "relationship": "missing"
+        },
+        {
+          "column_index": 23,
+          "model_position": 20,
+          "retained_sequence_position": null,
+          "original_sequence_position": null,
+          "symbol": "~",
+          "relationship": "missing"
+        },
+        {
+          "column_index": 24,
+          "model_position": null,
+          "retained_sequence_position": null,
+          "original_sequence_position": null,
+          "symbol": "~",
+          "relationship": "missing"
+        },
+        {
+          "column_index": 25,
+          "model_position": null,
+          "retained_sequence_position": null,
+          "original_sequence_position": null,
+          "symbol": "~",
+          "relationship": "missing"
+        }
+      ],
+      "availability": {
+        "geometry": true,
+        "rf": true,
+        "pp": false,
+        "original_mapping": "unique"
+      },
+      "issues": []
+    },
+    {
+      "record_key": "alignment:0/sequence:3",
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "line": 8,
+        "byte_start": 193,
+        "byte_end": 238,
+        "alignment_index": 0,
+        "row_index": 3,
+        "name_occurrence": 0
+      },
+      "name": "new",
+      "occurrence": 0,
+      "alignment_index": 0,
+      "native": {
+        "record_key": "alignment:0/sequence:3",
+        "name": "new",
+        "occurrence": 0,
+        "row_index": 3,
+        "alignment_index": 0,
+        "locator": {
+          "artifact_role": "stockholm",
+          "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+          "line": 8,
+          "byte_start": 193,
+          "byte_end": 238,
+          "alignment_index": 0,
+          "row_index": 3,
+          "name_occurrence": 0
+        },
+        "fragments": [
+          {
+            "raw": "new               ..ACDEFG..HIKLMNPQRSTVWY..\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+              "line": 8,
+              "byte_start": 193,
+              "byte_end": 238
+            },
+            "kind": "sequence",
+            "name": "new",
+            "value": "..ACDEFG..HIKLMNPQRSTVWY..",
+            "block_index": 0
+          }
+        ],
+        "annotation_fragments": [
+          {
+            "raw": "#=GR new       PP ..9*****..**************..\n",
+            "locator": {
+              "artifact_role": "stockholm",
+              "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+              "line": 9,
+              "byte_start": 238,
+              "byte_end": 283
+            },
+            "kind": "GR",
+            "tag": "PP",
+            "value": "..9*****..**************..",
+            "name": "new",
+            "block_index": 0
+          }
+        ],
+        "issues": [],
+        "identity_unambiguous": true,
+        "aligned_sequence": "..ACDEFG..HIKLMNPQRSTVWY..",
+        "symbols_valid": true,
+        "geometry_valid": true,
+        "column_annotations": {
+          "PP": {
+            "text": "..9*****..**************..",
+            "valid": true,
+            "fragments": [
+              {
+                "raw": "#=GR new       PP ..9*****..**************..\n",
+                "locator": {
+                  "artifact_role": "stockholm",
+                  "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+                  "line": 9,
+                  "byte_start": 238,
+                  "byte_end": 283
+                },
+                "kind": "GR",
+                "tag": "PP",
+                "value": "..9*****..**************..",
+                "name": "new",
+                "block_index": 0
+              }
+            ]
+          }
+        },
+        "sequence_annotations": [],
+        "sequence_annotations_joined": true
+      },
+      "origin": "newly_aligned",
+      "fragment": "not_declared",
+      "inherited_join": null,
+      "metadata_join": {
+        "input_index": 0,
+        "supplied": {
+          "name": "new",
+          "occurrence": 0,
+          "sequence": "ACDEFGHIKLMNPQRSTVWY",
+          "length": 20,
+          "origin": "new"
+        },
+        "status": "verified",
+        "sequence_mapping_status": "unique"
+      },
+      "mapping": {
+        "status": "unique",
+        "original_length": 20,
+        "candidate_intervals": [
+          [
+            0,
+            20
+          ]
+        ],
+        "original_interval": [
+          0,
+          20
+        ],
+        "trimmed_residues": 0,
+        "normalization": "native_alphabet_case_insensitive"
+      },
+      "measurements": {
+        "retained_residues": 20,
+        "match_state_residues": 20,
+        "deleted_model_positions": 0,
+        "insert_state_residues": 0,
+        "terminal_unaligned_residues": 0,
+        "missing_model_positions": 0,
+        "nonresidue_model_positions": 0
+      },
+      "model_length": 20,
+      "rf_model_positions": 20,
+      "native_rf": "..xxxxxx..xxxxxxxxxxxxxx..",
+      "posterior": {
+        "columns": [
+          {
+            "column_index": 0,
+            "symbol": ".",
+            "bounds": null
+          },
+          {
+            "column_index": 1,
+            "symbol": ".",
+            "bounds": null
+          },
+          {
+            "column_index": 2,
+            "symbol": "9",
+            "bounds": {
+              "lower_hundredths": 85,
+              "upper_hundredths": 95,
+              "lower_inclusive": true,
+              "upper_inclusive": false
+            }
+          },
+          {
+            "column_index": 3,
+            "symbol": "*",
+            "bounds": {
+              "lower_hundredths": 95,
+              "upper_hundredths": 100,
+              "lower_inclusive": true,
+              "upper_inclusive": true
+            }
+          },
+          {
+            "column_index": 4,
+            "symbol": "*",
+            "bounds": {
+              "lower_hundredths": 95,
+              "upper_hundredths": 100,
+              "lower_inclusive": true,
+              "upper_inclusive": true
+            }
+          },
+          {
+            "column_index": 5,
+            "symbol": "*",
+            "bounds": {
+              "lower_hundredths": 95,
+              "upper_hundredths": 100,
+              "lower_inclusive": true,
+              "upper_inclusive": true
+            }
+          },
+          {
+            "column_index": 6,
+            "symbol": "*",
+            "bounds": {
+              "lower_hundredths": 95,
+              "upper_hundredths": 100,
+              "lower_inclusive": true,
+              "upper_inclusive": true
+            }
+          },
+          {
+            "column_index": 7,
+            "symbol": "*",
+            "bounds": {
+              "lower_hundredths": 95,
+              "upper_hundredths": 100,
+              "lower_inclusive": true,
+              "upper_inclusive": true
+            }
+          },
+          {
+            "column_index": 8,
+            "symbol": ".",
+            "bounds": null
+          },
+          {
+            "column_index": 9,
+            "symbol": ".",
+            "bounds": null
+          },
+          {
+            "column_index": 10,
+            "symbol": "*",
+            "bounds": {
+              "lower_hundredths": 95,
+              "upper_hundredths": 100,
+              "lower_inclusive": true,
+              "upper_inclusive": true
+            }
+          },
+          {
+            "column_index": 11,
+            "symbol": "*",
+            "bounds": {
+              "lower_hundredths": 95,
+              "upper_hundredths": 100,
+              "lower_inclusive": true,
+              "upper_inclusive": true
+            }
+          },
+          {
+            "column_index": 12,
+            "symbol": "*",
+            "bounds": {
+              "lower_hundredths": 95,
+              "upper_hundredths": 100,
+              "lower_inclusive": true,
+              "upper_inclusive": true
+            }
+          },
+          {
+            "column_index": 13,
+            "symbol": "*",
+            "bounds": {
+              "lower_hundredths": 95,
+              "upper_hundredths": 100,
+              "lower_inclusive": true,
+              "upper_inclusive": true
+            }
+          },
+          {
+            "column_index": 14,
+            "symbol": "*",
+            "bounds": {
+              "lower_hundredths": 95,
+              "upper_hundredths": 100,
+              "lower_inclusive": true,
+              "upper_inclusive": true
+            }
+          },
+          {
+            "column_index": 15,
+            "symbol": "*",
+            "bounds": {
+              "lower_hundredths": 95,
+              "upper_hundredths": 100,
+              "lower_inclusive": true,
+              "upper_inclusive": true
+            }
+          },
+          {
+            "column_index": 16,
+            "symbol": "*",
+            "bounds": {
+              "lower_hundredths": 95,
+              "upper_hundredths": 100,
+              "lower_inclusive": true,
+              "upper_inclusive": true
+            }
+          },
+          {
+            "column_index": 17,
+            "symbol": "*",
+            "bounds": {
+              "lower_hundredths": 95,
+              "upper_hundredths": 100,
+              "lower_inclusive": true,
+              "upper_inclusive": true
+            }
+          },
+          {
+            "column_index": 18,
+            "symbol": "*",
+            "bounds": {
+              "lower_hundredths": 95,
+              "upper_hundredths": 100,
+              "lower_inclusive": true,
+              "upper_inclusive": true
+            }
+          },
+          {
+            "column_index": 19,
+            "symbol": "*",
+            "bounds": {
+              "lower_hundredths": 95,
+              "upper_hundredths": 100,
+              "lower_inclusive": true,
+              "upper_inclusive": true
+            }
+          },
+          {
+            "column_index": 20,
+            "symbol": "*",
+            "bounds": {
+              "lower_hundredths": 95,
+              "upper_hundredths": 100,
+              "lower_inclusive": true,
+              "upper_inclusive": true
+            }
+          },
+          {
+            "column_index": 21,
+            "symbol": "*",
+            "bounds": {
+              "lower_hundredths": 95,
+              "upper_hundredths": 100,
+              "lower_inclusive": true,
+              "upper_inclusive": true
+            }
+          },
+          {
+            "column_index": 22,
+            "symbol": "*",
+            "bounds": {
+              "lower_hundredths": 95,
+              "upper_hundredths": 100,
+              "lower_inclusive": true,
+              "upper_inclusive": true
+            }
+          },
+          {
+            "column_index": 23,
+            "symbol": "*",
+            "bounds": {
+              "lower_hundredths": 95,
+              "upper_hundredths": 100,
+              "lower_inclusive": true,
+              "upper_inclusive": true
+            }
+          },
+          {
+            "column_index": 24,
+            "symbol": ".",
+            "bounds": null
+          },
+          {
+            "column_index": 25,
+            "symbol": ".",
+            "bounds": null
+          }
+        ],
+        "bin_counts": {
+          "9": 1,
+          "*": 19
+        },
+        "residue_population": 20,
+        "bounded_residue_count": 20,
+        "unavailable_residue_count": 0,
+        "lower_sum_hundredths": 1890,
+        "upper_sum_hundredths": 1995,
+        "mean_upper_inclusive": false,
+        "population": "retained_residues_with_available_native_PP",
+        "native_pp": "..9*****..**************.."
+      },
+      "correspondence": [
+        {
+          "column_index": 0,
+          "model_position": null,
+          "retained_sequence_position": null,
+          "original_sequence_position": null,
+          "symbol": ".",
+          "relationship": "insertion_gap"
+        },
+        {
+          "column_index": 1,
+          "model_position": null,
+          "retained_sequence_position": null,
+          "original_sequence_position": null,
+          "symbol": ".",
+          "relationship": "insertion_gap"
+        },
+        {
+          "column_index": 2,
+          "model_position": 1,
+          "retained_sequence_position": 0,
+          "original_sequence_position": 0,
+          "symbol": "A",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 3,
+          "model_position": 2,
+          "retained_sequence_position": 1,
+          "original_sequence_position": 1,
+          "symbol": "C",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 4,
+          "model_position": 3,
+          "retained_sequence_position": 2,
+          "original_sequence_position": 2,
+          "symbol": "D",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 5,
+          "model_position": 4,
+          "retained_sequence_position": 3,
+          "original_sequence_position": 3,
+          "symbol": "E",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 6,
+          "model_position": 5,
+          "retained_sequence_position": 4,
+          "original_sequence_position": 4,
+          "symbol": "F",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 7,
+          "model_position": 6,
+          "retained_sequence_position": 5,
+          "original_sequence_position": 5,
+          "symbol": "G",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 8,
+          "model_position": null,
+          "retained_sequence_position": null,
+          "original_sequence_position": null,
+          "symbol": ".",
+          "relationship": "insertion_gap"
+        },
+        {
+          "column_index": 9,
+          "model_position": null,
+          "retained_sequence_position": null,
+          "original_sequence_position": null,
+          "symbol": ".",
+          "relationship": "insertion_gap"
+        },
+        {
+          "column_index": 10,
+          "model_position": 7,
+          "retained_sequence_position": 6,
+          "original_sequence_position": 6,
+          "symbol": "H",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 11,
+          "model_position": 8,
+          "retained_sequence_position": 7,
+          "original_sequence_position": 7,
+          "symbol": "I",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 12,
+          "model_position": 9,
+          "retained_sequence_position": 8,
+          "original_sequence_position": 8,
+          "symbol": "K",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 13,
+          "model_position": 10,
+          "retained_sequence_position": 9,
+          "original_sequence_position": 9,
+          "symbol": "L",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 14,
+          "model_position": 11,
+          "retained_sequence_position": 10,
+          "original_sequence_position": 10,
+          "symbol": "M",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 15,
+          "model_position": 12,
+          "retained_sequence_position": 11,
+          "original_sequence_position": 11,
+          "symbol": "N",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 16,
+          "model_position": 13,
+          "retained_sequence_position": 12,
+          "original_sequence_position": 12,
+          "symbol": "P",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 17,
+          "model_position": 14,
+          "retained_sequence_position": 13,
+          "original_sequence_position": 13,
+          "symbol": "Q",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 18,
+          "model_position": 15,
+          "retained_sequence_position": 14,
+          "original_sequence_position": 14,
+          "symbol": "R",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 19,
+          "model_position": 16,
+          "retained_sequence_position": 15,
+          "original_sequence_position": 15,
+          "symbol": "S",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 20,
+          "model_position": 17,
+          "retained_sequence_position": 16,
+          "original_sequence_position": 16,
+          "symbol": "T",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 21,
+          "model_position": 18,
+          "retained_sequence_position": 17,
+          "original_sequence_position": 17,
+          "symbol": "V",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 22,
+          "model_position": 19,
+          "retained_sequence_position": 18,
+          "original_sequence_position": 18,
+          "symbol": "W",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 23,
+          "model_position": 20,
+          "retained_sequence_position": 19,
+          "original_sequence_position": 19,
+          "symbol": "Y",
+          "relationship": "model_match"
+        },
+        {
+          "column_index": 24,
+          "model_position": null,
+          "retained_sequence_position": null,
+          "original_sequence_position": null,
+          "symbol": ".",
+          "relationship": "insertion_gap"
+        },
+        {
+          "column_index": 25,
+          "model_position": null,
+          "retained_sequence_position": null,
+          "original_sequence_position": null,
+          "symbol": ".",
+          "relationship": "insertion_gap"
+        }
+      ],
+      "availability": {
+        "geometry": true,
+        "rf": true,
+        "pp": true,
+        "original_mapping": "unique"
+      },
+      "issues": []
+    }
+  ],
+  "columns": [
+    {
+      "record_key": "alignment:0/column:0",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "alignment_index": 0,
+        "column_index": 0
+      },
+      "column_index": 0,
+      "native_rf_symbol": ".",
+      "model_position": null,
+      "homologous_model_column": false,
+      "populations": {
+        "all": {
+          "occupancy_numerator": 2,
+          "occupancy_denominator": 3,
+          "missing_rows": 1,
+          "row_count": 4,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2",
+            "alignment:0/sequence:3"
+          ]
+        },
+        "newly_aligned": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:3"
+          ]
+        },
+        "inherited": {
+          "occupancy_numerator": 2,
+          "occupancy_denominator": 2,
+          "missing_rows": 1,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2"
+          ]
+        },
+        "unknown": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 0,
+          "row_count": 0,
+          "record_keys": []
+        },
+        "fragment": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 1,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:2"
+          ]
+        },
+        "nonfragment": {
+          "occupancy_numerator": 2,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:3"
+          ]
+        }
+      },
+      "native_pp_cons_symbol": ".",
+      "native_pp_cons_bounds": null,
+      "pp_cons_population": "newly_aligned_match_state_residues_with_native_PP",
+      "pp_cons_observed_denominator": null
+    },
+    {
+      "record_key": "alignment:0/column:1",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "alignment_index": 0,
+        "column_index": 1
+      },
+      "column_index": 1,
+      "native_rf_symbol": ".",
+      "model_position": null,
+      "homologous_model_column": false,
+      "populations": {
+        "all": {
+          "occupancy_numerator": 2,
+          "occupancy_denominator": 3,
+          "missing_rows": 1,
+          "row_count": 4,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2",
+            "alignment:0/sequence:3"
+          ]
+        },
+        "newly_aligned": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:3"
+          ]
+        },
+        "inherited": {
+          "occupancy_numerator": 2,
+          "occupancy_denominator": 2,
+          "missing_rows": 1,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2"
+          ]
+        },
+        "unknown": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 0,
+          "row_count": 0,
+          "record_keys": []
+        },
+        "fragment": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 1,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:2"
+          ]
+        },
+        "nonfragment": {
+          "occupancy_numerator": 2,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:3"
+          ]
+        }
+      },
+      "native_pp_cons_symbol": ".",
+      "native_pp_cons_bounds": null,
+      "pp_cons_population": "newly_aligned_match_state_residues_with_native_PP",
+      "pp_cons_observed_denominator": null
+    },
+    {
+      "record_key": "alignment:0/column:2",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "alignment_index": 0,
+        "column_index": 2
+      },
+      "column_index": 2,
+      "native_rf_symbol": "x",
+      "model_position": 1,
+      "homologous_model_column": true,
+      "populations": {
+        "all": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 1,
+          "row_count": 4,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2",
+            "alignment:0/sequence:3"
+          ]
+        },
+        "newly_aligned": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:3"
+          ]
+        },
+        "inherited": {
+          "occupancy_numerator": 2,
+          "occupancy_denominator": 2,
+          "missing_rows": 1,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2"
+          ]
+        },
+        "unknown": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 0,
+          "row_count": 0,
+          "record_keys": []
+        },
+        "fragment": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 1,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:2"
+          ]
+        },
+        "nonfragment": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:3"
+          ]
+        }
+      },
+      "native_pp_cons_symbol": "9",
+      "native_pp_cons_bounds": {
+        "lower_hundredths": 85,
+        "upper_hundredths": 95,
+        "lower_inclusive": true,
+        "upper_inclusive": false
+      },
+      "pp_cons_population": "newly_aligned_match_state_residues_with_native_PP",
+      "pp_cons_observed_denominator": 1
+    },
+    {
+      "record_key": "alignment:0/column:3",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "alignment_index": 0,
+        "column_index": 3
+      },
+      "column_index": 3,
+      "native_rf_symbol": "x",
+      "model_position": 2,
+      "homologous_model_column": true,
+      "populations": {
+        "all": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 1,
+          "row_count": 4,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2",
+            "alignment:0/sequence:3"
+          ]
+        },
+        "newly_aligned": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:3"
+          ]
+        },
+        "inherited": {
+          "occupancy_numerator": 2,
+          "occupancy_denominator": 2,
+          "missing_rows": 1,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2"
+          ]
+        },
+        "unknown": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 0,
+          "row_count": 0,
+          "record_keys": []
+        },
+        "fragment": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 1,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:2"
+          ]
+        },
+        "nonfragment": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:3"
+          ]
+        }
+      },
+      "native_pp_cons_symbol": "*",
+      "native_pp_cons_bounds": {
+        "lower_hundredths": 95,
+        "upper_hundredths": 100,
+        "lower_inclusive": true,
+        "upper_inclusive": true
+      },
+      "pp_cons_population": "newly_aligned_match_state_residues_with_native_PP",
+      "pp_cons_observed_denominator": 1
+    },
+    {
+      "record_key": "alignment:0/column:4",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "alignment_index": 0,
+        "column_index": 4
+      },
+      "column_index": 4,
+      "native_rf_symbol": "x",
+      "model_position": 3,
+      "homologous_model_column": true,
+      "populations": {
+        "all": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 1,
+          "row_count": 4,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2",
+            "alignment:0/sequence:3"
+          ]
+        },
+        "newly_aligned": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:3"
+          ]
+        },
+        "inherited": {
+          "occupancy_numerator": 2,
+          "occupancy_denominator": 2,
+          "missing_rows": 1,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2"
+          ]
+        },
+        "unknown": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 0,
+          "row_count": 0,
+          "record_keys": []
+        },
+        "fragment": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 1,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:2"
+          ]
+        },
+        "nonfragment": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:3"
+          ]
+        }
+      },
+      "native_pp_cons_symbol": "*",
+      "native_pp_cons_bounds": {
+        "lower_hundredths": 95,
+        "upper_hundredths": 100,
+        "lower_inclusive": true,
+        "upper_inclusive": true
+      },
+      "pp_cons_population": "newly_aligned_match_state_residues_with_native_PP",
+      "pp_cons_observed_denominator": 1
+    },
+    {
+      "record_key": "alignment:0/column:5",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "alignment_index": 0,
+        "column_index": 5
+      },
+      "column_index": 5,
+      "native_rf_symbol": "x",
+      "model_position": 4,
+      "homologous_model_column": true,
+      "populations": {
+        "all": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 1,
+          "row_count": 4,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2",
+            "alignment:0/sequence:3"
+          ]
+        },
+        "newly_aligned": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:3"
+          ]
+        },
+        "inherited": {
+          "occupancy_numerator": 2,
+          "occupancy_denominator": 2,
+          "missing_rows": 1,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2"
+          ]
+        },
+        "unknown": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 0,
+          "row_count": 0,
+          "record_keys": []
+        },
+        "fragment": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 1,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:2"
+          ]
+        },
+        "nonfragment": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:3"
+          ]
+        }
+      },
+      "native_pp_cons_symbol": "*",
+      "native_pp_cons_bounds": {
+        "lower_hundredths": 95,
+        "upper_hundredths": 100,
+        "lower_inclusive": true,
+        "upper_inclusive": true
+      },
+      "pp_cons_population": "newly_aligned_match_state_residues_with_native_PP",
+      "pp_cons_observed_denominator": 1
+    },
+    {
+      "record_key": "alignment:0/column:6",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "alignment_index": 0,
+        "column_index": 6
+      },
+      "column_index": 6,
+      "native_rf_symbol": "x",
+      "model_position": 5,
+      "homologous_model_column": true,
+      "populations": {
+        "all": {
+          "occupancy_numerator": 4,
+          "occupancy_denominator": 4,
+          "missing_rows": 0,
+          "row_count": 4,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2",
+            "alignment:0/sequence:3"
+          ]
+        },
+        "newly_aligned": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:3"
+          ]
+        },
+        "inherited": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2"
+          ]
+        },
+        "unknown": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 0,
+          "row_count": 0,
+          "record_keys": []
+        },
+        "fragment": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:2"
+          ]
+        },
+        "nonfragment": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:3"
+          ]
+        }
+      },
+      "native_pp_cons_symbol": "*",
+      "native_pp_cons_bounds": {
+        "lower_hundredths": 95,
+        "upper_hundredths": 100,
+        "lower_inclusive": true,
+        "upper_inclusive": true
+      },
+      "pp_cons_population": "newly_aligned_match_state_residues_with_native_PP",
+      "pp_cons_observed_denominator": 1
+    },
+    {
+      "record_key": "alignment:0/column:7",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "alignment_index": 0,
+        "column_index": 7
+      },
+      "column_index": 7,
+      "native_rf_symbol": "x",
+      "model_position": 6,
+      "homologous_model_column": true,
+      "populations": {
+        "all": {
+          "occupancy_numerator": 4,
+          "occupancy_denominator": 4,
+          "missing_rows": 0,
+          "row_count": 4,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2",
+            "alignment:0/sequence:3"
+          ]
+        },
+        "newly_aligned": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:3"
+          ]
+        },
+        "inherited": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2"
+          ]
+        },
+        "unknown": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 0,
+          "row_count": 0,
+          "record_keys": []
+        },
+        "fragment": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:2"
+          ]
+        },
+        "nonfragment": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:3"
+          ]
+        }
+      },
+      "native_pp_cons_symbol": "*",
+      "native_pp_cons_bounds": {
+        "lower_hundredths": 95,
+        "upper_hundredths": 100,
+        "lower_inclusive": true,
+        "upper_inclusive": true
+      },
+      "pp_cons_population": "newly_aligned_match_state_residues_with_native_PP",
+      "pp_cons_observed_denominator": 1
+    },
+    {
+      "record_key": "alignment:0/column:8",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "alignment_index": 0,
+        "column_index": 8
+      },
+      "column_index": 8,
+      "native_rf_symbol": ".",
+      "model_position": null,
+      "homologous_model_column": false,
+      "populations": {
+        "all": {
+          "occupancy_numerator": 2,
+          "occupancy_denominator": 4,
+          "missing_rows": 0,
+          "row_count": 4,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2",
+            "alignment:0/sequence:3"
+          ]
+        },
+        "newly_aligned": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:3"
+          ]
+        },
+        "inherited": {
+          "occupancy_numerator": 2,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2"
+          ]
+        },
+        "unknown": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 0,
+          "row_count": 0,
+          "record_keys": []
+        },
+        "fragment": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:2"
+          ]
+        },
+        "nonfragment": {
+          "occupancy_numerator": 2,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:3"
+          ]
+        }
+      },
+      "native_pp_cons_symbol": ".",
+      "native_pp_cons_bounds": null,
+      "pp_cons_population": "newly_aligned_match_state_residues_with_native_PP",
+      "pp_cons_observed_denominator": null
+    },
+    {
+      "record_key": "alignment:0/column:9",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "alignment_index": 0,
+        "column_index": 9
+      },
+      "column_index": 9,
+      "native_rf_symbol": ".",
+      "model_position": null,
+      "homologous_model_column": false,
+      "populations": {
+        "all": {
+          "occupancy_numerator": 2,
+          "occupancy_denominator": 4,
+          "missing_rows": 0,
+          "row_count": 4,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2",
+            "alignment:0/sequence:3"
+          ]
+        },
+        "newly_aligned": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:3"
+          ]
+        },
+        "inherited": {
+          "occupancy_numerator": 2,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2"
+          ]
+        },
+        "unknown": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 0,
+          "row_count": 0,
+          "record_keys": []
+        },
+        "fragment": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:2"
+          ]
+        },
+        "nonfragment": {
+          "occupancy_numerator": 2,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:3"
+          ]
+        }
+      },
+      "native_pp_cons_symbol": ".",
+      "native_pp_cons_bounds": null,
+      "pp_cons_population": "newly_aligned_match_state_residues_with_native_PP",
+      "pp_cons_observed_denominator": null
+    },
+    {
+      "record_key": "alignment:0/column:10",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "alignment_index": 0,
+        "column_index": 10
+      },
+      "column_index": 10,
+      "native_rf_symbol": "x",
+      "model_position": 7,
+      "homologous_model_column": true,
+      "populations": {
+        "all": {
+          "occupancy_numerator": 4,
+          "occupancy_denominator": 4,
+          "missing_rows": 0,
+          "row_count": 4,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2",
+            "alignment:0/sequence:3"
+          ]
+        },
+        "newly_aligned": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:3"
+          ]
+        },
+        "inherited": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2"
+          ]
+        },
+        "unknown": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 0,
+          "row_count": 0,
+          "record_keys": []
+        },
+        "fragment": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:2"
+          ]
+        },
+        "nonfragment": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:3"
+          ]
+        }
+      },
+      "native_pp_cons_symbol": "*",
+      "native_pp_cons_bounds": {
+        "lower_hundredths": 95,
+        "upper_hundredths": 100,
+        "lower_inclusive": true,
+        "upper_inclusive": true
+      },
+      "pp_cons_population": "newly_aligned_match_state_residues_with_native_PP",
+      "pp_cons_observed_denominator": 1
+    },
+    {
+      "record_key": "alignment:0/column:11",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "alignment_index": 0,
+        "column_index": 11
+      },
+      "column_index": 11,
+      "native_rf_symbol": "x",
+      "model_position": 8,
+      "homologous_model_column": true,
+      "populations": {
+        "all": {
+          "occupancy_numerator": 4,
+          "occupancy_denominator": 4,
+          "missing_rows": 0,
+          "row_count": 4,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2",
+            "alignment:0/sequence:3"
+          ]
+        },
+        "newly_aligned": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:3"
+          ]
+        },
+        "inherited": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2"
+          ]
+        },
+        "unknown": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 0,
+          "row_count": 0,
+          "record_keys": []
+        },
+        "fragment": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:2"
+          ]
+        },
+        "nonfragment": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:3"
+          ]
+        }
+      },
+      "native_pp_cons_symbol": "*",
+      "native_pp_cons_bounds": {
+        "lower_hundredths": 95,
+        "upper_hundredths": 100,
+        "lower_inclusive": true,
+        "upper_inclusive": true
+      },
+      "pp_cons_population": "newly_aligned_match_state_residues_with_native_PP",
+      "pp_cons_observed_denominator": 1
+    },
+    {
+      "record_key": "alignment:0/column:12",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "alignment_index": 0,
+        "column_index": 12
+      },
+      "column_index": 12,
+      "native_rf_symbol": "x",
+      "model_position": 9,
+      "homologous_model_column": true,
+      "populations": {
+        "all": {
+          "occupancy_numerator": 4,
+          "occupancy_denominator": 4,
+          "missing_rows": 0,
+          "row_count": 4,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2",
+            "alignment:0/sequence:3"
+          ]
+        },
+        "newly_aligned": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:3"
+          ]
+        },
+        "inherited": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2"
+          ]
+        },
+        "unknown": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 0,
+          "row_count": 0,
+          "record_keys": []
+        },
+        "fragment": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:2"
+          ]
+        },
+        "nonfragment": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:3"
+          ]
+        }
+      },
+      "native_pp_cons_symbol": "*",
+      "native_pp_cons_bounds": {
+        "lower_hundredths": 95,
+        "upper_hundredths": 100,
+        "lower_inclusive": true,
+        "upper_inclusive": true
+      },
+      "pp_cons_population": "newly_aligned_match_state_residues_with_native_PP",
+      "pp_cons_observed_denominator": 1
+    },
+    {
+      "record_key": "alignment:0/column:13",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "alignment_index": 0,
+        "column_index": 13
+      },
+      "column_index": 13,
+      "native_rf_symbol": "x",
+      "model_position": 10,
+      "homologous_model_column": true,
+      "populations": {
+        "all": {
+          "occupancy_numerator": 4,
+          "occupancy_denominator": 4,
+          "missing_rows": 0,
+          "row_count": 4,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2",
+            "alignment:0/sequence:3"
+          ]
+        },
+        "newly_aligned": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:3"
+          ]
+        },
+        "inherited": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2"
+          ]
+        },
+        "unknown": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 0,
+          "row_count": 0,
+          "record_keys": []
+        },
+        "fragment": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:2"
+          ]
+        },
+        "nonfragment": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:3"
+          ]
+        }
+      },
+      "native_pp_cons_symbol": "*",
+      "native_pp_cons_bounds": {
+        "lower_hundredths": 95,
+        "upper_hundredths": 100,
+        "lower_inclusive": true,
+        "upper_inclusive": true
+      },
+      "pp_cons_population": "newly_aligned_match_state_residues_with_native_PP",
+      "pp_cons_observed_denominator": 1
+    },
+    {
+      "record_key": "alignment:0/column:14",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "alignment_index": 0,
+        "column_index": 14
+      },
+      "column_index": 14,
+      "native_rf_symbol": "x",
+      "model_position": 11,
+      "homologous_model_column": true,
+      "populations": {
+        "all": {
+          "occupancy_numerator": 4,
+          "occupancy_denominator": 4,
+          "missing_rows": 0,
+          "row_count": 4,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2",
+            "alignment:0/sequence:3"
+          ]
+        },
+        "newly_aligned": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:3"
+          ]
+        },
+        "inherited": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2"
+          ]
+        },
+        "unknown": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 0,
+          "row_count": 0,
+          "record_keys": []
+        },
+        "fragment": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:2"
+          ]
+        },
+        "nonfragment": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:3"
+          ]
+        }
+      },
+      "native_pp_cons_symbol": "*",
+      "native_pp_cons_bounds": {
+        "lower_hundredths": 95,
+        "upper_hundredths": 100,
+        "lower_inclusive": true,
+        "upper_inclusive": true
+      },
+      "pp_cons_population": "newly_aligned_match_state_residues_with_native_PP",
+      "pp_cons_observed_denominator": 1
+    },
+    {
+      "record_key": "alignment:0/column:15",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "alignment_index": 0,
+        "column_index": 15
+      },
+      "column_index": 15,
+      "native_rf_symbol": "x",
+      "model_position": 12,
+      "homologous_model_column": true,
+      "populations": {
+        "all": {
+          "occupancy_numerator": 4,
+          "occupancy_denominator": 4,
+          "missing_rows": 0,
+          "row_count": 4,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2",
+            "alignment:0/sequence:3"
+          ]
+        },
+        "newly_aligned": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:3"
+          ]
+        },
+        "inherited": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2"
+          ]
+        },
+        "unknown": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 0,
+          "row_count": 0,
+          "record_keys": []
+        },
+        "fragment": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:2"
+          ]
+        },
+        "nonfragment": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:3"
+          ]
+        }
+      },
+      "native_pp_cons_symbol": "*",
+      "native_pp_cons_bounds": {
+        "lower_hundredths": 95,
+        "upper_hundredths": 100,
+        "lower_inclusive": true,
+        "upper_inclusive": true
+      },
+      "pp_cons_population": "newly_aligned_match_state_residues_with_native_PP",
+      "pp_cons_observed_denominator": 1
+    },
+    {
+      "record_key": "alignment:0/column:16",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "alignment_index": 0,
+        "column_index": 16
+      },
+      "column_index": 16,
+      "native_rf_symbol": "x",
+      "model_position": 13,
+      "homologous_model_column": true,
+      "populations": {
+        "all": {
+          "occupancy_numerator": 4,
+          "occupancy_denominator": 4,
+          "missing_rows": 0,
+          "row_count": 4,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2",
+            "alignment:0/sequence:3"
+          ]
+        },
+        "newly_aligned": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:3"
+          ]
+        },
+        "inherited": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2"
+          ]
+        },
+        "unknown": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 0,
+          "row_count": 0,
+          "record_keys": []
+        },
+        "fragment": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:2"
+          ]
+        },
+        "nonfragment": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:3"
+          ]
+        }
+      },
+      "native_pp_cons_symbol": "*",
+      "native_pp_cons_bounds": {
+        "lower_hundredths": 95,
+        "upper_hundredths": 100,
+        "lower_inclusive": true,
+        "upper_inclusive": true
+      },
+      "pp_cons_population": "newly_aligned_match_state_residues_with_native_PP",
+      "pp_cons_observed_denominator": 1
+    },
+    {
+      "record_key": "alignment:0/column:17",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "alignment_index": 0,
+        "column_index": 17
+      },
+      "column_index": 17,
+      "native_rf_symbol": "x",
+      "model_position": 14,
+      "homologous_model_column": true,
+      "populations": {
+        "all": {
+          "occupancy_numerator": 4,
+          "occupancy_denominator": 4,
+          "missing_rows": 0,
+          "row_count": 4,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2",
+            "alignment:0/sequence:3"
+          ]
+        },
+        "newly_aligned": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:3"
+          ]
+        },
+        "inherited": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2"
+          ]
+        },
+        "unknown": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 0,
+          "row_count": 0,
+          "record_keys": []
+        },
+        "fragment": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:2"
+          ]
+        },
+        "nonfragment": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:3"
+          ]
+        }
+      },
+      "native_pp_cons_symbol": "*",
+      "native_pp_cons_bounds": {
+        "lower_hundredths": 95,
+        "upper_hundredths": 100,
+        "lower_inclusive": true,
+        "upper_inclusive": true
+      },
+      "pp_cons_population": "newly_aligned_match_state_residues_with_native_PP",
+      "pp_cons_observed_denominator": 1
+    },
+    {
+      "record_key": "alignment:0/column:18",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "alignment_index": 0,
+        "column_index": 18
+      },
+      "column_index": 18,
+      "native_rf_symbol": "x",
+      "model_position": 15,
+      "homologous_model_column": true,
+      "populations": {
+        "all": {
+          "occupancy_numerator": 4,
+          "occupancy_denominator": 4,
+          "missing_rows": 0,
+          "row_count": 4,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2",
+            "alignment:0/sequence:3"
+          ]
+        },
+        "newly_aligned": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:3"
+          ]
+        },
+        "inherited": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2"
+          ]
+        },
+        "unknown": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 0,
+          "row_count": 0,
+          "record_keys": []
+        },
+        "fragment": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:2"
+          ]
+        },
+        "nonfragment": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:3"
+          ]
+        }
+      },
+      "native_pp_cons_symbol": "*",
+      "native_pp_cons_bounds": {
+        "lower_hundredths": 95,
+        "upper_hundredths": 100,
+        "lower_inclusive": true,
+        "upper_inclusive": true
+      },
+      "pp_cons_population": "newly_aligned_match_state_residues_with_native_PP",
+      "pp_cons_observed_denominator": 1
+    },
+    {
+      "record_key": "alignment:0/column:19",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "alignment_index": 0,
+        "column_index": 19
+      },
+      "column_index": 19,
+      "native_rf_symbol": "x",
+      "model_position": 16,
+      "homologous_model_column": true,
+      "populations": {
+        "all": {
+          "occupancy_numerator": 4,
+          "occupancy_denominator": 4,
+          "missing_rows": 0,
+          "row_count": 4,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2",
+            "alignment:0/sequence:3"
+          ]
+        },
+        "newly_aligned": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:3"
+          ]
+        },
+        "inherited": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2"
+          ]
+        },
+        "unknown": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 0,
+          "row_count": 0,
+          "record_keys": []
+        },
+        "fragment": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:2"
+          ]
+        },
+        "nonfragment": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:3"
+          ]
+        }
+      },
+      "native_pp_cons_symbol": "*",
+      "native_pp_cons_bounds": {
+        "lower_hundredths": 95,
+        "upper_hundredths": 100,
+        "lower_inclusive": true,
+        "upper_inclusive": true
+      },
+      "pp_cons_population": "newly_aligned_match_state_residues_with_native_PP",
+      "pp_cons_observed_denominator": 1
+    },
+    {
+      "record_key": "alignment:0/column:20",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "alignment_index": 0,
+        "column_index": 20
+      },
+      "column_index": 20,
+      "native_rf_symbol": "x",
+      "model_position": 17,
+      "homologous_model_column": true,
+      "populations": {
+        "all": {
+          "occupancy_numerator": 4,
+          "occupancy_denominator": 4,
+          "missing_rows": 0,
+          "row_count": 4,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2",
+            "alignment:0/sequence:3"
+          ]
+        },
+        "newly_aligned": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:3"
+          ]
+        },
+        "inherited": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2"
+          ]
+        },
+        "unknown": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 0,
+          "row_count": 0,
+          "record_keys": []
+        },
+        "fragment": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:2"
+          ]
+        },
+        "nonfragment": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:3"
+          ]
+        }
+      },
+      "native_pp_cons_symbol": "*",
+      "native_pp_cons_bounds": {
+        "lower_hundredths": 95,
+        "upper_hundredths": 100,
+        "lower_inclusive": true,
+        "upper_inclusive": true
+      },
+      "pp_cons_population": "newly_aligned_match_state_residues_with_native_PP",
+      "pp_cons_observed_denominator": 1
+    },
+    {
+      "record_key": "alignment:0/column:21",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "alignment_index": 0,
+        "column_index": 21
+      },
+      "column_index": 21,
+      "native_rf_symbol": "x",
+      "model_position": 18,
+      "homologous_model_column": true,
+      "populations": {
+        "all": {
+          "occupancy_numerator": 4,
+          "occupancy_denominator": 4,
+          "missing_rows": 0,
+          "row_count": 4,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2",
+            "alignment:0/sequence:3"
+          ]
+        },
+        "newly_aligned": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:3"
+          ]
+        },
+        "inherited": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2"
+          ]
+        },
+        "unknown": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 0,
+          "row_count": 0,
+          "record_keys": []
+        },
+        "fragment": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:2"
+          ]
+        },
+        "nonfragment": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:3"
+          ]
+        }
+      },
+      "native_pp_cons_symbol": "*",
+      "native_pp_cons_bounds": {
+        "lower_hundredths": 95,
+        "upper_hundredths": 100,
+        "lower_inclusive": true,
+        "upper_inclusive": true
+      },
+      "pp_cons_population": "newly_aligned_match_state_residues_with_native_PP",
+      "pp_cons_observed_denominator": 1
+    },
+    {
+      "record_key": "alignment:0/column:22",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "alignment_index": 0,
+        "column_index": 22
+      },
+      "column_index": 22,
+      "native_rf_symbol": "x",
+      "model_position": 19,
+      "homologous_model_column": true,
+      "populations": {
+        "all": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 1,
+          "row_count": 4,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2",
+            "alignment:0/sequence:3"
+          ]
+        },
+        "newly_aligned": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:3"
+          ]
+        },
+        "inherited": {
+          "occupancy_numerator": 2,
+          "occupancy_denominator": 2,
+          "missing_rows": 1,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2"
+          ]
+        },
+        "unknown": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 0,
+          "row_count": 0,
+          "record_keys": []
+        },
+        "fragment": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 1,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:2"
+          ]
+        },
+        "nonfragment": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:3"
+          ]
+        }
+      },
+      "native_pp_cons_symbol": "*",
+      "native_pp_cons_bounds": {
+        "lower_hundredths": 95,
+        "upper_hundredths": 100,
+        "lower_inclusive": true,
+        "upper_inclusive": true
+      },
+      "pp_cons_population": "newly_aligned_match_state_residues_with_native_PP",
+      "pp_cons_observed_denominator": 1
+    },
+    {
+      "record_key": "alignment:0/column:23",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "alignment_index": 0,
+        "column_index": 23
+      },
+      "column_index": 23,
+      "native_rf_symbol": "x",
+      "model_position": 20,
+      "homologous_model_column": true,
+      "populations": {
+        "all": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 1,
+          "row_count": 4,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2",
+            "alignment:0/sequence:3"
+          ]
+        },
+        "newly_aligned": {
+          "occupancy_numerator": 1,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:3"
+          ]
+        },
+        "inherited": {
+          "occupancy_numerator": 2,
+          "occupancy_denominator": 2,
+          "missing_rows": 1,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2"
+          ]
+        },
+        "unknown": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 0,
+          "row_count": 0,
+          "record_keys": []
+        },
+        "fragment": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 1,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:2"
+          ]
+        },
+        "nonfragment": {
+          "occupancy_numerator": 3,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:3"
+          ]
+        }
+      },
+      "native_pp_cons_symbol": "*",
+      "native_pp_cons_bounds": {
+        "lower_hundredths": 95,
+        "upper_hundredths": 100,
+        "lower_inclusive": true,
+        "upper_inclusive": true
+      },
+      "pp_cons_population": "newly_aligned_match_state_residues_with_native_PP",
+      "pp_cons_observed_denominator": 1
+    },
+    {
+      "record_key": "alignment:0/column:24",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "alignment_index": 0,
+        "column_index": 24
+      },
+      "column_index": 24,
+      "native_rf_symbol": ".",
+      "model_position": null,
+      "homologous_model_column": false,
+      "populations": {
+        "all": {
+          "occupancy_numerator": 2,
+          "occupancy_denominator": 3,
+          "missing_rows": 1,
+          "row_count": 4,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2",
+            "alignment:0/sequence:3"
+          ]
+        },
+        "newly_aligned": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:3"
+          ]
+        },
+        "inherited": {
+          "occupancy_numerator": 2,
+          "occupancy_denominator": 2,
+          "missing_rows": 1,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2"
+          ]
+        },
+        "unknown": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 0,
+          "row_count": 0,
+          "record_keys": []
+        },
+        "fragment": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 1,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:2"
+          ]
+        },
+        "nonfragment": {
+          "occupancy_numerator": 2,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:3"
+          ]
+        }
+      },
+      "native_pp_cons_symbol": ".",
+      "native_pp_cons_bounds": null,
+      "pp_cons_population": "newly_aligned_match_state_residues_with_native_PP",
+      "pp_cons_observed_denominator": null
+    },
+    {
+      "record_key": "alignment:0/column:25",
+      "alignment_index": 0,
+      "locator": {
+        "artifact_role": "stockholm",
+        "artifact_ref": "fixture:fragment_mapali/stdout.txt",
+        "alignment_index": 0,
+        "column_index": 25
+      },
+      "column_index": 25,
+      "native_rf_symbol": ".",
+      "model_position": null,
+      "homologous_model_column": false,
+      "populations": {
+        "all": {
+          "occupancy_numerator": 2,
+          "occupancy_denominator": 3,
+          "missing_rows": 1,
+          "row_count": 4,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2",
+            "alignment:0/sequence:3"
+          ]
+        },
+        "newly_aligned": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 1,
+          "missing_rows": 0,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:3"
+          ]
+        },
+        "inherited": {
+          "occupancy_numerator": 2,
+          "occupancy_denominator": 2,
+          "missing_rows": 1,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:2"
+          ]
+        },
+        "unknown": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 0,
+          "row_count": 0,
+          "record_keys": []
+        },
+        "fragment": {
+          "occupancy_numerator": 0,
+          "occupancy_denominator": 0,
+          "missing_rows": 1,
+          "row_count": 1,
+          "record_keys": [
+            "alignment:0/sequence:2"
+          ]
+        },
+        "nonfragment": {
+          "occupancy_numerator": 2,
+          "occupancy_denominator": 3,
+          "missing_rows": 0,
+          "row_count": 3,
+          "record_keys": [
+            "alignment:0/sequence:0",
+            "alignment:0/sequence:1",
+            "alignment:0/sequence:3"
+          ]
+        }
+      },
+      "native_pp_cons_symbol": ".",
+      "native_pp_cons_bounds": null,
+      "pp_cons_population": "newly_aligned_match_state_residues_with_native_PP",
+      "pp_cons_observed_denominator": null
+    }
+  ],
+  "alignments": [
+    {
+      "record_key": "alignment:0",
+      "alignment_index": 0,
+      "column_count": 26,
+      "model_length": 20,
+      "rf_model_positions": 20,
+      "native_rf": "..xxxxxx..xxxxxxxxxxxxxx..",
+      "native_pp_cons": "..9*****..**************..",
+      "complete": true,
+      "row_count": 4
+    }
+  ],
+  "issues": []
+}

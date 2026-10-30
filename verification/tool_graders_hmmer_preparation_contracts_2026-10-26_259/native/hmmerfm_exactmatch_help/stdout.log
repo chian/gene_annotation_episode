@@ -1,0 +1,14 @@
+# hmmerfm-exactmatch :: Find all instances of each <qfile> sequence in the database represented by <fmfile>
+# Easel 0.49 (Aug 2023)
+# Copyright (C) 2023 Howard Hughes Medical Institute.
+# Freely distributed under the BSD open source license.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Usage: hmmerfm-exactmatch [options] <qfile> <fmfile>
+
+Basic options:
+  -h : show brief help on version and usage
+
+Special options:
+  --out <s>    : save list of hits to file <s>  ('-' writes to stdout)  [none]
+  --count_only : compute just counts, not locations
+  --fwd_only   : don't compute matches to the reversed sequence

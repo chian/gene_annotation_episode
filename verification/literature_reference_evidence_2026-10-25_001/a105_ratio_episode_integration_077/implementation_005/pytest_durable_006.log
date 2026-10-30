@@ -1,0 +1,42 @@
+.F
+=================================== FAILURES ===================================
+_ test_actual_durable_commission_c4_recovery_replay_parent_and_first_readonly[True] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_ratio_episode_integration_077/implementation_005/tmp_durable_006/test_actual_durable_commission1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7a50331d6fc0>
+interrupt_receive = True
+
+    @pytest.mark.parametrize('interrupt_receive',[False,True])
+    def test_actual_durable_commission_c4_recovery_replay_parent_and_first_readonly(tmp_path,monkeypatch,interrupt_receive):
+        store,case=make_case(tmp_path/'state');directory=tmp_path/'run'
+        original_service=WorkflowServices.literature_ratio_source_repository
+        injected=[]
+        if interrupt_receive:
+            def service(self,**kw):
+                repo=original_service(self,**kw)
+                if not hasattr(repo,'_fixture_interrupt_installed'):
+                    repo._fixture_interrupt_installed=True
+                    original=repo.receive_cells
+                    def receive(context,rows,key):
+                        original(context,rows,key)
+                        if context.role=='annotation' and not injected:
+                            injected.append(key)
+                            raise OSError('constructed interruption after actual native receive')
+                    repo.receive_cells=receive
+                return repo
+            monkeypatch.setattr(WorkflowServices,'literature_ratio_source_repository',service)
+        try:
+            if interrupt_receive:
+                with pytest.raises(OSError,match='after actual native receive'):
+                    asyncio.run(run_case(store,case,directory,durable=True))
+                assert injected
+                assert store.db.execute('SELECT count(*) FROM literature_ratio_source_received').fetchone()[0]==0
+>               assert store.db.execute('SELECT count(*) FROM runtime_return_admissions').fetchone()[0]==0
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               sqlite3.OperationalError: no such table: runtime_return_admissions
+
+tests/test_literature_ratio_source_connected_readonly.py:98: OperationalError
+=========================== short test summary info ============================
+FAILED tests/test_literature_ratio_source_connected_readonly.py::test_actual_durable_commission_c4_recovery_replay_parent_and_first_readonly[True]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 1 passed in 70.05s (0:01:10)

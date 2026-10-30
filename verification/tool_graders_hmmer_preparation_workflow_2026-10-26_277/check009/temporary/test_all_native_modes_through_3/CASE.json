@@ -1,0 +1,780 @@
+{
+  "program": "alimask",
+  "mode": "alignment_to_model",
+  "scripted_decisions": true,
+  "root_gains": [
+    0.0,
+    0.0
+  ],
+  "forms": [
+    {
+      "artifacts": [
+        {
+          "artifact_ref": "artifact_74cad0190e1630012f563d2aedad69c16265e5ad9e10234c7c49dca377b882f4",
+          "completeness": "complete",
+          "direction": "output",
+          "format": "hmmer_stdout",
+          "ordinal": 0,
+          "role": "stdout",
+          "sha256": "74cad0190e1630012f563d2aedad69c16265e5ad9e10234c7c49dca377b882f4",
+          "size_bytes": 1009,
+          "source_ref": "source_b82ff6e005f92241de22112c"
+        },
+        {
+          "artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "completeness": "complete",
+          "direction": "output",
+          "format": "hmmer_stderr",
+          "ordinal": 0,
+          "role": "stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0,
+          "source_ref": "source_b82ff6e005f92241de22112c"
+        },
+        {
+          "artifact_ref": "artifact_5d73b1b066d2f453de0e98cf371a5328bb18874f36a611a8b95c1e6b8c0fc260",
+          "completeness": "complete",
+          "direction": "input",
+          "format": "stockholm",
+          "ordinal": 0,
+          "role": "alignment",
+          "sha256": "5d73b1b066d2f453de0e98cf371a5328bb18874f36a611a8b95c1e6b8c0fc260",
+          "size_bytes": 202,
+          "source_ref": "source_b82ff6e005f92241de22112c"
+        }
+      ],
+      "completed": true,
+      "population": [
+        {
+          "collection": "calculations",
+          "missing_artifacts": [],
+          "missing_record_keys": [],
+          "omitted_records": 0,
+          "requested_artifact_count": 2,
+          "returned_artifact_count": 3,
+          "returned_records": 1,
+          "source_ref": "source_b82ff6e005f92241de22112c",
+          "total_records": 1
+        }
+      ],
+      "rows": [
+        {
+          "accession": "TINY001",
+          "artifact_ref": "artifact_5d73b1b066d2f453de0e98cf371a5328bb18874f36a611a8b95c1e6b8c0fc260",
+          "checks": [
+            {
+              "name": "requested_ranges",
+              "occurrences": [],
+              "outcome": "pass"
+            },
+            {
+              "name": "native_mapping",
+              "occurrences": [],
+              "outcome": "pass"
+            },
+            {
+              "name": "mask_annotation",
+              "occurrences": [],
+              "outcome": "unknown"
+            }
+          ],
+          "kind": "mapping",
+          "name": "tiny_protein",
+          "quantities": [
+            {
+              "path": "components.input_sequence_count",
+              "state": "present",
+              "unit": "sequence_count",
+              "value": 3
+            },
+            {
+              "path": "components.input_column_count",
+              "state": "present",
+              "unit": "alignment_column_count",
+              "value": 14
+            },
+            {
+              "path": "components.rf_consensus_count",
+              "state": "present",
+              "unit": "RF_consensus_column_count",
+              "value": 12
+            },
+            {
+              "path": "components.requested_interval_count",
+              "state": "present",
+              "unit": "request_interval_count",
+              "value": 1
+            },
+            {
+              "path": "components.native_mapping_row_count",
+              "state": "present",
+              "unit": "decoded_mapping_row_count",
+              "value": 1
+            },
+            {
+              "path": "components.requested_union_count",
+              "state": "missing",
+              "unit": "alignment_column_count",
+              "value": null
+            }
+          ],
+          "record_key": "artifact_76120b3e510b282fd8c35bc53cb58b02a5b6ee19cb761606eea093a169b9186c#/inputs/0#alignment/0",
+          "source_ref": "source_b82ff6e005f92241de22112c"
+        }
+      ]
+    }
+  ],
+  "result_histories": [
+    {
+      "current_credit": 2.0,
+      "decision": {
+        "continuation_cost": 0.0,
+        "decision_basis": "current_estimator_marginal_credit_upper_bound",
+        "projected_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "stop": true
+      },
+      "epoch": "(('annotation', 'root'), ('results', 'child_1'))",
+      "estimate": {
+        "diagnostics": {
+          "completed_acquisition_turns": 1,
+          "completion_action_index": 0,
+          "completion_proof": {
+            "assignment_sha256": "c50036b321816a151c1be56041ad2cc75a44b4de9457f0716edc25f02fd8bb73",
+            "endpoint": "usable_handoff",
+            "episode_id": "episode_28b3db734e1feda58a38167b55e9f6e349e2f3ed82f0ec6c31b28b5b1de27f9d",
+            "operation_key": "hmmer-preparation-workflow277:episode_28b3db734e1feda58a38167b55e9f6e349e2f3ed82f0ec6c31b28b5b1de27f9d:0",
+            "receipt_sha256": "34a60e9f8ccafafbfb220b5992951ef3afaafa7de95329d821f5624ca551c7be",
+            "run_id": "hmmer-preparation-workflow277",
+            "validation_keys": [
+              "original_native_attempt",
+              "complete_sealed_bundle_acquisition",
+              "requested_preparation_projection"
+            ],
+            "version": "practical_completion_v1"
+          },
+          "completion_unit_ref": {
+            "episode_id": "episode_28b3db734e1feda58a38167b55e9f6e349e2f3ed82f0ec6c31b28b5b1de27f9d",
+            "unit_id": "unit_f35c08aeb039f5797bf556c1c653305ffa01b96631c5aee24e873cafc3aea75f",
+            "unit_index": 0
+          },
+          "fitting_scope": "verified_assignment_endpoint",
+          "history_used": 1
+        },
+        "expected_next_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "parameters": {
+          "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+          "subsample_size": 50,
+          "uncertainty_alpha": 0.05,
+          "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+          "window_size": 100
+        },
+        "provenance": {
+          "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+          "completion_proof": "practical_completion_v1",
+          "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+          "continuation": "existing_available_upper_bound_lte_configured_cost",
+          "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+          "raw_history": "unchanged_one_observation_per_completed_own_action",
+          "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+          "version": "verified_practical_endpoint_yield_v1"
+        },
+        "turns": 1
+      },
+      "initial_credit": 0.0,
+      "scores": [
+        2.0
+      ]
+    }
+  ],
+  "native_plan": {
+    "attempt_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check009/temporary/test_all_native_modes_through_3/workspace/.episode-operations/da170de3d8f0713c63299b50f8a9a7a241d0c4ded039c08d123730c27a675558/a1ae9a265aee5be791acc5d5c2ee5b8cd0c6c15ad51ad10c3463c7075246001c/hmmer-preparation-attempt",
+    "identity": {
+      "attempt_id": "a1ae9a265aee5be791acc5d5c2ee5b8cd0c6c15ad51ad10c3463c7075246001c",
+      "episode_id": "episode_91354c15771ea44626b7cc3a4f05f54a38d8bb5406462dcaacb3a35e498186bd",
+      "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check009/temporary/test_all_native_modes_through_3/workspace/.episode-operations/da170de3d8f0713c63299b50f8a9a7a241d0c4ded039c08d123730c27a675558/a1ae9a265aee5be791acc5d5c2ee5b8cd0c6c15ad51ad10c3463c7075246001c/native.json",
+      "operation_key": "hmmer-preparation-workflow277:episode_91354c15771ea44626b7cc3a4f05f54a38d8bb5406462dcaacb3a35e498186bd:0",
+      "requested_job_sha256": "84b9ce5f08ad460584c839fe8b2bafb11b007be7aacab7dccf8c1fb3aa245960",
+      "resource_id": "here",
+      "run_id": "hmmer-preparation-workflow277"
+    },
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "requested_job": {
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/alimask",
+        "--amino",
+        "--hand",
+        "--ali2model",
+        "2-4",
+        "--informat",
+        "Stockholm",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/protein.sto"
+      ],
+      "environment": {},
+      "native_hmmer_preparation": {
+        "environment": {},
+        "grading_parameters": {},
+        "input_metadata": {},
+        "key": null,
+        "mode": "alignment_to_model",
+        "operands": [
+          {
+            "artifact_ref": "fixture267:alignment:0",
+            "format": "stockholm",
+            "ordinal": 0,
+            "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/protein.sto",
+            "role": "alignment",
+            "sha256": "5d73b1b066d2f453de0e98cf371a5328bb18874f36a611a8b95c1e6b8c0fc260",
+            "size_bytes": 202
+          }
+        ],
+        "options": [
+          "--amino",
+          "--hand",
+          "--ali2model",
+          "2-4"
+        ],
+        "outputs": [
+          {
+            "format": "hmmer_stdout",
+            "relative_path": "outputs/stdout",
+            "role": "stdout"
+          },
+          {
+            "format": "hmmer_stderr",
+            "relative_path": "outputs/stderr",
+            "role": "stderr"
+          }
+        ],
+        "program": "alimask",
+        "software": {
+          "engine_version": "3.4",
+          "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/alimask",
+          "sha256": "4cf273b7b4b52363468b758a39bedf8f00540b01983bf6641ffd36140afad547"
+        },
+        "version": "native_hmmer_preparation_job_v1"
+      }
+    },
+    "version": "native_hmmer_preparation_run_plan_v1"
+  },
+  "outcomes": [
+    {
+      "changed_record_refs": [
+        "source_b82ff6e005f92241de22112c",
+        "artifact_5d73b1b066d2f453de0e98cf371a5328bb18874f36a611a8b95c1e6b8c0fc260",
+        "artifact_74cad0190e1630012f563d2aedad69c16265e5ad9e10234c7c49dca377b882f4",
+        "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      ],
+      "feedback": null,
+      "pending_work_after_action": {
+        "captured_at": "2026-10-26T10:42:55.820757+00:00",
+        "items": [],
+        "version": "pending_work_v1"
+      },
+      "record_refs": [
+        "source_b82ff6e005f92241de22112c",
+        "artifact_5d73b1b066d2f453de0e98cf371a5328bb18874f36a611a8b95c1e6b8c0fc260",
+        "artifact_74cad0190e1630012f563d2aedad69c16265e5ad9e10234c7c49dca377b882f4",
+        "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      ],
+      "result": {
+        "arguments": {},
+        "artifacts": [
+          {
+            "artifact_ref": "artifact_74cad0190e1630012f563d2aedad69c16265e5ad9e10234c7c49dca377b882f4",
+            "completeness": "complete",
+            "direction": "output",
+            "format": "hmmer_stdout",
+            "ordinal": 0,
+            "role": "stdout",
+            "sha256": "74cad0190e1630012f563d2aedad69c16265e5ad9e10234c7c49dca377b882f4",
+            "size_bytes": 1009,
+            "source_ref": "source_b82ff6e005f92241de22112c"
+          },
+          {
+            "artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "completeness": "complete",
+            "direction": "output",
+            "format": "hmmer_stderr",
+            "ordinal": 0,
+            "role": "stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size_bytes": 0,
+            "source_ref": "source_b82ff6e005f92241de22112c"
+          },
+          {
+            "artifact_ref": "artifact_5d73b1b066d2f453de0e98cf371a5328bb18874f36a611a8b95c1e6b8c0fc260",
+            "completeness": "complete",
+            "direction": "input",
+            "format": "stockholm",
+            "ordinal": 0,
+            "role": "alignment",
+            "sha256": "5d73b1b066d2f453de0e98cf371a5328bb18874f36a611a8b95c1e6b8c0fc260",
+            "size_bytes": 202,
+            "source_ref": "source_b82ff6e005f92241de22112c"
+          }
+        ],
+        "assignment": {
+          "handoff_ref": "source_c843dd58466b5c1cd9fc9858",
+          "selector": {
+            "acquisition": "complete_bound_bundle",
+            "artifacts": [
+              {
+                "direction": "output",
+                "ordinal": 0,
+                "role": "stdout"
+              },
+              {
+                "direction": "output",
+                "ordinal": 0,
+                "role": "stderr"
+              }
+            ],
+            "projection": {
+              "checks": [
+                "requested_ranges",
+                "native_mapping",
+                "mask_annotation"
+              ],
+              "collection": "calculations",
+              "quantities": [
+                "components.input_sequence_count",
+                "components.input_column_count",
+                "components.rf_consensus_count",
+                "components.requested_interval_count",
+                "components.native_mapping_row_count",
+                "components.requested_union_count"
+              ],
+              "rows": {
+                "limit": 100,
+                "offset": 0
+              }
+            },
+            "version": "native_hmmer_preparation_result_selector_v1"
+          },
+          "version": "execution_results_assignment_v1"
+        },
+        "capture": {
+          "artifacts": [
+            {
+              "artifact_ref": "artifact_5d73b1b066d2f453de0e98cf371a5328bb18874f36a611a8b95c1e6b8c0fc260",
+              "direction": "input",
+              "format": "stockholm",
+              "ordinal": 0,
+              "relative_path": "inputs/alignment/0",
+              "role": "alignment"
+            },
+            {
+              "artifact_ref": "artifact_74cad0190e1630012f563d2aedad69c16265e5ad9e10234c7c49dca377b882f4",
+              "direction": "output",
+              "format": "hmmer_stdout",
+              "ordinal": 0,
+              "relative_path": "outputs/stdout",
+              "role": "stdout"
+            },
+            {
+              "artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "direction": "output",
+              "format": "hmmer_stderr",
+              "ordinal": 0,
+              "relative_path": "outputs/stderr",
+              "role": "stderr"
+            }
+          ],
+          "bundle_artifact_ref": "artifact_76120b3e510b282fd8c35bc53cb58b02a5b6ee19cb761606eea093a169b9186c",
+          "bundle_validated": true,
+          "complete": true,
+          "failures": [],
+          "invalid_artifacts": [],
+          "version": "native_hmmer_preparation_capture_v1"
+        },
+        "complete": true,
+        "episode_id": "episode_28b3db734e1feda58a38167b55e9f6e349e2f3ed82f0ec6c31b28b5b1de27f9d",
+        "failures": [],
+        "observation": {
+          "failure_code": null,
+          "logs": [
+            {
+              "bytes_base64": "IC0gLSAtIC0gLSAtIC0gLSAtIC0gLSAtIC0gLSAtIC0gLSAtIC0KCmFsaWdubWVudCBjb29yZGluYXRlcyAgICAgbW9kZWwgY29vcmRpbmF0ZXMKICAgICAgICAgIDIuLjQgICAgICAgIC0+ICAgICAgICAyLi40ICAgICAgIAo=",
+              "observed_size": 1009,
+              "offset": 881,
+              "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check009/temporary/test_all_native_modes_through_3/workspace/.episode-operations/da170de3d8f0713c63299b50f8a9a7a241d0c4ded039c08d123730c27a675558/a1ae9a265aee5be791acc5d5c2ee5b8cd0c6c15ad51ad10c3463c7075246001c/hmmer-preparation-attempt/outputs/stdout",
+              "role": "stdout"
+            },
+            {
+              "bytes_base64": "",
+              "observed_size": 0,
+              "offset": 0,
+              "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check009/temporary/test_all_native_modes_through_3/workspace/.episode-operations/da170de3d8f0713c63299b50f8a9a7a241d0c4ded039c08d123730c27a675558/a1ae9a265aee5be791acc5d5c2ee5b8cd0c6c15ad51ad10c3463c7075246001c/hmmer-preparation-attempt/outputs/stderr",
+              "role": "stderr"
+            }
+          ],
+          "measurements": [
+            {
+              "measure": "systemd_service_wall_seconds",
+              "seconds": 1.019240418
+            }
+          ],
+          "native": {
+            "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check009/temporary/test_all_native_modes_through_3/workspace/.episode-operations/da170de3d8f0713c63299b50f8a9a7a241d0c4ded039c08d123730c27a675558/a1ae9a265aee5be791acc5d5c2ee5b8cd0c6c15ad51ad10c3463c7075246001c/native.json",
+            "files": {
+              "stderr": {
+                "available": true,
+                "bytes": 0
+              },
+              "stdout": {
+                "available": true,
+                "bytes": 463
+              }
+            },
+            "metadata": {
+              "duration_measure": "systemd_service_wall_seconds",
+              "elapsed_seconds": 1.019240418,
+              "enforcement": {
+                "filesystem_sandbox": false,
+                "memory": "systemd_cgroup_v2_memory_max",
+                "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+                "process_tree": "systemd_control_group",
+                "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+                "swap": "systemd_memory_swap_max_zero",
+                "wall_time": "unset"
+              },
+              "native_lifecycle_version": "durable_systemd_native_job_v2",
+              "native_returncode": 0,
+              "observed_scratch_bytes": 73728,
+              "policy": {
+                "memory_bytes": 21474836480,
+                "scratch_bytes": 4294967296,
+                "wall_seconds": null
+              },
+              "service_exit": {
+                "EXIT_CODE": "exited",
+                "EXIT_STATUS": "0",
+                "SERVICE_RESULT": "success",
+                "ended": {
+                  "at": "2026-10-26T10:42:46.023442+00:00",
+                  "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+                  "monotonic_ns": 824927720766265
+                }
+              },
+              "verified_cgroup": {
+                "kill_mode": "control-group",
+                "memory_max": 21474836480,
+                "memory_swap_max": 0,
+                "oom_policy": "kill",
+                "runtime_max": "infinity"
+              }
+            },
+            "native_receipt": {
+              "ended": {
+                "at": "2026-10-26T10:42:45.824907+00:00",
+                "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+                "monotonic_ns": 824927522231064
+              },
+              "execution_failure": null,
+              "native_returncode": 0,
+              "observed_scratch_bytes": 73728,
+              "resource_failure": null,
+              "started": {
+                "at": "2026-10-26T10:42:45.368305+00:00",
+                "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+                "monotonic_ns": 824927065670462
+              }
+            },
+            "quiescent": true,
+            "state": "returned",
+            "terminal": true,
+            "version": "durable_systemd_native_job_v2"
+          },
+          "observed_at": "2026-10-26T10:42:49.550393+00:00",
+          "outputs": [
+            {
+              "available": true,
+              "bytes": 1009,
+              "role": "stdout",
+              "writer_closed": true
+            },
+            {
+              "available": true,
+              "bytes": 0,
+              "role": "stderr",
+              "writer_closed": true
+            },
+            {
+              "available": true,
+              "bytes": 7182,
+              "role": "native_hmmer_preparation_bundle",
+              "writer_closed": true
+            }
+          ],
+          "provenance_refs": [],
+          "result_available": true,
+          "returncode": 0,
+          "state": "completed"
+        },
+        "operation_key": "hmmer-preparation-workflow277:episode_28b3db734e1feda58a38167b55e9f6e349e2f3ed82f0ec6c31b28b5b1de27f9d:0",
+        "population": {
+          "collection": "calculations",
+          "missing_artifacts": [],
+          "missing_record_keys": [],
+          "omitted_records": 0,
+          "requested_artifact_count": 2,
+          "returned_artifact_count": 3,
+          "returned_records": 1,
+          "source_ref": "source_b82ff6e005f92241de22112c",
+          "total_records": 1
+        },
+        "prepared": {
+          "bundle_artifact_ref": "artifact_76120b3e510b282fd8c35bc53cb58b02a5b6ee19cb761606eea093a169b9186c",
+          "calculations_artifact_ref": "artifact_f9edb53cbe0a623fb593f281f6f166d266f79802689f96be934ddf6c0e3498ae",
+          "failures": [],
+          "graded": true,
+          "grading_artifact_ref": "artifact_8c1940679a8a9f08478d3535be99a81e30b89e8ee6876f61fba9018cbb346192",
+          "occurrences": [
+            {
+              "artifact_ref": "artifact_5d73b1b066d2f453de0e98cf371a5328bb18874f36a611a8b95c1e6b8c0fc260",
+              "completeness": "complete",
+              "direction": "input",
+              "format": "stockholm",
+              "occurrence_id": "artifact_76120b3e510b282fd8c35bc53cb58b02a5b6ee19cb761606eea093a169b9186c#/inputs/0",
+              "ordinal": 0,
+              "relative_path": "inputs/alignment/0",
+              "role": "alignment",
+              "sha256": "5d73b1b066d2f453de0e98cf371a5328bb18874f36a611a8b95c1e6b8c0fc260",
+              "size_bytes": 202
+            },
+            {
+              "artifact_ref": "artifact_74cad0190e1630012f563d2aedad69c16265e5ad9e10234c7c49dca377b882f4",
+              "completeness": "complete",
+              "direction": "output",
+              "format": "hmmer_stdout",
+              "occurrence_id": "artifact_76120b3e510b282fd8c35bc53cb58b02a5b6ee19cb761606eea093a169b9186c#/artifacts/0",
+              "ordinal": 0,
+              "relative_path": "outputs/stdout",
+              "role": "stdout",
+              "sha256": "74cad0190e1630012f563d2aedad69c16265e5ad9e10234c7c49dca377b882f4",
+              "size_bytes": 1009
+            },
+            {
+              "artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "completeness": "complete",
+              "direction": "output",
+              "format": "hmmer_stderr",
+              "occurrence_id": "artifact_76120b3e510b282fd8c35bc53cb58b02a5b6ee19cb761606eea093a169b9186c#/artifacts/1",
+              "ordinal": 0,
+              "relative_path": "outputs/stderr",
+              "role": "stderr",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size_bytes": 0
+            }
+          ],
+          "sheet_artifact_ref": "artifact_aea512585f912229047b5928a69e77baec5cfb009df17dde3dd9f0b25c58ea0b",
+          "source_grading_artifact_ref": "artifact_3d6b7cf8d26c336c4eacc9c143c0e50ab9e9f0d36d2b2d224c3abd948a7a856f",
+          "version": "native_hmmer_preparation_prepared_v1"
+        },
+        "record_refs": [
+          "source_b82ff6e005f92241de22112c",
+          "artifact_5d73b1b066d2f453de0e98cf371a5328bb18874f36a611a8b95c1e6b8c0fc260",
+          "artifact_74cad0190e1630012f563d2aedad69c16265e5ad9e10234c7c49dca377b882f4",
+          "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        ],
+        "rows": [
+          {
+            "accession": "TINY001",
+            "artifact_ref": "artifact_5d73b1b066d2f453de0e98cf371a5328bb18874f36a611a8b95c1e6b8c0fc260",
+            "checks": [
+              {
+                "name": "requested_ranges",
+                "occurrences": [],
+                "outcome": "pass"
+              },
+              {
+                "name": "native_mapping",
+                "occurrences": [],
+                "outcome": "pass"
+              },
+              {
+                "name": "mask_annotation",
+                "occurrences": [],
+                "outcome": "unknown"
+              }
+            ],
+            "kind": "mapping",
+            "name": "tiny_protein",
+            "quantities": [
+              {
+                "path": "components.input_sequence_count",
+                "state": "present",
+                "unit": "sequence_count",
+                "value": 3
+              },
+              {
+                "path": "components.input_column_count",
+                "state": "present",
+                "unit": "alignment_column_count",
+                "value": 14
+              },
+              {
+                "path": "components.rf_consensus_count",
+                "state": "present",
+                "unit": "RF_consensus_column_count",
+                "value": 12
+              },
+              {
+                "path": "components.requested_interval_count",
+                "state": "present",
+                "unit": "request_interval_count",
+                "value": 1
+              },
+              {
+                "path": "components.native_mapping_row_count",
+                "state": "present",
+                "unit": "decoded_mapping_row_count",
+                "value": 1
+              },
+              {
+                "path": "components.requested_union_count",
+                "state": "missing",
+                "unit": "alignment_column_count",
+                "value": null
+              }
+            ],
+            "record_key": "artifact_76120b3e510b282fd8c35bc53cb58b02a5b6ee19cb761606eea093a169b9186c#/inputs/0#alignment/0",
+            "source_ref": "source_b82ff6e005f92241de22112c"
+          }
+        ],
+        "run_id": "hmmer-preparation-workflow277",
+        "scope": {
+          "subject_refs": [
+            "input_518576eba4d16142194e533e"
+          ]
+        },
+        "source_ref": "source_b82ff6e005f92241de22112c",
+        "target": {
+          "assignment": {
+            "assignment_id": "native-preparation",
+            "completion_keys": [
+              "handoff"
+            ],
+            "constraints": {
+              "allocation": {
+                "memory_bytes": 21474836480,
+                "scratch_bytes": 4294967296,
+                "wall_seconds": null
+              }
+            },
+            "endpoint": "usable_handoff",
+            "initial_context": {
+              "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check009/temporary/test_all_native_modes_through_3/workspace",
+              "environment": {},
+              "revision": 0
+            },
+            "inventory_snapshot": {},
+            "progress_requirements": [
+              {
+                "credit": 7,
+                "key": "handoff",
+                "predicate": {
+                  "kind": "requested_job_handoff"
+                }
+              }
+            ],
+            "requested_job": {
+              "argv": [
+                "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/alimask",
+                "--amino",
+                "--hand",
+                "--ali2model",
+                "2-4",
+                "--informat",
+                "Stockholm",
+                "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/protein.sto"
+              ],
+              "environment": {},
+              "native_hmmer_preparation": {
+                "environment": {},
+                "grading_parameters": {},
+                "input_metadata": {},
+                "key": null,
+                "mode": "alignment_to_model",
+                "operands": [
+                  {
+                    "artifact_ref": "fixture267:alignment:0",
+                    "format": "stockholm",
+                    "ordinal": 0,
+                    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/protein.sto",
+                    "role": "alignment",
+                    "sha256": "5d73b1b066d2f453de0e98cf371a5328bb18874f36a611a8b95c1e6b8c0fc260",
+                    "size_bytes": 202
+                  }
+                ],
+                "options": [
+                  "--amino",
+                  "--hand",
+                  "--ali2model",
+                  "2-4"
+                ],
+                "outputs": [
+                  {
+                    "format": "hmmer_stdout",
+                    "relative_path": "outputs/stdout",
+                    "role": "stdout"
+                  },
+                  {
+                    "format": "hmmer_stderr",
+                    "relative_path": "outputs/stderr",
+                    "role": "stderr"
+                  }
+                ],
+                "program": "alimask",
+                "software": {
+                  "engine_version": "3.4",
+                  "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/alimask",
+                  "sha256": "4cf273b7b4b52363468b758a39bedf8f00540b01983bf6641ffd36140afad547"
+                },
+                "version": "native_hmmer_preparation_job_v1"
+              }
+            },
+            "resource_id": "here",
+            "resource_kind": "local",
+            "version": "practical_assignment_v1",
+            "workspace": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check009/temporary/test_all_native_modes_through_3/workspace"
+          },
+          "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check009/temporary/test_all_native_modes_through_3/workspace/.episode-operations/da170de3d8f0713c63299b50f8a9a7a241d0c4ded039c08d123730c27a675558/a1ae9a265aee5be791acc5d5c2ee5b8cd0c6c15ad51ad10c3463c7075246001c/native.json",
+          "handle": "source_c843dd58466b5c1cd9fc9858",
+          "origin_episode_id": "episode_91354c15771ea44626b7cc3a4f05f54a38d8bb5406462dcaacb3a35e498186bd",
+          "request_sha256": "84b9ce5f08ad460584c839fe8b2bafb11b007be7aacab7dccf8c1fb3aa245960",
+          "resource_id": "here",
+          "resource_kind": "local",
+          "run_id": "hmmer-preparation-workflow277",
+          "scope": {
+            "subject_refs": [
+              "input_518576eba4d16142194e533e"
+            ]
+          },
+          "version": "execution_target_v1"
+        },
+        "tool_name": "execution.results.collect",
+        "version": "native_hmmer_preparation_acquired_result_v1"
+      },
+      "status": "completed"
+    }
+  ]
+}

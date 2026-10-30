@@ -1,0 +1,1 @@
+Final review authority: CONTRACT003.md + SCHEMAS002.json + VERIFICATION_PLAN.md. All are planning-only/unadopted until root adopts exact bytes. Earlier CONTRACT.md/CONTRACT002.md/SCHEMAS.json and prior logs remain unmodified history. RESULTS.json and INPUT_PROVENANCE.json state checks/limits. No custody code/fork or scientific DB open occurred.

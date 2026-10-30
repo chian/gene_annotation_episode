@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="7" time="47.787" timestamp="2026-10-28T03:40:21.413651-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_selected_valid_count_does_not_inherit_unrelated_unknown_extra_count" time="3.471" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_missing_physical_mapping_conditions_reach_selected_parent_view" time="3.481" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_receiving_parent_sees_sampling_source_origin_and_approximation[False]" time="3.366" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_receiving_parent_sees_sampling_source_origin_and_approximation[True]" time="4.297" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_selected_shared_loop_first_readonly_composer_and_observations[None-False-False]" time="12.020" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_selected_shared_loop_first_readonly_composer_and_observations[None-True-False]" time="12.170" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_selected_shared_loop_first_readonly_composer_and_observations[operation_contract_information_v1-True-False]" time="7.309"><failure message="ValueError: unsupported_tool_argument_transport">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_summary_precision_binding_251/attempt_005/test_selected_shared_loop_firs2')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x72e5a085d220&gt;
+profile = 'operation_contract_information_v1', alias = True, nested = False
+
+    @pytest.mark.parametrize('profile,alias,nested', [(None, False, False), (None, True, False), ('operation_contract_information_v1', True, False), (None, True, True)])
+    def test_selected_shared_loop_first_readonly_composer_and_observations(tmp_path, monkeypatch, profile, alias, nested):
+        from gene_annotation_episode.episode_composition import compose_episode_bindings
+        from gene_annotation_episode.investigation_progress import ScientificFindingProgress, FindingProgressPolicy
+        from gene_annotation_episode.runtime import run_workflow
+        from test_runtime import FixtureController, ScriptedProvider
+        from test_contract_information_runtime_059 import PresentedProvider
+        from test_runtime_decision_exchanges import select as action
+        from test_literature_compiled_assay_185 import readonly
+        import gene_annotation_episode.communication as communication
+        store, ctx, args, _, _ = setup(tmp_path/'state'); sources = list(ctx.received_record_refs)
+        literal = obj({'numbers': summary_precision_cells_schema(), 'limit': {'type': 'string', 'enum': ['systematics_unknown']}})
+        submitted = obj({'numbers': {'$ref': 'episode-fact:'+NAMESPACE}, 'limit': literal['properties']['limit']}) if alias else literal
+        captured = []
+        def response(value):
+            if not profile: return value
+            value = deepcopy(value)
+            if value['selection']['kind'] == 'tool': value['selection']['arguments'] = json.dumps(value['selection']['arguments'])
+            return action(value)
+        def commission(role, assignment):
+            return response({'selection': {'kind': 'episode_child', 'role': role, 'assignment': assignment,
+                'goal': 'Determine the selected synthetic kinetic summary precision with its sampling qualifications.',
+                'scope': plain(ctx.scope), 'purpose': 'Return exactly requested precision cells and necessary limits.',
+                'schema_json': json.dumps(submitted), 'initial_report_json': json.dumps({'limit': 'systematics_unknown'})}, 'report_update': {}})
+        def work(inputs):
+            view = provider.views[provider.active_episode] if profile else inputs
+            assert KINETIC_SUMMARY_PRECISION_TASK in render_literature_experimental_prompt(view, 'Read selected precision.')
+            return response({'selection': {'kind': 'tool', 'tool': 'literature.kinetic.populate', 'arguments': args}, 'report_update': {'limit': 'systematics_unknown'}})
+        def integrate(inputs):
+            view = provider.views[provider.active_episode] if profile else inputs
+            form, = view['child_reports']; captured.append(deepcopy(form))
+            wanted = SELECTED[:1] if nested and len(captured) == 2 else SELECTED
+            assert [r['component'] for r in form['numbers']] == wanted
+            prompt = render_literature_experimental_prompt(view, 'Assess received precision.')
+            assert KINETIC_SUMMARY_PRECISION_TASK in prompt
+            assert 'parameter_native_exact' not in prompt.split('\n\nSTEERING\n')[1]
+            commit = {key: [] for key in store.reasoning_schema()['required']}
+            witness = args['selection']['kinetic_selection']['numerator']['subject']['construct']
+            artifact = store.get(witness['source_ref'])['text_ref']
+            commit['source_subjects'] = [{'alias': 'studied_construct251', 'reference_type': 'assay',
+                'source_ref': witness['source_ref'], 'label': witness['quote'], 'anchor': {
+                    'source_ref': witness['source_ref'], 'artifact_ref': artifact,
+                    'start': witness['start'], 'end': witness['end'], 'quote': witness['quote']}}]
+            return response({'selection': {'kind': 'reason', 'commit': commit},
+                'report_update': {'limit': 'systematics_unknown'} if nested and len(captured) == 1 else {}})
+        outer = plain(ctx.assignment)
+        if nested: outer[REQUESTED] = SELECTED[:1]
+        script = [commission('literature', outer)]
+        if nested: script.append(commission('literature_strategy', {'version': 'strategy_assignment_v1', 'question_context_refs': [], 'prior_search_refs': sources, REQUESTED: SELECTED}))
+        script += [work, integrate, *([integrate] if nested else [])]
+        class ControlledPresented(PresentedProvider):
+            async def complete(self, episode_id, *a):
+                self.active_episode = episode_id
+                return await super().complete(episode_id, *a)
+        provider = ControlledPresented(script) if profile else ScriptedProvider(script)
+        progress = ScientificFindingProgress(FindingProgressPolicy(1))
+        try:
+&gt;           asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path/'run',
+                controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 or nested and len(path) == 2 else 1),
+                project_credit=progress, binding_definitions={'credit': progress.as_record()}, initial_known_record_refs=sources,
+                episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True, reference_parent_sources=sources, contract_information_profile=profile),),
+                **({'decision_protocol': 'decision_exchange_v1'} if profile else {})))
+
+tests/test_literature_kinetic_summary_precision_binding_251.py:442: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4341: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4663: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:637: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:502: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1496: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1055: in call
+    return await self.exchange_decision(context, schema, index, saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1287: in exchange_decision
+    output_schema = _action_generation_schema(contract_record['exchange_schema']
+gene_annotation_episode/runtime.py:281: in _action_generation_schema
+    return translate(schema)
+           ^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:254: in translate
+    result[keyword] = {name: translate(item) for name, item in result[keyword].items()}
+                             ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:257: in translate
+    result[keyword] = [translate(item) for item in result[keyword]]
+                       ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:254: in translate
+    result[keyword] = {name: translate(item) for name, item in result[keyword].items()}
+                             ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:257: in translate
+    result[keyword] = [translate(item) for item in result[keyword]]
+                       ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:234: in translate
+    if _json_tool_arguments(value):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+schema = {'additionalProperties': False, 'properties': {'arguments': {'anyOf': [{'additionalProperties': False, 'properties': {...': 'literature.kinetic.populate', 'type': 'string'}}, 'required': ['kind', 'tool', 'arguments'], 'type': 'object', ...}
+
+    def _json_tool_arguments(schema):
+        """Composed inputs retain their own JSON reference/presence semantics."""
+        properties = schema.get('properties', {})
+        kind = properties.get('kind')
+        if not isinstance(kind, dict) or kind.get('const') != 'tool' or 'arguments' not in properties:
+            return False
+        if 'x-argument-transport' in schema:
+            if (schema['x-argument-transport'] != CONTRACT_ARGUMENT_TRANSPORT
+                    or not isinstance(properties['arguments'], dict)
+                    or properties['arguments'].get('type') != 'object'):
+&gt;               raise ValueError('unsupported_tool_argument_transport')
+E               ValueError: unsupported_tool_argument_transport
+
+gene_annotation_episode/runtime.py:303: ValueError</failure></testcase></testsuite></testsuites>

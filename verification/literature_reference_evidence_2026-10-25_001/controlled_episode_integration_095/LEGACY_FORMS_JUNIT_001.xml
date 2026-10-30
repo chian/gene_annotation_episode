@@ -1,0 +1,1335 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="47" skipped="0" tests="152" time="20.963" timestamp="2026-10-26T22:58:55.431054-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_rna_comparison_report_boundary" name="test_selected_recorded_numbers_and_two_structures_cross_typed_form" time="0.721"><failure message="gene_annotation_episode.communication.ReportBoundaryError: report.requested: RNA fact schema must match its registered source">schema = {'type': 'object', 'properties': {'requested': {'type': 'array', 'items': {'oneOf': [{'type': 'object', 'properties': ...-source': 'execution_rna_structure_comparison_projections'}}, 'required': ['requested'], 'additionalProperties': False}
+
+    def validate_closed_schema(schema):
+        """Compile a parent-chosen form and return its current detached tree."""
+        schema = plain(schema)
+        try:
+            content = (json.dumps(schema, separators=(",", ":"), allow_nan=False).encode("utf-8")
+                       if _schema_cacheable(schema) else None)
+        except (ValueError, TypeError, OverflowError, RecursionError):
+            content = None
+        if content is None:
+            return _compile_closed_schema(schema)
+        try:
+&gt;           _compiled_schema_content(content)
+
+../coherent_code_001/gene_annotation_episode/communication.py:110: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../coherent_code_001/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+../coherent_code_001/gene_annotation_episode/communication.py:226: in _compile_closed_schema
+    check(schema, "report")
+../coherent_code_001/gene_annotation_episode/communication.py:201: in check
+    check(child, path + "." + name, depth + 1)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'array', 'items': {'oneOf': [{'type': 'object', 'properties': {'schema': {'const': 'rna_comparison_projection...ulation_id', ...], 'additionalProperties': False}, ...]}, 'x-source': 'execution_rna_structure_comparison_projections'}
+path = 'report.requested', depth = 1
+
+    def check(node, path, depth=0):
+        nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources
+        source = node.get("x-source") if isinstance(node, dict) else None
+        if source == "literature_controlled_response_component_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_controlled_response_storage import controlled_response_cells_schema
+            expected = controlled_response_cells_schema()
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: controlled response fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_rna_structure_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if rna_structure_sources is None:
+                from .rna_structure_result_views import rna_structure_fact_sources
+                rna_structure_sources = rna_structure_fact_sources()
+            expected = rna_structure_sources.get(source, {}).get("report_schema")
+            # Recorded RNA fields have exact units, nullable associations and
+            # native labels. They do not grant a free-form model schema.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+&gt;               raise ReportBoundaryError(f"{path}: RNA fact schema must match its registered source", code="invalid_schema")
+E               gene_annotation_episode.communication.ReportBoundaryError: report.requested: RNA fact schema must match its registered source
+
+../coherent_code_001/gene_annotation_episode/communication.py:154: ReportBoundaryError
+
+During handling of the above exception, another exception occurred:
+
+projected_pair = [{'schema': 'rna_comparison_projection_v1', 'projection_id': 'difference', 'family': 'energy_comparison', 'result_rece... 'result_receipt_key': 'rna_comparison_receipt:1111111111111111111111111111111111111111111111111111111111111111', ...}]
+
+    def test_selected_recorded_numbers_and_two_structures_cross_typed_form(projected_pair):
+        declaration = schema()
+        original = deepcopy(declaration)
+&gt;       contract = TypedReportContract("Compare the selected RNA variants", declaration, resolve)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_rna_comparison_report_boundary.py:63: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../coherent_code_001/gene_annotation_episode/runtime.py:166: in __init__
+    admitted = validate_closed_schema(schema)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../coherent_code_001/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../coherent_code_001/gene_annotation_episode/communication.py:226: in _compile_closed_schema
+    check(schema, "report")
+../coherent_code_001/gene_annotation_episode/communication.py:201: in check
+    check(child, path + "." + name, depth + 1)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'array', 'items': {'oneOf': [{'type': 'object', 'properties': {'schema': {'const': 'rna_comparison_projection...ulation_id', ...], 'additionalProperties': False}, ...]}, 'x-source': 'execution_rna_structure_comparison_projections'}
+path = 'report.requested', depth = 1
+
+    def check(node, path, depth=0):
+        nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources
+        source = node.get("x-source") if isinstance(node, dict) else None
+        if source == "literature_controlled_response_component_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_controlled_response_storage import controlled_response_cells_schema
+            expected = controlled_response_cells_schema()
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: controlled response fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_rna_structure_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if rna_structure_sources is None:
+                from .rna_structure_result_views import rna_structure_fact_sources
+                rna_structure_sources = rna_structure_fact_sources()
+            expected = rna_structure_sources.get(source, {}).get("report_schema")
+            # Recorded RNA fields have exact units, nullable associations and
+            # native labels. They do not grant a free-form model schema.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+&gt;               raise ReportBoundaryError(f"{path}: RNA fact schema must match its registered source", code="invalid_schema")
+E               gene_annotation_episode.communication.ReportBoundaryError: report.requested: RNA fact schema must match its registered source
+
+../coherent_code_001/gene_annotation_episode/communication.py:154: ReportBoundaryError</failure></testcase><testcase classname="tests.test_rna_comparison_report_boundary" name="test_new_and_original_rna_schemas_coexist_without_changing_either[execution_rna_structure_summary_rows]" time="0.690"><failure message="gene_annotation_episode.communication.ReportBoundaryError: report.new: RNA fact schema must match its registered source">schema = {'type': 'object', 'properties': {'old': {'type': 'array', 'items': {'type': 'object', 'properties': {'family': {'cons...source': 'execution_rna_structure_comparison_projections'}}, 'required': ['old', 'new'], 'additionalProperties': False}
+
+    def validate_closed_schema(schema):
+        """Compile a parent-chosen form and return its current detached tree."""
+        schema = plain(schema)
+        try:
+            content = (json.dumps(schema, separators=(",", ":"), allow_nan=False).encode("utf-8")
+                       if _schema_cacheable(schema) else None)
+        except (ValueError, TypeError, OverflowError, RecursionError):
+            content = None
+        if content is None:
+            return _compile_closed_schema(schema)
+        try:
+&gt;           _compiled_schema_content(content)
+
+../coherent_code_001/gene_annotation_episode/communication.py:110: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../coherent_code_001/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+../coherent_code_001/gene_annotation_episode/communication.py:226: in _compile_closed_schema
+    check(schema, "report")
+../coherent_code_001/gene_annotation_episode/communication.py:201: in check
+    check(child, path + "." + name, depth + 1)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'array', 'items': {'oneOf': [{'type': 'object', 'properties': {'schema': {'const': 'rna_comparison_projection...ulation_id', ...], 'additionalProperties': False}, ...]}, 'x-source': 'execution_rna_structure_comparison_projections'}
+path = 'report.new', depth = 1
+
+    def check(node, path, depth=0):
+        nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources
+        source = node.get("x-source") if isinstance(node, dict) else None
+        if source == "literature_controlled_response_component_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_controlled_response_storage import controlled_response_cells_schema
+            expected = controlled_response_cells_schema()
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: controlled response fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_rna_structure_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if rna_structure_sources is None:
+                from .rna_structure_result_views import rna_structure_fact_sources
+                rna_structure_sources = rna_structure_fact_sources()
+            expected = rna_structure_sources.get(source, {}).get("report_schema")
+            # Recorded RNA fields have exact units, nullable associations and
+            # native labels. They do not grant a free-form model schema.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+&gt;               raise ReportBoundaryError(f"{path}: RNA fact schema must match its registered source", code="invalid_schema")
+E               gene_annotation_episode.communication.ReportBoundaryError: report.new: RNA fact schema must match its registered source
+
+../coherent_code_001/gene_annotation_episode/communication.py:154: ReportBoundaryError
+
+During handling of the above exception, another exception occurred:
+
+source = 'execution_rna_structure_summary_rows'
+
+    @pytest.mark.parametrize("source", list(rna_structure_fact_sources()))
+    def test_new_and_original_rna_schemas_coexist_without_changing_either(source):
+        old = rna_structure_fact_sources()[source]["report_schema"]
+        declaration = form({"old": old, "new": schema()["properties"]["requested"]})
+        original = deepcopy(declaration)
+&gt;       assert validate_closed_schema(declaration) == original
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_rna_comparison_report_boundary.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../coherent_code_001/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../coherent_code_001/gene_annotation_episode/communication.py:226: in _compile_closed_schema
+    check(schema, "report")
+../coherent_code_001/gene_annotation_episode/communication.py:201: in check
+    check(child, path + "." + name, depth + 1)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'array', 'items': {'oneOf': [{'type': 'object', 'properties': {'schema': {'const': 'rna_comparison_projection...ulation_id', ...], 'additionalProperties': False}, ...]}, 'x-source': 'execution_rna_structure_comparison_projections'}
+path = 'report.new', depth = 1
+
+    def check(node, path, depth=0):
+        nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources
+        source = node.get("x-source") if isinstance(node, dict) else None
+        if source == "literature_controlled_response_component_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_controlled_response_storage import controlled_response_cells_schema
+            expected = controlled_response_cells_schema()
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: controlled response fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_rna_structure_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if rna_structure_sources is None:
+                from .rna_structure_result_views import rna_structure_fact_sources
+                rna_structure_sources = rna_structure_fact_sources()
+            expected = rna_structure_sources.get(source, {}).get("report_schema")
+            # Recorded RNA fields have exact units, nullable associations and
+            # native labels. They do not grant a free-form model schema.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+&gt;               raise ReportBoundaryError(f"{path}: RNA fact schema must match its registered source", code="invalid_schema")
+E               gene_annotation_episode.communication.ReportBoundaryError: report.new: RNA fact schema must match its registered source
+
+../coherent_code_001/gene_annotation_episode/communication.py:154: ReportBoundaryError</failure></testcase><testcase classname="tests.test_rna_comparison_report_boundary" name="test_new_and_original_rna_schemas_coexist_without_changing_either[execution_rna_structure_pair_rows]" time="0.632"><failure message="gene_annotation_episode.communication.ReportBoundaryError: report.new: RNA fact schema must match its registered source">schema = {'type': 'object', 'properties': {'old': {'type': 'array', 'items': {'type': 'object', 'properties': {'family': {'cons...source': 'execution_rna_structure_comparison_projections'}}, 'required': ['old', 'new'], 'additionalProperties': False}
+
+    def validate_closed_schema(schema):
+        """Compile a parent-chosen form and return its current detached tree."""
+        schema = plain(schema)
+        try:
+            content = (json.dumps(schema, separators=(",", ":"), allow_nan=False).encode("utf-8")
+                       if _schema_cacheable(schema) else None)
+        except (ValueError, TypeError, OverflowError, RecursionError):
+            content = None
+        if content is None:
+            return _compile_closed_schema(schema)
+        try:
+&gt;           _compiled_schema_content(content)
+
+../coherent_code_001/gene_annotation_episode/communication.py:110: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../coherent_code_001/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+../coherent_code_001/gene_annotation_episode/communication.py:226: in _compile_closed_schema
+    check(schema, "report")
+../coherent_code_001/gene_annotation_episode/communication.py:201: in check
+    check(child, path + "." + name, depth + 1)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'array', 'items': {'oneOf': [{'type': 'object', 'properties': {'schema': {'const': 'rna_comparison_projection...ulation_id', ...], 'additionalProperties': False}, ...]}, 'x-source': 'execution_rna_structure_comparison_projections'}
+path = 'report.new', depth = 1
+
+    def check(node, path, depth=0):
+        nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources
+        source = node.get("x-source") if isinstance(node, dict) else None
+        if source == "literature_controlled_response_component_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_controlled_response_storage import controlled_response_cells_schema
+            expected = controlled_response_cells_schema()
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: controlled response fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_rna_structure_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if rna_structure_sources is None:
+                from .rna_structure_result_views import rna_structure_fact_sources
+                rna_structure_sources = rna_structure_fact_sources()
+            expected = rna_structure_sources.get(source, {}).get("report_schema")
+            # Recorded RNA fields have exact units, nullable associations and
+            # native labels. They do not grant a free-form model schema.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+&gt;               raise ReportBoundaryError(f"{path}: RNA fact schema must match its registered source", code="invalid_schema")
+E               gene_annotation_episode.communication.ReportBoundaryError: report.new: RNA fact schema must match its registered source
+
+../coherent_code_001/gene_annotation_episode/communication.py:154: ReportBoundaryError
+
+During handling of the above exception, another exception occurred:
+
+source = 'execution_rna_structure_pair_rows'
+
+    @pytest.mark.parametrize("source", list(rna_structure_fact_sources()))
+    def test_new_and_original_rna_schemas_coexist_without_changing_either(source):
+        old = rna_structure_fact_sources()[source]["report_schema"]
+        declaration = form({"old": old, "new": schema()["properties"]["requested"]})
+        original = deepcopy(declaration)
+&gt;       assert validate_closed_schema(declaration) == original
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_rna_comparison_report_boundary.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../coherent_code_001/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../coherent_code_001/gene_annotation_episode/communication.py:226: in _compile_closed_schema
+    check(schema, "report")
+../coherent_code_001/gene_annotation_episode/communication.py:201: in check
+    check(child, path + "." + name, depth + 1)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'array', 'items': {'oneOf': [{'type': 'object', 'properties': {'schema': {'const': 'rna_comparison_projection...ulation_id', ...], 'additionalProperties': False}, ...]}, 'x-source': 'execution_rna_structure_comparison_projections'}
+path = 'report.new', depth = 1
+
+    def check(node, path, depth=0):
+        nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources
+        source = node.get("x-source") if isinstance(node, dict) else None
+        if source == "literature_controlled_response_component_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_controlled_response_storage import controlled_response_cells_schema
+            expected = controlled_response_cells_schema()
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: controlled response fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_rna_structure_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if rna_structure_sources is None:
+                from .rna_structure_result_views import rna_structure_fact_sources
+                rna_structure_sources = rna_structure_fact_sources()
+            expected = rna_structure_sources.get(source, {}).get("report_schema")
+            # Recorded RNA fields have exact units, nullable associations and
+            # native labels. They do not grant a free-form model schema.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+&gt;               raise ReportBoundaryError(f"{path}: RNA fact schema must match its registered source", code="invalid_schema")
+E               gene_annotation_episode.communication.ReportBoundaryError: report.new: RNA fact schema must match its registered source
+
+../coherent_code_001/gene_annotation_episode/communication.py:154: ReportBoundaryError</failure></testcase><testcase classname="tests.test_rna_comparison_report_boundary" name="test_new_and_original_rna_schemas_coexist_without_changing_either[execution_rna_structure_stem_rows]" time="0.629"><failure message="gene_annotation_episode.communication.ReportBoundaryError: report.new: RNA fact schema must match its registered source">schema = {'type': 'object', 'properties': {'old': {'type': 'array', 'items': {'type': 'object', 'properties': {'family': {'cons...source': 'execution_rna_structure_comparison_projections'}}, 'required': ['old', 'new'], 'additionalProperties': False}
+
+    def validate_closed_schema(schema):
+        """Compile a parent-chosen form and return its current detached tree."""
+        schema = plain(schema)
+        try:
+            content = (json.dumps(schema, separators=(",", ":"), allow_nan=False).encode("utf-8")
+                       if _schema_cacheable(schema) else None)
+        except (ValueError, TypeError, OverflowError, RecursionError):
+            content = None
+        if content is None:
+            return _compile_closed_schema(schema)
+        try:
+&gt;           _compiled_schema_content(content)
+
+../coherent_code_001/gene_annotation_episode/communication.py:110: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../coherent_code_001/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+../coherent_code_001/gene_annotation_episode/communication.py:226: in _compile_closed_schema
+    check(schema, "report")
+../coherent_code_001/gene_annotation_episode/communication.py:201: in check
+    check(child, path + "." + name, depth + 1)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'array', 'items': {'oneOf': [{'type': 'object', 'properties': {'schema': {'const': 'rna_comparison_projection...ulation_id', ...], 'additionalProperties': False}, ...]}, 'x-source': 'execution_rna_structure_comparison_projections'}
+path = 'report.new', depth = 1
+
+    def check(node, path, depth=0):
+        nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources
+        source = node.get("x-source") if isinstance(node, dict) else None
+        if source == "literature_controlled_response_component_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_controlled_response_storage import controlled_response_cells_schema
+            expected = controlled_response_cells_schema()
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: controlled response fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_rna_structure_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if rna_structure_sources is None:
+                from .rna_structure_result_views import rna_structure_fact_sources
+                rna_structure_sources = rna_structure_fact_sources()
+            expected = rna_structure_sources.get(source, {}).get("report_schema")
+            # Recorded RNA fields have exact units, nullable associations and
+            # native labels. They do not grant a free-form model schema.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+&gt;               raise ReportBoundaryError(f"{path}: RNA fact schema must match its registered source", code="invalid_schema")
+E               gene_annotation_episode.communication.ReportBoundaryError: report.new: RNA fact schema must match its registered source
+
+../coherent_code_001/gene_annotation_episode/communication.py:154: ReportBoundaryError
+
+During handling of the above exception, another exception occurred:
+
+source = 'execution_rna_structure_stem_rows'
+
+    @pytest.mark.parametrize("source", list(rna_structure_fact_sources()))
+    def test_new_and_original_rna_schemas_coexist_without_changing_either(source):
+        old = rna_structure_fact_sources()[source]["report_schema"]
+        declaration = form({"old": old, "new": schema()["properties"]["requested"]})
+        original = deepcopy(declaration)
+&gt;       assert validate_closed_schema(declaration) == original
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_rna_comparison_report_boundary.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../coherent_code_001/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../coherent_code_001/gene_annotation_episode/communication.py:226: in _compile_closed_schema
+    check(schema, "report")
+../coherent_code_001/gene_annotation_episode/communication.py:201: in check
+    check(child, path + "." + name, depth + 1)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'array', 'items': {'oneOf': [{'type': 'object', 'properties': {'schema': {'const': 'rna_comparison_projection...ulation_id', ...], 'additionalProperties': False}, ...]}, 'x-source': 'execution_rna_structure_comparison_projections'}
+path = 'report.new', depth = 1
+
+    def check(node, path, depth=0):
+        nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources
+        source = node.get("x-source") if isinstance(node, dict) else None
+        if source == "literature_controlled_response_component_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_controlled_response_storage import controlled_response_cells_schema
+            expected = controlled_response_cells_schema()
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: controlled response fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_rna_structure_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if rna_structure_sources is None:
+                from .rna_structure_result_views import rna_structure_fact_sources
+                rna_structure_sources = rna_structure_fact_sources()
+            expected = rna_structure_sources.get(source, {}).get("report_schema")
+            # Recorded RNA fields have exact units, nullable associations and
+            # native labels. They do not grant a free-form model schema.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+&gt;               raise ReportBoundaryError(f"{path}: RNA fact schema must match its registered source", code="invalid_schema")
+E               gene_annotation_episode.communication.ReportBoundaryError: report.new: RNA fact schema must match its registered source
+
+../coherent_code_001/gene_annotation_episode/communication.py:154: ReportBoundaryError</failure></testcase><testcase classname="tests.test_rna_comparison_report_boundary" name="test_new_and_original_rna_schemas_coexist_without_changing_either[execution_rna_structure_region_rows]" time="0.683"><failure message="gene_annotation_episode.communication.ReportBoundaryError: report.new: RNA fact schema must match its registered source">schema = {'type': 'object', 'properties': {'old': {'type': 'array', 'items': {'type': 'object', 'properties': {'family': {'cons...source': 'execution_rna_structure_comparison_projections'}}, 'required': ['old', 'new'], 'additionalProperties': False}
+
+    def validate_closed_schema(schema):
+        """Compile a parent-chosen form and return its current detached tree."""
+        schema = plain(schema)
+        try:
+            content = (json.dumps(schema, separators=(",", ":"), allow_nan=False).encode("utf-8")
+                       if _schema_cacheable(schema) else None)
+        except (ValueError, TypeError, OverflowError, RecursionError):
+            content = None
+        if content is None:
+            return _compile_closed_schema(schema)
+        try:
+&gt;           _compiled_schema_content(content)
+
+../coherent_code_001/gene_annotation_episode/communication.py:110: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../coherent_code_001/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+../coherent_code_001/gene_annotation_episode/communication.py:226: in _compile_closed_schema
+    check(schema, "report")
+../coherent_code_001/gene_annotation_episode/communication.py:201: in check
+    check(child, path + "." + name, depth + 1)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'array', 'items': {'oneOf': [{'type': 'object', 'properties': {'schema': {'const': 'rna_comparison_projection...ulation_id', ...], 'additionalProperties': False}, ...]}, 'x-source': 'execution_rna_structure_comparison_projections'}
+path = 'report.new', depth = 1
+
+    def check(node, path, depth=0):
+        nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources
+        source = node.get("x-source") if isinstance(node, dict) else None
+        if source == "literature_controlled_response_component_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_controlled_response_storage import controlled_response_cells_schema
+            expected = controlled_response_cells_schema()
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: controlled response fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_rna_structure_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if rna_structure_sources is None:
+                from .rna_structure_result_views import rna_structure_fact_sources
+                rna_structure_sources = rna_structure_fact_sources()
+            expected = rna_structure_sources.get(source, {}).get("report_schema")
+            # Recorded RNA fields have exact units, nullable associations and
+            # native labels. They do not grant a free-form model schema.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+&gt;               raise ReportBoundaryError(f"{path}: RNA fact schema must match its registered source", code="invalid_schema")
+E               gene_annotation_episode.communication.ReportBoundaryError: report.new: RNA fact schema must match its registered source
+
+../coherent_code_001/gene_annotation_episode/communication.py:154: ReportBoundaryError
+
+During handling of the above exception, another exception occurred:
+
+source = 'execution_rna_structure_region_rows'
+
+    @pytest.mark.parametrize("source", list(rna_structure_fact_sources()))
+    def test_new_and_original_rna_schemas_coexist_without_changing_either(source):
+        old = rna_structure_fact_sources()[source]["report_schema"]
+        declaration = form({"old": old, "new": schema()["properties"]["requested"]})
+        original = deepcopy(declaration)
+&gt;       assert validate_closed_schema(declaration) == original
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_rna_comparison_report_boundary.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../coherent_code_001/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../coherent_code_001/gene_annotation_episode/communication.py:226: in _compile_closed_schema
+    check(schema, "report")
+../coherent_code_001/gene_annotation_episode/communication.py:201: in check
+    check(child, path + "." + name, depth + 1)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'array', 'items': {'oneOf': [{'type': 'object', 'properties': {'schema': {'const': 'rna_comparison_projection...ulation_id', ...], 'additionalProperties': False}, ...]}, 'x-source': 'execution_rna_structure_comparison_projections'}
+path = 'report.new', depth = 1
+
+    def check(node, path, depth=0):
+        nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources
+        source = node.get("x-source") if isinstance(node, dict) else None
+        if source == "literature_controlled_response_component_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_controlled_response_storage import controlled_response_cells_schema
+            expected = controlled_response_cells_schema()
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: controlled response fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_rna_structure_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if rna_structure_sources is None:
+                from .rna_structure_result_views import rna_structure_fact_sources
+                rna_structure_sources = rna_structure_fact_sources()
+            expected = rna_structure_sources.get(source, {}).get("report_schema")
+            # Recorded RNA fields have exact units, nullable associations and
+            # native labels. They do not grant a free-form model schema.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+&gt;               raise ReportBoundaryError(f"{path}: RNA fact schema must match its registered source", code="invalid_schema")
+E               gene_annotation_episode.communication.ReportBoundaryError: report.new: RNA fact schema must match its registered source
+
+../coherent_code_001/gene_annotation_episode/communication.py:154: ReportBoundaryError</failure></testcase><testcase classname="tests.test_rna_comparison_report_boundary" name="test_new_and_original_rna_schemas_coexist_without_changing_either[execution_rna_structure_failure_rows]" time="0.629"><failure message="gene_annotation_episode.communication.ReportBoundaryError: report.new: RNA fact schema must match its registered source">schema = {'type': 'object', 'properties': {'old': {'type': 'array', 'items': {'type': 'object', 'properties': {'family': {'cons...source': 'execution_rna_structure_comparison_projections'}}, 'required': ['old', 'new'], 'additionalProperties': False}
+
+    def validate_closed_schema(schema):
+        """Compile a parent-chosen form and return its current detached tree."""
+        schema = plain(schema)
+        try:
+            content = (json.dumps(schema, separators=(",", ":"), allow_nan=False).encode("utf-8")
+                       if _schema_cacheable(schema) else None)
+        except (ValueError, TypeError, OverflowError, RecursionError):
+            content = None
+        if content is None:
+            return _compile_closed_schema(schema)
+        try:
+&gt;           _compiled_schema_content(content)
+
+../coherent_code_001/gene_annotation_episode/communication.py:110: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../coherent_code_001/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+../coherent_code_001/gene_annotation_episode/communication.py:226: in _compile_closed_schema
+    check(schema, "report")
+../coherent_code_001/gene_annotation_episode/communication.py:201: in check
+    check(child, path + "." + name, depth + 1)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'array', 'items': {'oneOf': [{'type': 'object', 'properties': {'schema': {'const': 'rna_comparison_projection...ulation_id', ...], 'additionalProperties': False}, ...]}, 'x-source': 'execution_rna_structure_comparison_projections'}
+path = 'report.new', depth = 1
+
+    def check(node, path, depth=0):
+        nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources
+        source = node.get("x-source") if isinstance(node, dict) else None
+        if source == "literature_controlled_response_component_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_controlled_response_storage import controlled_response_cells_schema
+            expected = controlled_response_cells_schema()
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: controlled response fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_rna_structure_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if rna_structure_sources is None:
+                from .rna_structure_result_views import rna_structure_fact_sources
+                rna_structure_sources = rna_structure_fact_sources()
+            expected = rna_structure_sources.get(source, {}).get("report_schema")
+            # Recorded RNA fields have exact units, nullable associations and
+            # native labels. They do not grant a free-form model schema.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+&gt;               raise ReportBoundaryError(f"{path}: RNA fact schema must match its registered source", code="invalid_schema")
+E               gene_annotation_episode.communication.ReportBoundaryError: report.new: RNA fact schema must match its registered source
+
+../coherent_code_001/gene_annotation_episode/communication.py:154: ReportBoundaryError
+
+During handling of the above exception, another exception occurred:
+
+source = 'execution_rna_structure_failure_rows'
+
+    @pytest.mark.parametrize("source", list(rna_structure_fact_sources()))
+    def test_new_and_original_rna_schemas_coexist_without_changing_either(source):
+        old = rna_structure_fact_sources()[source]["report_schema"]
+        declaration = form({"old": old, "new": schema()["properties"]["requested"]})
+        original = deepcopy(declaration)
+&gt;       assert validate_closed_schema(declaration) == original
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_rna_comparison_report_boundary.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../coherent_code_001/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../coherent_code_001/gene_annotation_episode/communication.py:226: in _compile_closed_schema
+    check(schema, "report")
+../coherent_code_001/gene_annotation_episode/communication.py:201: in check
+    check(child, path + "." + name, depth + 1)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'array', 'items': {'oneOf': [{'type': 'object', 'properties': {'schema': {'const': 'rna_comparison_projection...ulation_id', ...], 'additionalProperties': False}, ...]}, 'x-source': 'execution_rna_structure_comparison_projections'}
+path = 'report.new', depth = 1
+
+    def check(node, path, depth=0):
+        nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources
+        source = node.get("x-source") if isinstance(node, dict) else None
+        if source == "literature_controlled_response_component_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_controlled_response_storage import controlled_response_cells_schema
+            expected = controlled_response_cells_schema()
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: controlled response fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_rna_structure_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if rna_structure_sources is None:
+                from .rna_structure_result_views import rna_structure_fact_sources
+                rna_structure_sources = rna_structure_fact_sources()
+            expected = rna_structure_sources.get(source, {}).get("report_schema")
+            # Recorded RNA fields have exact units, nullable associations and
+            # native labels. They do not grant a free-form model schema.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+&gt;               raise ReportBoundaryError(f"{path}: RNA fact schema must match its registered source", code="invalid_schema")
+E               gene_annotation_episode.communication.ReportBoundaryError: report.new: RNA fact schema must match its registered source
+
+../coherent_code_001/gene_annotation_episode/communication.py:154: ReportBoundaryError</failure></testcase><testcase classname="tests.test_rna_comparison_report_boundary" name="test_new_and_original_rna_schemas_coexist_without_changing_either[execution_rna_structure_result_refs]" time="0.743"><failure message="gene_annotation_episode.communication.ReportBoundaryError: report.new: RNA fact schema must match its registered source">schema = {'type': 'object', 'properties': {'old': {'type': 'array', 'uniqueItems': True, 'items': {'type': 'string', 'minLength...source': 'execution_rna_structure_comparison_projections'}}, 'required': ['old', 'new'], 'additionalProperties': False}
+
+    def validate_closed_schema(schema):
+        """Compile a parent-chosen form and return its current detached tree."""
+        schema = plain(schema)
+        try:
+            content = (json.dumps(schema, separators=(",", ":"), allow_nan=False).encode("utf-8")
+                       if _schema_cacheable(schema) else None)
+        except (ValueError, TypeError, OverflowError, RecursionError):
+            content = None
+        if content is None:
+            return _compile_closed_schema(schema)
+        try:
+&gt;           _compiled_schema_content(content)
+
+../coherent_code_001/gene_annotation_episode/communication.py:110: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../coherent_code_001/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+../coherent_code_001/gene_annotation_episode/communication.py:226: in _compile_closed_schema
+    check(schema, "report")
+../coherent_code_001/gene_annotation_episode/communication.py:201: in check
+    check(child, path + "." + name, depth + 1)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'array', 'items': {'oneOf': [{'type': 'object', 'properties': {'schema': {'const': 'rna_comparison_projection...ulation_id', ...], 'additionalProperties': False}, ...]}, 'x-source': 'execution_rna_structure_comparison_projections'}
+path = 'report.new', depth = 1
+
+    def check(node, path, depth=0):
+        nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources
+        source = node.get("x-source") if isinstance(node, dict) else None
+        if source == "literature_controlled_response_component_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_controlled_response_storage import controlled_response_cells_schema
+            expected = controlled_response_cells_schema()
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: controlled response fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_rna_structure_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if rna_structure_sources is None:
+                from .rna_structure_result_views import rna_structure_fact_sources
+                rna_structure_sources = rna_structure_fact_sources()
+            expected = rna_structure_sources.get(source, {}).get("report_schema")
+            # Recorded RNA fields have exact units, nullable associations and
+            # native labels. They do not grant a free-form model schema.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+&gt;               raise ReportBoundaryError(f"{path}: RNA fact schema must match its registered source", code="invalid_schema")
+E               gene_annotation_episode.communication.ReportBoundaryError: report.new: RNA fact schema must match its registered source
+
+../coherent_code_001/gene_annotation_episode/communication.py:154: ReportBoundaryError
+
+During handling of the above exception, another exception occurred:
+
+source = 'execution_rna_structure_result_refs'
+
+    @pytest.mark.parametrize("source", list(rna_structure_fact_sources()))
+    def test_new_and_original_rna_schemas_coexist_without_changing_either(source):
+        old = rna_structure_fact_sources()[source]["report_schema"]
+        declaration = form({"old": old, "new": schema()["properties"]["requested"]})
+        original = deepcopy(declaration)
+&gt;       assert validate_closed_schema(declaration) == original
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_rna_comparison_report_boundary.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../coherent_code_001/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../coherent_code_001/gene_annotation_episode/communication.py:226: in _compile_closed_schema
+    check(schema, "report")
+../coherent_code_001/gene_annotation_episode/communication.py:201: in check
+    check(child, path + "." + name, depth + 1)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'array', 'items': {'oneOf': [{'type': 'object', 'properties': {'schema': {'const': 'rna_comparison_projection...ulation_id', ...], 'additionalProperties': False}, ...]}, 'x-source': 'execution_rna_structure_comparison_projections'}
+path = 'report.new', depth = 1
+
+    def check(node, path, depth=0):
+        nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources
+        source = node.get("x-source") if isinstance(node, dict) else None
+        if source == "literature_controlled_response_component_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_controlled_response_storage import controlled_response_cells_schema
+            expected = controlled_response_cells_schema()
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: controlled response fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_rna_structure_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if rna_structure_sources is None:
+                from .rna_structure_result_views import rna_structure_fact_sources
+                rna_structure_sources = rna_structure_fact_sources()
+            expected = rna_structure_sources.get(source, {}).get("report_schema")
+            # Recorded RNA fields have exact units, nullable associations and
+            # native labels. They do not grant a free-form model schema.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+&gt;               raise ReportBoundaryError(f"{path}: RNA fact schema must match its registered source", code="invalid_schema")
+E               gene_annotation_episode.communication.ReportBoundaryError: report.new: RNA fact schema must match its registered source
+
+../coherent_code_001/gene_annotation_episode/communication.py:154: ReportBoundaryError</failure></testcase><testcase classname="tests.test_rna_comparison_report_boundary" name="test_new_and_original_rna_schemas_coexist_without_changing_either[execution_rna_structure_saved_sheet_inputs]" time="0.623"><failure message="gene_annotation_episode.communication.ReportBoundaryError: report.new: RNA fact schema must match its registered source">schema = {'type': 'object', 'properties': {'old': {'type': 'array', 'uniqueItems': True, 'items': {'type': 'object', 'propertie...source': 'execution_rna_structure_comparison_projections'}}, 'required': ['old', 'new'], 'additionalProperties': False}
+
+    def validate_closed_schema(schema):
+        """Compile a parent-chosen form and return its current detached tree."""
+        schema = plain(schema)
+        try:
+            content = (json.dumps(schema, separators=(",", ":"), allow_nan=False).encode("utf-8")
+                       if _schema_cacheable(schema) else None)
+        except (ValueError, TypeError, OverflowError, RecursionError):
+            content = None
+        if content is None:
+            return _compile_closed_schema(schema)
+        try:
+&gt;           _compiled_schema_content(content)
+
+../coherent_code_001/gene_annotation_episode/communication.py:110: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../coherent_code_001/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+../coherent_code_001/gene_annotation_episode/communication.py:226: in _compile_closed_schema
+    check(schema, "report")
+../coherent_code_001/gene_annotation_episode/communication.py:201: in check
+    check(child, path + "." + name, depth + 1)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'array', 'items': {'oneOf': [{'type': 'object', 'properties': {'schema': {'const': 'rna_comparison_projection...ulation_id', ...], 'additionalProperties': False}, ...]}, 'x-source': 'execution_rna_structure_comparison_projections'}
+path = 'report.new', depth = 1
+
+    def check(node, path, depth=0):
+        nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources
+        source = node.get("x-source") if isinstance(node, dict) else None
+        if source == "literature_controlled_response_component_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_controlled_response_storage import controlled_response_cells_schema
+            expected = controlled_response_cells_schema()
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: controlled response fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_rna_structure_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if rna_structure_sources is None:
+                from .rna_structure_result_views import rna_structure_fact_sources
+                rna_structure_sources = rna_structure_fact_sources()
+            expected = rna_structure_sources.get(source, {}).get("report_schema")
+            # Recorded RNA fields have exact units, nullable associations and
+            # native labels. They do not grant a free-form model schema.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+&gt;               raise ReportBoundaryError(f"{path}: RNA fact schema must match its registered source", code="invalid_schema")
+E               gene_annotation_episode.communication.ReportBoundaryError: report.new: RNA fact schema must match its registered source
+
+../coherent_code_001/gene_annotation_episode/communication.py:154: ReportBoundaryError
+
+During handling of the above exception, another exception occurred:
+
+source = 'execution_rna_structure_saved_sheet_inputs'
+
+    @pytest.mark.parametrize("source", list(rna_structure_fact_sources()))
+    def test_new_and_original_rna_schemas_coexist_without_changing_either(source):
+        old = rna_structure_fact_sources()[source]["report_schema"]
+        declaration = form({"old": old, "new": schema()["properties"]["requested"]})
+        original = deepcopy(declaration)
+&gt;       assert validate_closed_schema(declaration) == original
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_rna_comparison_report_boundary.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../coherent_code_001/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../coherent_code_001/gene_annotation_episode/communication.py:226: in _compile_closed_schema
+    check(schema, "report")
+../coherent_code_001/gene_annotation_episode/communication.py:201: in check
+    check(child, path + "." + name, depth + 1)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'array', 'items': {'oneOf': [{'type': 'object', 'properties': {'schema': {'const': 'rna_comparison_projection...ulation_id', ...], 'additionalProperties': False}, ...]}, 'x-source': 'execution_rna_structure_comparison_projections'}
+path = 'report.new', depth = 1
+
+    def check(node, path, depth=0):
+        nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources
+        source = node.get("x-source") if isinstance(node, dict) else None
+        if source == "literature_controlled_response_component_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_controlled_response_storage import controlled_response_cells_schema
+            expected = controlled_response_cells_schema()
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: controlled response fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_rna_structure_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if rna_structure_sources is None:
+                from .rna_structure_result_views import rna_structure_fact_sources
+                rna_structure_sources = rna_structure_fact_sources()
+            expected = rna_structure_sources.get(source, {}).get("report_schema")
+            # Recorded RNA fields have exact units, nullable associations and
+            # native labels. They do not grant a free-form model schema.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+&gt;               raise ReportBoundaryError(f"{path}: RNA fact schema must match its registered source", code="invalid_schema")
+E               gene_annotation_episode.communication.ReportBoundaryError: report.new: RNA fact schema must match its registered source
+
+../coherent_code_001/gene_annotation_episode/communication.py:154: ReportBoundaryError</failure></testcase><testcase classname="tests.test_rna_comparison_report_boundary" name="test_changed_registered_shape_cannot_expand_or_change_return[&lt;lambda&gt;0]" time="0.627" /><testcase classname="tests.test_rna_comparison_report_boundary" name="test_changed_registered_shape_cannot_expand_or_change_return[&lt;lambda&gt;1]" time="0.650" /><testcase classname="tests.test_rna_comparison_report_boundary" name="test_changed_registered_shape_cannot_expand_or_change_return[&lt;lambda&gt;2]" time="0.627" /><testcase classname="tests.test_rna_comparison_report_boundary" name="test_changed_registered_shape_cannot_expand_or_change_return[&lt;lambda&gt;3]" time="0.663" /><testcase classname="tests.test_rna_comparison_report_boundary" name="test_changed_registered_shape_cannot_expand_or_change_return[&lt;lambda&gt;4]" time="0.034" /><testcase classname="tests.test_rna_comparison_report_boundary" name="test_changed_registered_shape_cannot_expand_or_change_return[&lt;lambda&gt;5]" time="0.639" /><testcase classname="tests.test_rna_comparison_report_boundary" name="test_registration_does_not_allow_nesting_or_unbound_prose" time="1.249" /><testcase classname="tests.test_rna_comparison_report_boundary" name="test_every_selected_result_identity_needs_current_reference_resolution[rna_comparison_receipt]" time="0.706"><failure message="AssertionError: assert 'invalid_schema' == 'unknown_reference'&#10;  &#10;  - unknown_reference&#10;  + invalid_schema">projected_pair = [{'schema': 'rna_comparison_projection_v1', 'projection_id': 'difference', 'family': 'energy_comparison', 'result_rece... 'result_receipt_key': 'rna_comparison_receipt:1111111111111111111111111111111111111111111111111111111111111111', ...}]
+denied = 'rna_comparison_receipt'
+
+    @pytest.mark.parametrize("denied", ["rna_comparison_receipt", "rna_comparison_calculation"])
+    def test_every_selected_result_identity_needs_current_reference_resolution(projected_pair, denied):
+        visited = []
+        def resolver(value, namespace):
+            visited.append((value, namespace))
+            return namespace != denied and resolve(value, namespace)
+        with pytest.raises(ReportBoundaryError) as error:
+            validate_form({"requested": projected_pair}, schema(), resolver)
+&gt;       assert error.value.diagnostic["code"] == "unknown_reference"
+E       AssertionError: assert 'invalid_schema' == 'unknown_reference'
+E         
+E         - unknown_reference
+E         + invalid_schema
+
+tests/test_rna_comparison_report_boundary.py:120: AssertionError</failure></testcase><testcase classname="tests.test_rna_comparison_report_boundary" name="test_every_selected_result_identity_needs_current_reference_resolution[rna_comparison_calculation]" time="0.596"><failure message="AssertionError: assert 'invalid_schema' == 'unknown_reference'&#10;  &#10;  - unknown_reference&#10;  + invalid_schema">projected_pair = [{'schema': 'rna_comparison_projection_v1', 'projection_id': 'difference', 'family': 'energy_comparison', 'result_rece... 'result_receipt_key': 'rna_comparison_receipt:1111111111111111111111111111111111111111111111111111111111111111', ...}]
+denied = 'rna_comparison_calculation'
+
+    @pytest.mark.parametrize("denied", ["rna_comparison_receipt", "rna_comparison_calculation"])
+    def test_every_selected_result_identity_needs_current_reference_resolution(projected_pair, denied):
+        visited = []
+        def resolver(value, namespace):
+            visited.append((value, namespace))
+            return namespace != denied and resolve(value, namespace)
+        with pytest.raises(ReportBoundaryError) as error:
+            validate_form({"requested": projected_pair}, schema(), resolver)
+&gt;       assert error.value.diagnostic["code"] == "unknown_reference"
+E       AssertionError: assert 'invalid_schema' == 'unknown_reference'
+E         
+E         - unknown_reference
+E         + invalid_schema
+
+tests/test_rna_comparison_report_boundary.py:120: AssertionError</failure></testcase><testcase classname="tests.test_rna_comparison_report_boundary" name="test_semantic_resolution_runs_again_after_schema_cache_hit" time="0.622"><failure message="gene_annotation_episode.communication.ReportBoundaryError: report.requested: RNA fact schema must match its registered source">schema = {'type': 'object', 'properties': {'requested': {'type': 'array', 'items': {'oneOf': [{'type': 'object', 'properties': ...-source': 'execution_rna_structure_comparison_projections'}}, 'required': ['requested'], 'additionalProperties': False}
+
+    def validate_closed_schema(schema):
+        """Compile a parent-chosen form and return its current detached tree."""
+        schema = plain(schema)
+        try:
+            content = (json.dumps(schema, separators=(",", ":"), allow_nan=False).encode("utf-8")
+                       if _schema_cacheable(schema) else None)
+        except (ValueError, TypeError, OverflowError, RecursionError):
+            content = None
+        if content is None:
+            return _compile_closed_schema(schema)
+        try:
+&gt;           _compiled_schema_content(content)
+
+../coherent_code_001/gene_annotation_episode/communication.py:110: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../coherent_code_001/gene_annotation_episode/communication.py:96: in _compiled_schema_content
+    _compile_closed_schema(json.loads(content))
+../coherent_code_001/gene_annotation_episode/communication.py:226: in _compile_closed_schema
+    check(schema, "report")
+../coherent_code_001/gene_annotation_episode/communication.py:201: in check
+    check(child, path + "." + name, depth + 1)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'array', 'items': {'oneOf': [{'type': 'object', 'properties': {'schema': {'const': 'rna_comparison_projection...ulation_id', ...], 'additionalProperties': False}, ...]}, 'x-source': 'execution_rna_structure_comparison_projections'}
+path = 'report.requested', depth = 1
+
+    def check(node, path, depth=0):
+        nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources
+        source = node.get("x-source") if isinstance(node, dict) else None
+        if source == "literature_controlled_response_component_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_controlled_response_storage import controlled_response_cells_schema
+            expected = controlled_response_cells_schema()
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: controlled response fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_rna_structure_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if rna_structure_sources is None:
+                from .rna_structure_result_views import rna_structure_fact_sources
+                rna_structure_sources = rna_structure_fact_sources()
+            expected = rna_structure_sources.get(source, {}).get("report_schema")
+            # Recorded RNA fields have exact units, nullable associations and
+            # native labels. They do not grant a free-form model schema.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+&gt;               raise ReportBoundaryError(f"{path}: RNA fact schema must match its registered source", code="invalid_schema")
+E               gene_annotation_episode.communication.ReportBoundaryError: report.requested: RNA fact schema must match its registered source
+
+../coherent_code_001/gene_annotation_episode/communication.py:154: ReportBoundaryError
+
+During handling of the above exception, another exception occurred:
+
+projected_pair = [{'schema': 'rna_comparison_projection_v1', 'projection_id': 'difference', 'family': 'energy_comparison', 'result_rece... 'result_receipt_key': 'rna_comparison_receipt:1111111111111111111111111111111111111111111111111111111111111111', ...}]
+
+    def test_semantic_resolution_runs_again_after_schema_cache_hit(projected_pair):
+        payload = {"requested": projected_pair}
+&gt;       assert validate_form(payload, schema(), resolve) == payload
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_rna_comparison_report_boundary.py:126: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../coherent_code_001/gene_annotation_episode/communication.py:233: in validate_form
+    return _validate_form(payload, schema, reference_resolver)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../coherent_code_001/gene_annotation_episode/communication.py:237: in _validate_form
+    schema = validate_closed_schema(schema)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../coherent_code_001/gene_annotation_episode/communication.py:114: in validate_closed_schema
+    return _compile_closed_schema(schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../coherent_code_001/gene_annotation_episode/communication.py:226: in _compile_closed_schema
+    check(schema, "report")
+../coherent_code_001/gene_annotation_episode/communication.py:201: in check
+    check(child, path + "." + name, depth + 1)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+node = {'type': 'array', 'items': {'oneOf': [{'type': 'object', 'properties': {'schema': {'const': 'rna_comparison_projection...ulation_id', ...], 'additionalProperties': False}, ...]}, 'x-source': 'execution_rna_structure_comparison_projections'}
+path = 'report.requested', depth = 1
+
+    def check(node, path, depth=0):
+        nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources
+        source = node.get("x-source") if isinstance(node, dict) else None
+        if source == "literature_controlled_response_component_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_controlled_response_storage import controlled_response_cells_schema
+            expected = controlled_response_cells_schema()
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: controlled response fact schema must match its registered source", code="invalid_schema")
+            return
+        if isinstance(source, str) and source.startswith("execution_rna_structure_"):
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            if rna_structure_sources is None:
+                from .rna_structure_result_views import rna_structure_fact_sources
+                rna_structure_sources = rna_structure_fact_sources()
+            expected = rna_structure_sources.get(source, {}).get("report_schema")
+            # Recorded RNA fields have exact units, nullable associations and
+            # native labels. They do not grant a free-form model schema.
+            if (expected is None or not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+&gt;               raise ReportBoundaryError(f"{path}: RNA fact schema must match its registered source", code="invalid_schema")
+E               gene_annotation_episode.communication.ReportBoundaryError: report.requested: RNA fact schema must match its registered source
+
+../coherent_code_001/gene_annotation_episode/communication.py:154: ReportBoundaryError</failure></testcase><testcase classname="tests.test_rna_comparison_report_boundary" name="test_compact_numerical_return_rejects_expansion_and_wrong_value_types[&lt;lambda&gt;0]" time="0.642" /><testcase classname="tests.test_rna_comparison_report_boundary" name="test_compact_numerical_return_rejects_expansion_and_wrong_value_types[&lt;lambda&gt;1]" time="0.622" /><testcase classname="tests.test_rna_comparison_report_boundary" name="test_compact_numerical_return_rejects_expansion_and_wrong_value_types[&lt;lambda&gt;2]" time="0.617" /><testcase classname="tests.test_rna_comparison_report_boundary" name="test_compact_numerical_return_rejects_expansion_and_wrong_value_types[&lt;lambda&gt;3]" time="0.614" /><testcase classname="tests.test_rna_structure_report_boundary" name="test_each_exact_rna_fact_constructs_actual_typed_contract[execution_rna_structure_summary_rows]" time="0.037" /><testcase classname="tests.test_rna_structure_report_boundary" name="test_each_exact_rna_fact_constructs_actual_typed_contract[execution_rna_structure_pair_rows]" time="0.075" /><testcase classname="tests.test_rna_structure_report_boundary" name="test_each_exact_rna_fact_constructs_actual_typed_contract[execution_rna_structure_stem_rows]" time="0.041" /><testcase classname="tests.test_rna_structure_report_boundary" name="test_each_exact_rna_fact_constructs_actual_typed_contract[execution_rna_structure_region_rows]" time="0.041" /><testcase classname="tests.test_rna_structure_report_boundary" name="test_each_exact_rna_fact_constructs_actual_typed_contract[execution_rna_structure_failure_rows]" time="0.017" /><testcase classname="tests.test_rna_structure_report_boundary" name="test_each_exact_rna_fact_constructs_actual_typed_contract[execution_rna_structure_result_refs]" time="0.005" /><testcase classname="tests.test_rna_structure_report_boundary" name="test_each_exact_rna_fact_constructs_actual_typed_contract[execution_rna_structure_saved_sheet_inputs]" time="0.140" /><testcase classname="tests.test_rna_structure_report_boundary" name="test_rna_fact_cannot_be_nested[execution_rna_structure_summary_rows]" time="0.048" /><testcase classname="tests.test_rna_structure_report_boundary" name="test_rna_fact_cannot_be_nested[execution_rna_structure_pair_rows]" time="0.037" /><testcase classname="tests.test_rna_structure_report_boundary" name="test_rna_fact_cannot_be_nested[execution_rna_structure_stem_rows]" time="0.034" /><testcase classname="tests.test_rna_structure_report_boundary" name="test_rna_fact_cannot_be_nested[execution_rna_structure_region_rows]" time="0.037" /><testcase classname="tests.test_rna_structure_report_boundary" name="test_rna_fact_cannot_be_nested[execution_rna_structure_failure_rows]" time="0.014" /><testcase classname="tests.test_rna_structure_report_boundary" name="test_rna_fact_cannot_be_nested[execution_rna_structure_result_refs]" time="0.003" /><testcase classname="tests.test_rna_structure_report_boundary" name="test_rna_fact_cannot_be_nested[execution_rna_structure_saved_sheet_inputs]" time="0.008" /><testcase classname="tests.test_rna_structure_report_boundary" name="test_only_the_entire_exact_registered_schema_is_accepted[&lt;lambda&gt;0]" time="0.033" /><testcase classname="tests.test_rna_structure_report_boundary" name="test_only_the_entire_exact_registered_schema_is_accepted[&lt;lambda&gt;1]" time="0.035" /><testcase classname="tests.test_rna_structure_report_boundary" name="test_only_the_entire_exact_registered_schema_is_accepted[&lt;lambda&gt;2]" time="0.032" /><testcase classname="tests.test_rna_structure_report_boundary" name="test_only_the_entire_exact_registered_schema_is_accepted[&lt;lambda&gt;3]" time="0.035" /><testcase classname="tests.test_rna_structure_report_boundary" name="test_only_the_entire_exact_registered_schema_is_accepted[&lt;lambda&gt;4]" time="0.022" /><testcase classname="tests.test_rna_structure_report_boundary" name="test_only_the_entire_exact_registered_schema_is_accepted[&lt;lambda&gt;5]" time="0.037" /><testcase classname="tests.test_rna_structure_report_boundary" name="test_nullable_rna_source_still_needs_actual_reference_resolution" time="0.009" /><testcase classname="tests.test_rna_structure_report_boundary" name="test_rna_registration_does_not_allow_unrestricted_interpretations" time="0.034" /><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_search_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_search_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_hsp_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_hsp_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_sequence_hit_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_sequence_hit_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_sequence_group_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_sequence_group_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_sequence_function_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_sequence_function_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_sequence_population_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_sequence_population_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_sequence_taxonomy_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_sequence_taxonomy_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_sequence_quality_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_sequence_quality_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_profile_model_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_profile_model_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_profile_hsp_model_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_profile_hsp_model_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_profile_overlap_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_profile_overlap_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_pssm_matrix_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_pssm_matrix_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_pssm_cell_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_pssm_cell_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_pssm_position_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_pssm_position_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_iteration_inclusion_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_iteration_inclusion_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_iteration_convergence_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_iteration_convergence_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_iteration_comparison_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_iteration_comparison_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_vdb_subject_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_vdb_subject_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_vdb_membership_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_vdb_membership_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_vdb_sequence_group_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_vdb_sequence_group_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_vdb_sample_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_vdb_sample_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_vdb_feature_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_vdb_feature_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_vdb_feature_hsp_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_vdb_feature_hsp_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_vdb_taxonomy_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_vdb_taxonomy_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_vdb_quality_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_vdb_quality_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_vdb_population_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_vdb_population_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_vdb_population_function_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_vdb_population_function_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_sequence_record_quality_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_sequence_record_quality_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_vdb_function_summary_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_vdb_function_summary_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_vdb_function_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_vdb_function_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_vdb_function_contribution_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_vdb_function_contribution_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_vdb_function_census_rows]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_vdb_function_census_rows'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_result_refs]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_result_refs'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_failures]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_failures'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_acquisition]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_acquisition'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_all_thirty_actual_sources_compile_and_admit[execution_blast_database_vdb_function_saved_inputs]" time="0.001"><failure message="AssertionError: assert 36 == 30&#10; +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})">source = 'execution_blast_database_vdb_function_saved_inputs'
+
+    @pytest.mark.parametrize("source", SOURCES)
+    def test_all_thirty_actual_sources_compile_and_admit(source):
+&gt;       assert len(SOURCES) == 30
+E       AssertionError: assert 36 == 30
+E        +  where 36 = len({'execution_blast_database_search_rows': {'type': 'array', 'meaning': 'Selected frozen search numerical components; nu...tionalProperties': False}, 'uniqueItems': True, 'x-source': 'execution_blast_database_sequence_group_rows', ...}}, ...})
+
+tests/test_native_blast_fact_forms.py:108: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_fact_forms" name="test_exact_registration_rejects_tampering[unknown_source]" time="0.086" /><testcase classname="tests.test_native_blast_fact_forms" name="test_exact_registration_rejects_tampering[different_source]" time="0.086" /><testcase classname="tests.test_native_blast_fact_forms" name="test_exact_registration_rejects_tampering[open_replacement]" time="0.033" /><testcase classname="tests.test_native_blast_fact_forms" name="test_exact_registration_rejects_tampering[closed_replacement]" time="0.064" /><testcase classname="tests.test_native_blast_fact_forms" name="test_exact_registration_rejects_tampering[missing_unique_by]" time="0.093" /><testcase classname="tests.test_native_blast_fact_forms" name="test_exact_registration_rejects_tampering[missing_unique_items]" time="0.097" /><testcase classname="tests.test_native_blast_fact_forms" name="test_exact_registration_rejects_tampering[missing_pattern]" time="0.122" /><testcase classname="tests.test_native_blast_fact_forms" name="test_exact_registration_rejects_tampering[missing_conditionals]" time="0.066" /><testcase classname="tests.test_native_blast_fact_forms" name="test_exact_registration_rejects_tampering[extra_field]" time="0.091" /><testcase classname="tests.test_native_blast_fact_forms" name="test_exact_registration_rejects_tampering[extra_annotation]" time="0.092" /><testcase classname="tests.test_native_blast_fact_forms" name="test_exact_registration_rejects_tampering[changed_namespace]" time="0.124" /><testcase classname="tests.test_native_blast_fact_forms" name="test_exact_registration_rejects_tampering[boolean_bound]" time="0.003" /><testcase classname="tests.test_native_blast_fact_forms" name="test_exact_registration_rejects_tampering[float_bound]" time="0.089" /><testcase classname="tests.test_native_blast_fact_forms" name="test_generic_shaped_acquisition_still_requires_its_exact_contract" time="0.035" /><testcase classname="tests.test_native_blast_fact_forms" name="test_registered_meaning_is_only_a_whole_top_level_recorded_field[object]" time="0.059" /><testcase classname="tests.test_native_blast_fact_forms" name="test_registered_meaning_is_only_a_whole_top_level_recorded_field[array]" time="0.060" /><testcase classname="tests.test_native_blast_fact_forms" name="test_registered_meaning_is_only_a_whole_top_level_recorded_field[nested_source]" time="0.087" /><testcase classname="tests.test_native_blast_fact_forms" name="test_registered_meaning_is_only_a_whole_top_level_recorded_field[unbound]" time="0.059" /><testcase classname="tests.test_native_blast_fact_forms" name="test_native_numeric_status_reason_metric_unit_and_pattern_constraints[updates0]" time="0.085" /><testcase classname="tests.test_native_blast_fact_forms" name="test_native_numeric_status_reason_metric_unit_and_pattern_constraints[updates1]" time="0.002" /><testcase classname="tests.test_native_blast_fact_forms" name="test_native_numeric_status_reason_metric_unit_and_pattern_constraints[updates2]" time="0.001" /><testcase classname="tests.test_native_blast_fact_forms" name="test_native_numeric_status_reason_metric_unit_and_pattern_constraints[updates3]" time="0.001" /><testcase classname="tests.test_native_blast_fact_forms" name="test_native_numeric_status_reason_metric_unit_and_pattern_constraints[updates4]" time="0.001" /><testcase classname="tests.test_native_blast_fact_forms" name="test_native_numeric_status_reason_metric_unit_and_pattern_constraints[updates5]" time="0.001" /><testcase classname="tests.test_native_blast_fact_forms" name="test_native_numeric_status_reason_metric_unit_and_pattern_constraints[updates6]" time="0.002" /><testcase classname="tests.test_native_blast_fact_forms" name="test_native_numeric_status_reason_metric_unit_and_pattern_constraints[updates7]" time="0.001" /><testcase classname="tests.test_native_blast_fact_forms" name="test_zero_and_native_missingness_remain_distinct[0-available-None]" time="0.002" /><testcase classname="tests.test_native_blast_fact_forms" name="test_zero_and_native_missingness_remain_distinct[None-unavailable-missing_input]" time="0.002" /><testcase classname="tests.test_native_blast_fact_forms" name="test_zero_and_native_missingness_remain_distinct[None-unavailable-not_measured]" time="0.002" /><testcase classname="tests.test_native_blast_fact_forms" name="test_zero_and_native_missingness_remain_distinct[None-incompatible-incompatible_input]" time="0.002" /><testcase classname="tests.test_native_blast_fact_forms" name="test_native_boolean_conditional_contract[updates0]" time="0.001" /><testcase classname="tests.test_native_blast_fact_forms" name="test_native_boolean_conditional_contract[updates1]" time="0.001" /><testcase classname="tests.test_native_blast_fact_forms" name="test_native_boolean_conditional_contract[updates2]" time="0.001" /><testcase classname="tests.test_native_blast_fact_forms" name="test_native_boolean_conditional_contract[updates3]" time="0.001" /><testcase classname="tests.test_native_blast_fact_forms" name="test_not_constraint_excludes_cells_for_a_family_without_those_metrics" time="0.043" /><testcase classname="tests.test_native_blast_fact_forms" name="test_tagged_identity_and_base_references_reach_the_live_resolver[search]" time="0.002" /><testcase classname="tests.test_native_blast_fact_forms" name="test_tagged_identity_and_base_references_reach_the_live_resolver[query]" time="0.002" /><testcase classname="tests.test_native_blast_fact_forms" name="test_tagged_identity_and_base_references_reach_the_live_resolver[unbound]" time="0.002" /><testcase classname="tests.test_native_blast_fact_forms" name="test_tagged_query_tuple_constraints_keep_actual_prefix_positions[interval0]" time="0.001" /><testcase classname="tests.test_native_blast_fact_forms" name="test_tagged_query_tuple_constraints_keep_actual_prefix_positions[interval1]" time="0.001" /><testcase classname="tests.test_native_blast_fact_forms" name="test_tagged_query_tuple_constraints_keep_actual_prefix_positions[interval2]" time="0.001" /><testcase classname="tests.test_native_blast_fact_forms" name="test_tagged_query_tuple_constraints_keep_actual_prefix_positions[interval3]" time="0.001" /><testcase classname="tests.test_native_blast_fact_forms" name="test_tagged_query_tuple_constraints_keep_actual_prefix_positions[interval4]" time="0.002" /><testcase classname="tests.test_native_blast_fact_forms" name="test_tagged_query_tuple_constraints_keep_actual_prefix_positions[interval5]" time="0.001" /><testcase classname="tests.test_native_blast_fact_forms" name="test_tagged_identity_rejects_mismatched_scope_and_payload" time="0.001" /><testcase classname="tests.test_native_blast_fact_forms" name="test_unknown_references_cannot_hide_in_nullable_or_tagged_branches[observation_ref]" time="0.002" /><testcase classname="tests.test_native_blast_fact_forms" name="test_unknown_references_cannot_hide_in_nullable_or_tagged_branches[subject_ref]" time="0.002" /><testcase classname="tests.test_native_blast_fact_forms" name="test_unknown_references_cannot_hide_in_nullable_or_tagged_branches[nullable_function]" time="0.046" /><testcase classname="tests.test_native_blast_fact_forms" name="test_unknown_references_cannot_hide_in_nullable_or_tagged_branches[tagged_source]" time="0.002" /><testcase classname="tests.test_native_blast_fact_forms" name="test_unknown_references_cannot_hide_in_nullable_or_tagged_branches[tagged_query_artifact]" time="0.002" /><testcase classname="tests.test_native_blast_fact_forms" name="test_nullable_entity_references_keep_their_namespaces" time="0.002" /><testcase classname="tests.test_native_blast_fact_forms" name="test_failure_locators_can_name_unavailable_addresses_without_claiming_possession" time="0.026" /><testcase classname="tests.test_native_blast_fact_forms" name="test_distinct_rows_with_the_same_actual_identity_tuple_are_rejected" time="0.006" /><testcase classname="tests.test_native_blast_fact_forms" name="test_identical_rows_still_fail_the_original_unique_items_constraint" time="0.001" /><testcase classname="tests.test_native_blast_fact_forms" name="test_nonfinite_native_measurements_remain_rejected[nan]" time="0.001" /><testcase classname="tests.test_native_blast_fact_forms" name="test_nonfinite_native_measurements_remain_rejected[inf]" time="0.001" /><testcase classname="tests.test_native_blast_fact_forms" name="test_nonfinite_native_measurements_remain_rejected[-inf]" time="0.001" /><testcase classname="tests.test_native_blast_fact_forms" name="test_all_recorded_fields_are_excluded_and_copied_from_facts" time="1.140" /><testcase classname="tests.test_native_blast_fact_forms" name="test_generation_translates_every_native_branch_without_changing_runtime_schema" time="1.790" /><testcase classname="tests.test_native_blast_fact_forms" name="test_schema_cache_retains_only_successes_and_detaches_each_return" time="0.341" /><testcase classname="tests.test_native_blast_fact_forms" name="test_cached_native_schema_does_not_cache_reference_authority_across_forms" time="0.050" /><testcase classname="tests.test_native_blast_fact_forms" name="test_generic_closed_grammar_has_no_new_escape[node0]" time="0.002" /><testcase classname="tests.test_native_blast_fact_forms" name="test_generic_closed_grammar_has_no_new_escape[node1]" time="0.002" /><testcase classname="tests.test_native_blast_fact_forms" name="test_generic_closed_grammar_has_no_new_escape[node2]" time="0.002" /><testcase classname="tests.test_native_blast_fact_forms" name="test_generic_closed_grammar_has_no_new_escape[node3]" time="0.002" /><testcase classname="tests.test_native_blast_fact_forms" name="test_generic_closed_grammar_has_no_new_escape[node4]" time="0.002" /><testcase classname="tests.test_native_blast_fact_forms" name="test_generic_closed_grammar_has_no_new_escape[node5]" time="0.002" /><testcase classname="tests.test_native_blast_fact_forms" name="test_generic_closed_grammar_has_no_new_escape[node6]" time="0.002" /><testcase classname="tests.test_native_blast_fact_forms" name="test_generic_closed_grammar_has_no_new_escape[node7]" time="0.002" /><testcase classname="tests.test_native_blast_fact_forms" name="test_ordinary_generation_and_recorded_facts_keep_their_existing_behavior" time="0.001" /><testcase classname="tests.test_native_blast_fact_forms" name="test_generic_reference_error_preserves_payload_field_order" time="0.001" /><testcase classname="tests.test_native_blast_fact_forms" name="test_nonfinite_generic_schema_retains_its_uncached_diagnostic" time="0.002" /></testsuite></testsuites>

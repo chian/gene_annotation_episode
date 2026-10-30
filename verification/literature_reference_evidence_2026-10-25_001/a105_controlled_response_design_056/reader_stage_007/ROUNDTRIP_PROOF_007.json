@@ -1,0 +1,68 @@
+{
+  "scope": "Synthetic frozen-number compatibility only",
+  "rows": [
+    {
+      "original_source_lexeme": "0.1",
+      "source_exact": {
+        "numerator": "1",
+        "denominator": "10"
+      },
+      "technical_float_conversion": 0.1,
+      "finite_projection_accepted": true,
+      "source_equals_frozen_q_str_interpretation": true,
+      "numeric_projection_rounding": false,
+      "numeric_range_failure": false
+    },
+    {
+      "original_source_lexeme": "0.10000000000000000001",
+      "source_exact": {
+        "numerator": "10000000000000000001",
+        "denominator": "100000000000000000000"
+      },
+      "technical_float_conversion": 0.1,
+      "finite_projection_accepted": true,
+      "source_equals_frozen_q_str_interpretation": false,
+      "numeric_projection_rounding": true,
+      "numeric_range_failure": false
+    },
+    {
+      "original_source_lexeme": "12.000",
+      "source_exact": {
+        "numerator": "12",
+        "denominator": "1"
+      },
+      "technical_float_conversion": 12.0,
+      "finite_projection_accepted": true,
+      "source_equals_frozen_q_str_interpretation": true,
+      "numeric_projection_rounding": false,
+      "numeric_range_failure": false
+    },
+    {
+      "original_source_lexeme": "1e308",
+      "source_exact": {
+        "numerator": "100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "denominator": "1"
+      },
+      "technical_float_conversion": 1e+308,
+      "finite_projection_accepted": true,
+      "source_equals_frozen_q_str_interpretation": true,
+      "numeric_projection_rounding": false,
+      "numeric_range_failure": false
+    },
+    {
+      "original_source_lexeme": "1e-500",
+      "source_exact": {
+        "numerator": "1",
+        "denominator": "100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "technical_float_conversion": 0.0,
+      "finite_projection_accepted": false,
+      "source_equals_frozen_q_str_interpretation": false,
+      "numeric_projection_rounding": false,
+      "numeric_range_failure": true
+    }
+  ],
+  "binary_float_exact_ratio_is_not_rounding_criterion": true,
+  "reader_implemented": false,
+  "runtime_observations": 0
+}

@@ -1,0 +1,3469 @@
+{
+  "status": "proposed_sheet_shapes_not_production_calculator_outputs",
+  "actual242_proposed_sheet": {
+    "version": "a105_kinetic_summary_precision_sheet_v1",
+    "axis": "A105",
+    "evaluation_scope": "source_kinetic_summary_precision",
+    "inputs": {
+      "version": "a105_kinetic_summary_precision_inputs_v1",
+      "source_kind": "primary_source",
+      "parameter_kind": "catalytic_efficiency",
+      "source_origin": "reported",
+      "source_parameter_status": "point",
+      "source_parameter_reason": null,
+      "parameter_approximate": false,
+      "parameter_native_exact": {
+        "numerator": "31",
+        "denominator": "10"
+      },
+      "sd_native_exact": {
+        "numerator": "1",
+        "denominator": "10"
+      },
+      "canonical_scale_exact": {
+        "numerator": "3",
+        "denominator": "50000"
+      },
+      "canonical_unit": "uM^-1min^-1",
+      "sd_scale_exact": {
+        "numerator": "3",
+        "denominator": "50000"
+      },
+      "sd_canonical_unit": "uM^-1min^-1",
+      "sd_unit_basis": "inherited_parameter_unit",
+      "uncertainty_statistic": "sd",
+      "uncertainty_reason": null,
+      "source_count": {
+        "selector": {
+          "witness": {
+            "source_ref": "@elife2015AP",
+            "representation": "text",
+            "start": 32165,
+            "end": 32353,
+            "quote": "#The mutant was expressed in two independent enzyme preparations and standard deviations are from activity\n                                   measurements for the independent preparations.",
+            "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924"
+          },
+          "number_start": 29,
+          "number_end": 32
+        },
+        "raw_number": "two",
+        "value": 2,
+        "notation": "english_cardinal",
+        "relation": "point",
+        "approximate": false,
+        "status": "exact",
+        "unavailable_reason": null
+      },
+      "source_statistical_count": null,
+      "source_count_meaning": "physical_preparation_count",
+      "repetition_basis": "biological_preparations",
+      "estimate_basis": "unknown",
+      "assessments": {
+        "row_footnote_applicability": "source_supported",
+        "statistical_count_matches_sd": "unknown",
+        "one_estimate_per_preparation": "unknown",
+        "equal_weight_arithmetic_mean": "unknown",
+        "sample_sd_n_minus_one": "unknown",
+        "iid_common_mean_finite_variance": "unknown",
+        "normal_sampling_units": "unknown",
+        "reported_sd_summarizes_counted_preparation_estimates": "unknown"
+      },
+      "scenario": {
+        "version": "a105_summary_precision_scenario_v1",
+        "count_rule": "one_per_physical_preparation",
+        "stipulated_assumptions": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "equal_weight_arithmetic_mean",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance",
+          "normal_sampling_units"
+        ]
+      },
+      "interval_request": "student_t_95",
+      "dependencies": {
+        "parameter_source": {
+          "source_ref": "@elife2015AP",
+          "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+          "representation": "text",
+          "start": 24116,
+          "end": 24119
+        },
+        "spread_source": {
+          "source_ref": "@elife2015AP",
+          "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+          "representation": "text",
+          "start": 24121,
+          "end": 24124
+        },
+        "count_source": {
+          "source_ref": "@elife2015AP",
+          "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+          "representation": "text",
+          "start": 32194,
+          "end": 32197
+        },
+        "statistical_count_source": null,
+        "physical_measurement_id": null,
+        "parameter_unit_source": {
+          "source_ref": "@elife2015AP",
+          "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+          "representation": "text",
+          "start": 22176,
+          "end": 22186
+        },
+        "spread_unit_source": {
+          "source_ref": "@elife2015AP",
+          "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+          "representation": "text",
+          "start": 22176,
+          "end": 22186
+        }
+      }
+    },
+    "source_cells": {
+      "reported_parameter": {
+        "value": 0.000186,
+        "unit": "uM^-1min^-1",
+        "status": "populated",
+        "qualification": "source_reported",
+        "formula_code": "summary_precision_reported_parameter",
+        "origin": "reported",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "93",
+          "denominator": "500000"
+        },
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "reported_sd": {
+        "value": 6e-06,
+        "unit": "uM^-1min^-1",
+        "status": "populated",
+        "qualification": "source_reported",
+        "formula_code": "summary_precision_reported_sd",
+        "origin": "reported",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "3",
+          "denominator": "500000"
+        },
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "source_summary_count": {
+        "value": 2,
+        "unit": "count",
+        "status": "populated",
+        "qualification": "source_reported",
+        "formula_code": "summary_precision_source_summary_count",
+        "origin": "reported",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "independent_preparation_count": {
+        "value": 2,
+        "unit": "count",
+        "status": "populated",
+        "qualification": "source_reported",
+        "formula_code": "summary_precision_independent_preparation_count",
+        "origin": "reported",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "statistical_estimator_count": {
+        "value": null,
+        "unit": "count",
+        "status": "unavailable",
+        "qualification": "unavailable",
+        "formula_code": "summary_precision_statistical_estimator_count",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": "statistical_estimator_count_unknown"
+      },
+      "relative_reported_sd": {
+        "value": 0.03225806451612903,
+        "unit": "dimensionless",
+        "status": "populated",
+        "qualification": "derived_source_supported_conditions",
+        "formula_code": "summary_precision_relative_reported_sd",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "1",
+          "denominator": "31"
+        },
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "mean_variance": {
+        "value": null,
+        "unit": "uM_inverse_squared_min_inverse_squared",
+        "status": "unavailable",
+        "qualification": "unavailable",
+        "formula_code": "summary_precision_mean_variance",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": "statistical_estimator_count_unknown"
+      },
+      "mean_standard_error": {
+        "value": null,
+        "unit": "uM^-1min^-1",
+        "status": "unavailable",
+        "qualification": "unavailable",
+        "formula_code": "summary_precision_mean_standard_error",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": "statistical_estimator_count_unknown"
+      },
+      "relative_mean_standard_error": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "qualification": "unavailable",
+        "formula_code": "summary_precision_relative_mean_standard_error",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": "statistical_estimator_count_unknown"
+      },
+      "mean_interval_df": {
+        "value": null,
+        "unit": "count",
+        "status": "unavailable",
+        "qualification": "unavailable",
+        "formula_code": "summary_precision_mean_interval_df",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": "statistical_estimator_count_unknown"
+      },
+      "mean_interval_confidence_level": {
+        "value": 0.95,
+        "unit": "dimensionless",
+        "status": "populated",
+        "qualification": "derived_source_supported_conditions",
+        "formula_code": "summary_precision_mean_interval_confidence_level",
+        "origin": "proposed",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "19",
+          "denominator": "20"
+        },
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "mean_interval_t_multiplier": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "qualification": "unavailable",
+        "formula_code": "summary_precision_mean_interval_t_multiplier",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": "statistical_estimator_count_unknown"
+      },
+      "mean_interval_halfwidth": {
+        "value": null,
+        "unit": "uM^-1min^-1",
+        "status": "unavailable",
+        "qualification": "unavailable",
+        "formula_code": "summary_precision_mean_interval_halfwidth",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": "statistical_estimator_count_unknown"
+      },
+      "mean_interval_lower": {
+        "value": null,
+        "unit": "uM^-1min^-1",
+        "status": "unavailable",
+        "qualification": "unavailable",
+        "formula_code": "summary_precision_mean_interval_lower",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": "statistical_estimator_count_unknown"
+      },
+      "mean_interval_upper": {
+        "value": null,
+        "unit": "uM^-1min^-1",
+        "status": "unavailable",
+        "qualification": "unavailable",
+        "formula_code": "summary_precision_mean_interval_upper",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": "statistical_estimator_count_unknown"
+      }
+    },
+    "scenario_cells": {
+      "reported_parameter": {
+        "value": 0.000186,
+        "unit": "uM^-1min^-1",
+        "status": "populated",
+        "qualification": "source_reported",
+        "formula_code": "summary_precision_reported_parameter",
+        "origin": "reported",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "93",
+          "denominator": "500000"
+        },
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "reported_sd": {
+        "value": 6e-06,
+        "unit": "uM^-1min^-1",
+        "status": "populated",
+        "qualification": "source_reported",
+        "formula_code": "summary_precision_reported_sd",
+        "origin": "reported",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "3",
+          "denominator": "500000"
+        },
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "source_summary_count": {
+        "value": 2,
+        "unit": "count",
+        "status": "populated",
+        "qualification": "source_reported",
+        "formula_code": "summary_precision_source_summary_count",
+        "origin": "reported",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "independent_preparation_count": {
+        "value": 2,
+        "unit": "count",
+        "status": "populated",
+        "qualification": "source_reported",
+        "formula_code": "summary_precision_independent_preparation_count",
+        "origin": "reported",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "statistical_estimator_count": {
+        "value": 2,
+        "unit": "count",
+        "status": "populated",
+        "qualification": "conditional_on_stipulated_assumptions",
+        "formula_code": "summary_precision_statistical_estimator_count",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "conditional_on": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates"
+        ],
+        "stipulated_assumptions": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates"
+        ],
+        "unavailable_reason": null
+      },
+      "relative_reported_sd": {
+        "value": 0.03225806451612903,
+        "unit": "dimensionless",
+        "status": "populated",
+        "qualification": "derived_source_supported_conditions",
+        "formula_code": "summary_precision_relative_reported_sd",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "1",
+          "denominator": "31"
+        },
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "mean_variance": {
+        "value": 1.8e-11,
+        "unit": "uM_inverse_squared_min_inverse_squared",
+        "status": "populated",
+        "qualification": "conditional_on_stipulated_assumptions",
+        "formula_code": "summary_precision_mean_variance",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "9",
+          "denominator": "500000000000"
+        },
+        "conditional_on": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance"
+        ],
+        "stipulated_assumptions": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance"
+        ],
+        "unavailable_reason": null
+      },
+      "mean_standard_error": {
+        "value": 4.242640687119285e-06,
+        "unit": "uM^-1min^-1",
+        "status": "populated",
+        "qualification": "conditional_on_stipulated_assumptions",
+        "formula_code": "summary_precision_mean_standard_error",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance"
+        ],
+        "stipulated_assumptions": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance"
+        ],
+        "unavailable_reason": null
+      },
+      "relative_mean_standard_error": {
+        "value": 0.022809896167307983,
+        "unit": "dimensionless",
+        "status": "populated",
+        "qualification": "conditional_on_stipulated_assumptions",
+        "formula_code": "summary_precision_relative_mean_standard_error",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance",
+          "equal_weight_arithmetic_mean"
+        ],
+        "stipulated_assumptions": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance",
+          "equal_weight_arithmetic_mean"
+        ],
+        "unavailable_reason": null
+      },
+      "mean_interval_df": {
+        "value": 1,
+        "unit": "count",
+        "status": "populated",
+        "qualification": "conditional_on_stipulated_assumptions",
+        "formula_code": "summary_precision_mean_interval_df",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "conditional_on": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "sample_sd_n_minus_one"
+        ],
+        "stipulated_assumptions": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "sample_sd_n_minus_one"
+        ],
+        "unavailable_reason": null
+      },
+      "mean_interval_confidence_level": {
+        "value": 0.95,
+        "unit": "dimensionless",
+        "status": "populated",
+        "qualification": "derived_source_supported_conditions",
+        "formula_code": "summary_precision_mean_interval_confidence_level",
+        "origin": "proposed",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "19",
+          "denominator": "20"
+        },
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "mean_interval_t_multiplier": {
+        "value": 12.706204736174707,
+        "unit": "dimensionless",
+        "status": "populated",
+        "qualification": "conditional_on_stipulated_assumptions",
+        "formula_code": "summary_precision_mean_interval_t_multiplier",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance",
+          "normal_sampling_units"
+        ],
+        "stipulated_assumptions": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance",
+          "normal_sampling_units"
+        ],
+        "unavailable_reason": null
+      },
+      "mean_interval_halfwidth": {
+        "value": 5.390786119256257e-05,
+        "unit": "uM^-1min^-1",
+        "status": "populated",
+        "qualification": "conditional_on_stipulated_assumptions",
+        "formula_code": "summary_precision_mean_interval_halfwidth",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance",
+          "normal_sampling_units"
+        ],
+        "stipulated_assumptions": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance",
+          "normal_sampling_units"
+        ],
+        "unavailable_reason": null
+      },
+      "mean_interval_lower": {
+        "value": 0.00013209213880743744,
+        "unit": "uM^-1min^-1",
+        "status": "populated",
+        "qualification": "conditional_on_stipulated_assumptions",
+        "formula_code": "summary_precision_mean_interval_lower",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "equal_weight_arithmetic_mean",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance",
+          "normal_sampling_units"
+        ],
+        "stipulated_assumptions": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "equal_weight_arithmetic_mean",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance",
+          "normal_sampling_units"
+        ],
+        "unavailable_reason": null
+      },
+      "mean_interval_upper": {
+        "value": 0.00023990786119256258,
+        "unit": "uM^-1min^-1",
+        "status": "populated",
+        "qualification": "conditional_on_stipulated_assumptions",
+        "formula_code": "summary_precision_mean_interval_upper",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "equal_weight_arithmetic_mean",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance",
+          "normal_sampling_units"
+        ],
+        "stipulated_assumptions": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "equal_weight_arithmetic_mean",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance",
+          "normal_sampling_units"
+        ],
+        "unavailable_reason": null
+      }
+    },
+    "contribution": {
+      "kind": "one_summary_precision_contribution",
+      "dependency_sources": [
+        {
+          "source_ref": "@elife2015AP",
+          "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+          "representation": "text",
+          "start": 24116,
+          "end": 24119
+        },
+        {
+          "source_ref": "@elife2015AP",
+          "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+          "representation": "text",
+          "start": 24121,
+          "end": 24124
+        },
+        {
+          "source_ref": "@elife2015AP",
+          "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+          "representation": "text",
+          "start": 32194,
+          "end": 32197
+        },
+        {
+          "source_ref": "@elife2015AP",
+          "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+          "representation": "text",
+          "start": 22176,
+          "end": 22186
+        }
+      ],
+      "physical_measurement_id": null,
+      "independence_inferred": false
+    },
+    "limits": [
+      "source_summaries_do_not_reconstruct_raw_measurements",
+      "physical_count_does_not_define_statistical_count",
+      "source_conditions_and_stipulations_distinct",
+      "random_precision_does_not_include_unknown_systematics",
+      "shared_calibration_does_not_shrink_with_preparation_count",
+      "dependent_precision_representations_not_independent_assays",
+      "measurement_repeatability_does_not_establish_physiological_specificity",
+      "no_cross_construct_contrast",
+      "no_assay_error_probability",
+      "no_target_transfer_or_annotation_credit"
+    ],
+    "total_uncertainty": null,
+    "assay_error_probability": null,
+    "annotation_credit": null
+  },
+  "partial_missing_central_value_proposed_sheet": {
+    "version": "a105_kinetic_summary_precision_sheet_v1",
+    "axis": "A105",
+    "evaluation_scope": "source_kinetic_summary_precision",
+    "inputs": {
+      "version": "a105_kinetic_summary_precision_inputs_v1",
+      "source_kind": "synthetic_fixture",
+      "parameter_kind": "kcat",
+      "source_origin": "synthetic",
+      "source_parameter_status": "missing",
+      "source_parameter_reason": "source_measurement_unreported",
+      "parameter_approximate": false,
+      "parameter_native_exact": null,
+      "sd_native_exact": {
+        "numerator": "1",
+        "denominator": "5"
+      },
+      "canonical_scale_exact": null,
+      "canonical_unit": null,
+      "sd_scale_exact": {
+        "numerator": "60",
+        "denominator": "1"
+      },
+      "sd_canonical_unit": "per_min",
+      "sd_unit_basis": "explicit_source_unit",
+      "uncertainty_statistic": "sd",
+      "uncertainty_reason": null,
+      "source_count": {
+        "selector": {
+          "witness": {
+            "source_ref": "@synthetic248",
+            "representation": "text",
+            "start": 87,
+            "end": 178,
+            "quote": "There are four independent preparations; the same four estimates are summarized by this SD.",
+            "artifact_ref": "sha256_bb42b41edf5aa30f10dc245e84e63c6c4b1fb986def2af550cb3f0d150b6351c"
+          },
+          "number_start": 10,
+          "number_end": 14
+        },
+        "raw_number": "four",
+        "value": 4,
+        "notation": "english_cardinal",
+        "relation": "point",
+        "approximate": false,
+        "status": "exact",
+        "unavailable_reason": null
+      },
+      "source_statistical_count": null,
+      "source_count_meaning": "both_same_count",
+      "repetition_basis": "biological_preparations",
+      "estimate_basis": "between_fitted_parameters",
+      "assessments": {
+        "row_footnote_applicability": "source_supported",
+        "statistical_count_matches_sd": "unknown",
+        "one_estimate_per_preparation": "source_supported",
+        "equal_weight_arithmetic_mean": "source_supported",
+        "sample_sd_n_minus_one": "source_supported",
+        "iid_common_mean_finite_variance": "source_supported",
+        "normal_sampling_units": "unknown",
+        "reported_sd_summarizes_counted_preparation_estimates": "source_supported"
+      },
+      "scenario": null,
+      "interval_request": "none",
+      "dependencies": {
+        "parameter_source": null,
+        "spread_source": {
+          "source_ref": "@synthetic248",
+          "artifact_ref": "sha256_bb42b41edf5aa30f10dc245e84e63c6c4b1fb986def2af550cb3f0d150b6351c",
+          "representation": "text",
+          "start": 77,
+          "end": 80
+        },
+        "count_source": {
+          "source_ref": "@synthetic248",
+          "artifact_ref": "sha256_bb42b41edf5aa30f10dc245e84e63c6c4b1fb986def2af550cb3f0d150b6351c",
+          "representation": "text",
+          "start": 97,
+          "end": 101
+        },
+        "statistical_count_source": null,
+        "physical_measurement_id": null,
+        "parameter_unit_source": null,
+        "spread_unit_source": {
+          "source_ref": "@synthetic248",
+          "artifact_ref": "sha256_bb42b41edf5aa30f10dc245e84e63c6c4b1fb986def2af550cb3f0d150b6351c",
+          "representation": "text",
+          "start": 81,
+          "end": 85
+        }
+      }
+    },
+    "source_cells": {
+      "reported_parameter": {
+        "value": null,
+        "unit": null,
+        "status": "unavailable",
+        "qualification": "unavailable",
+        "formula_code": "summary_precision_reported_parameter",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": "source_measurement_unreported"
+      },
+      "reported_sd": {
+        "value": 12,
+        "unit": "per_min",
+        "status": "populated",
+        "qualification": "source_reported",
+        "formula_code": "summary_precision_reported_sd",
+        "origin": "reported",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "12",
+          "denominator": "1"
+        },
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "source_summary_count": {
+        "value": 4,
+        "unit": "count",
+        "status": "populated",
+        "qualification": "source_reported",
+        "formula_code": "summary_precision_source_summary_count",
+        "origin": "reported",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "independent_preparation_count": {
+        "value": 4,
+        "unit": "count",
+        "status": "populated",
+        "qualification": "source_reported",
+        "formula_code": "summary_precision_independent_preparation_count",
+        "origin": "reported",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "statistical_estimator_count": {
+        "value": 4,
+        "unit": "count",
+        "status": "populated",
+        "qualification": "source_reported",
+        "formula_code": "summary_precision_statistical_estimator_count",
+        "origin": "reported",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "relative_reported_sd": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "qualification": "unavailable",
+        "formula_code": "summary_precision_relative_reported_sd",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": "source_measurement_unreported"
+      },
+      "mean_variance": {
+        "value": 36,
+        "unit": "per_min_squared",
+        "status": "populated",
+        "qualification": "derived_source_supported_conditions",
+        "formula_code": "summary_precision_mean_variance",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "36",
+          "denominator": "1"
+        },
+        "conditional_on": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance"
+        ],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "mean_standard_error": {
+        "value": 6,
+        "unit": "per_min",
+        "status": "populated",
+        "qualification": "derived_source_supported_conditions",
+        "formula_code": "summary_precision_mean_standard_error",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "6",
+          "denominator": "1"
+        },
+        "conditional_on": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance"
+        ],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "relative_mean_standard_error": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "qualification": "unavailable",
+        "formula_code": "summary_precision_relative_mean_standard_error",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": "source_measurement_unreported"
+      },
+      "mean_interval_df": {
+        "value": null,
+        "unit": "count",
+        "status": "unavailable",
+        "qualification": "unavailable",
+        "formula_code": "summary_precision_mean_interval_df",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": "interval_not_requested"
+      },
+      "mean_interval_confidence_level": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "qualification": "unavailable",
+        "formula_code": "summary_precision_mean_interval_confidence_level",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": "interval_not_requested"
+      },
+      "mean_interval_t_multiplier": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "qualification": "unavailable",
+        "formula_code": "summary_precision_mean_interval_t_multiplier",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": "interval_not_requested"
+      },
+      "mean_interval_halfwidth": {
+        "value": null,
+        "unit": null,
+        "status": "unavailable",
+        "qualification": "unavailable",
+        "formula_code": "summary_precision_mean_interval_halfwidth",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": "interval_not_requested"
+      },
+      "mean_interval_lower": {
+        "value": null,
+        "unit": null,
+        "status": "unavailable",
+        "qualification": "unavailable",
+        "formula_code": "summary_precision_mean_interval_lower",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": "interval_not_requested"
+      },
+      "mean_interval_upper": {
+        "value": null,
+        "unit": null,
+        "status": "unavailable",
+        "qualification": "unavailable",
+        "formula_code": "summary_precision_mean_interval_upper",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": "interval_not_requested"
+      }
+    },
+    "scenario_cells": null,
+    "contribution": {
+      "kind": "one_summary_precision_contribution",
+      "dependency_sources": [
+        {
+          "source_ref": "@elife2015AP",
+          "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+          "representation": "text",
+          "start": 24116,
+          "end": 24119
+        },
+        {
+          "source_ref": "@elife2015AP",
+          "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+          "representation": "text",
+          "start": 24121,
+          "end": 24124
+        },
+        {
+          "source_ref": "@elife2015AP",
+          "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+          "representation": "text",
+          "start": 32194,
+          "end": 32197
+        },
+        {
+          "source_ref": "@elife2015AP",
+          "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+          "representation": "text",
+          "start": 22176,
+          "end": 22186
+        }
+      ],
+      "physical_measurement_id": null,
+      "independence_inferred": false
+    },
+    "limits": [
+      "source_summaries_do_not_reconstruct_raw_measurements",
+      "physical_count_does_not_define_statistical_count",
+      "source_conditions_and_stipulations_distinct",
+      "random_precision_does_not_include_unknown_systematics",
+      "shared_calibration_does_not_shrink_with_preparation_count",
+      "dependent_precision_representations_not_independent_assays",
+      "measurement_repeatability_does_not_establish_physiological_specificity",
+      "no_cross_construct_contrast",
+      "no_assay_error_probability",
+      "no_target_transfer_or_annotation_credit"
+    ],
+    "total_uncertainty": null,
+    "assay_error_probability": null,
+    "annotation_credit": null
+  },
+  "partial_attempted_scenario_proposed_sheet": {
+    "version": "a105_kinetic_summary_precision_sheet_v1",
+    "axis": "A105",
+    "evaluation_scope": "source_kinetic_summary_precision",
+    "inputs": {
+      "version": "a105_kinetic_summary_precision_inputs_v1",
+      "source_kind": "primary_source",
+      "parameter_kind": "catalytic_efficiency",
+      "source_origin": "reported",
+      "source_parameter_status": "point",
+      "source_parameter_reason": null,
+      "parameter_approximate": false,
+      "parameter_native_exact": {
+        "numerator": "31",
+        "denominator": "10"
+      },
+      "sd_native_exact": {
+        "numerator": "1",
+        "denominator": "10"
+      },
+      "canonical_scale_exact": {
+        "numerator": "3",
+        "denominator": "50000"
+      },
+      "canonical_unit": "uM^-1min^-1",
+      "sd_scale_exact": {
+        "numerator": "3",
+        "denominator": "50000"
+      },
+      "sd_canonical_unit": "uM^-1min^-1",
+      "sd_unit_basis": "inherited_parameter_unit",
+      "uncertainty_statistic": "sd",
+      "uncertainty_reason": null,
+      "source_count": {
+        "selector": {
+          "witness": {
+            "source_ref": "@elife2015AP",
+            "representation": "text",
+            "start": 32165,
+            "end": 32353,
+            "quote": "#The mutant was expressed in two independent enzyme preparations and standard deviations are from activity\n                                   measurements for the independent preparations.",
+            "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924"
+          },
+          "number_start": 29,
+          "number_end": 32
+        },
+        "raw_number": "two",
+        "value": 2,
+        "notation": "english_cardinal",
+        "relation": "point",
+        "approximate": false,
+        "status": "exact",
+        "unavailable_reason": null
+      },
+      "source_statistical_count": null,
+      "source_count_meaning": "physical_preparation_count",
+      "repetition_basis": "biological_preparations",
+      "estimate_basis": "unknown",
+      "assessments": {
+        "row_footnote_applicability": "source_supported",
+        "statistical_count_matches_sd": "unknown",
+        "one_estimate_per_preparation": "unknown",
+        "equal_weight_arithmetic_mean": "unknown",
+        "sample_sd_n_minus_one": "unknown",
+        "iid_common_mean_finite_variance": "unknown",
+        "normal_sampling_units": "unknown",
+        "reported_sd_summarizes_counted_preparation_estimates": "unknown"
+      },
+      "scenario": {
+        "version": "a105_summary_precision_scenario_v1",
+        "count_rule": "one_per_physical_preparation",
+        "stipulated_assumptions": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "equal_weight_arithmetic_mean",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance",
+          "normal_sampling_units"
+        ]
+      },
+      "interval_request": "student_t_95",
+      "dependencies": {
+        "parameter_source": {
+          "source_ref": "@elife2015AP",
+          "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+          "representation": "text",
+          "start": 24116,
+          "end": 24119
+        },
+        "spread_source": {
+          "source_ref": "@elife2015AP",
+          "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+          "representation": "text",
+          "start": 24121,
+          "end": 24124
+        },
+        "count_source": {
+          "source_ref": "@elife2015AP",
+          "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+          "representation": "text",
+          "start": 32194,
+          "end": 32197
+        },
+        "statistical_count_source": null,
+        "physical_measurement_id": null,
+        "parameter_unit_source": {
+          "source_ref": "@elife2015AP",
+          "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+          "representation": "text",
+          "start": 22176,
+          "end": 22186
+        },
+        "spread_unit_source": {
+          "source_ref": "@elife2015AP",
+          "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+          "representation": "text",
+          "start": 22176,
+          "end": 22186
+        }
+      }
+    },
+    "source_cells": {
+      "reported_parameter": {
+        "value": 0.000186,
+        "unit": "uM^-1min^-1",
+        "status": "populated",
+        "qualification": "source_reported",
+        "formula_code": "summary_precision_reported_parameter",
+        "origin": "reported",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "93",
+          "denominator": "500000"
+        },
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "reported_sd": {
+        "value": 6e-06,
+        "unit": "uM^-1min^-1",
+        "status": "populated",
+        "qualification": "source_reported",
+        "formula_code": "summary_precision_reported_sd",
+        "origin": "reported",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "3",
+          "denominator": "500000"
+        },
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "source_summary_count": {
+        "value": 2,
+        "unit": "count",
+        "status": "populated",
+        "qualification": "source_reported",
+        "formula_code": "summary_precision_source_summary_count",
+        "origin": "reported",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "independent_preparation_count": {
+        "value": 2,
+        "unit": "count",
+        "status": "populated",
+        "qualification": "source_reported",
+        "formula_code": "summary_precision_independent_preparation_count",
+        "origin": "reported",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "statistical_estimator_count": {
+        "value": null,
+        "unit": "count",
+        "status": "unavailable",
+        "qualification": "unavailable",
+        "formula_code": "summary_precision_statistical_estimator_count",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": "statistical_estimator_count_unknown"
+      },
+      "relative_reported_sd": {
+        "value": 0.03225806451612903,
+        "unit": "dimensionless",
+        "status": "populated",
+        "qualification": "derived_source_supported_conditions",
+        "formula_code": "summary_precision_relative_reported_sd",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "1",
+          "denominator": "31"
+        },
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "mean_variance": {
+        "value": null,
+        "unit": "uM_inverse_squared_min_inverse_squared",
+        "status": "unavailable",
+        "qualification": "unavailable",
+        "formula_code": "summary_precision_mean_variance",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": "statistical_estimator_count_unknown"
+      },
+      "mean_standard_error": {
+        "value": null,
+        "unit": "uM^-1min^-1",
+        "status": "unavailable",
+        "qualification": "unavailable",
+        "formula_code": "summary_precision_mean_standard_error",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": "statistical_estimator_count_unknown"
+      },
+      "relative_mean_standard_error": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "qualification": "unavailable",
+        "formula_code": "summary_precision_relative_mean_standard_error",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": "statistical_estimator_count_unknown"
+      },
+      "mean_interval_df": {
+        "value": null,
+        "unit": "count",
+        "status": "unavailable",
+        "qualification": "unavailable",
+        "formula_code": "summary_precision_mean_interval_df",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": "statistical_estimator_count_unknown"
+      },
+      "mean_interval_confidence_level": {
+        "value": 0.95,
+        "unit": "dimensionless",
+        "status": "populated",
+        "qualification": "derived_source_supported_conditions",
+        "formula_code": "summary_precision_mean_interval_confidence_level",
+        "origin": "proposed",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "19",
+          "denominator": "20"
+        },
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "mean_interval_t_multiplier": {
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "qualification": "unavailable",
+        "formula_code": "summary_precision_mean_interval_t_multiplier",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": "statistical_estimator_count_unknown"
+      },
+      "mean_interval_halfwidth": {
+        "value": null,
+        "unit": "uM^-1min^-1",
+        "status": "unavailable",
+        "qualification": "unavailable",
+        "formula_code": "summary_precision_mean_interval_halfwidth",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": "statistical_estimator_count_unknown"
+      },
+      "mean_interval_lower": {
+        "value": null,
+        "unit": "uM^-1min^-1",
+        "status": "unavailable",
+        "qualification": "unavailable",
+        "formula_code": "summary_precision_mean_interval_lower",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": "statistical_estimator_count_unknown"
+      },
+      "mean_interval_upper": {
+        "value": null,
+        "unit": "uM^-1min^-1",
+        "status": "unavailable",
+        "qualification": "unavailable",
+        "formula_code": "summary_precision_mean_interval_upper",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": "statistical_estimator_count_unknown"
+      }
+    },
+    "scenario_cells": {
+      "reported_parameter": {
+        "value": 0.000186,
+        "unit": "uM^-1min^-1",
+        "status": "populated",
+        "qualification": "source_reported",
+        "formula_code": "summary_precision_reported_parameter",
+        "origin": "reported",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "93",
+          "denominator": "500000"
+        },
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "reported_sd": {
+        "value": 6e-06,
+        "unit": "uM^-1min^-1",
+        "status": "populated",
+        "qualification": "source_reported",
+        "formula_code": "summary_precision_reported_sd",
+        "origin": "reported",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "3",
+          "denominator": "500000"
+        },
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "source_summary_count": {
+        "value": 2,
+        "unit": "count",
+        "status": "populated",
+        "qualification": "source_reported",
+        "formula_code": "summary_precision_source_summary_count",
+        "origin": "reported",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "independent_preparation_count": {
+        "value": 2,
+        "unit": "count",
+        "status": "populated",
+        "qualification": "source_reported",
+        "formula_code": "summary_precision_independent_preparation_count",
+        "origin": "reported",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "statistical_estimator_count": {
+        "value": 2,
+        "unit": "count",
+        "status": "populated",
+        "qualification": "conditional_on_stipulated_assumptions",
+        "formula_code": "summary_precision_statistical_estimator_count",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "conditional_on": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates"
+        ],
+        "stipulated_assumptions": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates"
+        ],
+        "unavailable_reason": null
+      },
+      "relative_reported_sd": {
+        "value": 0.03225806451612903,
+        "unit": "dimensionless",
+        "status": "populated",
+        "qualification": "derived_source_supported_conditions",
+        "formula_code": "summary_precision_relative_reported_sd",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "1",
+          "denominator": "31"
+        },
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "mean_variance": {
+        "value": null,
+        "unit": "uM_inverse_squared_min_inverse_squared",
+        "status": "unavailable",
+        "qualification": "unavailable",
+        "formula_code": "summary_precision_mean_variance",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [],
+        "stipulated_assumptions": [
+          "one_estimate_per_preparation"
+        ],
+        "unavailable_reason": "sd_preparation_estimator_ownership_unknown"
+      },
+      "mean_standard_error": {
+        "value": 4.242640687119285e-06,
+        "unit": "uM^-1min^-1",
+        "status": "populated",
+        "qualification": "conditional_on_stipulated_assumptions",
+        "formula_code": "summary_precision_mean_standard_error",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance"
+        ],
+        "stipulated_assumptions": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance"
+        ],
+        "unavailable_reason": null
+      },
+      "relative_mean_standard_error": {
+        "value": 0.022809896167307983,
+        "unit": "dimensionless",
+        "status": "populated",
+        "qualification": "conditional_on_stipulated_assumptions",
+        "formula_code": "summary_precision_relative_mean_standard_error",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance",
+          "equal_weight_arithmetic_mean"
+        ],
+        "stipulated_assumptions": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance",
+          "equal_weight_arithmetic_mean"
+        ],
+        "unavailable_reason": null
+      },
+      "mean_interval_df": {
+        "value": 1,
+        "unit": "count",
+        "status": "populated",
+        "qualification": "conditional_on_stipulated_assumptions",
+        "formula_code": "summary_precision_mean_interval_df",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "conditional_on": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "sample_sd_n_minus_one"
+        ],
+        "stipulated_assumptions": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "sample_sd_n_minus_one"
+        ],
+        "unavailable_reason": null
+      },
+      "mean_interval_confidence_level": {
+        "value": 0.95,
+        "unit": "dimensionless",
+        "status": "populated",
+        "qualification": "derived_source_supported_conditions",
+        "formula_code": "summary_precision_mean_interval_confidence_level",
+        "origin": "proposed",
+        "approximate": false,
+        "source_exact_value": {
+          "numerator": "19",
+          "denominator": "20"
+        },
+        "conditional_on": [],
+        "stipulated_assumptions": [],
+        "unavailable_reason": null
+      },
+      "mean_interval_t_multiplier": {
+        "value": 12.706204736174707,
+        "unit": "dimensionless",
+        "status": "populated",
+        "qualification": "conditional_on_stipulated_assumptions",
+        "formula_code": "summary_precision_mean_interval_t_multiplier",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance",
+          "normal_sampling_units"
+        ],
+        "stipulated_assumptions": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance",
+          "normal_sampling_units"
+        ],
+        "unavailable_reason": null
+      },
+      "mean_interval_halfwidth": {
+        "value": 5.390786119256257e-05,
+        "unit": "uM^-1min^-1",
+        "status": "populated",
+        "qualification": "conditional_on_stipulated_assumptions",
+        "formula_code": "summary_precision_mean_interval_halfwidth",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance",
+          "normal_sampling_units"
+        ],
+        "stipulated_assumptions": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance",
+          "normal_sampling_units"
+        ],
+        "unavailable_reason": null
+      },
+      "mean_interval_lower": {
+        "value": 0.00013209213880743744,
+        "unit": "uM^-1min^-1",
+        "status": "populated",
+        "qualification": "conditional_on_stipulated_assumptions",
+        "formula_code": "summary_precision_mean_interval_lower",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "equal_weight_arithmetic_mean",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance",
+          "normal_sampling_units"
+        ],
+        "stipulated_assumptions": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "equal_weight_arithmetic_mean",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance",
+          "normal_sampling_units"
+        ],
+        "unavailable_reason": null
+      },
+      "mean_interval_upper": {
+        "value": 0.00023990786119256258,
+        "unit": "uM^-1min^-1",
+        "status": "populated",
+        "qualification": "conditional_on_stipulated_assumptions",
+        "formula_code": "summary_precision_mean_interval_upper",
+        "origin": "derived",
+        "approximate": false,
+        "source_exact_value": null,
+        "conditional_on": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "equal_weight_arithmetic_mean",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance",
+          "normal_sampling_units"
+        ],
+        "stipulated_assumptions": [
+          "one_estimate_per_preparation",
+          "reported_sd_summarizes_counted_preparation_estimates",
+          "equal_weight_arithmetic_mean",
+          "sample_sd_n_minus_one",
+          "iid_common_mean_finite_variance",
+          "normal_sampling_units"
+        ],
+        "unavailable_reason": null
+      }
+    },
+    "contribution": {
+      "kind": "one_summary_precision_contribution",
+      "dependency_sources": [
+        {
+          "source_ref": "@elife2015AP",
+          "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+          "representation": "text",
+          "start": 24116,
+          "end": 24119
+        },
+        {
+          "source_ref": "@elife2015AP",
+          "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+          "representation": "text",
+          "start": 24121,
+          "end": 24124
+        },
+        {
+          "source_ref": "@elife2015AP",
+          "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+          "representation": "text",
+          "start": 32194,
+          "end": 32197
+        },
+        {
+          "source_ref": "@elife2015AP",
+          "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+          "representation": "text",
+          "start": 22176,
+          "end": 22186
+        }
+      ],
+      "physical_measurement_id": null,
+      "independence_inferred": false
+    },
+    "limits": [
+      "source_summaries_do_not_reconstruct_raw_measurements",
+      "physical_count_does_not_define_statistical_count",
+      "source_conditions_and_stipulations_distinct",
+      "random_precision_does_not_include_unknown_systematics",
+      "shared_calibration_does_not_shrink_with_preparation_count",
+      "dependent_precision_representations_not_independent_assays",
+      "measurement_repeatability_does_not_establish_physiological_specificity",
+      "no_cross_construct_contrast",
+      "no_assay_error_probability",
+      "no_target_transfer_or_annotation_credit"
+    ],
+    "total_uncertainty": null,
+    "assay_error_probability": null,
+    "annotation_credit": null
+  },
+  "root250_concrete_bad_cell": {
+    "value": 12,
+    "unit": "count",
+    "status": "populated",
+    "qualification": "derived_source_supported_conditions",
+    "formula_code": "summary_precision_reported_parameter",
+    "origin": "derived",
+    "approximate": false,
+    "source_exact_value": null,
+    "conditional_on": [],
+    "stipulated_assumptions": [],
+    "unavailable_reason": null
+  },
+  "checks": [
+    {
+      "case": "complete_actual242_proposed_source_and_conditional_shape",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "partial_missing_central_value_keeps_known_SD_and_SE",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "unavailable_scenario_retains_attempted_stipulation_and_known_squared_unit",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "source_cells.reported_parameter.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.reported_parameter.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.reported_parameter.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "source_cells.reported_parameter.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.reported_parameter.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.reported_parameter.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.reported_parameter.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.reported_parameter.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.reported_parameter.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.reported_parameter.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.reported_sd.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.reported_sd.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.reported_sd.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "source_cells.reported_sd.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.reported_sd.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.reported_sd.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.reported_sd.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.reported_sd.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.reported_sd.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.reported_sd.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.source_summary_count.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.source_summary_count.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.source_summary_count.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "source_cells.source_summary_count.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.source_summary_count.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.source_summary_count.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.source_summary_count.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.source_summary_count.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.source_summary_count.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.source_summary_count.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.source_summary_count.unavailable_null_fixed_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.source_summary_count.fractional_count",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.independent_preparation_count.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.independent_preparation_count.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.independent_preparation_count.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "source_cells.independent_preparation_count.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.independent_preparation_count.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.independent_preparation_count.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.independent_preparation_count.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.independent_preparation_count.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.independent_preparation_count.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.independent_preparation_count.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.independent_preparation_count.unavailable_null_fixed_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.independent_preparation_count.fractional_count",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.statistical_estimator_count.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.statistical_estimator_count.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.statistical_estimator_count.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "source_cells.statistical_estimator_count.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.statistical_estimator_count.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.statistical_estimator_count.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.statistical_estimator_count.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.statistical_estimator_count.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.statistical_estimator_count.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.statistical_estimator_count.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.statistical_estimator_count.unavailable_null_fixed_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.statistical_estimator_count.fractional_count",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.relative_reported_sd.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.relative_reported_sd.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.relative_reported_sd.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "source_cells.relative_reported_sd.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.relative_reported_sd.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.relative_reported_sd.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.relative_reported_sd.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.relative_reported_sd.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.relative_reported_sd.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.relative_reported_sd.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.relative_reported_sd.unavailable_null_fixed_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_variance.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_variance.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_variance.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "source_cells.mean_variance.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_variance.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_variance.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_variance.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_variance.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_variance.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_variance.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_standard_error.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_standard_error.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_standard_error.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "source_cells.mean_standard_error.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_standard_error.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_standard_error.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_standard_error.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_standard_error.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_standard_error.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_standard_error.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.relative_mean_standard_error.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.relative_mean_standard_error.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.relative_mean_standard_error.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "source_cells.relative_mean_standard_error.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.relative_mean_standard_error.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.relative_mean_standard_error.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.relative_mean_standard_error.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.relative_mean_standard_error.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.relative_mean_standard_error.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.relative_mean_standard_error.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.relative_mean_standard_error.unavailable_null_fixed_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_df.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_df.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_df.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_df.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_df.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_df.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_df.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_df.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_df.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_df.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_df.unavailable_null_fixed_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_df.fractional_count",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_confidence_level.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_confidence_level.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_confidence_level.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_confidence_level.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_confidence_level.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_confidence_level.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_confidence_level.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_confidence_level.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_confidence_level.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_confidence_level.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_confidence_level.unavailable_null_fixed_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_t_multiplier.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_t_multiplier.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_t_multiplier.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_t_multiplier.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_t_multiplier.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_t_multiplier.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_t_multiplier.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_t_multiplier.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_t_multiplier.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_t_multiplier.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_t_multiplier.unavailable_null_fixed_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_halfwidth.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_halfwidth.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_halfwidth.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_halfwidth.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_halfwidth.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_halfwidth.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_halfwidth.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_halfwidth.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_halfwidth.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_halfwidth.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_lower.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_lower.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_lower.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_lower.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_lower.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_lower.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_lower.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_lower.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_lower.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_lower.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_upper.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_upper.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_upper.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_upper.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_upper.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_upper.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_upper.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_upper.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_upper.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.mean_interval_upper.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.reported_parameter.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.reported_parameter.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.reported_parameter.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "scenario_cells.reported_parameter.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.reported_parameter.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.reported_parameter.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.reported_parameter.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.reported_parameter.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.reported_parameter.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.reported_parameter.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.reported_sd.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.reported_sd.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.reported_sd.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "scenario_cells.reported_sd.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.reported_sd.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.reported_sd.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.reported_sd.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.reported_sd.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.reported_sd.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.reported_sd.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.source_summary_count.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.source_summary_count.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.source_summary_count.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "scenario_cells.source_summary_count.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.source_summary_count.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.source_summary_count.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.source_summary_count.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.source_summary_count.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.source_summary_count.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.source_summary_count.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.source_summary_count.unavailable_null_fixed_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.source_summary_count.fractional_count",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.independent_preparation_count.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.independent_preparation_count.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.independent_preparation_count.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "scenario_cells.independent_preparation_count.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.independent_preparation_count.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.independent_preparation_count.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.independent_preparation_count.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.independent_preparation_count.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.independent_preparation_count.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.independent_preparation_count.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.independent_preparation_count.unavailable_null_fixed_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.independent_preparation_count.fractional_count",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.statistical_estimator_count.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.statistical_estimator_count.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.statistical_estimator_count.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "scenario_cells.statistical_estimator_count.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.statistical_estimator_count.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.statistical_estimator_count.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.statistical_estimator_count.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.statistical_estimator_count.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.statistical_estimator_count.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.statistical_estimator_count.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.statistical_estimator_count.unavailable_null_fixed_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.statistical_estimator_count.fractional_count",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.relative_reported_sd.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.relative_reported_sd.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.relative_reported_sd.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "scenario_cells.relative_reported_sd.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.relative_reported_sd.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.relative_reported_sd.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.relative_reported_sd.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.relative_reported_sd.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.relative_reported_sd.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.relative_reported_sd.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.relative_reported_sd.unavailable_null_fixed_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_variance.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_variance.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_variance.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_variance.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_variance.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_variance.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_variance.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_variance.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_variance.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_variance.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_standard_error.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_standard_error.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_standard_error.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_standard_error.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_standard_error.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_standard_error.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_standard_error.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_standard_error.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_standard_error.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_standard_error.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.relative_mean_standard_error.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.relative_mean_standard_error.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.relative_mean_standard_error.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "scenario_cells.relative_mean_standard_error.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.relative_mean_standard_error.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.relative_mean_standard_error.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.relative_mean_standard_error.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.relative_mean_standard_error.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.relative_mean_standard_error.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.relative_mean_standard_error.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.relative_mean_standard_error.unavailable_null_fixed_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_df.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_df.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_df.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_df.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_df.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_df.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_df.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_df.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_df.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_df.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_df.unavailable_null_fixed_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_df.fractional_count",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_confidence_level.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_confidence_level.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_confidence_level.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_confidence_level.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_confidence_level.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_confidence_level.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_confidence_level.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_confidence_level.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_confidence_level.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_confidence_level.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_confidence_level.unavailable_null_fixed_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_t_multiplier.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_t_multiplier.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_t_multiplier.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_t_multiplier.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_t_multiplier.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_t_multiplier.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_t_multiplier.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_t_multiplier.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_t_multiplier.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_t_multiplier.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_t_multiplier.unavailable_null_fixed_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_halfwidth.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_halfwidth.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_halfwidth.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_halfwidth.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_halfwidth.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_halfwidth.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_halfwidth.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_halfwidth.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_halfwidth.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_halfwidth.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_lower.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_lower.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_lower.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_lower.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_lower.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_lower.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_lower.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_lower.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_lower.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_lower.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_upper.wrong_formula_code",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_upper.wrong_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_upper.named_cell_domain",
+      "expected": "accepted",
+      "actual": "accepted_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_upper.populated_null_unit",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_upper.populated_null_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_upper.populated_nonnull_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_upper.populated_unavailable_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_upper.unavailable_numeric_value",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_upper.unavailable_null_reason",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.mean_interval_upper.unavailable_nonnull_exact",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cells.root250_wrong_cell_pairing",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "scenario_cells.root250_wrong_cell_pairing",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_cannot_claim_scenario_qualification",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "conditional_populated_needs_stipulation",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "source_supported_populated_cannot_retain_stipulation",
+      "expected": "rejected",
+      "actual": "rejected_by_both"
+    },
+    {
+      "case": "nonfinite_inf",
+      "expected": "rejected",
+      "actual": "rejected_by_domain_canonical_check"
+    },
+    {
+      "case": "nonfinite_-inf",
+      "expected": "rejected",
+      "actual": "rejected_by_domain_canonical_check"
+    },
+    {
+      "case": "nonfinite_nan",
+      "expected": "rejected",
+      "actual": "rejected_by_domain_canonical_check"
+    }
+  ]
+}

@@ -1,0 +1,2383 @@
+{
+  "format": "lossless JSON DAG for reviewing repeated schema subtrees; __root_review_fragment__ is only a review marker, not a production schema keyword",
+  "schemas": {
+    "INPUT_SCHEMA_001.json": {
+      "__root_review_fragment__": "fragment_1"
+    },
+    "EXTRACTION_SCHEMA_001.json": {
+      "__root_review_fragment__": "fragment_50"
+    },
+    "SHEET_SCHEMA_001.json": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "a105_endpoint_signal_components_v1"
+        },
+        "axis": {
+          "const": "A105"
+        },
+        "section": {
+          "const": "endpoint_signal_contribution"
+        },
+        "requested_cells": {
+          "__root_review_fragment__": "fragment_46"
+        },
+        "cells": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "component": {
+                "__root_review_fragment__": "fragment_47"
+              },
+              "value": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "conditional_value": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "exact_value": {
+                "__root_review_fragment__": "fragment_149"
+              },
+              "conditional_exact_value": {
+                "__root_review_fragment__": "fragment_149"
+              },
+              "lower": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "upper": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "exact_lower": {
+                "__root_review_fragment__": "fragment_149"
+              },
+              "exact_upper": {
+                "__root_review_fragment__": "fragment_149"
+              },
+              "unit": {
+                "enum": [
+                  "direction_oriented_pixel",
+                  "dimensionless",
+                  "pixel^2",
+                  "dimensionless^2"
+                ]
+              },
+              "status": {
+                "enum": [
+                  "populated",
+                  "conditional_scenario",
+                  "unavailable"
+                ]
+              },
+              "origin": {
+                "const": "derived"
+              },
+              "input_origins": {
+                "__root_review_fragment__": "fragment_147"
+              },
+              "formula": {
+                "type": "string",
+                "minLength": 1
+              },
+              "meaning": {
+                "type": "string",
+                "minLength": 1
+              },
+              "conditional_on": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              },
+              "unavailable_reasons": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "source_unavailable",
+                    "missing_initial",
+                    "missing_baseline_at_addition",
+                    "missing_late",
+                    "axis_scale_unestablished",
+                    "ordinate_direction_unresolved",
+                    "measurement_stage_not_endpoint",
+                    "correction_already_applied",
+                    "correction_stage_unresolved",
+                    "baseline_basis_unsupported",
+                    "baseline_applicability_unresolved",
+                    "fast_component_completion_unresolved",
+                    "zero_total_amplitude",
+                    "reading_enclosure_unreported",
+                    "reading_denominator_contains_zero",
+                    "covariance_unreported",
+                    "covariance_unavailable",
+                    "covariance_status_unknown",
+                    "covariance_basis_not_applicable",
+                    "numerical_projection_range"
+                  ]
+                },
+                "uniqueItems": true
+              },
+              "qualifications": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "manual_reading_not_physical_measurement",
+                    "reading_bounds_not_statistical_CI",
+                    "nonnegative_additive_model_incompatible",
+                    "physical_covariance_unreported",
+                    "synthetic_covariance_model",
+                    "not_molecular_attribution",
+                    "first_order_covariance_propagation"
+                  ]
+                },
+                "uniqueItems": true
+              },
+              "bound_kind": {
+                "enum": [
+                  "manual_reading_enclosure_not_confidence_interval",
+                  "none"
+                ]
+              },
+              "primitive_owners": {
+                "type": "array",
+                "items": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "minItems": 3,
+                "maxItems": 3
+              },
+              "contribution_key": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uncertainty_basis": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "joint_manual_reading_error",
+                      "joint_physical_ordinate_estimates"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "component",
+              "value",
+              "conditional_value",
+              "exact_value",
+              "conditional_exact_value",
+              "lower",
+              "upper",
+              "exact_lower",
+              "exact_upper",
+              "unit",
+              "status",
+              "origin",
+              "input_origins",
+              "formula",
+              "meaning",
+              "conditional_on",
+              "unavailable_reasons",
+              "qualifications",
+              "bound_kind",
+              "primitive_owners",
+              "contribution_key",
+              "uncertainty_basis"
+            ],
+            "additionalProperties": false
+          },
+          "uniqueItems": true
+        },
+        "input_snapshot": {
+          "__root_review_fragment__": "fragment_50"
+        },
+        "joint_propagation": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "basis": {
+                  "enum": [
+                    "joint_manual_reading_error",
+                    "joint_physical_ordinate_estimates"
+                  ]
+                },
+                "origin": {
+                  "enum": [
+                    "source_reported",
+                    "source_derived",
+                    "synthetic"
+                  ]
+                },
+                "primitive_order": {
+                  "const": [
+                    "initial",
+                    "baseline_at_addition",
+                    "late"
+                  ]
+                },
+                "primitive_owners": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "minItems": 3,
+                  "maxItems": 3
+                },
+                "component_order": {
+                  "const": [
+                    "total_amplitude",
+                    "corrected_amplitude",
+                    "additional_amplitude",
+                    "retained_fraction",
+                    "additional_fraction"
+                  ]
+                },
+                "exact_covariance": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "__root_review_fragment__": "fragment_142"
+                    },
+                    "minItems": 5,
+                    "maxItems": 5
+                  },
+                  "minItems": 5,
+                  "maxItems": 5
+                }
+              },
+              "required": [
+                "basis",
+                "origin",
+                "primitive_order",
+                "primitive_owners",
+                "component_order",
+                "exact_covariance"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "version",
+        "axis",
+        "section",
+        "requested_cells",
+        "cells",
+        "input_snapshot",
+        "joint_propagation"
+      ],
+      "additionalProperties": false
+    },
+    "COVARIANCE_SCHEMA_001.json": {
+      "__root_review_fragment__": "fragment_134"
+    }
+  },
+  "fragments": {
+    "fragment_1": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_2"
+      },
+      "required": {
+        "__root_review_fragment__": "fragment_49"
+      },
+      "additionalProperties": false
+    },
+    "fragment_2": {
+      "version": {
+        "const": "a105_endpoint_signal_selection_v1"
+      },
+      "source_ref": {
+        "type": "string",
+        "minLength": 1
+      },
+      "source_kind": {
+        "enum": [
+          "primary_source",
+          "retained_extraction",
+          "synthetic_fixture"
+        ]
+      },
+      "context": {
+        "__root_review_fragment__": "fragment_3"
+      },
+      "relationships": {
+        "__root_review_fragment__": "fragment_10"
+      },
+      "image": {
+        "__root_review_fragment__": "fragment_31"
+      },
+      "covariance_source_ref": {
+        "anyOf": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "requested_cells": {
+        "__root_review_fragment__": "fragment_46"
+      }
+    },
+    "fragment_3": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_4"
+      },
+      "required": {
+        "__root_review_fragment__": "fragment_9"
+      },
+      "additionalProperties": false
+    },
+    "fragment_4": {
+      "subject": {
+        "__root_review_fragment__": "fragment_5"
+      },
+      "organism": {
+        "__root_review_fragment__": "fragment_5"
+      },
+      "genotype": {
+        "__root_review_fragment__": "fragment_5"
+      },
+      "construct": {
+        "__root_review_fragment__": "fragment_5"
+      },
+      "preparation": {
+        "__root_review_fragment__": "fragment_5"
+      },
+      "partners": {
+        "__root_review_fragment__": "fragment_5"
+      },
+      "experiment": {
+        "__root_review_fragment__": "fragment_5"
+      },
+      "condition": {
+        "__root_review_fragment__": "fragment_5"
+      },
+      "endpoint": {
+        "__root_review_fragment__": "fragment_5"
+      },
+      "normalization": {
+        "__root_review_fragment__": "fragment_5"
+      },
+      "intended_variable": {
+        "__root_review_fragment__": "fragment_5"
+      },
+      "functional_assertion": {
+        "__root_review_fragment__": "fragment_5"
+      },
+      "correction_discussion": {
+        "__root_review_fragment__": "fragment_5"
+      },
+      "limitations": {
+        "__root_review_fragment__": "fragment_5"
+      },
+      "repetition": {
+        "__root_review_fragment__": "fragment_5"
+      }
+    },
+    "fragment_5": {
+      "anyOf": {
+        "__root_review_fragment__": "fragment_6"
+      }
+    },
+    "fragment_6": [
+      {
+        "__root_review_fragment__": "fragment_7"
+      },
+      {
+        "type": "null"
+      }
+    ],
+    "fragment_7": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_8"
+      },
+      "required": [
+        "source_ref",
+        "representation",
+        "start",
+        "end",
+        "quote"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_8": {
+      "source_ref": {
+        "type": "string",
+        "minLength": 1
+      },
+      "representation": {
+        "enum": [
+          "original",
+          "text"
+        ]
+      },
+      "start": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "end": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "quote": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "fragment_9": [
+      "subject",
+      "organism",
+      "genotype",
+      "construct",
+      "preparation",
+      "partners",
+      "experiment",
+      "condition",
+      "endpoint",
+      "normalization",
+      "intended_variable",
+      "functional_assertion",
+      "correction_discussion",
+      "limitations",
+      "repetition"
+    ],
+    "fragment_10": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_11"
+      },
+      "required": {
+        "__root_review_fragment__": "fragment_30"
+      },
+      "additionalProperties": false
+    },
+    "fragment_11": {
+      "axis_scale": {
+        "__root_review_fragment__": "fragment_12"
+      },
+      "ordinate_direction": {
+        "__root_review_fragment__": "fragment_16"
+      },
+      "measurement_stage": {
+        "__root_review_fragment__": "fragment_18"
+      },
+      "correction_stage": {
+        "__root_review_fragment__": "fragment_20"
+      },
+      "baseline_basis": {
+        "__root_review_fragment__": "fragment_22"
+      },
+      "baseline_applicability": {
+        "__root_review_fragment__": "fragment_25"
+      },
+      "fast_component_completion": {
+        "__root_review_fragment__": "fragment_25"
+      },
+      "additive_interpretation": {
+        "__root_review_fragment__": "fragment_28"
+      }
+    },
+    "fragment_12": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_13"
+      },
+      "required": [
+        "value",
+        "witnesses",
+        "image_regions"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_13": {
+      "value": {
+        "enum": [
+          "common_affine",
+          "nonlinear",
+          "unknown",
+          "conflicting"
+        ]
+      },
+      "witnesses": {
+        "__root_review_fragment__": "fragment_14"
+      },
+      "image_regions": {
+        "__root_review_fragment__": "fragment_15"
+      }
+    },
+    "fragment_14": {
+      "type": "array",
+      "items": {
+        "__root_review_fragment__": "fragment_7"
+      }
+    },
+    "fragment_15": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "minItems": 4,
+        "maxItems": 4
+      }
+    },
+    "fragment_16": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_17"
+      },
+      "required": [
+        "value",
+        "witnesses",
+        "image_regions"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_17": {
+      "value": {
+        "enum": [
+          "increases_upward",
+          "increases_downward",
+          "unknown",
+          "conflicting"
+        ]
+      },
+      "witnesses": {
+        "__root_review_fragment__": "fragment_14"
+      },
+      "image_regions": {
+        "__root_review_fragment__": "fragment_15"
+      }
+    },
+    "fragment_18": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_19"
+      },
+      "required": [
+        "value",
+        "witnesses",
+        "image_regions"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_19": {
+      "value": {
+        "enum": [
+          "endpoint_amplitude",
+          "initial_rate",
+          "other",
+          "unknown",
+          "conflicting"
+        ]
+      },
+      "witnesses": {
+        "__root_review_fragment__": "fragment_14"
+      },
+      "image_regions": {
+        "__root_review_fragment__": "fragment_15"
+      }
+    },
+    "fragment_20": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_21"
+      },
+      "required": [
+        "value",
+        "witnesses",
+        "image_regions"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_21": {
+      "value": {
+        "enum": [
+          "not_applied",
+          "already_applied",
+          "unknown",
+          "conflicting"
+        ]
+      },
+      "witnesses": {
+        "__root_review_fragment__": "fragment_14"
+      },
+      "image_regions": {
+        "__root_review_fragment__": "fragment_15"
+      }
+    },
+    "fragment_22": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_23"
+      },
+      "required": [
+        "value",
+        "witnesses",
+        "image_regions"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_23": {
+      "value": {
+        "__root_review_fragment__": "fragment_24"
+      },
+      "witnesses": {
+        "__root_review_fragment__": "fragment_14"
+      },
+      "image_regions": {
+        "__root_review_fragment__": "fragment_15"
+      }
+    },
+    "fragment_24": {
+      "enum": [
+        "source_displayed_extrapolation",
+        "matched_control",
+        "new_fit",
+        "unknown",
+        "conflicting"
+      ]
+    },
+    "fragment_25": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_26"
+      },
+      "required": [
+        "value",
+        "witnesses",
+        "image_regions"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_26": {
+      "value": {
+        "__root_review_fragment__": "fragment_27"
+      },
+      "witnesses": {
+        "__root_review_fragment__": "fragment_14"
+      },
+      "image_regions": {
+        "__root_review_fragment__": "fragment_15"
+      }
+    },
+    "fragment_27": {
+      "enum": [
+        "supported",
+        "explicit_conditional_scenario",
+        "unsupported",
+        "unknown",
+        "conflicting"
+      ]
+    },
+    "fragment_28": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_29"
+      },
+      "required": [
+        "value",
+        "witnesses",
+        "image_regions"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_29": {
+      "value": {
+        "enum": [
+          "nonnegative_additive",
+          "signed_decomposition",
+          "unknown",
+          "conflicting"
+        ]
+      },
+      "witnesses": {
+        "__root_review_fragment__": "fragment_14"
+      },
+      "image_regions": {
+        "__root_review_fragment__": "fragment_15"
+      }
+    },
+    "fragment_30": [
+      "axis_scale",
+      "ordinate_direction",
+      "measurement_stage",
+      "correction_stage",
+      "baseline_basis",
+      "baseline_applicability",
+      "fast_component_completion",
+      "additive_interpretation"
+    ],
+    "fragment_31": {
+      "anyOf": {
+        "__root_review_fragment__": "fragment_32"
+      }
+    },
+    "fragment_32": [
+      {
+        "__root_review_fragment__": "fragment_33"
+      },
+      {
+        "type": "null"
+      }
+    ],
+    "fragment_33": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_34"
+      },
+      "required": [
+        "source_ref",
+        "expected_sha256",
+        "width",
+        "height",
+        "panel_region",
+        "image_origin",
+        "points"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_34": {
+      "source_ref": {
+        "type": "string",
+        "minLength": 1
+      },
+      "expected_sha256": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      },
+      "width": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "height": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "panel_region": {
+        "type": "array",
+        "items": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "minItems": 4,
+        "maxItems": 4
+      },
+      "image_origin": {
+        "enum": [
+          "published",
+          "synthetic"
+        ]
+      },
+      "points": {
+        "__root_review_fragment__": "fragment_35"
+      }
+    },
+    "fragment_35": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_36"
+      },
+      "required": [
+        "initial",
+        "baseline_at_addition",
+        "late"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_36": {
+      "initial": {
+        "__root_review_fragment__": "fragment_37"
+      },
+      "baseline_at_addition": {
+        "__root_review_fragment__": "fragment_37"
+      },
+      "late": {
+        "__root_review_fragment__": "fragment_37"
+      }
+    },
+    "fragment_37": {
+      "anyOf": {
+        "__root_review_fragment__": "fragment_38"
+      }
+    },
+    "fragment_38": [
+      {
+        "__root_review_fragment__": "fragment_39"
+      },
+      {
+        "type": "null"
+      }
+    ],
+    "fragment_39": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_40"
+      },
+      "required": {
+        "__root_review_fragment__": "fragment_45"
+      },
+      "additionalProperties": false
+    },
+    "fragment_40": {
+      "x": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "y": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "y_enclosure": {
+        "__root_review_fragment__": "fragment_41"
+      },
+      "support_region": {
+        "type": "array",
+        "items": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "minItems": 4,
+        "maxItems": 4
+      },
+      "maximum_rgb": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 255
+      },
+      "image_witness": {
+        "__root_review_fragment__": "fragment_43"
+      },
+      "semantic_witnesses": {
+        "__root_review_fragment__": "fragment_14"
+      },
+      "physical_estimate_owner": {
+        "__root_review_fragment__": "fragment_5"
+      }
+    },
+    "fragment_41": {
+      "anyOf": {
+        "__root_review_fragment__": "fragment_42"
+      }
+    },
+    "fragment_42": [
+      {
+        "type": "array",
+        "items": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "minItems": 2,
+        "maxItems": 2
+      },
+      {
+        "type": "null"
+      }
+    ],
+    "fragment_43": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_44"
+      },
+      "required": [
+        "region",
+        "meaning"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_44": {
+      "region": {
+        "type": "array",
+        "items": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "minItems": 4,
+        "maxItems": 4
+      },
+      "meaning": {
+        "enum": [
+          "initial_trace",
+          "displayed_baseline_at_addition",
+          "selected_late_trace"
+        ]
+      }
+    },
+    "fragment_45": [
+      "x",
+      "y",
+      "y_enclosure",
+      "support_region",
+      "maximum_rgb",
+      "image_witness",
+      "semantic_witnesses",
+      "physical_estimate_owner"
+    ],
+    "fragment_46": {
+      "type": "array",
+      "items": {
+        "__root_review_fragment__": "fragment_47"
+      },
+      "uniqueItems": true
+    },
+    "fragment_47": {
+      "enum": {
+        "__root_review_fragment__": "fragment_48"
+      }
+    },
+    "fragment_48": [
+      "total_amplitude",
+      "corrected_amplitude",
+      "additional_amplitude",
+      "retained_fraction",
+      "additional_fraction",
+      "total_amplitude_variance",
+      "corrected_amplitude_variance",
+      "additional_amplitude_variance",
+      "retained_fraction_variance",
+      "additional_fraction_variance"
+    ],
+    "fragment_49": [
+      "version",
+      "source_ref",
+      "source_kind",
+      "context",
+      "relationships",
+      "image",
+      "covariance_source_ref",
+      "requested_cells"
+    ],
+    "fragment_50": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_51"
+      },
+      "required": {
+        "__root_review_fragment__": "fragment_148"
+      },
+      "additionalProperties": false
+    },
+    "fragment_51": {
+      "version": {
+        "const": "a105_endpoint_signal_inputs_v1"
+      },
+      "arguments": {
+        "__root_review_fragment__": "fragment_1"
+      },
+      "source_ref": {
+        "type": "string",
+        "minLength": 1
+      },
+      "source_kind": {
+        "enum": [
+          "primary_source",
+          "retained_extraction",
+          "synthetic_fixture"
+        ]
+      },
+      "context": {
+        "__root_review_fragment__": "fragment_52"
+      },
+      "context_errors": {
+        "__root_review_fragment__": "fragment_60"
+      },
+      "relationships": {
+        "__root_review_fragment__": "fragment_65"
+      },
+      "image": {
+        "__root_review_fragment__": "fragment_110"
+      },
+      "points": {
+        "__root_review_fragment__": "fragment_115"
+      },
+      "covariance": {
+        "__root_review_fragment__": "fragment_128"
+      },
+      "source_artifacts": {
+        "__root_review_fragment__": "fragment_144"
+      },
+      "input_origins": {
+        "__root_review_fragment__": "fragment_147"
+      }
+    },
+    "fragment_52": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_53"
+      },
+      "required": {
+        "__root_review_fragment__": "fragment_9"
+      },
+      "additionalProperties": false
+    },
+    "fragment_53": {
+      "subject": {
+        "__root_review_fragment__": "fragment_54"
+      },
+      "organism": {
+        "__root_review_fragment__": "fragment_54"
+      },
+      "genotype": {
+        "__root_review_fragment__": "fragment_54"
+      },
+      "construct": {
+        "__root_review_fragment__": "fragment_54"
+      },
+      "preparation": {
+        "__root_review_fragment__": "fragment_54"
+      },
+      "partners": {
+        "__root_review_fragment__": "fragment_54"
+      },
+      "experiment": {
+        "__root_review_fragment__": "fragment_54"
+      },
+      "condition": {
+        "__root_review_fragment__": "fragment_54"
+      },
+      "endpoint": {
+        "__root_review_fragment__": "fragment_54"
+      },
+      "normalization": {
+        "__root_review_fragment__": "fragment_54"
+      },
+      "intended_variable": {
+        "__root_review_fragment__": "fragment_54"
+      },
+      "functional_assertion": {
+        "__root_review_fragment__": "fragment_54"
+      },
+      "correction_discussion": {
+        "__root_review_fragment__": "fragment_54"
+      },
+      "limitations": {
+        "__root_review_fragment__": "fragment_54"
+      },
+      "repetition": {
+        "__root_review_fragment__": "fragment_54"
+      }
+    },
+    "fragment_54": {
+      "anyOf": {
+        "__root_review_fragment__": "fragment_55"
+      }
+    },
+    "fragment_55": [
+      {
+        "__root_review_fragment__": "fragment_56"
+      },
+      {
+        "type": "null"
+      }
+    ],
+    "fragment_56": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_57"
+      },
+      "required": [
+        "value",
+        "witness"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_57": {
+      "value": {
+        "type": "string",
+        "minLength": 1
+      },
+      "witness": {
+        "__root_review_fragment__": "fragment_58"
+      }
+    },
+    "fragment_58": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_59"
+      },
+      "required": [
+        "source_ref",
+        "representation",
+        "start",
+        "end",
+        "quote",
+        "artifact_ref"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_59": {
+      "source_ref": {
+        "type": "string",
+        "minLength": 1
+      },
+      "representation": {
+        "enum": [
+          "original",
+          "text"
+        ]
+      },
+      "start": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "end": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "quote": {
+        "type": "string",
+        "minLength": 1
+      },
+      "artifact_ref": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "fragment_60": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_61"
+      },
+      "required": {
+        "__root_review_fragment__": "fragment_9"
+      },
+      "additionalProperties": false
+    },
+    "fragment_61": {
+      "subject": {
+        "__root_review_fragment__": "fragment_62"
+      },
+      "organism": {
+        "__root_review_fragment__": "fragment_62"
+      },
+      "genotype": {
+        "__root_review_fragment__": "fragment_62"
+      },
+      "construct": {
+        "__root_review_fragment__": "fragment_62"
+      },
+      "preparation": {
+        "__root_review_fragment__": "fragment_62"
+      },
+      "partners": {
+        "__root_review_fragment__": "fragment_62"
+      },
+      "experiment": {
+        "__root_review_fragment__": "fragment_62"
+      },
+      "condition": {
+        "__root_review_fragment__": "fragment_62"
+      },
+      "endpoint": {
+        "__root_review_fragment__": "fragment_62"
+      },
+      "normalization": {
+        "__root_review_fragment__": "fragment_62"
+      },
+      "intended_variable": {
+        "__root_review_fragment__": "fragment_62"
+      },
+      "functional_assertion": {
+        "__root_review_fragment__": "fragment_62"
+      },
+      "correction_discussion": {
+        "__root_review_fragment__": "fragment_62"
+      },
+      "limitations": {
+        "__root_review_fragment__": "fragment_62"
+      },
+      "repetition": {
+        "__root_review_fragment__": "fragment_62"
+      }
+    },
+    "fragment_62": {
+      "anyOf": {
+        "__root_review_fragment__": "fragment_63"
+      }
+    },
+    "fragment_63": [
+      {
+        "__root_review_fragment__": "fragment_64"
+      },
+      {
+        "type": "null"
+      }
+    ],
+    "fragment_64": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "field": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "code",
+        "field"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_65": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_66"
+      },
+      "required": {
+        "__root_review_fragment__": "fragment_30"
+      },
+      "additionalProperties": false
+    },
+    "fragment_66": {
+      "axis_scale": {
+        "__root_review_fragment__": "fragment_67"
+      },
+      "ordinate_direction": {
+        "__root_review_fragment__": "fragment_74"
+      },
+      "measurement_stage": {
+        "__root_review_fragment__": "fragment_80"
+      },
+      "correction_stage": {
+        "__root_review_fragment__": "fragment_86"
+      },
+      "baseline_basis": {
+        "__root_review_fragment__": "fragment_92"
+      },
+      "baseline_applicability": {
+        "__root_review_fragment__": "fragment_98"
+      },
+      "fast_component_completion": {
+        "__root_review_fragment__": "fragment_98"
+      },
+      "additive_interpretation": {
+        "__root_review_fragment__": "fragment_104"
+      }
+    },
+    "fragment_67": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_68"
+      },
+      "required": [
+        "interpretation",
+        "error"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_68": {
+      "interpretation": {
+        "__root_review_fragment__": "fragment_69"
+      },
+      "error": {
+        "__root_review_fragment__": "fragment_62"
+      }
+    },
+    "fragment_69": {
+      "anyOf": {
+        "__root_review_fragment__": "fragment_70"
+      }
+    },
+    "fragment_70": [
+      {
+        "__root_review_fragment__": "fragment_71"
+      },
+      {
+        "type": "null"
+      }
+    ],
+    "fragment_71": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_72"
+      },
+      "required": [
+        "kind",
+        "value",
+        "witnesses",
+        "image_regions"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_72": {
+      "kind": {
+        "const": "source_interpretation"
+      },
+      "value": {
+        "enum": [
+          "common_affine",
+          "nonlinear",
+          "unknown",
+          "conflicting"
+        ]
+      },
+      "witnesses": {
+        "__root_review_fragment__": "fragment_73"
+      },
+      "image_regions": {
+        "__root_review_fragment__": "fragment_15"
+      }
+    },
+    "fragment_73": {
+      "type": "array",
+      "items": {
+        "__root_review_fragment__": "fragment_58"
+      }
+    },
+    "fragment_74": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_75"
+      },
+      "required": [
+        "interpretation",
+        "error"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_75": {
+      "interpretation": {
+        "__root_review_fragment__": "fragment_76"
+      },
+      "error": {
+        "__root_review_fragment__": "fragment_62"
+      }
+    },
+    "fragment_76": {
+      "anyOf": {
+        "__root_review_fragment__": "fragment_77"
+      }
+    },
+    "fragment_77": [
+      {
+        "__root_review_fragment__": "fragment_78"
+      },
+      {
+        "type": "null"
+      }
+    ],
+    "fragment_78": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_79"
+      },
+      "required": [
+        "kind",
+        "value",
+        "witnesses",
+        "image_regions"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_79": {
+      "kind": {
+        "const": "source_interpretation"
+      },
+      "value": {
+        "enum": [
+          "increases_upward",
+          "increases_downward",
+          "unknown",
+          "conflicting"
+        ]
+      },
+      "witnesses": {
+        "__root_review_fragment__": "fragment_73"
+      },
+      "image_regions": {
+        "__root_review_fragment__": "fragment_15"
+      }
+    },
+    "fragment_80": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_81"
+      },
+      "required": [
+        "interpretation",
+        "error"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_81": {
+      "interpretation": {
+        "__root_review_fragment__": "fragment_82"
+      },
+      "error": {
+        "__root_review_fragment__": "fragment_62"
+      }
+    },
+    "fragment_82": {
+      "anyOf": {
+        "__root_review_fragment__": "fragment_83"
+      }
+    },
+    "fragment_83": [
+      {
+        "__root_review_fragment__": "fragment_84"
+      },
+      {
+        "type": "null"
+      }
+    ],
+    "fragment_84": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_85"
+      },
+      "required": [
+        "kind",
+        "value",
+        "witnesses",
+        "image_regions"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_85": {
+      "kind": {
+        "const": "source_interpretation"
+      },
+      "value": {
+        "enum": [
+          "endpoint_amplitude",
+          "initial_rate",
+          "other",
+          "unknown",
+          "conflicting"
+        ]
+      },
+      "witnesses": {
+        "__root_review_fragment__": "fragment_73"
+      },
+      "image_regions": {
+        "__root_review_fragment__": "fragment_15"
+      }
+    },
+    "fragment_86": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_87"
+      },
+      "required": [
+        "interpretation",
+        "error"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_87": {
+      "interpretation": {
+        "__root_review_fragment__": "fragment_88"
+      },
+      "error": {
+        "__root_review_fragment__": "fragment_62"
+      }
+    },
+    "fragment_88": {
+      "anyOf": {
+        "__root_review_fragment__": "fragment_89"
+      }
+    },
+    "fragment_89": [
+      {
+        "__root_review_fragment__": "fragment_90"
+      },
+      {
+        "type": "null"
+      }
+    ],
+    "fragment_90": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_91"
+      },
+      "required": [
+        "kind",
+        "value",
+        "witnesses",
+        "image_regions"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_91": {
+      "kind": {
+        "const": "source_interpretation"
+      },
+      "value": {
+        "enum": [
+          "not_applied",
+          "already_applied",
+          "unknown",
+          "conflicting"
+        ]
+      },
+      "witnesses": {
+        "__root_review_fragment__": "fragment_73"
+      },
+      "image_regions": {
+        "__root_review_fragment__": "fragment_15"
+      }
+    },
+    "fragment_92": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_93"
+      },
+      "required": [
+        "interpretation",
+        "error"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_93": {
+      "interpretation": {
+        "__root_review_fragment__": "fragment_94"
+      },
+      "error": {
+        "__root_review_fragment__": "fragment_62"
+      }
+    },
+    "fragment_94": {
+      "anyOf": {
+        "__root_review_fragment__": "fragment_95"
+      }
+    },
+    "fragment_95": [
+      {
+        "__root_review_fragment__": "fragment_96"
+      },
+      {
+        "type": "null"
+      }
+    ],
+    "fragment_96": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_97"
+      },
+      "required": [
+        "kind",
+        "value",
+        "witnesses",
+        "image_regions"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_97": {
+      "kind": {
+        "const": "source_interpretation"
+      },
+      "value": {
+        "__root_review_fragment__": "fragment_24"
+      },
+      "witnesses": {
+        "__root_review_fragment__": "fragment_73"
+      },
+      "image_regions": {
+        "__root_review_fragment__": "fragment_15"
+      }
+    },
+    "fragment_98": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_99"
+      },
+      "required": [
+        "interpretation",
+        "error"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_99": {
+      "interpretation": {
+        "__root_review_fragment__": "fragment_100"
+      },
+      "error": {
+        "__root_review_fragment__": "fragment_62"
+      }
+    },
+    "fragment_100": {
+      "anyOf": {
+        "__root_review_fragment__": "fragment_101"
+      }
+    },
+    "fragment_101": [
+      {
+        "__root_review_fragment__": "fragment_102"
+      },
+      {
+        "type": "null"
+      }
+    ],
+    "fragment_102": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_103"
+      },
+      "required": [
+        "kind",
+        "value",
+        "witnesses",
+        "image_regions"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_103": {
+      "kind": {
+        "const": "source_interpretation"
+      },
+      "value": {
+        "__root_review_fragment__": "fragment_27"
+      },
+      "witnesses": {
+        "__root_review_fragment__": "fragment_73"
+      },
+      "image_regions": {
+        "__root_review_fragment__": "fragment_15"
+      }
+    },
+    "fragment_104": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_105"
+      },
+      "required": [
+        "interpretation",
+        "error"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_105": {
+      "interpretation": {
+        "__root_review_fragment__": "fragment_106"
+      },
+      "error": {
+        "__root_review_fragment__": "fragment_62"
+      }
+    },
+    "fragment_106": {
+      "anyOf": {
+        "__root_review_fragment__": "fragment_107"
+      }
+    },
+    "fragment_107": [
+      {
+        "__root_review_fragment__": "fragment_108"
+      },
+      {
+        "type": "null"
+      }
+    ],
+    "fragment_108": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_109"
+      },
+      "required": [
+        "kind",
+        "value",
+        "witnesses",
+        "image_regions"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_109": {
+      "kind": {
+        "const": "source_interpretation"
+      },
+      "value": {
+        "enum": [
+          "nonnegative_additive",
+          "signed_decomposition",
+          "unknown",
+          "conflicting"
+        ]
+      },
+      "witnesses": {
+        "__root_review_fragment__": "fragment_73"
+      },
+      "image_regions": {
+        "__root_review_fragment__": "fragment_15"
+      }
+    },
+    "fragment_110": {
+      "anyOf": {
+        "__root_review_fragment__": "fragment_111"
+      }
+    },
+    "fragment_111": [
+      {
+        "__root_review_fragment__": "fragment_112"
+      },
+      {
+        "type": "null"
+      }
+    ],
+    "fragment_112": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_113"
+      },
+      "required": {
+        "__root_review_fragment__": "fragment_114"
+      },
+      "additionalProperties": false
+    },
+    "fragment_113": {
+      "source_ref": {
+        "type": "string",
+        "minLength": 1
+      },
+      "artifact_ref": {
+        "anyOf": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "sha256": {
+        "anyOf": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "width": {
+        "anyOf": [
+          {
+            "type": "integer",
+            "minimum": 0
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "height": {
+        "anyOf": [
+          {
+            "type": "integer",
+            "minimum": 0
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "format": {
+        "anyOf": [
+          {
+            "enum": [
+              "PNG",
+              "JPEG"
+            ]
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "mode": {
+        "anyOf": [
+          {
+            "enum": [
+              "RGB",
+              "RGBA",
+              "L"
+            ]
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "panel_region": {
+        "type": "array",
+        "items": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "minItems": 4,
+        "maxItems": 4
+      },
+      "error": {
+        "__root_review_fragment__": "fragment_62"
+      }
+    },
+    "fragment_114": [
+      "source_ref",
+      "artifact_ref",
+      "sha256",
+      "width",
+      "height",
+      "format",
+      "mode",
+      "panel_region",
+      "error"
+    ],
+    "fragment_115": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_116"
+      },
+      "required": [
+        "initial",
+        "baseline_at_addition",
+        "late"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_116": {
+      "initial": {
+        "__root_review_fragment__": "fragment_117"
+      },
+      "baseline_at_addition": {
+        "__root_review_fragment__": "fragment_117"
+      },
+      "late": {
+        "__root_review_fragment__": "fragment_117"
+      }
+    },
+    "fragment_117": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_118"
+      },
+      "required": [
+        "selection",
+        "observation",
+        "error"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_118": {
+      "selection": {
+        "__root_review_fragment__": "fragment_37"
+      },
+      "observation": {
+        "__root_review_fragment__": "fragment_119"
+      },
+      "error": {
+        "__root_review_fragment__": "fragment_62"
+      }
+    },
+    "fragment_119": {
+      "anyOf": {
+        "__root_review_fragment__": "fragment_120"
+      }
+    },
+    "fragment_120": [
+      {
+        "__root_review_fragment__": "fragment_121"
+      },
+      {
+        "type": "null"
+      }
+    ],
+    "fragment_121": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_122"
+      },
+      "required": {
+        "__root_review_fragment__": "fragment_127"
+      },
+      "additionalProperties": false
+    },
+    "fragment_122": {
+      "selection": {
+        "__root_review_fragment__": "fragment_39"
+      },
+      "coordinate_owner": {
+        "type": "string",
+        "minLength": 1
+      },
+      "physical_estimate_owner": {
+        "anyOf": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "x": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "y": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "y_enclosure": {
+        "__root_review_fragment__": "fragment_41"
+      },
+      "support": {
+        "__root_review_fragment__": "fragment_123"
+      },
+      "semantic_witnesses": {
+        "__root_review_fragment__": "fragment_73"
+      },
+      "physical_owner_witness": {
+        "__root_review_fragment__": "fragment_125"
+      },
+      "origin": {
+        "enum": [
+          "graph_derived_manual",
+          "synthetic"
+        ]
+      },
+      "error": {
+        "__root_review_fragment__": "fragment_62"
+      }
+    },
+    "fragment_123": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_124"
+      },
+      "required": [
+        "qualifying_pixel_count",
+        "point_rgb",
+        "authentication"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_124": {
+      "qualifying_pixel_count": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "point_rgb": {
+        "type": "array",
+        "items": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "minItems": 3,
+        "maxItems": 3
+      },
+      "authentication": {
+        "const": "source_bytes_geometry_and_ink_only"
+      }
+    },
+    "fragment_125": {
+      "anyOf": {
+        "__root_review_fragment__": "fragment_126"
+      }
+    },
+    "fragment_126": [
+      {
+        "__root_review_fragment__": "fragment_58"
+      },
+      {
+        "type": "null"
+      }
+    ],
+    "fragment_127": [
+      "selection",
+      "coordinate_owner",
+      "physical_estimate_owner",
+      "x",
+      "y",
+      "y_enclosure",
+      "support",
+      "semantic_witnesses",
+      "physical_owner_witness",
+      "origin",
+      "error"
+    ],
+    "fragment_128": {
+      "anyOf": {
+        "__root_review_fragment__": "fragment_129"
+      }
+    },
+    "fragment_129": [
+      {
+        "__root_review_fragment__": "fragment_130"
+      },
+      {
+        "type": "null"
+      }
+    ],
+    "fragment_130": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_131"
+      },
+      "required": [
+        "source_ref",
+        "artifact_ref",
+        "sha256",
+        "model",
+        "exact_covariance",
+        "error"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_131": {
+      "source_ref": {
+        "type": "string",
+        "minLength": 1
+      },
+      "artifact_ref": {
+        "anyOf": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "sha256": {
+        "anyOf": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "model": {
+        "__root_review_fragment__": "fragment_132"
+      },
+      "exact_covariance": {
+        "__root_review_fragment__": "fragment_138"
+      },
+      "error": {
+        "__root_review_fragment__": "fragment_62"
+      }
+    },
+    "fragment_132": {
+      "anyOf": {
+        "__root_review_fragment__": "fragment_133"
+      }
+    },
+    "fragment_133": [
+      {
+        "__root_review_fragment__": "fragment_134"
+      },
+      {
+        "type": "null"
+      }
+    ],
+    "fragment_134": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_135"
+      },
+      "required": {
+        "__root_review_fragment__": "fragment_137"
+      },
+      "additionalProperties": false
+    },
+    "fragment_135": {
+      "version": {
+        "const": "a105_endpoint_signal_covariance_v1"
+      },
+      "basis": {
+        "enum": [
+          "joint_manual_reading_error",
+          "joint_physical_ordinate_estimates"
+        ]
+      },
+      "primitive_order": {
+        "const": [
+          "initial",
+          "baseline_at_addition",
+          "late"
+        ]
+      },
+      "primitive_owners": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 3,
+        "maxItems": 3
+      },
+      "primitive_units": {
+        "const": [
+          "native_ordinate_pixel",
+          "native_ordinate_pixel",
+          "native_ordinate_pixel"
+        ]
+      },
+      "covariance": {
+        "__root_review_fragment__": "fragment_136"
+      },
+      "variance_status": {
+        "enum": [
+          "known",
+          "estimated",
+          "unknown"
+        ]
+      },
+      "origin": {
+        "enum": [
+          "source_reported",
+          "source_derived",
+          "synthetic"
+        ]
+      },
+      "provenance_witnesses": {
+        "__root_review_fragment__": "fragment_14"
+      },
+      "affine_mapping_witnesses": {
+        "__root_review_fragment__": "fragment_14"
+      }
+    },
+    "fragment_136": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 3,
+        "maxItems": 3
+      },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "fragment_137": [
+      "version",
+      "basis",
+      "primitive_order",
+      "primitive_owners",
+      "primitive_units",
+      "covariance",
+      "variance_status",
+      "origin",
+      "provenance_witnesses",
+      "affine_mapping_witnesses"
+    ],
+    "fragment_138": {
+      "anyOf": {
+        "__root_review_fragment__": "fragment_139"
+      }
+    },
+    "fragment_139": [
+      {
+        "__root_review_fragment__": "fragment_140"
+      },
+      {
+        "type": "null"
+      }
+    ],
+    "fragment_140": {
+      "type": "array",
+      "items": {
+        "__root_review_fragment__": "fragment_141"
+      },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "fragment_141": {
+      "type": "array",
+      "items": {
+        "__root_review_fragment__": "fragment_142"
+      },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "fragment_142": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_143"
+      },
+      "required": [
+        "numerator",
+        "denominator"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_143": {
+      "numerator": {
+        "type": "string",
+        "pattern": "^-?[0-9]+$"
+      },
+      "denominator": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      }
+    },
+    "fragment_144": {
+      "type": "array",
+      "items": {
+        "__root_review_fragment__": "fragment_145"
+      }
+    },
+    "fragment_145": {
+      "type": "object",
+      "properties": {
+        "__root_review_fragment__": "fragment_146"
+      },
+      "required": [
+        "source_ref",
+        "representation",
+        "artifact_ref",
+        "sha256",
+        "error"
+      ],
+      "additionalProperties": false
+    },
+    "fragment_146": {
+      "source_ref": {
+        "type": "string",
+        "minLength": 1
+      },
+      "representation": {
+        "enum": [
+          "original",
+          "text"
+        ]
+      },
+      "artifact_ref": {
+        "anyOf": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "sha256": {
+        "anyOf": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "error": {
+        "__root_review_fragment__": "fragment_62"
+      }
+    },
+    "fragment_147": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "graph_derived_manual",
+          "reported",
+          "derived",
+          "synthetic"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "fragment_148": [
+      "version",
+      "arguments",
+      "source_ref",
+      "source_kind",
+      "context",
+      "context_errors",
+      "relationships",
+      "image",
+      "points",
+      "covariance",
+      "source_artifacts",
+      "input_origins"
+    ],
+    "fragment_149": {
+      "anyOf": {
+        "__root_review_fragment__": "fragment_150"
+      }
+    },
+    "fragment_150": [
+      {
+        "__root_review_fragment__": "fragment_142"
+      },
+      {
+        "type": "null"
+      }
+    ]
+  },
+  "roundtrip_to_all_four_original_schemas": true,
+  "source_hashes": {
+    "INPUT_SCHEMA_001.json": "ab8dfa5a05415158527e61c96582b4ccf340e5d137ef6eb011042954288a8806",
+    "EXTRACTION_SCHEMA_001.json": "8d68083aa9b6d0299f6c6db9badc164e031cbab62feb1b2a0b8c25f600a180d3",
+    "SHEET_SCHEMA_001.json": "cafeba289a8ca5884b022e5cf50853c36c1d422b0bc4034da3d5b5242d76a6ac",
+    "COVARIANCE_SCHEMA_001.json": "b40eea34092ad69db05b141b1ce85725f9e8f08f73812bc9e2ec26fd1482d8a4"
+  }
+}

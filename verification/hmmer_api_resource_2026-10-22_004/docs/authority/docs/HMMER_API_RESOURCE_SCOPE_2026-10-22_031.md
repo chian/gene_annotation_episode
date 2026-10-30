@@ -1,0 +1,9 @@
+# Correction of scope030's test hypothesis
+
+Scope030, SHA256 1b405ee8d947997998829795f22d1cc6e7a7903d404d229dc01b6d3c33a4dde8, incorrectly described the existing long-active-resume test as a stale expectation requiring modification. Reading the complete fixture and running the exact node disproved that claim. Its ScriptedProvider has no has_session method, so the original pending decision42 already contains its captured restoration preview. Replaying that preview unchanged is compatible with scope029.
+
+The exact existing node tests/test_runtime_history.py::test_long_active_resume_adds_bounded_metadata_without_rewriting_or_reexecuting passed unchanged: one test, exit0, 46.62 seconds. Original command, input hashes, log, XML, results and final hashes are retained in /tmp/hmmer-api-r-004-history030-evidence. RESULTS.json SHA256 is ef7971a3f0f1c8e18bc90169b0e42568f44d7564cd4e49492127cbcbec55c428. The existing test file SHA256 before and after is 8f054b3170ba7ea2720d482cc09be9b04aa7dfca629324478ad3c5424a085982. The complete133-file runtime pin before and after is 16435877cddb566a9b802b6b3ce942595a9564b4cc10f8ca52b75f4007d9689d.
+
+No source or test was edited under scope030. Its conditional test-edit authorization is withdrawn because the expected failure did not occur. Generation004 retains all205 existing test files unchanged and adds six new files. The separate passing node is supplemental evidence and is excluded from the root's316-case final regression count. No actual model, public service, native job or scientific workspace was used by this supplemental check.
+
+Scope030 remains unchanged as the original mistaken statement; this additive correction supersedes its claims that a failure had been established or that an existing test was changed. Exact saved pending-request replay remains required. Future model-presentation planning does not acquire authority to modify a passing historical assertion from that rejected hypothesis.

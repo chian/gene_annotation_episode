@@ -1,0 +1,11 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+________________ test_capture_selected_tiny_database_utilities _________________
+source_snapshot/tests/test_native_blast_database_utility_capture_624.py:113: in test_capture_selected_tiny_database_utilities
+    assert all(r['returncode']==r['expected_returncode'] for r in cases
+E   AssertionError: [{'name': 'build_dna_v4', 'program': 'makeblastdb', 'argv': ['/home/chia/repos/gene_annotation_episode/verification/to...ification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/extract_dna_v4', ...}, ...]
+E   assert False
+E    +  where False = all(<generator object test_capture_selected_tiny_database_utilities.<locals>.<genexpr> at 0x738acff3a190>)
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_native_blast_database_utility_capture_624.py::test_capture_selected_tiny_database_utilities
+1 failed in 0.98s

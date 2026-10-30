@@ -1,0 +1,159 @@
+{
+  "artifacts": [
+    {
+      "format": "hmmer_stdout",
+      "relative_path": "outputs/stdout",
+      "role": "stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "format": "hmmer_stderr",
+      "relative_path": "outputs/stderr",
+      "role": "stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "format": "fasta",
+      "relative_path": "outputs/generated_sequences",
+      "role": "generated_sequences",
+      "sha256": "8b31fe91ddbfd97a7e3c31c492f329eb86a9dd4797e539132af7b2d4bde6c476",
+      "size_bytes": 37
+    }
+  ],
+  "environment": {
+    "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check002/temporary/test_actual_reservation_cli_di0/.episode-operations/feb638b36c652a62cd13a60f32211175bba62fb263132450ce1421edbdef801f/d6ffaf517664d7886c65ba878d423cfa09c3782fb6f0501c01ea144252509639/hmmer-preparation-attempt/tmp",
+    "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check002/temporary/test_actual_reservation_cli_di0/.episode-operations/feb638b36c652a62cd13a60f32211175bba62fb263132450ce1421edbdef801f/d6ffaf517664d7886c65ba878d423cfa09c3782fb6f0501c01ea144252509639/hmmer-preparation-attempt/tmp",
+    "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check002/temporary/test_actual_reservation_cli_di0/.episode-operations/feb638b36c652a62cd13a60f32211175bba62fb263132450ce1421edbdef801f/d6ffaf517664d7886c65ba878d423cfa09c3782fb6f0501c01ea144252509639/hmmer-preparation-attempt/tmp",
+    "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check002/temporary/test_actual_reservation_cli_di0/.episode-operations/feb638b36c652a62cd13a60f32211175bba62fb263132450ce1421edbdef801f/d6ffaf517664d7886c65ba878d423cfa09c3782fb6f0501c01ea144252509639/hmmer-preparation-attempt/cache"
+  },
+  "failures": [],
+  "finished_at": "2026-10-26T09:01:19.228121+00:00",
+  "identity": {
+    "attempt_id": "d6ffaf517664d7886c65ba878d423cfa09c3782fb6f0501c01ea144252509639",
+    "episode_id": "local-child267",
+    "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check002/temporary/test_actual_reservation_cli_di0/.episode-operations/feb638b36c652a62cd13a60f32211175bba62fb263132450ce1421edbdef801f/d6ffaf517664d7886c65ba878d423cfa09c3782fb6f0501c01ea144252509639/native.json",
+    "operation_key": "selected-preparation",
+    "requested_job_sha256": "48e5e0b6e3cfce99693adea7173f949ef660b264ae06e7f8523ef0f497829e7b",
+    "resource_id": "local267",
+    "run_id": "run267"
+  },
+  "inputs": [
+    {
+      "artifact_ref": "fixture267:models:0",
+      "expected_sha256": "f744b16d69df05ddf8239af3bc4a68d36a6e2764f31ad1b8274507e958056ea5",
+      "expected_size_bytes": 6670,
+      "final_sha256": "f744b16d69df05ddf8239af3bc4a68d36a6e2764f31ad1b8274507e958056ea5",
+      "final_size_bytes": 6670,
+      "format": "hmmer3_ascii",
+      "ordinal": 0,
+      "original_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_protein/profile.hmm",
+      "relative_path": "inputs/models.hmm",
+      "role": "models",
+      "staged_sha256": "f744b16d69df05ddf8239af3bc4a68d36a6e2764f31ad1b8274507e958056ea5",
+      "staged_size_bytes": 6670
+    }
+  ],
+  "mode": "consensus_simple",
+  "native_abi": {
+    "byte_order": "little",
+    "bytes_per_float": 8,
+    "c_float_bytes": 4,
+    "c_int_bytes": 4,
+    "c_long_bytes": 8,
+    "float_format": "ieee754_binary64",
+    "int32_bytes": 4,
+    "uint16_bytes": 2,
+    "uint32_bytes": 4,
+    "uint64_bytes": 8,
+    "uint8_bytes": 1
+  },
+  "operation": {
+    "engine_version": "3.4",
+    "mode": "consensus_simple",
+    "program": "hmmemit",
+    "settings": {
+      "--seed": 42,
+      "-c": true
+    }
+  },
+  "program": "hmmemit",
+  "realized_argv": [
+    "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmemit",
+    "--seed",
+    "42",
+    "-c",
+    "-o",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check002/temporary/test_actual_reservation_cli_di0/.episode-operations/feb638b36c652a62cd13a60f32211175bba62fb263132450ce1421edbdef801f/d6ffaf517664d7886c65ba878d423cfa09c3782fb6f0501c01ea144252509639/hmmer-preparation-attempt/outputs/generated_sequences",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check002/temporary/test_actual_reservation_cli_di0/.episode-operations/feb638b36c652a62cd13a60f32211175bba62fb263132450ce1421edbdef801f/d6ffaf517664d7886c65ba878d423cfa09c3782fb6f0501c01ea144252509639/hmmer-preparation-attempt/inputs/models.hmm"
+  ],
+  "requested_job": {
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmemit",
+      "--seed",
+      "42",
+      "-c",
+      "-o",
+      "outputs/generated_sequences",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_protein/profile.hmm"
+    ],
+    "environment": {},
+    "native_hmmer_preparation": {
+      "environment": {},
+      "grading_parameters": {},
+      "input_metadata": {},
+      "key": null,
+      "mode": "consensus_simple",
+      "operands": [
+        {
+          "artifact_ref": "fixture267:models:0",
+          "format": "hmmer3_ascii",
+          "ordinal": 0,
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_protein/profile.hmm",
+          "role": "models",
+          "sha256": "f744b16d69df05ddf8239af3bc4a68d36a6e2764f31ad1b8274507e958056ea5",
+          "size_bytes": 6670
+        }
+      ],
+      "options": [
+        "--seed",
+        "42"
+      ],
+      "outputs": [
+        {
+          "format": "hmmer_stdout",
+          "relative_path": "outputs/stdout",
+          "role": "stdout"
+        },
+        {
+          "format": "hmmer_stderr",
+          "relative_path": "outputs/stderr",
+          "role": "stderr"
+        },
+        {
+          "format": "fasta",
+          "relative_path": "outputs/generated_sequences",
+          "role": "generated_sequences"
+        }
+      ],
+      "program": "hmmemit",
+      "software": {
+        "engine_version": "3.4",
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmemit",
+        "sha256": "a8cb98a6716ea40f959e06d7b643e21879d009d47c82673761634b3157ca79e1"
+      },
+      "version": "native_hmmer_preparation_job_v1"
+    }
+  },
+  "returncode": 0,
+  "software": {
+    "actual_sha256": "a8cb98a6716ea40f959e06d7b643e21879d009d47c82673761634b3157ca79e1",
+    "declared_engine_version": "3.4",
+    "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmemit",
+    "expected_sha256": "a8cb98a6716ea40f959e06d7b643e21879d009d47c82673761634b3157ca79e1"
+  },
+  "started_at": "2026-10-26T09:01:19.187130+00:00",
+  "version": "native_hmmer_preparation_bundle_v1",
+  "working_copies": []
+}

@@ -1,0 +1,2238 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "a105_kinetic_summary_precision_sheet_v1"
+    },
+    "axis": {
+      "const": "A105"
+    },
+    "evaluation_scope": {
+      "const": "source_kinetic_summary_precision"
+    },
+    "inputs": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "a105_kinetic_summary_precision_inputs_v1"
+        },
+        "source_kind": {
+          "enum": [
+            "primary_source",
+            "synthetic_fixture"
+          ]
+        },
+        "parameter_kind": {
+          "enum": [
+            "Km",
+            "kcat",
+            "catalytic_efficiency",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "source_origin": {
+          "enum": [
+            "reported",
+            "synthetic"
+          ]
+        },
+        "source_parameter_status": {
+          "enum": [
+            "point",
+            "censored",
+            "missing",
+            "conflicting"
+          ]
+        },
+        "source_parameter_reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "source_measurement_unreported",
+                "source_kinetic_unit_unreported",
+                "unsupported_source_kinetic_unit",
+                "source_operand_qualification_unknown",
+                "source_operand_qualification_conflicting",
+                "source_numeric_range"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "parameter_approximate": {
+          "type": "boolean"
+        },
+        "parameter_native_exact": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "numerator": {
+                  "type": "string",
+                  "pattern": "^(0|-?[1-9][0-9]*)$"
+                },
+                "denominator": {
+                  "type": "string",
+                  "pattern": "^[1-9][0-9]*$"
+                }
+              },
+              "required": [
+                "numerator",
+                "denominator"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sd_native_exact": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "numerator": {
+                  "type": "string",
+                  "pattern": "^(0|-?[1-9][0-9]*)$"
+                },
+                "denominator": {
+                  "type": "string",
+                  "pattern": "^[1-9][0-9]*$"
+                }
+              },
+              "required": [
+                "numerator",
+                "denominator"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "canonical_scale_exact": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "numerator": {
+                  "type": "string",
+                  "pattern": "^(0|-?[1-9][0-9]*)$"
+                },
+                "denominator": {
+                  "type": "string",
+                  "pattern": "^[1-9][0-9]*$"
+                }
+              },
+              "required": [
+                "numerator",
+                "denominator"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "canonical_unit": {
+          "anyOf": [
+            {
+              "enum": [
+                "uM",
+                "per_min",
+                "uM^-1min^-1"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "uncertainty_statistic": {
+          "enum": [
+            "sd",
+            "sem",
+            "ci",
+            "unspecified",
+            "unreported"
+          ]
+        },
+        "uncertainty_reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "source_uncertainty_unit_unavailable",
+                "source_numeric_range"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_count": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "selector": {
+                  "type": "object",
+                  "properties": {
+                    "witness": {
+                      "type": "object",
+                      "properties": {
+                        "source_ref": {
+                          "type": "string",
+                          "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                          "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                        },
+                        "representation": {
+                          "enum": [
+                            "original",
+                            "text"
+                          ]
+                        },
+                        "start": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "end": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "quote": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "artifact_ref": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "source_ref",
+                        "representation",
+                        "start",
+                        "end",
+                        "quote",
+                        "artifact_ref"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "number_start": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "number_end": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  },
+                  "required": [
+                    "witness",
+                    "number_start",
+                    "number_end"
+                  ],
+                  "additionalProperties": false
+                },
+                "raw_number": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "value": {
+                  "anyOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "notation": {
+                  "enum": [
+                    "decimal_digits",
+                    "english_cardinal",
+                    "unsupported"
+                  ]
+                },
+                "relation": {
+                  "enum": [
+                    "point",
+                    "lt",
+                    "le",
+                    "gt",
+                    "ge",
+                    "unresolved"
+                  ]
+                },
+                "approximate": {
+                  "anyOf": [
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "status": {
+                  "enum": [
+                    "exact",
+                    "qualified",
+                    "range_or_alternatives",
+                    "unsupported",
+                    "not_positive"
+                  ]
+                },
+                "unavailable_reason": {
+                  "anyOf": [
+                    {
+                      "enum": [
+                        "exact_count_qualified",
+                        "count_range_or_alternatives",
+                        "unsupported_count_literal",
+                        "positive_count_required"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "selector",
+                "raw_number",
+                "value",
+                "notation",
+                "relation",
+                "approximate",
+                "status",
+                "unavailable_reason"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_statistical_count": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "selector": {
+                  "type": "object",
+                  "properties": {
+                    "witness": {
+                      "type": "object",
+                      "properties": {
+                        "source_ref": {
+                          "type": "string",
+                          "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                          "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                        },
+                        "representation": {
+                          "enum": [
+                            "original",
+                            "text"
+                          ]
+                        },
+                        "start": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "end": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "quote": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "artifact_ref": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "source_ref",
+                        "representation",
+                        "start",
+                        "end",
+                        "quote",
+                        "artifact_ref"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "number_start": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "number_end": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  },
+                  "required": [
+                    "witness",
+                    "number_start",
+                    "number_end"
+                  ],
+                  "additionalProperties": false
+                },
+                "raw_number": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "value": {
+                  "anyOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "notation": {
+                  "enum": [
+                    "decimal_digits",
+                    "english_cardinal",
+                    "unsupported"
+                  ]
+                },
+                "relation": {
+                  "enum": [
+                    "point",
+                    "lt",
+                    "le",
+                    "gt",
+                    "ge",
+                    "unresolved"
+                  ]
+                },
+                "approximate": {
+                  "anyOf": [
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "status": {
+                  "enum": [
+                    "exact",
+                    "qualified",
+                    "range_or_alternatives",
+                    "unsupported",
+                    "not_positive"
+                  ]
+                },
+                "unavailable_reason": {
+                  "anyOf": [
+                    {
+                      "enum": [
+                        "exact_count_qualified",
+                        "count_range_or_alternatives",
+                        "unsupported_count_literal",
+                        "positive_count_required"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "selector",
+                "raw_number",
+                "value",
+                "notation",
+                "relation",
+                "approximate",
+                "status",
+                "unavailable_reason"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_count_meaning": {
+          "enum": [
+            "physical_preparation_count",
+            "statistical_estimator_count",
+            "both_same_count",
+            "technical_measurement_count",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "repetition_basis": {
+          "enum": [
+            "biological_preparations",
+            "technical_measurements",
+            "unspecified"
+          ]
+        },
+        "estimate_basis": {
+          "enum": [
+            "fit_to_averaged_curve",
+            "between_fitted_parameters",
+            "unknown"
+          ]
+        },
+        "assessments": {
+          "type": "object",
+          "properties": {
+            "row_footnote_applicability": {
+              "enum": [
+                "source_supported",
+                "source_contradicted",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "statistical_count_matches_sd": {
+              "enum": [
+                "source_supported",
+                "source_contradicted",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "one_estimate_per_preparation": {
+              "enum": [
+                "source_supported",
+                "source_contradicted",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "equal_weight_arithmetic_mean": {
+              "enum": [
+                "source_supported",
+                "source_contradicted",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "sample_sd_n_minus_one": {
+              "enum": [
+                "source_supported",
+                "source_contradicted",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "iid_common_mean_finite_variance": {
+              "enum": [
+                "source_supported",
+                "source_contradicted",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "normal_sampling_units": {
+              "enum": [
+                "source_supported",
+                "source_contradicted",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "reported_sd_summarizes_counted_preparation_estimates": {
+              "enum": [
+                "source_supported",
+                "source_contradicted",
+                "unknown",
+                "conflicting"
+              ]
+            }
+          },
+          "required": [
+            "row_footnote_applicability",
+            "statistical_count_matches_sd",
+            "one_estimate_per_preparation",
+            "equal_weight_arithmetic_mean",
+            "sample_sd_n_minus_one",
+            "iid_common_mean_finite_variance",
+            "normal_sampling_units",
+            "reported_sd_summarizes_counted_preparation_estimates"
+          ],
+          "additionalProperties": false
+        },
+        "scenario": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "version": {
+                  "const": "a105_summary_precision_scenario_v1"
+                },
+                "count_rule": {
+                  "enum": [
+                    "source_statistical_count",
+                    "one_per_physical_preparation"
+                  ]
+                },
+                "stipulated_assumptions": {
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "one_estimate_per_preparation",
+                      "reported_sd_summarizes_counted_preparation_estimates",
+                      "equal_weight_arithmetic_mean",
+                      "sample_sd_n_minus_one",
+                      "iid_common_mean_finite_variance",
+                      "normal_sampling_units"
+                    ]
+                  },
+                  "uniqueItems": true
+                }
+              },
+              "required": [
+                "version",
+                "count_rule",
+                "stipulated_assumptions"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "interval_request": {
+          "enum": [
+            "none",
+            "student_t_95"
+          ]
+        },
+        "dependencies": {
+          "type": "object",
+          "properties": {
+            "parameter_source": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "source_ref": {
+                      "type": "string",
+                      "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                      "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                    },
+                    "artifact_ref": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "representation": {
+                      "enum": [
+                        "original",
+                        "text"
+                      ]
+                    },
+                    "start": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "end": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "artifact_ref",
+                    "representation",
+                    "start",
+                    "end"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "spread_source": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "source_ref": {
+                      "type": "string",
+                      "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                      "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                    },
+                    "artifact_ref": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "representation": {
+                      "enum": [
+                        "original",
+                        "text"
+                      ]
+                    },
+                    "start": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "end": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "artifact_ref",
+                    "representation",
+                    "start",
+                    "end"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "count_source": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "source_ref": {
+                      "type": "string",
+                      "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                      "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                    },
+                    "artifact_ref": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "representation": {
+                      "enum": [
+                        "original",
+                        "text"
+                      ]
+                    },
+                    "start": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "end": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "artifact_ref",
+                    "representation",
+                    "start",
+                    "end"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "statistical_count_source": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "source_ref": {
+                      "type": "string",
+                      "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                      "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                    },
+                    "artifact_ref": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "representation": {
+                      "enum": [
+                        "original",
+                        "text"
+                      ]
+                    },
+                    "start": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "end": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "artifact_ref",
+                    "representation",
+                    "start",
+                    "end"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "physical_measurement_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "parameter_unit_source": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "source_ref": {
+                      "type": "string",
+                      "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                      "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                    },
+                    "artifact_ref": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "representation": {
+                      "enum": [
+                        "original",
+                        "text"
+                      ]
+                    },
+                    "start": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "end": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "artifact_ref",
+                    "representation",
+                    "start",
+                    "end"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "spread_unit_source": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "source_ref": {
+                      "type": "string",
+                      "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                      "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                    },
+                    "artifact_ref": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "representation": {
+                      "enum": [
+                        "original",
+                        "text"
+                      ]
+                    },
+                    "start": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "end": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "artifact_ref",
+                    "representation",
+                    "start",
+                    "end"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "parameter_source",
+            "spread_source",
+            "count_source",
+            "statistical_count_source",
+            "physical_measurement_id",
+            "parameter_unit_source",
+            "spread_unit_source"
+          ],
+          "additionalProperties": false
+        },
+        "sd_scale_exact": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "numerator": {
+                  "type": "string",
+                  "pattern": "^(0|-?[1-9][0-9]*)$"
+                },
+                "denominator": {
+                  "type": "string",
+                  "pattern": "^[1-9][0-9]*$"
+                }
+              },
+              "required": [
+                "numerator",
+                "denominator"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sd_canonical_unit": {
+          "anyOf": [
+            {
+              "enum": [
+                "uM",
+                "per_min",
+                "uM^-1min^-1"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sd_unit_basis": {
+          "enum": [
+            "explicit_source_unit",
+            "inherited_parameter_unit",
+            "unavailable"
+          ]
+        }
+      },
+      "required": [
+        "version",
+        "source_kind",
+        "parameter_kind",
+        "source_origin",
+        "source_parameter_status",
+        "source_parameter_reason",
+        "parameter_approximate",
+        "parameter_native_exact",
+        "sd_native_exact",
+        "canonical_scale_exact",
+        "canonical_unit",
+        "uncertainty_statistic",
+        "uncertainty_reason",
+        "source_count",
+        "source_statistical_count",
+        "source_count_meaning",
+        "repetition_basis",
+        "estimate_basis",
+        "assessments",
+        "scenario",
+        "interval_request",
+        "dependencies",
+        "sd_scale_exact",
+        "sd_canonical_unit",
+        "sd_unit_basis"
+      ],
+      "additionalProperties": false
+    },
+    "source_cells": {
+      "type": "object",
+      "properties": {
+        "reported_parameter": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Cell"
+            },
+            {
+              "$ref": "#/$defs/CellStates"
+            },
+            {
+              "$ref": "#/$defs/SourceCellQualifications"
+            }
+          ],
+          "properties": {
+            "formula_code": {
+              "const": "summary_precision_reported_parameter"
+            },
+            "unit": {
+              "$ref": "#/$defs/Unit_canonical"
+            },
+            "value": {
+              "$ref": "#/$defs/Value_number"
+            }
+          }
+        },
+        "reported_sd": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Cell"
+            },
+            {
+              "$ref": "#/$defs/CellStates"
+            },
+            {
+              "$ref": "#/$defs/SourceCellQualifications"
+            }
+          ],
+          "properties": {
+            "formula_code": {
+              "const": "summary_precision_reported_sd"
+            },
+            "unit": {
+              "$ref": "#/$defs/Unit_canonical"
+            },
+            "value": {
+              "$ref": "#/$defs/Value_nonnegative"
+            }
+          }
+        },
+        "source_summary_count": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Cell"
+            },
+            {
+              "$ref": "#/$defs/CellStates"
+            },
+            {
+              "$ref": "#/$defs/SourceCellQualifications"
+            }
+          ],
+          "properties": {
+            "formula_code": {
+              "const": "summary_precision_source_summary_count"
+            },
+            "unit": {
+              "$ref": "#/$defs/Unit_count"
+            },
+            "value": {
+              "$ref": "#/$defs/Value_positive_integer"
+            }
+          }
+        },
+        "independent_preparation_count": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Cell"
+            },
+            {
+              "$ref": "#/$defs/CellStates"
+            },
+            {
+              "$ref": "#/$defs/SourceCellQualifications"
+            }
+          ],
+          "properties": {
+            "formula_code": {
+              "const": "summary_precision_independent_preparation_count"
+            },
+            "unit": {
+              "$ref": "#/$defs/Unit_count"
+            },
+            "value": {
+              "$ref": "#/$defs/Value_positive_integer"
+            }
+          }
+        },
+        "statistical_estimator_count": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Cell"
+            },
+            {
+              "$ref": "#/$defs/CellStates"
+            },
+            {
+              "$ref": "#/$defs/SourceCellQualifications"
+            }
+          ],
+          "properties": {
+            "formula_code": {
+              "const": "summary_precision_statistical_estimator_count"
+            },
+            "unit": {
+              "$ref": "#/$defs/Unit_count"
+            },
+            "value": {
+              "$ref": "#/$defs/Value_positive_integer"
+            }
+          }
+        },
+        "relative_reported_sd": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Cell"
+            },
+            {
+              "$ref": "#/$defs/CellStates"
+            },
+            {
+              "$ref": "#/$defs/SourceCellQualifications"
+            }
+          ],
+          "properties": {
+            "formula_code": {
+              "const": "summary_precision_relative_reported_sd"
+            },
+            "unit": {
+              "$ref": "#/$defs/Unit_dimensionless"
+            },
+            "value": {
+              "$ref": "#/$defs/Value_nonnegative"
+            }
+          }
+        },
+        "mean_variance": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Cell"
+            },
+            {
+              "$ref": "#/$defs/CellStates"
+            },
+            {
+              "$ref": "#/$defs/SourceCellQualifications"
+            }
+          ],
+          "properties": {
+            "formula_code": {
+              "const": "summary_precision_mean_variance"
+            },
+            "unit": {
+              "$ref": "#/$defs/Unit_squared"
+            },
+            "value": {
+              "$ref": "#/$defs/Value_nonnegative"
+            }
+          }
+        },
+        "mean_standard_error": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Cell"
+            },
+            {
+              "$ref": "#/$defs/CellStates"
+            },
+            {
+              "$ref": "#/$defs/SourceCellQualifications"
+            }
+          ],
+          "properties": {
+            "formula_code": {
+              "const": "summary_precision_mean_standard_error"
+            },
+            "unit": {
+              "$ref": "#/$defs/Unit_canonical"
+            },
+            "value": {
+              "$ref": "#/$defs/Value_nonnegative"
+            }
+          }
+        },
+        "relative_mean_standard_error": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Cell"
+            },
+            {
+              "$ref": "#/$defs/CellStates"
+            },
+            {
+              "$ref": "#/$defs/SourceCellQualifications"
+            }
+          ],
+          "properties": {
+            "formula_code": {
+              "const": "summary_precision_relative_mean_standard_error"
+            },
+            "unit": {
+              "$ref": "#/$defs/Unit_dimensionless"
+            },
+            "value": {
+              "$ref": "#/$defs/Value_nonnegative"
+            }
+          }
+        },
+        "mean_interval_df": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Cell"
+            },
+            {
+              "$ref": "#/$defs/CellStates"
+            },
+            {
+              "$ref": "#/$defs/SourceCellQualifications"
+            }
+          ],
+          "properties": {
+            "formula_code": {
+              "const": "summary_precision_mean_interval_df"
+            },
+            "unit": {
+              "$ref": "#/$defs/Unit_count"
+            },
+            "value": {
+              "$ref": "#/$defs/Value_positive_integer"
+            }
+          }
+        },
+        "mean_interval_confidence_level": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Cell"
+            },
+            {
+              "$ref": "#/$defs/CellStates"
+            },
+            {
+              "$ref": "#/$defs/SourceCellQualifications"
+            }
+          ],
+          "properties": {
+            "formula_code": {
+              "const": "summary_precision_mean_interval_confidence_level"
+            },
+            "unit": {
+              "$ref": "#/$defs/Unit_dimensionless"
+            },
+            "value": {
+              "$ref": "#/$defs/Value_confidence_95"
+            }
+          }
+        },
+        "mean_interval_t_multiplier": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Cell"
+            },
+            {
+              "$ref": "#/$defs/CellStates"
+            },
+            {
+              "$ref": "#/$defs/SourceCellQualifications"
+            }
+          ],
+          "properties": {
+            "formula_code": {
+              "const": "summary_precision_mean_interval_t_multiplier"
+            },
+            "unit": {
+              "$ref": "#/$defs/Unit_dimensionless"
+            },
+            "value": {
+              "$ref": "#/$defs/Value_positive"
+            }
+          }
+        },
+        "mean_interval_halfwidth": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Cell"
+            },
+            {
+              "$ref": "#/$defs/CellStates"
+            },
+            {
+              "$ref": "#/$defs/SourceCellQualifications"
+            }
+          ],
+          "properties": {
+            "formula_code": {
+              "const": "summary_precision_mean_interval_halfwidth"
+            },
+            "unit": {
+              "$ref": "#/$defs/Unit_canonical"
+            },
+            "value": {
+              "$ref": "#/$defs/Value_positive"
+            }
+          }
+        },
+        "mean_interval_lower": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Cell"
+            },
+            {
+              "$ref": "#/$defs/CellStates"
+            },
+            {
+              "$ref": "#/$defs/SourceCellQualifications"
+            }
+          ],
+          "properties": {
+            "formula_code": {
+              "const": "summary_precision_mean_interval_lower"
+            },
+            "unit": {
+              "$ref": "#/$defs/Unit_canonical"
+            },
+            "value": {
+              "$ref": "#/$defs/Value_number"
+            }
+          }
+        },
+        "mean_interval_upper": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Cell"
+            },
+            {
+              "$ref": "#/$defs/CellStates"
+            },
+            {
+              "$ref": "#/$defs/SourceCellQualifications"
+            }
+          ],
+          "properties": {
+            "formula_code": {
+              "const": "summary_precision_mean_interval_upper"
+            },
+            "unit": {
+              "$ref": "#/$defs/Unit_canonical"
+            },
+            "value": {
+              "$ref": "#/$defs/Value_number"
+            }
+          }
+        }
+      },
+      "required": [
+        "reported_parameter",
+        "reported_sd",
+        "source_summary_count",
+        "independent_preparation_count",
+        "statistical_estimator_count",
+        "relative_reported_sd",
+        "mean_variance",
+        "mean_standard_error",
+        "relative_mean_standard_error",
+        "mean_interval_df",
+        "mean_interval_confidence_level",
+        "mean_interval_t_multiplier",
+        "mean_interval_halfwidth",
+        "mean_interval_lower",
+        "mean_interval_upper"
+      ],
+      "additionalProperties": false
+    },
+    "scenario_cells": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "reported_parameter": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Cell"
+                },
+                {
+                  "$ref": "#/$defs/CellStates"
+                },
+                {
+                  "$ref": "#/$defs/ScenarioCellQualifications"
+                }
+              ],
+              "properties": {
+                "formula_code": {
+                  "const": "summary_precision_reported_parameter"
+                },
+                "unit": {
+                  "$ref": "#/$defs/Unit_canonical"
+                },
+                "value": {
+                  "$ref": "#/$defs/Value_number"
+                }
+              }
+            },
+            "reported_sd": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Cell"
+                },
+                {
+                  "$ref": "#/$defs/CellStates"
+                },
+                {
+                  "$ref": "#/$defs/ScenarioCellQualifications"
+                }
+              ],
+              "properties": {
+                "formula_code": {
+                  "const": "summary_precision_reported_sd"
+                },
+                "unit": {
+                  "$ref": "#/$defs/Unit_canonical"
+                },
+                "value": {
+                  "$ref": "#/$defs/Value_nonnegative"
+                }
+              }
+            },
+            "source_summary_count": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Cell"
+                },
+                {
+                  "$ref": "#/$defs/CellStates"
+                },
+                {
+                  "$ref": "#/$defs/ScenarioCellQualifications"
+                }
+              ],
+              "properties": {
+                "formula_code": {
+                  "const": "summary_precision_source_summary_count"
+                },
+                "unit": {
+                  "$ref": "#/$defs/Unit_count"
+                },
+                "value": {
+                  "$ref": "#/$defs/Value_positive_integer"
+                }
+              }
+            },
+            "independent_preparation_count": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Cell"
+                },
+                {
+                  "$ref": "#/$defs/CellStates"
+                },
+                {
+                  "$ref": "#/$defs/ScenarioCellQualifications"
+                }
+              ],
+              "properties": {
+                "formula_code": {
+                  "const": "summary_precision_independent_preparation_count"
+                },
+                "unit": {
+                  "$ref": "#/$defs/Unit_count"
+                },
+                "value": {
+                  "$ref": "#/$defs/Value_positive_integer"
+                }
+              }
+            },
+            "statistical_estimator_count": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Cell"
+                },
+                {
+                  "$ref": "#/$defs/CellStates"
+                },
+                {
+                  "$ref": "#/$defs/ScenarioCellQualifications"
+                }
+              ],
+              "properties": {
+                "formula_code": {
+                  "const": "summary_precision_statistical_estimator_count"
+                },
+                "unit": {
+                  "$ref": "#/$defs/Unit_count"
+                },
+                "value": {
+                  "$ref": "#/$defs/Value_positive_integer"
+                }
+              }
+            },
+            "relative_reported_sd": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Cell"
+                },
+                {
+                  "$ref": "#/$defs/CellStates"
+                },
+                {
+                  "$ref": "#/$defs/ScenarioCellQualifications"
+                }
+              ],
+              "properties": {
+                "formula_code": {
+                  "const": "summary_precision_relative_reported_sd"
+                },
+                "unit": {
+                  "$ref": "#/$defs/Unit_dimensionless"
+                },
+                "value": {
+                  "$ref": "#/$defs/Value_nonnegative"
+                }
+              }
+            },
+            "mean_variance": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Cell"
+                },
+                {
+                  "$ref": "#/$defs/CellStates"
+                },
+                {
+                  "$ref": "#/$defs/ScenarioCellQualifications"
+                }
+              ],
+              "properties": {
+                "formula_code": {
+                  "const": "summary_precision_mean_variance"
+                },
+                "unit": {
+                  "$ref": "#/$defs/Unit_squared"
+                },
+                "value": {
+                  "$ref": "#/$defs/Value_nonnegative"
+                }
+              }
+            },
+            "mean_standard_error": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Cell"
+                },
+                {
+                  "$ref": "#/$defs/CellStates"
+                },
+                {
+                  "$ref": "#/$defs/ScenarioCellQualifications"
+                }
+              ],
+              "properties": {
+                "formula_code": {
+                  "const": "summary_precision_mean_standard_error"
+                },
+                "unit": {
+                  "$ref": "#/$defs/Unit_canonical"
+                },
+                "value": {
+                  "$ref": "#/$defs/Value_nonnegative"
+                }
+              }
+            },
+            "relative_mean_standard_error": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Cell"
+                },
+                {
+                  "$ref": "#/$defs/CellStates"
+                },
+                {
+                  "$ref": "#/$defs/ScenarioCellQualifications"
+                }
+              ],
+              "properties": {
+                "formula_code": {
+                  "const": "summary_precision_relative_mean_standard_error"
+                },
+                "unit": {
+                  "$ref": "#/$defs/Unit_dimensionless"
+                },
+                "value": {
+                  "$ref": "#/$defs/Value_nonnegative"
+                }
+              }
+            },
+            "mean_interval_df": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Cell"
+                },
+                {
+                  "$ref": "#/$defs/CellStates"
+                },
+                {
+                  "$ref": "#/$defs/ScenarioCellQualifications"
+                }
+              ],
+              "properties": {
+                "formula_code": {
+                  "const": "summary_precision_mean_interval_df"
+                },
+                "unit": {
+                  "$ref": "#/$defs/Unit_count"
+                },
+                "value": {
+                  "$ref": "#/$defs/Value_positive_integer"
+                }
+              }
+            },
+            "mean_interval_confidence_level": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Cell"
+                },
+                {
+                  "$ref": "#/$defs/CellStates"
+                },
+                {
+                  "$ref": "#/$defs/ScenarioCellQualifications"
+                }
+              ],
+              "properties": {
+                "formula_code": {
+                  "const": "summary_precision_mean_interval_confidence_level"
+                },
+                "unit": {
+                  "$ref": "#/$defs/Unit_dimensionless"
+                },
+                "value": {
+                  "$ref": "#/$defs/Value_confidence_95"
+                }
+              }
+            },
+            "mean_interval_t_multiplier": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Cell"
+                },
+                {
+                  "$ref": "#/$defs/CellStates"
+                },
+                {
+                  "$ref": "#/$defs/ScenarioCellQualifications"
+                }
+              ],
+              "properties": {
+                "formula_code": {
+                  "const": "summary_precision_mean_interval_t_multiplier"
+                },
+                "unit": {
+                  "$ref": "#/$defs/Unit_dimensionless"
+                },
+                "value": {
+                  "$ref": "#/$defs/Value_positive"
+                }
+              }
+            },
+            "mean_interval_halfwidth": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Cell"
+                },
+                {
+                  "$ref": "#/$defs/CellStates"
+                },
+                {
+                  "$ref": "#/$defs/ScenarioCellQualifications"
+                }
+              ],
+              "properties": {
+                "formula_code": {
+                  "const": "summary_precision_mean_interval_halfwidth"
+                },
+                "unit": {
+                  "$ref": "#/$defs/Unit_canonical"
+                },
+                "value": {
+                  "$ref": "#/$defs/Value_positive"
+                }
+              }
+            },
+            "mean_interval_lower": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Cell"
+                },
+                {
+                  "$ref": "#/$defs/CellStates"
+                },
+                {
+                  "$ref": "#/$defs/ScenarioCellQualifications"
+                }
+              ],
+              "properties": {
+                "formula_code": {
+                  "const": "summary_precision_mean_interval_lower"
+                },
+                "unit": {
+                  "$ref": "#/$defs/Unit_canonical"
+                },
+                "value": {
+                  "$ref": "#/$defs/Value_number"
+                }
+              }
+            },
+            "mean_interval_upper": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Cell"
+                },
+                {
+                  "$ref": "#/$defs/CellStates"
+                },
+                {
+                  "$ref": "#/$defs/ScenarioCellQualifications"
+                }
+              ],
+              "properties": {
+                "formula_code": {
+                  "const": "summary_precision_mean_interval_upper"
+                },
+                "unit": {
+                  "$ref": "#/$defs/Unit_canonical"
+                },
+                "value": {
+                  "$ref": "#/$defs/Value_number"
+                }
+              }
+            }
+          },
+          "required": [
+            "reported_parameter",
+            "reported_sd",
+            "source_summary_count",
+            "independent_preparation_count",
+            "statistical_estimator_count",
+            "relative_reported_sd",
+            "mean_variance",
+            "mean_standard_error",
+            "relative_mean_standard_error",
+            "mean_interval_df",
+            "mean_interval_confidence_level",
+            "mean_interval_t_multiplier",
+            "mean_interval_halfwidth",
+            "mean_interval_lower",
+            "mean_interval_upper"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "contribution": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "one_summary_precision_contribution"
+        },
+        "dependency_sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "source_ref": {
+                "type": "string",
+                "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+              },
+              "artifact_ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "representation": {
+                "enum": [
+                  "original",
+                  "text"
+                ]
+              },
+              "start": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "end": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "source_ref",
+              "artifact_ref",
+              "representation",
+              "start",
+              "end"
+            ],
+            "additionalProperties": false
+          },
+          "uniqueItems": true
+        },
+        "physical_measurement_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "independence_inferred": {
+          "const": false
+        }
+      },
+      "required": [
+        "kind",
+        "dependency_sources",
+        "physical_measurement_id",
+        "independence_inferred"
+      ],
+      "additionalProperties": false
+    },
+    "limits": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "source_summaries_do_not_reconstruct_raw_measurements",
+          "physical_count_does_not_define_statistical_count",
+          "source_conditions_and_stipulations_distinct",
+          "random_precision_does_not_include_unknown_systematics",
+          "shared_calibration_does_not_shrink_with_preparation_count",
+          "dependent_precision_representations_not_independent_assays",
+          "measurement_repeatability_does_not_establish_physiological_specificity",
+          "no_cross_construct_contrast",
+          "no_assay_error_probability",
+          "no_target_transfer_or_annotation_credit"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "total_uncertainty": {
+      "type": "null"
+    },
+    "assay_error_probability": {
+      "type": "null"
+    },
+    "annotation_credit": {
+      "type": "null"
+    }
+  },
+  "required": [
+    "version",
+    "axis",
+    "evaluation_scope",
+    "inputs",
+    "source_cells",
+    "scenario_cells",
+    "contribution",
+    "limits",
+    "total_uncertainty",
+    "assay_error_probability",
+    "annotation_credit"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "Cell": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "enum": [
+                "uM",
+                "per_min",
+                "uM^-1min^-1",
+                "uM_squared",
+                "per_min_squared",
+                "uM_inverse_squared_min_inverse_squared",
+                "dimensionless",
+                "count"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "enum": [
+            "populated",
+            "unavailable"
+          ]
+        },
+        "qualification": {
+          "enum": [
+            "source_reported",
+            "derived_source_supported_conditions",
+            "conditional_on_stipulated_assumptions",
+            "unavailable"
+          ]
+        },
+        "formula_code": {
+          "enum": [
+            "summary_precision_reported_parameter",
+            "summary_precision_reported_sd",
+            "summary_precision_source_summary_count",
+            "summary_precision_independent_preparation_count",
+            "summary_precision_statistical_estimator_count",
+            "summary_precision_relative_reported_sd",
+            "summary_precision_mean_variance",
+            "summary_precision_mean_standard_error",
+            "summary_precision_relative_mean_standard_error",
+            "summary_precision_mean_interval_df",
+            "summary_precision_mean_interval_confidence_level",
+            "summary_precision_mean_interval_t_multiplier",
+            "summary_precision_mean_interval_halfwidth",
+            "summary_precision_mean_interval_lower",
+            "summary_precision_mean_interval_upper"
+          ]
+        },
+        "origin": {
+          "enum": [
+            "reported",
+            "derived",
+            "proposed",
+            "synthetic"
+          ]
+        },
+        "approximate": {
+          "type": "boolean"
+        },
+        "source_exact_value": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "numerator": {
+                  "type": "string",
+                  "pattern": "^(0|-?[1-9][0-9]*)$"
+                },
+                "denominator": {
+                  "type": "string",
+                  "pattern": "^[1-9][0-9]*$"
+                }
+              },
+              "required": [
+                "numerator",
+                "denominator"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "conditional_on": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "one_estimate_per_preparation",
+              "reported_sd_summarizes_counted_preparation_estimates",
+              "equal_weight_arithmetic_mean",
+              "sample_sd_n_minus_one",
+              "iid_common_mean_finite_variance",
+              "normal_sampling_units"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "stipulated_assumptions": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "one_estimate_per_preparation",
+              "reported_sd_summarizes_counted_preparation_estimates",
+              "equal_weight_arithmetic_mean",
+              "sample_sd_n_minus_one",
+              "iid_common_mean_finite_variance",
+              "normal_sampling_units"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "unavailable_reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "source_measurement_unreported",
+                "source_kinetic_unit_unreported",
+                "unsupported_source_kinetic_unit",
+                "source_operand_qualification_unknown",
+                "source_operand_qualification_conflicting",
+                "source_numeric_range",
+                "source_uncertainty_unit_unavailable",
+                "censored_parameter",
+                "conflicting_parameter",
+                "reported_sd_unreported",
+                "reported_statistic_not_sd",
+                "source_summary_count_unreported",
+                "source_count_not_exact",
+                "row_footnote_applicability_unknown",
+                "row_footnote_applicability_conflicting",
+                "row_footnote_applicability_contradicted",
+                "physical_preparation_count_unknown",
+                "statistical_estimator_count_unknown",
+                "statistical_count_conflicting",
+                "statistical_count_sd_relationship_unknown",
+                "insufficient_estimator_count",
+                "sample_sd_convention_unknown",
+                "iid_model_unknown",
+                "mean_identity_unknown",
+                "normality_unknown",
+                "source_condition_contradicted",
+                "source_condition_conflicting",
+                "zero_parameter_for_relative_precision",
+                "interval_not_requested",
+                "positive_sd_required_for_student_t",
+                "scenario_assumption_conflicts_with_source",
+                "numerical_model_range",
+                "sd_preparation_estimator_ownership_unknown"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "unit",
+        "status",
+        "qualification",
+        "formula_code",
+        "origin",
+        "approximate",
+        "source_exact_value",
+        "conditional_on",
+        "stipulated_assumptions",
+        "unavailable_reason"
+      ],
+      "additionalProperties": false
+    },
+    "CellStates": {
+      "oneOf": [
+        {
+          "properties": {
+            "status": {
+              "const": "populated"
+            },
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "not": {
+                "type": "null"
+              }
+            },
+            "qualification": {
+              "enum": [
+                "source_reported",
+                "derived_source_supported_conditions",
+                "conditional_on_stipulated_assumptions"
+              ]
+            },
+            "unavailable_reason": {
+              "type": "null"
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "qualification": {
+                    "const": "conditional_on_stipulated_assumptions"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "stipulated_assumptions": {
+                    "minItems": 1
+                  }
+                }
+              },
+              "else": {
+                "properties": {
+                  "stipulated_assumptions": {
+                    "maxItems": 0
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "properties": {
+            "status": {
+              "const": "unavailable"
+            },
+            "value": {
+              "type": "null"
+            },
+            "qualification": {
+              "const": "unavailable"
+            },
+            "source_exact_value": {
+              "type": "null"
+            },
+            "unavailable_reason": {
+              "not": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "SourceCellQualifications": {
+      "properties": {
+        "qualification": {
+          "enum": [
+            "source_reported",
+            "derived_source_supported_conditions",
+            "unavailable"
+          ]
+        },
+        "stipulated_assumptions": {
+          "maxItems": 0
+        }
+      }
+    },
+    "ScenarioCellQualifications": {
+      "properties": {
+        "qualification": {
+          "enum": [
+            "source_reported",
+            "derived_source_supported_conditions",
+            "conditional_on_stipulated_assumptions",
+            "unavailable"
+          ]
+        }
+      }
+    },
+    "Unit_canonical": {
+      "enum": [
+        "uM",
+        "per_min",
+        "uM^-1min^-1",
+        null
+      ]
+    },
+    "Unit_squared": {
+      "enum": [
+        "uM_squared",
+        "per_min_squared",
+        "uM_inverse_squared_min_inverse_squared",
+        null
+      ]
+    },
+    "Unit_count": {
+      "const": "count"
+    },
+    "Unit_dimensionless": {
+      "const": "dimensionless"
+    },
+    "Value_number": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Value_nonnegative": {
+      "anyOf": [
+        {
+          "type": "number",
+          "minimum": 0
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Value_positive": {
+      "anyOf": [
+        {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Value_positive_integer": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Value_confidence_95": {
+      "anyOf": [
+        {
+          "const": 0.95
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  }
+}

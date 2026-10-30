@@ -1,0 +1,70 @@
+{
+  "version": "durable_systemd_native_job_v2",
+  "state": "returned",
+  "terminal": true,
+  "quiescent": true,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "exit-code",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "1",
+      "ended": {
+        "at": "2026-10-30T15:32:06.655722+00:00",
+        "monotonic_ns": 66285892324183,
+        "boot_id": "cbe86543-4386-4c23-b27d-dc4aa550fcfa"
+      }
+    },
+    "elapsed_seconds": 31.257311702,
+    "native_returncode": 1,
+    "observed_scratch_bytes": 692752384
+  },
+  "native_receipt": {
+    "started": {
+      "at": "2026-10-30T15:31:35.674403+00:00",
+      "monotonic_ns": 66254910997015,
+      "boot_id": "cbe86543-4386-4c23-b27d-dc4aa550fcfa"
+    },
+    "ended": {
+      "at": "2026-10-30T15:32:06.488619+00:00",
+      "monotonic_ns": 66285725215029,
+      "boot_id": "cbe86543-4386-4c23-b27d-dc4aa550fcfa"
+    },
+    "native_returncode": 1,
+    "observed_scratch_bytes": 692752384,
+    "resource_failure": null,
+    "execution_failure": null
+  },
+  "files": {
+    "stdout": {
+      "available": true,
+      "bytes": 5999
+    },
+    "stderr": {
+      "available": true,
+      "bytes": 0
+    }
+  }
+}

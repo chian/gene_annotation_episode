@@ -1,0 +1,405 @@
+--- a/gene_annotation_episode/literature_binding_interaction_calculations.py
++++ b/gene_annotation_episode/literature_binding_interaction_calculations.py
+@@ -19,9 +19,16 @@
+   {source_ref, artifact_ref, kind: utf8_span, start, end}, or
+   {source_ref, artifact_ref, kind: image_region, region: [x0,y0,x1,y1]}, or
+   {source_ref, artifact_ref, kind: table_cell, table_id, row_index, column}.
+-Uncertainty: {statistic, basis, interval, confidence_level, exact_count,
+-              minimum_count, repetition_basis}. Reported_spread is the source's
+-symmetric magnitude (SD/SEM/unspecified); confidence intervals use endpoints.
++Uncertainty is null (metadata unresolved/not supplied) or the closed object
++{statistic, basis, interval, confidence_level, exact_count, minimum_count,
++ repetition_basis}. Null is distinct from the supplied statistic unreported.
++Reported_spread independently retains a finite nonnegative symmetric magnitude
++or null. A known SD/SEM/unspecified statistic may have unavailable magnitude.
++A confidence interval has no symmetric spread; its interval may be null or two
++individually nullable endpoints, and its confidence level may independently be
++null. Missing endpoints never mean infinity. Supplied pieces stay unaltered and
++receive finite role-qualified partial meanings. None of these pieces supplies
++the separate covariance/model required for statistical cells.
+ 
+ Core relationship statuses: supported|unknown|conflicting. common_conditions:
+ matched|not_matched|unknown|conflicting. Non-unknown claims need witnesses.
+@@ -61,6 +68,10 @@
+ RELATIONS = ("within_reference_subject", "within_test_subject",
+              "ligand_correspondence", "parameter_definition", "separate_assays",
+              "common_conditions")
++UNCERTAINTY_PARTIAL_CODES = (
++    "uncertainty_metadata_unresolved", "reported_uncertainty_magnitude_unknown",
++    "confidence_interval_endpoints_incomplete", "confidence_level_unknown",
++)
+ _PAIR_IDS = ("subject", "construct", "state", "parameter_definition", "readout",
+              "normalization")
+ _COEFFICIENTS = (-1, 1, 1, -1)
+@@ -142,6 +153,12 @@
+ 
+ def _uncertainty(operand, field):
+     value = operand["uncertainty"]
++    spread = operand["reported_spread"]
++    _finite(spread, field.rsplit(".", 1)[0] + ".reported_spread", nullable=True, nonnegative=True)
++    if value is None:
++        if operand["relation"] == "unreported" and spread is not None:
++            _fail("symmetric_spread_not_applicable", field)
++        return
+     _keys(value, ("statistic", "basis", "interval", "confidence_level",
+                   "exact_count", "minimum_count", "repetition_basis"), field)
+     statistic = value["statistic"]
+@@ -152,25 +169,22 @@
+     _choice(value["repetition_basis"], ("biological_preparations",
+             "technical_measurements", "assay_occasions", "unspecified"),
+             field + ".repetition_basis")
+-    spread = operand["reported_spread"]
+-    _finite(spread, field.rsplit(".", 1)[0] + ".reported_spread", nullable=True, nonnegative=True)
+     if statistic in ("unreported", "confidence_interval"):
+         if spread is not None:
+             _fail("symmetric_spread_not_applicable", field)
+-    elif spread is None:
+-        _fail("reported_spread_required", field)
+     if statistic == "confidence_interval":
+         interval = value["interval"]
+-        if not isinstance(interval, list) or len(interval) != 2:
+-            _fail("confidence_interval_endpoints_required", field + ".interval")
+-        for endpoint in interval:
+-            # Retain a source-reported interval even if it extends outside the
+-            # positive parameter domain; no log-interval conversion is made.
+-            _finite(endpoint, field + ".interval")
+-        if interval[0] > interval[1]:
+-            _fail("ordered_interval_required", field + ".interval")
+-        _finite(value["confidence_level"], field + ".confidence_level", positive=True)
+-        if value["confidence_level"] >= 1:
++        if interval is not None:
++            if not isinstance(interval, list) or len(interval) != 2:
++                _fail("confidence_interval_endpoints_required", field + ".interval")
++            for endpoint in interval:
++                # Retain source endpoints outside the positive parameter
++                # domain, and preserve missing endpoints without infinity.
++                _finite(endpoint, field + ".interval", nullable=True)
++            if all(endpoint is not None for endpoint in interval) and interval[0] > interval[1]:
++                _fail("ordered_interval_required", field + ".interval")
++        _finite(value["confidence_level"], field + ".confidence_level", nullable=True, positive=True)
++        if value["confidence_level"] is not None and value["confidence_level"] >= 1:
+             _fail("confidence_probability_required", field + ".confidence_level")
+     elif value["interval"] is not None or value["confidence_level"] is not None:
+         _fail("confidence_interval_not_applicable", field)
+@@ -181,6 +195,26 @@
+         _fail("exact_count_below_minimum", field)
+     if operand["relation"] == "unreported" and statistic != "unreported":
+         _fail("unreported_parameter_uncertainty", field)
++
++
++def _uncertainty_qualifications(inputs):
++    """Finite missing meanings, without changing numeric or model availability."""
++    for role in ROLES:
++        operand = inputs["operands"][role]
++        if operand is None:
++            continue
++        uncertainty = operand["uncertainty"]
++        if uncertainty is None:
++            yield UNCERTAINTY_PARTIAL_CODES[0] + ":" + role
++        elif uncertainty["statistic"] in ("sd", "sem", "unspecified"):
++            if operand["reported_spread"] is None:
++                yield UNCERTAINTY_PARTIAL_CODES[1] + ":" + role
++        elif uncertainty["statistic"] == "confidence_interval":
++            interval = uncertainty["interval"]
++            if interval is None or any(endpoint is None for endpoint in interval):
++                yield UNCERTAINTY_PARTIAL_CODES[2] + ":" + role
++            if uncertainty["confidence_level"] is None:
++                yield UNCERTAINTY_PARTIAL_CODES[3] + ":" + role
+ 
+ 
+ def validate_binding_interaction_inputs(inputs):
+@@ -572,6 +606,7 @@
+             cells[name]["reason"] = statistical_reason
+     qualifications = ["dependent_representations", "reported_parameter_not_intrinsic_affinity",
+                       "physical_owners_do_not_establish_independence"]
++    qualifications.extend(_uncertainty_qualifications(inputs))
+     condition_status = inputs["relationships"]["common_conditions"]["status"]
+     qualifications.append("common_conditions_" + condition_status)
+     condition_ids = {operand["canonical_ids"]["conditions"]
+@@ -602,5 +637,5 @@
+ 
+ 
+ __all__ = ["INPUT_VERSION", "MODEL_VERSION", "SHEET_VERSION", "ROLES", "CONTEXT_FIELDS",
+-           "ID_FIELDS", "RELATIONS", "validate_binding_interaction_inputs",
++           "ID_FIELDS", "RELATIONS", "UNCERTAINTY_PARTIAL_CODES", "validate_binding_interaction_inputs",
+            "binding_interaction_operand_keys", "populate_binding_interaction"]
+--- a/tests/test_literature_binding_interaction_calculations.py
++++ b/tests/test_literature_binding_interaction_calculations.py
+@@ -1,12 +1,17 @@
+ """Synthetic-only scientific and numerical checks; no retained paper fixtures."""
+ from copy import deepcopy
++import ast
++from functools import lru_cache
++import importlib.util
+ import json
+ import math
++from pathlib import Path
+ 
+ import pytest
+ 
+ from gene_annotation_episode.literature_binding_interaction_calculations import (
+     CONTEXT_FIELDS, ID_FIELDS, INPUT_VERSION, MODEL_VERSION, RELATIONS, ROLES,
++    UNCERTAINTY_PARTIAL_CODES,
+     binding_interaction_operand_keys, populate_binding_interaction,
+     validate_binding_interaction_inputs,
+ )
+@@ -344,8 +349,9 @@
+         cells(inputs)
+     operand["reported_spread"] = None
+     operand["uncertainty"]["interval"] = None
+-    with pytest.raises(ExperimentalContractError, match="confidence_interval_endpoints_required"):
+-        cells(inputs)
++    partial = populate_binding_interaction(inputs)
++    assert partial["inputs"]["operands"][ROLES[0]]["uncertainty"]["interval"] is None
++    assert partial["cells"]["interaction_ratio"]["value"] == 4
+     inputs = example()
+     inputs["operands"][ROLES[0]]["uncertainty"].update(exact_count=2, minimum_count=3)
+     with pytest.raises(ExperimentalContractError, match="exact_count_below_minimum"):
+@@ -444,8 +450,11 @@
+ 
+ 
+ @pytest.mark.parametrize("values", ((5, 40, 2, 4), (5, 4, 2, 40)))
+-def test_score_matches_independent_joint_constrained_normal_optimization(values):
++@pytest.mark.parametrize("partial", (False, True))
++def test_score_matches_independent_joint_constrained_normal_optimization(values, partial):
+     inputs = example(values)
++    if partial:
++        _partial_uncertainty(inputs, "level_unknown")
+     matrix = [[0.16, 0.02, -0.01, 0.0], [0.02, 0.09, 0.0, 0.01],
+               [-0.01, 0.0, 0.25, 0.03], [0.0, 0.01, 0.03, 0.36]]
+     # Invert by solving four independent unit-vector systems. Then fit the
+@@ -464,3 +473,234 @@
+                         for i in range(4) for j in range(4)) / 2
+     signed_optimum = math.copysign(deviance_half, sum(c * x for c, x in zip(constraint, observations)))
+     assert cells(inputs, observation_model(inputs, matrix))["signed_profile_log_ratio"]["value"] == pytest.approx(signed_optimum)
++
++
++def _partial_uncertainty(inputs, case):
++    operand = inputs["operands"][ROLES[0]]
++    if case == "unresolved":
++        operand["uncertainty"] = None
++        return
++    uncertainty = operand["uncertainty"]
++    if case in ("sd", "sem", "unspecified"):
++        uncertainty["statistic"] = case
++        return
++    uncertainty.update(statistic="confidence_interval", interval=[4, 6], confidence_level=0.95)
++    if case == "level_unknown":
++        uncertainty["confidence_level"] = None
++    elif case == "interval_unknown":
++        uncertainty["interval"] = None
++    elif case == "lower_unknown":
++        uncertainty["interval"][0] = None
++    elif case == "upper_unknown":
++        uncertainty["interval"][1] = None
++    elif case == "endpoints_and_level_unknown":
++        uncertainty.update(interval=[None, None], confidence_level=None)
++    else:
++        raise AssertionError(case)
++
++
++@pytest.mark.parametrize("case,codes", (
++    ("unresolved", (0,)), ("sd", (1,)), ("sem", (1,)), ("unspecified", (1,)),
++    ("level_unknown", (3,)), ("interval_unknown", (2,)),
++    ("lower_unknown", (2,)), ("upper_unknown", (2,)),
++    ("endpoints_and_level_unknown", (2, 3)),
++))
++@pytest.mark.parametrize("relation", ("eq", "gt"))
++def test_partial_uncertainty_preserves_parameters_and_descriptive_contrasts(case, codes, relation):
++    inputs = example()
++    inputs["operands"][ROLES[0]]["relation"] = relation
++    baseline = populate_binding_interaction(inputs)
++    _partial_uncertainty(inputs, case)
++    original = deepcopy(inputs)
++    result = populate_binding_interaction(inputs)
++    assert inputs == original == result["inputs"]
++    assert result["inputs"] is not inputs
++    for name in ("parameter_rr", "parameter_rt", "parameter_tr", "parameter_tt",
++                 "reference_subject_ratio", "test_subject_ratio", "interaction_ratio", "log_interaction"):
++        assert result["cells"][name] == baseline["cells"][name]
++    interaction = result["cells"]["interaction_ratio"]
++    assert interaction["value"] == (4 if relation == "eq" else None)
++    assert interaction["threshold"] == (None if relation == "eq" else 4)
++    assert interaction["relation"] == ("eq" if relation == "eq" else "lt")
++    for name in ("log_interaction_variance", "log_interaction_standard_uncertainty",
++                 "signed_profile_log_ratio", "signed_index"):
++        assert result["cells"][name]["value"] is None
++    added = [code + ":" + ROLES[0] for index, code in enumerate(UNCERTAINTY_PARTIAL_CODES)
++             if index in codes]
++    assert result["qualifications"] == baseline["qualifications"][:3] + added + baseline["qualifications"][3:]
++    json.dumps(result, allow_nan=False)
++
++
++def test_unresolved_metadata_is_distinct_from_supplied_unreported_statistic():
++    inputs = example()
++    before = populate_binding_interaction(inputs)
++    inputs["operands"][ROLES[0]].update(uncertainty=None, reported_spread=0.3)
++    result = populate_binding_interaction(inputs)
++    assert result["inputs"]["operands"][ROLES[0]]["uncertainty"] is None
++    assert result["inputs"]["operands"][ROLES[0]]["reported_spread"] == 0.3
++    assert result["operand_keys"][ROLES[0]] != before["operand_keys"][ROLES[0]]
++    assert result["physical_fit_ids"] == before["physical_fit_ids"]
++
++
++@pytest.mark.parametrize("spread", (True, -0.1, float("nan"), float("inf")))
++def test_null_metadata_never_skips_spread_validation(spread):
++    inputs = example()
++    inputs["operands"][ROLES[0]].update(uncertainty=None, reported_spread=spread)
++    with pytest.raises(ExperimentalContractError):
++        populate_binding_interaction(inputs)
++
++
++@pytest.mark.parametrize("uncertainty", (None, "unreported"))
++def test_unreported_parameter_cannot_have_spread_with_or_without_metadata(uncertainty):
++    inputs = example()
++    operand = inputs["operands"][ROLES[0]]
++    operand.update(value=None, relation="unreported", reported_spread=0.1)
++    if uncertainty is None:
++        operand["uncertainty"] = None
++    with pytest.raises(ExperimentalContractError, match="symmetric_spread_not_applicable"):
++        populate_binding_interaction(inputs)
++    operand["reported_spread"] = None
++    result = populate_binding_interaction(inputs)
++    assert result["cells"]["parameter_rt"]["value"] == 40
++    assert result["cells"]["test_subject_ratio"]["value"] == 2
++    assert result["cells"]["interaction_ratio"]["value"] is None
++
++
++@pytest.mark.parametrize("interval", ([], [4], [4, 5, 6], (4, 6), [True, None],
++                                     [None, float("nan")], [float("inf"), None], [6, 4], ["4", None]))
++def test_partial_ci_still_requires_valid_known_endpoints(interval):
++    inputs = example()
++    _partial_uncertainty(inputs, "level_unknown")
++    inputs["operands"][ROLES[0]]["uncertainty"]["interval"] = interval
++    with pytest.raises(ExperimentalContractError):
++        populate_binding_interaction(inputs)
++
++
++@pytest.mark.parametrize("level", (True, 0, 1, -0.1, float("nan"), float("inf"), "0.95"))
++def test_partial_ci_still_requires_valid_known_level(level):
++    inputs = example()
++    _partial_uncertainty(inputs, "interval_unknown")
++    inputs["operands"][ROLES[0]]["uncertainty"]["confidence_level"] = level
++    with pytest.raises(ExperimentalContractError):
++        populate_binding_interaction(inputs)
++
++
++@pytest.mark.parametrize("statistic,spread,interval,level", (
++    ("sd", None, [None, 6], None), ("sem", None, None, 0.95),
++    ("unspecified", None, [4, 6], 0.95), ("unreported", 0.1, None, None),
++    ("confidence_interval", 0.1, [4, None], None),
++))
++def test_partial_metadata_rejects_contradictory_statistic_fields(statistic, spread, interval, level):
++    inputs = example()
++    operand = inputs["operands"][ROLES[0]]
++    operand["reported_spread"] = spread
++    operand["uncertainty"].update(statistic=statistic, interval=interval, confidence_level=level)
++    with pytest.raises(ExperimentalContractError):
++        populate_binding_interaction(inputs)
++
++
++def test_ci_missing_whole_interval_and_missing_endpoints_remain_as_supplied():
++    inputs = example()
++    _partial_uncertainty(inputs, "interval_unknown")
++    first = populate_binding_interaction(inputs)
++    inputs["operands"][ROLES[0]]["uncertainty"]["interval"] = [None, None]
++    second = populate_binding_interaction(inputs)
++    assert first["inputs"]["operands"][ROLES[0]]["uncertainty"]["interval"] is None
++    assert second["inputs"]["operands"][ROLES[0]]["uncertainty"]["interval"] == [None, None]
++    assert first["operand_keys"][ROLES[0]] != second["operand_keys"][ROLES[0]]
++    assert first["cells"] == second["cells"]
++
++
++@pytest.mark.parametrize("status", ("known", "estimated", "unknown"))
++def test_partial_reported_uncertainty_does_not_select_or_upgrade_a_separate_model(status):
++    inputs = example()
++    old_model = observation_model(inputs, status=status)
++    before = populate_binding_interaction(inputs, old_model)
++    _partial_uncertainty(inputs, "level_unknown")
++    result = populate_binding_interaction(inputs, observation_model(inputs, status=status))
++    assert result["cells"] == before["cells"]
++    assert result["model"]["variance_status"] == status
++    if status != "known":
++        assert result["cells"]["signed_profile_log_ratio"]["value"] is None
++    with pytest.raises(ExperimentalContractError):
++        populate_binding_interaction(inputs, old_model)
++
++
++@lru_cache(maxsize=1)
++def _baseline_module():
++    path = Path(__file__).resolve().parents[1] / "verification" / "literature_reference_evidence_2026-10-25_001" / "a105_binding_partial_uncertainty_053" / "baseline_001" / "gene_annotation_episode" / "literature_binding_interaction_calculations.py"
++    spec = importlib.util.spec_from_file_location("gene_annotation_episode._binding_interaction_baseline_053", path)
++    module = importlib.util.module_from_spec(spec)
++    spec.loader.exec_module(module)
++    return module
++
++
++def _complete_baseline_cases():
++    cases = [example(values) for values in ((5, 40, 2, 4), (5, 4, 2, 40), (2, 4, 5, 40),
++                                          (1e-300, 1e300, 1e300, 1e-300),
++                                          (1e300, 1e-300, 1e-300, 1e300))]
++    for statistic in ("sd", "sem", "unspecified", "confidence_interval"):
++        inputs = example()
++        operand = inputs["operands"][ROLES[0]]
++        operand["uncertainty"].update(statistic=statistic, exact_count=8, minimum_count=3,
++            basis="between_independent_fitted_parameters", repetition_basis="biological_preparations")
++        if statistic == "confidence_interval":
++            operand["uncertainty"].update(interval=[-1, 6], confidence_level=0.95)
++        else:
++            operand["reported_spread"] = 0.1
++        cases.append(inputs)
++    for scope in ("reported_protocols", "common_conditions"):
++        for status in ("matched", "not_matched", "unknown", "conflicting"):
++            inputs = example()
++            inputs["comparison_scope"] = scope
++            inputs["relationships"]["common_conditions"] = {
++                "status": status, "sources": [] if status == "unknown" else [witness(10)]}
++            cases.append(inputs)
++    for relations in (("gt", "eq", "eq", "eq"), ("lt", "gt", "eq", "eq"),
++                      ("lt", "eq", "eq", "gt")):
++        inputs = example()
++        for role, relation in zip(ROLES, relations):
++            inputs["operands"][role]["relation"] = relation
++        cases.append(inputs)
++    inputs = example()
++    inputs["parameter_kind"] = "reported_hill_kd"
++    cases.append(inputs)
++    return cases
++
++
++def test_previously_accepted_complete_result_dictionaries_are_exact():
++    baseline = _baseline_module()
++    for inputs in _complete_baseline_cases():
++        for model in [None] + [observation_model(inputs, status=status)
++                               for status in ("known", "estimated", "unknown")]:
++            old = baseline.populate_binding_interaction(inputs, model)
++            new = populate_binding_interaction(inputs, model)
++            assert new == old
++            # Sorted JSON comparison also distinguishes signed zero and exact
++            # number serialization that Python dictionary equality can hide.
++            assert json.dumps(new, sort_keys=True, allow_nan=False) == json.dumps(old, sort_keys=True, allow_nan=False)
++
++
++def test_numeric_model_identity_and_relationship_code_is_unchanged_from_048():
++    baseline = _baseline_module()
++    baseline_tree = ast.parse(Path(baseline.__file__).read_text())
++    current_tree = ast.parse((Path(__file__).resolve().parents[1] / "gene_annotation_episode" /
++                              "literature_binding_interaction_calculations.py").read_text())
++    old_functions = {node.name: node for node in baseline_tree.body if isinstance(node, ast.FunctionDef)}
++    new_functions = {node.name: node for node in current_tree.body if isinstance(node, ast.FunctionDef)}
++    assert set(new_functions) - set(old_functions) == {"_uncertainty_qualifications"}
++    assert set(old_functions) <= set(new_functions)
++    for name, node in old_functions.items():
++        if name not in ("_uncertainty", "populate_binding_interaction"):
++            assert ast.dump(node) == ast.dump(new_functions[name]), name
++    current_populate = deepcopy(new_functions["populate_binding_interaction"])
++    additions = [node for node in current_populate.body if isinstance(node, ast.Expr)
++                 and isinstance(node.value, ast.Call) and isinstance(node.value.func, ast.Attribute)
++                 and isinstance(node.value.func.value, ast.Name)
++                 and node.value.func.value.id == "qualifications" and node.value.func.attr == "extend"
++                 and len(node.value.args) == 1 and isinstance(node.value.args[0], ast.Call)
++                 and isinstance(node.value.args[0].func, ast.Name)
++                 and node.value.args[0].func.id == "_uncertainty_qualifications"]
++    assert len(additions) == 1
++    current_populate.body.remove(additions[0])
++    assert ast.dump(current_populate) == ast.dump(old_functions["populate_binding_interaction"])

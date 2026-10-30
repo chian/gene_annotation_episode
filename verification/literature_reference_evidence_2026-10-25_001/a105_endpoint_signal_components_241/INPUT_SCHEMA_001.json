@@ -1,0 +1,1849 @@
+{
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "a105_endpoint_signal_selection_v1"
+    },
+    "source_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_kind": {
+      "enum": [
+        "primary_source",
+        "retained_extraction",
+        "synthetic_fixture"
+      ]
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "subject": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "source_ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "representation": {
+                  "enum": [
+                    "original",
+                    "text"
+                  ]
+                },
+                "start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "source_ref",
+                "representation",
+                "start",
+                "end",
+                "quote"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "organism": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "source_ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "representation": {
+                  "enum": [
+                    "original",
+                    "text"
+                  ]
+                },
+                "start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "source_ref",
+                "representation",
+                "start",
+                "end",
+                "quote"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "genotype": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "source_ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "representation": {
+                  "enum": [
+                    "original",
+                    "text"
+                  ]
+                },
+                "start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "source_ref",
+                "representation",
+                "start",
+                "end",
+                "quote"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "construct": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "source_ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "representation": {
+                  "enum": [
+                    "original",
+                    "text"
+                  ]
+                },
+                "start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "source_ref",
+                "representation",
+                "start",
+                "end",
+                "quote"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "preparation": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "source_ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "representation": {
+                  "enum": [
+                    "original",
+                    "text"
+                  ]
+                },
+                "start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "source_ref",
+                "representation",
+                "start",
+                "end",
+                "quote"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "partners": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "source_ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "representation": {
+                  "enum": [
+                    "original",
+                    "text"
+                  ]
+                },
+                "start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "source_ref",
+                "representation",
+                "start",
+                "end",
+                "quote"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "experiment": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "source_ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "representation": {
+                  "enum": [
+                    "original",
+                    "text"
+                  ]
+                },
+                "start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "source_ref",
+                "representation",
+                "start",
+                "end",
+                "quote"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "condition": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "source_ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "representation": {
+                  "enum": [
+                    "original",
+                    "text"
+                  ]
+                },
+                "start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "source_ref",
+                "representation",
+                "start",
+                "end",
+                "quote"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "endpoint": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "source_ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "representation": {
+                  "enum": [
+                    "original",
+                    "text"
+                  ]
+                },
+                "start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "source_ref",
+                "representation",
+                "start",
+                "end",
+                "quote"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "normalization": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "source_ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "representation": {
+                  "enum": [
+                    "original",
+                    "text"
+                  ]
+                },
+                "start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "source_ref",
+                "representation",
+                "start",
+                "end",
+                "quote"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "intended_variable": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "source_ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "representation": {
+                  "enum": [
+                    "original",
+                    "text"
+                  ]
+                },
+                "start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "source_ref",
+                "representation",
+                "start",
+                "end",
+                "quote"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "functional_assertion": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "source_ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "representation": {
+                  "enum": [
+                    "original",
+                    "text"
+                  ]
+                },
+                "start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "source_ref",
+                "representation",
+                "start",
+                "end",
+                "quote"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "correction_discussion": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "source_ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "representation": {
+                  "enum": [
+                    "original",
+                    "text"
+                  ]
+                },
+                "start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "source_ref",
+                "representation",
+                "start",
+                "end",
+                "quote"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "limitations": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "source_ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "representation": {
+                  "enum": [
+                    "original",
+                    "text"
+                  ]
+                },
+                "start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "source_ref",
+                "representation",
+                "start",
+                "end",
+                "quote"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "repetition": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "source_ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "representation": {
+                  "enum": [
+                    "original",
+                    "text"
+                  ]
+                },
+                "start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "source_ref",
+                "representation",
+                "start",
+                "end",
+                "quote"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "subject",
+        "organism",
+        "genotype",
+        "construct",
+        "preparation",
+        "partners",
+        "experiment",
+        "condition",
+        "endpoint",
+        "normalization",
+        "intended_variable",
+        "functional_assertion",
+        "correction_discussion",
+        "limitations",
+        "repetition"
+      ],
+      "additionalProperties": false
+    },
+    "relationships": {
+      "type": "object",
+      "properties": {
+        "axis_scale": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "common_affine",
+                "nonlinear",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "image_regions": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "minItems": 4,
+                "maxItems": 4
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses",
+            "image_regions"
+          ],
+          "additionalProperties": false
+        },
+        "ordinate_direction": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "increases_upward",
+                "increases_downward",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "image_regions": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "minItems": 4,
+                "maxItems": 4
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses",
+            "image_regions"
+          ],
+          "additionalProperties": false
+        },
+        "measurement_stage": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "endpoint_amplitude",
+                "initial_rate",
+                "other",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "image_regions": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "minItems": 4,
+                "maxItems": 4
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses",
+            "image_regions"
+          ],
+          "additionalProperties": false
+        },
+        "correction_stage": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "not_applied",
+                "already_applied",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "image_regions": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "minItems": 4,
+                "maxItems": 4
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses",
+            "image_regions"
+          ],
+          "additionalProperties": false
+        },
+        "baseline_basis": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "source_displayed_extrapolation",
+                "matched_control",
+                "new_fit",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "image_regions": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "minItems": 4,
+                "maxItems": 4
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses",
+            "image_regions"
+          ],
+          "additionalProperties": false
+        },
+        "baseline_applicability": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "supported",
+                "explicit_conditional_scenario",
+                "unsupported",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "image_regions": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "minItems": 4,
+                "maxItems": 4
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses",
+            "image_regions"
+          ],
+          "additionalProperties": false
+        },
+        "fast_component_completion": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "supported",
+                "explicit_conditional_scenario",
+                "unsupported",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "image_regions": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "minItems": 4,
+                "maxItems": 4
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses",
+            "image_regions"
+          ],
+          "additionalProperties": false
+        },
+        "additive_interpretation": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "nonnegative_additive",
+                "signed_decomposition",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "image_regions": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "minItems": 4,
+                "maxItems": 4
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses",
+            "image_regions"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "axis_scale",
+        "ordinate_direction",
+        "measurement_stage",
+        "correction_stage",
+        "baseline_basis",
+        "baseline_applicability",
+        "fast_component_completion",
+        "additive_interpretation"
+      ],
+      "additionalProperties": false
+    },
+    "image": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "source_ref": {
+              "type": "string",
+              "minLength": 1
+            },
+            "expected_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "width": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "height": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "panel_region": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "minItems": 4,
+              "maxItems": 4
+            },
+            "image_origin": {
+              "enum": [
+                "published",
+                "synthetic"
+              ]
+            },
+            "points": {
+              "type": "object",
+              "properties": {
+                "initial": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "x": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "y": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "y_enclosure": {
+                          "anyOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "minItems": 2,
+                              "maxItems": 2
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "support_region": {
+                          "type": "array",
+                          "items": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "minItems": 4,
+                          "maxItems": 4
+                        },
+                        "maximum_rgb": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 255
+                        },
+                        "image_witness": {
+                          "type": "object",
+                          "properties": {
+                            "region": {
+                              "type": "array",
+                              "items": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "minItems": 4,
+                              "maxItems": 4
+                            },
+                            "meaning": {
+                              "enum": [
+                                "initial_trace",
+                                "displayed_baseline_at_addition",
+                                "selected_late_trace"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "region",
+                            "meaning"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "semantic_witnesses": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "source_ref": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "representation": {
+                                "enum": [
+                                  "original",
+                                  "text"
+                                ]
+                              },
+                              "start": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "end": {
+                                "type": "integer",
+                                "minimum": 1
+                              },
+                              "quote": {
+                                "type": "string",
+                                "minLength": 1
+                              }
+                            },
+                            "required": [
+                              "source_ref",
+                              "representation",
+                              "start",
+                              "end",
+                              "quote"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "physical_estimate_owner": {
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "source_ref": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "representation": {
+                                  "enum": [
+                                    "original",
+                                    "text"
+                                  ]
+                                },
+                                "start": {
+                                  "type": "integer",
+                                  "minimum": 0
+                                },
+                                "end": {
+                                  "type": "integer",
+                                  "minimum": 1
+                                },
+                                "quote": {
+                                  "type": "string",
+                                  "minLength": 1
+                                }
+                              },
+                              "required": [
+                                "source_ref",
+                                "representation",
+                                "start",
+                                "end",
+                                "quote"
+                              ],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "x",
+                        "y",
+                        "y_enclosure",
+                        "support_region",
+                        "maximum_rgb",
+                        "image_witness",
+                        "semantic_witnesses",
+                        "physical_estimate_owner"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "baseline_at_addition": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "x": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "y": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "y_enclosure": {
+                          "anyOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "minItems": 2,
+                              "maxItems": 2
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "support_region": {
+                          "type": "array",
+                          "items": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "minItems": 4,
+                          "maxItems": 4
+                        },
+                        "maximum_rgb": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 255
+                        },
+                        "image_witness": {
+                          "type": "object",
+                          "properties": {
+                            "region": {
+                              "type": "array",
+                              "items": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "minItems": 4,
+                              "maxItems": 4
+                            },
+                            "meaning": {
+                              "enum": [
+                                "initial_trace",
+                                "displayed_baseline_at_addition",
+                                "selected_late_trace"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "region",
+                            "meaning"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "semantic_witnesses": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "source_ref": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "representation": {
+                                "enum": [
+                                  "original",
+                                  "text"
+                                ]
+                              },
+                              "start": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "end": {
+                                "type": "integer",
+                                "minimum": 1
+                              },
+                              "quote": {
+                                "type": "string",
+                                "minLength": 1
+                              }
+                            },
+                            "required": [
+                              "source_ref",
+                              "representation",
+                              "start",
+                              "end",
+                              "quote"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "physical_estimate_owner": {
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "source_ref": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "representation": {
+                                  "enum": [
+                                    "original",
+                                    "text"
+                                  ]
+                                },
+                                "start": {
+                                  "type": "integer",
+                                  "minimum": 0
+                                },
+                                "end": {
+                                  "type": "integer",
+                                  "minimum": 1
+                                },
+                                "quote": {
+                                  "type": "string",
+                                  "minLength": 1
+                                }
+                              },
+                              "required": [
+                                "source_ref",
+                                "representation",
+                                "start",
+                                "end",
+                                "quote"
+                              ],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "x",
+                        "y",
+                        "y_enclosure",
+                        "support_region",
+                        "maximum_rgb",
+                        "image_witness",
+                        "semantic_witnesses",
+                        "physical_estimate_owner"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "late": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "x": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "y": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "y_enclosure": {
+                          "anyOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "minItems": 2,
+                              "maxItems": 2
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "support_region": {
+                          "type": "array",
+                          "items": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "minItems": 4,
+                          "maxItems": 4
+                        },
+                        "maximum_rgb": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 255
+                        },
+                        "image_witness": {
+                          "type": "object",
+                          "properties": {
+                            "region": {
+                              "type": "array",
+                              "items": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "minItems": 4,
+                              "maxItems": 4
+                            },
+                            "meaning": {
+                              "enum": [
+                                "initial_trace",
+                                "displayed_baseline_at_addition",
+                                "selected_late_trace"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "region",
+                            "meaning"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "semantic_witnesses": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "source_ref": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "representation": {
+                                "enum": [
+                                  "original",
+                                  "text"
+                                ]
+                              },
+                              "start": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "end": {
+                                "type": "integer",
+                                "minimum": 1
+                              },
+                              "quote": {
+                                "type": "string",
+                                "minLength": 1
+                              }
+                            },
+                            "required": [
+                              "source_ref",
+                              "representation",
+                              "start",
+                              "end",
+                              "quote"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "physical_estimate_owner": {
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "source_ref": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "representation": {
+                                  "enum": [
+                                    "original",
+                                    "text"
+                                  ]
+                                },
+                                "start": {
+                                  "type": "integer",
+                                  "minimum": 0
+                                },
+                                "end": {
+                                  "type": "integer",
+                                  "minimum": 1
+                                },
+                                "quote": {
+                                  "type": "string",
+                                  "minLength": 1
+                                }
+                              },
+                              "required": [
+                                "source_ref",
+                                "representation",
+                                "start",
+                                "end",
+                                "quote"
+                              ],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "x",
+                        "y",
+                        "y_enclosure",
+                        "support_region",
+                        "maximum_rgb",
+                        "image_witness",
+                        "semantic_witnesses",
+                        "physical_estimate_owner"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "initial",
+                "baseline_at_addition",
+                "late"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "source_ref",
+            "expected_sha256",
+            "width",
+            "height",
+            "panel_region",
+            "image_origin",
+            "points"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "covariance_source_ref": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "requested_cells": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "total_amplitude",
+          "corrected_amplitude",
+          "additional_amplitude",
+          "retained_fraction",
+          "additional_fraction",
+          "total_amplitude_variance",
+          "corrected_amplitude_variance",
+          "additional_amplitude_variance",
+          "retained_fraction_variance",
+          "additional_fraction_variance"
+        ]
+      },
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "version",
+    "source_ref",
+    "source_kind",
+    "context",
+    "relationships",
+    "image",
+    "covariance_source_ref",
+    "requested_cells"
+  ],
+  "additionalProperties": false
+}

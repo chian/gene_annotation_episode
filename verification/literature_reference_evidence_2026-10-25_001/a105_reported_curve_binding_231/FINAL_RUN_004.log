@@ -1,0 +1,61 @@
+..F                                                                      [100%]
+=================================== FAILURES ===================================
+____ test_explicit_parent_sources_are_receipt_bound_fixed_and_reconstructed ____
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_reported_curve_binding_231/final_run_004/test_explicit_parent_sources_a0')
+
+    def test_explicit_parent_sources_are_receipt_bound_fixed_and_reconstructed(tmp_path):
+        store,child,args,_=setup_store(tmp_path)
+        try:
+            original=binding_for(store,child)
+            enabled=LiteratureEpisodes(original.services,rate_population=True,
+                reference_parent_sources=[args['source_ref']])
+            parent=replace(child,role='annotation',episode_id='root',path=(('annotation','root'),),assignment={})
+            assert original.initial_decision_context(parent)=={}
+            information=enabled.initial_decision_context(parent)
+            assert information['reference_evidence_parent']['source_refs']==[args['source_ref']]
+            assert information['literature_experimental_work']['aspect']=='reference_evidence_parent'
+            assert enabled.initial_decision_context(child)=={}
+>           assert enabled.initial_decision_context(replace(parent,received_record_refs=(*parent.received_record_refs,'extra')))==information
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_reference_parent_delivery.py:32: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_episodes.py:816: in initial_decision_context
+    result.update(self._native_rate_display_context(context))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:1240: in _native_rate_display_context
+    record = self.services.read_record(reference)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/episode_services.py:96: in read_record
+    return self.workflow.store.get(reference)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.state.Store object at 0x729afb687e00>
+ref = 'extra'
+
+    def get(self, ref: str) -> dict:
+        row = self.db.execute("SELECT data FROM inputs WHERE id=?", (ref,)).fetchone()
+        if row:
+            return json.loads(row["data"])
+        row = self.db.execute("SELECT data FROM records WHERE id=?", (ref,)).fetchone()
+        if row:
+            return json.loads(row["data"])
+        read_subject = libraries.resolve(self, ref)
+        if read_subject is not None:
+            return read_subject
+        row = self.db.execute("SELECT data FROM material_members WHERE id=?", (ref,)).fetchone()
+        if row:
+            return json.loads(row[0])
+        row = self.db.execute("SELECT * FROM artifacts WHERE id=?", (ref,)).fetchone()
+        if row:
+            return {**dict(row), "record_type": "artifact"}
+>       raise ContractError("unknown_reference")
+E       gene_annotation_episode.domain.ContractError: unknown_reference
+
+gene_annotation_episode/state.py:229: ContractError
+=========================== short test summary info ============================
+FAILED tests/test_literature_reference_parent_delivery.py::test_explicit_parent_sources_are_receipt_bound_fixed_and_reconstructed
+1 failed, 2 passed in 23.12s
+{"exit_code": 1, "elapsed_seconds": 23.421405792236328, "selected_test_modules": ["tests/test_literature_rate_observations_166.py::test_original_workbook_native_arithmetic_exact_lexemes_and_shared_reference", "tests/test_literature_rate_observations_166.py::test_original_source_shared_episode_admission_and_cold_readonly_factory", "tests/test_literature_reference_parent_delivery.py::test_explicit_parent_sources_are_receipt_bound_fixed_and_reconstructed"], "all_traced_imports_inside_pin": true, "all_pinned_and_external_original_files_unchanged": true, "actual_model_execution": false, "A105_complete": false, "full_goal_complete": false}

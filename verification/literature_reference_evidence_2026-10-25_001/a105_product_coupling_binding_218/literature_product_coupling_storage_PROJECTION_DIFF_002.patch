@@ -1,0 +1,141 @@
+--- pin001/gene_annotation_episode/literature_product_coupling_storage.py
++++ pin002/gene_annotation_episode/literature_product_coupling_storage.py
+@@ -30,6 +30,7 @@
+ REQUESTED = 'requested_product_coupling_components'
+ VIEW = 'product_coupling_components'
+ SCOPE = 'source_product_coupling'
++PROJECTION_VERSION = 'product_coupling_projection_v2'
+ MODEL_COMPONENTS = frozenset(('productive_fraction', 'calculated_coupling_percent',
+     'displayed_coupling_difference_pp', 'productive_fraction_variance',
+     'productive_fraction_standard_uncertainty'))
+@@ -120,7 +121,8 @@
+ _STATISTICAL_PREFIX = re.compile(r'\b(?:SD|SEM|SE|mean|CV|variance|uncertainty|CI|activity|rate|turnover|coupling)\b', re.I)
+ 
+ 
+-def _meaning(witness, locations, *, unit=False, condition=False):
++def _meaning_v1(witness, locations, *, unit=False, condition=False):
++    """Exact markerless saved-display policy from the immutable218pin001."""
+     if witness is None:
+         return None
+     raw = witness['quote'].encode(); flags = [False] * len(raw)
+@@ -159,15 +161,86 @@
+         'unavailable_reason': 'unrequested_numerical_scope_unresolved' if unresolved else None}
+ 
+ 
++# A bounded chemical identifier is not an assay value. This increment supports
++# the position/stereochemical camphor-product names in the retained207case;
++# neither arbitrary digit-prefixed prose nor numerical ranges qualify.
++_CHEMICAL_NAME = re.compile(r'(?<![A-Za-z0-9_])[0-9]+(?:,[0-9]+)*-'
++    r'(?:(?:exo|endo|cis|trans|R|S)-)?(?:hydroxy|oxo|amino|deoxy)camphor(?![A-Za-z0-9_])', re.I)
++_STATISTIC_NUMBER = re.compile(r'(\b(?:SD|SEM|SE|mean|CV|variance|uncertainty|CI|activity|rate|turnover|coupling)'
++    r'\s*[:=]?\s*)([+−-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+−-]?[0-9]+)?)', re.I)
++_UNIT_ADJACENT_NUMBER = re.compile(r'(?<![A-Za-z0-9_.])[+−-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)'
++    r'(?:[eE][+−-]?[0-9]+)?(?=(?:mM|µM|μM|uM|nM|M|percent|%)(?![A-Za-z0-9_]))', re.I)
++
++
++def _meaning(witness, locations, *, unit=False, condition=False):
++    """New projection policy; preserve bounded chemical names, redact statistics."""
++    if witness is None:
++        return None
++    # Coordinate masking follows the original artifact/span policy. Classify
++    # that display afresh; the v1 helper's already redacted display cannot be
++    # used here because chemical locants must still be available.
++    raw = witness['quote'].encode(); flags = [False] * len(raw)
++    for location in locations:
++        if (location['artifact_ref'] == witness['artifact_ref']
++                and witness['start'] < location['end'] and location['start'] < witness['end']):
++            a = max(witness['start'], location['start']) - witness['start']
++            b = min(witness['end'], location['end']) - witness['start']
++            flags[a:b] = [True] * (b-a)
++    chunks, start = [], 0
++    while start < len(raw):
++        end = start+1
++        while end < len(raw) and flags[end] == flags[start]:
++            end += 1
++        chunks.append('[unrequested numerical operand]' if flags[start] else raw[start:end].decode())
++        start = end
++    shown = ''.join(chunks); visible = re.sub(r'<[^>]+>', ' ', shown)
++    chemical = []
++    def protect(match):
++        # Alphabet-only placeholder cannot masquerade as a statistic or model
++        # value. It is restored solely to this exact matched source substring.
++        token = 'CHEMICALLOCANT' + chr(0xE000+len(chemical))
++        chemical.append((token, match.group()))
++        return token
++    protected = _CHEMICAL_NAME.sub(protect, visible)
++    numeric = bool(_VISIBLE_NUMBER.search(protected) or _STATISTIC_NUMBER.search(protected)
++        or _UNIT_ADJACENT_NUMBER.search(protected))
++    safe_literal = unit or bool(condition and not _STATISTICAL_PREFIX.search(visible)
++        and _CONDITION.fullmatch(visible))
++    unresolved = numeric and not safe_literal
++    if re.search(r'<(?:table|tr|td|th)\b', witness['quote'], re.I) and numeric:
++        unresolved = True
++    display = shown
++    if unresolved:
++        redacted = _STATISTIC_NUMBER.sub(lambda match: match.group(1)+'[unclassified numerical context withheld]', protected)
++        redacted = _UNIT_ADJACENT_NUMBER.sub('[unclassified numerical context withheld]', redacted)
++        redacted = _VISIBLE_NUMBER.sub('[unclassified numerical context withheld]', redacted)
++        for token, original in chemical:
++            redacted = redacted.replace(token, original)
++        display = '[Mixed numerical source context retained; requested operand scope unresolved.] ' + redacted
++    return {**{name: witness[name] for name in ('source_ref', 'artifact_ref', 'representation', 'start', 'end')},
++        'display_text': display, 'status': 'numerical_scope_unresolved' if unresolved else
++            'unrequested_numbers_withheld' if any(flags) else 'selected',
++        'unavailable_reason': 'unrequested_numerical_scope_unresolved' if unresolved else None}
++
++
++def _projection_policy(saved):
++    if 'projection_version' not in saved:
++        return _meaning_v1
++    if saved['projection_version'] != PROJECTION_VERSION:
++        raise ContractError('product_coupling_saved_projection_version_unsupported')
++    return _meaning
++
++
+ def _project_saved(saved, reference, components):
+     data = saved['extraction']; locations = saved['numerical_scope_locations']
+-    meaning = lambda w: _meaning(w, locations)
++    policy = _projection_policy(saved)
++    meaning = lambda w: policy(w, locations)
+     interpreted = lambda v: {'value': v['value'], 'support': [meaning(w) for w in v['witnesses']]}
+     quantities = {}
+     for role, item in data['quantities'].items():
+         quantities[role] = None if item is None else {
+             'label': meaning(item['quantity_label']),
+-            'unit': None if item['unit'] is None else _meaning(item['unit']['witness'], locations,
++            'unit': None if item['unit'] is None else policy(item['unit']['witness'], locations,
+                 unit=item['unit']['canonical_unit'] is not None),
+             **{name: interpreted(item[name]) for name in QUANTITY_MEANINGS},
+             'measurement_key': None if item['number'] is None else item['number']['measurement_key'],
+@@ -176,7 +249,7 @@
+             'dependency_support': [meaning(w) for w in item['dependency_witnesses']]}
+     metadata = {'sheet_ref': reference, 'evidence_source_ref': saved['input_source_ref'],
+         'evaluation_scope': SCOPE, 'source_kind': data['source_kind'],
+-        'source_meanings': {name: None if value is None else _meaning(value['witness'], locations,
++        'source_meanings': {name: None if value is None else policy(value['witness'], locations,
+             condition=name in ('product_conditions', 'cofactor_conditions'))
+             for name, value in data['context'].items()},
+         'quantity_meanings': quantities,
+@@ -275,7 +348,8 @@
+         if cov['source_ref'] is not None and read_sizes[(cov['source_ref'], 'original')] > 0:
+             locations.append({'source_ref': cov['source_ref'], 'artifact_ref': cov['artifact_ref'],
+                 'representation': 'original', 'start': 0, 'end': read_sizes[(cov['source_ref'], 'original')]})
+-        payload = {'version': VERSION, 'input_source_ref': args['source_ref'], 'input_artifact_ref': source['artifact_ref'],
++        payload = {'version': VERSION, 'projection_version': PROJECTION_VERSION,
++            'input_source_ref': args['source_ref'], 'input_artifact_ref': source['artifact_ref'],
+             'selection': args, 'direct_input_source_refs': direct, 'input_source_refs': parents,
+             'source_metadata': {ref: self.store.get(ref) for ref in parents}, 'numerical_scope_locations': locations,
+             'original_implementation': receipt, 'extraction': extraction, 'sheet': sheet}
+@@ -462,8 +536,10 @@
+         if operation is None or operation['signature'] != canonical(request):
+             raise ContractError('literature_sheet_not_selected_output')
+         saved = self._json(source['artifact_ref'])
+-        if (set(saved) != {'version', 'input_source_ref', 'input_artifact_ref', 'selection', 'direct_input_source_refs',
+-                'input_source_refs', 'source_metadata', 'numerical_scope_locations', 'original_implementation', 'extraction', 'sheet'}
++        original_keys = {'version', 'input_source_ref', 'input_artifact_ref', 'selection', 'direct_input_source_refs',
++            'input_source_refs', 'source_metadata', 'numerical_scope_locations', 'original_implementation', 'extraction', 'sheet'}
++        _projection_policy(saved)
++        if (set(saved) not in (original_keys, original_keys | {'projection_version'})
+                 or saved['version'] != VERSION or saved['selection'] != request['arguments']
+                 or saved['input_source_ref'] != request['arguments']['source_ref'] or source['text_ref'] != source['artifact_ref']
+                 or saved['input_source_refs'] != source['parent_source_refs']

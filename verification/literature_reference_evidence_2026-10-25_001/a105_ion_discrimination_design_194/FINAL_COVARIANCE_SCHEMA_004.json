@@ -1,0 +1,87 @@
+{
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "a105_ion_activity_covariance_v1"
+    },
+    "activity_order": {
+      "const": [
+        "preferred",
+        "alternative"
+      ]
+    },
+    "activity_keys": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "activity_units": {
+      "type": "array",
+      "items": {
+        "const": "per_min"
+      },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "dependency_keys": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "matrix": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 2,
+        "maxItems": 2
+      },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "variance_status": {
+      "type": "string",
+      "enum": [
+        "known",
+        "estimated",
+        "unknown"
+      ]
+    },
+    "origin": {
+      "type": "string",
+      "enum": [
+        "reported",
+        "derived",
+        "synthetic"
+      ]
+    },
+    "basis": {
+      "const": "joint_covariance_of_selected_per_unit_activity_estimators"
+    }
+  },
+  "required": [
+    "version",
+    "activity_order",
+    "activity_keys",
+    "activity_units",
+    "dependency_keys",
+    "matrix",
+    "variance_status",
+    "origin",
+    "basis"
+  ],
+  "additionalProperties": false
+}

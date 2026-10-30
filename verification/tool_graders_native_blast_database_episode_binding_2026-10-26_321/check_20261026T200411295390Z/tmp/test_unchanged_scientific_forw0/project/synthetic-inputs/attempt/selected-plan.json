@@ -1,0 +1,233 @@
+{
+  "attempt_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T200411295390Z/tmp/test_unchanged_scientific_forw0/project/synthetic-inputs/attempt",
+  "database_paths": {
+    "target": [
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T200411295390Z/tmp/test_unchanged_scientific_forw0/project/synthetic-inputs/db-target"
+    ]
+  },
+  "identity": {
+    "assignment_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "attempt_id": "129ed7790ef6011695e7264351338c552e6f82ebf33f0fcc317fd1e3aad6d7d9",
+    "episode_id": "synthetic-hpc-child",
+    "execution_id": null,
+    "operation_key": "explicit-selected-operation",
+    "requested_job_sha256": "f0859b367c9ac625569177097d69e8c5dc886628062dfe3162c958830a833f47",
+    "resource_id": "synthetic-hpc",
+    "run_id": "synthetic-313",
+    "submission_token": "51f780c9e75a5fca5a427b920d3f1fe579a9bce7244b60818da0c85cbf89b5cf"
+  },
+  "input_paths": {
+    "metadata": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T200411295390Z/tmp/test_unchanged_scientific_forw0/project/synthetic-inputs/attempt/inputs/metadata",
+    "query": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T200411295390Z/tmp/test_unchanged_scientific_forw0/project/synthetic-inputs/attempt/inputs/query"
+  },
+  "output_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T200411295390Z/tmp/test_unchanged_scientific_forw0/project/synthetic-inputs/attempt/outputs",
+  "producer_manifest": {
+    "artifact_ref": null,
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T200411295390Z/tmp/test_unchanged_scientific_forw0/project/synthetic-inputs/producer-manifest.json",
+    "sha256": "8fff176f32bca600e7138184a3d5acf1419398d6131e33d1d2733dbbe07c678c",
+    "size_bytes": 1738
+  },
+  "requested_job": {
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T200411295390Z/tmp/test_unchanged_scientific_forw0/project/synthetic-inputs/synthetic-native-command",
+      "-query",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T200411295390Z/tmp/test_unchanged_scientific_forw0/project/synthetic-inputs/selected-query",
+      "-db",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T200411295390Z/tmp/test_unchanged_scientific_forw0/project/synthetic-inputs/db-target",
+      "-outfmt",
+      "15",
+      "-out",
+      "report"
+    ],
+    "environment": {
+      "OUTSIDE_FILE": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T200411295390Z/tmp/test_unchanged_scientific_forw0/project/synthetic-inputs/outside-file",
+      "SYNTHETIC_BEHAVIOR": "complete"
+    },
+    "native_blast_database": {
+      "databases": [
+        {
+          "database_key": "target",
+          "identity": {
+            "namespace": "synthetic",
+            "preparation_type": "sequence_database",
+            "release": null,
+            "scope": null,
+            "source": {
+              "pointer": "/preparation",
+              "source_ref": "source_explicit"
+            },
+            "value": "target",
+            "version": null
+          },
+          "kind": "blast_protein_sequence",
+          "manifest": {
+            "access": {
+              "mode": "prepared_local",
+              "offline_configuration": {
+                "artifact_ref": null,
+                "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T200411295390Z/tmp/test_unchanged_scientific_forw0/project/synthetic-inputs/target.offline.json",
+                "sha256": "270d70a766735035db49629de6977b4c297fbc593c0d0786b786368577743285",
+                "size_bytes": 48
+              }
+            },
+            "database_key": "target",
+            "files": [
+              {
+                "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T200411295390Z/tmp/test_unchanged_scientific_forw0/project/synthetic-inputs/db-target.pin",
+                "sha256": "807b46d83c953bc9deb20a3147c6bf49409f73137c083a7e81a15b4422ab4668",
+                "size_bytes": 30
+              }
+            ],
+            "identity": {
+              "namespace": "synthetic",
+              "preparation_type": "sequence_database",
+              "release": null,
+              "scope": null,
+              "source": {
+                "pointer": "/preparation",
+                "source_ref": "source_explicit"
+              },
+              "value": "target",
+              "version": null
+            },
+            "inventory_complete": true,
+            "kind": "blast_protein_sequence",
+            "metadata_manifests": [
+              {
+                "artifact_ref": null,
+                "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T200411295390Z/tmp/test_unchanged_scientific_forw0/project/synthetic-inputs/target.metadata.json",
+                "sha256": "f275df8436710cad35df3e3469f78b34303cea80be3f1d85e8c8ce1fc6341ed0",
+                "size_bytes": 25
+              }
+            ],
+            "native_paths": [
+              "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T200411295390Z/tmp/test_unchanged_scientific_forw0/project/synthetic-inputs/db-target"
+            ],
+            "preparation": {
+              "argv": null,
+              "input_manifest": {
+                "artifact_ref": null,
+                "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T200411295390Z/tmp/test_unchanged_scientific_forw0/project/synthetic-inputs/target.inputs.json",
+                "sha256": "76bd39ada2837e2cad8c48ef3964d422d6de4249ffe4483fcdf647acf8c5635c",
+                "size_bytes": 22
+              },
+              "method": "publisher_package",
+              "preparation_type": "sequence_database",
+              "receipt": {
+                "artifact_ref": null,
+                "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T200411295390Z/tmp/test_unchanged_scientific_forw0/project/synthetic-inputs/target.receipt.json",
+                "sha256": "a29df13bb047e1193365943724813b9609be2b0408cb6a8d55da4cb3af0bf005",
+                "size_bytes": 26
+              },
+              "software": {
+                "executable_sha256": null,
+                "name": "fixture preparation",
+                "version": null
+              },
+              "source": {
+                "pointer": "/preparation",
+                "source_ref": "source_explicit"
+              }
+            },
+            "version": "native_blast_prepared_database_manifest_v1"
+          },
+          "manifest_file": {
+            "artifact_ref": null,
+            "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T200411295390Z/tmp/test_unchanged_scientific_forw0/project/synthetic-inputs/target.manifest.json",
+            "sha256": "ae957a4a12b68ed85bf9071b70d3a74412489460de3c4edf8e26471340062e44",
+            "size_bytes": 3102
+          },
+          "native_paths": [
+            "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T200411295390Z/tmp/test_unchanged_scientific_forw0/project/synthetic-inputs/db-target"
+          ],
+          "role": "target"
+        }
+      ],
+      "environment": {
+        "OUTSIDE_FILE": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T200411295390Z/tmp/test_unchanged_scientific_forw0/project/synthetic-inputs/outside-file",
+        "SYNTHETIC_BEHAVIOR": "complete"
+      },
+      "grading_parameters": {
+        "sequence_database_model": null
+      },
+      "inputs": [
+        {
+          "artifact_ref": null,
+          "format": "fasta",
+          "input_key": "query",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T200411295390Z/tmp/test_unchanged_scientific_forw0/project/synthetic-inputs/selected-query",
+          "role": "query_sequence",
+          "sha256": "b723b47af7a8dcd99ce556f5a17a776a34fdd8452c3a9c8d65a5b1f6b0361b22",
+          "size_bytes": 22
+        },
+        {
+          "artifact_ref": null,
+          "format": "json",
+          "input_key": "metadata",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T200411295390Z/tmp/test_unchanged_scientific_forw0/project/synthetic-inputs/metadata.json",
+          "role": "metadata",
+          "sha256": "f9a407f743c8ef080018cafe327ef7b3d0b64b684e6d9b2d181641563fe7f283",
+          "size_bytes": 51
+        }
+      ],
+      "metadata_inputs": [
+        {
+          "consumer": "profile",
+          "input_key": "metadata",
+          "schema_id": "unregistered.example"
+        }
+      ],
+      "mode": "database",
+      "options": [],
+      "outputs": [
+        {
+          "delimiter": null,
+          "fields": [],
+          "format": "text",
+          "output_key": "stdout",
+          "path_kind": "file",
+          "relative_path": "stdout.txt",
+          "required": true,
+          "role": "stdout"
+        },
+        {
+          "delimiter": null,
+          "fields": [],
+          "format": "text",
+          "output_key": "stderr",
+          "path_kind": "file",
+          "relative_path": "stderr.txt",
+          "required": true,
+          "role": "stderr"
+        },
+        {
+          "delimiter": null,
+          "fields": [],
+          "format": "json15",
+          "output_key": "report",
+          "path_kind": "file",
+          "relative_path": "report",
+          "required": true,
+          "role": "primary_report"
+        }
+      ],
+      "program": "psiblast",
+      "query": {
+        "ignore_msa_master": null,
+        "input_key": "query",
+        "kind": "sequence",
+        "msa_master_record_ordinal": null
+      },
+      "software": {
+        "engine_version": null,
+        "executable": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_database_episode_binding_2026-10-26_321/check_20261026T200411295390Z/tmp/test_unchanged_scientific_forw0/project/synthetic-inputs/synthetic-native-command",
+        "sha256": "6717c33f6c6bc6ef1487adffdf423debbfa6bd67a74c258b9d6ffd3b86e8097e"
+      },
+      "version": "native_blast_database_job_v1"
+    }
+  },
+  "resource_environment": {
+    "RESOURCE_SETTING": "explicit"
+  },
+  "version": "native_blast_database_run_plan_v1"
+}

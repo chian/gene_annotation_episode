@@ -1,0 +1,27 @@
+# Electrical components179: bounded implementation receipt
+
+Implemented three new production modules and one new synthetic test module. These are separate reader/calculator/TASK responsibilities for numerical sections of the logical A105 sheet. No episode binding, saved repository, parent return schema, controller, annotation-credit calculation or existing production file was edited.
+
+## Interface and meanings
+
+`channel_population_schema()` accepts closed source selectors. `read_channel_inputs(arguments, read_source=...)` uses caller-authorized retained source bytes, verified byte-offset quotations, Unicode-character number selectors, complete electrical unit witnesses, optional separately typed spreads and experimental context witnesses. Source literals retain organism, genotype, molecule, construct, preparation, system, membrane, ionic conditions, voltage convention, baseline, conducting unit, endpoint and intended variable. Constrained interpretations retain molecular arrangement, current kind and reversal-condition applicability. Literal custody does not establish scientific interpretation.
+
+Point electrical readings reuse the shared scalar reader with role=rate and an additional point-only guard; spreads use role=spread. Bounds, intervals, approximations, clipped signs/digits/units and percentage spreads do not silently become point operands. The bounded unit path supports pA/nA/A, mV/V and pS/nS/S, preserving exact decimal-rational conversion and original tokens. The same artifact/numeric span has one measurement key; separate numeric spans remain distinct even when their values are equal.
+
+`channel_calculation_inputs(extraction)` validates the retained extraction shape and projects the declared canonical operands without reading sources. `populate_channel_components(inputs)` retains native current, applied voltage, reversal voltage and reported conductance; calculates absolute driving voltage, defined chord conductance and elementary-charge-equivalent rate; and optionally propagates the supplied full 3x3 canonical covariance. Applicability means the reversal conditions apply to the chosen current/voltage arrangement, not necessarily one acquisition or bilayer. It does not merge physical measurement keys or establish an ohmic I-V slope. Reported conductance remains a separate native value.
+
+The numerical cells declare units, formula, section, meaning, conditions, operand roles and unique measurement dependencies. The chord formula is `1000*abs(I_pA)/abs(V_mV-E_mV)` in pS. The electrical conversion is `abs(I_pA)*1e-12/1.602176634e-19` in elementary_charge_equivalents_per_s. Neither is a universal quality grade or ion-specific flux. The gradient for first-order chord variance uses correct absolute-value signs. Exact all-principal-minor PSD checks, symmetry checks and physical-alias checks precede propagation. Unknown variance/covariance/owners remain unavailable; zero driving voltage and the zero-current absolute-value cusp have explicit reasons. Extreme intermediates use rational arithmetic before final per-cell float checks.
+
+`CHANNEL_TASK` preserves all seven full scientific paragraphs printed by root, separate from sheet/schema and future terse STEERING. It is not installed in episode prompts by this increment.
+
+## Verification
+
+- TESTS_003.xml/log: 78 passed, 0 failed; all fixtures explicitly synthetic. Tests cover exact source custody, dimensions and scales, token clipping, malformed/qualified operands, distinct/equal/shared measurement identities, salt-versus-biionic source spans, missing inputs, applicability, signed-current gradients, correlated errors, covariance ownership/PSD/aliases, zero cases and extreme numerical range.
+- SYNTHETIC_NUMERICAL_CONTROLS_001.json: five exact/semantic controls passed, with populated synthetic extraction and numerical sheet. The nominal chord is exactly1800/253 pS; electrical charge-equivalent conversion uses exact elementary charge. The native reported7pS remains separate; unknown covariance is not zero.
+- All four files compile. No real model inference, original scientific source or source packet was read or run in this implementation workload.
+
+Earlier failures remain visible: the first attempted command failed before pytest because its output directory did not yet exist. TESTS_002.xml/log retains77passed/1failed: the fixture for equal values selected the same first identical table cell twice. Correcting fixture coordinates made the test exercise two actual distinct spans; no production change was needed for that failure.
+
+## Limits and handoff
+
+This is a bounded numerical electrical path, not completed channel-assay grading or A105 adequacy. It does not calculate ion-specific flux, permeability/selectivity, occupancy-weighted throughput, pore/polypeptide normalization, initial liposome flux, a common overall reliability score or target transfer. It supports literal point inputs only; unsupported bounds/approximations require an explicit broader reader rather than conversion to points. Current-specific controls and scientific attribution remain interpreted relationships. Shared-loop selection, durable operation storage, scoped typed parent delivery and source-free reconstruction are still integration work for a separately assigned owner. The future integration must validate committed operation/source custody; a schema alone does not authenticate arbitrary external extraction objects.

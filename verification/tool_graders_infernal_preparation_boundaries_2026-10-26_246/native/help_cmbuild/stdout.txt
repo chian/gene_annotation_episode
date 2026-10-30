@@ -1,0 +1,68 @@
+# cmbuild :: covariance model construction from multiple sequence alignments
+# INFERNAL 1.1.5 (Sep 2023)
+# Copyright (C) 2023 Howard Hughes Medical Institute.
+# Freely distributed under the BSD open source license.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Usage: cmbuild [-options] <cmfile_out> <msafile>
+
+Basic options:
+  -h        : show brief help on version and usage
+  -n <s>    : name the CM(s) <s>, (only if single aln in file)
+  -F        : force; allow overwriting of <cmfile_out>
+  -o <f>    : direct summary output to file <f>, not stdout
+  -O <f>    : resave consensus/insert column annotated MSA to file <f>
+  --devhelp : show list of otherwise hidden developer/expert options
+
+Alternative model construction strategies:
+  --fast           : assign cols w/ >= symfrac residues as consensus
+  --hand           : use reference coordinate annotation to specify consensus
+  --symfrac <x>    : fraction of non-gaps to require in a consensus column [0..1]
+  --fragthresh <x> : if aligned seq spans <= x*alen, tag seq as a fragment
+  --fragnrfpos <n> : w/--hand, seqs w/ > <n> 5' or 3' consensus gaps are fragments
+  --fraggiven      : use fragment info, if any, in input MSA, don't infer frags
+  --noss           : ignore secondary structure annotation in input alignment
+  --rsearch <f>    : use RSEARCH parameterization with RIBOSUM matrix file <f>
+  --consrf         : with --hand, rewrite RF line with consensus sequence
+
+Other model construction options*:
+  --null <f>  : read null (random sequence) model from file <f>
+  --prior <f> : read priors from file <f>
+
+Alternative relative sequence weighting strategies:
+  --wpb     : Henikoff position-based weights  [default]
+  --wgsc    : Gerstein/Sonnhammer/Chothia tree weights
+  --wnone   : don't do any relative weighting; set all to 1
+  --wgiven  : use weights as given in MSA file
+  --wblosum : Henikoff simple filter weights
+  --wid <x> : for --wblosum: set identity cutoff  [0.62]  (0<=x<=1)
+
+Alternative effective sequence weighting strategies:
+  --eent        : adjust eff seq # to achieve relative entropy target  [default]
+  --enone       : no effective seq # weighting: just use nseq
+  --ere <x>     : for --eent: set CM target relative entropy to <x>
+  --eset <x>    : set eff seq # for all models to <x>
+  --eminseq <x> : for --eent: set minimum effective sequence number to <x>  [0.1]
+  --emaxseq <x> : for --eent: set maximum effective sequence number to <x>
+  --ehmmre <x>  : for --eent: set minimum HMM relative entropy to <x>
+  --esigma <x>  : for --eent: set sigma param to <x>  [45.0]
+
+Options for HMM filter construction*:
+  --p7ere <x> : for the filter p7 HMM, set minimum rel entropy/posn to <x>
+  --p7ml      : define the filter p7 HMM as the ML p7 HMM
+
+Options for HMM filter calibration*:
+  --EmN <n>  : number of sampled seqs to use for p7 local MSV calibration  [200]
+  --EvN <n>  : number of sampled seqs to use for p7 local Vit calibration  [200]
+  --ElfN <n> : number of sampled seqs to use for p7 local Fwd calibration  [200]
+  --EgfN <n> : number of sampled seqs to use for p7 glocal Fwd calibration  [200]
+
+Options for refining the input alignment*:
+  --refine <f> : refine input aln w/Expectation-Maximization, save to <f>
+  -l           : w/--refine, configure model for local alignment [default: global]
+  --gibbs      : w/--refine, use Gibbs sampling instead of EM
+  --seed <n>   : w/--gibbs, set RNG seed to <n> (if 0: one-time arbitrary seed)
+  --cyk        : w/--refine, use CYK instead of optimal accuracy
+  --notrunc    : w/--refine, do not use truncated alignment algorithm
+  --miss       : w/--refine, mark seqs w/terminal gaps as fragments
+
+*Use --devhelp to show additional expert options.

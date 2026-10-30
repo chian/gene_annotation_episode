@@ -1,0 +1,1146 @@
+{
+  "record_type": "blast_database_utility_native_capture_v1",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "swap_bytes": 0,
+    "wall_seconds": null
+  },
+  "environment_overrides": {
+    "BLAST_USAGE_REPORT": "false",
+    "NCBI_DONT_USE_NCBIRC": "1",
+    "BLASTDB_LMDB_MAP_SIZE": "100000000"
+  },
+  "inputs": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/inputs/dna.fa",
+      "sha256": "161f0767e844bc3310ed5f9bb00a459e067727326727f4032c48aad5c0972cbc",
+      "size_bytes": 57
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/inputs/duplicate.fa",
+      "sha256": "37f537a5cfb94fb1c1dd10ad1fd84413da351b379ead5c116b85e1e04030db1a",
+      "size_bytes": 38
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/inputs/protein.fa",
+      "sha256": "5f7cfbf82c74f416c7590110d3f18edc5c437d5c579ad9b8b65b77eacfd1bfd0",
+      "size_bytes": 49
+    }
+  ],
+  "cases": [
+    {
+      "name": "build_dna_v4",
+      "program": "makeblastdb",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/makeblastdb",
+        "-in",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/inputs/dna.fa",
+        "-input_type",
+        "fasta",
+        "-dbtype",
+        "nucl",
+        "-out",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/database",
+        "-blastdb_version",
+        "4",
+        "-title",
+        "explicit tiny dna_v4",
+        "-parse_seqids"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4",
+      "executable": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/makeblastdb",
+        "sha256": "c1ffdcf6f15d1d8d75377cc9f37afa42bc9fa06678903bad77c2641e60778fce",
+        "size_bytes": 26516464
+      },
+      "started": true,
+      "returncode": 0,
+      "launch_error": null,
+      "expected_returncode": 0,
+      "stdout": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/stdout.txt",
+        "sha256": "721000299b9b7d2bf7f379e1a327fe5e039024b99e8c2f19f0e276e81a9e0499",
+        "size_bytes": 444
+      },
+      "stderr": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "files": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/database.nhr",
+          "sha256": "e18277abe9159c8cf2f575fee278388704c367d5d2f8fd60b4b7e932a78e170f",
+          "size_bytes": 134
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/database.nin",
+          "sha256": "3f73df4aca97de05fd4d7dc881ec6bb6c39b7ff28ba02afd8582c026b948c8dd",
+          "size_bytes": 128
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/database.njs",
+          "sha256": "6c857120bed7a261ed5014f951347039df692383976410129e906a188b3bc2d9",
+          "size_bytes": 439
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/database.nog",
+          "sha256": "9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+          "size_bytes": 44
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/database.nsd",
+          "sha256": "4b621512bf434bd522915d47805afc68bc7359ef3f6d69601a426b88a1ced9b3",
+          "size_bytes": 64
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/database.nsi",
+          "sha256": "442fc207d562940bdb40ebf80324282d2d5a5985034fd7872e5f22507b95b971",
+          "size_bytes": 64
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/database.nsq",
+          "sha256": "31d7d072f59ac4ab6b71020d84f0cf00b66f6bc744457126087769ac72ee31fa",
+          "size_bytes": 27
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/stdout.txt",
+          "sha256": "721000299b9b7d2bf7f379e1a327fe5e039024b99e8c2f19f0e276e81a9e0499",
+          "size_bytes": 444
+        }
+      ]
+    },
+    {
+      "name": "build_dna_v5",
+      "program": "makeblastdb",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/makeblastdb",
+        "-in",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/inputs/dna.fa",
+        "-input_type",
+        "fasta",
+        "-dbtype",
+        "nucl",
+        "-out",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database",
+        "-blastdb_version",
+        "5",
+        "-title",
+        "explicit tiny dna_v5",
+        "-parse_seqids"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5",
+      "executable": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/makeblastdb",
+        "sha256": "c1ffdcf6f15d1d8d75377cc9f37afa42bc9fa06678903bad77c2641e60778fce",
+        "size_bytes": 26516464
+      },
+      "started": true,
+      "returncode": 0,
+      "launch_error": null,
+      "expected_returncode": 0,
+      "stdout": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/stdout.txt",
+        "sha256": "cc461b59d9047a5c050f5a16dc05e966112e6994d50b3fdba62378259ee5ff61",
+        "size_bytes": 444
+      },
+      "stderr": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "files": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.ndb",
+          "sha256": "c70aac81352a4ad6ec06f78903fd6d10fab3ceac357fb4d4c3c6614d5f3dc19e",
+          "size_bytes": 32768
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.nhr",
+          "sha256": "e18277abe9159c8cf2f575fee278388704c367d5d2f8fd60b4b7e932a78e170f",
+          "size_bytes": 134
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.nin",
+          "sha256": "3a8a8fb3e0d81df2d1f5aee6e730eae77185df99794f91ff3adf189c4170eb18",
+          "size_bytes": 144
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.njs",
+          "sha256": "81c2b32da950b62bc69a18f4bf99d2f09fe431e653663ed52258f459d36c987a",
+          "size_bytes": 501
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.nog",
+          "sha256": "9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+          "size_bytes": 44
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.nos",
+          "sha256": "35c9e75ed53a711090c89a65f52a83e2d8d3235667c7ec0d9359352f78e6afed",
+          "size_bytes": 52
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.not",
+          "sha256": "2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+          "size_bytes": 44
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.nsq",
+          "sha256": "31d7d072f59ac4ab6b71020d84f0cf00b66f6bc744457126087769ac72ee31fa",
+          "size_bytes": 27
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.ntf",
+          "sha256": "18cddae0697ea0e8f6add08a8d4b7a0884f4bbce93d53705aea2369362418c74",
+          "size_bytes": 16384
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.nto",
+          "sha256": "6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+          "size_bytes": 16
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/stdout.txt",
+          "sha256": "cc461b59d9047a5c050f5a16dc05e966112e6994d50b3fdba62378259ee5ff61",
+          "size_bytes": 444
+        }
+      ]
+    },
+    {
+      "name": "build_protein_v5",
+      "program": "makeblastdb",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/makeblastdb",
+        "-in",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/inputs/protein.fa",
+        "-input_type",
+        "fasta",
+        "-dbtype",
+        "prot",
+        "-out",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database",
+        "-blastdb_version",
+        "5",
+        "-title",
+        "explicit tiny protein_v5",
+        "-parse_seqids"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5",
+      "executable": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/makeblastdb",
+        "sha256": "c1ffdcf6f15d1d8d75377cc9f37afa42bc9fa06678903bad77c2641e60778fce",
+        "size_bytes": 26516464
+      },
+      "started": true,
+      "returncode": 0,
+      "launch_error": null,
+      "expected_returncode": 0,
+      "stdout": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/stdout.txt",
+        "sha256": "157fe68a28d6432f01a161067784293059bfe40a6a588fbb9a37ff66ca8d3aa6",
+        "size_bytes": 449
+      },
+      "stderr": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "files": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.pdb",
+          "sha256": "b30586d9470a5ba406d69bac30f5e0cf74fd184f78af277df1155b7cde54524d",
+          "size_bytes": 32768
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.phr",
+          "sha256": "1efe85474930bef4db88517bff83dcaea2ee697d1495ef4345408a44d3638383",
+          "size_bytes": 86
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.pin",
+          "sha256": "83e6d2a8d03633bebb9a1a54445a6a507d3623eb6dd7ebe894db82c8c7d649a8",
+          "size_bytes": 128
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.pjs",
+          "sha256": "d7f87afad5e80ecda552ab30a7683cf7f072c3ffdebcd913790b9227dfea4cf1",
+          "size_bytes": 502
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.pog",
+          "sha256": "5e4534b0b0caf02033b0bdf90c7117419265f99587230b0c5ab47567bd32d94e",
+          "size_bytes": 40
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.pos",
+          "sha256": "b81158e072236511c97d70d7f1e54ce1c5d71b6b26e314f238ffd154819dec05",
+          "size_bytes": 34
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.pot",
+          "sha256": "7b0a91667ad8d58a00256b3e213b31e2ba8604b9db04b58e6fe5c8f1e693acfc",
+          "size_bytes": 32
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.psq",
+          "sha256": "2ad9795869362e075cac14a349ab080e7e615a5cc491254277610ff0faf27cba",
+          "size_bytes": 38
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.ptf",
+          "sha256": "18cddae0697ea0e8f6add08a8d4b7a0884f4bbce93d53705aea2369362418c74",
+          "size_bytes": 16384
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.pto",
+          "sha256": "0db201e8371010e5cd3b719cf6c131cea86e18ef7c5bdd394e23b352b8e54f9e",
+          "size_bytes": 12
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/stdout.txt",
+          "sha256": "157fe68a28d6432f01a161067784293059bfe40a6a588fbb9a37ff66ca8d3aa6",
+          "size_bytes": 449
+        }
+      ]
+    },
+    {
+      "name": "info_dna_v4",
+      "program": "blastdbcmd",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "-db",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/database",
+        "-dbtype",
+        "nucl",
+        "-info",
+        "-exact_length"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/info_dna_v4",
+      "executable": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "sha256": "7b7985134ac696b2f28428baf8a210554c4e2d6c38cc1dfdd46d207dc4cc762f",
+        "size_bytes": 31670200
+      },
+      "started": true,
+      "returncode": 0,
+      "launch_error": null,
+      "expected_returncode": 0,
+      "stdout": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/info_dna_v4/stdout.txt",
+        "sha256": "c9b296e6bb71b021d007ced26ef2fbbb8bd2d8dad4d50a3e79f40180bc8b0ab5",
+        "size_bytes": 341
+      },
+      "stderr": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/info_dna_v4/stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "files": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/info_dna_v4/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/info_dna_v4/stdout.txt",
+          "sha256": "c9b296e6bb71b021d007ced26ef2fbbb8bd2d8dad4d50a3e79f40180bc8b0ab5",
+          "size_bytes": 341
+        }
+      ]
+    },
+    {
+      "name": "metadata_dna_v4",
+      "program": "blastdbcmd",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "-db",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/database",
+        "-dbtype",
+        "nucl",
+        "-metadata"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/metadata_dna_v4",
+      "executable": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "sha256": "7b7985134ac696b2f28428baf8a210554c4e2d6c38cc1dfdd46d207dc4cc762f",
+        "size_bytes": 31670200
+      },
+      "started": true,
+      "returncode": 0,
+      "launch_error": null,
+      "expected_returncode": 0,
+      "stdout": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/metadata_dna_v4/stdout.txt",
+        "sha256": "d8c59845196c03aa544a800430accc7f55715c492858762562a9c7f7402588db",
+        "size_bytes": 459
+      },
+      "stderr": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/metadata_dna_v4/stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "files": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/metadata_dna_v4/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/metadata_dna_v4/stdout.txt",
+          "sha256": "d8c59845196c03aa544a800430accc7f55715c492858762562a9c7f7402588db",
+          "size_bytes": 459
+        }
+      ]
+    },
+    {
+      "name": "extract_dna_v4",
+      "program": "blastdbcmd",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "-db",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/database",
+        "-dbtype",
+        "nucl",
+        "-entry",
+        "seqA,seqB,ambiguous",
+        "-outfmt",
+        "%o\t%i\t%a\t%l\t%s"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/extract_dna_v4",
+      "executable": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "sha256": "7b7985134ac696b2f28428baf8a210554c4e2d6c38cc1dfdd46d207dc4cc762f",
+        "size_bytes": 31670200
+      },
+      "started": true,
+      "returncode": 0,
+      "launch_error": null,
+      "expected_returncode": 0,
+      "stdout": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/extract_dna_v4/stdout.txt",
+        "sha256": "c36f2127571edc15a97352aeaba82a6a6a20aa170932d5309036d119f29fce38",
+        "size_bytes": 100
+      },
+      "stderr": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/extract_dna_v4/stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "files": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/extract_dna_v4/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/extract_dna_v4/stdout.txt",
+          "sha256": "c36f2127571edc15a97352aeaba82a6a6a20aa170932d5309036d119f29fce38",
+          "size_bytes": 100
+        }
+      ]
+    },
+    {
+      "name": "info_dna_v5",
+      "program": "blastdbcmd",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "-db",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database",
+        "-dbtype",
+        "nucl",
+        "-info",
+        "-exact_length"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/info_dna_v5",
+      "executable": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "sha256": "7b7985134ac696b2f28428baf8a210554c4e2d6c38cc1dfdd46d207dc4cc762f",
+        "size_bytes": 31670200
+      },
+      "started": true,
+      "returncode": 0,
+      "launch_error": null,
+      "expected_returncode": 0,
+      "stdout": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/info_dna_v5/stdout.txt",
+        "sha256": "f49835ca9828e290887c01fa12ae55c217a9d478f81128ed984237ca537bbda5",
+        "size_bytes": 341
+      },
+      "stderr": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/info_dna_v5/stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "files": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/info_dna_v5/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/info_dna_v5/stdout.txt",
+          "sha256": "f49835ca9828e290887c01fa12ae55c217a9d478f81128ed984237ca537bbda5",
+          "size_bytes": 341
+        }
+      ]
+    },
+    {
+      "name": "metadata_dna_v5",
+      "program": "blastdbcmd",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "-db",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database",
+        "-dbtype",
+        "nucl",
+        "-metadata"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/metadata_dna_v5",
+      "executable": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "sha256": "7b7985134ac696b2f28428baf8a210554c4e2d6c38cc1dfdd46d207dc4cc762f",
+        "size_bytes": 31670200
+      },
+      "started": true,
+      "returncode": 0,
+      "launch_error": null,
+      "expected_returncode": 0,
+      "stdout": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/metadata_dna_v5/stdout.txt",
+        "sha256": "5b0cc4ba9ff6287c4281b0510836f34e1b2eca3e4f4be9aca2c9eeb296c8c705",
+        "size_bytes": 521
+      },
+      "stderr": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/metadata_dna_v5/stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "files": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/metadata_dna_v5/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/metadata_dna_v5/stdout.txt",
+          "sha256": "5b0cc4ba9ff6287c4281b0510836f34e1b2eca3e4f4be9aca2c9eeb296c8c705",
+          "size_bytes": 521
+        }
+      ]
+    },
+    {
+      "name": "extract_dna_v5",
+      "program": "blastdbcmd",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "-db",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database",
+        "-dbtype",
+        "nucl",
+        "-entry",
+        "seqA,seqB,ambiguous",
+        "-outfmt",
+        "%o\t%i\t%a\t%l\t%s"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/extract_dna_v5",
+      "executable": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "sha256": "7b7985134ac696b2f28428baf8a210554c4e2d6c38cc1dfdd46d207dc4cc762f",
+        "size_bytes": 31670200
+      },
+      "started": true,
+      "returncode": 0,
+      "launch_error": null,
+      "expected_returncode": 0,
+      "stdout": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/extract_dna_v5/stdout.txt",
+        "sha256": "c36f2127571edc15a97352aeaba82a6a6a20aa170932d5309036d119f29fce38",
+        "size_bytes": 100
+      },
+      "stderr": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/extract_dna_v5/stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "files": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/extract_dna_v5/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/extract_dna_v5/stdout.txt",
+          "sha256": "c36f2127571edc15a97352aeaba82a6a6a20aa170932d5309036d119f29fce38",
+          "size_bytes": 100
+        }
+      ]
+    },
+    {
+      "name": "info_protein_v5",
+      "program": "blastdbcmd",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "-db",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database",
+        "-dbtype",
+        "prot",
+        "-info",
+        "-exact_length"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/info_protein_v5",
+      "executable": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "sha256": "7b7985134ac696b2f28428baf8a210554c4e2d6c38cc1dfdd46d207dc4cc762f",
+        "size_bytes": 31670200
+      },
+      "started": true,
+      "returncode": 0,
+      "launch_error": null,
+      "expected_returncode": 0,
+      "stdout": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/info_protein_v5/stdout.txt",
+        "sha256": "3523cd5a429a5fcbdca57fd1af5e79485e835198bf932afb5b2c46cca460d25a",
+        "size_bytes": 355
+      },
+      "stderr": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/info_protein_v5/stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "files": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/info_protein_v5/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/info_protein_v5/stdout.txt",
+          "sha256": "3523cd5a429a5fcbdca57fd1af5e79485e835198bf932afb5b2c46cca460d25a",
+          "size_bytes": 355
+        }
+      ]
+    },
+    {
+      "name": "metadata_protein_v5",
+      "program": "blastdbcmd",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "-db",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database",
+        "-dbtype",
+        "prot",
+        "-metadata"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/metadata_protein_v5",
+      "executable": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "sha256": "7b7985134ac696b2f28428baf8a210554c4e2d6c38cc1dfdd46d207dc4cc762f",
+        "size_bytes": 31670200
+      },
+      "started": true,
+      "returncode": 0,
+      "launch_error": null,
+      "expected_returncode": 0,
+      "stdout": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/metadata_protein_v5/stdout.txt",
+        "sha256": "b5e19a027006e3ab1dfa065a8deecaf4fd51c0469a41fc325063cec53d7472e0",
+        "size_bytes": 522
+      },
+      "stderr": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/metadata_protein_v5/stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "files": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/metadata_protein_v5/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/metadata_protein_v5/stdout.txt",
+          "sha256": "b5e19a027006e3ab1dfa065a8deecaf4fd51c0469a41fc325063cec53d7472e0",
+          "size_bytes": 522
+        }
+      ]
+    },
+    {
+      "name": "extract_protein_v5",
+      "program": "blastdbcmd",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "-db",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database",
+        "-dbtype",
+        "prot",
+        "-entry",
+        "seqP,seqQ",
+        "-outfmt",
+        "%o\t%i\t%a\t%l\t%s"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/extract_protein_v5",
+      "executable": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "sha256": "7b7985134ac696b2f28428baf8a210554c4e2d6c38cc1dfdd46d207dc4cc762f",
+        "size_bytes": 31670200
+      },
+      "started": true,
+      "returncode": 0,
+      "launch_error": null,
+      "expected_returncode": 0,
+      "stdout": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/extract_protein_v5/stdout.txt",
+        "sha256": "7c85d09751c8a811335cddb7cdf5d158cb25e3fed1b5cd00687beeed909b5ba9",
+        "size_bytes": 75
+      },
+      "stderr": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/extract_protein_v5/stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "files": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/extract_protein_v5/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/extract_protein_v5/stdout.txt",
+          "sha256": "7c85d09751c8a811335cddb7cdf5d158cb25e3fed1b5cd00687beeed909b5ba9",
+          "size_bytes": 75
+        }
+      ]
+    },
+    {
+      "name": "range_plus",
+      "program": "blastdbcmd",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "-db",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database",
+        "-dbtype",
+        "nucl",
+        "-entry",
+        "seqA",
+        "-outfmt",
+        "%o\t%i\t%a\t%l\t%s",
+        "-range",
+        "2-7",
+        "-strand",
+        "plus"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/range_plus",
+      "executable": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "sha256": "7b7985134ac696b2f28428baf8a210554c4e2d6c38cc1dfdd46d207dc4cc762f",
+        "size_bytes": 31670200
+      },
+      "started": true,
+      "returncode": 0,
+      "launch_error": null,
+      "expected_returncode": 0,
+      "stdout": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/range_plus/stdout.txt",
+        "sha256": "46a7d5b077db5e409f592465186b3213010dd39269569b24f231023007e34414",
+        "size_bytes": 26
+      },
+      "stderr": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/range_plus/stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "files": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/range_plus/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/range_plus/stdout.txt",
+          "sha256": "46a7d5b077db5e409f592465186b3213010dd39269569b24f231023007e34414",
+          "size_bytes": 26
+        }
+      ]
+    },
+    {
+      "name": "range_minus",
+      "program": "blastdbcmd",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "-db",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database",
+        "-dbtype",
+        "nucl",
+        "-entry",
+        "seqA",
+        "-outfmt",
+        "%o\t%i\t%a\t%l\t%s",
+        "-range",
+        "2-7",
+        "-strand",
+        "minus"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/range_minus",
+      "executable": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "sha256": "7b7985134ac696b2f28428baf8a210554c4e2d6c38cc1dfdd46d207dc4cc762f",
+        "size_bytes": 31670200
+      },
+      "started": true,
+      "returncode": 0,
+      "launch_error": null,
+      "expected_returncode": 0,
+      "stdout": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/range_minus/stdout.txt",
+        "sha256": "46a7d5b077db5e409f592465186b3213010dd39269569b24f231023007e34414",
+        "size_bytes": 26
+      },
+      "stderr": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/range_minus/stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "files": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/range_minus/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/range_minus/stdout.txt",
+          "sha256": "46a7d5b077db5e409f592465186b3213010dd39269569b24f231023007e34414",
+          "size_bytes": 26
+        }
+      ]
+    },
+    {
+      "name": "range_past_end",
+      "program": "blastdbcmd",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "-db",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database",
+        "-dbtype",
+        "nucl",
+        "-entry",
+        "seqA",
+        "-outfmt",
+        "%o\t%i\t%a\t%l\t%s",
+        "-range",
+        "8-99",
+        "-strand",
+        "plus"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/range_past_end",
+      "executable": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "sha256": "7b7985134ac696b2f28428baf8a210554c4e2d6c38cc1dfdd46d207dc4cc762f",
+        "size_bytes": 31670200
+      },
+      "started": true,
+      "returncode": 0,
+      "launch_error": null,
+      "expected_returncode": 0,
+      "stdout": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/range_past_end/stdout.txt",
+        "sha256": "c4e502f5d59ef0eb5eeac2a72516bc363d5487735bad482f14277a1ba530611a",
+        "size_bytes": 25
+      },
+      "stderr": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/range_past_end/stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "files": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/range_past_end/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/range_past_end/stdout.txt",
+          "sha256": "c4e502f5d59ef0eb5eeac2a72516bc363d5487735bad482f14277a1ba530611a",
+          "size_bytes": 25
+        }
+      ]
+    },
+    {
+      "name": "duplicate_selectors",
+      "program": "blastdbcmd",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "-db",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database",
+        "-dbtype",
+        "nucl",
+        "-entry",
+        "seqA,seqA",
+        "-outfmt",
+        "%o\t%i\t%a\t%l\t%s"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/duplicate_selectors",
+      "executable": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "sha256": "7b7985134ac696b2f28428baf8a210554c4e2d6c38cc1dfdd46d207dc4cc762f",
+        "size_bytes": 31670200
+      },
+      "started": true,
+      "returncode": 0,
+      "launch_error": null,
+      "expected_returncode": 0,
+      "stdout": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/duplicate_selectors/stdout.txt",
+        "sha256": "9369c320967fbda769d4a477a0cb7f46022f5e43d831c39bd3c9a8e689a24122",
+        "size_bytes": 64
+      },
+      "stderr": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/duplicate_selectors/stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "files": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/duplicate_selectors/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/duplicate_selectors/stdout.txt",
+          "sha256": "9369c320967fbda769d4a477a0cb7f46022f5e43d831c39bd3c9a8e689a24122",
+          "size_bytes": 64
+        }
+      ]
+    },
+    {
+      "name": "missing_selector",
+      "program": "blastdbcmd",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "-db",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database",
+        "-dbtype",
+        "nucl",
+        "-entry",
+        "seqA,missing_record",
+        "-outfmt",
+        "%o\t%i\t%a\t%l\t%s"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/missing_selector",
+      "executable": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "sha256": "7b7985134ac696b2f28428baf8a210554c4e2d6c38cc1dfdd46d207dc4cc762f",
+        "size_bytes": 31670200
+      },
+      "started": true,
+      "returncode": 1,
+      "launch_error": null,
+      "expected_returncode": null,
+      "stdout": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/missing_selector/stdout.txt",
+        "sha256": "43fc365b174445b921fb1c5649e67d8ff1061f52b0aeaf4651144363ef288a6f",
+        "size_bytes": 32
+      },
+      "stderr": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/missing_selector/stderr.txt",
+        "sha256": "0f98740d8917140cbadab7029dcf21ad17805267d7ad74a63caba2db3dbe2539",
+        "size_bytes": 52
+      },
+      "files": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/missing_selector/stderr.txt",
+          "sha256": "0f98740d8917140cbadab7029dcf21ad17805267d7ad74a63caba2db3dbe2539",
+          "size_bytes": 52
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/missing_selector/stdout.txt",
+          "sha256": "43fc365b174445b921fb1c5649e67d8ff1061f52b0aeaf4651144363ef288a6f",
+          "size_bytes": 32
+        }
+      ]
+    },
+    {
+      "name": "integrity_full",
+      "program": "blastdbcheck",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcheck",
+        "-db",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database",
+        "-dbtype",
+        "nucl",
+        "-full"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/integrity_full",
+      "executable": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcheck",
+        "sha256": "f4180788562a1ea84545db0a8c453687d06dee6ce8f82340d337129e208e0753",
+        "size_bytes": 23357376
+      },
+      "started": true,
+      "returncode": 1,
+      "launch_error": null,
+      "expected_returncode": 0,
+      "stdout": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/integrity_full/stdout.txt",
+        "sha256": "ec053446d23a33b47f30585f88186cd2828acb1206be2f79342c2270ec509718",
+        "size_bytes": 577
+      },
+      "stderr": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/integrity_full/stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "files": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/integrity_full/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/integrity_full/stdout.txt",
+          "sha256": "ec053446d23a33b47f30585f88186cd2828acb1206be2f79342c2270ec509718",
+          "size_bytes": 577
+        }
+      ]
+    },
+    {
+      "name": "integrity_stride",
+      "program": "blastdbcheck",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcheck",
+        "-db",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database",
+        "-dbtype",
+        "nucl",
+        "-stride",
+        "2"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/integrity_stride",
+      "executable": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcheck",
+        "sha256": "f4180788562a1ea84545db0a8c453687d06dee6ce8f82340d337129e208e0753",
+        "size_bytes": 23357376
+      },
+      "started": true,
+      "returncode": 1,
+      "launch_error": null,
+      "expected_returncode": 0,
+      "stdout": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/integrity_stride/stdout.txt",
+        "sha256": "9f3e3daf91783a08665cd02a2c16c21df060005a177eeb5fe7ee4fcaacd6a87d",
+        "size_bytes": 556
+      },
+      "stderr": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/integrity_stride/stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "files": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/integrity_stride/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/integrity_stride/stdout.txt",
+          "sha256": "9f3e3daf91783a08665cd02a2c16c21df060005a177eeb5fe7ee4fcaacd6a87d",
+          "size_bytes": 556
+        }
+      ]
+    },
+    {
+      "name": "build_duplicate_ids",
+      "program": "makeblastdb",
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/makeblastdb",
+        "-in",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/inputs/duplicate.fa",
+        "-input_type",
+        "fasta",
+        "-dbtype",
+        "nucl",
+        "-out",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_duplicate_ids/database",
+        "-blastdb_version",
+        "5",
+        "-title",
+        "explicit duplicate-ID failure case",
+        "-parse_seqids"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_duplicate_ids",
+      "executable": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/makeblastdb",
+        "sha256": "c1ffdcf6f15d1d8d75377cc9f37afa42bc9fa06678903bad77c2641e60778fce",
+        "size_bytes": 26516464
+      },
+      "started": true,
+      "returncode": 1,
+      "launch_error": null,
+      "expected_returncode": null,
+      "stdout": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_duplicate_ids/stdout.txt",
+        "sha256": "ed399153ef561c831b70ce260a69c3df301617bcb0ca75384c6d0cab6f94dcdf",
+        "size_bytes": 465
+      },
+      "stderr": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_duplicate_ids/stderr.txt",
+        "sha256": "797f6aecad4d6f36f5a846b033113f52dddcaa401a0aa4d8da753327135890f3",
+        "size_bytes": 78
+      },
+      "files": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_duplicate_ids/database.00.nog",
+          "sha256": "b31ad5df85471fcfc39c04f43c7ff3cf90f86afe7e9d1b6e554cf442ce107cc4",
+          "size_bytes": 36
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_duplicate_ids/database.nos",
+          "sha256": "2dd0435c3d883558103a6ebf234b5031dc8e3b35cc79d685c794ff68617dfaa3",
+          "size_bytes": 21
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_duplicate_ids/database.not",
+          "sha256": "e2099cbf3445ac30a98dcc86f0b899eac91fd0a23cf2825f48bd01daadee347a",
+          "size_bytes": 20
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_duplicate_ids/database.ntf",
+          "sha256": "18cddae0697ea0e8f6add08a8d4b7a0884f4bbce93d53705aea2369362418c74",
+          "size_bytes": 16384
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_duplicate_ids/database.nto",
+          "sha256": "7c9fa136d4413fa6173637e883b6998d32e1d675f88cddff9dcbcf331820f4b8",
+          "size_bytes": 8
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_duplicate_ids/stderr.txt",
+          "sha256": "797f6aecad4d6f36f5a846b033113f52dddcaa401a0aa4d8da753327135890f3",
+          "size_bytes": 78
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_duplicate_ids/stdout.txt",
+          "sha256": "ed399153ef561c831b70ce260a69c3df301617bcb0ca75384c6d0cab6f94dcdf",
+          "size_bytes": 465
+        }
+      ]
+    }
+  ],
+  "qualification": "Explicit tiny native utility observations only; no search or episode binding claim."
+}

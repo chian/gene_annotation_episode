@@ -1,0 +1,187 @@
+--- original_v2/partner_source_fields.py
++++ current_v3/partner_source_fields.py
+@@ -22,6 +22,12 @@
+ _TERMINAL_TAGS = re.compile(r"(?:" + _TAG + r"\s*)+$")
+ _INITIAL_TAGS = re.compile(r"^(?:\s*" + _TAG + r")+")
+ _ALL_TAGS = re.compile(_TAG)
++_TABLE_BOUNDARY = re.compile(
++    r"</?(?:table|thead|tbody|tfoot|tr|td|th|caption|colgroup|col)(?=[\s/>])[^<>]*>", re.I)
++_STRUCTURAL_TAG = re.compile(
++    r"</?(?:table|thead|tbody|tfoot|tr|td|th|caption|colgroup|col|p|div|section|sec|title"
++    r"|list|list-item|li|hr|disp-formula|br|break)(?=[\s/>])[^<>]*>\Z", re.I)
++_SOFT_BREAK_TAG = re.compile(r"</?(?:br|break)(?=[\s/>])[^<>]*>\Z", re.I)
+ _PM = re.compile(r"(?:±|\+\s*/\s*-|\+\s*−)\s*$")
+ _LOWER = re.compile(r"(?:>=?|≥|\b(?:greater\s+than(?:\s+or\s+equal\s+to)?|above|at\s+least|no\s+less\s+than))\s*$", re.I)
+ _UPPER = re.compile(r"(<=?|≤|\b(?:less\s+than(?:\s+or\s+equal\s+to)?|below|at\s+most|no\s+more\s+than))\s*$", re.I)
+@@ -92,17 +98,93 @@
+         "number_end": {"type": "integer", "minimum": 1}})
+ 
+ 
+-def _contexts(sources, witness, start, end):
++def _raw_contexts(sources, witness, start, end):
+     raw = sources.source(witness["source_ref"], witness["representation"])["content"]
+     quote = witness["quote"]
+     absolute_start = witness["start"] + len(quote[:start].encode("utf-8"))
+     absolute_end = witness["start"] + len(quote[:end].encode("utf-8"))
+     prefix = raw[:absolute_start].decode("utf-8", errors="ignore")
+     suffix = raw[absolute_end:].decode("utf-8", errors="ignore")
+-    # Remove only real terminal/initial markup, before decoding comparator
+-    # entities. Encoded '<' is a comparator, not a fabricated XML element.
+-    return (html.unescape(_TERMINAL_TAGS.sub("", prefix)),
+-            html.unescape(_INITIAL_TAGS.sub("", suffix)))
++    return prefix, suffix
++
++
++def _edge_contexts(prefix, suffix):
++    # Structural markup separates visible tokens; inline formatting is zero
++    # width. Preserve whitespace already present around either kind of tag.
++    # Recognize actual tags before entity decoding, so an encoded comparator
++    # cannot become a fabricated element. No source/witness bytes are changed.
++    def visible(match):
++        return _ALL_TAGS.sub(lambda tag: " " if _STRUCTURAL_TAG.fullmatch(tag.group()) else "",
++                             match.group())
++    return (html.unescape(_TERMINAL_TAGS.sub(visible, prefix)),
++            html.unescape(_INITIAL_TAGS.sub(visible, suffix)))
++
++
++def _contexts(sources, witness, start, end):
++    # Retain qualifier context across structural separators, including a line
++    # break between a comparator/uncertainty marker and its selected number.
++    # Determining which row/header supplies scientific meaning is caller-owned.
++    return _edge_contexts(*_raw_contexts(sources, witness, start, end))
++
++
++def _table_contexts(sources, witness, start, end):
++    """Return original lexical neighbours within definite table boundaries."""
++    prefix, suffix = _raw_contexts(sources, witness, start, end)
++    boundaries = list(_TABLE_BOUNDARY.finditer(prefix))
++    if boundaries:
++        prefix = prefix[boundaries[-1].end():]
++    boundary = _TABLE_BOUNDARY.search(suffix)
++    if boundary:
++        suffix = suffix[:boundary.start()]
++    return prefix, suffix
++
++
++def _unit_contexts(sources, witness, start, end):
++    """Lexical unit neighbours cannot continue through another table field."""
++    return _edge_contexts(*_table_contexts(sources, witness, start, end))
++
++
++def _interval_contexts(sources, witness, start, end):
++    """Expose direct interval syntax through actual markup inside one field."""
++    def visible(tag):
++        return " " if _STRUCTURAL_TAG.fullmatch(tag.group()) else ""
++    # Recognize actual tags before decoding entities. Inline formatting is
++    # zero-width; a soft break leaves whitespace, never a new numeric field.
++    return tuple(html.unescape(_ALL_TAGS.sub(visible, value))
++                 for value in _table_contexts(sources, witness, start, end))
++
++
++def _soft_break_numeric_token(sources, witness, start, end, token, *, pm_spread):
++    """A soft break cannot hide a sign, decimal marker or exponent fragment.
++
++    This guard does not join independent digits across line breaks. Real source
++    whitespace and definite structural field boundaries remain separators.
++    """
++    prefix, suffix = _raw_contexts(sources, witness, start, end)
++
++    def has_soft_break(edge):
++        return edge is not None and any(_SOFT_BREAK_TAG.fullmatch(tag.group())
++            for tag in _ALL_TAGS.finditer(edge.group()))
++
++    def visible(tag):
++        return " " if (_STRUCTURAL_TAG.fullmatch(tag.group())
++            and not _SOFT_BREAK_TAG.fullmatch(tag.group())) else ""
++
++    leading = _TERMINAL_TAGS.search(prefix)
++    if has_soft_break(leading):
++        before = html.unescape(_ALL_TAGS.sub(visible, prefix))
++        if (before[-1:] in ("+", "−", "-", ".") and not pm_spread
++                or token.startswith(".") and before[-1:].isdigit()
++                or re.search(r"(?<![A-Za-z0-9_.])[+−-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)[eE]$", before)):
++            return True
++    trailing = _INITIAL_TAGS.match(suffix)
++    if has_soft_break(trailing):
++        after = html.unescape(_ALL_TAGS.sub(visible, suffix))
++        if (re.match(r"^\.[0-9]", after)
++                or token.endswith(".") and after[:1].isdigit()
++                or re.match(r"^[eE][+−-]?(?:[0-9]|$)", after)):
++            return True
++    return False
+ 
+ 
+ def _between_numeric_scope(prefix, suffix):
+@@ -139,7 +221,12 @@
+     return "unresolved"
+ 
+ 
+-def _relation(prefix, suffix, *, role):
++def _relation(prefix, suffix, *, role, interval_contexts=None):
++    # An adjacent signed value in another table field is not the other end of
++    # this scalar's interval. Only direct numeric interval syntax uses these
++    # bounded neighbours; named qualifiers retain their original full context.
++    interval_prefix, interval_suffix = ((prefix, suffix) if interval_contexts is None
++                                        else interval_contexts)
+     relative = r"(?:CV|RSD|coefficient\s+of\s+variation|relative\s+(?:standard\s+)?(?:error|uncertainty|deviation))"
+     if role == "spread" and (re.match(r"\s*\(?\s*(?:%|percent\b|per\s+cent\b|" + relative + r"\b)", suffix, re.I)
+             or re.search(r"(?:%|\bpercent|\bper\s+cent)\s*\)?\s*[:=]?\s*$", prefix, re.I)
+@@ -155,8 +242,8 @@
+             or ((_BETWEEN_AND.search(prefix) or (_BETWEEN_FIRST_PREFIX.search(prefix)
+                     and _BETWEEN_FIRST_SUFFIX.match(suffix)))
+                 and _between_numeric_scope(prefix, suffix) != "non_numeric_coordination")
+-            or re.search(r"\d\s*(?:[–—−-]|\bto)\s*$", prefix)
+-            or re.match(r"\s*(?:[–—−-]|\bto\b)\s*[+−-]?(?:\d|\.\d)", suffix)):
++            or re.search(r"\d\s*(?:[–—−-]|\bto)\s*$", interval_prefix)
++            or re.match(r"\s*(?:[–—−-]|\bto\b)\s*[+−-]?(?:\d|\.\d)", interval_suffix)):
+         _fail("interval_source_number_unsupported", "number")
+     if re.search(r"\b(?:LOD|LOQ|limit\s+of\s+(?:detection|quantification)|detection\s+limit|upper\s+limit)\s*(?:was|is|of|[:=])?\s*$", prefix, re.I):
+         _fail("untyped_limit_source_number", "number")
+@@ -198,12 +285,15 @@
+     if not _NUMBER.fullmatch(token):
+         _fail("literal_source_number_required", "number_selector")
+     prefix, suffix = _contexts(sources, witness, start, end)
+-    relation = _relation(prefix, suffix, role=role)
++    relation = _relation(prefix, suffix, role=role,
++                         interval_contexts=_interval_contexts(sources, witness, start, end))
+     before, after = prefix[-1:], suffix[:1]
+     marker = _PM.search(prefix)
+     # A minus sign belonging to a plus/minus marker is not a clipped numeric
+     # sign for an explicitly selected spread. Everything else remains lexical.
+     pm_spread = role == "spread" and marker is not None
++    if _soft_break_numeric_token(sources, witness, start, end, token, pm_spread=pm_spread):
++        _fail("partial_source_numeric_token", "number_selector")
+     bad_prefix = before and (before in ".eE+−-" or before.isdigit() or before.isalpha() or before == "_") and not pm_spread
+     # A permitted sentence stop applies only to the trailing edge. It must
+     # never excuse a clipped digit/sign on the leading edge.
+@@ -226,6 +316,12 @@
+ 
+ 
+ def _rate_unit(raw):
++    # A line break or inline exponent may continue one printed unit. Separate
++    # table cells cannot be joined to manufacture one supported unit token.
++    fragments = [html.unescape(_ALL_TAGS.sub("", part)).strip()
++        for part in _TABLE_BOUNDARY.split(raw)]
++    if sum(bool(part) for part in fragments) > 1:
++        _fail("unsupported_source_rate_unit", "unit_witness")
+     text = html.unescape(_ALL_TAGS.sub("", raw))
+     text = re.sub(r"\s+", "", text).replace("µ", "u").replace("μ", "u")
+     text = text.translate(str.maketrans({"−": "-", "⁻": "-", "¹": "1"})).replace("^", "")
+@@ -252,7 +348,7 @@
+     """Read one complete supported rate unit without assigning its denominator."""
+     enriched = sources.witness(witness, "unit_witness")
+     raw = enriched["quote"]
+-    prefix, suffix = _contexts(sources, enriched, 0, len(raw))
++    prefix, suffix = _unit_contexts(sources, enriched, 0, len(raw))
+     before = prefix[-1:]
+     if (before and (before.isalpha() or before in "_µμ/⁻¹^")) or _unit_continuation(suffix):
+         _fail("partial_source_rate_unit", "unit_witness")
+@@ -285,7 +381,7 @@
+     if actual_unit != unit:
+         _fail("source_unit_record_mismatch", "source_unit")
+     selected = actual["selector"]
+-    _, suffix = _contexts(sources, selected["witness"], selected["number_start"], selected["number_end"])
++    _, suffix = _unit_contexts(sources, selected["witness"], selected["number_start"], selected["number_end"])
+     visible = html.unescape(_ALL_TAGS.sub("", suffix)).lstrip()
+     match = _PRINTED_RATE_UNIT.match(visible)
+     if match is None:

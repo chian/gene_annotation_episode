@@ -1,0 +1,66 @@
+.....F
+=================================== FAILURES ===================================
+_ test_actual_child_worker_original_typed_parent_return_and_frozen_projection[blastp-True] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check009/temporary/pytest/test_actual_child_worker_origi0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7be596db0770>
+program = 'blastp', same = True
+
+    @pytest.mark.parametrize('program,same', [('blastp', True), ('blastp', False), ('psiblast', True), ('deltablast', True)])
+    def test_actual_child_worker_original_typed_parent_return_and_frozen_projection(tmp_path, monkeypatch, program, same):
+        standard = program == 'blastp'
+        host = StandardHost if standard else NativeHost
+        h = host(tmp_path, monkeypatch, program, query_bytes=b'>q\nACDEFGHI\n', sequence='ACDEFGHI',
+            native_report=sf.encoded(sf.report(program)), metadata=dict(schema=V2, documents=[], searches=[]),
+            tuples=[dict(input_key='metadata', consumer='sequence_database', schema_id=V2)])
+        try:
+            selection, payload = host_selection(h, same=same)
+            if not standard:
+                selection['version'] = 'native_blast_database_result_selector_v1'
+            child = h.results(selection)
+            outcome = h.select(child, 0, 'execution.results.collect')
+            assert outcome['status'] == 'completed', outcome
+            body = outcome['result']
+            assert body['complete'], body['failures']
+            family = 'native_blast_standard_database' if standard else 'native_blast_database'
+            returned, schema = h.returned(child)
+            facts = getattr(h.family, family + '_returns').received_facts(h.root, schema)
+            key = 'execution_blast_' + ('standard_database' if standard else 'database') + '_sequence_record_quality_rows'
+            published = facts[key]
+            assert len(published) == len({r['record_key'] for r in published}) == 4
+            for row in published:
+                ordinal = row['identity']['assembly_source']['record_locator']['record_ordinal']
+                assert values(row) == {'completeness_fraction': (.9, .6)[ordinal]}
+                assert row['booleans'] == [] and row['observation_ref'] is None
+                assert row['publication_status'] == 'source_only'
+            function_key = key.replace('sequence_record_quality', 'sequence_function')
+            assert {r['identity']['function']: values(r) for r in facts[function_key]} == (
+                {'synthetic-same-function': {'function_mass': 1.25, 'unadjusted_probability': 1}} if same else
+                {'F': {'function_mass': 1, 'unadjusted_probability': .8}, 'G': {'function_mass': .25, 'unadjusted_probability': .2}})
+            save(tmp_path/'original-parent-form.json', returned)
+            save(tmp_path/'original-parent-schema.json', schema)
+            save(tmp_path/'received-parent-facts.json', facts)
+            save(tmp_path/'selected-v2-wire.json', payload)
+            save(tmp_path/'selected-selector.json', selection)
+            save(tmp_path/'actual-result.json', body)
+            # The native host's fresh import inventory must match the worker closure;
+            # successful actual worker invocation above checks this across processes.
+            count = len(list(h.workspace.rglob('synthetic-emitter-invoked')))
+            assert count == 1
+            module = __import__('gene_annotation_episode.' + family + '_result_publication', fromlist=['x'])
+            prepared = body['preparation']
+            frozen = module._validate_preparation(h.store, child, prepared)
+            request, manifest = frozen['request'], frozen['manifest']
+            revised = sr.reuse(request, manifest, tmp_path/'received-T2') if standard else nr.reuse_request(request, manifest)
+            with monkeypatch.context() as blocked:
+                forbid_reparse(blocked)
+                reused = sr.invoke(revised)[0] if standard else nr.run_request(tmp_path, revised, name='received-reuse.json')
+>           assert reused['status'] != 'failed', reused['failures']
+E           AssertionError: [{'stage': 'worker', 'code': 'native_blast_standard_database_artifact_identity_mismatch', 'detail_code': 'artifact_digest_conflict', 'pointer': '/implementation/files', ...}]
+E           assert 'failed' != 'failed'
+
+../../../tests/test_blast_fasta_record_identity_integration.py:281: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_fasta_record_identity_integration.py::test_actual_child_worker_original_typed_parent_return_and_frozen_projection[blastp-True]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 5 passed in 29.66s

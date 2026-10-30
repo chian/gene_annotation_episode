@@ -1,0 +1,1142 @@
+{
+  "record_type": "retained_makeblastdb_preparation_fixture_v1",
+  "source_capture": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/CAPTURE_001.json",
+    "sha256": "c77f3a317acdf74ba1de46b2a5ac35fc60135fa6e9fb9614f646206226d3ec59",
+    "size_bytes": 69696,
+    "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/CAPTURE_001.json"
+  },
+  "qualification": "Original runner529 check084 builds: three successful builds and one duplicate-ID failure. Whole native suite returned 1 due to separately selected integrity-check diagnostics. Identity and occurrence labels below are fixture-owned, not native measurements. No database binary is read to create this JSON.",
+  "cases": [
+    {
+      "name": "build_dna_v4",
+      "arguments": {
+        "operation": {
+          "version": "blast_utility_operation_v1",
+          "program": "makeblastdb",
+          "mode": "create_sequence_database",
+          "input_occurrence_ids": [
+            "build_dna_v4:input:0"
+          ],
+          "database_key": null,
+          "molecule": "dna",
+          "parameters": {
+            "input_type": "fasta",
+            "database_format_version": 4,
+            "output_prefix": "database",
+            "title": "explicit tiny dna_v4",
+            "parse_seqids": true,
+            "hash_index": false,
+            "max_file_size": null,
+            "taxid": null,
+            "taxid_map_occurrence_id": null,
+            "mask_occurrence_ids": []
+          }
+        },
+        "inputs": [
+          {
+            "occurrence_id": "build_dna_v4:input:0",
+            "direction": "input",
+            "role": "sequence_input",
+            "ordinal": 0,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/inputs/dna.fa",
+            "sha256": "161f0767e844bc3310ed5f9bb00a459e067727326727f4032c48aad5c0972cbc",
+            "size_bytes": 57,
+            "native_format": "fasta",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/inputs/dna.fa"
+          }
+        ],
+        "outputs": [
+          {
+            "occurrence_id": "build_dna_v4:output:0",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 0,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/database.nhr",
+            "sha256": "e18277abe9159c8cf2f575fee278388704c367d5d2f8fd60b4b7e932a78e170f",
+            "size_bytes": 134,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/database.nhr"
+          },
+          {
+            "occurrence_id": "build_dna_v4:output:1",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 1,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/database.nin",
+            "sha256": "3f73df4aca97de05fd4d7dc881ec6bb6c39b7ff28ba02afd8582c026b948c8dd",
+            "size_bytes": 128,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/database.nin"
+          },
+          {
+            "occurrence_id": "build_dna_v4:output:2",
+            "direction": "output",
+            "role": "database_metadata",
+            "ordinal": 2,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/database.njs",
+            "sha256": "6c857120bed7a261ed5014f951347039df692383976410129e906a188b3bc2d9",
+            "size_bytes": 439,
+            "native_format": "blastdb_metadata_json",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/database.njs"
+          },
+          {
+            "occurrence_id": "build_dna_v4:output:3",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 3,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/database.nog",
+            "sha256": "9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+            "size_bytes": 44,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/database.nog"
+          },
+          {
+            "occurrence_id": "build_dna_v4:output:4",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 4,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/database.nsd",
+            "sha256": "4b621512bf434bd522915d47805afc68bc7359ef3f6d69601a426b88a1ced9b3",
+            "size_bytes": 64,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/database.nsd"
+          },
+          {
+            "occurrence_id": "build_dna_v4:output:5",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 5,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/database.nsi",
+            "sha256": "442fc207d562940bdb40ebf80324282d2d5a5985034fd7872e5f22507b95b971",
+            "size_bytes": 64,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/database.nsi"
+          },
+          {
+            "occurrence_id": "build_dna_v4:output:6",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 6,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/database.nsq",
+            "sha256": "31d7d072f59ac4ab6b71020d84f0cf00b66f6bc744457126087769ac72ee31fa",
+            "size_bytes": 27,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/database.nsq"
+          },
+          {
+            "occurrence_id": "build_dna_v4:output:7",
+            "direction": "output",
+            "role": "stderr",
+            "ordinal": 7,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/stderr.txt",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size_bytes": 0,
+            "native_format": "text",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/stderr.txt"
+          },
+          {
+            "occurrence_id": "build_dna_v4:output:8",
+            "direction": "output",
+            "role": "stdout",
+            "ordinal": 8,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/stdout.txt",
+            "sha256": "721000299b9b7d2bf7f379e1a327fe5e039024b99e8c2f19f0e276e81a9e0499",
+            "size_bytes": 444,
+            "native_format": "text",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/stdout.txt"
+          }
+        ],
+        "database_key": "build_dna_v4",
+        "identity": {
+          "namespace": "retained-native-fixture",
+          "value": "build_dna_v4",
+          "version": null,
+          "release": null,
+          "scope": "tiny supplied FASTA inputs",
+          "preparation_type": "sequence_database",
+          "source": {
+            "source_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/CAPTURE_001.json",
+            "pointer": "/cases/0"
+          }
+        },
+        "software": {
+          "name": "makeblastdb",
+          "version": null,
+          "executable_sha256": "c1ffdcf6f15d1d8d75377cc9f37afa42bc9fa06678903bad77c2641e60778fce"
+        },
+        "argv": [
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/makeblastdb",
+          "-in",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/inputs/dna.fa",
+          "-input_type",
+          "fasta",
+          "-dbtype",
+          "nucl",
+          "-out",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/database",
+          "-blastdb_version",
+          "4",
+          "-title",
+          "explicit tiny dna_v4",
+          "-parse_seqids"
+        ],
+        "native_paths": [
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v4/database"
+        ],
+        "dependency_bindings": [],
+        "native_metadata": [
+          {
+            "field_name": "database_title",
+            "value": "explicit tiny dna_v4",
+            "unit": "text",
+            "value_basis": "native_reported_exact",
+            "native_lexeme": null,
+            "occurrence_id": "build_dna_v4:output:2",
+            "line_number": null,
+            "json_pointer": "/description",
+            "missing_reason": null
+          },
+          {
+            "field_name": "database_format_version",
+            "value": 4,
+            "unit": "version",
+            "value_basis": "native_reported_exact",
+            "native_lexeme": null,
+            "occurrence_id": "build_dna_v4:output:2",
+            "line_number": null,
+            "json_pointer": "/db-version",
+            "missing_reason": null
+          },
+          {
+            "field_name": "database_created_at_native",
+            "value": "2026-10-28T16:58:00",
+            "unit": "text",
+            "value_basis": "native_reported_exact",
+            "native_lexeme": null,
+            "occurrence_id": "build_dna_v4:output:2",
+            "line_number": null,
+            "json_pointer": "/last-updated",
+            "missing_reason": null
+          },
+          {
+            "field_name": "database_sequence_count",
+            "value": 3,
+            "unit": "sequences",
+            "value_basis": "native_reported_exact",
+            "native_lexeme": null,
+            "occurrence_id": "build_dna_v4:output:2",
+            "line_number": null,
+            "json_pointer": "/number-of-sequences",
+            "missing_reason": null
+          },
+          {
+            "field_name": "database_residue_count",
+            "value": 31,
+            "unit": "nt",
+            "value_basis": "native_reported_exact",
+            "native_lexeme": null,
+            "occurrence_id": "build_dna_v4:output:2",
+            "line_number": null,
+            "json_pointer": "/number-of-letters",
+            "missing_reason": null
+          },
+          {
+            "field_name": "database_bytes",
+            "value": 461,
+            "unit": "bytes",
+            "value_basis": "native_reported_exact",
+            "native_lexeme": null,
+            "occurrence_id": "build_dna_v4:output:2",
+            "line_number": null,
+            "json_pointer": "/bytes-total",
+            "missing_reason": null
+          },
+          {
+            "field_name": "database_file_names",
+            "value": [
+              "database.nhr",
+              "database.nin",
+              "database.nog",
+              "database.nsd",
+              "database.nsi",
+              "database.nsq"
+            ],
+            "unit": "paths",
+            "value_basis": "native_reported_exact",
+            "native_lexeme": null,
+            "occurrence_id": "build_dna_v4:output:2",
+            "line_number": null,
+            "json_pointer": "/files",
+            "missing_reason": null
+          }
+        ],
+        "outcome": {
+          "started": true,
+          "returncode": 0,
+          "state": "succeeded",
+          "writer_closed": true,
+          "inventory_complete": true
+        }
+      },
+      "native_metadata_files": [
+        {
+          "relative_path": "build_dna_v4_native_metadata.json",
+          "sha256": "6c857120bed7a261ed5014f951347039df692383976410129e906a188b3bc2d9",
+          "size_bytes": 439,
+          "source_occurrence_id": "build_dna_v4:output:2"
+        }
+      ],
+      "expected_database_file_count": 7,
+      "native_returncode": 0
+    },
+    {
+      "name": "build_dna_v5",
+      "arguments": {
+        "operation": {
+          "version": "blast_utility_operation_v1",
+          "program": "makeblastdb",
+          "mode": "create_sequence_database",
+          "input_occurrence_ids": [
+            "build_dna_v5:input:0"
+          ],
+          "database_key": null,
+          "molecule": "dna",
+          "parameters": {
+            "input_type": "fasta",
+            "database_format_version": 5,
+            "output_prefix": "database",
+            "title": "explicit tiny dna_v5",
+            "parse_seqids": true,
+            "hash_index": false,
+            "max_file_size": null,
+            "taxid": null,
+            "taxid_map_occurrence_id": null,
+            "mask_occurrence_ids": []
+          }
+        },
+        "inputs": [
+          {
+            "occurrence_id": "build_dna_v5:input:0",
+            "direction": "input",
+            "role": "sequence_input",
+            "ordinal": 0,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/inputs/dna.fa",
+            "sha256": "161f0767e844bc3310ed5f9bb00a459e067727326727f4032c48aad5c0972cbc",
+            "size_bytes": 57,
+            "native_format": "fasta",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/inputs/dna.fa"
+          }
+        ],
+        "outputs": [
+          {
+            "occurrence_id": "build_dna_v5:output:0",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 0,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.ndb",
+            "sha256": "c70aac81352a4ad6ec06f78903fd6d10fab3ceac357fb4d4c3c6614d5f3dc19e",
+            "size_bytes": 32768,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.ndb"
+          },
+          {
+            "occurrence_id": "build_dna_v5:output:1",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 1,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.nhr",
+            "sha256": "e18277abe9159c8cf2f575fee278388704c367d5d2f8fd60b4b7e932a78e170f",
+            "size_bytes": 134,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.nhr"
+          },
+          {
+            "occurrence_id": "build_dna_v5:output:2",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 2,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.nin",
+            "sha256": "3a8a8fb3e0d81df2d1f5aee6e730eae77185df99794f91ff3adf189c4170eb18",
+            "size_bytes": 144,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.nin"
+          },
+          {
+            "occurrence_id": "build_dna_v5:output:3",
+            "direction": "output",
+            "role": "database_metadata",
+            "ordinal": 3,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.njs",
+            "sha256": "81c2b32da950b62bc69a18f4bf99d2f09fe431e653663ed52258f459d36c987a",
+            "size_bytes": 501,
+            "native_format": "blastdb_metadata_json",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.njs"
+          },
+          {
+            "occurrence_id": "build_dna_v5:output:4",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 4,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.nog",
+            "sha256": "9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+            "size_bytes": 44,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.nog"
+          },
+          {
+            "occurrence_id": "build_dna_v5:output:5",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 5,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.nos",
+            "sha256": "35c9e75ed53a711090c89a65f52a83e2d8d3235667c7ec0d9359352f78e6afed",
+            "size_bytes": 52,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.nos"
+          },
+          {
+            "occurrence_id": "build_dna_v5:output:6",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 6,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.not",
+            "sha256": "2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+            "size_bytes": 44,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.not"
+          },
+          {
+            "occurrence_id": "build_dna_v5:output:7",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 7,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.nsq",
+            "sha256": "31d7d072f59ac4ab6b71020d84f0cf00b66f6bc744457126087769ac72ee31fa",
+            "size_bytes": 27,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.nsq"
+          },
+          {
+            "occurrence_id": "build_dna_v5:output:8",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 8,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.ntf",
+            "sha256": "18cddae0697ea0e8f6add08a8d4b7a0884f4bbce93d53705aea2369362418c74",
+            "size_bytes": 16384,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.ntf"
+          },
+          {
+            "occurrence_id": "build_dna_v5:output:9",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 9,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.nto",
+            "sha256": "6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+            "size_bytes": 16,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database.nto"
+          },
+          {
+            "occurrence_id": "build_dna_v5:output:10",
+            "direction": "output",
+            "role": "stderr",
+            "ordinal": 10,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/stderr.txt",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size_bytes": 0,
+            "native_format": "text",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/stderr.txt"
+          },
+          {
+            "occurrence_id": "build_dna_v5:output:11",
+            "direction": "output",
+            "role": "stdout",
+            "ordinal": 11,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/stdout.txt",
+            "sha256": "cc461b59d9047a5c050f5a16dc05e966112e6994d50b3fdba62378259ee5ff61",
+            "size_bytes": 444,
+            "native_format": "text",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/stdout.txt"
+          }
+        ],
+        "database_key": "build_dna_v5",
+        "identity": {
+          "namespace": "retained-native-fixture",
+          "value": "build_dna_v5",
+          "version": null,
+          "release": null,
+          "scope": "tiny supplied FASTA inputs",
+          "preparation_type": "sequence_database",
+          "source": {
+            "source_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/CAPTURE_001.json",
+            "pointer": "/cases/1"
+          }
+        },
+        "software": {
+          "name": "makeblastdb",
+          "version": null,
+          "executable_sha256": "c1ffdcf6f15d1d8d75377cc9f37afa42bc9fa06678903bad77c2641e60778fce"
+        },
+        "argv": [
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/makeblastdb",
+          "-in",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/inputs/dna.fa",
+          "-input_type",
+          "fasta",
+          "-dbtype",
+          "nucl",
+          "-out",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database",
+          "-blastdb_version",
+          "5",
+          "-title",
+          "explicit tiny dna_v5",
+          "-parse_seqids"
+        ],
+        "native_paths": [
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_dna_v5/database"
+        ],
+        "dependency_bindings": [],
+        "native_metadata": [
+          {
+            "field_name": "database_title",
+            "value": "explicit tiny dna_v5",
+            "unit": "text",
+            "value_basis": "native_reported_exact",
+            "native_lexeme": null,
+            "occurrence_id": "build_dna_v5:output:3",
+            "line_number": null,
+            "json_pointer": "/description",
+            "missing_reason": null
+          },
+          {
+            "field_name": "database_format_version",
+            "value": 5,
+            "unit": "version",
+            "value_basis": "native_reported_exact",
+            "native_lexeme": null,
+            "occurrence_id": "build_dna_v5:output:3",
+            "line_number": null,
+            "json_pointer": "/db-version",
+            "missing_reason": null
+          },
+          {
+            "field_name": "database_created_at_native",
+            "value": "2026-10-28T16:58:00",
+            "unit": "text",
+            "value_basis": "native_reported_exact",
+            "native_lexeme": null,
+            "occurrence_id": "build_dna_v5:output:3",
+            "line_number": null,
+            "json_pointer": "/last-updated",
+            "missing_reason": null
+          },
+          {
+            "field_name": "database_sequence_count",
+            "value": 3,
+            "unit": "sequences",
+            "value_basis": "native_reported_exact",
+            "native_lexeme": null,
+            "occurrence_id": "build_dna_v5:output:3",
+            "line_number": null,
+            "json_pointer": "/number-of-sequences",
+            "missing_reason": null
+          },
+          {
+            "field_name": "database_residue_count",
+            "value": 31,
+            "unit": "nt",
+            "value_basis": "native_reported_exact",
+            "native_lexeme": null,
+            "occurrence_id": "build_dna_v5:output:3",
+            "line_number": null,
+            "json_pointer": "/number-of-letters",
+            "missing_reason": null
+          },
+          {
+            "field_name": "database_bytes",
+            "value": 49613,
+            "unit": "bytes",
+            "value_basis": "native_reported_exact",
+            "native_lexeme": null,
+            "occurrence_id": "build_dna_v5:output:3",
+            "line_number": null,
+            "json_pointer": "/bytes-total",
+            "missing_reason": null
+          },
+          {
+            "field_name": "database_file_names",
+            "value": [
+              "database.ndb",
+              "database.nhr",
+              "database.nin",
+              "database.nog",
+              "database.nos",
+              "database.not",
+              "database.nsq",
+              "database.ntf",
+              "database.nto"
+            ],
+            "unit": "paths",
+            "value_basis": "native_reported_exact",
+            "native_lexeme": null,
+            "occurrence_id": "build_dna_v5:output:3",
+            "line_number": null,
+            "json_pointer": "/files",
+            "missing_reason": null
+          }
+        ],
+        "outcome": {
+          "started": true,
+          "returncode": 0,
+          "state": "succeeded",
+          "writer_closed": true,
+          "inventory_complete": true
+        }
+      },
+      "native_metadata_files": [
+        {
+          "relative_path": "build_dna_v5_native_metadata.json",
+          "sha256": "81c2b32da950b62bc69a18f4bf99d2f09fe431e653663ed52258f459d36c987a",
+          "size_bytes": 501,
+          "source_occurrence_id": "build_dna_v5:output:3"
+        }
+      ],
+      "expected_database_file_count": 10,
+      "native_returncode": 0
+    },
+    {
+      "name": "build_protein_v5",
+      "arguments": {
+        "operation": {
+          "version": "blast_utility_operation_v1",
+          "program": "makeblastdb",
+          "mode": "create_sequence_database",
+          "input_occurrence_ids": [
+            "build_protein_v5:input:0"
+          ],
+          "database_key": null,
+          "molecule": "protein",
+          "parameters": {
+            "input_type": "fasta",
+            "database_format_version": 5,
+            "output_prefix": "database",
+            "title": "explicit tiny protein_v5",
+            "parse_seqids": true,
+            "hash_index": false,
+            "max_file_size": null,
+            "taxid": null,
+            "taxid_map_occurrence_id": null,
+            "mask_occurrence_ids": []
+          }
+        },
+        "inputs": [
+          {
+            "occurrence_id": "build_protein_v5:input:0",
+            "direction": "input",
+            "role": "sequence_input",
+            "ordinal": 0,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/inputs/protein.fa",
+            "sha256": "5f7cfbf82c74f416c7590110d3f18edc5c437d5c579ad9b8b65b77eacfd1bfd0",
+            "size_bytes": 49,
+            "native_format": "fasta",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/inputs/protein.fa"
+          }
+        ],
+        "outputs": [
+          {
+            "occurrence_id": "build_protein_v5:output:0",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 0,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.pdb",
+            "sha256": "b30586d9470a5ba406d69bac30f5e0cf74fd184f78af277df1155b7cde54524d",
+            "size_bytes": 32768,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.pdb"
+          },
+          {
+            "occurrence_id": "build_protein_v5:output:1",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 1,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.phr",
+            "sha256": "1efe85474930bef4db88517bff83dcaea2ee697d1495ef4345408a44d3638383",
+            "size_bytes": 86,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.phr"
+          },
+          {
+            "occurrence_id": "build_protein_v5:output:2",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 2,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.pin",
+            "sha256": "83e6d2a8d03633bebb9a1a54445a6a507d3623eb6dd7ebe894db82c8c7d649a8",
+            "size_bytes": 128,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.pin"
+          },
+          {
+            "occurrence_id": "build_protein_v5:output:3",
+            "direction": "output",
+            "role": "database_metadata",
+            "ordinal": 3,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.pjs",
+            "sha256": "d7f87afad5e80ecda552ab30a7683cf7f072c3ffdebcd913790b9227dfea4cf1",
+            "size_bytes": 502,
+            "native_format": "blastdb_metadata_json",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.pjs"
+          },
+          {
+            "occurrence_id": "build_protein_v5:output:4",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 4,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.pog",
+            "sha256": "5e4534b0b0caf02033b0bdf90c7117419265f99587230b0c5ab47567bd32d94e",
+            "size_bytes": 40,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.pog"
+          },
+          {
+            "occurrence_id": "build_protein_v5:output:5",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 5,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.pos",
+            "sha256": "b81158e072236511c97d70d7f1e54ce1c5d71b6b26e314f238ffd154819dec05",
+            "size_bytes": 34,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.pos"
+          },
+          {
+            "occurrence_id": "build_protein_v5:output:6",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 6,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.pot",
+            "sha256": "7b0a91667ad8d58a00256b3e213b31e2ba8604b9db04b58e6fe5c8f1e693acfc",
+            "size_bytes": 32,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.pot"
+          },
+          {
+            "occurrence_id": "build_protein_v5:output:7",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 7,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.psq",
+            "sha256": "2ad9795869362e075cac14a349ab080e7e615a5cc491254277610ff0faf27cba",
+            "size_bytes": 38,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.psq"
+          },
+          {
+            "occurrence_id": "build_protein_v5:output:8",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 8,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.ptf",
+            "sha256": "18cddae0697ea0e8f6add08a8d4b7a0884f4bbce93d53705aea2369362418c74",
+            "size_bytes": 16384,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.ptf"
+          },
+          {
+            "occurrence_id": "build_protein_v5:output:9",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 9,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.pto",
+            "sha256": "0db201e8371010e5cd3b719cf6c131cea86e18ef7c5bdd394e23b352b8e54f9e",
+            "size_bytes": 12,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database.pto"
+          },
+          {
+            "occurrence_id": "build_protein_v5:output:10",
+            "direction": "output",
+            "role": "stderr",
+            "ordinal": 10,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/stderr.txt",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size_bytes": 0,
+            "native_format": "text",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/stderr.txt"
+          },
+          {
+            "occurrence_id": "build_protein_v5:output:11",
+            "direction": "output",
+            "role": "stdout",
+            "ordinal": 11,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/stdout.txt",
+            "sha256": "157fe68a28d6432f01a161067784293059bfe40a6a588fbb9a37ff66ca8d3aa6",
+            "size_bytes": 449,
+            "native_format": "text",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/stdout.txt"
+          }
+        ],
+        "database_key": "build_protein_v5",
+        "identity": {
+          "namespace": "retained-native-fixture",
+          "value": "build_protein_v5",
+          "version": null,
+          "release": null,
+          "scope": "tiny supplied FASTA inputs",
+          "preparation_type": "sequence_database",
+          "source": {
+            "source_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/CAPTURE_001.json",
+            "pointer": "/cases/2"
+          }
+        },
+        "software": {
+          "name": "makeblastdb",
+          "version": null,
+          "executable_sha256": "c1ffdcf6f15d1d8d75377cc9f37afa42bc9fa06678903bad77c2641e60778fce"
+        },
+        "argv": [
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/makeblastdb",
+          "-in",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/inputs/protein.fa",
+          "-input_type",
+          "fasta",
+          "-dbtype",
+          "prot",
+          "-out",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database",
+          "-blastdb_version",
+          "5",
+          "-title",
+          "explicit tiny protein_v5",
+          "-parse_seqids"
+        ],
+        "native_paths": [
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_protein_v5/database"
+        ],
+        "dependency_bindings": [],
+        "native_metadata": [
+          {
+            "field_name": "database_title",
+            "value": "explicit tiny protein_v5",
+            "unit": "text",
+            "value_basis": "native_reported_exact",
+            "native_lexeme": null,
+            "occurrence_id": "build_protein_v5:output:3",
+            "line_number": null,
+            "json_pointer": "/description",
+            "missing_reason": null
+          },
+          {
+            "field_name": "database_format_version",
+            "value": 5,
+            "unit": "version",
+            "value_basis": "native_reported_exact",
+            "native_lexeme": null,
+            "occurrence_id": "build_protein_v5:output:3",
+            "line_number": null,
+            "json_pointer": "/db-version",
+            "missing_reason": null
+          },
+          {
+            "field_name": "database_created_at_native",
+            "value": "2026-10-28T16:58:00",
+            "unit": "text",
+            "value_basis": "native_reported_exact",
+            "native_lexeme": null,
+            "occurrence_id": "build_protein_v5:output:3",
+            "line_number": null,
+            "json_pointer": "/last-updated",
+            "missing_reason": null
+          },
+          {
+            "field_name": "database_sequence_count",
+            "value": 2,
+            "unit": "sequences",
+            "value_basis": "native_reported_exact",
+            "native_lexeme": null,
+            "occurrence_id": "build_protein_v5:output:3",
+            "line_number": null,
+            "json_pointer": "/number-of-sequences",
+            "missing_reason": null
+          },
+          {
+            "field_name": "database_residue_count",
+            "value": 35,
+            "unit": "aa",
+            "value_basis": "native_reported_exact",
+            "native_lexeme": null,
+            "occurrence_id": "build_protein_v5:output:3",
+            "line_number": null,
+            "json_pointer": "/number-of-letters",
+            "missing_reason": null
+          },
+          {
+            "field_name": "database_bytes",
+            "value": 49522,
+            "unit": "bytes",
+            "value_basis": "native_reported_exact",
+            "native_lexeme": null,
+            "occurrence_id": "build_protein_v5:output:3",
+            "line_number": null,
+            "json_pointer": "/bytes-total",
+            "missing_reason": null
+          },
+          {
+            "field_name": "database_file_names",
+            "value": [
+              "database.pdb",
+              "database.phr",
+              "database.pin",
+              "database.pog",
+              "database.pos",
+              "database.pot",
+              "database.psq",
+              "database.ptf",
+              "database.pto"
+            ],
+            "unit": "paths",
+            "value_basis": "native_reported_exact",
+            "native_lexeme": null,
+            "occurrence_id": "build_protein_v5:output:3",
+            "line_number": null,
+            "json_pointer": "/files",
+            "missing_reason": null
+          }
+        ],
+        "outcome": {
+          "started": true,
+          "returncode": 0,
+          "state": "succeeded",
+          "writer_closed": true,
+          "inventory_complete": true
+        }
+      },
+      "native_metadata_files": [
+        {
+          "relative_path": "build_protein_v5_native_metadata.json",
+          "sha256": "d7f87afad5e80ecda552ab30a7683cf7f072c3ffdebcd913790b9227dfea4cf1",
+          "size_bytes": 502,
+          "source_occurrence_id": "build_protein_v5:output:3"
+        }
+      ],
+      "expected_database_file_count": 10,
+      "native_returncode": 0
+    },
+    {
+      "name": "build_duplicate_ids",
+      "arguments": {
+        "operation": {
+          "version": "blast_utility_operation_v1",
+          "program": "makeblastdb",
+          "mode": "create_sequence_database",
+          "input_occurrence_ids": [
+            "build_duplicate_ids:input:0"
+          ],
+          "database_key": null,
+          "molecule": "dna",
+          "parameters": {
+            "input_type": "fasta",
+            "database_format_version": 5,
+            "output_prefix": "database",
+            "title": "explicit duplicate-ID failure case",
+            "parse_seqids": true,
+            "hash_index": false,
+            "max_file_size": null,
+            "taxid": null,
+            "taxid_map_occurrence_id": null,
+            "mask_occurrence_ids": []
+          }
+        },
+        "inputs": [
+          {
+            "occurrence_id": "build_duplicate_ids:input:0",
+            "direction": "input",
+            "role": "sequence_input",
+            "ordinal": 0,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/inputs/duplicate.fa",
+            "sha256": "37f537a5cfb94fb1c1dd10ad1fd84413da351b379ead5c116b85e1e04030db1a",
+            "size_bytes": 38,
+            "native_format": "fasta",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/inputs/duplicate.fa"
+          }
+        ],
+        "outputs": [
+          {
+            "occurrence_id": "build_duplicate_ids:output:0",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 0,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_duplicate_ids/database.00.nog",
+            "sha256": "b31ad5df85471fcfc39c04f43c7ff3cf90f86afe7e9d1b6e554cf442ce107cc4",
+            "size_bytes": 36,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_duplicate_ids/database.00.nog"
+          },
+          {
+            "occurrence_id": "build_duplicate_ids:output:1",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 1,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_duplicate_ids/database.nos",
+            "sha256": "2dd0435c3d883558103a6ebf234b5031dc8e3b35cc79d685c794ff68617dfaa3",
+            "size_bytes": 21,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_duplicate_ids/database.nos"
+          },
+          {
+            "occurrence_id": "build_duplicate_ids:output:2",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 2,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_duplicate_ids/database.not",
+            "sha256": "e2099cbf3445ac30a98dcc86f0b899eac91fd0a23cf2825f48bd01daadee347a",
+            "size_bytes": 20,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_duplicate_ids/database.not"
+          },
+          {
+            "occurrence_id": "build_duplicate_ids:output:3",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 3,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_duplicate_ids/database.ntf",
+            "sha256": "18cddae0697ea0e8f6add08a8d4b7a0884f4bbce93d53705aea2369362418c74",
+            "size_bytes": 16384,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_duplicate_ids/database.ntf"
+          },
+          {
+            "occurrence_id": "build_duplicate_ids:output:4",
+            "direction": "output",
+            "role": "database_file",
+            "ordinal": 4,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_duplicate_ids/database.nto",
+            "sha256": "7c9fa136d4413fa6173637e883b6998d32e1d675f88cddff9dcbcf331820f4b8",
+            "size_bytes": 8,
+            "native_format": "blastdb_binary",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_duplicate_ids/database.nto"
+          },
+          {
+            "occurrence_id": "build_duplicate_ids:output:5",
+            "direction": "output",
+            "role": "stderr",
+            "ordinal": 5,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_duplicate_ids/stderr.txt",
+            "sha256": "797f6aecad4d6f36f5a846b033113f52dddcaa401a0aa4d8da753327135890f3",
+            "size_bytes": 78,
+            "native_format": "text",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_duplicate_ids/stderr.txt"
+          },
+          {
+            "occurrence_id": "build_duplicate_ids:output:6",
+            "direction": "output",
+            "role": "stdout",
+            "ordinal": 6,
+            "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_duplicate_ids/stdout.txt",
+            "sha256": "ed399153ef561c831b70ce260a69c3df301617bcb0ca75384c6d0cab6f94dcdf",
+            "size_bytes": 465,
+            "native_format": "text",
+            "completeness": "complete",
+            "native_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_duplicate_ids/stdout.txt"
+          }
+        ],
+        "database_key": "build_duplicate_ids",
+        "identity": {
+          "namespace": "retained-native-fixture",
+          "value": "build_duplicate_ids",
+          "version": null,
+          "release": null,
+          "scope": "tiny supplied FASTA inputs",
+          "preparation_type": "sequence_database",
+          "source": {
+            "source_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/CAPTURE_001.json",
+            "pointer": "/cases/19"
+          }
+        },
+        "software": {
+          "name": "makeblastdb",
+          "version": null,
+          "executable_sha256": "c1ffdcf6f15d1d8d75377cc9f37afa42bc9fa06678903bad77c2641e60778fce"
+        },
+        "argv": [
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/makeblastdb",
+          "-in",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/inputs/duplicate.fa",
+          "-input_type",
+          "fasta",
+          "-dbtype",
+          "nucl",
+          "-out",
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_duplicate_ids/database",
+          "-blastdb_version",
+          "5",
+          "-title",
+          "explicit duplicate-ID failure case",
+          "-parse_seqids"
+        ],
+        "native_paths": [
+          "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check084_database_utility_native/temporary/database_utility_native/build_duplicate_ids/database"
+        ],
+        "dependency_bindings": [],
+        "native_metadata": [],
+        "outcome": {
+          "started": true,
+          "returncode": 1,
+          "state": "failed",
+          "writer_closed": true,
+          "inventory_complete": true
+        }
+      },
+      "native_metadata_files": [],
+      "expected_database_file_count": 5,
+      "native_returncode": 1
+    }
+  ]
+}

@@ -1,0 +1,190 @@
+{
+  "requested_job": {
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmsearch",
+      "--cpu",
+      "1",
+      "--tblout",
+      "hits.tblout",
+      "--fmt",
+      "3",
+      "-A",
+      "included.sto",
+      "--tformat",
+      "fasta",
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/tutorial/minifam.cm",
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/tutorial/mrum-tRNAs10.fa"
+    ],
+    "environment": {
+      "LC_ALL": "C"
+    },
+    "native_infernal": {
+      "version": "native_infernal_job_v1",
+      "program": "cmsearch",
+      "software": {
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmsearch",
+        "sha256": "36e0dd6955648fbf8a6bdc397801e07e7729282b6fff47f1816629428d9ae7d9",
+        "engine_version": "1.1.5 (caller declaration; native stdout retained separately)"
+      },
+      "environment": {
+        "LC_ALL": "C"
+      },
+      "operands": [
+        {
+          "role": "models",
+          "format": "infernal_ascii",
+          "path": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/tutorial/minifam.cm",
+          "sha256": "69de11fd1a8dc197a306780a53b9417427f83b66002d1c3bb53b42021ce294fd",
+          "size_bytes": 256295,
+          "artifact_ref": "source_tutorial_models"
+        },
+        {
+          "role": "sequences",
+          "format": "fasta",
+          "path": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/tutorial/mrum-tRNAs10.fa",
+          "sha256": "458183dae273c27cc934236c4ffd1f70f24681028751ad198e7b8a4430ce7c91",
+          "size_bytes": 923,
+          "artifact_ref": "source_tutorial_sequences"
+        }
+      ],
+      "operand_bindings": [
+        {
+          "operand_role": "models",
+          "record_ordinal": 0,
+          "native_name": "tRNA5",
+          "native_accession": null,
+          "subject_ref": null,
+          "reference_ref": "reference_tutorial_model_0"
+        },
+        {
+          "operand_role": "models",
+          "record_ordinal": 1,
+          "native_name": "5S_rRNA",
+          "native_accession": null,
+          "subject_ref": null,
+          "reference_ref": "reference_tutorial_model_1"
+        },
+        {
+          "operand_role": "models",
+          "record_ordinal": 2,
+          "native_name": "Cobalamin",
+          "native_accession": null,
+          "subject_ref": null,
+          "reference_ref": "reference_tutorial_model_2"
+        },
+        {
+          "operand_role": "sequences",
+          "record_ordinal": 0,
+          "native_name": "mrum-tRNA.1",
+          "native_accession": null,
+          "subject_ref": "subject_tutorial_sequence_0",
+          "reference_ref": null
+        },
+        {
+          "operand_role": "sequences",
+          "record_ordinal": 1,
+          "native_name": "mrum-tRNA.2",
+          "native_accession": null,
+          "subject_ref": "subject_tutorial_sequence_1",
+          "reference_ref": null
+        },
+        {
+          "operand_role": "sequences",
+          "record_ordinal": 2,
+          "native_name": "mrum-tRNA.3",
+          "native_accession": null,
+          "subject_ref": "subject_tutorial_sequence_2",
+          "reference_ref": null
+        },
+        {
+          "operand_role": "sequences",
+          "record_ordinal": 3,
+          "native_name": "mrum-tRNA.4",
+          "native_accession": null,
+          "subject_ref": "subject_tutorial_sequence_3",
+          "reference_ref": null
+        },
+        {
+          "operand_role": "sequences",
+          "record_ordinal": 4,
+          "native_name": "mrum-tRNA.5",
+          "native_accession": null,
+          "subject_ref": "subject_tutorial_sequence_4",
+          "reference_ref": null
+        },
+        {
+          "operand_role": "sequences",
+          "record_ordinal": 5,
+          "native_name": "mrum-tRNA.6",
+          "native_accession": null,
+          "subject_ref": "subject_tutorial_sequence_5",
+          "reference_ref": null
+        },
+        {
+          "operand_role": "sequences",
+          "record_ordinal": 6,
+          "native_name": "mrum-tRNA.7",
+          "native_accession": null,
+          "subject_ref": "subject_tutorial_sequence_6",
+          "reference_ref": null
+        },
+        {
+          "operand_role": "sequences",
+          "record_ordinal": 7,
+          "native_name": "mrum-tRNA.8",
+          "native_accession": null,
+          "subject_ref": "subject_tutorial_sequence_7",
+          "reference_ref": null
+        },
+        {
+          "operand_role": "sequences",
+          "record_ordinal": 8,
+          "native_name": "mrum-tRNA.9",
+          "native_accession": null,
+          "subject_ref": "subject_tutorial_sequence_8",
+          "reference_ref": null
+        },
+        {
+          "operand_role": "sequences",
+          "record_ordinal": 9,
+          "native_name": "mrum-tRNA.10",
+          "native_accession": null,
+          "subject_ref": "subject_tutorial_sequence_9",
+          "reference_ref": null
+        }
+      ],
+      "options": [
+        "--cpu",
+        "1"
+      ],
+      "outputs": [
+        {
+          "role": "stdout",
+          "format": "infernal_stdout",
+          "relative_path": "stdout.log"
+        },
+        {
+          "role": "stderr",
+          "format": "text",
+          "relative_path": "stderr.log"
+        },
+        {
+          "role": "tblout",
+          "format": "infernal_tblout",
+          "relative_path": "hits.tblout"
+        },
+        {
+          "role": "included_msa",
+          "format": "stockholm",
+          "relative_path": "included.sto"
+        }
+      ],
+      "table_format": 3,
+      "metadata": {},
+      "grading_parameters": {}
+    }
+  },
+  "workspace": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_native_execution_2026-10-26_222/runs/cmsearch",
+  "resource_kind": "local",
+  "resource_id": "local-verification-20GiB-4GiB"
+}

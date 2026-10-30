@@ -1,0 +1,251 @@
+........................................................................ [ 26%]
+........................................................................ [ 53%]
+.....F............FFFFFFFFFFFFFFF....................................... [ 80%]
+........F..............FFFFFFFF....................                      [100%]
+=================================== FAILURES ===================================
+_ test_v03_present_invalid_context_does_not_fall_back_and_legacy_absence_does __
+source_snapshot/tests/test_hmmer_alignment_input_adapter.py:199: in test_v03_present_invalid_context_does_not_fall_back_and_legacy_absence_does
+    assert data.effective_hmmer_alignment_alphabet(record, settings={"--dna": True})["alphabet"] == "DNA"
+E   AssertionError: assert None == 'DNA'
+_ test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\x00-RF] _
+source_snapshot/tests/test_hmmer_alignment_input_adapter.py:359: in test_v07_byte_qualified_annotations_keep_successful_sequence_geometry
+    assert reconstruct_alimask_model_map(record, settings={"--rna": True, "--hand": True})["issues"][0]["code"] == "rf_missing"
+E   AssertionError: assert 'input_decoding_invalid' == 'rf_missing'
+E     
+E     - rf_missing
+E     + input_decoding_invalid
+_ test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\x00-MM] _
+source_snapshot/tests/test_hmmer_alignment_input_adapter.py:363: in test_v07_byte_qualified_annotations_keep_successful_sequence_geometry
+    assert reconstruct_alimask_model_map(record, settings={"--rna": True, "--wnone": True})["state"] == "present"
+E   AssertionError: assert 'incompatible' == 'present'
+E     
+E     - present
+E     + incompatible
+_ test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\x00-CS] _
+source_snapshot/tests/test_hmmer_alignment_input_adapter.py:363: in test_v07_byte_qualified_annotations_keep_successful_sequence_geometry
+    assert reconstruct_alimask_model_map(record, settings={"--rna": True, "--wnone": True})["state"] == "present"
+E   AssertionError: assert 'incompatible' == 'present'
+E     
+E     - present
+E     + incompatible
+_ test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\x00-SS] _
+source_snapshot/tests/test_hmmer_alignment_input_adapter.py:363: in test_v07_byte_qualified_annotations_keep_successful_sequence_geometry
+    assert reconstruct_alimask_model_map(record, settings={"--rna": True, "--wnone": True})["state"] == "present"
+E   AssertionError: assert 'incompatible' == 'present'
+E     
+E     - present
+E     + incompatible
+_ test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\x00-SA] _
+source_snapshot/tests/test_hmmer_alignment_input_adapter.py:363: in test_v07_byte_qualified_annotations_keep_successful_sequence_geometry
+    assert reconstruct_alimask_model_map(record, settings={"--rna": True, "--wnone": True})["state"] == "present"
+E   AssertionError: assert 'incompatible' == 'present'
+E     
+E     - present
+E     + incompatible
+_ test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\xff-RF] _
+source_snapshot/tests/test_hmmer_alignment_input_adapter.py:359: in test_v07_byte_qualified_annotations_keep_successful_sequence_geometry
+    assert reconstruct_alimask_model_map(record, settings={"--rna": True, "--hand": True})["issues"][0]["code"] == "rf_missing"
+E   AssertionError: assert 'input_decoding_invalid' == 'rf_missing'
+E     
+E     - rf_missing
+E     + input_decoding_invalid
+_ test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\xff-MM] _
+source_snapshot/tests/test_hmmer_alignment_input_adapter.py:363: in test_v07_byte_qualified_annotations_keep_successful_sequence_geometry
+    assert reconstruct_alimask_model_map(record, settings={"--rna": True, "--wnone": True})["state"] == "present"
+E   AssertionError: assert 'incompatible' == 'present'
+E     
+E     - present
+E     + incompatible
+_ test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\xff-CS] _
+source_snapshot/tests/test_hmmer_alignment_input_adapter.py:363: in test_v07_byte_qualified_annotations_keep_successful_sequence_geometry
+    assert reconstruct_alimask_model_map(record, settings={"--rna": True, "--wnone": True})["state"] == "present"
+E   AssertionError: assert 'incompatible' == 'present'
+E     
+E     - present
+E     + incompatible
+_ test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\xff-SS] _
+source_snapshot/tests/test_hmmer_alignment_input_adapter.py:363: in test_v07_byte_qualified_annotations_keep_successful_sequence_geometry
+    assert reconstruct_alimask_model_map(record, settings={"--rna": True, "--wnone": True})["state"] == "present"
+E   AssertionError: assert 'incompatible' == 'present'
+E     
+E     - present
+E     + incompatible
+_ test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\xff-SA] _
+source_snapshot/tests/test_hmmer_alignment_input_adapter.py:363: in test_v07_byte_qualified_annotations_keep_successful_sequence_geometry
+    assert reconstruct_alimask_model_map(record, settings={"--rna": True, "--wnone": True})["state"] == "present"
+E   AssertionError: assert 'incompatible' == 'present'
+E     
+E     - present
+E     + incompatible
+_ test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\xc3\xa9-RF] _
+source_snapshot/tests/test_hmmer_alignment_input_adapter.py:359: in test_v07_byte_qualified_annotations_keep_successful_sequence_geometry
+    assert reconstruct_alimask_model_map(record, settings={"--rna": True, "--hand": True})["issues"][0]["code"] == "rf_missing"
+E   AssertionError: assert 'input_decoding_invalid' == 'rf_missing'
+E     
+E     - rf_missing
+E     + input_decoding_invalid
+_ test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\xc3\xa9-MM] _
+source_snapshot/tests/test_hmmer_alignment_input_adapter.py:363: in test_v07_byte_qualified_annotations_keep_successful_sequence_geometry
+    assert reconstruct_alimask_model_map(record, settings={"--rna": True, "--wnone": True})["state"] == "present"
+E   AssertionError: assert 'incompatible' == 'present'
+E     
+E     - present
+E     + incompatible
+_ test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\xc3\xa9-CS] _
+source_snapshot/tests/test_hmmer_alignment_input_adapter.py:363: in test_v07_byte_qualified_annotations_keep_successful_sequence_geometry
+    assert reconstruct_alimask_model_map(record, settings={"--rna": True, "--wnone": True})["state"] == "present"
+E   AssertionError: assert 'incompatible' == 'present'
+E     
+E     - present
+E     + incompatible
+_ test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\xc3\xa9-SS] _
+source_snapshot/tests/test_hmmer_alignment_input_adapter.py:363: in test_v07_byte_qualified_annotations_keep_successful_sequence_geometry
+    assert reconstruct_alimask_model_map(record, settings={"--rna": True, "--wnone": True})["state"] == "present"
+E   AssertionError: assert 'incompatible' == 'present'
+E     
+E     - present
+E     + incompatible
+_ test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\xc3\xa9-SA] _
+source_snapshot/tests/test_hmmer_alignment_input_adapter.py:363: in test_v07_byte_qualified_annotations_keep_successful_sequence_geometry
+    assert reconstruct_alimask_model_map(record, settings={"--rna": True, "--wnone": True})["state"] == "present"
+E   AssertionError: assert 'incompatible' == 'present'
+E     
+E     - present
+E     + incompatible
+___ test_numerical_writer_is_byte_identical_for_previously_encodable_values ____
+source_snapshot/tests/test_hmmer_alignment_input_integration.py:85: in test_numerical_writer_is_byte_identical_for_previously_encodable_values
+    assert raw == old.read_bytes() == (canonical(value) + "\n").encode("utf-8")
+E   assert b'{"literal":...e,1,0.125]}\n' == b'{"literal":...e,1,0.125]}\n'
+E     
+E     At index 12 diff: b'\\' != b'\xc3'
+E     Use -v to get more diff
+_ test_unsafe_or_unavailable_new_input_never_launches[empty-map->a\n----\n>b\n----\n-empty_model_map] _
+source_snapshot/tests/test_hmmer_alignment_input_integration.py:193: in test_unsafe_or_unavailable_new_input_never_launches
+    bundle = driver.run_native_hmmer_preparation(plan)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py:730: in run_native_hmmer_preparation
+    _preflight(root, job, bundle)
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py:382: in _preflight
+    _alimask_preflight_shared(root, job, bundle)
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py:303: in _alimask_preflight_shared
+    _error("alimask_input_decoding_contract")
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py:127: in _error
+    raise ValueError(_PREFIX + reason)
+E   ValueError: native_hmmer_preparation_alimask_input_decoding_contract
+_ test_unsafe_or_unavailable_new_input_never_launches[after-last->a\nACGT--\n>b\nACGT--\n-None] _
+source_snapshot/tests/test_hmmer_alignment_input_integration.py:193: in test_unsafe_or_unavailable_new_input_never_launches
+    bundle = driver.run_native_hmmer_preparation(plan)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py:730: in run_native_hmmer_preparation
+    _preflight(root, job, bundle)
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py:382: in _preflight
+    _alimask_preflight_shared(root, job, bundle)
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py:303: in _alimask_preflight_shared
+    _error("alimask_input_decoding_contract")
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py:127: in _error
+    raise ValueError(_PREFIX + reason)
+E   ValueError: native_hmmer_preparation_alimask_input_decoding_contract
+_ test_unsafe_or_unavailable_new_input_never_launches[alphabet-refusal->a\nAC\n-alphabet_undetermined] _
+source_snapshot/tests/test_hmmer_alignment_input_integration.py:193: in test_unsafe_or_unavailable_new_input_never_launches
+    bundle = driver.run_native_hmmer_preparation(plan)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py:730: in run_native_hmmer_preparation
+    _preflight(root, job, bundle)
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py:382: in _preflight
+    _alimask_preflight_shared(root, job, bundle)
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py:303: in _alimask_preflight_shared
+    _error("alimask_input_decoding_contract")
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py:127: in _error
+    raise ValueError(_PREFIX + reason)
+E   ValueError: native_hmmer_preparation_alimask_input_decoding_contract
+_ test_unsafe_or_unavailable_new_input_never_launches[failed-a2m->a\nACGT\n>b\nACG\n-malformed_alignment] _
+source_snapshot/tests/test_hmmer_alignment_input_integration.py:193: in test_unsafe_or_unavailable_new_input_never_launches
+    bundle = driver.run_native_hmmer_preparation(plan)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py:730: in run_native_hmmer_preparation
+    _preflight(root, job, bundle)
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py:382: in _preflight
+    _alimask_preflight_shared(root, job, bundle)
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py:303: in _alimask_preflight_shared
+    _error("alimask_input_decoding_contract")
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py:127: in _error
+    raise ValueError(_PREFIX + reason)
+E   ValueError: native_hmmer_preparation_alimask_input_decoding_contract
+___ test_complete_first_phylip_record_survives_unprocessed_malformed_suffix ____
+source_snapshot/tests/test_hmmer_alignment_input_integration.py:218: in test_complete_first_phylip_record_survives_unprocessed_malformed_suffix
+    plan, bundle = run_actual(tmp_path, selected)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_hmmer_preparation_driver.py:48: in run_actual
+    assert (attempt / "bundle.json").is_file(), result.stderr_path.read_text()
+E   AssertionError: Traceback (most recent call last):
+E       File "<frozen runpy>", line 198, in _run_module_as_main
+E       File "<frozen runpy>", line 88, in _run_code
+E       File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py", line 774, in <module>
+E         raise SystemExit(main())
+E                          ^^^^^^
+E       File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py", line 762, in main
+E         result = run_native_hmmer_preparation(plan)
+E                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py", line 730, in run_native_hmmer_preparation
+E         _preflight(root, job, bundle)
+E       File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py", line 382, in _preflight
+E         _alimask_preflight_shared(root, job, bundle)
+E       File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py", line 303, in _alimask_preflight_shared
+E         _error("alimask_input_decoding_contract")
+E       File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py", line 127, in _error
+E         raise ValueError(_PREFIX + reason)
+E     ValueError: native_hmmer_preparation_alimask_input_decoding_contract
+E     
+E   assert False
+E    +  where False = is_file()
+E    +    where is_file = (PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/temporary/pytest/test_complete_first_phylip_rec0/hmmer-preparation-attempt') / 'bundle.json').is_file
+_ test_actual_hmmbuild_original_alphabet_checksum_map_and_saved_return[a2m-a2m_insertions] _
+source_snapshot/tests/test_hmmer_alignment_input_integration.py:250: in test_actual_hmmbuild_original_alphabet_checksum_map_and_saved_return
+    source = sheet["input_records"][0]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   IndexError: list index out of range
+_ test_actual_hmmbuild_original_alphabet_checksum_map_and_saved_return[clustal-aligned_clustal] _
+source_snapshot/tests/test_hmmer_alignment_input_integration.py:250: in test_actual_hmmbuild_original_alphabet_checksum_map_and_saved_return
+    source = sheet["input_records"][0]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   IndexError: list index out of range
+_________ test_syntax_failure_returns_before_reconstruction_or_native __________
+source_snapshot/tests/test_hmmer_alignment_input_integration.py:293: in test_syntax_failure_returns_before_reconstruction_or_native
+    bundle = driver.run_native_hmmer_preparation(make_plan(tmp_path, selected))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py:730: in run_native_hmmer_preparation
+    _preflight(root, job, bundle)
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py:382: in _preflight
+    _alimask_preflight_shared(root, job, bundle)
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py:303: in _alimask_preflight_shared
+    _error("alimask_input_decoding_contract")
+source_snapshot/gene_annotation_episode/native_hmmer_preparation_driver.py:127: in _error
+    raise ValueError(_PREFIX + reason)
+E   ValueError: native_hmmer_preparation_alimask_input_decoding_contract
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_hmmer_alignment_input_adapter.py::test_v03_present_invalid_context_does_not_fall_back_and_legacy_absence_does
+FAILED source_snapshot/tests/test_hmmer_alignment_input_adapter.py::test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\x00-RF]
+FAILED source_snapshot/tests/test_hmmer_alignment_input_adapter.py::test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\x00-MM]
+FAILED source_snapshot/tests/test_hmmer_alignment_input_adapter.py::test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\x00-CS]
+FAILED source_snapshot/tests/test_hmmer_alignment_input_adapter.py::test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\x00-SS]
+FAILED source_snapshot/tests/test_hmmer_alignment_input_adapter.py::test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\x00-SA]
+FAILED source_snapshot/tests/test_hmmer_alignment_input_adapter.py::test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\xff-RF]
+FAILED source_snapshot/tests/test_hmmer_alignment_input_adapter.py::test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\xff-MM]
+FAILED source_snapshot/tests/test_hmmer_alignment_input_adapter.py::test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\xff-CS]
+FAILED source_snapshot/tests/test_hmmer_alignment_input_adapter.py::test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\xff-SS]
+FAILED source_snapshot/tests/test_hmmer_alignment_input_adapter.py::test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\xff-SA]
+FAILED source_snapshot/tests/test_hmmer_alignment_input_adapter.py::test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\xc3\xa9-RF]
+FAILED source_snapshot/tests/test_hmmer_alignment_input_adapter.py::test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\xc3\xa9-MM]
+FAILED source_snapshot/tests/test_hmmer_alignment_input_adapter.py::test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\xc3\xa9-CS]
+FAILED source_snapshot/tests/test_hmmer_alignment_input_adapter.py::test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\xc3\xa9-SS]
+FAILED source_snapshot/tests/test_hmmer_alignment_input_adapter.py::test_v07_byte_qualified_annotations_keep_successful_sequence_geometry[\xc3\xa9-SA]
+FAILED source_snapshot/tests/test_hmmer_alignment_input_integration.py::test_numerical_writer_is_byte_identical_for_previously_encodable_values
+FAILED source_snapshot/tests/test_hmmer_alignment_input_integration.py::test_unsafe_or_unavailable_new_input_never_launches[empty-map->a\n----\n>b\n----\n-empty_model_map]
+FAILED source_snapshot/tests/test_hmmer_alignment_input_integration.py::test_unsafe_or_unavailable_new_input_never_launches[after-last->a\nACGT--\n>b\nACGT--\n-None]
+FAILED source_snapshot/tests/test_hmmer_alignment_input_integration.py::test_unsafe_or_unavailable_new_input_never_launches[alphabet-refusal->a\nAC\n-alphabet_undetermined]
+FAILED source_snapshot/tests/test_hmmer_alignment_input_integration.py::test_unsafe_or_unavailable_new_input_never_launches[failed-a2m->a\nACGT\n>b\nACG\n-malformed_alignment]
+FAILED source_snapshot/tests/test_hmmer_alignment_input_integration.py::test_complete_first_phylip_record_survives_unprocessed_malformed_suffix
+FAILED source_snapshot/tests/test_hmmer_alignment_input_integration.py::test_actual_hmmbuild_original_alphabet_checksum_map_and_saved_return[a2m-a2m_insertions]
+FAILED source_snapshot/tests/test_hmmer_alignment_input_integration.py::test_actual_hmmbuild_original_alphabet_checksum_map_and_saved_return[clustal-aligned_clustal]
+FAILED source_snapshot/tests/test_hmmer_alignment_input_integration.py::test_syntax_failure_returns_before_reconstruction_or_native
+25 failed, 242 passed in 17.35s

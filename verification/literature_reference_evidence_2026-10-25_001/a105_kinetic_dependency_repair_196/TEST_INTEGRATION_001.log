@@ -1,0 +1,61 @@
+.................................................FF..................... [ 25%]
+........................................................................ [ 50%]
+........................................................................ [ 76%]
+....................................................................     [100%]
+=================================== FAILURES ===================================
+_____ test_preview_does_not_accept_wrong_source_bytes_or_intervals[quote] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1982/test_preview_does_not_accept_w0')
+mismatch = 'quote'
+
+    @pytest.mark.parametrize("mismatch", ["quote", "offset"])
+    def test_preview_does_not_accept_wrong_source_bytes_or_intervals(tmp_path, mismatch):
+        literal = "Condition μ\n" + "x" * 600
+        store, context, args = setup(tmp_path, extra=literal)
+        with store:
+            witness = witness_for(store, args, literal)
+            witness["quote"] = witness["quote"].replace("μ", "β") if mismatch == "quote" else witness["quote"]
+            if mismatch == "offset":
+                witness["start"] += 1
+                witness["end"] += 1
+            args["numerator"]["context"]["conditions"] = witness
+            repo = LiteratureKineticRepository(store, context.run_id)
+            before = list(store.db.iterdump())
+            with pytest.raises(ValueError):
+                repo.populate(context, args, "bad-witness")
+            assert list(store.db.iterdump()) == before
+>           assert store.db.execute("SELECT count(*) FROM literature_kinetic_operations").fetchone()[0] == 0
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           sqlite3.OperationalError: no such table: literature_kinetic_operations
+
+tests/test_literature_kinetic_witness_publication.py:238: OperationalError
+_____ test_preview_does_not_accept_wrong_source_bytes_or_intervals[offset] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1982/test_preview_does_not_accept_w1')
+mismatch = 'offset'
+
+    @pytest.mark.parametrize("mismatch", ["quote", "offset"])
+    def test_preview_does_not_accept_wrong_source_bytes_or_intervals(tmp_path, mismatch):
+        literal = "Condition μ\n" + "x" * 600
+        store, context, args = setup(tmp_path, extra=literal)
+        with store:
+            witness = witness_for(store, args, literal)
+            witness["quote"] = witness["quote"].replace("μ", "β") if mismatch == "quote" else witness["quote"]
+            if mismatch == "offset":
+                witness["start"] += 1
+                witness["end"] += 1
+            args["numerator"]["context"]["conditions"] = witness
+            repo = LiteratureKineticRepository(store, context.run_id)
+            before = list(store.db.iterdump())
+            with pytest.raises(ValueError):
+                repo.populate(context, args, "bad-witness")
+            assert list(store.db.iterdump()) == before
+>           assert store.db.execute("SELECT count(*) FROM literature_kinetic_operations").fetchone()[0] == 0
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           sqlite3.OperationalError: no such table: literature_kinetic_operations
+
+tests/test_literature_kinetic_witness_publication.py:238: OperationalError
+=========================== short test summary info ============================
+FAILED tests/test_literature_kinetic_witness_publication.py::test_preview_does_not_accept_wrong_source_bytes_or_intervals[quote]
+FAILED tests/test_literature_kinetic_witness_publication.py::test_preview_does_not_accept_wrong_source_bytes_or_intervals[offset]
+2 failed, 282 passed in 218.59s (0:03:38)

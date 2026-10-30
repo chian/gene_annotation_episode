@@ -1,0 +1,93 @@
+[
+  {
+    "body_sha256": "bdafb99aca10c92fcde3f5a6f75e1ab7277cda24a394324eb07e475e12ec8092",
+    "method": "POST",
+    "path": "/app",
+    "rpc": {
+      "id": "bvbrc_rpc_177541bf7b252233046c60bcf429bbda61a300e48b5f31e6ff311d62f96f966e",
+      "method": "AppService.start_app2",
+      "params": [
+        "MSA",
+        {
+          "aligner": "Mafft",
+          "alphabet": "dna",
+          "fasta_keyboard_input": ">m1|example\nAACGT--\n>m2|example\nAATGTT-\n>m3|example\n--CGTAA\n>m4|example\nA-CGTAA\n",
+          "output_file": "selected",
+          "output_path": "/synthetic/work/output",
+          "strategy": "auto"
+        },
+        {}
+      ],
+      "version": "1.1"
+    }
+  },
+  {
+    "body_sha256": "a0f7b30c0e4b89fd56fd11b7f6244728d7884db0eb2fca06ed140f4a6987b50c",
+    "method": "POST",
+    "path": "/workspace",
+    "rpc": {
+      "id": "bvbrc_rpc_05986d90bdaa5cf14f6974427d5b2cccfcd544cef7e85c93f99a6ae19c9de58e",
+      "method": "Workspace.get_download_url",
+      "params": [
+        {
+          "objects": [
+            "/controlled/output/native-0"
+          ]
+        }
+      ],
+      "version": "1.1"
+    }
+  },
+  {
+    "byte_count": 80,
+    "method": "GET",
+    "path": "/download/native-0",
+    "sha256": "b8a6021aec414abd5a37fa7eac3ad6c5aeb419e00c09b607b22bdfcdff508338"
+  },
+  {
+    "body_sha256": "912a592442127223627fdc019d4ec9816266eb8a2b691fa447f88154ada4dacd",
+    "method": "POST",
+    "path": "/workspace",
+    "rpc": {
+      "id": "bvbrc_rpc_c6cebee500e6e38008038ea7bf47de3aea9cb551490fe482a4513be667b24e56",
+      "method": "Workspace.get_download_url",
+      "params": [
+        {
+          "objects": [
+            "/controlled/output/native-1"
+          ]
+        }
+      ],
+      "version": "1.1"
+    }
+  },
+  {
+    "byte_count": 204,
+    "method": "GET",
+    "path": "/download/native-1",
+    "sha256": "941b00f8b3bb5d7adafb589edc29e830878ab435632bf02093f7afe0e15c3030"
+  },
+  {
+    "body_sha256": "06b3d5c0a10d3773a5e6f473d9e1e6da9d4efb18f580c591fee097da06b2821a",
+    "method": "POST",
+    "path": "/workspace",
+    "rpc": {
+      "id": "bvbrc_rpc_cdc3c1971e2ee9eb7bc15ea8defe35bb31ae9e3b44c50ddd7c700108e363c9d3",
+      "method": "Workspace.get_download_url",
+      "params": [
+        {
+          "objects": [
+            "/controlled/output/native-2"
+          ]
+        }
+      ],
+      "version": "1.1"
+    }
+  },
+  {
+    "byte_count": 76,
+    "method": "GET",
+    "path": "/download/native-2",
+    "sha256": "15c8b231226d9c92920bdc8fc633ec5e0fff7e55748e86d496d58d92a150621c"
+  }
+]

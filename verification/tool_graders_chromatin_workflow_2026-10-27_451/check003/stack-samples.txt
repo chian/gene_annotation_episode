@@ -1,0 +1,75 @@
+Timeout (0:00:30)!
+Thread 0x00007ec0c1584080 (most recent call first):
+  File "/usr/lib/python3.12/json/encoder.py", line 258 in iterencode
+  File "/usr/lib/python3.12/json/encoder.py", line 200 in encode
+  File "/usr/lib/python3.12/json/__init__.py", line 238 in dumps
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check003/source_snapshot/method_loop/durable.py", line 57 in canonical
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check003/source_snapshot/gene_annotation_episode/scientific_tool_library.py", line 63 in _profiles
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check003/source_snapshot/gene_annotation_episode/scientific_tool_library.py", line 260 in resolve_tool_info
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check003/source_snapshot/gene_annotation_episode/scientific_tool_library.py", line 276 in resolve_invocations
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check003/source_snapshot/gene_annotation_episode/scientific_process_episodes.py", line 378 in _tool_resolution_for
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check003/source_snapshot/gene_annotation_episode/scientific_process_episodes.py", line 381 in _tool_resolution
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check003/source_snapshot/gene_annotation_episode/scientific_process_episodes.py", line 399 in catalog
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check003/source_snapshot/gene_annotation_episode/scientific_process_episodes.py", line 431 in common_tool_names
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check003/source_snapshot/gene_annotation_episode/runtime.py", line 3084 in catalog
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check003/source_snapshot/gene_annotation_episode/runtime.py", line 3512 in action_schema
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check003/source_snapshot/gene_annotation_episode/runtime.py", line 1469 in next
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check003/source_snapshot/method_loop/episode.py", line 1551 in _run_loop_async
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check003/source_snapshot/method_loop/episode.py", line 1258 in run_async
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check003/source_snapshot/method_loop/episode.py", line 1757 in acquire_async
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check003/source_snapshot/gene_annotation_episode/runtime.py", line 488 in acquire_async
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check003/source_snapshot/method_loop/episode.py", line 1602 in _acquire_unit_async
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check003/source_snapshot/gene_annotation_episode/runtime.py", line 623 in _acquire_unit_async
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check003/source_snapshot/method_loop/episode.py", line 1560 in _run_loop_async
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check003/source_snapshot/method_loop/episode.py", line 1258 in run_async
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check003/source_snapshot/verification/tool_graders_chromatin_workflow_2026-10-27_451/fixture_helpers.py", line 170 in run_root
+  File "/usr/lib/python3.12/asyncio/events.py", line 88 in _run
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 1987 in _run_once
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 641 in run_forever
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 674 in run_until_complete
+  File "/usr/lib/python3.12/asyncio/runners.py", line 118 in run
+  File "/usr/lib/python3.12/asyncio/runners.py", line 194 in run
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check003/source_snapshot/verification/tool_graders_chromatin_workflow_2026-10-27_451/fixture_helpers.py", line 325 in workflow_case
+  File "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_workflow_2026-10-27_451/check003/source_snapshot/tests/test_native_chromatin_interaction_workflow.py", line 153 in connected_case
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/_pytest/fixtures.py", line 998 in call_fixture_func
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/_pytest/fixtures.py", line 1328 in pytest_fixture_setup
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/pluggy/_callers.py", line 121 in _multicall
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/pluggy/_manager.py", line 120 in _hookexec
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/pluggy/_hooks.py", line 512 in __call__
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/_pytest/fixtures.py", line 1232 in execute
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/_pytest/fixtures.py", line 726 in _get_active_fixturedef
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/_pytest/fixtures.py", line 630 in getfixturevalue
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/_pytest/fixtures.py", line 806 in _fillfixtures
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/_pytest/python.py", line 1710 in setup
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/_pytest/runner.py", line 536 in setup
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/_pytest/runner.py", line 170 in pytest_runtest_setup
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/pluggy/_callers.py", line 121 in _multicall
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/pluggy/_manager.py", line 120 in _hookexec
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/pluggy/_hooks.py", line 512 in __call__
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/_pytest/runner.py", line 250 in <lambda>
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/_pytest/runner.py", line 361 in from_call
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/_pytest/runner.py", line 249 in call_and_report
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/_pytest/runner.py", line 132 in runtestprotocol
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/_pytest/runner.py", line 118 in pytest_runtest_protocol
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/pluggy/_callers.py", line 121 in _multicall
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/pluggy/_manager.py", line 120 in _hookexec
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/pluggy/_hooks.py", line 512 in __call__
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/_pytest/main.py", line 408 in pytest_runtestloop
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/pluggy/_callers.py", line 121 in _multicall
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/pluggy/_manager.py", line 120 in _hookexec
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/pluggy/_hooks.py", line 512 in __call__
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/_pytest/main.py", line 384 in _main
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/_pytest/main.py", line 330 in wrap_session
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/_pytest/main.py", line 377 in pytest_cmdline_main
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/pluggy/_callers.py", line 121 in _multicall
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/pluggy/_manager.py", line 120 in _hookexec
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/pluggy/_hooks.py", line 512 in __call__
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/_pytest/config/__init__.py", line 229 in _main
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/_pytest/config/__init__.py", line 253 in _console_main
+  File "/home/chia/repos/gene_annotation_episode/reference/episode_tools/.venv/lib/python3.12/site-packages/pytest/__main__.py", line 9 in <module>
+  File "<frozen runpy>", line 88 in _run_code
+  File "<frozen runpy>", line 198 in _run_module_as_main
+Timeout (0:00:30)!
+Thread 0x00007ec0c1584080 (most recent call first):
+  File "/usr/lib/python3.12/json/__init__.py", line 238 in dumps
+  File 

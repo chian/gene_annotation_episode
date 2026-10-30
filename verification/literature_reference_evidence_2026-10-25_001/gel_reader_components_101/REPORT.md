@@ -1,0 +1,11 @@
+# Standalone gel reader/calculator101 result
+
+Delivered two NEW production modules, two NEW test modules and this verification directory only. Frozen current source is FROZEN_SOURCE_003.json; the exact interface/dependency/meaning/native limitations are in INTEGRATION_HANDOFF_004.md. The fixed pasted goal is unchanged and root GOAL.md remains absent; no governing amendment or instruction file was changed.
+
+Final50 focused constructed tests pass; root independently reran the same50. The earlier29fail/11pass run exposed PNG getexif-before-verify loading; corrected before first40pass. Three physical identity tests then produced43pass. Explicit versioned mean/median background support produced final50pass. Earlier receipts remain historical and have not been rewritten.
+
+Actual original096 Figure8A extraction reproduced all14 declared background/ROI choices:112 lanes,336 bands. Raw counts/sums/black occupancies agree exactly with the independent original096 script. Baseline direct shift=.6916968824321723; coherent analysis-choice range=.6913850428134041–.7049978038303105, not a confidence interval. Original actual v1 saved extraction/sheet and new v2 outputs reconstruct exactly without source acquisition, image decoding or public reader/populator calls. Original003 outputs remain unchanged.
+
+Scientifically these are published JPEG display-darkness components. They do not establish molecular occupancy, Kd, a false-positive rate, independent preparation precision, an overall reliability grade or annotation credit. Comparison/source interpretation qualifications stay beside available numbers. Primary source-read coverage is selected Methods/Results/caption plus retained packet/image, not the whole paper.101 performed its own full post-paper reset before scientific conversion and primary proof.
+
+This workload adds one targeted gel reader and one descriptive calculator; neither is yet a registered native operation or a completed assay grader. Native LiteratureEpisodes persistence/typed delivery/model interpretation remain unfinished for a fresh integration owner. No computational-biology suite, configured model, external acquisition, HPC operation or controller observation was launched.

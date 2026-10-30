@@ -1,0 +1,163 @@
+# Copyright (C) 2024 Roberto Rossini <roberros@uio.no>
+# SPDX-License-Identifier: MIT
+
+name: Build dependencies with Conan (Linux)
+
+on:
+  workflow_call:
+    outputs:
+      cache-key:
+        description: "Cache key"
+        value: ${{ jobs.build-deps.outputs.cache-key }}
+      tar:
+        description: "Archive path"
+        value: ${{ jobs.build-deps.outputs.tar }}
+
+    inputs:
+      build-type:
+        type: string
+        required: true
+        description: "Build type to pass to Conan."
+      conan-version:
+        type: string
+        required: true
+        description: "Conan version to be installed with pip."
+      cppstd:
+        type: string
+        required: true
+        description: "Value to pass to compiler.cppstd."
+      image:
+        type: string
+        required: true
+        description: "Docker image used to build Conan deps."
+      ref:
+        type: string
+        required: true
+        description: "Reference used to clone the conanfile.py and build script."
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  contents: read
+
+jobs:
+  build-deps:
+    name: Build dependencies with Conan (Linux)
+    runs-on: ubuntu-latest
+
+    container:
+      image: ${{ inputs.image }}
+      options: "--user=root"
+
+    env:
+      CCACHE_DISABLE: "1"
+      CMAKE_POLICY_VERSION_MINIMUM: 3.5
+      CONAN_HOME: "/opt/conan/"
+      TMPDIR: "/tmp/"
+
+    outputs:
+      cache-key: ${{ steps.generate-cache-key.outputs.cache-key }}
+      tar: ${{ steps.generate-cache-key.outputs.tar }}
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Generate cache key
+        id: generate-cache-key
+        run: |
+          set -u
+          set -e
+
+          hash="${{ hashFiles('conanfile.py', 'utils/devel/build_dependencies.py') }}"
+
+          image="$(echo '${{ inputs.image }}' |
+                   rev |
+                   cut -f 1 -d '/' |
+                   rev
+                )"
+
+          compiler="$(cc --version | head -n 1)"
+
+          suffix="$image-$compiler-cxx${{ inputs.cppstd }}-${{ inputs.build-type }}-$hash"
+          suffix="$(echo "$suffix" |
+                    tr -c '[:alnum:]._-' '-' |
+                    sed 's/-\+/-/g' |
+                    sed 's/-$//' |
+                    tr '[:upper:]' '[:lower:]'
+                  )"
+
+          dest='/tmp/dependencies.conan.${{ inputs.build-type }}.tar.zst'
+
+          echo "cache-key=conan-$suffix" | tee -a "$GITHUB_OUTPUT"
+          echo "tar=$dest" | tee -a "$GITHUB_OUTPUT"
+
+      - name: Lookup package cache
+        id: lookup-conan-cache
+        uses: actions/cache/restore@v4
+        with:
+          key: ${{ steps.generate-cache-key.outputs.cache-key }}
+          path: ${{ steps.generate-cache-key.outputs.tar }}
+          lookup-only: true
+
+      - name: Update build deps
+        if: steps.lookup-conan-cache.outputs.cache-hit != 'true'
+        run: pip install 'conan==${{ inputs.conan-version }}'
+
+      - name: Clean Conan cache (pre-build)
+        if: steps.lookup-conan-cache.outputs.cache-hit != 'true'
+        run: conan remove --confirm '*'
+
+      - name: Install build dependencies
+        if: steps.lookup-conan-cache.outputs.cache-hit != 'true'
+        run: |
+          apt-get update
+          apt-get install -y -q gcc g++
+
+          CC=gcc CXX=g++ conan profile detect --name gcc
+
+          conan install \
+             --requires 'b2/5.2.1' \
+             --build='*'           \
+             -pr:b=gcc             \
+             -pr:h=gcc
+
+      - name: Tweak conan profile
+        if: steps.lookup-conan-cache.outputs.cache-hit != 'true'
+        run: |
+          # Newer versions of b2 lead to exceptions like
+          # ConanException: These libraries were built, but were not used in any boost module
+          cat << EOF | tee -a "$CONAN_DEFAULT_PROFILE_PATH"
+          [tool_requires]
+          boost/*: b2/5.2.1
+          EOF
+
+      - name: Build and deploy dependencies
+        if: steps.lookup-conan-cache.outputs.cache-hit != 'true'
+        run: |
+          utils/devel/build_dependencies.py \
+            --build-type='${{ inputs.build-type }}' \
+            --cppstd='${{ inputs.cppstd }}' \
+            --ci
+
+      - name: Archive dependencies
+        if: steps.lookup-conan-cache.outputs.cache-hit != 'true'
+        run: |
+          src='deps/'
+          dest='${{ steps.generate-cache-key.outputs.tar }}'
+          tar -C "$TMPDIR" -cf - "$src" |
+            zstd -T0 -22 --long --ultra -v -o "$dest"
+
+          echo "tar=$dest" | tee -a "$GITHUB_OUTPUT"
+
+      - name: Export dependencies
+        uses: actions/cache/save@v4
+        if: steps.lookup-conan-cache.outputs.cache-hit != 'true'
+        with:
+          key: ${{ steps.generate-cache-key.outputs.cache-key }}
+          path: ${{ steps.generate-cache-key.outputs.tar }}
+        env:
+          ZSTD_CLEVEL: 0

@@ -1,0 +1,3880 @@
+[
+  {
+    "name": "same_B_text_graph",
+    "source_reader_executed": false,
+    "cells": {
+      "condition1_controlled_response": {
+        "value": 0.006,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "condition_control_difference",
+        "conditional_on": [
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "condition0_controlled_response": {
+        "value": 0.00395,
+        "lower": 0.00385,
+        "upper": 0.00405,
+        "relation": "interval",
+        "approximate": true,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "condition_control_difference",
+        "conditional_on": [
+          "approximate_source_reading",
+          "conditional_digitization",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "conditional_digitization",
+        "bound_state": {
+          "lower": "available",
+          "upper": "available"
+        }
+      },
+      "controlled_response_difference": {
+        "value": 0.002,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "four_arm_condition_difference",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "contrast_variance": {
+        "value": 3e-07,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "(umol/min)^2",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "linear_joint_covariance",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "contrast_standard_uncertainty": {
+        "value": 0.0005477225575051661,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "square_root_variance",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "contrast_precision": {
+        "value": 3333333.3333333335,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "(umol/min)^-2",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "inverse_variance",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "source_profile_log_ratio": {
+        "value": 6.666666666666667,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "dimensionless",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "signed_known_normal_profile",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "known_normal_source_means",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "source_signed_index": {
+        "value": 0.9974579674738373,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "dimensionless",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "tanh_half_signed_profile",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "known_normal_source_means",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      }
+    },
+    "dependencies": {
+      "coefficient_order": [
+        "protein_condition1",
+        "empty_condition1",
+        "protein_condition0",
+        "empty_condition0"
+      ],
+      "role_coefficients": [
+        1,
+        -1,
+        -1,
+        1
+      ],
+      "groups": [
+        {
+          "physical_observation_id": "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+          "roles": [
+            "protein_condition1"
+          ],
+          "coefficient": 1,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": "controlled_physical_observation_cac697188531ad9f6ebd4d53",
+          "roles": [
+            "empty_condition1",
+            "empty_condition0"
+          ],
+          "coefficient": 0,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": "controlled_physical_observation_c326af7eddd13ce90baf09ae",
+          "roles": [
+            "protein_condition0"
+          ],
+          "coefficient": -1,
+          "known_owner": true
+        }
+      ],
+      "active_roles": [
+        "protein_condition1",
+        "protein_condition0"
+      ],
+      "canceled_roles": [
+        "empty_condition1",
+        "empty_condition0"
+      ],
+      "scientific_reasons": [],
+      "active_reading_reasons": [],
+      "canceled_reading_qualifications": [
+        "canceled_graph_reading",
+        "canceled_representation_difference",
+        "owner_cancellation"
+      ],
+      "reading_conflict_roles": [],
+      "required_covariance_owner_ids": [
+        "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+        "controlled_physical_observation_c326af7eddd13ce90baf09ae"
+      ],
+      "provided_covariance_owner_ids": [
+        "controlled_physical_observation_cac697188531ad9f6ebd4d53",
+        "controlled_physical_observation_c326af7eddd13ce90baf09ae",
+        "controlled_physical_observation_222c2180def6cf7f129cc6e0"
+      ],
+      "covariance_state": "available",
+      "model_active_roles": [
+        "protein_condition1",
+        "protein_condition0"
+      ]
+    }
+  },
+  {
+    "name": "both_B_numbers_units_absent_with_AC_from_full_source",
+    "source_reader_executed": false,
+    "cells": {
+      "condition1_controlled_response": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "missing_arm",
+          "unknown_unit"
+        ],
+        "formula_code": "condition_control_difference",
+        "conditional_on": [
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "condition0_controlled_response": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "missing_arm",
+          "unknown_unit"
+        ],
+        "formula_code": "condition_control_difference",
+        "conditional_on": [
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "controlled_response_difference": {
+        "value": 0.002,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "four_arm_condition_difference",
+        "conditional_on": [
+          "canceled_reading_unavailable",
+          "canceled_unit_unknown",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "contrast_variance": {
+        "value": 3e-07,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "(umol/min)^2",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "linear_joint_covariance",
+        "conditional_on": [
+          "canceled_reading_unavailable",
+          "canceled_unit_unknown",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "contrast_standard_uncertainty": {
+        "value": 0.0005477225575051661,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "square_root_variance",
+        "conditional_on": [
+          "canceled_reading_unavailable",
+          "canceled_unit_unknown",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "contrast_precision": {
+        "value": 3333333.3333333335,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "(umol/min)^-2",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "inverse_variance",
+        "conditional_on": [
+          "canceled_reading_unavailable",
+          "canceled_unit_unknown",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "source_profile_log_ratio": {
+        "value": 6.666666666666667,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "dimensionless",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "signed_known_normal_profile",
+        "conditional_on": [
+          "canceled_reading_unavailable",
+          "canceled_unit_unknown",
+          "known_normal_source_means",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "source_signed_index": {
+        "value": 0.9974579674738373,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "dimensionless",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "tanh_half_signed_profile",
+        "conditional_on": [
+          "canceled_reading_unavailable",
+          "canceled_unit_unknown",
+          "known_normal_source_means",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      }
+    },
+    "dependencies": {
+      "coefficient_order": [
+        "protein_condition1",
+        "empty_condition1",
+        "protein_condition0",
+        "empty_condition0"
+      ],
+      "role_coefficients": [
+        1,
+        -1,
+        -1,
+        1
+      ],
+      "groups": [
+        {
+          "physical_observation_id": "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+          "roles": [
+            "protein_condition1"
+          ],
+          "coefficient": 1,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": "controlled_physical_observation_cac697188531ad9f6ebd4d53",
+          "roles": [
+            "empty_condition1",
+            "empty_condition0"
+          ],
+          "coefficient": 0,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": "controlled_physical_observation_c326af7eddd13ce90baf09ae",
+          "roles": [
+            "protein_condition0"
+          ],
+          "coefficient": -1,
+          "known_owner": true
+        }
+      ],
+      "active_roles": [
+        "protein_condition1",
+        "protein_condition0"
+      ],
+      "canceled_roles": [
+        "empty_condition1",
+        "empty_condition0"
+      ],
+      "scientific_reasons": [],
+      "active_reading_reasons": [],
+      "canceled_reading_qualifications": [
+        "canceled_reading_unavailable",
+        "canceled_unit_unknown",
+        "owner_cancellation"
+      ],
+      "reading_conflict_roles": [],
+      "required_covariance_owner_ids": [
+        "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+        "controlled_physical_observation_c326af7eddd13ce90baf09ae"
+      ],
+      "provided_covariance_owner_ids": [
+        "controlled_physical_observation_c326af7eddd13ce90baf09ae",
+        "controlled_physical_observation_222c2180def6cf7f129cc6e0"
+      ],
+      "covariance_state": "available",
+      "model_active_roles": [
+        "protein_condition1",
+        "protein_condition0"
+      ]
+    }
+  },
+  {
+    "name": "unreadable_B_retained_science",
+    "source_reader_executed": false,
+    "cells": {
+      "condition1_controlled_response": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "unsupported",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "unknown_unit",
+          "unsupported_source_expression"
+        ],
+        "formula_code": "condition_control_difference",
+        "conditional_on": [
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "condition0_controlled_response": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "missing_arm",
+          "unknown_unit"
+        ],
+        "formula_code": "condition_control_difference",
+        "conditional_on": [
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "controlled_response_difference": {
+        "value": 0.002,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "four_arm_condition_difference",
+        "conditional_on": [
+          "canceled_reading_unavailable",
+          "canceled_unit_unknown",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "contrast_variance": {
+        "value": 3e-07,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "(umol/min)^2",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "linear_joint_covariance",
+        "conditional_on": [
+          "canceled_reading_unavailable",
+          "canceled_unit_unknown",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "contrast_standard_uncertainty": {
+        "value": 0.0005477225575051661,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "square_root_variance",
+        "conditional_on": [
+          "canceled_reading_unavailable",
+          "canceled_unit_unknown",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "contrast_precision": {
+        "value": 3333333.3333333335,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "(umol/min)^-2",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "inverse_variance",
+        "conditional_on": [
+          "canceled_reading_unavailable",
+          "canceled_unit_unknown",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "source_profile_log_ratio": {
+        "value": 6.666666666666667,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "dimensionless",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "signed_known_normal_profile",
+        "conditional_on": [
+          "canceled_reading_unavailable",
+          "canceled_unit_unknown",
+          "known_normal_source_means",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "source_signed_index": {
+        "value": 0.9974579674738373,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "dimensionless",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "tanh_half_signed_profile",
+        "conditional_on": [
+          "canceled_reading_unavailable",
+          "canceled_unit_unknown",
+          "known_normal_source_means",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      }
+    },
+    "dependencies": {
+      "coefficient_order": [
+        "protein_condition1",
+        "empty_condition1",
+        "protein_condition0",
+        "empty_condition0"
+      ],
+      "role_coefficients": [
+        1,
+        -1,
+        -1,
+        1
+      ],
+      "groups": [
+        {
+          "physical_observation_id": "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+          "roles": [
+            "protein_condition1"
+          ],
+          "coefficient": 1,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": "controlled_physical_observation_cac697188531ad9f6ebd4d53",
+          "roles": [
+            "empty_condition1",
+            "empty_condition0"
+          ],
+          "coefficient": 0,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": "controlled_physical_observation_c326af7eddd13ce90baf09ae",
+          "roles": [
+            "protein_condition0"
+          ],
+          "coefficient": -1,
+          "known_owner": true
+        }
+      ],
+      "active_roles": [
+        "protein_condition1",
+        "protein_condition0"
+      ],
+      "canceled_roles": [
+        "empty_condition1",
+        "empty_condition0"
+      ],
+      "scientific_reasons": [],
+      "active_reading_reasons": [],
+      "canceled_reading_qualifications": [
+        "canceled_reading_unavailable",
+        "canceled_unit_unknown",
+        "owner_cancellation"
+      ],
+      "reading_conflict_roles": [],
+      "required_covariance_owner_ids": [
+        "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+        "controlled_physical_observation_c326af7eddd13ce90baf09ae"
+      ],
+      "provided_covariance_owner_ids": [
+        "controlled_physical_observation_c326af7eddd13ce90baf09ae",
+        "controlled_physical_observation_222c2180def6cf7f129cc6e0"
+      ],
+      "covariance_state": "available",
+      "model_active_roles": [
+        "protein_condition1",
+        "protein_condition0"
+      ]
+    }
+  },
+  {
+    "name": "canceled_B_4_vs_5_numeric_conflict",
+    "source_reader_executed": false,
+    "cells": {
+      "condition1_controlled_response": {
+        "value": 0.006,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "condition_control_difference",
+        "conditional_on": [
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "condition0_controlled_response": {
+        "value": 0.003,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "condition_control_difference",
+        "conditional_on": [
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "controlled_response_difference": {
+        "value": 0.002,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "four_arm_condition_difference",
+        "conditional_on": [
+          "canceled_reading_domain_conflict",
+          "canceled_representation_difference",
+          "canceled_source_reading_conflict",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "contrast_variance": {
+        "value": 3e-07,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "(umol/min)^2",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "linear_joint_covariance",
+        "conditional_on": [
+          "canceled_reading_domain_conflict",
+          "canceled_representation_difference",
+          "canceled_source_reading_conflict",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "contrast_standard_uncertainty": {
+        "value": 0.0005477225575051661,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "square_root_variance",
+        "conditional_on": [
+          "canceled_reading_domain_conflict",
+          "canceled_representation_difference",
+          "canceled_source_reading_conflict",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "contrast_precision": {
+        "value": 3333333.3333333335,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "(umol/min)^-2",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "inverse_variance",
+        "conditional_on": [
+          "canceled_reading_domain_conflict",
+          "canceled_representation_difference",
+          "canceled_source_reading_conflict",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "source_profile_log_ratio": {
+        "value": 6.666666666666667,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "dimensionless",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "signed_known_normal_profile",
+        "conditional_on": [
+          "canceled_reading_domain_conflict",
+          "canceled_representation_difference",
+          "canceled_source_reading_conflict",
+          "known_normal_source_means",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "source_signed_index": {
+        "value": 0.9974579674738373,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "dimensionless",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "tanh_half_signed_profile",
+        "conditional_on": [
+          "canceled_reading_domain_conflict",
+          "canceled_representation_difference",
+          "canceled_source_reading_conflict",
+          "known_normal_source_means",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      }
+    },
+    "dependencies": {
+      "coefficient_order": [
+        "protein_condition1",
+        "empty_condition1",
+        "protein_condition0",
+        "empty_condition0"
+      ],
+      "role_coefficients": [
+        1,
+        -1,
+        -1,
+        1
+      ],
+      "groups": [
+        {
+          "physical_observation_id": "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+          "roles": [
+            "protein_condition1"
+          ],
+          "coefficient": 1,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": "controlled_physical_observation_cac697188531ad9f6ebd4d53",
+          "roles": [
+            "empty_condition1",
+            "empty_condition0"
+          ],
+          "coefficient": 0,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": "controlled_physical_observation_c326af7eddd13ce90baf09ae",
+          "roles": [
+            "protein_condition0"
+          ],
+          "coefficient": -1,
+          "known_owner": true
+        }
+      ],
+      "active_roles": [
+        "protein_condition1",
+        "protein_condition0"
+      ],
+      "canceled_roles": [
+        "empty_condition1",
+        "empty_condition0"
+      ],
+      "scientific_reasons": [],
+      "active_reading_reasons": [],
+      "canceled_reading_qualifications": [
+        "canceled_reading_domain_conflict",
+        "canceled_representation_difference",
+        "canceled_source_reading_conflict",
+        "owner_cancellation"
+      ],
+      "reading_conflict_roles": [
+        "empty_condition1",
+        "empty_condition0"
+      ],
+      "required_covariance_owner_ids": [
+        "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+        "controlled_physical_observation_c326af7eddd13ce90baf09ae"
+      ],
+      "provided_covariance_owner_ids": [
+        "controlled_physical_observation_cac697188531ad9f6ebd4d53",
+        "controlled_physical_observation_c326af7eddd13ce90baf09ae",
+        "controlled_physical_observation_222c2180def6cf7f129cc6e0"
+      ],
+      "covariance_state": "available",
+      "model_active_roles": [
+        "protein_condition1",
+        "protein_condition0"
+      ]
+    }
+  },
+  {
+    "name": "unknown_active_owner_equal_known_required_provided",
+    "source_reader_executed": false,
+    "cells": {
+      "condition1_controlled_response": {
+        "value": 0.006,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "condition_control_difference",
+        "conditional_on": [
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "condition0_controlled_response": {
+        "value": 0.00395,
+        "lower": 0.00385,
+        "upper": 0.00405,
+        "relation": "interval",
+        "approximate": true,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "condition_control_difference",
+        "conditional_on": [
+          "approximate_source_reading",
+          "conditional_digitization",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "conditional_digitization",
+        "bound_state": {
+          "lower": "available",
+          "upper": "available"
+        }
+      },
+      "controlled_response_difference": {
+        "value": 0.00205,
+        "lower": 0.00195,
+        "upper": 0.00215,
+        "relation": "interval",
+        "approximate": true,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "four_arm_condition_difference",
+        "conditional_on": [
+          "approximate_source_reading",
+          "conditional_digitization",
+          "shared_reference_assumption",
+          "synthetic_fixture",
+          "unknown_control_reuse"
+        ],
+        "bound_kind": "conditional_digitization",
+        "bound_state": {
+          "lower": "available",
+          "upper": "available"
+        }
+      },
+      "contrast_variance": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": true,
+        "unit": "(umol/min)^2",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "incomplete_active_covariance"
+        ],
+        "formula_code": "linear_joint_covariance",
+        "conditional_on": [
+          "approximate_source_reading",
+          "conditional_digitization",
+          "shared_reference_assumption",
+          "synthetic_fixture",
+          "unknown_control_reuse"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "contrast_standard_uncertainty": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": true,
+        "unit": "umol/min",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "incomplete_active_covariance"
+        ],
+        "formula_code": "square_root_variance",
+        "conditional_on": [
+          "approximate_source_reading",
+          "conditional_digitization",
+          "shared_reference_assumption",
+          "synthetic_fixture",
+          "unknown_control_reuse"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "contrast_precision": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": true,
+        "unit": "(umol/min)^-2",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "incomplete_active_covariance"
+        ],
+        "formula_code": "inverse_variance",
+        "conditional_on": [
+          "approximate_source_reading",
+          "conditional_digitization",
+          "shared_reference_assumption",
+          "synthetic_fixture",
+          "unknown_control_reuse"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "source_profile_log_ratio": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": true,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "incomplete_active_covariance",
+          "unresolved_reading_model"
+        ],
+        "formula_code": "signed_known_normal_profile",
+        "conditional_on": [
+          "approximate_source_reading",
+          "conditional_digitization",
+          "known_normal_source_means",
+          "shared_reference_assumption",
+          "synthetic_fixture",
+          "unknown_control_reuse"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "source_signed_index": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": true,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "incomplete_active_covariance",
+          "unresolved_reading_model"
+        ],
+        "formula_code": "tanh_half_signed_profile",
+        "conditional_on": [
+          "approximate_source_reading",
+          "conditional_digitization",
+          "known_normal_source_means",
+          "shared_reference_assumption",
+          "synthetic_fixture",
+          "unknown_control_reuse"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      }
+    },
+    "dependencies": {
+      "coefficient_order": [
+        "protein_condition1",
+        "empty_condition1",
+        "protein_condition0",
+        "empty_condition0"
+      ],
+      "role_coefficients": [
+        1,
+        -1,
+        -1,
+        1
+      ],
+      "groups": [
+        {
+          "physical_observation_id": "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+          "roles": [
+            "protein_condition1"
+          ],
+          "coefficient": 1,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": "controlled_physical_observation_cac697188531ad9f6ebd4d53",
+          "roles": [
+            "empty_condition1"
+          ],
+          "coefficient": -1,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": "controlled_physical_observation_c326af7eddd13ce90baf09ae",
+          "roles": [
+            "protein_condition0"
+          ],
+          "coefficient": -1,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": null,
+          "roles": [
+            "empty_condition0"
+          ],
+          "coefficient": 1,
+          "known_owner": false
+        }
+      ],
+      "active_roles": [
+        "protein_condition1",
+        "empty_condition1",
+        "protein_condition0",
+        "empty_condition0"
+      ],
+      "canceled_roles": [],
+      "scientific_reasons": [],
+      "active_reading_reasons": [],
+      "canceled_reading_qualifications": [],
+      "reading_conflict_roles": [],
+      "required_covariance_owner_ids": [
+        "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+        "controlled_physical_observation_cac697188531ad9f6ebd4d53",
+        "controlled_physical_observation_c326af7eddd13ce90baf09ae"
+      ],
+      "provided_covariance_owner_ids": [
+        "controlled_physical_observation_cac697188531ad9f6ebd4d53",
+        "controlled_physical_observation_c326af7eddd13ce90baf09ae",
+        "controlled_physical_observation_222c2180def6cf7f129cc6e0"
+      ],
+      "covariance_state": "incomplete_active_coverage",
+      "model_active_roles": [
+        "protein_condition1",
+        "empty_condition1",
+        "protein_condition0",
+        "empty_condition0"
+      ]
+    }
+  },
+  {
+    "name": "actual_scientific_owner_conflict",
+    "source_reader_executed": false,
+    "cells": {
+      "condition1_controlled_response": {
+        "value": 0.006,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "condition_control_difference",
+        "conditional_on": [
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "condition0_controlled_response": {
+        "value": 0.00395,
+        "lower": 0.00385,
+        "upper": 0.00405,
+        "relation": "interval",
+        "approximate": true,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "condition_control_difference",
+        "conditional_on": [
+          "approximate_source_reading",
+          "conditional_digitization",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "conditional_digitization",
+        "bound_state": {
+          "lower": "available",
+          "upper": "available"
+        }
+      },
+      "controlled_response_difference": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": true,
+        "unit": "umol/min",
+        "status": "conflicting",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "conflicting_control_reuse",
+          "conflicting_owner_context"
+        ],
+        "formula_code": "four_arm_condition_difference",
+        "conditional_on": [
+          "approximate_source_reading",
+          "conditional_digitization",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "contrast_variance": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": true,
+        "unit": "(umol/min)^2",
+        "status": "conflicting",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "conflicting_control_reuse",
+          "conflicting_owner_context",
+          "incomplete_active_covariance"
+        ],
+        "formula_code": "linear_joint_covariance",
+        "conditional_on": [
+          "approximate_source_reading",
+          "conditional_digitization",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "contrast_standard_uncertainty": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": true,
+        "unit": "umol/min",
+        "status": "conflicting",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "conflicting_control_reuse",
+          "conflicting_owner_context",
+          "incomplete_active_covariance"
+        ],
+        "formula_code": "square_root_variance",
+        "conditional_on": [
+          "approximate_source_reading",
+          "conditional_digitization",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "contrast_precision": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": true,
+        "unit": "(umol/min)^-2",
+        "status": "conflicting",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "conflicting_control_reuse",
+          "conflicting_owner_context",
+          "incomplete_active_covariance"
+        ],
+        "formula_code": "inverse_variance",
+        "conditional_on": [
+          "approximate_source_reading",
+          "conditional_digitization",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "source_profile_log_ratio": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": true,
+        "unit": "dimensionless",
+        "status": "conflicting",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "conflicting_control_reuse",
+          "conflicting_owner_context",
+          "incomplete_active_covariance",
+          "unresolved_reading_model"
+        ],
+        "formula_code": "signed_known_normal_profile",
+        "conditional_on": [
+          "approximate_source_reading",
+          "conditional_digitization",
+          "known_normal_source_means",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "source_signed_index": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": true,
+        "unit": "dimensionless",
+        "status": "conflicting",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "conflicting_control_reuse",
+          "conflicting_owner_context",
+          "incomplete_active_covariance",
+          "unresolved_reading_model"
+        ],
+        "formula_code": "tanh_half_signed_profile",
+        "conditional_on": [
+          "approximate_source_reading",
+          "conditional_digitization",
+          "known_normal_source_means",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      }
+    },
+    "dependencies": {
+      "coefficient_order": [
+        "protein_condition1",
+        "empty_condition1",
+        "protein_condition0",
+        "empty_condition0"
+      ],
+      "role_coefficients": [
+        1,
+        -1,
+        -1,
+        1
+      ],
+      "groups": [
+        {
+          "physical_observation_id": "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+          "roles": [
+            "protein_condition1"
+          ],
+          "coefficient": 1,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": "controlled_physical_observation_cac697188531ad9f6ebd4d53",
+          "roles": [
+            "empty_condition1"
+          ],
+          "coefficient": -1,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": "controlled_physical_observation_c326af7eddd13ce90baf09ae",
+          "roles": [
+            "protein_condition0"
+          ],
+          "coefficient": -1,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": null,
+          "roles": [
+            "empty_condition0"
+          ],
+          "coefficient": 1,
+          "known_owner": false
+        }
+      ],
+      "active_roles": [
+        "protein_condition1",
+        "empty_condition1",
+        "protein_condition0",
+        "empty_condition0"
+      ],
+      "canceled_roles": [],
+      "scientific_reasons": [
+        "conflicting_control_reuse",
+        "conflicting_owner_context"
+      ],
+      "active_reading_reasons": [],
+      "canceled_reading_qualifications": [],
+      "reading_conflict_roles": [],
+      "required_covariance_owner_ids": [
+        "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+        "controlled_physical_observation_cac697188531ad9f6ebd4d53",
+        "controlled_physical_observation_c326af7eddd13ce90baf09ae"
+      ],
+      "provided_covariance_owner_ids": [
+        "controlled_physical_observation_cac697188531ad9f6ebd4d53",
+        "controlled_physical_observation_c326af7eddd13ce90baf09ae",
+        "controlled_physical_observation_222c2180def6cf7f129cc6e0"
+      ],
+      "covariance_state": "scientific_blocked",
+      "model_active_roles": [
+        "protein_condition1",
+        "empty_condition1",
+        "protein_condition0",
+        "empty_condition0"
+      ]
+    }
+  },
+  {
+    "name": "active_graph_physical_unit_with_sd",
+    "source_reader_executed": false,
+    "cells": {
+      "condition1_controlled_response": {
+        "value": 0.00605,
+        "lower": 0.00595,
+        "upper": 0.00615,
+        "relation": "interval",
+        "approximate": true,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "condition_control_difference",
+        "conditional_on": [
+          "approximate_source_reading",
+          "conditional_digitization",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "conditional_digitization",
+        "bound_state": {
+          "lower": "available",
+          "upper": "available"
+        }
+      },
+      "condition0_controlled_response": {
+        "value": 0.00395,
+        "lower": 0.00385,
+        "upper": 0.00405,
+        "relation": "interval",
+        "approximate": true,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "condition_control_difference",
+        "conditional_on": [
+          "approximate_source_reading",
+          "conditional_digitization",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "conditional_digitization",
+        "bound_state": {
+          "lower": "available",
+          "upper": "available"
+        }
+      },
+      "controlled_response_difference": {
+        "value": 0.00205,
+        "lower": 0.00195,
+        "upper": 0.00215,
+        "relation": "interval",
+        "approximate": true,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "four_arm_condition_difference",
+        "conditional_on": [
+          "approximate_source_reading",
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "conditional_digitization",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "conditional_digitization",
+        "bound_state": {
+          "lower": "available",
+          "upper": "available"
+        }
+      },
+      "contrast_variance": {
+        "value": 3e-07,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": true,
+        "unit": "(umol/min)^2",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "linear_joint_covariance",
+        "conditional_on": [
+          "approximate_source_reading",
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "conditional_digitization",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "contrast_standard_uncertainty": {
+        "value": 0.0005477225575051661,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": true,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "square_root_variance",
+        "conditional_on": [
+          "approximate_source_reading",
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "conditional_digitization",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "contrast_precision": {
+        "value": 3333333.3333333335,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": true,
+        "unit": "(umol/min)^-2",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "inverse_variance",
+        "conditional_on": [
+          "approximate_source_reading",
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "conditional_digitization",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "source_profile_log_ratio": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": true,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "unresolved_reading_model"
+        ],
+        "formula_code": "signed_known_normal_profile",
+        "conditional_on": [
+          "approximate_source_reading",
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "conditional_digitization",
+          "known_normal_source_means",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "source_signed_index": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": true,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "unresolved_reading_model"
+        ],
+        "formula_code": "tanh_half_signed_profile",
+        "conditional_on": [
+          "approximate_source_reading",
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "conditional_digitization",
+          "known_normal_source_means",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      }
+    },
+    "dependencies": {
+      "coefficient_order": [
+        "protein_condition1",
+        "empty_condition1",
+        "protein_condition0",
+        "empty_condition0"
+      ],
+      "role_coefficients": [
+        1,
+        -1,
+        -1,
+        1
+      ],
+      "groups": [
+        {
+          "physical_observation_id": "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+          "roles": [
+            "protein_condition1"
+          ],
+          "coefficient": 1,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": "controlled_physical_observation_cac697188531ad9f6ebd4d53",
+          "roles": [
+            "empty_condition1",
+            "empty_condition0"
+          ],
+          "coefficient": 0,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": "controlled_physical_observation_c326af7eddd13ce90baf09ae",
+          "roles": [
+            "protein_condition0"
+          ],
+          "coefficient": -1,
+          "known_owner": true
+        }
+      ],
+      "active_roles": [
+        "protein_condition1",
+        "protein_condition0"
+      ],
+      "canceled_roles": [
+        "empty_condition1",
+        "empty_condition0"
+      ],
+      "scientific_reasons": [],
+      "active_reading_reasons": [],
+      "canceled_reading_qualifications": [
+        "canceled_graph_reading",
+        "canceled_representation_difference",
+        "owner_cancellation"
+      ],
+      "reading_conflict_roles": [],
+      "required_covariance_owner_ids": [
+        "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+        "controlled_physical_observation_c326af7eddd13ce90baf09ae"
+      ],
+      "provided_covariance_owner_ids": [
+        "controlled_physical_observation_cac697188531ad9f6ebd4d53",
+        "controlled_physical_observation_c326af7eddd13ce90baf09ae",
+        "controlled_physical_observation_222c2180def6cf7f129cc6e0"
+      ],
+      "covariance_state": "available",
+      "model_active_roles": [
+        "protein_condition1",
+        "protein_condition0"
+      ]
+    }
+  },
+  {
+    "name": "active_graph_physical_unit_with_ci",
+    "source_reader_executed": false,
+    "cells": {
+      "condition1_controlled_response": {
+        "value": 0.00605,
+        "lower": 0.00595,
+        "upper": 0.00615,
+        "relation": "interval",
+        "approximate": true,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "condition_control_difference",
+        "conditional_on": [
+          "approximate_source_reading",
+          "conditional_digitization",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "conditional_digitization",
+        "bound_state": {
+          "lower": "available",
+          "upper": "available"
+        }
+      },
+      "condition0_controlled_response": {
+        "value": 0.00395,
+        "lower": 0.00385,
+        "upper": 0.00405,
+        "relation": "interval",
+        "approximate": true,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "condition_control_difference",
+        "conditional_on": [
+          "approximate_source_reading",
+          "conditional_digitization",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "conditional_digitization",
+        "bound_state": {
+          "lower": "available",
+          "upper": "available"
+        }
+      },
+      "controlled_response_difference": {
+        "value": 0.00205,
+        "lower": 0.00195,
+        "upper": 0.00215,
+        "relation": "interval",
+        "approximate": true,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "four_arm_condition_difference",
+        "conditional_on": [
+          "approximate_source_reading",
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "conditional_digitization",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "conditional_digitization",
+        "bound_state": {
+          "lower": "available",
+          "upper": "available"
+        }
+      },
+      "contrast_variance": {
+        "value": 3e-07,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": true,
+        "unit": "(umol/min)^2",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "linear_joint_covariance",
+        "conditional_on": [
+          "approximate_source_reading",
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "conditional_digitization",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "contrast_standard_uncertainty": {
+        "value": 0.0005477225575051661,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": true,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "square_root_variance",
+        "conditional_on": [
+          "approximate_source_reading",
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "conditional_digitization",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "contrast_precision": {
+        "value": 3333333.3333333335,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": true,
+        "unit": "(umol/min)^-2",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "inverse_variance",
+        "conditional_on": [
+          "approximate_source_reading",
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "conditional_digitization",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "source_profile_log_ratio": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": true,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "unresolved_reading_model"
+        ],
+        "formula_code": "signed_known_normal_profile",
+        "conditional_on": [
+          "approximate_source_reading",
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "conditional_digitization",
+          "known_normal_source_means",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "source_signed_index": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": true,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "unresolved_reading_model"
+        ],
+        "formula_code": "tanh_half_signed_profile",
+        "conditional_on": [
+          "approximate_source_reading",
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "conditional_digitization",
+          "known_normal_source_means",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      }
+    },
+    "dependencies": {
+      "coefficient_order": [
+        "protein_condition1",
+        "empty_condition1",
+        "protein_condition0",
+        "empty_condition0"
+      ],
+      "role_coefficients": [
+        1,
+        -1,
+        -1,
+        1
+      ],
+      "groups": [
+        {
+          "physical_observation_id": "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+          "roles": [
+            "protein_condition1"
+          ],
+          "coefficient": 1,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": "controlled_physical_observation_cac697188531ad9f6ebd4d53",
+          "roles": [
+            "empty_condition1",
+            "empty_condition0"
+          ],
+          "coefficient": 0,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": "controlled_physical_observation_c326af7eddd13ce90baf09ae",
+          "roles": [
+            "protein_condition0"
+          ],
+          "coefficient": -1,
+          "known_owner": true
+        }
+      ],
+      "active_roles": [
+        "protein_condition1",
+        "protein_condition0"
+      ],
+      "canceled_roles": [
+        "empty_condition1",
+        "empty_condition0"
+      ],
+      "scientific_reasons": [],
+      "active_reading_reasons": [],
+      "canceled_reading_qualifications": [
+        "canceled_graph_reading",
+        "canceled_representation_difference",
+        "owner_cancellation"
+      ],
+      "reading_conflict_roles": [],
+      "required_covariance_owner_ids": [
+        "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+        "controlled_physical_observation_c326af7eddd13ce90baf09ae"
+      ],
+      "provided_covariance_owner_ids": [
+        "controlled_physical_observation_cac697188531ad9f6ebd4d53",
+        "controlled_physical_observation_c326af7eddd13ce90baf09ae",
+        "controlled_physical_observation_222c2180def6cf7f129cc6e0"
+      ],
+      "covariance_state": "available",
+      "model_active_roles": [
+        "protein_condition1",
+        "protein_condition0"
+      ]
+    }
+  },
+  {
+    "name": "legitimate_actual_AC_only_source_matrix",
+    "source_reader_executed": false,
+    "cells": {
+      "condition1_controlled_response": {
+        "value": 0.006,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "condition_control_difference",
+        "conditional_on": [
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "condition0_controlled_response": {
+        "value": 0.00395,
+        "lower": 0.00385,
+        "upper": 0.00405,
+        "relation": "interval",
+        "approximate": true,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "condition_control_difference",
+        "conditional_on": [
+          "approximate_source_reading",
+          "conditional_digitization",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "conditional_digitization",
+        "bound_state": {
+          "lower": "available",
+          "upper": "available"
+        }
+      },
+      "controlled_response_difference": {
+        "value": 0.002,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "four_arm_condition_difference",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "contrast_variance": {
+        "value": 3e-07,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "(umol/min)^2",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "linear_joint_covariance",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "contrast_standard_uncertainty": {
+        "value": 0.0005477225575051661,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "square_root_variance",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "contrast_precision": {
+        "value": 3333333.3333333335,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "(umol/min)^-2",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "inverse_variance",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "source_profile_log_ratio": {
+        "value": 6.666666666666667,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "dimensionless",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "signed_known_normal_profile",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "known_normal_source_means",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "source_signed_index": {
+        "value": 0.9974579674738373,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "dimensionless",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "tanh_half_signed_profile",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "known_normal_source_means",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      }
+    },
+    "dependencies": {
+      "coefficient_order": [
+        "protein_condition1",
+        "empty_condition1",
+        "protein_condition0",
+        "empty_condition0"
+      ],
+      "role_coefficients": [
+        1,
+        -1,
+        -1,
+        1
+      ],
+      "groups": [
+        {
+          "physical_observation_id": "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+          "roles": [
+            "protein_condition1"
+          ],
+          "coefficient": 1,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": "controlled_physical_observation_cac697188531ad9f6ebd4d53",
+          "roles": [
+            "empty_condition1",
+            "empty_condition0"
+          ],
+          "coefficient": 0,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": "controlled_physical_observation_c326af7eddd13ce90baf09ae",
+          "roles": [
+            "protein_condition0"
+          ],
+          "coefficient": -1,
+          "known_owner": true
+        }
+      ],
+      "active_roles": [
+        "protein_condition1",
+        "protein_condition0"
+      ],
+      "canceled_roles": [
+        "empty_condition1",
+        "empty_condition0"
+      ],
+      "scientific_reasons": [],
+      "active_reading_reasons": [],
+      "canceled_reading_qualifications": [
+        "canceled_graph_reading",
+        "canceled_representation_difference",
+        "owner_cancellation"
+      ],
+      "reading_conflict_roles": [],
+      "required_covariance_owner_ids": [
+        "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+        "controlled_physical_observation_c326af7eddd13ce90baf09ae"
+      ],
+      "provided_covariance_owner_ids": [
+        "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+        "controlled_physical_observation_c326af7eddd13ce90baf09ae"
+      ],
+      "covariance_state": "available",
+      "model_active_roles": [
+        "protein_condition1",
+        "protein_condition0"
+      ]
+    }
+  },
+  {
+    "name": "full_invalid_source_C_no_favorable_submatrix",
+    "source_reader_executed": false,
+    "cells": {
+      "condition1_controlled_response": {
+        "value": 0.006,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "condition_control_difference",
+        "conditional_on": [
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "condition0_controlled_response": {
+        "value": 0.00395,
+        "lower": 0.00385,
+        "upper": 0.00405,
+        "relation": "interval",
+        "approximate": true,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "condition_control_difference",
+        "conditional_on": [
+          "approximate_source_reading",
+          "conditional_digitization",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "conditional_digitization",
+        "bound_state": {
+          "lower": "available",
+          "upper": "available"
+        }
+      },
+      "controlled_response_difference": {
+        "value": 0.002,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "four_arm_condition_difference",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "contrast_variance": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "(umol/min)^2",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "unknown_covariance"
+        ],
+        "formula_code": "linear_joint_covariance",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "contrast_standard_uncertainty": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "unknown_covariance"
+        ],
+        "formula_code": "square_root_variance",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "contrast_precision": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "(umol/min)^-2",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "unknown_covariance"
+        ],
+        "formula_code": "inverse_variance",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "source_profile_log_ratio": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "observation_model_unselected",
+          "unknown_covariance"
+        ],
+        "formula_code": "signed_known_normal_profile",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "source_signed_index": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "observation_model_unselected",
+          "unknown_covariance"
+        ],
+        "formula_code": "tanh_half_signed_profile",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      }
+    },
+    "dependencies": {
+      "coefficient_order": [
+        "protein_condition1",
+        "empty_condition1",
+        "protein_condition0",
+        "empty_condition0"
+      ],
+      "role_coefficients": [
+        1,
+        -1,
+        -1,
+        1
+      ],
+      "groups": [
+        {
+          "physical_observation_id": "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+          "roles": [
+            "protein_condition1"
+          ],
+          "coefficient": 1,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": "controlled_physical_observation_cac697188531ad9f6ebd4d53",
+          "roles": [
+            "empty_condition1",
+            "empty_condition0"
+          ],
+          "coefficient": 0,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": "controlled_physical_observation_c326af7eddd13ce90baf09ae",
+          "roles": [
+            "protein_condition0"
+          ],
+          "coefficient": -1,
+          "known_owner": true
+        }
+      ],
+      "active_roles": [
+        "protein_condition1",
+        "protein_condition0"
+      ],
+      "canceled_roles": [
+        "empty_condition1",
+        "empty_condition0"
+      ],
+      "scientific_reasons": [],
+      "active_reading_reasons": [],
+      "canceled_reading_qualifications": [
+        "canceled_graph_reading",
+        "canceled_representation_difference",
+        "owner_cancellation"
+      ],
+      "reading_conflict_roles": [],
+      "required_covariance_owner_ids": [
+        "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+        "controlled_physical_observation_c326af7eddd13ce90baf09ae"
+      ],
+      "provided_covariance_owner_ids": [],
+      "covariance_state": "unavailable",
+      "model_active_roles": [
+        "protein_condition1",
+        "protein_condition0"
+      ]
+    }
+  },
+  {
+    "name": "unknown_actual_control_application",
+    "source_reader_executed": false,
+    "cells": {
+      "condition1_controlled_response": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "unknown_control_application"
+        ],
+        "formula_code": "condition_control_difference",
+        "conditional_on": [
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "condition0_controlled_response": {
+        "value": 0.00395,
+        "lower": 0.00385,
+        "upper": 0.00405,
+        "relation": "interval",
+        "approximate": true,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "condition_control_difference",
+        "conditional_on": [
+          "approximate_source_reading",
+          "conditional_digitization",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "conditional_digitization",
+        "bound_state": {
+          "lower": "available",
+          "upper": "available"
+        }
+      },
+      "controlled_response_difference": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "unknown_control_application"
+        ],
+        "formula_code": "four_arm_condition_difference",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "contrast_variance": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "(umol/min)^2",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "unknown_control_application"
+        ],
+        "formula_code": "linear_joint_covariance",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "contrast_standard_uncertainty": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "unknown_control_application"
+        ],
+        "formula_code": "square_root_variance",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "contrast_precision": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "(umol/min)^-2",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "unknown_control_application"
+        ],
+        "formula_code": "inverse_variance",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "source_profile_log_ratio": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "unknown_control_application"
+        ],
+        "formula_code": "signed_known_normal_profile",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "known_normal_source_means",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "source_signed_index": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "unknown_control_application"
+        ],
+        "formula_code": "tanh_half_signed_profile",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "known_normal_source_means",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      }
+    },
+    "dependencies": {
+      "coefficient_order": [
+        "protein_condition1",
+        "empty_condition1",
+        "protein_condition0",
+        "empty_condition0"
+      ],
+      "role_coefficients": [
+        1,
+        -1,
+        -1,
+        1
+      ],
+      "groups": [
+        {
+          "physical_observation_id": "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+          "roles": [
+            "protein_condition1"
+          ],
+          "coefficient": 1,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": "controlled_physical_observation_cac697188531ad9f6ebd4d53",
+          "roles": [
+            "empty_condition1",
+            "empty_condition0"
+          ],
+          "coefficient": 0,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": "controlled_physical_observation_c326af7eddd13ce90baf09ae",
+          "roles": [
+            "protein_condition0"
+          ],
+          "coefficient": -1,
+          "known_owner": true
+        }
+      ],
+      "active_roles": [
+        "protein_condition1",
+        "protein_condition0"
+      ],
+      "canceled_roles": [
+        "empty_condition1",
+        "empty_condition0"
+      ],
+      "scientific_reasons": [
+        "unknown_control_application"
+      ],
+      "active_reading_reasons": [],
+      "canceled_reading_qualifications": [
+        "canceled_graph_reading",
+        "canceled_representation_difference",
+        "owner_cancellation"
+      ],
+      "reading_conflict_roles": [],
+      "required_covariance_owner_ids": [
+        "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+        "controlled_physical_observation_c326af7eddd13ce90baf09ae"
+      ],
+      "provided_covariance_owner_ids": [
+        "controlled_physical_observation_cac697188531ad9f6ebd4d53",
+        "controlled_physical_observation_c326af7eddd13ce90baf09ae",
+        "controlled_physical_observation_222c2180def6cf7f129cc6e0"
+      ],
+      "covariance_state": "scientific_blocked",
+      "model_active_roles": [
+        "protein_condition1",
+        "protein_condition0"
+      ]
+    }
+  },
+  {
+    "name": "zero_active_V",
+    "source_reader_executed": false,
+    "cells": {
+      "condition1_controlled_response": {
+        "value": 0.006,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "condition_control_difference",
+        "conditional_on": [
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "condition0_controlled_response": {
+        "value": 0.00395,
+        "lower": 0.00385,
+        "upper": 0.00405,
+        "relation": "interval",
+        "approximate": true,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "condition_control_difference",
+        "conditional_on": [
+          "approximate_source_reading",
+          "conditional_digitization",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "conditional_digitization",
+        "bound_state": {
+          "lower": "available",
+          "upper": "available"
+        }
+      },
+      "controlled_response_difference": {
+        "value": 0.002,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "four_arm_condition_difference",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "contrast_variance": {
+        "value": 0.0,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "(umol/min)^2",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "linear_joint_covariance",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "contrast_standard_uncertainty": {
+        "value": 0.0,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "square_root_variance",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "contrast_precision": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "(umol/min)^-2",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "nonpositive_variance_for_model"
+        ],
+        "formula_code": "inverse_variance",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "source_profile_log_ratio": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "nonpositive_variance_for_model"
+        ],
+        "formula_code": "signed_known_normal_profile",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "known_normal_source_means",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "source_signed_index": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "nonpositive_variance_for_model"
+        ],
+        "formula_code": "tanh_half_signed_profile",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "known_normal_source_means",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      }
+    },
+    "dependencies": {
+      "coefficient_order": [
+        "protein_condition1",
+        "empty_condition1",
+        "protein_condition0",
+        "empty_condition0"
+      ],
+      "role_coefficients": [
+        1,
+        -1,
+        -1,
+        1
+      ],
+      "groups": [
+        {
+          "physical_observation_id": "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+          "roles": [
+            "protein_condition1"
+          ],
+          "coefficient": 1,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": "controlled_physical_observation_cac697188531ad9f6ebd4d53",
+          "roles": [
+            "empty_condition1",
+            "empty_condition0"
+          ],
+          "coefficient": 0,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": "controlled_physical_observation_c326af7eddd13ce90baf09ae",
+          "roles": [
+            "protein_condition0"
+          ],
+          "coefficient": -1,
+          "known_owner": true
+        }
+      ],
+      "active_roles": [
+        "protein_condition1",
+        "protein_condition0"
+      ],
+      "canceled_roles": [
+        "empty_condition1",
+        "empty_condition0"
+      ],
+      "scientific_reasons": [],
+      "active_reading_reasons": [],
+      "canceled_reading_qualifications": [
+        "canceled_graph_reading",
+        "canceled_representation_difference",
+        "owner_cancellation"
+      ],
+      "reading_conflict_roles": [],
+      "required_covariance_owner_ids": [
+        "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+        "controlled_physical_observation_c326af7eddd13ce90baf09ae"
+      ],
+      "provided_covariance_owner_ids": [
+        "controlled_physical_observation_c326af7eddd13ce90baf09ae",
+        "controlled_physical_observation_222c2180def6cf7f129cc6e0"
+      ],
+      "covariance_state": "available",
+      "model_active_roles": [
+        "protein_condition1",
+        "protein_condition0"
+      ]
+    }
+  },
+  {
+    "name": "authentic_active_scalar_outside_float_range",
+    "source_reader_executed": false,
+    "cells": {
+      "condition1_controlled_response": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "unsupported",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "unsupported_source_expression"
+        ],
+        "formula_code": "condition_control_difference",
+        "conditional_on": [
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "condition0_controlled_response": {
+        "value": 0.00395,
+        "lower": 0.00385,
+        "upper": 0.00405,
+        "relation": "interval",
+        "approximate": true,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "condition_control_difference",
+        "conditional_on": [
+          "approximate_source_reading",
+          "conditional_digitization",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "conditional_digitization",
+        "bound_state": {
+          "lower": "available",
+          "upper": "available"
+        }
+      },
+      "controlled_response_difference": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "unsupported",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "unsupported_source_expression"
+        ],
+        "formula_code": "four_arm_condition_difference",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "contrast_variance": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "(umol/min)^2",
+        "status": "unsupported",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "unsupported_source_expression"
+        ],
+        "formula_code": "linear_joint_covariance",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "contrast_standard_uncertainty": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "unsupported",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "unsupported_source_expression"
+        ],
+        "formula_code": "square_root_variance",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "contrast_precision": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "(umol/min)^-2",
+        "status": "unsupported",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "unsupported_source_expression"
+        ],
+        "formula_code": "inverse_variance",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "source_profile_log_ratio": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "dimensionless",
+        "status": "unsupported",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "unsupported_source_expression"
+        ],
+        "formula_code": "signed_known_normal_profile",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "known_normal_source_means",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      },
+      "source_signed_index": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "dimensionless",
+        "status": "unsupported",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "unsupported_source_expression"
+        ],
+        "formula_code": "tanh_half_signed_profile",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "known_normal_source_means",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "unknown",
+          "upper": "unknown"
+        }
+      }
+    },
+    "dependencies": {
+      "coefficient_order": [
+        "protein_condition1",
+        "empty_condition1",
+        "protein_condition0",
+        "empty_condition0"
+      ],
+      "role_coefficients": [
+        1,
+        -1,
+        -1,
+        1
+      ],
+      "groups": [
+        {
+          "physical_observation_id": "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+          "roles": [
+            "protein_condition1"
+          ],
+          "coefficient": 1,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": "controlled_physical_observation_cac697188531ad9f6ebd4d53",
+          "roles": [
+            "empty_condition1",
+            "empty_condition0"
+          ],
+          "coefficient": 0,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": "controlled_physical_observation_c326af7eddd13ce90baf09ae",
+          "roles": [
+            "protein_condition0"
+          ],
+          "coefficient": -1,
+          "known_owner": true
+        }
+      ],
+      "active_roles": [
+        "protein_condition1",
+        "protein_condition0"
+      ],
+      "canceled_roles": [
+        "empty_condition1",
+        "empty_condition0"
+      ],
+      "scientific_reasons": [],
+      "active_reading_reasons": [
+        "unsupported_source_expression"
+      ],
+      "canceled_reading_qualifications": [
+        "canceled_graph_reading",
+        "canceled_representation_difference",
+        "owner_cancellation"
+      ],
+      "reading_conflict_roles": [],
+      "required_covariance_owner_ids": [
+        "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+        "controlled_physical_observation_c326af7eddd13ce90baf09ae"
+      ],
+      "provided_covariance_owner_ids": [
+        "controlled_physical_observation_cac697188531ad9f6ebd4d53",
+        "controlled_physical_observation_c326af7eddd13ce90baf09ae",
+        "controlled_physical_observation_222c2180def6cf7f129cc6e0"
+      ],
+      "covariance_state": "available",
+      "model_active_roles": [
+        "protein_condition1",
+        "protein_condition0"
+      ]
+    }
+  },
+  {
+    "name": "variance_cell_underflow_retains_representable_SE",
+    "source_reader_executed": false,
+    "cells": {
+      "condition1_controlled_response": {
+        "value": 0.006,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "condition_control_difference",
+        "conditional_on": [
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "condition0_controlled_response": {
+        "value": 0.00395,
+        "lower": 0.00385,
+        "upper": 0.00405,
+        "relation": "interval",
+        "approximate": true,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "condition_control_difference",
+        "conditional_on": [
+          "approximate_source_reading",
+          "conditional_digitization",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "conditional_digitization",
+        "bound_state": {
+          "lower": "available",
+          "upper": "available"
+        }
+      },
+      "controlled_response_difference": {
+        "value": 0.002,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "four_arm_condition_difference",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "contrast_variance": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "(umol/min)^2",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "numeric_range_failure"
+        ],
+        "formula_code": "linear_joint_covariance",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "contrast_standard_uncertainty": {
+        "value": 1.414213562373095e-163,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "umol/min",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "square_root_variance",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "contrast_precision": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "(umol/min)^-2",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "numeric_range_failure"
+        ],
+        "formula_code": "inverse_variance",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "source_profile_log_ratio": {
+        "value": null,
+        "lower": null,
+        "upper": null,
+        "relation": "none",
+        "approximate": false,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "origin": "synthetic",
+        "unavailable_reason": [
+          "numeric_range_failure"
+        ],
+        "formula_code": "signed_known_normal_profile",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "known_normal_source_means",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      },
+      "source_signed_index": {
+        "value": 1.0,
+        "lower": null,
+        "upper": null,
+        "relation": "eq",
+        "approximate": false,
+        "unit": "dimensionless",
+        "status": "available",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "formula_code": "tanh_half_signed_profile",
+        "conditional_on": [
+          "canceled_graph_reading",
+          "canceled_representation_difference",
+          "known_normal_source_means",
+          "owner_cancellation",
+          "shared_reference_assumption",
+          "synthetic_fixture"
+        ],
+        "bound_kind": "none",
+        "bound_state": {
+          "lower": "not_applicable",
+          "upper": "not_applicable"
+        }
+      }
+    },
+    "dependencies": {
+      "coefficient_order": [
+        "protein_condition1",
+        "empty_condition1",
+        "protein_condition0",
+        "empty_condition0"
+      ],
+      "role_coefficients": [
+        1,
+        -1,
+        -1,
+        1
+      ],
+      "groups": [
+        {
+          "physical_observation_id": "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+          "roles": [
+            "protein_condition1"
+          ],
+          "coefficient": 1,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": "controlled_physical_observation_cac697188531ad9f6ebd4d53",
+          "roles": [
+            "empty_condition1",
+            "empty_condition0"
+          ],
+          "coefficient": 0,
+          "known_owner": true
+        },
+        {
+          "physical_observation_id": "controlled_physical_observation_c326af7eddd13ce90baf09ae",
+          "roles": [
+            "protein_condition0"
+          ],
+          "coefficient": -1,
+          "known_owner": true
+        }
+      ],
+      "active_roles": [
+        "protein_condition1",
+        "protein_condition0"
+      ],
+      "canceled_roles": [
+        "empty_condition1",
+        "empty_condition0"
+      ],
+      "scientific_reasons": [],
+      "active_reading_reasons": [],
+      "canceled_reading_qualifications": [
+        "canceled_graph_reading",
+        "canceled_representation_difference",
+        "owner_cancellation"
+      ],
+      "reading_conflict_roles": [],
+      "required_covariance_owner_ids": [
+        "controlled_physical_observation_222c2180def6cf7f129cc6e0",
+        "controlled_physical_observation_c326af7eddd13ce90baf09ae"
+      ],
+      "provided_covariance_owner_ids": [
+        "controlled_physical_observation_c326af7eddd13ce90baf09ae",
+        "controlled_physical_observation_222c2180def6cf7f129cc6e0"
+      ],
+      "covariance_state": "available",
+      "model_active_roles": [
+        "protein_condition1",
+        "protein_condition0"
+      ]
+    }
+  }
+]

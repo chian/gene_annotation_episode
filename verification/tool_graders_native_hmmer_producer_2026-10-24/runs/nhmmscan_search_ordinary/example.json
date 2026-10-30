@@ -1,0 +1,364 @@
+{
+  "label": "nhmmscan_search_ordinary",
+  "program": "nhmmscan",
+  "mode": "search",
+  "variant": "ordinary",
+  "native_returncode": 0,
+  "artifact_count": 3,
+  "row_family": "loci",
+  "row_count": 3,
+  "saved_sheet_recalculation_equal": true,
+  "sealed_replay_equal": true,
+  "episode_integration_verified": false,
+  "example_row": {
+    "record_key": "tblout:line:3",
+    "locator": {
+      "artifact_role": "tblout",
+      "artifact_ref": "fixture:sha256:9408e22bbb76c50876de1303d7932a0404abb68167afa50f216ef77da6cf0f12",
+      "line_number": 3,
+      "byte_start": 344,
+      "byte_end": 497,
+      "row_occurrence": 1
+    },
+    "status": "valid",
+    "query_record_key": "stdout:query:1",
+    "query_occurrence": 1,
+    "target_occurrence": 1,
+    "identities": {
+      "query_name": "forward",
+      "query_accession": null,
+      "target_name": "model",
+      "target_accession": null
+    },
+    "strand": "+",
+    "iteration": null,
+    "native_status": {
+      "reported": true,
+      "included": true,
+      "inclusion_flag": "!"
+    },
+    "coordinates": {
+      "convention": "zero_based_half_open",
+      "native_convention": "one_based_inclusive",
+      "model_interval": [
+        0,
+        100
+      ],
+      "sequence_interval": [
+        10,
+        110
+      ],
+      "sequence_envelope_interval": [
+        10,
+        110
+      ]
+    },
+    "native": {
+      "native_evalue": 2e-39,
+      "native_score_bits": 120.9,
+      "native_bias_bits": 0.9,
+      "native_accuracy": 0.99
+    },
+    "derived": {
+      "model_length": 100,
+      "sequence_length": 120,
+      "model_span_positions": 100,
+      "sequence_span_positions": 100,
+      "sequence_envelope_positions": 100,
+      "paired_positions": 100,
+      "insert_positions": 0,
+      "delete_positions": 0,
+      "alignment_columns": 100,
+      "model_span_coverage": 1.0,
+      "sequence_span_coverage": 0.8333333333333334,
+      "sequence_envelope_coverage": 0.8333333333333334,
+      "paired_model_coverage": 1.0,
+      "paired_sequence_coverage": 0.8333333333333334,
+      "posterior_lower_mean": 0.939,
+      "posterior_upper_mean": 0.9915
+    },
+    "components": {
+      "native_evalue": {
+        "value": 2e-39,
+        "numerator": null,
+        "denominator": null,
+        "unit": "expected_hits",
+        "input_fields": [
+          "native.evalue"
+        ],
+        "unavailable_reason": null
+      },
+      "native_score_bits": {
+        "value": 120.9,
+        "numerator": null,
+        "denominator": null,
+        "unit": "bits",
+        "input_fields": [
+          "native.score_bits"
+        ],
+        "unavailable_reason": null
+      },
+      "native_bias_bits": {
+        "value": 0.9,
+        "numerator": null,
+        "denominator": null,
+        "unit": "bits",
+        "input_fields": [
+          "native.bias_bits"
+        ],
+        "unavailable_reason": null
+      },
+      "native_accuracy": {
+        "value": 0.99,
+        "numerator": null,
+        "denominator": 100,
+        "unit": "posterior_fraction",
+        "input_fields": [
+          "native.accuracy",
+          "coordinates.sequence_envelope_interval"
+        ],
+        "unavailable_reason": null,
+        "numerator_unavailable_reason": "native_oasc_not_printed"
+      },
+      "model_length": {
+        "value": 100,
+        "numerator": null,
+        "denominator": null,
+        "unit": "model_positions",
+        "input_fields": [
+          "model_length",
+          "length_sources.model_length"
+        ],
+        "unavailable_reason": null,
+        "sources": [
+          {
+            "value": 100,
+            "field": "native.length_field"
+          },
+          {
+            "value": 100,
+            "field": "inputs.model.length_or_sequence"
+          }
+        ]
+      },
+      "sequence_length": {
+        "value": 120,
+        "numerator": null,
+        "denominator": null,
+        "unit": "nucleotides",
+        "input_fields": [
+          "sequence_length",
+          "length_sources.sequence_length"
+        ],
+        "unavailable_reason": null,
+        "sources": [
+          {
+            "value": 120,
+            "field": "stdout:query:1.length"
+          }
+        ]
+      },
+      "model_span_positions": {
+        "value": 100,
+        "numerator": null,
+        "denominator": null,
+        "unit": "model_positions",
+        "input_fields": [
+          "coordinates.model_interval"
+        ],
+        "unavailable_reason": null,
+        "coordinate_convention": "zero_based_half_open"
+      },
+      "sequence_span_positions": {
+        "value": 100,
+        "numerator": null,
+        "denominator": null,
+        "unit": "nucleotides",
+        "input_fields": [
+          "coordinates.sequence_interval"
+        ],
+        "unavailable_reason": null,
+        "coordinate_convention": "zero_based_half_open"
+      },
+      "sequence_envelope_positions": {
+        "value": 100,
+        "numerator": null,
+        "denominator": null,
+        "unit": "nucleotides",
+        "input_fields": [
+          "coordinates.sequence_envelope_interval"
+        ],
+        "unavailable_reason": null,
+        "coordinate_convention": "zero_based_half_open"
+      },
+      "paired_positions": {
+        "value": 100,
+        "numerator": null,
+        "denominator": null,
+        "unit": "alignment_positions",
+        "input_fields": [
+          "alignment.model_aligned",
+          "alignment.sequence_aligned"
+        ],
+        "unavailable_reason": null
+      },
+      "insert_positions": {
+        "value": 0,
+        "numerator": null,
+        "denominator": null,
+        "unit": "alignment_positions",
+        "input_fields": [
+          "alignment.model_aligned",
+          "alignment.sequence_aligned"
+        ],
+        "unavailable_reason": null
+      },
+      "delete_positions": {
+        "value": 0,
+        "numerator": null,
+        "denominator": null,
+        "unit": "alignment_positions",
+        "input_fields": [
+          "alignment.model_aligned",
+          "alignment.sequence_aligned"
+        ],
+        "unavailable_reason": null
+      },
+      "alignment_columns": {
+        "value": 100,
+        "numerator": null,
+        "denominator": null,
+        "unit": "alignment_positions",
+        "input_fields": [
+          "alignment.model_aligned",
+          "alignment.sequence_aligned"
+        ],
+        "unavailable_reason": null
+      },
+      "model_span_coverage": {
+        "value": 1.0,
+        "numerator": 100,
+        "denominator": 100,
+        "unit": "fraction",
+        "input_fields": [
+          "model_span_positions",
+          "model_length"
+        ],
+        "unavailable_reason": null
+      },
+      "sequence_span_coverage": {
+        "value": 0.8333333333333334,
+        "numerator": 100,
+        "denominator": 120,
+        "unit": "fraction",
+        "input_fields": [
+          "sequence_span_positions",
+          "sequence_length"
+        ],
+        "unavailable_reason": null
+      },
+      "sequence_envelope_coverage": {
+        "value": 0.8333333333333334,
+        "numerator": 100,
+        "denominator": 120,
+        "unit": "fraction",
+        "input_fields": [
+          "sequence_envelope_positions",
+          "sequence_length"
+        ],
+        "unavailable_reason": null
+      },
+      "paired_model_coverage": {
+        "value": 1.0,
+        "numerator": 100,
+        "denominator": 100,
+        "unit": "fraction",
+        "input_fields": [
+          "paired_positions",
+          "model_length"
+        ],
+        "unavailable_reason": null
+      },
+      "paired_sequence_coverage": {
+        "value": 0.8333333333333334,
+        "numerator": 100,
+        "denominator": 120,
+        "unit": "fraction",
+        "input_fields": [
+          "paired_positions",
+          "sequence_length"
+        ],
+        "unavailable_reason": null
+      },
+      "posterior_lower_mean": {
+        "value": 0.939,
+        "numerator": 93.89999999999999,
+        "denominator": 100,
+        "unit": "posterior_fraction_bound",
+        "input_fields": [
+          "alignment.posterior",
+          "alignment.sequence_aligned"
+        ],
+        "unavailable_reason": null,
+        "bound_inclusive": true,
+        "population": "sequence residues with native PP bins",
+        "missing_residue_count": 0
+      },
+      "posterior_upper_mean": {
+        "value": 0.9915,
+        "numerator": 99.15,
+        "denominator": 100,
+        "unit": "posterior_fraction_bound",
+        "input_fields": [
+          "alignment.posterior",
+          "alignment.sequence_aligned"
+        ],
+        "unavailable_reason": null,
+        "bound_inclusive": false,
+        "population": "sequence residues with native PP bins",
+        "missing_residue_count": 0
+      }
+    },
+    "issues": [],
+    "native_evalue": 2e-39,
+    "native_score_bits": 120.9,
+    "native_bias_bits": 0.9,
+    "native_accuracy": 0.99,
+    "model_length": 100,
+    "sequence_length": 120,
+    "model_span_positions": 100,
+    "sequence_span_positions": 100,
+    "sequence_envelope_positions": 100,
+    "paired_positions": 100,
+    "insert_positions": 0,
+    "delete_positions": 0,
+    "alignment_columns": 100,
+    "model_span_coverage": 1.0,
+    "sequence_span_coverage": 0.8333333333333334,
+    "sequence_envelope_coverage": 0.8333333333333334,
+    "paired_model_coverage": 1.0,
+    "paired_sequence_coverage": 0.8333333333333334,
+    "posterior_lower_mean": 0.939,
+    "posterior_upper_mean": 0.9915,
+    "paired_model_intervals": [
+      [
+        0,
+        100
+      ]
+    ],
+    "paired_sequence_intervals": [
+      [
+        10,
+        110
+      ]
+    ],
+    "cutoff_margins": [],
+    "union_identity": {
+      "query": "stdout:query:1",
+      "target": "inputs/targets/0",
+      "strand": "+",
+      "iteration": null
+    },
+    "availability": {}
+  }
+}

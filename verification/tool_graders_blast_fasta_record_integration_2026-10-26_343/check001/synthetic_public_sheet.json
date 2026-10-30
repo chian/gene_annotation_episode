@@ -1,0 +1,821 @@
+{
+  "database_profile": null,
+  "description_bindings": [
+    {
+      "binding": {
+        "description_index": 0,
+        "hit_index": 0,
+        "linkage_pointer": "/description_links/0",
+        "linkage_source_ref": "source-sequence-meta-links",
+        "metadata_identifier": {
+          "namespace": "synthetic",
+          "value": "S0.1"
+        },
+        "metadata_index": 0,
+        "metadata_pointer": "",
+        "metadata_record_locator": {
+          "kind": "fasta_record",
+          "record_ordinal": 0
+        },
+        "metadata_source_ref": "source-sequence-meta-records",
+        "native_description": {
+          "accession": "S0.1",
+          "id": "s0",
+          "taxid": 1,
+          "title": "synthetic 0"
+        },
+        "report_index": 0
+      },
+      "search_key": {
+        "artifact_key": "report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/search"
+      }
+    },
+    {
+      "binding": {
+        "description_index": 0,
+        "hit_index": 1,
+        "linkage_pointer": "/description_links/1",
+        "linkage_source_ref": "source-sequence-meta-links",
+        "metadata_identifier": {
+          "namespace": "synthetic",
+          "value": "S1.1"
+        },
+        "metadata_index": 1,
+        "metadata_pointer": "",
+        "metadata_record_locator": {
+          "kind": "fasta_record",
+          "record_ordinal": 1
+        },
+        "metadata_source_ref": "source-sequence-meta-records",
+        "native_description": {
+          "accession": "S1.1",
+          "id": "s1",
+          "taxid": 2,
+          "title": "synthetic 1"
+        },
+        "report_index": 0
+      },
+      "search_key": {
+        "artifact_key": "report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/search"
+      }
+    }
+  ],
+  "query_binding": {
+    "axis_kind": "sequence",
+    "coordinate_unit": "aa",
+    "full_length": 8,
+    "master_mapping_ref": null,
+    "operand": {
+      "artifact_key": "query",
+      "identity": null,
+      "length": 8,
+      "molecule": "protein",
+      "native_id": "q",
+      "native_title": "q",
+      "record_ordinal": 0,
+      "role": "query",
+      "selected_interval": null,
+      "subject_ref": null
+    },
+    "pssm_key": null,
+    "sequence_sha256": "473ce836d642ce7760eb1fd3c6d77c5f3755b3c281f17f89cd4b3b408ba822fc"
+  },
+  "reference_metadata": [
+    {
+      "accession": "S0.1",
+      "assembly": {
+        "accession": "synthetic-assembly-0",
+        "completeness_fraction": 0.9,
+        "contamination_fraction": null,
+        "contig_count": null,
+        "contig_n50": null,
+        "measurement_methods": {},
+        "quality_method": "synthetic-identity-counterexample",
+        "total_sequence_length": null
+      },
+      "functions": [
+        {
+          "evidence": [
+            "synthetic supplied assignment"
+          ],
+          "function": "synthetic-same-function",
+          "source": "source-metadata"
+        }
+      ],
+      "identifier_namespace": "synthetic",
+      "lineage": [
+        {
+          "name": null,
+          "rank": "genus",
+          "taxid": 10
+        }
+      ],
+      "native_pointer": "",
+      "native_record": {
+        "accession": "S0.1",
+        "function": "F",
+        "sequence": "ACDEFGHIKL"
+      },
+      "origin": {
+        "assignment_scope": "whole_sequence"
+      },
+      "record_locator": {
+        "kind": "fasta_record",
+        "record_ordinal": 0
+      },
+      "sequence_group": null,
+      "source": "source-sequence-meta-records",
+      "study_groups": [],
+      "taxid": 1
+    },
+    {
+      "accession": "S1.1",
+      "assembly": {
+        "accession": "synthetic-assembly-1",
+        "completeness_fraction": 0.6,
+        "contamination_fraction": null,
+        "contig_count": null,
+        "contig_n50": null,
+        "measurement_methods": {},
+        "quality_method": "synthetic-identity-counterexample",
+        "total_sequence_length": null
+      },
+      "functions": [
+        {
+          "evidence": [
+            "synthetic supplied assignment"
+          ],
+          "function": "synthetic-same-function",
+          "source": "source-metadata"
+        }
+      ],
+      "identifier_namespace": "synthetic",
+      "lineage": [
+        {
+          "name": null,
+          "rank": "genus",
+          "taxid": 11
+        }
+      ],
+      "native_pointer": "",
+      "native_record": {
+        "accession": "S1.1",
+        "function": "G",
+        "sequence": "ACDEPQRSTV"
+      },
+      "origin": {
+        "assignment_scope": "whole_sequence"
+      },
+      "record_locator": {
+        "kind": "fasta_record",
+        "record_ordinal": 1
+      },
+      "sequence_group": null,
+      "source": "source-sequence-meta-records",
+      "study_groups": [],
+      "taxid": 2
+    }
+  ],
+  "report_source": {
+    "artifact_key": "report",
+    "artifact_ref": "artifact-report",
+    "member_ordinal": null,
+    "member_sha256": null
+  },
+  "schema": "blast_sequence_database_result_sheet_v2",
+  "search": {
+    "issues": [],
+    "iteration": null,
+    "native": {
+      "line_numbers": null,
+      "report": {
+        "params": {},
+        "program": "blastp",
+        "results": {
+          "search": {
+            "hits": [
+              {
+                "description": [
+                  {
+                    "accession": "S0.1",
+                    "id": "s0",
+                    "taxid": 1,
+                    "title": "synthetic 0"
+                  }
+                ],
+                "hsps": [
+                  {
+                    "align_len": 4,
+                    "bit_score": 20,
+                    "evalue": 0.0,
+                    "gaps": 0,
+                    "hit_from": 1,
+                    "hit_to": 4,
+                    "hseq": "ACDE",
+                    "identity": 4,
+                    "qseq": "ACDE",
+                    "query_from": 1,
+                    "query_to": 4,
+                    "score": 40
+                  }
+                ],
+                "len": 10
+              },
+              {
+                "description": [
+                  {
+                    "accession": "S1.1",
+                    "id": "s1",
+                    "taxid": 2,
+                    "title": "synthetic 1"
+                  }
+                ],
+                "hsps": [
+                  {
+                    "align_len": 4,
+                    "bit_score": 18,
+                    "evalue": 0.0,
+                    "gaps": 0,
+                    "hit_from": 1,
+                    "hit_to": 4,
+                    "hseq": "ACDE",
+                    "identity": 4,
+                    "qseq": "ACDE",
+                    "query_from": 1,
+                    "query_to": 4,
+                    "score": 40
+                  }
+                ],
+                "len": 10
+              }
+            ],
+            "query_id": "q",
+            "query_len": 8,
+            "query_title": "q",
+            "stat": {
+              "db_len": 10000,
+              "db_num": 1000
+            }
+          }
+        },
+        "search_target": {
+          "db": "target"
+        },
+        "version": "BLASTP 2.17.0+"
+      },
+      "search": {
+        "hits": [
+          {
+            "description": [
+              {
+                "accession": "S0.1",
+                "id": "s0",
+                "taxid": 1,
+                "title": "synthetic 0"
+              }
+            ],
+            "hsps": [
+              {
+                "align_len": 4,
+                "bit_score": 20,
+                "evalue": 0.0,
+                "gaps": 0,
+                "hit_from": 1,
+                "hit_to": 4,
+                "hseq": "ACDE",
+                "identity": 4,
+                "qseq": "ACDE",
+                "query_from": 1,
+                "query_to": 4,
+                "score": 40
+              }
+            ],
+            "len": 10
+          },
+          {
+            "description": [
+              {
+                "accession": "S1.1",
+                "id": "s1",
+                "taxid": 2,
+                "title": "synthetic 1"
+              }
+            ],
+            "hsps": [
+              {
+                "align_len": 4,
+                "bit_score": 18,
+                "evalue": 0.0,
+                "gaps": 0,
+                "hit_from": 1,
+                "hit_to": 4,
+                "hseq": "ACDE",
+                "identity": 4,
+                "qseq": "ACDE",
+                "query_from": 1,
+                "query_to": 4,
+                "score": 40
+              }
+            ],
+            "len": 10
+          }
+        ],
+        "query_id": "q",
+        "query_len": 8,
+        "query_title": "q",
+        "stat": {
+          "db_len": 10000,
+          "db_num": 1000
+        }
+      }
+    },
+    "normalized": {
+      "format": "json2",
+      "hits": [
+        {
+          "descriptions": [
+            {
+              "accession": "S0.1",
+              "id": "s0",
+              "taxid": 1,
+              "title": "synthetic 0"
+            }
+          ],
+          "hit_index": 0,
+          "hsps": [
+            {
+              "align_len": 4,
+              "bit_score": 20,
+              "evalue": 0.0,
+              "gaps": 0,
+              "hit_from": 1,
+              "hit_to": 4,
+              "hseq": "ACDE",
+              "identity": 4,
+              "qseq": "ACDE",
+              "query_from": 1,
+              "query_to": 4,
+              "score": 40
+            }
+          ],
+          "length": 10,
+          "unpaired_metadata": {}
+        },
+        {
+          "descriptions": [
+            {
+              "accession": "S1.1",
+              "id": "s1",
+              "taxid": 2,
+              "title": "synthetic 1"
+            }
+          ],
+          "hit_index": 1,
+          "hsps": [
+            {
+              "align_len": 4,
+              "bit_score": 18,
+              "evalue": 0.0,
+              "gaps": 0,
+              "hit_from": 1,
+              "hit_to": 4,
+              "hseq": "ACDE",
+              "identity": 4,
+              "qseq": "ACDE",
+              "query_from": 1,
+              "query_to": 4,
+              "score": 40
+            }
+          ],
+          "length": 10,
+          "unpaired_metadata": {}
+        }
+      ],
+      "issues": [],
+      "mode": "database",
+      "native": {
+        "archive_member": null,
+        "document": {
+          "BlastOutput2": [
+            {
+              "report": {
+                "params": {},
+                "program": "blastp",
+                "results": {
+                  "search": {
+                    "hits": [
+                      {
+                        "description": [
+                          {
+                            "accession": "S0.1",
+                            "id": "s0",
+                            "taxid": 1,
+                            "title": "synthetic 0"
+                          }
+                        ],
+                        "hsps": [
+                          {
+                            "align_len": 4,
+                            "bit_score": 20,
+                            "evalue": 0.0,
+                            "gaps": 0,
+                            "hit_from": 1,
+                            "hit_to": 4,
+                            "hseq": "ACDE",
+                            "identity": 4,
+                            "qseq": "ACDE",
+                            "query_from": 1,
+                            "query_to": 4,
+                            "score": 40
+                          }
+                        ],
+                        "len": 10
+                      },
+                      {
+                        "description": [
+                          {
+                            "accession": "S1.1",
+                            "id": "s1",
+                            "taxid": 2,
+                            "title": "synthetic 1"
+                          }
+                        ],
+                        "hsps": [
+                          {
+                            "align_len": 4,
+                            "bit_score": 18,
+                            "evalue": 0.0,
+                            "gaps": 0,
+                            "hit_from": 1,
+                            "hit_to": 4,
+                            "hseq": "ACDE",
+                            "identity": 4,
+                            "qseq": "ACDE",
+                            "query_from": 1,
+                            "query_to": 4,
+                            "score": 40
+                          }
+                        ],
+                        "len": 10
+                      }
+                    ],
+                    "query_id": "q",
+                    "query_len": 8,
+                    "query_title": "q",
+                    "stat": {
+                      "db_len": 10000,
+                      "db_num": 1000
+                    }
+                  }
+                },
+                "search_target": {
+                  "db": "target"
+                },
+                "version": "BLASTP 2.17.0+"
+              }
+            }
+          ],
+          "not_native_measurements": true,
+          "synthetic": true
+        },
+        "sha256": "c9a456c520ed595263e0d3ce6b1ea3dfd696dd6779a1d07692b0aef571ea7b88"
+      },
+      "query": {
+        "id": "q",
+        "length": 8,
+        "title": "q"
+      },
+      "resource": "hpc",
+      "schema": "blast_normalized_result_v1",
+      "search": {
+        "database": "target",
+        "hit_array_present": true,
+        "parameters": {},
+        "program": "blastp",
+        "reported_hit_count": 2,
+        "request": {
+          "argv": [
+            "/selected/bin/blastp",
+            "-query",
+            "/selected/query",
+            "-db",
+            "/selected/db/target",
+            "-outfmt",
+            "15",
+            "-out",
+            "report"
+          ],
+          "environment": {
+            "EXPLICIT": "selected"
+          },
+          "native_blast_standard_database": {
+            "databases": [
+              {
+                "database_key": "target",
+                "identity": {
+                  "namespace": "synthetic",
+                  "preparation_type": "sequence_database",
+                  "release": "r1",
+                  "scope": "selected_sequences",
+                  "source": {
+                    "pointer": "/preparation",
+                    "source_ref": "synthetic_source"
+                  },
+                  "value": "target",
+                  "version": "1"
+                },
+                "kind": "blast_protein_sequence",
+                "manifest": {
+                  "access": {
+                    "mode": "prepared_local",
+                    "offline_configuration": null
+                  },
+                  "database_key": "target",
+                  "files": [
+                    {
+                      "path": "/selected/db/target.phr",
+                      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "size_bytes": 23
+                    },
+                    {
+                      "path": "/selected/db/target.pin",
+                      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "size_bytes": 23
+                    },
+                    {
+                      "path": "/selected/db/target.psq",
+                      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "size_bytes": 23
+                    }
+                  ],
+                  "identity": {
+                    "namespace": "synthetic",
+                    "preparation_type": "sequence_database",
+                    "release": "r1",
+                    "scope": "selected_sequences",
+                    "source": {
+                      "pointer": "/preparation",
+                      "source_ref": "synthetic_source"
+                    },
+                    "value": "target",
+                    "version": "1"
+                  },
+                  "inventory_complete": true,
+                  "kind": "blast_protein_sequence",
+                  "metadata_manifests": [],
+                  "native_paths": [
+                    "/selected/db/target"
+                  ],
+                  "preparation": {
+                    "argv": null,
+                    "input_manifest": null,
+                    "method": "publisher_package",
+                    "preparation_type": "sequence_database",
+                    "receipt": {
+                      "artifact_ref": null,
+                      "path": "/selected/receipt",
+                      "sha256": "8662cfbff1e1c76d8849ccb488a1ee6fa431e88ac20cbc77afe0fa6a757e10b6",
+                      "size_bytes": 51
+                    },
+                    "software": {
+                      "executable_sha256": null,
+                      "name": "synthetic preparation",
+                      "version": null
+                    },
+                    "source": {
+                      "pointer": "/preparation",
+                      "source_ref": "synthetic_source"
+                    }
+                  },
+                  "version": "native_blast_standard_prepared_database_manifest_v1"
+                },
+                "manifest_file": {
+                  "artifact_ref": null,
+                  "path": "/selected/manifest",
+                  "sha256": "f85b1323d1aa1a03ddf20a4522e235687ce08d36caeb5e439cfd87e5513d8116",
+                  "size_bytes": 1305
+                },
+                "native_paths": [
+                  "/selected/db/target"
+                ],
+                "role": "target"
+              }
+            ],
+            "environment": {
+              "EXPLICIT": "selected"
+            },
+            "grading_parameters": {
+              "sequence_database_model": null
+            },
+            "inputs": [
+              {
+                "artifact_ref": "artifact-query",
+                "format": "fasta",
+                "input_key": "query",
+                "path": "/selected/query",
+                "role": "query_sequence",
+                "sha256": "22bad0da088383277184bf9a12df13f61c71a0ca9c2be0879ffe61e6366fb77e",
+                "size_bytes": 12
+              }
+            ],
+            "metadata_inputs": [],
+            "mode": "database",
+            "options": [],
+            "outputs": [
+              {
+                "delimiter": null,
+                "fields": [],
+                "format": "text",
+                "output_key": "stdout",
+                "path_kind": "file",
+                "relative_path": "stdout.txt",
+                "required": true,
+                "role": "stdout"
+              },
+              {
+                "delimiter": null,
+                "fields": [],
+                "format": "text",
+                "output_key": "stderr",
+                "path_kind": "file",
+                "relative_path": "stderr.txt",
+                "required": true,
+                "role": "stderr"
+              },
+              {
+                "delimiter": null,
+                "fields": [],
+                "format": "json15",
+                "output_key": "report",
+                "path_kind": "file",
+                "relative_path": "report",
+                "required": true,
+                "role": "primary_report"
+              }
+            ],
+            "program": "blastp",
+            "query": {
+              "input_key": "query",
+              "kind": "sequence"
+            },
+            "software": {
+              "engine_version": "2.17.0+",
+              "executable": "/selected/bin/blastp",
+              "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+            },
+            "version": "native_blast_standard_database_job_v1"
+          }
+        },
+        "statistics": {
+          "db_len": 10000,
+          "db_num": 1000
+        },
+        "version": "BLASTP 2.17.0+"
+      }
+    },
+    "operand_binding": {
+      "artifact_key": "query",
+      "identity": null,
+      "length": 8,
+      "molecule": "protein",
+      "native_id": "q",
+      "native_title": "q",
+      "record_ordinal": 0,
+      "role": "query",
+      "selected_interval": null,
+      "subject_ref": null
+    },
+    "program_context": {
+      "execution_program": "blastp",
+      "geometry_program": "blastp",
+      "native_version": "BLASTP 2.17.0+",
+      "query_kind": "sequence",
+      "reference_kind": "sequence",
+      "reported_program": "blastp",
+      "scientific_mode": "database"
+    },
+    "reporting": {
+      "native_hit_array_present": true,
+      "native_hit_count": 2,
+      "native_returncode": 0,
+      "producer_complete": true,
+      "requested_hit_limit": null,
+      "requested_hsp_limit": null
+    },
+    "row_map": [
+      {
+        "description_ordinals": [
+          0
+        ],
+        "hit_index": 0,
+        "hsp_ordinals": [
+          0
+        ]
+      },
+      {
+        "description_ordinals": [
+          0
+        ],
+        "hit_index": 1,
+        "hsp_ordinals": [
+          0
+        ]
+      }
+    ],
+    "search_key": {
+      "artifact_key": "report",
+      "member_ordinal": null,
+      "report_index": 0,
+      "search_pointer": "/BlastOutput2/0/report/results/search"
+    },
+    "stage": null
+  },
+  "search_binding": {
+    "biological_round": null,
+    "database_identity": {
+      "namespace": "synthetic",
+      "preparation_type": "sequence_database",
+      "release": "r1",
+      "scope": "selected_sequences",
+      "source": {
+        "pointer": "/preparation",
+        "source_ref": "synthetic_source"
+      },
+      "value": "target",
+      "version": "1"
+    },
+    "input_pssm_key": null,
+    "provenance": {
+      "pointer": "/requested_job/native_blast_standard_database",
+      "source_ref": "source-bundle"
+    },
+    "search_key": {
+      "artifact_key": "report",
+      "member_ordinal": null,
+      "report_index": 0,
+      "search_pointer": "/BlastOutput2/0/report/results/search"
+    },
+    "stage": "sequence_database"
+  },
+  "sequence_identity_bindings": [
+    {
+      "binding": {
+        "algorithm": "sha256",
+        "digest": "be5884f5108f13d3e64bda3992e916bc204e704322e49bb1623ef9a7b496e64b",
+        "hit_index": 0,
+        "kind": "full_sequence_digest",
+        "linkage_pointer": "/sequence_links/0",
+        "linkage_source_ref": "source-sequence-meta-links",
+        "molecule": "aa",
+        "pointer": "",
+        "record_locator": {
+          "kind": "fasta_record",
+          "record_ordinal": 0
+        },
+        "report_index": 0,
+        "sequence_group": "sha256:be5884f5108f13d3e64bda3992e916bc204e704322e49bb1623ef9a7b496e64b",
+        "sequence_length": 10,
+        "source_ref": "source-sequence-meta-records"
+      },
+      "search_key": {
+        "artifact_key": "report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/search"
+      }
+    },
+    {
+      "binding": {
+        "algorithm": "sha256",
+        "digest": "f287ecbc4ac4c62be5c3deae84ca86ae001be2061987568c4a1d8eedebd55f64",
+        "hit_index": 1,
+        "kind": "full_sequence_digest",
+        "linkage_pointer": "/sequence_links/1",
+        "linkage_source_ref": "source-sequence-meta-links",
+        "molecule": "aa",
+        "pointer": "",
+        "record_locator": {
+          "kind": "fasta_record",
+          "record_ordinal": 1
+        },
+        "report_index": 0,
+        "sequence_group": "sha256:f287ecbc4ac4c62be5c3deae84ca86ae001be2061987568c4a1d8eedebd55f64",
+        "sequence_length": 10,
+        "source_ref": "source-sequence-meta-records"
+      },
+      "search_key": {
+        "artifact_key": "report",
+        "member_ordinal": null,
+        "report_index": 0,
+        "search_pointer": "/BlastOutput2/0/report/results/search"
+      }
+    }
+  ],
+  "target_context": null
+}

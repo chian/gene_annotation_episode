@@ -1,0 +1,155 @@
+{
+  "artifacts": [
+    {
+      "format": "hmmer3_ascii",
+      "relative_path": "outputs/converted_models",
+      "role": "stdout",
+      "sha256": "5facad48ba0ac10ee01525601844fb68f873f0ee18ee95793027268693cea418",
+      "size_bytes": 6665
+    },
+    {
+      "format": "hmmer_stderr",
+      "relative_path": "outputs/stderr",
+      "role": "stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "format": "hmmer3_ascii",
+      "relative_path": "outputs/converted_models",
+      "role": "converted_models",
+      "sha256": "5facad48ba0ac10ee01525601844fb68f873f0ee18ee95793027268693cea418",
+      "size_bytes": 6665
+    }
+  ],
+  "environment": {
+    "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check004/temporary/test_actual_conversion_revisio4/hmmer-preparation-attempt/tmp",
+    "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check004/temporary/test_actual_conversion_revisio4/hmmer-preparation-attempt/tmp",
+    "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check004/temporary/test_actual_conversion_revisio4/hmmer-preparation-attempt/tmp",
+    "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check004/temporary/test_actual_conversion_revisio4/hmmer-preparation-attempt/cache"
+  },
+  "failures": [],
+  "finished_at": "2026-10-26T09:07:42.968433+00:00",
+  "identity": {
+    "attempt_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e",
+    "episode_id": "selected-local-child",
+    "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check004/temporary/test_actual_conversion_revisio4/native.json",
+    "operation_key": "selected-command",
+    "requested_job_sha256": "2af2af07f13e737336bb14e4e7c703da9696c3f5a24c7b711a62d2b455c30097",
+    "resource_id": "local",
+    "run_id": "producer267-test"
+  },
+  "inputs": [
+    {
+      "artifact_ref": "fixture267:models:0",
+      "expected_sha256": "4d3f4b96321b7383137f3b19814fb1c1d7310e247da4dc0b84d2f879a2cd565c",
+      "expected_size_bytes": 2725,
+      "final_sha256": "4d3f4b96321b7383137f3b19814fb1c1d7310e247da4dc0b84d2f879a2cd565c",
+      "final_size_bytes": 2725,
+      "format": "hmmer_binary",
+      "ordinal": 0,
+      "original_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmconvert_binary/stdout.log",
+      "relative_path": "inputs/models.hmm",
+      "role": "models",
+      "staged_sha256": "4d3f4b96321b7383137f3b19814fb1c1d7310e247da4dc0b84d2f879a2cd565c",
+      "staged_size_bytes": 2725
+    }
+  ],
+  "mode": "ascii",
+  "native_abi": {
+    "byte_order": "little",
+    "bytes_per_float": 8,
+    "c_float_bytes": 4,
+    "c_int_bytes": 4,
+    "c_long_bytes": 8,
+    "float_format": "ieee754_binary64",
+    "int32_bytes": 4,
+    "uint16_bytes": 2,
+    "uint32_bytes": 4,
+    "uint64_bytes": 8,
+    "uint8_bytes": 1
+  },
+  "operation": {
+    "engine_version": "3.4",
+    "mode": "ascii",
+    "program": "hmmconvert",
+    "settings": {
+      "--outfmt": "3/e",
+      "-a": true
+    }
+  },
+  "program": "hmmconvert",
+  "realized_argv": [
+    "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmconvert",
+    "--outfmt",
+    "3/e",
+    "-a",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check004/temporary/test_actual_conversion_revisio4/hmmer-preparation-attempt/inputs/models.hmm"
+  ],
+  "requested_job": {
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmconvert",
+      "--outfmt",
+      "3/e",
+      "-a",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmconvert_binary/stdout.log"
+    ],
+    "environment": {},
+    "native_hmmer_preparation": {
+      "environment": {},
+      "grading_parameters": {},
+      "input_metadata": {},
+      "key": null,
+      "mode": "ascii",
+      "operands": [
+        {
+          "artifact_ref": "fixture267:models:0",
+          "format": "hmmer_binary",
+          "ordinal": 0,
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmconvert_binary/stdout.log",
+          "role": "models",
+          "sha256": "4d3f4b96321b7383137f3b19814fb1c1d7310e247da4dc0b84d2f879a2cd565c",
+          "size_bytes": 2725
+        }
+      ],
+      "options": [
+        "--outfmt",
+        "3/e"
+      ],
+      "outputs": [
+        {
+          "format": "hmmer3_ascii",
+          "relative_path": "outputs/converted_models",
+          "role": "stdout"
+        },
+        {
+          "format": "hmmer_stderr",
+          "relative_path": "outputs/stderr",
+          "role": "stderr"
+        },
+        {
+          "format": "hmmer3_ascii",
+          "relative_path": "outputs/converted_models",
+          "role": "converted_models"
+        }
+      ],
+      "program": "hmmconvert",
+      "software": {
+        "engine_version": "3.4",
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmconvert",
+        "sha256": "906291d58ec6733f7ec48537c4e907811da5cf232a0bebcccf52f272eaf4fafd"
+      },
+      "version": "native_hmmer_preparation_job_v1"
+    }
+  },
+  "returncode": 0,
+  "software": {
+    "actual_sha256": "906291d58ec6733f7ec48537c4e907811da5cf232a0bebcccf52f272eaf4fafd",
+    "declared_engine_version": "3.4",
+    "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmconvert",
+    "expected_sha256": "906291d58ec6733f7ec48537c4e907811da5cf232a0bebcccf52f272eaf4fafd"
+  },
+  "started_at": "2026-10-26T09:07:42.889996+00:00",
+  "version": "native_hmmer_preparation_bundle_v1",
+  "working_copies": []
+}

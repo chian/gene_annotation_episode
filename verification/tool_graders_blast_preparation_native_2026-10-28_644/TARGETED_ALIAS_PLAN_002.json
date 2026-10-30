@@ -1,0 +1,40 @@
+{
+  "record_type": "targeted_unchanged_binary_alias_followup_644_v1",
+  "runner_attempt": "check102c_blast_alias_binary",
+  "reason": "Original text alias failed. Source establishes separate literal text and canonical binary input paths; reuse actual prior binary output without modifying it.",
+  "input_source": "retained_native case04 bound.bsl plus exact original096 ten-file manifest and DB bytes",
+  "cases": [
+    {
+      "id": "01_binary_subset_alias",
+      "program": "blastdb_aliastool",
+      "arguments": [
+        "-db",
+        "db/tiny",
+        "-dbtype",
+        "nucl",
+        "-seqidlist",
+        "bound.bsl",
+        "-out",
+        "subset",
+        "-title",
+        "644 retained binary subset"
+      ],
+      "verification_helper": false
+    },
+    {
+      "id": "02_selected_subset_inspection",
+      "program": "blastdbcmd",
+      "arguments": [
+        "-db",
+        "subset",
+        "-dbtype",
+        "nucl",
+        "-entry",
+        "all",
+        "-outfmt",
+        "%o\t%i\t%l\t%s"
+      ],
+      "verification_helper": true
+    }
+  ]
+}

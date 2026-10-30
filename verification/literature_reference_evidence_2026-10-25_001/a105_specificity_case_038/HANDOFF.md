@@ -1,0 +1,13 @@
+# Stable packet handoff to parent
+
+Read FINDINGS.md and PROVENANCE.md as one retained paper-specific packet, then perform your own required complete post-paper authority reset before interpreting it.
+
+The useful result is a same-construct, separately assayed **PAP versus IMP/FBP** reference-function distinction. Reported efficiencies are **42±8**, **0.0027±0.0015**, **0.025±0.001 µM−1 min−1**, averages of three independent experiments with Table 1's error statistic unspecified. The ratios are **15555.5556** and **1680**, log effects **9.6521731243** and **7.4265490724**. Distinct protocols mean these do not establish preference at one common condition. Positive alternative activity is preserved.
+
+The profile/index continuation is explicit rather than a ratio labeled final score: conditional known-normal `S_I=46.5822230103/V_II`, `S_F=27.5768155624/V_FF`, `B=tanh(S/2)`. Both-preference joint assertion has conditional `S_both=min(S_I,S_F)` for these positive contrasts under the declared model. Actual V and S/B are **null** because error meaning, covariance and the applicable observation model are not supplied. Common-condition contrast additionally lacks a measured response mapping. Do not fill those gaps with quality weights.
+
+Shared PAP numerator, calibration and potential preparation/amount sharing require explicit covariance/identity. The separate plate-complementation experiment addresses cellular substitution in E. coli, not a second kinetic replication or substrate-resolved measurement. PAPS kinetic characterization failed owing to decomposition/competing PAP and lithium; it is not zero activity.
+
+Needed targeted contract extension: witnessed **kinetic parameter** (Km/kcat/kcat_over_Km) rows and contrasts, with units, per-substrate conditions, untyped errors/count basis and original fit identities. Current rate and reported-percent paths do not implement it. Preserve those paths; do not silently relabel efficiency as rate or manufacture TSV primary data. FINDINGS.md gives paired extraction/cell definitions, allowed meanings, a concrete instruction draft and unknown/conflicting behavior for feedback, without wiring TASK text.
+
+Primary source bytes SHA256: `53be249a7cfc6df40d85fdb5dfc39b156d1c260fdb810951102eeaa4070a3f9e`. Read coverage is complete available BioC Methods/Results prose, Table 1 and captions; rendered equations, figure pixels, supplement and raw data not inspected. Parent can reconstruct native arithmetic from this packet without source reacquisition or reinterpretation. No shared production/test/library/prompt/run edits; no model scientific run; no claim A105 complete.

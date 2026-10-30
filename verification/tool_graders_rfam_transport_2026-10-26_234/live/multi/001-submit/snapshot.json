@@ -1,0 +1,117 @@
+{
+  "service": "rfam_batch",
+  "url": "https://batch.rfam.org/submit-job",
+  "request": {
+    "action": "submit",
+    "job_id": null,
+    "representation": "json",
+    "multipart_field": "sequence_file",
+    "filename": "public119-transformations.fasta",
+    "file_sha256": "4dc1529db76f089ec36caf8f3d176028d3bb5c828a1d04bfd130e72f92f515f4",
+    "file_bytes": 818
+  },
+  "retrieved_at": "2026-10-26T03:19:26.111802+00:00",
+  "media_type": "application/json",
+  "transport": {
+    "status": 200,
+    "reason": "OK",
+    "representation": "http_response_bytes",
+    "headers": {
+      "server": "uvicorn",
+      "content-type": "application/json",
+      "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+      "date": "Mon, 26 Oct 2026 03:19:23 GMT",
+      "connection": "close",
+      "content-length": "155"
+    },
+    "header_items": [
+      [
+        "server",
+        "uvicorn"
+      ],
+      [
+        "content-type",
+        "application/json"
+      ],
+      [
+        "strict-transport-security",
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      [
+        "date",
+        "Mon, 26 Oct 2026 03:19:23 GMT"
+      ],
+      [
+        "Connection",
+        "close"
+      ],
+      [
+        "content-length",
+        "155"
+      ]
+    ],
+    "request": {
+      "method": "POST",
+      "url": "https://batch.rfam.org/submit-job",
+      "headers": {
+        "Host": "batch.rfam.org",
+        "Accept": "application/json",
+        "Accept-Encoding": "identity",
+        "User-Agent": "gene-annotation-episode/0.2",
+        "Connection": "close",
+        "Content-Type": "multipart/form-data; boundary=gene-annotation-1326f8d0a8514dd59fb7c50bdd77f219",
+        "Content-Length": "1052"
+      },
+      "header_items": [
+        [
+          "Host",
+          "batch.rfam.org"
+        ],
+        [
+          "Accept",
+          "application/json"
+        ],
+        [
+          "Accept-Encoding",
+          "identity"
+        ],
+        [
+          "User-Agent",
+          "gene-annotation-episode/0.2"
+        ],
+        [
+          "Connection",
+          "close"
+        ],
+        [
+          "Content-Type",
+          "multipart/form-data; boundary=gene-annotation-1326f8d0a8514dd59fb7c50bdd77f219"
+        ],
+        [
+          "Content-Length",
+          "1052"
+        ]
+      ],
+      "body_base64": "LS1nZW5lLWFubm90YXRpb24tMTMyNmY4ZDBhODUxNGRkNTlmYjdjNTBiZGQ3N2YyMTkNCkNvbnRlbnQtRGlzcG9zaXRpb246IGZvcm0tZGF0YTsgbmFtZT0ic2VxdWVuY2VfZmlsZSI7IGZpbGVuYW1lPSJwdWJsaWMxMTktdHJhbnNmb3JtYXRpb25zLmZhc3RhIg0KQ29udGVudC1UeXBlOiB0ZXh0L3BsYWluDQoNCj5yZmFtX2V4YW1wbGVfb3JpZ2luYWwKQUdUVEFDR0dDQ0FUQUNDVENBR0FHQUFUQVRBQ0NHVEFUQ0NDR1RUQ0dBVENUR0NHQUFHVFRBQUdDVENUR0FBR0dHQ0dUQ0dUQ0FHVEFDVEFUQUdUR0dHVEdBQ0NBVEFUR0dHQUFUQUNHQUNHVEdDVEdUQUdDVFQKPnJmYW1fZXhhbXBsZV9yZXBlYXQKQUdUVEFDR0dDQ0FUQUNDVENBR0FHQUFUQVRBQ0NHVEFUQ0NDR1RUQ0dBVENUR0NHQUFHVFRBQUdDVENUR0FBR0dHQ0dUQ0dUQ0FHVEFDVEFUQUdUR0dHVEdBQ0NBVEFUR0dHQUFUQUNHQUNHVEdDVEdUQUdDVFQKPnJmYW1fZXhhbXBsZV9yZXZlcnNlX2NvbXBsZW1lbnQKQUFHQ1RBQ0FHQ0FDR1RDR1RBVFRDQ0NBVEFUR0dUQ0FDQ0NBQ1RBVEFHVEFDVEdBQ0dBQ0dDQ0NUVENBR0FHQ1RUQUFDVFRDR0NBR0FUQ0dBQUNHR0dBVEFDR0dUQVRBVFRDVENUR0FHR1RBVEdHQ0NHVEFBQ1QKPnJmYW1fZXhhbXBsZV9wcmVmaXg3MApBR1RUQUNHR0NDQVRBQ0NUQ0FHQUdBQVRBVEFDQ0dUQVRDQ0NHVFRDR0FUQ1RHQ0dBQUdUVEFBR0NUQ1RHQUFHR0dDR1RDCj5yZmFtX2V4YW1wbGVfaW5zZXJ0aW9uCkFHVFRBQ0dHQ0NBVEFDQ1RDQUdBR0FBVEFUQUNDR1RBVENDQ0dUVENHQVRDVEdDR0FBR1RUQUFHQ1RDVEFHQUFHR0dDR1RDR1RDQUdUQUNUQVRBR1RHR0dUR0FDQ0FUQVRHR0dBQVRBQ0dBQ0dUR0NUR1RBR0NUVAo+cmZhbV9leGFtcGxlX2RlbGV0aW9uCkFHVFRBQ0dHQ0NBVEFDQ1RDQUdBR0FBVEFUQUNDR1RBVENDQ0dUVENHQVRDVEdDR0FBR1RUQUFHQ1RDVEFBR0dHQ0dUQ0dUQ0FHVEFDVEFUQUdUR0dHVEdBQ0NBVEFUR0dHQUFUQUNHQUNHVEdDVEdUQUdDVFQKDQotLWdlbmUtYW5ub3RhdGlvbi0xMzI2ZjhkMGE4NTE0ZGQ1OWZiN2M1MGJkZDc3ZjIxOS0tDQo=",
+      "body_sha256": "0fbd4cb61031dfe5f995b448a589773d9f6de79bcc7413b59b64b92bd71ef7c6",
+      "body_bytes": 1052
+    },
+    "declared_url": "https://batch.rfam.org/submit-job",
+    "effective_url": "https://batch.rfam.org/submit-job",
+    "acquisition_started_at": "2026-10-26T03:19:23.211874+00:00",
+    "acquisition_finished_at": "2026-10-26T03:19:26.111802+00:00",
+    "elapsed_seconds": 2.899943146039732,
+    "duration_meaning": "http_request_turnaround",
+    "timeout_seconds": 45.0,
+    "body_complete": true,
+    "bytes_received": 155,
+    "declared_content_length": 155,
+    "body_capture_error": null,
+    "automatic_redirects": false,
+    "automatic_retries": false,
+    "http_request_count": 1,
+    "redirect_not_followed": false,
+    "failure_code": null
+  },
+  "content_sha256": "b246a6a477052f33da216a64166343beb290727ba64032b00cbe07bff7ca07ab"
+}

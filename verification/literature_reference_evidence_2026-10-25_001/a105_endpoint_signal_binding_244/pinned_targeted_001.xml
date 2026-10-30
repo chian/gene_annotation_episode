@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="6" skipped="0" tests="35" time="165.897" timestamp="2026-10-28T02:33:38.901104-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_exact_schema_discovery_selected_sheet_and_requested_rows" time="4.343" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_component_discriminator_and_exact_registered_form[unit]" time="3.689" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_component_discriminator_and_exact_registered_form[formula]" time="3.074" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_component_discriminator_and_exact_registered_form[meaning]" time="4.294" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_order_and_empty_rosters[components0]" time="3.524" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_order_and_empty_rosters[components1]" time="3.524" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_source_custody_and_request_preflight[primary]" time="1.675" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_source_custody_and_request_preflight[image]" time="1.446" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_source_custody_and_request_preflight[context]" time="2.227" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_source_custody_and_request_preflight[covariance]" time="1.922" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_source_custody_and_request_preflight[order]" time="2.123" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_conditional_and_partial_meanings[supported]" time="3.586" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_conditional_and_partial_meanings[unknown]" time="3.958" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_conditional_and_partial_meanings[conflicting]" time="3.691" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_conditional_and_partial_meanings[unsupported]" time="3.333" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_conditional_and_partial_meanings[explicit_conditional_scenario]" time="3.949" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_narrow_admission_private_receipt_access_and_public_originals" time="4.926" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_full_task_and_no_unrequested_operand_hydration" time="3.542" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_all_sources_keep_assigned_page_ancestry" time="1.881"><failure message="ValueError: binding_context_path_must_match_role">tests/test_literature_endpoint_signal_binding_244.py:220: in test_all_sources_keep_assigned_page_ancestry
+    pagectx=replace(ctx,role='literature_page',assignment=page)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/dataclasses.py:1581: in replace
+    return obj.__class__(**changes)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+&lt;string&gt;:11: in __init__
+    ???
+gene_annotation_episode/episode_bindings.py:71: in __post_init__
+    raise ValueError('binding_context_path_must_match_role')
+E   ValueError: binding_context_path_must_match_role</failure></testcase><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_authorized_partials_preserve_meanings_and_total[missing_baseline]" time="3.116" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_authorized_partials_preserve_meanings_and_total[already_applied]" time="3.232" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_authorized_partials_preserve_meanings_and_total[image_unavailable]" time="4.135" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_synthetic_reading_covariance_is_not_physical_uncertainty_or_matrix_return[known]" time="4.172" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_synthetic_reading_covariance_is_not_physical_uncertainty_or_matrix_return[unknown]" time="3.368" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_saved_tampering_rejects_without_repair[row]" time="3.766" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_saved_tampering_rejects_without_repair[sheet]" time="4.389" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_saved_tampering_rejects_without_repair[schema]" time="3.279" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_saved_tampering_rejects_without_repair[source]" time="3.476" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_saved_tampering_rejects_without_repair[receipt]" time="3.243" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_original_pending_alias_first_readonly_composer_has_no_factory_or_cache_dependency[None]" time="5.099" /><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_original_pending_alias_first_readonly_composer_has_no_factory_or_cache_dependency[operation_contract_information_v1]" time="4.661"><failure message="gene_annotation_episode.episode_contract_information.ContractInformationError: original_literature_numerical_contracts_mismatch">tests/test_literature_endpoint_signal_binding_244.py:325: in test_original_pending_alias_first_readonly_composer_has_no_factory_or_cache_dependency
+    expanded=contracts.expand_numerical_form(json.dumps(submitted),child_role='literature',saved=json.loads(actual))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_numerical_contracts.py:200: in expand_numerical_form
+    record = validate_frozen_contracts(saved)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_numerical_contracts.py:167: in validate_frozen_contracts
+    raise ContractInformationError('original_literature_numerical_contracts_mismatch')
+E   gene_annotation_episode.episode_contract_information.ContractInformationError: original_literature_numerical_contracts_mismatch</failure></testcase><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_selected_shared_loop_and_first_readonly_composer[None-False-False]" time="11.091"><failure message="RuntimeError: coroutine raised StopIteration">tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+tests/test_literature_endpoint_signal_binding_244.py:377: in test_selected_shared_loop_and_first_readonly_composer
+    asyncio.run(run_workflow(store,ToolRegistry(store),provider=provider,run_dir=tmp_path/'run',
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4324: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4646: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1495: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1086: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</failure></testcase><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_selected_shared_loop_and_first_readonly_composer[None-True-False]" time="11.393"><failure message="RuntimeError: coroutine raised StopIteration">tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+tests/test_literature_endpoint_signal_binding_244.py:377: in test_selected_shared_loop_and_first_readonly_composer
+    asyncio.run(run_workflow(store,ToolRegistry(store),provider=provider,run_dir=tmp_path/'run',
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4324: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4646: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1495: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1086: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+E   RuntimeError: coroutine raised StopIteration</failure></testcase><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_selected_shared_loop_and_first_readonly_composer[operation_contract_information_v1-True-False]" time="20.109"><failure message="RuntimeError: coroutine raised StopIteration">tests/test_runtime.py:183: in complete
+    response = next(self.script)
+               ^^^^^^^^^^^^^^^^^
+E   StopIteration
+
+The above exception was the direct cause of the following exception:
+tests/test_literature_endpoint_signal_binding_244.py:377: in test_selected_shared_loop_and_first_readonly_composer
+    asyncio.run(run_workflow(store,ToolRegistry(store),provider=provider,run_dir=tmp_path/'run',
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4324: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4646: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1495: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1054: in call
+    return await self.exchange_decision(context, schema, index, saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1336: in exchange_decision
+    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',
+tests/test_literature_endpoint_signal_binding_244.py:373: in complete
+    async def complete(self,episode_id,*a):self.active_episode=episode_id;return await super().complete(episode_id,*a)
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_contract_information_runtime_059.py:41: in complete
+    return await super().complete(episode_id, role, instructions, context, output_schema)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_runtime_decision_exchanges.py:100: in complete
+    result = await super().complete(episode_id, role, instructions, context, output_schema)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   RuntimeError: coroutine raised StopIteration</failure></testcase><testcase classname="tests.test_literature_endpoint_signal_binding_244" name="test_selected_shared_loop_and_first_readonly_composer[None-True-True]" time="14.522"><failure message="AssertionError: assert ['retained_fr...ion_variance'] == ['retained_fraction']&#10;  &#10;  Left contains one more item: 'retained_fraction_variance'&#10;  Use -v to get more diff">tests/test_literature_endpoint_signal_binding_244.py:377: in test_selected_shared_loop_and_first_readonly_composer
+    asyncio.run(run_workflow(store,ToolRegistry(store),provider=provider,run_dir=tmp_path/'run',
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4324: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4646: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:636: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:501: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1495: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1086: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+tests/test_literature_endpoint_signal_binding_244.py:363: in integrate
+    assert [r['component'] for r in form['numbers']]==wanted
+E   AssertionError: assert ['retained_fr...ion_variance'] == ['retained_fraction']
+E     
+E     Left contains one more item: 'retained_fraction_variance'
+E     Use -v to get more diff</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,1188 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:gene-annotation:proteome-native-contracts:002",
+  "$defs": {
+    "ContentBinding": {
+      "type": "object",
+      "properties": {
+        "source_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_field": {
+          "enum": [
+            "artifact_ref",
+            "text_ref",
+            "stdout_ref",
+            "stderr_ref",
+            "request_ref"
+          ]
+        },
+        "artifact_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "byte_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "source_ref",
+        "artifact_field",
+        "artifact_ref",
+        "sha256",
+        "byte_count"
+      ],
+      "additionalProperties": false
+    },
+    "Diagnostic": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "enum": [
+            "native_encoding_invalid",
+            "native_json_invalid",
+            "duplicate_json_member",
+            "native_schema_incompatible",
+            "native_number_invalid",
+            "native_fraction_out_of_range",
+            "native_row_invalid",
+            "native_table_header_invalid",
+            "native_table_width_invalid",
+            "native_duplicate_reference_id",
+            "native_comparison_track_missing",
+            "native_source_version_unverified",
+            "native_zero_default_divergence",
+            "source_bytes_incomplete",
+            "source_object_incomplete",
+            "original_task_mismatch",
+            "artifact_binding_unqualified",
+            "artifact_digest_mismatch",
+            "producer_byte_version_unknown",
+            "representation_conflict",
+            "native_staging_collision",
+            "input_arrays_required",
+            "input_count_invalid",
+            "reference_index_invalid",
+            "native_threshold_invalid",
+            "original_input_inventory_missing",
+            "execution_input_binding_unknown",
+            "input_inventory_truncated",
+            "input_sequence_invalid",
+            "input_empty",
+            "native_identifier_ambiguous",
+            "native_identifier_unmatched",
+            "reference_membership_conflict",
+            "subject_membership_conflict",
+            "sequence_digest_conflict",
+            "sequence_length_conflict",
+            "metadata_source_invalid",
+            "metadata_join_missing",
+            "metadata_join_ambiguous",
+            "metadata_coordinate_convention_unknown",
+            "track_materialization_unknown",
+            "projection_incomplete",
+            "native_hit_category_invalid",
+            "legacy_hsp_data_not_retained",
+            "directional_report_missing",
+            "directional_report_truncated",
+            "directional_report_incompatible",
+            "producer_manifest_missing",
+            "producer_exit_status_missing",
+            "producer_query_missing",
+            "native_hit_limit_censoring",
+            "alignment_counts_conflict",
+            "alignment_coordinates_conflict",
+            "alignment_mapping_conflict",
+            "selection_scope_invalid",
+            "requested_field_unavailable",
+            "denominator_zero"
+          ]
+        },
+        "severity": {
+          "enum": [
+            "error",
+            "qualification"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^(|/.*)$"
+        },
+        "scope": {
+          "$ref": "#/$defs/Scope"
+        },
+        "source_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceField"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "severity",
+        "path",
+        "scope",
+        "source_fields"
+      ],
+      "additionalProperties": false
+    },
+    "NativeAssociationRecord": {
+      "type": "object",
+      "properties": {
+        "association_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reference_row_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "track_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "comparison_ordinal": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "native_pointer": {
+          "type": "string",
+          "pattern": "^(|/.*)$"
+        },
+        "hit": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "contig": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "patric_id": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "locus_tag": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "gene_name": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "function": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "gene": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "aa_length": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "percent_identity": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "seq_coverage": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "valid": {
+          "type": "boolean"
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Diagnostic"
+          }
+        }
+      },
+      "required": [
+        "association_key",
+        "reference_row_ordinal",
+        "track_key",
+        "comparison_ordinal",
+        "native_pointer",
+        "hit",
+        "contig",
+        "patric_id",
+        "locus_tag",
+        "gene_name",
+        "function",
+        "gene",
+        "aa_length",
+        "percent_identity",
+        "seq_coverage",
+        "valid",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "NativeJSONDocument": {
+      "type": "object",
+      "properties": {
+        "genome_names": {
+          "type": "object",
+          "properties": {
+            "ref_genome": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "ref_genome"
+          ],
+          "additionalProperties": false,
+          "patternProperties": {
+            "^comp_genome_[1-9][0-9]*$": {
+              "type": "string"
+            }
+          }
+        },
+        "feature_matches": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NativeJSONRow"
+          }
+        }
+      },
+      "required": [
+        "genome_names",
+        "feature_matches"
+      ],
+      "additionalProperties": false
+    },
+    "NativeJSONRow": {
+      "type": "object",
+      "properties": {
+        "ref_genome_contig": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ref_genome_patric_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ref_genome_locus_tag": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ref_genome_gene_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ref_genome_plfam_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ref_genome_pgfam_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ref_genome_function": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ref_genome_strand": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ref_genome_gene": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string",
+              "pattern": "^[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ref_genome_aa_length": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string",
+              "pattern": "^[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ref_genome_start": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string",
+              "pattern": "^[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ref_genome_end": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string",
+              "pattern": "^[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "ref_genome_patric_id"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^comp_genome_[1-9][0-9]*_hit$": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "^comp_genome_[1-9][0-9]*_contig$": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "^comp_genome_[1-9][0-9]*_patric_id$": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "^comp_genome_[1-9][0-9]*_locus_tag$": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "^comp_genome_[1-9][0-9]*_gene_name$": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "^comp_genome_[1-9][0-9]*_function$": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "^comp_genome_[1-9][0-9]*_gene$": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string",
+              "pattern": "^[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "^comp_genome_[1-9][0-9]*_aa_length$": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string",
+              "pattern": "^[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "^comp_genome_[1-9][0-9]*_percent_identity$": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string",
+              "pattern": "^[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "^comp_genome_[1-9][0-9]*_seq_coverage$": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string",
+              "pattern": "^[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "NativeNumber": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "presence": {
+          "enum": [
+            "value",
+            "explicit_null",
+            "omitted",
+            "blank",
+            "invalid"
+          ]
+        },
+        "lexeme": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_field": {
+          "$ref": "#/$defs/SourceField"
+        }
+      },
+      "required": [
+        "value",
+        "presence",
+        "lexeme",
+        "source_field"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "presence": {
+                "const": "value"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "number"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "NativeProjection": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_proteome_native_projection_v1"
+        },
+        "scientific_mode": {
+          "const": "proteome_comparison"
+        },
+        "format": {
+          "enum": [
+            "genome_comparison_json_v1",
+            "genome_comparison_tsv_v1"
+          ]
+        },
+        "source": {
+          "$ref": "#/$defs/NativeSource"
+        },
+        "source_contract": {
+          "$ref": "#/$defs/SourceContract"
+        },
+        "tracks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NativeTrack"
+          }
+        },
+        "reference_rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NativeReferenceRecord"
+          }
+        },
+        "associations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NativeAssociationRecord"
+          }
+        },
+        "physical_record_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "table_field_order": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "projection_completeness": {
+          "enum": [
+            "complete_document",
+            "complete_prefix_only",
+            "partial_or_unknown_artifact",
+            "invalid_document"
+          ]
+        },
+        "unsupported_field_paths": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(|/.*)$"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "scientific_mode",
+        "format",
+        "source",
+        "source_contract",
+        "tracks",
+        "reference_rows",
+        "associations",
+        "physical_record_count",
+        "table_field_order",
+        "projection_completeness",
+        "unsupported_field_paths"
+      ],
+      "additionalProperties": false
+    },
+    "NativeProjectionResult": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "ok",
+            "partial",
+            "invalid"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NativeProjection"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Requirement"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Diagnostic"
+          }
+        }
+      },
+      "required": [
+        "status",
+        "value",
+        "requirements",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "NativeReferenceRecord": {
+      "type": "object",
+      "properties": {
+        "row_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reference_row_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "native_pointer": {
+          "type": "string",
+          "pattern": "^(|/.*)$"
+        },
+        "contig": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "patric_id": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "locus_tag": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "gene_name": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "plfam_id": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "pgfam_id": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "function": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "strand": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "gene": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "aa_length": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "start": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "end": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "valid": {
+          "type": "boolean"
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Diagnostic"
+          }
+        }
+      },
+      "required": [
+        "row_ordinal",
+        "reference_row_key",
+        "native_pointer",
+        "contig",
+        "patric_id",
+        "locus_tag",
+        "gene_name",
+        "plfam_id",
+        "pgfam_id",
+        "function",
+        "strand",
+        "gene",
+        "aa_length",
+        "start",
+        "end",
+        "valid",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "NativeSource": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "$ref": "#/$defs/ContentBinding"
+        },
+        "body_complete": {
+          "type": "boolean"
+        },
+        "object_complete": {
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ]
+        }
+      },
+      "required": [
+        "content",
+        "body_complete",
+        "object_complete"
+      ],
+      "additionalProperties": false
+    },
+    "NativeString": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "presence": {
+          "enum": [
+            "value",
+            "explicit_null",
+            "omitted",
+            "blank",
+            "invalid"
+          ]
+        },
+        "source_field": {
+          "$ref": "#/$defs/SourceField"
+        }
+      },
+      "required": [
+        "value",
+        "presence",
+        "source_field"
+      ],
+      "additionalProperties": false
+    },
+    "NativeTrack": {
+      "type": "object",
+      "properties": {
+        "track_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "comparison_ordinal": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "display_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "materialization": {
+          "enum": [
+            "reference_rows",
+            "table_field_block",
+            "published_association",
+            "producer_manifest",
+            "unknown"
+          ]
+        },
+        "source_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceField"
+          }
+        }
+      },
+      "required": [
+        "track_key",
+        "comparison_ordinal",
+        "display_name",
+        "materialization",
+        "source_fields"
+      ],
+      "additionalProperties": false
+    },
+    "Requirement": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "enum": [
+            "native_encoding_invalid",
+            "native_json_invalid",
+            "duplicate_json_member",
+            "native_schema_incompatible",
+            "native_number_invalid",
+            "native_fraction_out_of_range",
+            "native_row_invalid",
+            "native_table_header_invalid",
+            "native_table_width_invalid",
+            "native_duplicate_reference_id",
+            "native_comparison_track_missing",
+            "native_source_version_unverified",
+            "native_zero_default_divergence",
+            "source_bytes_incomplete",
+            "source_object_incomplete",
+            "original_task_mismatch",
+            "artifact_binding_unqualified",
+            "artifact_digest_mismatch",
+            "producer_byte_version_unknown",
+            "representation_conflict",
+            "native_staging_collision",
+            "input_arrays_required",
+            "input_count_invalid",
+            "reference_index_invalid",
+            "native_threshold_invalid",
+            "original_input_inventory_missing",
+            "execution_input_binding_unknown",
+            "input_inventory_truncated",
+            "input_sequence_invalid",
+            "input_empty",
+            "native_identifier_ambiguous",
+            "native_identifier_unmatched",
+            "reference_membership_conflict",
+            "subject_membership_conflict",
+            "sequence_digest_conflict",
+            "sequence_length_conflict",
+            "metadata_source_invalid",
+            "metadata_join_missing",
+            "metadata_join_ambiguous",
+            "metadata_coordinate_convention_unknown",
+            "track_materialization_unknown",
+            "projection_incomplete",
+            "native_hit_category_invalid",
+            "legacy_hsp_data_not_retained",
+            "directional_report_missing",
+            "directional_report_truncated",
+            "directional_report_incompatible",
+            "producer_manifest_missing",
+            "producer_exit_status_missing",
+            "producer_query_missing",
+            "native_hit_limit_censoring",
+            "alignment_counts_conflict",
+            "alignment_coordinates_conflict",
+            "alignment_mapping_conflict",
+            "selection_scope_invalid",
+            "requested_field_unavailable",
+            "denominator_zero"
+          ]
+        },
+        "scope": {
+          "$ref": "#/$defs/Scope"
+        },
+        "required_input": {
+          "enum": [
+            "complete_artifact_bytes",
+            "exact_input_fasta",
+            "identifier_mapping",
+            "complete_input_membership",
+            "producer_manifest",
+            "directional_blast_report",
+            "feature_metadata",
+            "genome_metadata",
+            "coordinate_convention",
+            "native_producer_version",
+            "requested_calculation_field"
+          ]
+        },
+        "source_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceField"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "scope",
+        "required_input",
+        "source_fields"
+      ],
+      "additionalProperties": false
+    },
+    "Scope": {
+      "type": "object",
+      "properties": {
+        "track_key": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reference_row_ordinal": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "association_key": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "protein_key": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "report_key": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "query_ordinal": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "hit_ordinal": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "hsp_ordinal": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "track_key",
+        "reference_row_ordinal",
+        "association_key",
+        "protein_key",
+        "report_key",
+        "query_ordinal",
+        "hit_ordinal",
+        "hsp_ordinal"
+      ],
+      "additionalProperties": false
+    },
+    "SourceContract": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "const": "GenomeComparison_inspected_source_v1"
+        },
+        "application_tree": {
+          "const": "5c365e1dca2b3a8c311d7d352e862ff1442eefc9"
+        },
+        "application_sha256": {
+          "const": "4267b35bdd5ad858b833fa2b84eb794c91e95b7f5abc0628b90ec4d6a0a33c14"
+        },
+        "dependency_tree": {
+          "const": "18196fe0df123702457e4af2e0b1e0707d5f5281"
+        },
+        "deployment_match": {
+          "enum": [
+            "demonstrated",
+            "unobserved",
+            "different"
+          ]
+        },
+        "deployment_evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceField"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "application_tree",
+        "application_sha256",
+        "dependency_tree",
+        "deployment_match",
+        "deployment_evidence"
+      ],
+      "additionalProperties": false
+    },
+    "SourceField": {
+      "type": "object",
+      "properties": {
+        "source_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "pointer": {
+          "type": "string",
+          "pattern": "^(|/.*)$"
+        },
+        "row_ordinal": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "field_name": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "source_ref",
+        "sha256",
+        "pointer",
+        "row_ordinal",
+        "field_name"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,34 @@
+--- before/gene_annotation_episode/communication.py
++++ final/gene_annotation_episode/communication.py
+@@ -135,6 +135,16 @@
+         nonlocal native_blast_sources, standard_blast_sources, rna_structure_sources, protein_structure_sources, genomic_overlap_sources
+         nonlocal chromatin_sources, atac_sources, expression_nmf_sources
+         source = node.get("x-source") if isinstance(node, dict) else None
++        if source == "bvbrc_minhash_calculation_diagnostics":
++            if depth != 1:
++                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
++            from .bvbrc_minhash_views import minhash_fact_sources
++            expected = minhash_fact_sources()[source]["report_schema"]
++            if (not _schema_cacheable(node)
++                    or json.dumps(node, sort_keys=True, allow_nan=False)
++                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
++                raise ReportBoundaryError(f"{path}: MinHash diagnostic schema must match its registered source", code="invalid_schema")
++            return
+         if isinstance(source, str) and source.startswith("expression_nmf_"):
+             if depth != 1:
+                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+@@ -211,11 +221,12 @@
+                     != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                 raise ReportBoundaryError(f"{path}: channel fact schema must match its registered source", code="invalid_schema")
+             return
+-        if source in {"literature_compiled_assay_cells", "literature_compiled_assay_v2_cells"}:
++        if source in {"literature_compiled_assay_cells", "literature_compiled_assay_v2_cells", "literature_compiled_assay_v3_cells"}:
+             if depth != 1:
+                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+             from .literature_compiled_assay_storage import compiled_assay_cells_schema
+-            expected = compiled_assay_cells_schema(2 if source == "literature_compiled_assay_v2_cells" else 1)
++            expected = compiled_assay_cells_schema(3 if source == 'literature_compiled_assay_v3_cells'
++                else 2 if source == "literature_compiled_assay_v2_cells" else 1)
+             if (not _schema_cacheable(node)
+                     or json.dumps(node, sort_keys=True, allow_nan=False)
+                     != json.dumps(expected, sort_keys=True, allow_nan=False)):

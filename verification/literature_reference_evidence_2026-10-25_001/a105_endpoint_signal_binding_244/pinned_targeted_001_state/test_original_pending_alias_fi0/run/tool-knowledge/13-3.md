@@ -1,0 +1,5 @@
+The native outputs are native.stdout, native.stderr, hits.tbl and domains.tbl. The caller's result adapter binds them to the original query, reference database and execution identity. A search match is evidence, not an assigned annotation, orthology assertion or substrate-specific assay.
+
+homology.extract acquires a selected page with an explicit limit. Use its returned snapshot_ref for subsequent pages of the same captured results. homology.coverage reads recorded parsed/acquired row coverage and parser/native completion; it does not poll the job or parse it again. homology.errors reads typed extraction failures from that snapshot. An explicit retry_from identifies a failed extraction attempt; inspect what needs changing before retrying.
+
+The requested result references return through the parent's form. The scientific parent integrates them. Successful native termination, extraction completion and episode yielding do not establish that a biological question is resolved. Preserve valid acquired rows when another component fails.

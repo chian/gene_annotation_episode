@@ -1,0 +1,25 @@
+# Owner043 provenance and actual coverage
+
+This separately owned research packet concerns only retained group `organism_19_pyruvate_transport`, primary DOI **10.1128/JB.00599-17**, PMCID **PMC5738728**, PMID **29061664**. The article was prepublished in 2017 and assigned to the 2018 journal volume; “2017 BtsT” and “2018 BtsT” here identify the same paper. The grouped case metadata includes two other papers; neither was opened. No retained BtsT case interpretation, graph transcription, numerical packet or old review was read.
+
+## Honest order and repair
+
+1. Full active attachment, root AGENTS, research AGENTS, latest human039 and selection target040 were read at task start. SOURCE_CORRECTIONS was read; its YeaG correction does not change this BtsT study.
+2. Metadata-only index discovery used `research/slotted_process_library/case_records.json`. A debug command unintentionally printed the first ~1500 characters of the unrelated AF2372 first record, including retained observations. This was an instruction-order error. Those facts are excluded from this investigation; no further AF2372 reading or interpretation occurred.
+3. Selected BtsT identifiers were sent to root before intentionally opening BtsT. Live PMC returned a browser challenge; Europe PMC fullTextXML returned HTTP500. One DOI-specific availability search returned irrelevant hits; none was opened or used. Known PMC PDF and EuropePMC article paths were unavailable through web.
+4. A first BtsT primary text request for lines1–160 was truncated explicitly (tool original count ~10739 tokens). It exposed partial Results/Methods before root's correction about the unrelated exposure arrived. No scoring interpretation was made. This packet does **not** claim the first reset preceded that BtsT exposure.
+5. `reset1_receipt.json`: a fresh full36-chunk authority/sheet/transport-code reset was completed and only acknowledged after each untruncated output was observed. This repaired the stopping point, not the historical ordering.
+6. BtsT retained primary text was then read completely in five sequential untruncated portions: lines1–102,103–127,128–150,151–315,316–395 (the final line lacks a newline, hence wc reports394). This fully repaired the initial truncation. Figures3,4,5 were visually inspected using the saved primary image assets. Figures1–2 captions/text were read but their images were not inspected. No supplemental PDF, supplemental figure images S1–S10 or dataset workbook was opened. Supplement-referenced results below therefore have main-text-report coverage only.
+7. `reset2_receipt.json`: the same full36-chunk set was freshly reread after the complete BtsT text/figure reading, before component interpretation. Each chunk was acknowledged only in the next call after its full observed output. Latest human039, selection040, then the full active goal were last. No new primary paper or paper-specific packet was opened after this reset.
+
+## Full reset content
+
+Both receipts enumerate exact paths, SHA256, byte and line counts, and sequential coverage. They include the full active attachment; AGENTS and GOAL; EPISODE_STRUCTURE, TIME_AWARE_ESTIMATION, TOOL_KNOWLEDGE, TASK_AND_STEERING; both task/steering and evidence-axis amendments; complete VERBATIM_DIRECTION and VERBATIM_RECOVERY; complete EVIDENCE_AXIS_LIBRARY_INSTRUCTIONS with corrections; numeric review002; research AGENTS and SOURCE_CORRECTIONS; the entire696-line A105 proposal including its additive section11; complete transport calculator, input reader and storage; quantity storage, JATS and HTML readers; assay inputs and experimental contracts; latest human039, selection040 and active goal last. Historical target-transfer and source-pooling proposals are read as required history, not adopted here.
+
+## Source custody
+
+`source/PMC5738728_retained_primary.txt` is a byte copy of `research/experimental_scoring_review_2026-10-23/template_a105_transport_002/PMC5738728.txt`, not a newly fetched publisher original. It identifies the article and includes all main-text scientific sections/captions. `source/fig3.jpg`, `fig4.jpg`, `fig5.jpg` are copies of raw saved primary image assets under `verification/literature_reference_evidence_2026-10-25_001/primary_btst/source/`; accompanying old interpretations were not read. Source hashes and original copy locations are in MANIFEST.json. The failed live `source/PMC5738728.html` is a browser-challenge response, not article evidence.
+
+## Operational scope
+
+Only new files in owner043 directory were written. No shared production code, tests, sheet, library, TASK, run, pin or scientific execution was changed. No delegated agents, model-backed LiteratureEpisode, native scientific analysis, PBS job or production scoring ran. The numerical research check is a local arithmetic artifact, not an executable production grader or controller observation. Code review covers complete directly relevant transport paths listed above; inherited rate-storage base, full LiteratureEpisodes and service/runtime consumer paths were not independently audited here. Owner041 coordinates that broader current-code audit without receiving paper findings.

@@ -1,0 +1,93 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmcalibrate",
+    "--forecast",
+    "--nforecast",
+    "1",
+    "-L",
+    "0.01",
+    "model.cm"
+  ],
+  "environment": {
+    "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_forecast/cache",
+    "OMP_NUM_THREADS": "1",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_forecast",
+  "binary_sha256": "41be3917e970bfd0981663b0a09513702fbfd2bb69ee58c790d1f6f7df5569be",
+  "inputs": [
+    {
+      "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmbuild_hand/built.cm",
+      "path": "model.cm",
+      "sha256": "5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc"
+    }
+  ],
+  "started_at": "2026-10-26T04:41:32.868906+00:00",
+  "returncode": 0,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "success",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "ended": {
+        "at": "2026-10-26T04:41:33.606226+00:00",
+        "monotonic_ns": 803255303551686,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 0.54014279,
+    "native_returncode": 0,
+    "observed_scratch_bytes": 36864
+  },
+  "finished_at": "2026-10-26T04:41:33.815541+00:00",
+  "files": [
+    {
+      "path": "model.cm",
+      "size_bytes": 9695,
+      "sha256": "5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc"
+    },
+    {
+      "path": "request.json",
+      "size_bytes": 1177,
+      "sha256": "bad2b9db0bb259e5eb900249278b9d44c8d6114da2203c7bd247b64b4ac6f043"
+    },
+    {
+      "path": "stderr.txt",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "stdout.txt",
+      "size_bytes": 815,
+      "sha256": "f6941af37a8c2d7bb81cc792f6e86764e8535599aaae7ce1b6656310885ffb44"
+    }
+  ]
+}

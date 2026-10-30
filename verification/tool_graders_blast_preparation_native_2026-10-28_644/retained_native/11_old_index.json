@@ -1,0 +1,125 @@
+{
+  "id": "11_old_index",
+  "purpose": "Old-style FASTA with distinct legacy flag; original FASTA unchanged",
+  "independently_selected_verification_helper": false,
+  "program": "makembindex",
+  "argv": [
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/makembindex",
+    "-input",
+    "original096.fa",
+    "-iformat",
+    "fasta",
+    "-old_style_index",
+    "true",
+    "-legacy",
+    "true",
+    "-nmer",
+    "8",
+    "-stride",
+    "3",
+    "-ws_hint",
+    "8",
+    "-volsize",
+    "1",
+    "-idmap",
+    "true",
+    "-output",
+    "old"
+  ],
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/index_old",
+  "shell": false,
+  "executable": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/makembindex",
+    "sha256": "97084c88ec845b38a1acf570b19f2edeb4f8bb87c1d551192886ce80400e29d3",
+    "size_bytes": 22694000
+  },
+  "input_bindings": [
+    {
+      "role": "sequence_input",
+      "original": {
+        "input_key": "source",
+        "role": "sequence_input",
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/supplied.fa",
+        "format": "fasta",
+        "sha256": "97e3afd6d8cafea2dfd28c4fc02277eb57dfbc55050dabdd46604725001cfdf3",
+        "size_bytes": 60,
+        "artifact_ref": null
+      },
+      "retained_source": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/source_snapshot/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/state/artifacts/97/97e3afd6d8cafea2dfd28c4fc02277eb57dfbc55050dabdd46604725001cfdf3",
+        "sha256": "97e3afd6d8cafea2dfd28c4fc02277eb57dfbc55050dabdd46604725001cfdf3",
+        "size_bytes": 60
+      },
+      "staged": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/index_old/original096.fa",
+        "sha256": "97e3afd6d8cafea2dfd28c4fc02277eb57dfbc55050dabdd46604725001cfdf3",
+        "size_bytes": 60
+      }
+    }
+  ],
+  "inventory_before": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/index_old/original096.fa",
+      "sha256": "97e3afd6d8cafea2dfd28c4fc02277eb57dfbc55050dabdd46604725001cfdf3",
+      "size_bytes": 60,
+      "relative_path": "original096.fa"
+    }
+  ],
+  "started": true,
+  "returncode": 0,
+  "launch_error": null,
+  "stdout": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/logs/11_old_index.stdout",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "size_bytes": 0
+  },
+  "stderr": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/logs/11_old_index.stderr",
+    "sha256": "3a4fc911210135022386d5252fd94d8d2f680d82520af60e196e4d93b10f2c8d",
+    "size_bytes": 182
+  },
+  "writer_closed": true,
+  "inventory_complete": true,
+  "captured_bytes_complete": true,
+  "native_status": "succeeded",
+  "semantic_compatibility": "unverified",
+  "inventory_after": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/index_old/old.00.idx",
+      "sha256": "1e8b86b831d5af7de38a9283a3f9b94f7aed08bc8f2e0258827d85b78317720a",
+      "size_bytes": 262322,
+      "relative_path": "old.00.idx"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/index_old/old.00.idx.map",
+      "sha256": "a130c6f9c5f003faad35c425a67143f136cb590bc24e8d281d07ebc183bba16a",
+      "size_bytes": 29,
+      "relative_path": "old.00.idx.map"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/index_old/original096.fa",
+      "sha256": "97e3afd6d8cafea2dfd28c4fc02277eb57dfbc55050dabdd46604725001cfdf3",
+      "size_bytes": 60,
+      "relative_path": "original096.fa"
+    }
+  ],
+  "new_files": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/index_old/old.00.idx",
+      "sha256": "1e8b86b831d5af7de38a9283a3f9b94f7aed08bc8f2e0258827d85b78317720a",
+      "size_bytes": 262322,
+      "relative_path": "old.00.idx"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/index_old/old.00.idx.map",
+      "sha256": "a130c6f9c5f003faad35c425a67143f136cb590bc24e8d281d07ebc183bba16a",
+      "size_bytes": 29,
+      "relative_path": "old.00.idx.map"
+    }
+  ],
+  "changed_files": [],
+  "removed_files": [],
+  "stdout_utf8": "",
+  "stderr_utf8": "Warning: -stride has no effect upon legacy index creation\nWarning: -ws_hint has no effect upon legacy index creation\ncreating old.00.idx...done\ncreating old.01.idx...removed (empty)\n",
+  "native_text_outputs": []
+}

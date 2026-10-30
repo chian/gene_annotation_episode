@@ -1,0 +1,39 @@
+--- pin_002/literature_experimental_prompt.py
++++ workspace/literature_experimental_prompt.py
+@@ -462,7 +462,7 @@
+             "second_image_origin", "first_axis_unit", "second_axis_unit", "statistical_uncertainty",
+             "partner_necessity", "comparison_checks", "arm_metadata"))))
+         _structure_definitions(parts, content)
+-        _context_definitions(parts, content)
++        _context_definitions(parts, content, records=controlled_records)
+         _amount_metadata(parts, content)
+     assay = content.get("assay_interpretation")
+     if isinstance(assay, Mapping):
+@@ -535,7 +535,7 @@
+     return ("[" if region.get("lower_closed") else "(") + lower + ", " + upper + ("]" if region.get("upper_closed") else ")")
+ 
+ 
+-def _context_definitions(parts, content):
++def _context_definitions(parts, content, *, records=None):
+     """Render scientific domain/route meanings without private measurements."""
+     requirements = content.get("requirement_definitions")
+     if isinstance(requirements, (list, tuple)):
+@@ -543,6 +543,9 @@
+             if row.get("unit") == "state":
+                 return "scoped state relation"
+             return " ∪ ".join(_context_interval(region) for region in row.get(field, ())) or "none established"
++        from .literature_context_meanings_render import render_meanings
++        if render_meanings(parts, content, records, section=_section, table=_table, regions=regions):
++            return
+         _section(parts, "Context operating requirements", _table(("Requirement", "Unit basis", "Supported domain", "Incompatible domain"),
+             ((i, row.get("unit"), regions(row, "supported"), regions(row, "incompatible"))
+                 for i, row in enumerate(requirements))))
+@@ -863,7 +866,7 @@
+             "unavailable_reason", "conditional_on", "formula_code")}
+         cells = {row["component"]: _pick(row, ("value", "unit", "status", "origin",
+             "unavailable_reason", "conditional_on", "formula_code")) for row in rows}
+-        _source_result(parts, {"result": {**metadata, "cells": cells}}, "Admitted requested context components")
++        _source_result(parts, {"result": {**metadata, "cells": cells}}, "Admitted requested context components", controlled_records=records)
+         _section(parts, "Received organism/sample context bindings", values(_pick(first, (
+             "sheet_ref", "evidence_source_ref", "data_source_ref", "assayed_subject_ref",
+             "organism_ref", "strain_ref", "experiment_ref", "function_ref", "biological_context_ref",

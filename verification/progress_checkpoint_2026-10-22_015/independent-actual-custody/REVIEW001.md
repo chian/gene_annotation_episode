@@ -1,0 +1,15 @@
+# Independent actual custody handoff review
+
+Passed for the actual published result at `/home/chia/gene_annotation_episode_runs/configured_api_prechoice_001`. This review used file hashes and two explicitly closed, query-only immutable SQLite connections to the NEW checkpoint only. It imported no application code, opened no original database/sidecar or active working database, called no application constructor, and performed no work, model, native program or public HTTP call.
+
+The adopted closed result and receipt validate. Their exact descriptor hashes match the operator record. The 200 inherited references are the sorted union of 198 caller-selected references and the two actual lineage source IDs. The caller selection covers every committed input/record ID: one input and 192 records. The five additional caller references resolve as four artifacts and one collection member.
+
+All four native execution receipts are inherited. The 24 committed revision records comprise 13 assessments and 11 annotations, with no interpretation accounts; the current revision index has 12 assessment keys and one annotation key. These counts describe record types and coverage, not 24 annotation revisions or a scientific interpretation.
+
+The checkpoint is 211,947,520 bytes with SHA256 `21922c544ebc17da977f7c0e064c8d95cd290efa3e6ba48c58d67be69069f4d8`, matching the receipt's recorded original-source main-file witness. Its inode is distinct from the current working file. All nine declared authority copies and 144 original artifacts (4,201,310 bytes) match their saved descriptors. The checkpoint retains one old run and episode, 179 actions, 175 observations and 180 model calls, including the exact sole pending request. All 175 raw observation TEXT rows, separate LF delimiters, index offsets/hashes and lineage metadata match the retained files. The two closed source identities were independently recomputed from those payloads.
+
+The receipt's working-database publication hash is historical. This review did not read the current working file's content or assert current equality, because ordinary preparation may already have changed it. The original-source zero-write checks are internally consistent saved witnesses; this review did not resample any original database. It also did not query current working lineage rows, project credit, or inspect the active investigation.
+
+The exact 200-reference selected baseline is separate from runtime receipt row counts. Existing receipt dependency expansion may add references, and the existing paged collection-member interface can deliberately omit a selected member from individual receipt rows. This review establishes selection, resolution and retained custody, without requiring one receipt row per selected reference.
+
+`RESULTS001.json` records the initial verification. `ENTITY_TYPES_ADDENDUM001.json` adds the exact grouped entity counts, and `READSET_FINAL001.json` combines both readsets. `review_actual001.py`, its captured log and `CHECKS001.json` retain the executed review and assertions. No scientific conclusion, same-episode resumption or overall-goal completion is claimed.

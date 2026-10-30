@@ -1,0 +1,2112 @@
+{
+  "schema": "nhmmer_sheet_v1",
+  "operation": {
+    "program": "nhmmer",
+    "format": "hmmer3_nucleotide_native",
+    "engine_version": "3.4",
+    "alphabet": "DNA",
+    "mode": "profile_to_sequence_database",
+    "query_construction_mode": "single_sequence"
+  },
+  "inputs": {
+    "query": {
+      "name": "query",
+      "accession": null,
+      "sequence": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG",
+      "kind": "nucleotide_sequence",
+      "alphabet": "DNA",
+      "length": 100
+    },
+    "targets": [
+      {
+        "name": "forward",
+        "accession": null,
+        "sequence": "ACGCTAGCATGGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTGGACTAGCATG",
+        "kind": "nucleotide_sequence",
+        "alphabet": "DNA",
+        "length": 120
+      },
+      {
+        "name": "reverse",
+        "accession": null,
+        "sequence": "AGTCAGTCAGCAATGGGAAGAGTGAGTCTGCCAAAAAGCGAGATCTTGCCCCCGTCAGGCTTACTGTTAGTGATGGACTTATCGTAAAGGGAGGTTGACACGCCACTGCCTCAGTCAGTC",
+        "kind": "nucleotide_sequence",
+        "alphabet": "DNA",
+        "length": 120
+      },
+      {
+        "name": "gapped",
+        "accession": null,
+        "sequence": "ACTGACTGACGGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCAGTACTAACAGTAAGCCTGACGGGGGCAAGATCTCTTTTTGGCAGACTCACTCTTCCCATTGTCGATCGATC",
+        "kind": "nucleotide_sequence",
+        "alphabet": "DNA",
+        "length": 121
+      }
+    ],
+    "native_parameters": {
+      "query_construction_mode": "single_sequence",
+      "argv": [
+        "--cpu",
+        "1",
+        "--notextw"
+      ]
+    },
+    "acquisition": {
+      "output_complete": true,
+      "hit_population_complete": true
+    }
+  },
+  "native": {
+    "schema": "nhmmer_native_v1",
+    "operation": {
+      "program": "nhmmer",
+      "format": "hmmer3_nucleotide_native",
+      "engine_version": "3.4",
+      "alphabet": null,
+      "mode": "profile_to_sequence_database"
+    },
+    "artifacts": {
+      "stdout": {
+        "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+        "text": "# nhmmer :: search a DNA model, alignment, or sequence against a DNA database\n# HMMER 3.4 (Aug 2023); http://hmmer.org/\n# Copyright (C) 2023 Howard Hughes Medical Institute.\n# Freely distributed under the BSD open source license.\n# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n# query file:                      /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmer_sequence_ordinary/attempt/inputs/query_sequence.fa\n# target sequence database:        /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmer_sequence_ordinary/attempt/inputs/sequence_database.fa\n# MSA of all hits saved to file:   /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmer_sequence_ordinary/attempt/outputs/included_msa\n# hits tabular output:             /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmer_sequence_ordinary/attempt/outputs/tblout\n# max ASCII text line length:      unlimited\n# query format asserted:           fasta\n# query contains individual seqs:  on\n# target format asserted:          fasta\n# number of worker threads:        1\n# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n\nQuery:       query  [M=100]\nScores for complete hits:\n    E-value  score  bias  Sequence  start    end  Description\n    ------- ------ -----  --------  -----  -----  -----------\n    1.4e-30   92.2   0.9  forward      11    110 \n    1.4e-30   92.2   0.9  reverse     110     11 \n      3e-26   78.7   0.7  gapped       11    111 \n\n\nAnnotation for each hit  (and alignments):\n>> forward  \n    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to       sq len      acc\n   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----\n !   92.2   0.9   1.4e-30         1       100 []        11       110 ..        11       110 ..       120    0.98\n\n  Alignment:\n  score: 92.2 bits\n    query   1 ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg 100\n              ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg\n  forward  11 GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG 110\n              689*********************************************************************************************9985 PP\n\n>> reverse  \n    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to       sq len      acc\n   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----\n !   92.2   0.9   1.4e-30         1       100 []       110        11 ..       110        11 ..       120    0.98\n\n  Alignment:\n  score: 92.2 bits\n    query   1 ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg 100\n              ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg\n  reverse 110 GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG 11 \n              689*********************************************************************************************9985 PP\n\n>> gapped  \n    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to       sq len      acc\n   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----\n !   78.7   0.7     3e-26         1       100 []        11       111 ..        11       111 ..       121    0.93\n\n  Alignment:\n  score: 78.7 bits\n   query   1 ggcagtggcgtgtcaacctccctttacgataagtccatca...ctaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg 100\n             ggcagtggcgtgtcaacctccctttacgataagtccatca   ctaacagtaagcctgacgggggcaagatct  ctttttggcagactcactcttcccattg\n  gapped  11 GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCAgtaCTAACAGTAAGCCTGACGGGGGCAAGATCT--CTTTTTGGCAGACTCACTCTTCCCATTG 111\n             689*********************************9985333889************************988..58999*******************9985 PP\n\n\n\nInternal pipeline statistics summary:\n-------------------------------------\nQuery model(s):                            1  (100 nodes)\nTarget sequences:                          3  (722 residues searched)\nResidues passing SSV filter:             361  (0.5); expected (0.02)\nResidues passing bias filter:            361  (0.5); expected (0.02)\nResidues passing Vit filter:             361  (0.5); expected (0.003)\nResidues passing Fwd filter:             361  (0.5); expected (3e-05)\nTotal number of hits:                      3  (0.417)\n# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00\n# Mc/sec: 68.17\n//\n# Alignment of 3 hits satisfying inclusion thresholds saved to: /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmer_sequence_ordinary/attempt/outputs/included_msa\n[ok]\n",
+        "native_complete": true,
+        "byte_length": 5155,
+        "completion_marker_observed": true,
+        "status": "complete",
+        "format": "stdout"
+      },
+      "tblout": {
+        "artifact_ref": "fixture:sha256:7e6f66badbe0fbe2437c504c499bc853177d0e39b58eefc660ad958928148546",
+        "text": "# target name        accession  query name           accession  hmmfrom hmm to alifrom  ali to envfrom  env to  sq len strand   E-value  score  bias  description of target\n#------------------- ---------- -------------------- ---------- ------- ------- ------- ------- ------- ------- ------- ------ --------- ------ ----- ---------------------\nforward              -          query                -                1     100      11     110      11     110     120    +     1.4e-30   92.2   0.9  -\nreverse              -          query                -                1     100     110      11     110      11     120    -     1.4e-30   92.2   0.9  -\ngapped               -          query                -                1     100      11     111      11     111     121    +       3e-26   78.7   0.7  -\n#\n# Program:         nhmmer\n# Version:         3.4 (Aug 2023)\n# Pipeline mode:   SEARCH\n# Query file:      /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmer_sequence_ordinary/attempt/inputs/query_sequence.fa\n# Target file:     /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmer_sequence_ordinary/attempt/inputs/sequence_database.fa\n# Option settings: /home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/nhmmer -A /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmer_sequence_ordinary/attempt/outputs/included_msa --tblout /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmer_sequence_ordinary/attempt/outputs/tblout --notextw --qformat fasta --qsingle_seqs --tformat fasta --cpu 1 /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmer_sequence_ordinary/attempt/inputs/query_sequence.fa /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmer_sequence_ordinary/attempt/inputs/sequence_database.fa \n# Current dir:     /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmer_sequence_ordinary/attempt\n# Date:            Sat Oct 24 15:31:44 2026\n# [ok]\n",
+        "native_complete": true,
+        "byte_length": 2296,
+        "completion_marker_observed": true,
+        "status": "complete",
+        "format": "tblout"
+      }
+    },
+    "table_rows": [
+      {
+        "record_key": "tblout:line:3",
+        "locator": {
+          "artifact_role": "tblout",
+          "artifact_ref": "fixture:sha256:7e6f66badbe0fbe2437c504c499bc853177d0e39b58eefc660ad958928148546",
+          "line_number": 3,
+          "byte_start": 344,
+          "byte_end": 497,
+          "row_occurrence": 1
+        },
+        "status": "valid",
+        "native": {
+          "target_name": "forward",
+          "target_accession": null,
+          "query_name": "query",
+          "query_accession": null,
+          "hmm_from": 1,
+          "hmm_to": 100,
+          "ali_from": 11,
+          "ali_to": 110,
+          "env_from": 11,
+          "env_to": 110,
+          "length_field": 120,
+          "evalue": 1.4e-30,
+          "score_bits": 92.2,
+          "bias_bits": 0.9,
+          "strand": "+",
+          "description": "-",
+          "length_field_meaning": "sequence_length",
+          "reported": true,
+          "included": null
+        },
+        "coordinates": {
+          "convention": "zero_based_half_open",
+          "native_convention": "one_based_inclusive",
+          "model_interval": [
+            0,
+            100
+          ],
+          "sequence_interval": [
+            10,
+            110
+          ],
+          "sequence_envelope_interval": [
+            10,
+            110
+          ]
+        },
+        "raw": "forward              -          query                -                1     100      11     110      11     110     120    +     1.4e-30   92.2   0.9  -\n",
+        "raw_fields": {
+          "target_name": "forward",
+          "target_accession": "-",
+          "query_name": "query",
+          "query_accession": "-",
+          "hmm_from": "1",
+          "hmm_to": "100",
+          "ali_from": "11",
+          "ali_to": "110",
+          "env_from": "11",
+          "env_to": "110",
+          "length_field": "120",
+          "strand": "+",
+          "evalue": "1.4e-30",
+          "score_bits": "92.2",
+          "bias_bits": "0.9"
+        },
+        "query_occurrence": null,
+        "target_occurrence": null,
+        "issues": []
+      },
+      {
+        "record_key": "tblout:line:4",
+        "locator": {
+          "artifact_role": "tblout",
+          "artifact_ref": "fixture:sha256:7e6f66badbe0fbe2437c504c499bc853177d0e39b58eefc660ad958928148546",
+          "line_number": 4,
+          "byte_start": 497,
+          "byte_end": 650,
+          "row_occurrence": 2
+        },
+        "status": "valid",
+        "native": {
+          "target_name": "reverse",
+          "target_accession": null,
+          "query_name": "query",
+          "query_accession": null,
+          "hmm_from": 1,
+          "hmm_to": 100,
+          "ali_from": 110,
+          "ali_to": 11,
+          "env_from": 110,
+          "env_to": 11,
+          "length_field": 120,
+          "evalue": 1.4e-30,
+          "score_bits": 92.2,
+          "bias_bits": 0.9,
+          "strand": "-",
+          "description": "-",
+          "length_field_meaning": "sequence_length",
+          "reported": true,
+          "included": null
+        },
+        "coordinates": {
+          "convention": "zero_based_half_open",
+          "native_convention": "one_based_inclusive",
+          "model_interval": [
+            0,
+            100
+          ],
+          "sequence_interval": [
+            10,
+            110
+          ],
+          "sequence_envelope_interval": [
+            10,
+            110
+          ]
+        },
+        "raw": "reverse              -          query                -                1     100     110      11     110      11     120    -     1.4e-30   92.2   0.9  -\n",
+        "raw_fields": {
+          "target_name": "reverse",
+          "target_accession": "-",
+          "query_name": "query",
+          "query_accession": "-",
+          "hmm_from": "1",
+          "hmm_to": "100",
+          "ali_from": "110",
+          "ali_to": "11",
+          "env_from": "110",
+          "env_to": "11",
+          "length_field": "120",
+          "strand": "-",
+          "evalue": "1.4e-30",
+          "score_bits": "92.2",
+          "bias_bits": "0.9"
+        },
+        "query_occurrence": null,
+        "target_occurrence": null,
+        "issues": []
+      },
+      {
+        "record_key": "tblout:line:5",
+        "locator": {
+          "artifact_role": "tblout",
+          "artifact_ref": "fixture:sha256:7e6f66badbe0fbe2437c504c499bc853177d0e39b58eefc660ad958928148546",
+          "line_number": 5,
+          "byte_start": 650,
+          "byte_end": 803,
+          "row_occurrence": 3
+        },
+        "status": "valid",
+        "native": {
+          "target_name": "gapped",
+          "target_accession": null,
+          "query_name": "query",
+          "query_accession": null,
+          "hmm_from": 1,
+          "hmm_to": 100,
+          "ali_from": 11,
+          "ali_to": 111,
+          "env_from": 11,
+          "env_to": 111,
+          "length_field": 121,
+          "evalue": 3e-26,
+          "score_bits": 78.7,
+          "bias_bits": 0.7,
+          "strand": "+",
+          "description": "-",
+          "length_field_meaning": "sequence_length",
+          "reported": true,
+          "included": null
+        },
+        "coordinates": {
+          "convention": "zero_based_half_open",
+          "native_convention": "one_based_inclusive",
+          "model_interval": [
+            0,
+            100
+          ],
+          "sequence_interval": [
+            10,
+            111
+          ],
+          "sequence_envelope_interval": [
+            10,
+            111
+          ]
+        },
+        "raw": "gapped               -          query                -                1     100      11     111      11     111     121    +       3e-26   78.7   0.7  -\n",
+        "raw_fields": {
+          "target_name": "gapped",
+          "target_accession": "-",
+          "query_name": "query",
+          "query_accession": "-",
+          "hmm_from": "1",
+          "hmm_to": "100",
+          "ali_from": "11",
+          "ali_to": "111",
+          "env_from": "11",
+          "env_to": "111",
+          "length_field": "121",
+          "strand": "+",
+          "evalue": "3e-26",
+          "score_bits": "78.7",
+          "bias_bits": "0.7"
+        },
+        "query_occurrence": null,
+        "target_occurrence": null,
+        "issues": []
+      }
+    ],
+    "stdout_loci": [
+      {
+        "kind": "locus",
+        "record_key": "stdout:query:1:locus:1",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+          "line_number": 27,
+          "byte_start": 1735,
+          "byte_end": 2592,
+          "end_line_number": 38,
+          "query_occurrence": 1,
+          "target_occurrence": 1
+        },
+        "query_record_key": "stdout:query:1",
+        "query_occurrence": 1,
+        "target_occurrence": 1,
+        "native": {
+          "target_name": "forward",
+          "target_accession": null,
+          "query_name": "query",
+          "query_accession": null,
+          "hmm_from": 1,
+          "hmm_to": 100,
+          "ali_from": 11,
+          "ali_to": 110,
+          "env_from": 11,
+          "env_to": 110,
+          "length_field": 120,
+          "strand": "+",
+          "evalue": 1.4e-30,
+          "score_bits": 92.2,
+          "bias_bits": 0.9,
+          "target_display_id": "forward",
+          "description": "",
+          "reported": true,
+          "included": true,
+          "length_field_meaning": "sequence_length",
+          "inclusion_flag": "!",
+          "accuracy": 0.98,
+          "boundary_flags": [
+            "[]",
+            "..",
+            ".."
+          ]
+        },
+        "coordinates": {
+          "convention": "zero_based_half_open",
+          "native_convention": "one_based_inclusive",
+          "model_interval": [
+            0,
+            100
+          ],
+          "sequence_interval": [
+            10,
+            110
+          ],
+          "sequence_envelope_interval": [
+            10,
+            110
+          ]
+        },
+        "alignment": {
+          "model_aligned": "ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+          "sequence_aligned": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG",
+          "posterior": "689*********************************************************************************************9985",
+          "chunks": [
+            {
+              "model": {
+                "label": "query",
+                "from": 1,
+                "text": "ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+                "to": 100,
+                "locator": {
+                  "artifact_role": "stdout",
+                  "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+                  "line_number": 34,
+                  "byte_start": 2120,
+                  "byte_end": 2239
+                },
+                "column_offset": 14
+              },
+              "sequence": {
+                "label": "forward",
+                "from": 11,
+                "text": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG",
+                "to": 110,
+                "locator": {
+                  "artifact_role": "stdout",
+                  "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+                  "line_number": 36,
+                  "byte_start": 2354,
+                  "byte_end": 2473
+                },
+                "column_offset": 14
+              },
+              "posterior": "689*********************************************************************************************9985",
+              "annotations": [
+                {
+                  "raw": "              ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg\n",
+                  "locator": {
+                    "artifact_role": "stdout",
+                    "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+                    "line_number": 35,
+                    "byte_start": 2239,
+                    "byte_end": 2354
+                  }
+                }
+              ],
+              "posterior_locator": {
+                "artifact_role": "stdout",
+                "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+                "line_number": 37,
+                "byte_start": 2473,
+                "byte_end": 2591
+              }
+            }
+          ],
+          "valid": true,
+          "posterior_valid": true,
+          "issues": []
+        },
+        "raw": ">> forward  \n    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to       sq len      acc\n   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----\n !   92.2   0.9   1.4e-30         1       100 []        11       110 ..        11       110 ..       120    0.98\n\n  Alignment:\n  score: 92.2 bits\n    query   1 ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg 100\n              ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg\n  forward  11 GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG 110\n              689*********************************************************************************************9985 PP\n\n",
+        "status": "valid",
+        "issues": []
+      },
+      {
+        "kind": "locus",
+        "record_key": "stdout:query:1:locus:2",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+          "line_number": 39,
+          "byte_start": 2592,
+          "byte_end": 3449,
+          "end_line_number": 50,
+          "query_occurrence": 1,
+          "target_occurrence": 2
+        },
+        "query_record_key": "stdout:query:1",
+        "query_occurrence": 1,
+        "target_occurrence": 2,
+        "native": {
+          "target_name": "reverse",
+          "target_accession": null,
+          "query_name": "query",
+          "query_accession": null,
+          "hmm_from": 1,
+          "hmm_to": 100,
+          "ali_from": 110,
+          "ali_to": 11,
+          "env_from": 110,
+          "env_to": 11,
+          "length_field": 120,
+          "strand": "-",
+          "evalue": 1.4e-30,
+          "score_bits": 92.2,
+          "bias_bits": 0.9,
+          "target_display_id": "reverse",
+          "description": "",
+          "reported": true,
+          "included": true,
+          "length_field_meaning": "sequence_length",
+          "inclusion_flag": "!",
+          "accuracy": 0.98,
+          "boundary_flags": [
+            "[]",
+            "..",
+            ".."
+          ]
+        },
+        "coordinates": {
+          "convention": "zero_based_half_open",
+          "native_convention": "one_based_inclusive",
+          "model_interval": [
+            0,
+            100
+          ],
+          "sequence_interval": [
+            10,
+            110
+          ],
+          "sequence_envelope_interval": [
+            10,
+            110
+          ]
+        },
+        "alignment": {
+          "model_aligned": "ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+          "sequence_aligned": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG",
+          "posterior": "689*********************************************************************************************9985",
+          "chunks": [
+            {
+              "model": {
+                "label": "query",
+                "from": 1,
+                "text": "ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+                "to": 100,
+                "locator": {
+                  "artifact_role": "stdout",
+                  "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+                  "line_number": 46,
+                  "byte_start": 2977,
+                  "byte_end": 3096
+                },
+                "column_offset": 14
+              },
+              "sequence": {
+                "label": "reverse",
+                "from": 110,
+                "text": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG",
+                "to": 11,
+                "locator": {
+                  "artifact_role": "stdout",
+                  "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+                  "line_number": 48,
+                  "byte_start": 3211,
+                  "byte_end": 3330
+                },
+                "column_offset": 14
+              },
+              "posterior": "689*********************************************************************************************9985",
+              "annotations": [
+                {
+                  "raw": "              ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg\n",
+                  "locator": {
+                    "artifact_role": "stdout",
+                    "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+                    "line_number": 47,
+                    "byte_start": 3096,
+                    "byte_end": 3211
+                  }
+                }
+              ],
+              "posterior_locator": {
+                "artifact_role": "stdout",
+                "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+                "line_number": 49,
+                "byte_start": 3330,
+                "byte_end": 3448
+              }
+            }
+          ],
+          "valid": true,
+          "posterior_valid": true,
+          "issues": []
+        },
+        "raw": ">> reverse  \n    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to       sq len      acc\n   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----\n !   92.2   0.9   1.4e-30         1       100 []       110        11 ..       110        11 ..       120    0.98\n\n  Alignment:\n  score: 92.2 bits\n    query   1 ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg 100\n              ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg\n  reverse 110 GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG 11 \n              689*********************************************************************************************9985 PP\n\n",
+        "status": "valid",
+        "issues": []
+      },
+      {
+        "kind": "locus",
+        "record_key": "stdout:query:1:locus:3",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+          "line_number": 51,
+          "byte_start": 3449,
+          "byte_end": 4315,
+          "end_line_number": 64,
+          "query_occurrence": 1,
+          "target_occurrence": 3
+        },
+        "query_record_key": "stdout:query:1",
+        "query_occurrence": 1,
+        "target_occurrence": 3,
+        "native": {
+          "target_name": "gapped",
+          "target_accession": null,
+          "query_name": "query",
+          "query_accession": null,
+          "hmm_from": 1,
+          "hmm_to": 100,
+          "ali_from": 11,
+          "ali_to": 111,
+          "env_from": 11,
+          "env_to": 111,
+          "length_field": 121,
+          "strand": "+",
+          "evalue": 3e-26,
+          "score_bits": 78.7,
+          "bias_bits": 0.7,
+          "target_display_id": "gapped",
+          "description": "",
+          "reported": true,
+          "included": true,
+          "length_field_meaning": "sequence_length",
+          "inclusion_flag": "!",
+          "accuracy": 0.93,
+          "boundary_flags": [
+            "[]",
+            "..",
+            ".."
+          ]
+        },
+        "coordinates": {
+          "convention": "zero_based_half_open",
+          "native_convention": "one_based_inclusive",
+          "model_interval": [
+            0,
+            100
+          ],
+          "sequence_interval": [
+            10,
+            111
+          ],
+          "sequence_envelope_interval": [
+            10,
+            111
+          ]
+        },
+        "alignment": {
+          "model_aligned": "ggcagtggcgtgtcaacctccctttacgataagtccatca...ctaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+          "sequence_aligned": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCAgtaCTAACAGTAAGCCTGACGGGGGCAAGATCT--CTTTTTGGCAGACTCACTCTTCCCATTG",
+          "posterior": "689*********************************9985333889************************988..58999*******************9985",
+          "chunks": [
+            {
+              "model": {
+                "label": "query",
+                "from": 1,
+                "text": "ggcagtggcgtgtcaacctccctttacgataagtccatca...ctaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+                "to": 100,
+                "locator": {
+                  "artifact_role": "stdout",
+                  "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+                  "line_number": 58,
+                  "byte_start": 3833,
+                  "byte_end": 3954
+                },
+                "column_offset": 13
+              },
+              "sequence": {
+                "label": "gapped",
+                "from": 11,
+                "text": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCAgtaCTAACAGTAAGCCTGACGGGGGCAAGATCT--CTTTTTGGCAGACTCACTCTTCCCATTG",
+                "to": 111,
+                "locator": {
+                  "artifact_role": "stdout",
+                  "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+                  "line_number": 60,
+                  "byte_start": 4071,
+                  "byte_end": 4192
+                },
+                "column_offset": 13
+              },
+              "posterior": "689*********************************9985333889************************988..58999*******************9985",
+              "annotations": [
+                {
+                  "raw": "             ggcagtggcgtgtcaacctccctttacgataagtccatca   ctaacagtaagcctgacgggggcaagatct  ctttttggcagactcactcttcccattg\n",
+                  "locator": {
+                    "artifact_role": "stdout",
+                    "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+                    "line_number": 59,
+                    "byte_start": 3954,
+                    "byte_end": 4071
+                  }
+                }
+              ],
+              "posterior_locator": {
+                "artifact_role": "stdout",
+                "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+                "line_number": 61,
+                "byte_start": 4192,
+                "byte_end": 4312
+              }
+            }
+          ],
+          "valid": true,
+          "posterior_valid": true,
+          "issues": []
+        },
+        "raw": ">> gapped  \n    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to       sq len      acc\n   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----\n !   78.7   0.7     3e-26         1       100 []        11       111 ..        11       111 ..       121    0.93\n\n  Alignment:\n  score: 78.7 bits\n   query   1 ggcagtggcgtgtcaacctccctttacgataagtccatca...ctaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg 100\n             ggcagtggcgtgtcaacctccctttacgataagtccatca   ctaacagtaagcctgacgggggcaagatct  ctttttggcagactcactcttcccattg\n  gapped  11 GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCAgtaCTAACAGTAAGCCTGACGGGGGCAAGATCT--CTTTTTGGCAGACTCACTCTTCCCATTG 111\n             689*********************************9985333889************************988..58999*******************9985 PP\n\n\n\n",
+        "status": "valid",
+        "issues": []
+      }
+    ],
+    "queries": [
+      {
+        "kind": "query_end",
+        "record_key": "stdout:query:1",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+          "line_number": 17,
+          "byte_start": 1362,
+          "byte_end": 4927,
+          "end_line_number": 76
+        },
+        "name": "query",
+        "accession": null,
+        "occurrence": 1,
+        "length": 100,
+        "length_axis": "model",
+        "statistics": [
+          {
+            "name": "Query model(s)",
+            "count": 1,
+            "count_unit": "models",
+            "positions": 100,
+            "positions_unit": "model_nodes",
+            "raw": "Query model(s):                            1  (100 nodes)\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+              "line_number": 67,
+              "byte_start": 4391,
+              "byte_end": 4449
+            }
+          },
+          {
+            "name": "Target sequences",
+            "count": 3,
+            "count_unit": "sequences",
+            "positions": 722,
+            "positions_unit": "nucleotides_searched",
+            "raw": "Target sequences:                          3  (722 residues searched)\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+              "line_number": 68,
+              "byte_start": 4449,
+              "byte_end": 4519
+            }
+          },
+          {
+            "name": "Residues passing SSV filter",
+            "count": 361,
+            "count_unit": "nucleotide_positions",
+            "native_fraction": 0.5,
+            "expected_fraction": 0.02,
+            "raw": "Residues passing SSV filter:             361  (0.5); expected (0.02)\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+              "line_number": 69,
+              "byte_start": 4519,
+              "byte_end": 4588
+            },
+            "issues": [],
+            "fraction_numerator": 361,
+            "fraction_denominator": 722,
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "fraction_input_fields": [
+              "native.filter_position_count",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator_unavailable_reason": null,
+            "fraction_precision": "native_rounded_three_significant_digits"
+          },
+          {
+            "name": "Residues passing bias filter",
+            "count": 361,
+            "count_unit": "nucleotide_positions",
+            "native_fraction": 0.5,
+            "expected_fraction": 0.02,
+            "raw": "Residues passing bias filter:            361  (0.5); expected (0.02)\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+              "line_number": 70,
+              "byte_start": 4588,
+              "byte_end": 4657
+            },
+            "issues": [],
+            "fraction_numerator": 361,
+            "fraction_denominator": 722,
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "fraction_input_fields": [
+              "native.filter_position_count",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator_unavailable_reason": null,
+            "fraction_precision": "native_rounded_three_significant_digits"
+          },
+          {
+            "name": "Residues passing Vit filter",
+            "count": 361,
+            "count_unit": "nucleotide_positions",
+            "native_fraction": 0.5,
+            "expected_fraction": 0.003,
+            "raw": "Residues passing Vit filter:             361  (0.5); expected (0.003)\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+              "line_number": 71,
+              "byte_start": 4657,
+              "byte_end": 4727
+            },
+            "issues": [],
+            "fraction_numerator": 361,
+            "fraction_denominator": 722,
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "fraction_input_fields": [
+              "native.filter_position_count",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator_unavailable_reason": null,
+            "fraction_precision": "native_rounded_three_significant_digits"
+          },
+          {
+            "name": "Residues passing Fwd filter",
+            "count": 361,
+            "count_unit": "nucleotide_positions",
+            "native_fraction": 0.5,
+            "expected_fraction": 3e-05,
+            "raw": "Residues passing Fwd filter:             361  (0.5); expected (3e-05)\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+              "line_number": 72,
+              "byte_start": 4727,
+              "byte_end": 4797
+            },
+            "issues": [],
+            "fraction_numerator": 361,
+            "fraction_denominator": 722,
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "fraction_input_fields": [
+              "native.filter_position_count",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator_unavailable_reason": null,
+            "fraction_precision": "native_rounded_three_significant_digits"
+          },
+          {
+            "name": "Total number of hits",
+            "count": 3,
+            "count_unit": "loci",
+            "native_fraction": 0.417,
+            "expected_fraction": null,
+            "raw": "Total number of hits:                      3  (0.417)\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+              "line_number": 73,
+              "byte_start": 4797,
+              "byte_end": 4851
+            },
+            "issues": [],
+            "fraction_numerator": null,
+            "fraction_denominator": 722,
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "fraction_input_fields": [
+              "native.pos_output",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator_unavailable_reason": "summed_aligned_position_count_not_printed",
+            "fraction_precision": "native_rounded_three_significant_digits"
+          },
+          {
+            "name": null,
+            "raw": "# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+              "line_number": 74,
+              "byte_start": 4851,
+              "byte_end": 4908
+            }
+          },
+          {
+            "name": null,
+            "raw": "# Mc/sec: 68.17\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+              "line_number": 75,
+              "byte_start": 4908,
+              "byte_end": 4924
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "raw": "Scores for complete hits:\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+              "line_number": 18,
+              "byte_start": 1390,
+              "byte_end": 1416
+            }
+          },
+          {
+            "raw": "    E-value  score  bias  Sequence  start    end  Description\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+              "line_number": 19,
+              "byte_start": 1416,
+              "byte_end": 1478
+            }
+          },
+          {
+            "raw": "    ------- ------ -----  --------  -----  -----  -----------\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+              "line_number": 20,
+              "byte_start": 1478,
+              "byte_end": 1540
+            }
+          },
+          {
+            "raw": "    1.4e-30   92.2   0.9  forward      11    110 \n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+              "line_number": 21,
+              "byte_start": 1540,
+              "byte_end": 1590
+            }
+          },
+          {
+            "raw": "    1.4e-30   92.2   0.9  reverse     110     11 \n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+              "line_number": 22,
+              "byte_start": 1590,
+              "byte_end": 1640
+            }
+          },
+          {
+            "raw": "      3e-26   78.7   0.7  gapped       11    111 \n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+              "line_number": 23,
+              "byte_start": 1640,
+              "byte_end": 1690
+            }
+          },
+          {
+            "raw": "Annotation for each hit  (and alignments):\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+              "line_number": 26,
+              "byte_start": 1692,
+              "byte_end": 1735
+            }
+          },
+          {
+            "raw": "-------------------------------------\n",
+            "locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+              "line_number": 66,
+              "byte_start": 4353,
+              "byte_end": 4391
+            }
+          }
+        ],
+        "locus_count": 3,
+        "issues": [],
+        "terminated": true
+      }
+    ],
+    "headers": [
+      {
+        "kind": "header",
+        "raw": "# nhmmer :: search a DNA model, alignment, or sequence against a DNA database\n",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+          "line_number": 1,
+          "byte_start": 0,
+          "byte_end": 78
+        },
+        "issues": []
+      },
+      {
+        "kind": "header",
+        "raw": "# HMMER 3.4 (Aug 2023); http://hmmer.org/\n",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+          "line_number": 2,
+          "byte_start": 78,
+          "byte_end": 120
+        },
+        "issues": []
+      },
+      {
+        "kind": "header",
+        "raw": "# Copyright (C) 2023 Howard Hughes Medical Institute.\n",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+          "line_number": 3,
+          "byte_start": 120,
+          "byte_end": 174
+        },
+        "issues": []
+      },
+      {
+        "kind": "header",
+        "raw": "# Freely distributed under the BSD open source license.\n",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+          "line_number": 4,
+          "byte_start": 174,
+          "byte_end": 230
+        },
+        "issues": []
+      },
+      {
+        "kind": "header",
+        "raw": "# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+          "line_number": 5,
+          "byte_start": 230,
+          "byte_end": 304
+        },
+        "issues": []
+      },
+      {
+        "kind": "header",
+        "raw": "# query file:                      /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmer_sequence_ordinary/attempt/inputs/query_sequence.fa\n",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+          "line_number": 6,
+          "byte_start": 304,
+          "byte_end": 502
+        },
+        "issues": []
+      },
+      {
+        "kind": "header",
+        "raw": "# target sequence database:        /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmer_sequence_ordinary/attempt/inputs/sequence_database.fa\n",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+          "line_number": 7,
+          "byte_start": 502,
+          "byte_end": 703
+        },
+        "issues": []
+      },
+      {
+        "kind": "header",
+        "raw": "# MSA of all hits saved to file:   /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmer_sequence_ordinary/attempt/outputs/included_msa\n",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+          "line_number": 8,
+          "byte_start": 703,
+          "byte_end": 897
+        },
+        "issues": []
+      },
+      {
+        "kind": "header",
+        "raw": "# hits tabular output:             /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmer_sequence_ordinary/attempt/outputs/tblout\n",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+          "line_number": 9,
+          "byte_start": 897,
+          "byte_end": 1085
+        },
+        "issues": []
+      },
+      {
+        "kind": "header",
+        "raw": "# max ASCII text line length:      unlimited\n",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+          "line_number": 10,
+          "byte_start": 1085,
+          "byte_end": 1130
+        },
+        "issues": []
+      },
+      {
+        "kind": "header",
+        "raw": "# query format asserted:           fasta\n",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+          "line_number": 11,
+          "byte_start": 1130,
+          "byte_end": 1171
+        },
+        "issues": []
+      },
+      {
+        "kind": "header",
+        "raw": "# query contains individual seqs:  on\n",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+          "line_number": 12,
+          "byte_start": 1171,
+          "byte_end": 1209
+        },
+        "issues": []
+      },
+      {
+        "kind": "header",
+        "raw": "# target format asserted:          fasta\n",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+          "line_number": 13,
+          "byte_start": 1209,
+          "byte_end": 1250
+        },
+        "issues": []
+      },
+      {
+        "kind": "header",
+        "raw": "# number of worker threads:        1\n",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+          "line_number": 14,
+          "byte_start": 1250,
+          "byte_end": 1287
+        },
+        "issues": []
+      },
+      {
+        "kind": "header",
+        "raw": "# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+          "line_number": 15,
+          "byte_start": 1287,
+          "byte_end": 1361
+        },
+        "issues": []
+      },
+      {
+        "kind": "header",
+        "raw": "# Alignment of 3 hits satisfying inclusion thresholds saved to: /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmer_sequence_ordinary/attempt/outputs/included_msa\n",
+        "locator": {
+          "artifact_role": "stdout",
+          "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+          "line_number": 77,
+          "byte_start": 4927,
+          "byte_end": 5150
+        },
+        "issues": []
+      }
+    ],
+    "native_settings": [],
+    "observed_engine_versions": [
+      {
+        "artifact_role": "stdout",
+        "version": "3.4"
+      },
+      {
+        "artifact_role": "tblout",
+        "version": "3.4"
+      }
+    ],
+    "issues": []
+  },
+  "loci": [
+    {
+      "record_key": "tblout:line:3",
+      "locator": {
+        "artifact_role": "tblout",
+        "artifact_ref": "fixture:sha256:7e6f66badbe0fbe2437c504c499bc853177d0e39b58eefc660ad958928148546",
+        "line_number": 3,
+        "byte_start": 344,
+        "byte_end": 497,
+        "row_occurrence": 1
+      },
+      "status": "valid",
+      "native": {
+        "target_name": "forward",
+        "target_accession": null,
+        "query_name": "query",
+        "query_accession": null,
+        "hmm_from": 1,
+        "hmm_to": 100,
+        "ali_from": 11,
+        "ali_to": 110,
+        "env_from": 11,
+        "env_to": 110,
+        "length_field": 120,
+        "evalue": 1.4e-30,
+        "score_bits": 92.2,
+        "bias_bits": 0.9,
+        "strand": "+",
+        "description": "-",
+        "length_field_meaning": "sequence_length",
+        "reported": true,
+        "included": true,
+        "inclusion_flag": "!",
+        "accuracy": 0.98,
+        "boundary_flags": [
+          "[]",
+          "..",
+          ".."
+        ]
+      },
+      "coordinates": {
+        "convention": "zero_based_half_open",
+        "native_convention": "one_based_inclusive",
+        "model_interval": [
+          0,
+          100
+        ],
+        "sequence_interval": [
+          10,
+          110
+        ],
+        "sequence_envelope_interval": [
+          10,
+          110
+        ]
+      },
+      "raw": "forward              -          query                -                1     100      11     110      11     110     120    +     1.4e-30   92.2   0.9  -\n",
+      "raw_fields": {
+        "target_name": "forward",
+        "target_accession": "-",
+        "query_name": "query",
+        "query_accession": "-",
+        "hmm_from": "1",
+        "hmm_to": "100",
+        "ali_from": "11",
+        "ali_to": "110",
+        "env_from": "11",
+        "env_to": "110",
+        "length_field": "120",
+        "strand": "+",
+        "evalue": "1.4e-30",
+        "score_bits": "92.2",
+        "bias_bits": "0.9"
+      },
+      "query_occurrence": 1,
+      "target_occurrence": 1,
+      "issues": [],
+      "source_records": [
+        {
+          "record_key": "tblout:line:3",
+          "locator": {
+            "artifact_role": "tblout",
+            "artifact_ref": "fixture:sha256:7e6f66badbe0fbe2437c504c499bc853177d0e39b58eefc660ad958928148546",
+            "line_number": 3,
+            "byte_start": 344,
+            "byte_end": 497,
+            "row_occurrence": 1
+          }
+        },
+        {
+          "record_key": "stdout:query:1:locus:1",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+            "line_number": 27,
+            "byte_start": 1735,
+            "byte_end": 2592,
+            "end_line_number": 38,
+            "query_occurrence": 1,
+            "target_occurrence": 1
+          }
+        }
+      ],
+      "joins": {
+        "stdout": "stdout:query:1:locus:1",
+        "query": "stdout:query:1",
+        "target_metadata": "inputs/targets/0"
+      },
+      "query_record_key": "stdout:query:1",
+      "alignment": {
+        "model_aligned": "ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+        "sequence_aligned": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG",
+        "posterior": "689*********************************************************************************************9985",
+        "chunks": [
+          {
+            "model": {
+              "label": "query",
+              "from": 1,
+              "text": "ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+              "to": 100,
+              "locator": {
+                "artifact_role": "stdout",
+                "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+                "line_number": 34,
+                "byte_start": 2120,
+                "byte_end": 2239
+              },
+              "column_offset": 14
+            },
+            "sequence": {
+              "label": "forward",
+              "from": 11,
+              "text": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG",
+              "to": 110,
+              "locator": {
+                "artifact_role": "stdout",
+                "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+                "line_number": 36,
+                "byte_start": 2354,
+                "byte_end": 2473
+              },
+              "column_offset": 14
+            },
+            "posterior": "689*********************************************************************************************9985",
+            "annotations": [
+              {
+                "raw": "              ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg\n",
+                "locator": {
+                  "artifact_role": "stdout",
+                  "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+                  "line_number": 35,
+                  "byte_start": 2239,
+                  "byte_end": 2354
+                }
+              }
+            ],
+            "posterior_locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+              "line_number": 37,
+              "byte_start": 2473,
+              "byte_end": 2591
+            }
+          }
+        ],
+        "valid": true,
+        "posterior_valid": true,
+        "issues": []
+      },
+      "model_metadata": {
+        "name": "query",
+        "accession": null,
+        "sequence": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG",
+        "kind": "nucleotide_sequence",
+        "alphabet": "DNA",
+        "length": 100
+      },
+      "sequence_metadata": {
+        "name": "forward",
+        "accession": null,
+        "sequence": "ACGCTAGCATGGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTGGACTAGCATG",
+        "kind": "nucleotide_sequence",
+        "alphabet": "DNA",
+        "length": 120
+      },
+      "length_sources": {
+        "model_length": [
+          {
+            "value": 100,
+            "field": "stdout:query:1.length"
+          }
+        ],
+        "sequence_length": [
+          {
+            "value": 120,
+            "field": "native.length_field"
+          },
+          {
+            "value": 120,
+            "field": "inputs.sequence.length_or_sequence"
+          }
+        ]
+      },
+      "model_length": 100,
+      "sequence_length": 120,
+      "sequence_metadata_alignment_validated": true,
+      "union_identity": {
+        "query": "stdout:query:1",
+        "target": "inputs/targets/0",
+        "strand": "+",
+        "iteration": null
+      }
+    },
+    {
+      "record_key": "tblout:line:4",
+      "locator": {
+        "artifact_role": "tblout",
+        "artifact_ref": "fixture:sha256:7e6f66badbe0fbe2437c504c499bc853177d0e39b58eefc660ad958928148546",
+        "line_number": 4,
+        "byte_start": 497,
+        "byte_end": 650,
+        "row_occurrence": 2
+      },
+      "status": "valid",
+      "native": {
+        "target_name": "reverse",
+        "target_accession": null,
+        "query_name": "query",
+        "query_accession": null,
+        "hmm_from": 1,
+        "hmm_to": 100,
+        "ali_from": 110,
+        "ali_to": 11,
+        "env_from": 110,
+        "env_to": 11,
+        "length_field": 120,
+        "evalue": 1.4e-30,
+        "score_bits": 92.2,
+        "bias_bits": 0.9,
+        "strand": "-",
+        "description": "-",
+        "length_field_meaning": "sequence_length",
+        "reported": true,
+        "included": true,
+        "inclusion_flag": "!",
+        "accuracy": 0.98,
+        "boundary_flags": [
+          "[]",
+          "..",
+          ".."
+        ]
+      },
+      "coordinates": {
+        "convention": "zero_based_half_open",
+        "native_convention": "one_based_inclusive",
+        "model_interval": [
+          0,
+          100
+        ],
+        "sequence_interval": [
+          10,
+          110
+        ],
+        "sequence_envelope_interval": [
+          10,
+          110
+        ]
+      },
+      "raw": "reverse              -          query                -                1     100     110      11     110      11     120    -     1.4e-30   92.2   0.9  -\n",
+      "raw_fields": {
+        "target_name": "reverse",
+        "target_accession": "-",
+        "query_name": "query",
+        "query_accession": "-",
+        "hmm_from": "1",
+        "hmm_to": "100",
+        "ali_from": "110",
+        "ali_to": "11",
+        "env_from": "110",
+        "env_to": "11",
+        "length_field": "120",
+        "strand": "-",
+        "evalue": "1.4e-30",
+        "score_bits": "92.2",
+        "bias_bits": "0.9"
+      },
+      "query_occurrence": 1,
+      "target_occurrence": 2,
+      "issues": [],
+      "source_records": [
+        {
+          "record_key": "tblout:line:4",
+          "locator": {
+            "artifact_role": "tblout",
+            "artifact_ref": "fixture:sha256:7e6f66badbe0fbe2437c504c499bc853177d0e39b58eefc660ad958928148546",
+            "line_number": 4,
+            "byte_start": 497,
+            "byte_end": 650,
+            "row_occurrence": 2
+          }
+        },
+        {
+          "record_key": "stdout:query:1:locus:2",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+            "line_number": 39,
+            "byte_start": 2592,
+            "byte_end": 3449,
+            "end_line_number": 50,
+            "query_occurrence": 1,
+            "target_occurrence": 2
+          }
+        }
+      ],
+      "joins": {
+        "stdout": "stdout:query:1:locus:2",
+        "query": "stdout:query:1",
+        "target_metadata": "inputs/targets/1"
+      },
+      "query_record_key": "stdout:query:1",
+      "alignment": {
+        "model_aligned": "ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+        "sequence_aligned": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG",
+        "posterior": "689*********************************************************************************************9985",
+        "chunks": [
+          {
+            "model": {
+              "label": "query",
+              "from": 1,
+              "text": "ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+              "to": 100,
+              "locator": {
+                "artifact_role": "stdout",
+                "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+                "line_number": 46,
+                "byte_start": 2977,
+                "byte_end": 3096
+              },
+              "column_offset": 14
+            },
+            "sequence": {
+              "label": "reverse",
+              "from": 110,
+              "text": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG",
+              "to": 11,
+              "locator": {
+                "artifact_role": "stdout",
+                "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+                "line_number": 48,
+                "byte_start": 3211,
+                "byte_end": 3330
+              },
+              "column_offset": 14
+            },
+            "posterior": "689*********************************************************************************************9985",
+            "annotations": [
+              {
+                "raw": "              ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg\n",
+                "locator": {
+                  "artifact_role": "stdout",
+                  "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+                  "line_number": 47,
+                  "byte_start": 3096,
+                  "byte_end": 3211
+                }
+              }
+            ],
+            "posterior_locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+              "line_number": 49,
+              "byte_start": 3330,
+              "byte_end": 3448
+            }
+          }
+        ],
+        "valid": true,
+        "posterior_valid": true,
+        "issues": []
+      },
+      "model_metadata": {
+        "name": "query",
+        "accession": null,
+        "sequence": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG",
+        "kind": "nucleotide_sequence",
+        "alphabet": "DNA",
+        "length": 100
+      },
+      "sequence_metadata": {
+        "name": "reverse",
+        "accession": null,
+        "sequence": "AGTCAGTCAGCAATGGGAAGAGTGAGTCTGCCAAAAAGCGAGATCTTGCCCCCGTCAGGCTTACTGTTAGTGATGGACTTATCGTAAAGGGAGGTTGACACGCCACTGCCTCAGTCAGTC",
+        "kind": "nucleotide_sequence",
+        "alphabet": "DNA",
+        "length": 120
+      },
+      "length_sources": {
+        "model_length": [
+          {
+            "value": 100,
+            "field": "stdout:query:1.length"
+          }
+        ],
+        "sequence_length": [
+          {
+            "value": 120,
+            "field": "native.length_field"
+          },
+          {
+            "value": 120,
+            "field": "inputs.sequence.length_or_sequence"
+          }
+        ]
+      },
+      "model_length": 100,
+      "sequence_length": 120,
+      "sequence_metadata_alignment_validated": true,
+      "union_identity": {
+        "query": "stdout:query:1",
+        "target": "inputs/targets/1",
+        "strand": "-",
+        "iteration": null
+      }
+    },
+    {
+      "record_key": "tblout:line:5",
+      "locator": {
+        "artifact_role": "tblout",
+        "artifact_ref": "fixture:sha256:7e6f66badbe0fbe2437c504c499bc853177d0e39b58eefc660ad958928148546",
+        "line_number": 5,
+        "byte_start": 650,
+        "byte_end": 803,
+        "row_occurrence": 3
+      },
+      "status": "valid",
+      "native": {
+        "target_name": "gapped",
+        "target_accession": null,
+        "query_name": "query",
+        "query_accession": null,
+        "hmm_from": 1,
+        "hmm_to": 100,
+        "ali_from": 11,
+        "ali_to": 111,
+        "env_from": 11,
+        "env_to": 111,
+        "length_field": 121,
+        "evalue": 3e-26,
+        "score_bits": 78.7,
+        "bias_bits": 0.7,
+        "strand": "+",
+        "description": "-",
+        "length_field_meaning": "sequence_length",
+        "reported": true,
+        "included": true,
+        "inclusion_flag": "!",
+        "accuracy": 0.93,
+        "boundary_flags": [
+          "[]",
+          "..",
+          ".."
+        ]
+      },
+      "coordinates": {
+        "convention": "zero_based_half_open",
+        "native_convention": "one_based_inclusive",
+        "model_interval": [
+          0,
+          100
+        ],
+        "sequence_interval": [
+          10,
+          111
+        ],
+        "sequence_envelope_interval": [
+          10,
+          111
+        ]
+      },
+      "raw": "gapped               -          query                -                1     100      11     111      11     111     121    +       3e-26   78.7   0.7  -\n",
+      "raw_fields": {
+        "target_name": "gapped",
+        "target_accession": "-",
+        "query_name": "query",
+        "query_accession": "-",
+        "hmm_from": "1",
+        "hmm_to": "100",
+        "ali_from": "11",
+        "ali_to": "111",
+        "env_from": "11",
+        "env_to": "111",
+        "length_field": "121",
+        "strand": "+",
+        "evalue": "3e-26",
+        "score_bits": "78.7",
+        "bias_bits": "0.7"
+      },
+      "query_occurrence": 1,
+      "target_occurrence": 3,
+      "issues": [],
+      "source_records": [
+        {
+          "record_key": "tblout:line:5",
+          "locator": {
+            "artifact_role": "tblout",
+            "artifact_ref": "fixture:sha256:7e6f66badbe0fbe2437c504c499bc853177d0e39b58eefc660ad958928148546",
+            "line_number": 5,
+            "byte_start": 650,
+            "byte_end": 803,
+            "row_occurrence": 3
+          }
+        },
+        {
+          "record_key": "stdout:query:1:locus:3",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+            "line_number": 51,
+            "byte_start": 3449,
+            "byte_end": 4315,
+            "end_line_number": 64,
+            "query_occurrence": 1,
+            "target_occurrence": 3
+          }
+        }
+      ],
+      "joins": {
+        "stdout": "stdout:query:1:locus:3",
+        "query": "stdout:query:1",
+        "target_metadata": "inputs/targets/2"
+      },
+      "query_record_key": "stdout:query:1",
+      "alignment": {
+        "model_aligned": "ggcagtggcgtgtcaacctccctttacgataagtccatca...ctaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+        "sequence_aligned": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCAgtaCTAACAGTAAGCCTGACGGGGGCAAGATCT--CTTTTTGGCAGACTCACTCTTCCCATTG",
+        "posterior": "689*********************************9985333889************************988..58999*******************9985",
+        "chunks": [
+          {
+            "model": {
+              "label": "query",
+              "from": 1,
+              "text": "ggcagtggcgtgtcaacctccctttacgataagtccatca...ctaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+              "to": 100,
+              "locator": {
+                "artifact_role": "stdout",
+                "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+                "line_number": 58,
+                "byte_start": 3833,
+                "byte_end": 3954
+              },
+              "column_offset": 13
+            },
+            "sequence": {
+              "label": "gapped",
+              "from": 11,
+              "text": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCAgtaCTAACAGTAAGCCTGACGGGGGCAAGATCT--CTTTTTGGCAGACTCACTCTTCCCATTG",
+              "to": 111,
+              "locator": {
+                "artifact_role": "stdout",
+                "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+                "line_number": 60,
+                "byte_start": 4071,
+                "byte_end": 4192
+              },
+              "column_offset": 13
+            },
+            "posterior": "689*********************************9985333889************************988..58999*******************9985",
+            "annotations": [
+              {
+                "raw": "             ggcagtggcgtgtcaacctccctttacgataagtccatca   ctaacagtaagcctgacgggggcaagatct  ctttttggcagactcactcttcccattg\n",
+                "locator": {
+                  "artifact_role": "stdout",
+                  "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+                  "line_number": 59,
+                  "byte_start": 3954,
+                  "byte_end": 4071
+                }
+              }
+            ],
+            "posterior_locator": {
+              "artifact_role": "stdout",
+              "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+              "line_number": 61,
+              "byte_start": 4192,
+              "byte_end": 4312
+            }
+          }
+        ],
+        "valid": true,
+        "posterior_valid": true,
+        "issues": []
+      },
+      "model_metadata": {
+        "name": "query",
+        "accession": null,
+        "sequence": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG",
+        "kind": "nucleotide_sequence",
+        "alphabet": "DNA",
+        "length": 100
+      },
+      "sequence_metadata": {
+        "name": "gapped",
+        "accession": null,
+        "sequence": "ACTGACTGACGGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCAGTACTAACAGTAAGCCTGACGGGGGCAAGATCTCTTTTTGGCAGACTCACTCTTCCCATTGTCGATCGATC",
+        "kind": "nucleotide_sequence",
+        "alphabet": "DNA",
+        "length": 121
+      },
+      "length_sources": {
+        "model_length": [
+          {
+            "value": 100,
+            "field": "stdout:query:1.length"
+          }
+        ],
+        "sequence_length": [
+          {
+            "value": 121,
+            "field": "native.length_field"
+          },
+          {
+            "value": 121,
+            "field": "inputs.sequence.length_or_sequence"
+          }
+        ]
+      },
+      "model_length": 100,
+      "sequence_length": 121,
+      "sequence_metadata_alignment_validated": true,
+      "union_identity": {
+        "query": "stdout:query:1",
+        "target": "inputs/targets/2",
+        "strand": "+",
+        "iteration": null
+      }
+    }
+  ],
+  "queries": [
+    {
+      "kind": "query_end",
+      "record_key": "stdout:query:1",
+      "locator": {
+        "artifact_role": "stdout",
+        "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+        "line_number": 17,
+        "byte_start": 1362,
+        "byte_end": 4927,
+        "end_line_number": 76
+      },
+      "name": "query",
+      "accession": null,
+      "occurrence": 1,
+      "length": 100,
+      "length_axis": "model",
+      "statistics": [
+        {
+          "name": "Query model(s)",
+          "count": 1,
+          "count_unit": "models",
+          "positions": 100,
+          "positions_unit": "model_nodes",
+          "raw": "Query model(s):                            1  (100 nodes)\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+            "line_number": 67,
+            "byte_start": 4391,
+            "byte_end": 4449
+          }
+        },
+        {
+          "name": "Target sequences",
+          "count": 3,
+          "count_unit": "sequences",
+          "positions": 722,
+          "positions_unit": "nucleotides_searched",
+          "raw": "Target sequences:                          3  (722 residues searched)\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+            "line_number": 68,
+            "byte_start": 4449,
+            "byte_end": 4519
+          }
+        },
+        {
+          "name": "Residues passing SSV filter",
+          "count": 361,
+          "count_unit": "nucleotide_positions",
+          "native_fraction": 0.5,
+          "expected_fraction": 0.02,
+          "raw": "Residues passing SSV filter:             361  (0.5); expected (0.02)\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+            "line_number": 69,
+            "byte_start": 4519,
+            "byte_end": 4588
+          },
+          "issues": [],
+          "fraction_numerator": 361,
+          "fraction_denominator": 722,
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "fraction_input_fields": [
+            "native.filter_position_count",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator_unavailable_reason": null,
+          "fraction_precision": "native_rounded_three_significant_digits"
+        },
+        {
+          "name": "Residues passing bias filter",
+          "count": 361,
+          "count_unit": "nucleotide_positions",
+          "native_fraction": 0.5,
+          "expected_fraction": 0.02,
+          "raw": "Residues passing bias filter:            361  (0.5); expected (0.02)\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+            "line_number": 70,
+            "byte_start": 4588,
+            "byte_end": 4657
+          },
+          "issues": [],
+          "fraction_numerator": 361,
+          "fraction_denominator": 722,
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "fraction_input_fields": [
+            "native.filter_position_count",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator_unavailable_reason": null,
+          "fraction_precision": "native_rounded_three_significant_digits"
+        },
+        {
+          "name": "Residues passing Vit filter",
+          "count": 361,
+          "count_unit": "nucleotide_positions",
+          "native_fraction": 0.5,
+          "expected_fraction": 0.003,
+          "raw": "Residues passing Vit filter:             361  (0.5); expected (0.003)\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+            "line_number": 71,
+            "byte_start": 4657,
+            "byte_end": 4727
+          },
+          "issues": [],
+          "fraction_numerator": 361,
+          "fraction_denominator": 722,
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "fraction_input_fields": [
+            "native.filter_position_count",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator_unavailable_reason": null,
+          "fraction_precision": "native_rounded_three_significant_digits"
+        },
+        {
+          "name": "Residues passing Fwd filter",
+          "count": 361,
+          "count_unit": "nucleotide_positions",
+          "native_fraction": 0.5,
+          "expected_fraction": 3e-05,
+          "raw": "Residues passing Fwd filter:             361  (0.5); expected (3e-05)\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+            "line_number": 72,
+            "byte_start": 4727,
+            "byte_end": 4797
+          },
+          "issues": [],
+          "fraction_numerator": 361,
+          "fraction_denominator": 722,
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "fraction_input_fields": [
+            "native.filter_position_count",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator_unavailable_reason": null,
+          "fraction_precision": "native_rounded_three_significant_digits"
+        },
+        {
+          "name": "Total number of hits",
+          "count": 3,
+          "count_unit": "loci",
+          "native_fraction": 0.417,
+          "expected_fraction": null,
+          "raw": "Total number of hits:                      3  (0.417)\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+            "line_number": 73,
+            "byte_start": 4797,
+            "byte_end": 4851
+          },
+          "issues": [],
+          "fraction_numerator": null,
+          "fraction_denominator": 722,
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "fraction_input_fields": [
+            "native.pos_output",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator_unavailable_reason": "summed_aligned_position_count_not_printed",
+          "fraction_precision": "native_rounded_three_significant_digits"
+        },
+        {
+          "name": null,
+          "raw": "# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+            "line_number": 74,
+            "byte_start": 4851,
+            "byte_end": 4908
+          }
+        },
+        {
+          "name": null,
+          "raw": "# Mc/sec: 68.17\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+            "line_number": 75,
+            "byte_start": 4908,
+            "byte_end": 4924
+          }
+        }
+      ],
+      "annotations": [
+        {
+          "raw": "Scores for complete hits:\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+            "line_number": 18,
+            "byte_start": 1390,
+            "byte_end": 1416
+          }
+        },
+        {
+          "raw": "    E-value  score  bias  Sequence  start    end  Description\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+            "line_number": 19,
+            "byte_start": 1416,
+            "byte_end": 1478
+          }
+        },
+        {
+          "raw": "    ------- ------ -----  --------  -----  -----  -----------\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+            "line_number": 20,
+            "byte_start": 1478,
+            "byte_end": 1540
+          }
+        },
+        {
+          "raw": "    1.4e-30   92.2   0.9  forward      11    110 \n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+            "line_number": 21,
+            "byte_start": 1540,
+            "byte_end": 1590
+          }
+        },
+        {
+          "raw": "    1.4e-30   92.2   0.9  reverse     110     11 \n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+            "line_number": 22,
+            "byte_start": 1590,
+            "byte_end": 1640
+          }
+        },
+        {
+          "raw": "      3e-26   78.7   0.7  gapped       11    111 \n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+            "line_number": 23,
+            "byte_start": 1640,
+            "byte_end": 1690
+          }
+        },
+        {
+          "raw": "Annotation for each hit  (and alignments):\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+            "line_number": 26,
+            "byte_start": 1692,
+            "byte_end": 1735
+          }
+        },
+        {
+          "raw": "-------------------------------------\n",
+          "locator": {
+            "artifact_role": "stdout",
+            "artifact_ref": "fixture:sha256:7665b4293b4081c4973cceb4b9610b41f6d6efa635272745bf9b3f3d93eb1b98",
+            "line_number": 66,
+            "byte_start": 4353,
+            "byte_end": 4391
+          }
+        }
+      ],
+      "locus_count": 3,
+      "issues": [],
+      "terminated": true
+    }
+  ],
+  "native_settings": [],
+  "completeness": {
+    "native_artifacts": {
+      "stdout": true,
+      "tblout": true
+    },
+    "acquisition": {
+      "output_complete": true,
+      "hit_population_complete": true
+    },
+    "status": "complete",
+    "hit_population_complete": true
+  },
+  "issues": []
+}

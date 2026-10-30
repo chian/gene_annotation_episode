@@ -1,0 +1,16 @@
+..........................F.......F....                                  [100%]
+=================================== FAILURES ===================================
+_ test_new_production_local_assignment_dispatch_and_semantic_parent_constraints _
+source_snapshot/tests/test_composed_episode_assignment_transport.py:184: in test_new_production_local_assignment_dispatch_and_semantic_parent_constraints
+    assert unit is not None, case.source.feedback
+E   AssertionError: {'status': 'invalid', 'category': 'action_contract', 'detail': 'parent must declare the information its child returns'}
+E   assert None is not None
+_ test_old_recorded_pending_exchange_and_completed_selection_replay_are_unchanged _
+source_snapshot/tests/test_composed_episode_assignment_transport.py:238: in test_old_recorded_pending_exchange_and_completed_selection_replay_are_unchanged
+    assert unit is not None, case.source.feedback
+E   AssertionError: {'status': 'invalid', 'category': 'action_contract', 'detail': 'parent must declare the information its child returns'}
+E   assert None is not None
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_composed_episode_assignment_transport.py::test_new_production_local_assignment_dispatch_and_semantic_parent_constraints
+FAILED source_snapshot/tests/test_composed_episode_assignment_transport.py::test_old_recorded_pending_exchange_and_completed_selection_replay_are_unchanged
+2 failed, 37 passed in 30.78s

@@ -1,0 +1,19 @@
+--- before/gene_annotation_episode/communication.py
++++ after/gene_annotation_episode/communication.py
+@@ -170,6 +170,16 @@
+                     or json.dumps(node, sort_keys=True, allow_nan=False)
+                     not in {json.dumps(tree, sort_keys=True, allow_nan=False) for tree in expected}):
+                 raise ReportBoundaryError(f"{path}: chromatin fact schema must match its registered source", code="invalid_schema")
++            return
++        if source == "literature_product_coupling_cells":
++            if depth != 1:
++                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
++            from .literature_product_coupling_storage import product_coupling_cells_schema
++            expected = product_coupling_cells_schema()
++            if (not _schema_cacheable(node)
++                    or json.dumps(node, sort_keys=True, allow_nan=False)
++                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
++                raise ReportBoundaryError(f"{path}: product coupling schema must match its registered source", code="invalid_schema")
+             return
+         if source == "literature_measurement_validation_cells":
+             if depth != 1:

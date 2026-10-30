@@ -1,0 +1,53 @@
+# HMMER provider reported elapsed semantics
+
+Checked 2026-10-22 with read-only public-source GETs. No application, test or project documentation was changed; no model, scientific workflow, Store or HMMER service request was run. Only the specifically authorized credential-free response.entity was read from the existing service capture. No capture manifest, transport headers, workspace database or credential-bearing file was read.
+
+## Conclusion
+
+The current public EBI HMMER API implementation declares `result.stats.elapsed` as elapsed seconds, decodes it directly from the binary `HMMD_SEARCH_STATS` result from an hmmpgmd service, and does not compute it from HTTP or Celery timestamps. The compatible upstream C daemon sets this field to the master process's wall-clock search-processing interval. It is not pure worker CPU time, not an HTTP duration, not a queue duration, and not total submission-to-result turnaround.
+
+The exact deployed daemon build and its mapping to this source remain unverified. Consequently, the most defensible observed metric is **provider-reported elapsed seconds**. The more detailed daemon boundary below is established for the inspected source, conditional on the deployed service using this compatible daemon implementation.
+
+## Immutable primary-source references
+
+- HMMER web server: 2026 update: https://doi.org/10.1093/nar/gkag373 (PMC https://pmc.ncbi.nlm.nih.gov/articles/PMC13355042/), identifies EBI-Metagenomics/hmmer-api as the backend code repository. The paper identifies the repository; it does not establish a deployment commit.
+- EBI-Metagenomics/hmmer-api default `main`: `a3d3421ba317e58131a009647b4697d09640004a`, commit timestamp 2026-07-28T13:36:45Z, resolved by public GitHub API GET on 2026-10-22.
+- EBI-Metagenomics/hmmer branch `hmmpgmd2msa-fix`: `6995b9f6c37bbf52d3f394b63361b6e6b9e815f4`, timestamp 2025-09-11T12:07:11Z. This branch is named in the backend Dockerfile for building its shared libhmmer library. It does not pin or prove the separate configured daemon's build.
+- EBI-Metagenomics/hmmer current default `master`: `088b341855dbaa811bb0784a554df5b2fa25c5c6`, timestamp 2026-04-02T14:08:19Z. All four timing/serialization files checked (`hmmdmstr.c`, `hmmdwrkr.c`, `hmmpgmd.h`, `p7_hmmd_search_stats.c`) are byte-identical to the pinned Dockerfile branch files. Both copies and their hashes are retained. This confirms current upstream source agreement, not the deployed daemon build.
+- EddyRivasLab/easel `master`: `07ca83ba9ef0414dba9ce0a9331d465b5eb58f2b`, timestamp 2023-08-15T19:01:49Z. This repository/branch is named by the backend Dockerfile for that library build. Exact deployed daemon stopwatch build configuration remains unknown.
+
+## Backend data path
+
+1. `run_search` obtains database host/port, connects the client, sends a prepared query, saves the returned binary payload, and then post-processes it: https://github.com/EBI-Metagenomics/hmmer-api/blob/a3d3421ba317e58131a009647b4697d09640004a/search/tasks.py#L24-L69 .
+2. `Client.search` sends a socket request, receives status, and writes the remaining payload unchanged to the result file. Its separately measured socket logging durations are not assigned to the stats field: https://github.com/EBI-Metagenomics/hmmer-api/blob/a3d3421ba317e58131a009647b4697d09640004a/search/client.py#L52-L131 .
+3. `HmmdSearchStats.elapsed` is a big-endian Float64 decoded from the binary payload, documented as seconds. `user` and `sys` are distinct fields. API-added `id`, `algo`, and `database` come from parse context: https://github.com/EBI-Metagenomics/hmmer-api/blob/a3d3421ba317e58131a009647b4697d09640004a/result/models.py#L319-L383 .
+4. The result loader parses stats from the saved file before slicing/filtering hits and returns the same stats object: https://github.com/EBI-Metagenomics/hmmer-api/blob/a3d3421ba317e58131a009647b4697d09640004a/result/models.py#L696-L788 . Job identity is supplied here: https://github.com/EBI-Metagenomics/hmmer-api/blob/a3d3421ba317e58131a009647b4697d09640004a/search/models.py#L416-L440 .
+5. This route uses hmmpgmd for searching. PyHMMER is used in query input/model handling; it does not supply this route's elapsed timer. The Dockerfile's library source and unpinned branch dependencies are visible at https://github.com/EBI-Metagenomics/hmmer-api/blob/a3d3421ba317e58131a009647b4697d09640004a/Dockerfile#L12-L25 . The remotely configured daemon is outside that build proof.
+
+## Upstream timing interval
+
+- Unit and kind: elapsed wall seconds, distinct from user/system CPU seconds: https://github.com/EBI-Metagenomics/hmmer/blob/6995b9f6c37bbf52d3f394b63361b6e6b9e815f4/src/hmmpgmd.h#L11-L17 and https://github.com/EddyRivasLab/easel/blob/07ca83ba9ef0414dba9ce0a9331d465b5eb58f2b/esl_stopwatch.h#L34-L39 .
+- Start: master `process_search`, after command-queue pop and database-existence validation, immediately before result initialization/range counting/worker distribution: https://github.com/EBI-Metagenomics/hmmer/blob/6995b9f6c37bbf52d3f394b63361b6e6b9e815f4/src/hmmdmstr.c#L294-L343 . Queue pop/call is at https://github.com/EBI-Metagenomics/hmmer/blob/6995b9f6c37bbf52d3f394b63361b6e6b9e815f4/src/hmmdmstr.c#L589-L607 .
+- End: after all worker completion and gathering, including the implementation's possible worker-error redistribution, immediately before setting `results.stats.elapsed` and calling `forward_results`: https://github.com/EBI-Metagenomics/hmmer/blob/6995b9f6c37bbf52d3f394b63361b6e6b9e815f4/src/hmmdmstr.c#L346-L441 .
+- Included in that wall interval: worker assignment/coordination, worker computation, internal master-worker request/results traffic, worker-side query processing, master reception/deserialization of worker hits, gathering/merge, and any covered redistribution. Master reads/deserializes results before marking a worker completed: https://github.com/EBI-Metagenomics/hmmer/blob/6995b9f6c37bbf52d3f394b63361b6e6b9e815f4/src/hmmdmstr.c#L1537-L1645 .
+- Excluded by source: prior API/Celery queue, prior daemon command queue, API query preparation, initial client-to-master query transfer/parsing, final master global hit sort/threshold/serialization/forwarding, daemon-to-API result transfer, API result-file parse/metadata formatting and HTTP response transfer. The master final sort/threshold/serialization/forwarding happens in `forward_results` after stop: https://github.com/EBI-Metagenomics/hmmer/blob/6995b9f6c37bbf52d3f394b63361b6e6b9e815f4/src/hmmdmstr.c#L773-L905 . The initial parsed command is queued here: https://github.com/EBI-Metagenomics/hmmer/blob/6995b9f6c37bbf52d3f394b63361b6e6b9e815f4/src/hmmdmstr.c#L1323-L1344 .
+- Worker elapsed is separately measured, serialized and received, but the outgoing final elapsed is assigned from the master's own stopwatch rather than sum/max of worker times: https://github.com/EBI-Metagenomics/hmmer/blob/6995b9f6c37bbf52d3f394b63361b6e6b9e815f4/src/hmmdwrkr.c#L196-L322 and https://github.com/EBI-Metagenomics/hmmer/blob/6995b9f6c37bbf52d3f394b63361b6e6b9e815f4/src/hmmdwrkr.c#L769-L812 .
+- Binary serialization preserves the elapsed double's bits in network byte order, with no unit conversion: https://github.com/EBI-Metagenomics/hmmer/blob/6995b9f6c37bbf52d3f394b63361b6e6b9e815f4/src/p7_hmmd_search_stats.c#L88-L93 .
+- Easel implements stop minus start in seconds; Linux high-resolution branch prefers CLOCK_MONOTONIC_RAW, with platform/build alternatives and fallbacks. Do not assert a deployed clock or its precision from the reported decimal: https://github.com/EddyRivasLab/easel/blob/07ca83ba9ef0414dba9ce0a9331d465b5eb58f2b/esl_stopwatch.c#L61-L139 and https://github.com/EddyRivasLab/easel/blob/07ca83ba9ef0414dba9ce0a9331d465b5eb58f2b/esl_stopwatch.c#L296-L373 .
+
+## Repetition, identity and iteration limits
+
+- Pagination/filtering reuses the saved stats for the result job; each page or repeated GET is not another execution-duration sample. It is one reported processing interval for that stored result execution. Within one persisted result, provenance needs provider/service + result job ID + source field and its evidence artifact, with an iteration/child identity when relevant; equal numerical elapsed values are not identities. Job ID alone does not attest unique underlying attempts across retries/reruns.
+- Backend stats.id is the HmmerJob ID provided by its loader. The stats object has no explicit iteration field. For jackhmmer the root result returns descendant IDs/iteration/status, and each iteration's job has its own result file/stats: https://github.com/EBI-Metagenomics/hmmer-api/blob/a3d3421ba317e58131a009647b4697d09640004a/result/api.py#L74-L126 and https://github.com/EBI-Metagenomics/hmmer-api/blob/a3d3421ba317e58131a009647b4697d09640004a/search/tasks.py#L73-L108 . A single child elapsed is not whole iterative-search turnaround, and no aggregation rule is established by stats alone.
+- API retries can rerun a search for the same logical job after selected failures; stats does not reveal attempt history. The successfully saved field is not evidence of failed-attempt cost or overall job elapsed.
+- `database='pdb'` is a contextual database name, not a release identifier. Stats alone cannot establish database release, query size, resource allocation, clock precision, queue delay, executed-at timestamps or total turnaround.
+
+## Observed retained response
+
+The authorized response.entity has SHA256 `df4f50a6c95e403a2056b1c1182e8ddb4f8ba8df4d251edce7738ce51a8e402e`. It reports elapsed `0.24640200287103653`, user/sys `0.0`, nmodels `1`, nseqs `170694`, algo `phmmer`, database `pdb`. It contains stats.id, no stats.iteration, and no database version/release field. Under the documented field units this is about 0.246402 seconds, not milliseconds. Zero user/sys does not establish zero worker CPU use; upstream outgoing CPU fields are master process timing.
+
+## Remaining unverified
+
+There is no deployed daemon commit/build/clock attestation in the examined response entity or API source. The API can connect to configured host/port and the public Dockerfile only proves a library dependency choice. The response shape is compatible with this source; shape alone cannot prove deployed timer boundaries. No new HMMER search/status/results requests, deployment inspection, empirical timer validation, page refetches or iteration experiments were performed. No inference of queue/network durations by subtraction is justified by this field.
+
+Every retained source file has its exact original download URL, commit and SHA256 in `source-manifest.json`. All task artifacts are private to this newly created directory.

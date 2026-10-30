@@ -1,0 +1,715 @@
+{
+  "context": {
+    "run_id": "native-quantity-run",
+    "episode_id": "native-quantity-child",
+    "role": "literature",
+    "path": [
+      [
+        "literature",
+        "case"
+      ]
+    ],
+    "scope": {
+      "subject_refs": [
+        "input_6171cab31afa0ba24f1102b2"
+      ]
+    },
+    "assignment": {
+      "version": "literature_assignment_v1",
+      "question_context_refs": [],
+      "source_refs": [
+        "source_1ebc77ca4e2924e293a7f696"
+      ],
+      "requested_quantity_components": [
+        "reported_value",
+        "relative_reported_spread",
+        "source_presence_index"
+      ]
+    },
+    "request": {},
+    "received_record_refs": [
+      "source_1ebc77ca4e2924e293a7f696"
+    ]
+  },
+  "parent": {
+    "run_id": "native-quantity-run",
+    "episode_id": "parent",
+    "role": "annotation",
+    "path": [
+      [
+        "annotation",
+        "root"
+      ]
+    ],
+    "scope": {
+      "subject_refs": [
+        "input_6171cab31afa0ba24f1102b2"
+      ]
+    },
+    "assignment": {},
+    "request": {},
+    "received_record_refs": [
+      "source_1ebc77ca4e2924e293a7f696",
+      "source_a398b22b2b5b157429442358",
+      "reference_beb3c620326db1f2ed0faca2",
+      "term_8314d9f728b52b9a76bffb81",
+      "term_f3d488ffd35fb79fba5b9414",
+      "term_f7c07a2d212ea87693ba3404"
+    ]
+  },
+  "arguments": {
+    "source_ref": "source_1ebc77ca4e2924e293a7f696",
+    "source_kind": "synthetic_fixture",
+    "section_id": "s",
+    "paragraph_id": "p",
+    "subject": "P",
+    "quantity": "specific_activity",
+    "analyte": null
+  },
+  "operation_key": "selected-v1",
+  "outcome": {
+    "status": "completed",
+    "operation_ref": "operation_d5ca6849e015888d46d158f3",
+    "record_refs": [
+      "source_a398b22b2b5b157429442358",
+      "reference_beb3c620326db1f2ed0faca2",
+      "term_8314d9f728b52b9a76bffb81",
+      "term_f3d488ffd35fb79fba5b9414",
+      "term_f7c07a2d212ea87693ba3404"
+    ],
+    "changed_record_refs": [
+      "reference_beb3c620326db1f2ed0faca2",
+      "term_8314d9f728b52b9a76bffb81",
+      "term_f3d488ffd35fb79fba5b9414",
+      "term_f7c07a2d212ea87693ba3404",
+      "source_a398b22b2b5b157429442358"
+    ],
+    "result": {
+      "sheet_ref": "source_a398b22b2b5b157429442358",
+      "cells": {
+        "reported_value": {
+          "value": 12.0,
+          "unit": "umol/min/mg",
+          "status": "populated",
+          "formula": "literal_source_value_with_explicit_unit_conversion",
+          "origin": "synthetic",
+          "unavailable_reason": null,
+          "conditional_on": []
+        },
+        "reported_spread": {
+          "value": 2.0,
+          "unit": "umol/min/mg",
+          "status": "populated",
+          "formula": "literal_source_plus_minus_spread",
+          "origin": "synthetic",
+          "unavailable_reason": null,
+          "conditional_on": []
+        },
+        "relative_reported_spread": {
+          "value": 0.16666666666666666,
+          "unit": "dimensionless",
+          "status": "populated",
+          "formula": "reported_spread/abs(reported_value)",
+          "origin": "derived",
+          "unavailable_reason": null,
+          "conditional_on": []
+        },
+        "corrected_activity": {
+          "value": null,
+          "unit": "per_min",
+          "status": "unavailable",
+          "formula": "(q-g)*v/(k*E*u)",
+          "origin": "derived",
+          "unavailable_reason": "correction_inputs_unreported",
+          "conditional_on": []
+        },
+        "effect_variance": {
+          "value": null,
+          "unit": "per_min_squared",
+          "status": "unavailable",
+          "formula": "J*covariance*J_transpose+distinct_residual_variance",
+          "origin": "derived",
+          "unavailable_reason": "correction_inputs_unreported",
+          "conditional_on": [
+            "first_order_covariance_propagation"
+          ]
+        },
+        "effect_standard_uncertainty": {
+          "value": null,
+          "unit": "per_min",
+          "status": "unavailable",
+          "formula": "sqrt(effect_variance)",
+          "origin": "derived",
+          "unavailable_reason": "correction_inputs_unreported",
+          "conditional_on": [
+            "first_order_covariance_propagation"
+          ]
+        },
+        "effect_precision": {
+          "value": null,
+          "unit": "min_squared",
+          "status": "unavailable",
+          "formula": "1/effect_variance",
+          "origin": "derived",
+          "unavailable_reason": "correction_inputs_unreported",
+          "conditional_on": [
+            "first_order_covariance_propagation"
+          ]
+        },
+        "source_profile_log_ratio": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "formula": "max(0,corrected_activity)^2/(2*effect_variance)",
+          "origin": "derived",
+          "unavailable_reason": "correction_inputs_unreported",
+          "conditional_on": [
+            "first_order_covariance_propagation",
+            "known_variance",
+            "known_normal_nonnegative_presence"
+          ]
+        },
+        "source_presence_index": {
+          "value": null,
+          "unit": "dimensionless",
+          "status": "unavailable",
+          "formula": "tanh(source_profile_log_ratio/2)",
+          "origin": "proposed",
+          "unavailable_reason": "correction_inputs_unreported",
+          "conditional_on": [
+            "first_order_covariance_propagation",
+            "known_variance",
+            "known_normal_nonnegative_presence"
+          ]
+        }
+      },
+      "subject": "P",
+      "quantity": "specific_activity",
+      "analyte": null,
+      "source_uncertainty": {
+        "kind": "unspecified",
+        "magnitude": 2.0,
+        "count": null,
+        "sampling_basis": "unspecified"
+      },
+      "text": "Protein P has a specific activity of 12 \u00b1 2 umol/min/mg.",
+      "source_ref": "source_1ebc77ca4e2924e293a7f696",
+      "artifact_ref": "artifact_b99f63bb3a73283781d33a3a8041bd7c8b529c625f2a560d3353b8b7509859eb",
+      "section_id": "s",
+      "paragraph_id": "p",
+      "expression_start": 16,
+      "expression_end": 55,
+      "coordinate_unit": "paragraph_unicode_characters"
+    },
+    "feedback": null
+  },
+  "form": {
+    "measurements": [
+      {
+        "sheet_ref": "source_a398b22b2b5b157429442358",
+        "evidence_source_ref": "source_1ebc77ca4e2924e293a7f696",
+        "reported_subject_ref": "reference_beb3c620326db1f2ed0faca2",
+        "experiment_ref": null,
+        "condition_ref": null,
+        "endpoint_ref": "term_8314d9f728b52b9a76bffb81",
+        "normalization_ref": "term_f3d488ffd35fb79fba5b9414",
+        "quantity_ref": "term_f7c07a2d212ea87693ba3404",
+        "analyte_ref": null,
+        "component": "reported_value",
+        "value": 12.0,
+        "unit": "umol/min/mg",
+        "status": "populated",
+        "origin": "synthetic",
+        "unavailable_reason": null,
+        "conditional_on": [],
+        "reported_uncertainty_kind": "unspecified"
+      },
+      {
+        "sheet_ref": "source_a398b22b2b5b157429442358",
+        "evidence_source_ref": "source_1ebc77ca4e2924e293a7f696",
+        "reported_subject_ref": "reference_beb3c620326db1f2ed0faca2",
+        "experiment_ref": null,
+        "condition_ref": null,
+        "endpoint_ref": "term_8314d9f728b52b9a76bffb81",
+        "normalization_ref": "term_f3d488ffd35fb79fba5b9414",
+        "quantity_ref": "term_f7c07a2d212ea87693ba3404",
+        "analyte_ref": null,
+        "component": "relative_reported_spread",
+        "value": 0.16666666666666666,
+        "unit": "dimensionless",
+        "status": "populated",
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": [],
+        "reported_uncertainty_kind": "unspecified"
+      },
+      {
+        "sheet_ref": "source_a398b22b2b5b157429442358",
+        "evidence_source_ref": "source_1ebc77ca4e2924e293a7f696",
+        "reported_subject_ref": "reference_beb3c620326db1f2ed0faca2",
+        "experiment_ref": null,
+        "condition_ref": null,
+        "endpoint_ref": "term_8314d9f728b52b9a76bffb81",
+        "normalization_ref": "term_f3d488ffd35fb79fba5b9414",
+        "quantity_ref": "term_f7c07a2d212ea87693ba3404",
+        "analyte_ref": null,
+        "component": "source_presence_index",
+        "value": null,
+        "unit": "dimensionless",
+        "status": "unavailable",
+        "origin": "proposed",
+        "unavailable_reason": "correction_inputs_unreported",
+        "conditional_on": [
+          "first_order_covariance_propagation",
+          "known_variance",
+          "known_normal_nonnegative_presence"
+        ],
+        "reported_uncertainty_kind": "unspecified"
+      }
+    ]
+  },
+  "schema": {
+    "type": "object",
+    "properties": {
+      "measurements": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "sheet_ref": {
+              "type": "string",
+              "format": "reference",
+              "x-reference-namespace": "source"
+            },
+            "evidence_source_ref": {
+              "type": "string",
+              "format": "reference",
+              "x-reference-namespace": "source"
+            },
+            "component": {
+              "type": "string",
+              "enum": [
+                "reported_value",
+                "reported_spread",
+                "relative_reported_spread",
+                "corrected_activity",
+                "effect_variance",
+                "effect_standard_uncertainty",
+                "effect_precision",
+                "source_profile_log_ratio",
+                "source_presence_index"
+              ]
+            },
+            "value": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "unit": {
+              "type": "string",
+              "enum": [
+                "umol/min/mg",
+                "uM",
+                "dimensionless",
+                "per_min",
+                "per_min_squared",
+                "min_squared"
+              ]
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "populated",
+                "unavailable"
+              ]
+            },
+            "origin": {
+              "type": "string",
+              "enum": [
+                "reported",
+                "synthetic",
+                "derived",
+                "proposed"
+              ]
+            },
+            "unavailable_reason": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                null,
+                "quantity_not_activity_rate",
+                "reported_spread_unavailable",
+                "zero_reported_value",
+                "numerical_model_range",
+                "correction_inputs_unreported",
+                "primitive_covariance_unreported",
+                "distinct_residual_variance_unreported",
+                "invalid_propagated_variance",
+                "positive_effect_variance_required",
+                "known_variance_required",
+                "observation_model_unspecified"
+              ]
+            },
+            "conditional_on": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "first_order_covariance_propagation",
+                  "known_variance",
+                  "known_normal_nonnegative_presence"
+                ]
+              }
+            },
+            "reported_uncertainty_kind": {
+              "type": "string",
+              "enum": [
+                "unspecified",
+                "unreported"
+              ]
+            },
+            "reported_subject_ref": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "reference",
+              "x-reference-namespace": "reference"
+            },
+            "experiment_ref": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "reference",
+              "x-reference-namespace": "reference"
+            },
+            "condition_ref": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "reference",
+              "x-reference-namespace": "context"
+            },
+            "endpoint_ref": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "reference",
+              "x-reference-namespace": "term"
+            },
+            "normalization_ref": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "reference",
+              "x-reference-namespace": "term"
+            },
+            "quantity_ref": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "reference",
+              "x-reference-namespace": "term"
+            },
+            "analyte_ref": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "reference",
+              "x-reference-namespace": "term"
+            }
+          },
+          "required": [
+            "sheet_ref",
+            "evidence_source_ref",
+            "component",
+            "value",
+            "unit",
+            "status",
+            "origin",
+            "unavailable_reason",
+            "conditional_on",
+            "reported_uncertainty_kind",
+            "reported_subject_ref",
+            "experiment_ref",
+            "condition_ref",
+            "endpoint_ref",
+            "normalization_ref",
+            "quantity_ref",
+            "analyte_ref"
+          ],
+          "additionalProperties": false
+        },
+        "x-source": "literature_quantity_cells"
+      }
+    },
+    "required": [
+      "measurements"
+    ],
+    "additionalProperties": false
+  },
+  "descriptor": {
+    "version": "literature_episode_binding_v1",
+    "binding_id": "literature",
+    "implementation_sha256": "6a956fb88abc03c91f69303798b27af13b6e29bc0750c913b0a6a40e8fb547c7",
+    "configuration": {
+      "outcome_page_size": 8,
+      "rate_population": true
+    }
+  },
+  "payload": {
+    "experimental_bindings": {
+      "analyte_ref": null,
+      "condition_ref": null,
+      "endpoint_ref": "term_8314d9f728b52b9a76bffb81",
+      "experiment_ref": null,
+      "normalization_ref": "term_f3d488ffd35fb79fba5b9414",
+      "quantity_ref": "term_f7c07a2d212ea87693ba3404",
+      "reported_subject_ref": "reference_beb3c620326db1f2ed0faca2"
+    },
+    "input_artifact_ref": "artifact_b99f63bb3a73283781d33a3a8041bd7c8b529c625f2a560d3353b8b7509859eb",
+    "input_source_ref": "source_1ebc77ca4e2924e293a7f696",
+    "sheet": {
+      "annotation_credit": null,
+      "axis": "A105",
+      "cells": {
+        "corrected_activity": {
+          "conditional_on": [],
+          "formula": "(q-g)*v/(k*E*u)",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "correction_inputs_unreported",
+          "unit": "per_min",
+          "value": null
+        },
+        "effect_precision": {
+          "conditional_on": [
+            "first_order_covariance_propagation"
+          ],
+          "formula": "1/effect_variance",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "correction_inputs_unreported",
+          "unit": "min_squared",
+          "value": null
+        },
+        "effect_standard_uncertainty": {
+          "conditional_on": [
+            "first_order_covariance_propagation"
+          ],
+          "formula": "sqrt(effect_variance)",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "correction_inputs_unreported",
+          "unit": "per_min",
+          "value": null
+        },
+        "effect_variance": {
+          "conditional_on": [
+            "first_order_covariance_propagation"
+          ],
+          "formula": "J*covariance*J_transpose+distinct_residual_variance",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "correction_inputs_unreported",
+          "unit": "per_min_squared",
+          "value": null
+        },
+        "relative_reported_spread": {
+          "conditional_on": [],
+          "formula": "reported_spread/abs(reported_value)",
+          "origin": "derived",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "dimensionless",
+          "value": 0.16666666666666666
+        },
+        "reported_spread": {
+          "conditional_on": [],
+          "formula": "literal_source_plus_minus_spread",
+          "origin": "synthetic",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "umol/min/mg",
+          "value": 2.0
+        },
+        "reported_value": {
+          "conditional_on": [],
+          "formula": "literal_source_value_with_explicit_unit_conversion",
+          "origin": "synthetic",
+          "status": "populated",
+          "unavailable_reason": null,
+          "unit": "umol/min/mg",
+          "value": 12.0
+        },
+        "source_presence_index": {
+          "conditional_on": [
+            "first_order_covariance_propagation",
+            "known_variance",
+            "known_normal_nonnegative_presence"
+          ],
+          "formula": "tanh(source_profile_log_ratio/2)",
+          "origin": "proposed",
+          "status": "unavailable",
+          "unavailable_reason": "correction_inputs_unreported",
+          "unit": "dimensionless",
+          "value": null
+        },
+        "source_profile_log_ratio": {
+          "conditional_on": [
+            "first_order_covariance_propagation",
+            "known_variance",
+            "known_normal_nonnegative_presence"
+          ],
+          "formula": "max(0,corrected_activity)^2/(2*effect_variance)",
+          "origin": "derived",
+          "status": "unavailable",
+          "unavailable_reason": "correction_inputs_unreported",
+          "unit": "dimensionless",
+          "value": null
+        }
+      },
+      "correction": {
+        "cells": {
+          "corrected_activity": {
+            "conditional_on": [],
+            "formula": "(q-g)*v/(k*E*u)",
+            "origin": "derived",
+            "status": "unavailable",
+            "unavailable_reason": "correction_inputs_unreported",
+            "unit": "per_min",
+            "value": null
+          },
+          "effect_precision": {
+            "conditional_on": [
+              "first_order_covariance_propagation"
+            ],
+            "formula": "1/effect_variance",
+            "origin": "derived",
+            "status": "unavailable",
+            "unavailable_reason": "correction_inputs_unreported",
+            "unit": "min_squared",
+            "value": null
+          },
+          "effect_standard_uncertainty": {
+            "conditional_on": [
+              "first_order_covariance_propagation"
+            ],
+            "formula": "sqrt(effect_variance)",
+            "origin": "derived",
+            "status": "unavailable",
+            "unavailable_reason": "correction_inputs_unreported",
+            "unit": "per_min",
+            "value": null
+          },
+          "effect_variance": {
+            "conditional_on": [
+              "first_order_covariance_propagation"
+            ],
+            "formula": "J*covariance*J_transpose+distinct_residual_variance",
+            "origin": "derived",
+            "status": "unavailable",
+            "unavailable_reason": "correction_inputs_unreported",
+            "unit": "per_min_squared",
+            "value": null
+          },
+          "source_presence_index": {
+            "conditional_on": [
+              "first_order_covariance_propagation",
+              "known_variance",
+              "known_normal_nonnegative_presence"
+            ],
+            "formula": "tanh(source_profile_log_ratio/2)",
+            "origin": "proposed",
+            "status": "unavailable",
+            "unavailable_reason": "correction_inputs_unreported",
+            "unit": "dimensionless",
+            "value": null
+          },
+          "source_profile_log_ratio": {
+            "conditional_on": [
+              "first_order_covariance_propagation",
+              "known_variance",
+              "known_normal_nonnegative_presence"
+            ],
+            "formula": "max(0,corrected_activity)^2/(2*effect_variance)",
+            "origin": "derived",
+            "status": "unavailable",
+            "unavailable_reason": "correction_inputs_unreported",
+            "unit": "dimensionless",
+            "value": null
+          }
+        },
+        "inputs": {
+          "covariance": null,
+          "distinct_residual_variance": null,
+          "observation_model": "none",
+          "values": {
+            "E": null,
+            "g": null,
+            "k": null,
+            "q": null,
+            "u": null,
+            "v": null
+          },
+          "variance_status": "unknown"
+        },
+        "primitive_order": [
+          "q",
+          "g",
+          "k",
+          "E",
+          "u",
+          "v"
+        ],
+        "version": "a105_corrected_activity_v1"
+      },
+      "extraction": {
+        "analyte": null,
+        "normalization": "mg_assayed_preparation",
+        "origin": "synthetic",
+        "quantity": "specific_activity",
+        "source": {
+          "artifact_ref": "artifact_b99f63bb3a73283781d33a3a8041bd7c8b529c625f2a560d3353b8b7509859eb",
+          "expression": "specific activity of 12 \u00b1 2 umol/min/mg",
+          "expression_end": 55,
+          "expression_start": 16,
+          "paragraph_id": "p",
+          "paragraph_text": "Protein P has a specific activity of 12 \u00b1 2 umol/min/mg.",
+          "representation": "synthetic_fixture",
+          "section_id": "s",
+          "source_ref": "source_1ebc77ca4e2924e293a7f696"
+        },
+        "subject": "P",
+        "uncertainty": {
+          "count": null,
+          "kind": "unspecified",
+          "magnitude": 2.0,
+          "sampling_basis": "unspecified"
+        },
+        "unit": "umol/min/mg",
+        "value": 12.0,
+        "version": "a105_jats_quantity_v1"
+      },
+      "interpretation_limits": [
+        "subject_token_presence_is_not_experimental_attribution",
+        "reported_specific_activity_does_not_establish_product_identity",
+        "reported_spread_with_unspecified_meaning_is_not_SEM_or_SD",
+        "apparent_km_is_not_affinity_or_an_activity_rate"
+      ],
+      "scope": "reported_source_quantity",
+      "source_conditions": null
+    },
+    "version": "literature_source_quantity_record_v1"
+  }
+}

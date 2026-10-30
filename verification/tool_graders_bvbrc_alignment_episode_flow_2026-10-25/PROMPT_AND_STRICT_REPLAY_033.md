@@ -1,0 +1,19 @@
+# Recorded prompt and stricter saved replay checks
+
+The production owner's prompt correction was checked independently against all nine original MSA scientific model-call contexts from closed run009. Six of those contexts previously exposed the final publication source ID. `verify_recorded_prompt_030.py` rerenders each context using its exact retained recurring instruction block. All four identifiers in the unchanged integration-test negative assertion are absent: final publication source ID, adapter implementation pin, scientific episode ID and results episode ID. Each complete TASK is byte-identical to the original TASK. Every numeric scalar, selected field, measurement unit/origin/status and missing reason remains unchanged. Original context dictionaries and all original run files remain unchanged. The new presentations are additive files in `recorded-prompt-030/`; no model or Workflow ran.
+
+The saved-replay barrier in the owned integration test was strengthened after the production owner identified scientific arithmetic in the separate GenomeAlignment saved path. It now blocks lower-level MSA, MetaCATS, shared phylogeny and XMFA calculators, native parser implementations, source binding/calculation functions, XMFA union/length/multiplicity/complement helpers, the two full XMFA numerical validators, and entropy/statistical math primitives. It replaces already-imported aliases as well as defining exports. This happens only after the test's explicit saved-sheet recalculation. Original structural validation, hash verification, custody checks, selector equality and frozen-value checks remain active. The barriers raise if invoked; no validator becomes a no-op.
+
+Diagnostics 031 and 032 applied the strict barriers to all eight retained adapter examples in `verification/tool_graders_bvbrc_alignment_bundle_2026-10-25/EXAMPLES_010`. These are the provider/resolver team's native-data examples with explicitly synthetic custody. They establish pure saved projection behavior, not actual host custody or Workflow integration. Every projected fact equals its retained value. The traced executed package modules were only `bvbrc_alignment_bundle_contracts.py`, `bvbrc_alignment_bundle_projection.py` and `bvbrc_appservice_contracts.py`. No native full component validator, parser or scientific calculator executed.
+
+Both diagnostics blocked 144 implementations and their aliases. Seven direct rejection controls exercised entropy/log2, union, length, multiplicity, complement and the two full XMFA numerical validators. Diagnostic 032 additionally installed a temporary, explicitly synthetic parser alias in a consumer module, replaced the parser export first, and confirmed the stronger barrier still found and blocked the retained alias. The temporary alias is removed with the diagnostic's monkeypatch context.
+
+Commands all exited 0:
+
+```sh
+.venv/bin/python verification/tool_graders_bvbrc_alignment_episode_flow_2026-10-25/verify_recorded_prompt_030.py > verification/tool_graders_bvbrc_alignment_episode_flow_2026-10-25/recorded-prompt-030.log 2>&1
+.venv/bin/python verification/tool_graders_bvbrc_alignment_episode_flow_2026-10-25/verify_strict_saved_projection_031.py > verification/tool_graders_bvbrc_alignment_episode_flow_2026-10-25/strict-saved-projection-031.log 2>&1
+.venv/bin/python verification/tool_graders_bvbrc_alignment_episode_flow_2026-10-25/verify_strict_saved_projection_032.py > verification/tool_graders_bvbrc_alignment_episode_flow_2026-10-25/strict-saved-projection-032.log 2>&1
+```
+
+The corresponding JSON receipts retain source hashes, facts, exact blocked symbols, call traces and assertions. This does not replace the pending fresh three-case Workflow run. That run remains pending while the production owner repairs shared native saved-validation contracts inside the configured adapter dependency closure. No old source pins or historical outcomes are rewritten.

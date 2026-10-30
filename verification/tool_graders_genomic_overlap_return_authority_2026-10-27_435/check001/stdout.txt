@@ -1,0 +1,40 @@
+........................F.........................                       [100%]
+=================================== FAILURES ===================================
+__________ test_foreign_scope_and_non_immediate_child_attempt_reject ___________
+
+f = <test_genomic_overlap_returns.RuntimeFixture object at 0x76aa90b09220>
+
+    def test_foreign_scope_and_non_immediate_child_attempt_reject(f):
+        schema = schema_for(PROJECTION_SOURCE)
+        science = f.child(f.root, schema, role="scientific_process")
+        result = f.child(science, schema)
+        f.own(result)
+        f.returned(science, result)
+        form = f.returned(f.root, science)
+        f.store.db.execute("UPDATE runtime_report_attempts SET child_episode_id=? WHERE run_id=? AND parent_episode_id=?",
+            (result.episode_id, f.run_id, f.root.episode_id))
+        with pytest.raises(ValueError, match="return_child_contract_conflict"):
+            f.boundary.record_admission(f.root, form, schema, f.operation(f.root))
+>       unrelated = {"subject_refs": f.store.create_problem(raw_sequence="AAAA", molecule="dna")["subject_refs"]}
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_genomic_overlap_returns.py:405: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/state.py:155: in create_problem
+    return materials.create_problem(self, input_path, raw_sequence=raw_sequence,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+store = <gene_annotation_episode.state.Store object at 0x76aa90b091c0>
+input_path = None, raw_sequence = 'AAAA', molecule = 'dna', role = 'unspecified'
+manifest_path = None, caller_context = None, format = 'auto'
+
+    def create_problem(store, input_path=None, *, raw_sequence=None, molecule="unspecified", role="unspecified",
+            manifest_path=None, caller_context=None, format="auto"):
+        if store.db.execute("SELECT 1 FROM problem").fetchone():
+>           raise ContractError("problem_already_exists")
+E           gene_annotation_episode.domain.ContractError: problem_already_exists
+
+source_snapshot/gene_annotation_episode/materials.py:568: ContractError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_genomic_overlap_returns.py::test_foreign_scope_and_non_immediate_child_attempt_reject
+1 failed, 49 passed in 129.05s (0:02:09)

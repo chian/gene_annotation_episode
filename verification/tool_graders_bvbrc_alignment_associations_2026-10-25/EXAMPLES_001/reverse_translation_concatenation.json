@@ -1,0 +1,829 @@
+{
+  "name": "reverse_translation_concatenation",
+  "required_example_groups": [
+    1
+  ],
+  "source_status": "synthetic",
+  "native_executed_this_workload": false,
+  "native_execution_case": null,
+  "common_operands": {
+    "inputs": [
+      {
+        "binding_id": "original",
+        "parameter_pointer": "/input/original",
+        "kind": "retained_bytes",
+        "content": {
+          "source_ref": "source:original",
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "original",
+          "sha256": "ad78c2dcaf0cd2502c68e42ac9a03cf92a1b224038a89f26f6154cbe26e8ef38",
+          "byte_count": 23
+        },
+        "workspace_path": "/workspace/original",
+        "inline_value": null,
+        "link_evidence": null,
+        "members": []
+      }
+    ],
+    "documents": [
+      {
+        "kind": "alignment",
+        "value": {
+          "alignment_id": "original#alignment",
+          "artifact": {
+            "raw_artifact_ref": "original",
+            "source_ref": "source:original",
+            "sha256": "ad78c2dcaf0cd2502c68e42ac9a03cf92a1b224038a89f26f6154cbe26e8ef38"
+          },
+          "format": "aligned_fasta",
+          "layout": "fasta",
+          "id_rule": "first_whitespace_token",
+          "encoding": "utf-8",
+          "declared_row_count": null,
+          "declared_column_count": null,
+          "observed_row_count": 2,
+          "observed_column_count": null,
+          "completeness": "partial",
+          "rows": [
+            {
+              "row_index": 0,
+              "raw_header": "dna",
+              "member_label": "dna",
+              "sequence": "CCCCAT",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "original",
+                  "source_ref": "source:original",
+                  "sha256": "ad78c2dcaf0cd2502c68e42ac9a03cf92a1b224038a89f26f6154cbe26e8ef38"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 12,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            },
+            {
+              "row_index": 1,
+              "raw_header": "other",
+              "member_label": "other",
+              "sequence": "AAA",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "original",
+                  "source_ref": "source:original",
+                  "sha256": "ad78c2dcaf0cd2502c68e42ac9a03cf92a1b224038a89f26f6154cbe26e8ef38"
+                },
+                "byte_start_0based": 12,
+                "byte_end_0based_exclusive": 23,
+                "line_start_1based": 3,
+                "line_end_1based_inclusive": 4,
+                "xml_path": null
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "alignment",
+        "value": {
+          "alignment_id": "aligned#alignment",
+          "artifact": {
+            "raw_artifact_ref": "aligned",
+            "source_ref": "source:aligned",
+            "sha256": "dbabc18c9112563fed5afa1e23d886c60a822d55c7a8232f8e3e9918c2891a74"
+          },
+          "format": "aligned_fasta",
+          "layout": "fasta",
+          "id_rule": "first_whitespace_token",
+          "encoding": "utf-8",
+          "declared_row_count": null,
+          "declared_column_count": null,
+          "observed_row_count": 1,
+          "observed_column_count": 3,
+          "completeness": "complete",
+          "rows": [
+            {
+              "row_index": 0,
+              "raw_header": "product",
+              "member_label": "product",
+              "sequence": "MGK",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "aligned",
+                  "source_ref": "source:aligned",
+                  "sha256": "dbabc18c9112563fed5afa1e23d886c60a822d55c7a8232f8e3e9918c2891a74"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 13,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "declarations": {
+      "common": {
+        "version": "bvbrc_alignment_associations_v1",
+        "analysis_id": "analysis",
+        "input_sequences": [
+          {
+            "kind": "parsed_document",
+            "input_binding_id": "original",
+            "document": "original#alignment",
+            "member_id_rule": "first_whitespace_token",
+            "molecule": "dna",
+            "host_member_joins": [],
+            "evidence": []
+          }
+        ],
+        "row_joins": [
+          {
+            "association_id": "explicit",
+            "alignment_id": "aligned#alignment",
+            "row_index": 0,
+            "member_keys": [
+              {
+                "input_binding_id": "original",
+                "member_id": "dna",
+                "occurrence_index": 0
+              },
+              {
+                "input_binding_id": "original",
+                "member_id": "other",
+                "occurrence_index": 0
+              }
+            ],
+            "transformation_ids": [
+              "concat",
+              "translate",
+              "translate-other"
+            ],
+            "state": "resolved",
+            "basis": "transformation_record",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "source:facts",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "facts",
+                  "sha256": "0694aacb66d62e742a92e8d5f1e82bd9d2a8ca1be88744201fbe63d0f5007502",
+                  "byte_count": 5
+                },
+                "pointer": ""
+              }
+            ]
+          }
+        ],
+        "automatic_row_joins": [],
+        "transformations": [
+          {
+            "input_members": [
+              {
+                "input_binding_id": "original",
+                "member_id": "dna",
+                "occurrence_index": 0
+              },
+              {
+                "input_binding_id": "original",
+                "member_id": "other",
+                "occurrence_index": 0
+              }
+            ],
+            "input_rows": [],
+            "output_rows": [
+              {
+                "alignment_id": "aligned#alignment",
+                "row_index": 0
+              }
+            ],
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "source:facts",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "facts",
+                  "sha256": "0694aacb66d62e742a92e8d5f1e82bd9d2a8ca1be88744201fbe63d0f5007502",
+                  "byte_count": 5
+                },
+                "pointer": ""
+              }
+            ],
+            "transformation_id": "concat",
+            "kind": "concatenate",
+            "segment_order": [
+              "a",
+              "b"
+            ],
+            "output_intervals": [
+              {
+                "segment_id": "a",
+                "interval_0based_half_open": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "segment_id": "b",
+                "interval_0based_half_open": [
+                  2,
+                  3
+                ]
+              }
+            ]
+          },
+          {
+            "input_members": [
+              {
+                "input_binding_id": "original",
+                "member_id": "dna",
+                "occurrence_index": 0
+              }
+            ],
+            "input_rows": [],
+            "output_rows": [
+              {
+                "alignment_id": "aligned#alignment",
+                "row_index": 0
+              }
+            ],
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "source:facts",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "facts",
+                  "sha256": "0694aacb66d62e742a92e8d5f1e82bd9d2a8ca1be88744201fbe63d0f5007502",
+                  "byte_count": 5
+                },
+                "pointer": ""
+              }
+            ],
+            "transformation_id": "translate",
+            "kind": "translate",
+            "translation_table": 11,
+            "frame": 0,
+            "strand": "-",
+            "input_intervals": [
+              [
+                0,
+                6
+              ]
+            ]
+          },
+          {
+            "input_members": [
+              {
+                "input_binding_id": "original",
+                "member_id": "other",
+                "occurrence_index": 0
+              }
+            ],
+            "input_rows": [],
+            "output_rows": [
+              {
+                "alignment_id": "aligned#alignment",
+                "row_index": 0
+              }
+            ],
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "source:facts",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "facts",
+                  "sha256": "0694aacb66d62e742a92e8d5f1e82bd9d2a8ca1be88744201fbe63d0f5007502",
+                  "byte_count": 5
+                },
+                "pointer": ""
+              }
+            ],
+            "transformation_id": "translate-other",
+            "kind": "translate",
+            "translation_table": 11,
+            "frame": 0,
+            "strand": "+",
+            "input_intervals": [
+              [
+                0,
+                3
+              ]
+            ]
+          }
+        ],
+        "correspondences": [
+          {
+            "alignment_id": "aligned#alignment",
+            "row_index": 0,
+            "column_0based": 0,
+            "staged_ungapped_position_0based": 0,
+            "original_member": {
+              "input_binding_id": "original",
+              "member_id": "dna"
+            },
+            "original_interval_0based_half_open": [
+              3,
+              6
+            ],
+            "strand": "-",
+            "translation_table": 11,
+            "transformation_id": "translate",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "source:facts",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "facts",
+                  "sha256": "0694aacb66d62e742a92e8d5f1e82bd9d2a8ca1be88744201fbe63d0f5007502",
+                  "byte_count": 5
+                },
+                "pointer": ""
+              }
+            ]
+          },
+          {
+            "alignment_id": "aligned#alignment",
+            "row_index": 0,
+            "column_0based": 1,
+            "staged_ungapped_position_0based": 1,
+            "original_member": {
+              "input_binding_id": "original",
+              "member_id": "dna"
+            },
+            "original_interval_0based_half_open": [
+              0,
+              3
+            ],
+            "strand": "-",
+            "translation_table": 11,
+            "transformation_id": "translate",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "source:facts",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "facts",
+                  "sha256": "0694aacb66d62e742a92e8d5f1e82bd9d2a8ca1be88744201fbe63d0f5007502",
+                  "byte_count": 5
+                },
+                "pointer": ""
+              }
+            ]
+          },
+          {
+            "alignment_id": "aligned#alignment",
+            "row_index": 0,
+            "column_0based": 2,
+            "staged_ungapped_position_0based": 2,
+            "original_member": {
+              "input_binding_id": "original",
+              "member_id": "other"
+            },
+            "original_interval_0based_half_open": [
+              0,
+              3
+            ],
+            "strand": "+",
+            "translation_table": 11,
+            "transformation_id": "translate-other",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "source:facts",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "facts",
+                  "sha256": "0694aacb66d62e742a92e8d5f1e82bd9d2a8ca1be88744201fbe63d0f5007502",
+                  "byte_count": 5
+                },
+                "pointer": ""
+              }
+            ]
+          }
+        ],
+        "feature_genomes": [],
+        "source_records": [],
+        "member_entities": []
+      },
+      "functions": null,
+      "taxonomy": null
+    }
+  },
+  "common_result": {
+    "status": "partial",
+    "value": {
+      "original_members": [
+        {
+          "key": {
+            "input_binding_id": "original",
+            "member_id": "dna",
+            "occurrence_index": 0
+          },
+          "host_member_id": null,
+          "original_input_pointer": "/input/original",
+          "source_document_id": "original#alignment",
+          "source_row_index": 0,
+          "raw_header": "dna",
+          "member_label": "dna",
+          "sequence_sha256": "b9a12fa6afcacd3fcd64eac92661582b7cabfccdb2718ba6d5142f9d6237c0bc",
+          "original_length": 6,
+          "molecule": "dna",
+          "feature_ids": [],
+          "genome_ids": [],
+          "source_record_ids": [],
+          "evidence": []
+        },
+        {
+          "key": {
+            "input_binding_id": "original",
+            "member_id": "other",
+            "occurrence_index": 0
+          },
+          "host_member_id": null,
+          "original_input_pointer": "/input/original",
+          "source_document_id": "original#alignment",
+          "source_row_index": 1,
+          "raw_header": "other",
+          "member_label": "other",
+          "sequence_sha256": "cb1ad2119d8fafb69566510ee712661f9f14b83385006ef92aec47f523a38358",
+          "original_length": 3,
+          "molecule": "dna",
+          "feature_ids": [],
+          "genome_ids": [],
+          "source_record_ids": [],
+          "evidence": []
+        }
+      ],
+      "inline_inputs": [],
+      "row_members": [
+        {
+          "association_id": "explicit",
+          "alignment_id": "aligned#alignment",
+          "row_index": 0,
+          "member_keys": [
+            {
+              "input_binding_id": "original",
+              "member_id": "dna",
+              "occurrence_index": 0
+            },
+            {
+              "input_binding_id": "original",
+              "member_id": "other",
+              "occurrence_index": 0
+            }
+          ],
+          "transformation_ids": [
+            "concat",
+            "translate",
+            "translate-other"
+          ],
+          "state": "resolved",
+          "basis": "transformation_record",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:facts",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "facts",
+                "sha256": "0694aacb66d62e742a92e8d5f1e82bd9d2a8ca1be88744201fbe63d0f5007502",
+                "byte_count": 5
+              },
+              "pointer": ""
+            }
+          ]
+        }
+      ],
+      "transformations": [
+        {
+          "input_members": [
+            {
+              "input_binding_id": "original",
+              "member_id": "dna",
+              "occurrence_index": 0
+            },
+            {
+              "input_binding_id": "original",
+              "member_id": "other",
+              "occurrence_index": 0
+            }
+          ],
+          "input_rows": [],
+          "output_rows": [
+            {
+              "alignment_id": "aligned#alignment",
+              "row_index": 0
+            }
+          ],
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:facts",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "facts",
+                "sha256": "0694aacb66d62e742a92e8d5f1e82bd9d2a8ca1be88744201fbe63d0f5007502",
+                "byte_count": 5
+              },
+              "pointer": ""
+            }
+          ],
+          "transformation_id": "concat",
+          "kind": "concatenate",
+          "segment_order": [
+            "a",
+            "b"
+          ],
+          "output_intervals": [
+            {
+              "segment_id": "a",
+              "interval_0based_half_open": [
+                0,
+                2
+              ]
+            },
+            {
+              "segment_id": "b",
+              "interval_0based_half_open": [
+                2,
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "input_members": [
+            {
+              "input_binding_id": "original",
+              "member_id": "dna",
+              "occurrence_index": 0
+            }
+          ],
+          "input_rows": [],
+          "output_rows": [
+            {
+              "alignment_id": "aligned#alignment",
+              "row_index": 0
+            }
+          ],
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:facts",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "facts",
+                "sha256": "0694aacb66d62e742a92e8d5f1e82bd9d2a8ca1be88744201fbe63d0f5007502",
+                "byte_count": 5
+              },
+              "pointer": ""
+            }
+          ],
+          "transformation_id": "translate",
+          "kind": "translate",
+          "translation_table": 11,
+          "frame": 0,
+          "strand": "-",
+          "input_intervals": [
+            [
+              0,
+              6
+            ]
+          ]
+        },
+        {
+          "input_members": [
+            {
+              "input_binding_id": "original",
+              "member_id": "other",
+              "occurrence_index": 0
+            }
+          ],
+          "input_rows": [],
+          "output_rows": [
+            {
+              "alignment_id": "aligned#alignment",
+              "row_index": 0
+            }
+          ],
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:facts",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "facts",
+                "sha256": "0694aacb66d62e742a92e8d5f1e82bd9d2a8ca1be88744201fbe63d0f5007502",
+                "byte_count": 5
+              },
+              "pointer": ""
+            }
+          ],
+          "transformation_id": "translate-other",
+          "kind": "translate",
+          "translation_table": 11,
+          "frame": 0,
+          "strand": "+",
+          "input_intervals": [
+            [
+              0,
+              3
+            ]
+          ]
+        }
+      ],
+      "correspondences": [
+        {
+          "alignment_id": "aligned#alignment",
+          "row_index": 0,
+          "column_0based": 0,
+          "staged_ungapped_position_0based": 0,
+          "original_member": {
+            "input_binding_id": "original",
+            "member_id": "dna"
+          },
+          "original_interval_0based_half_open": [
+            3,
+            6
+          ],
+          "strand": "-",
+          "translation_table": 11,
+          "transformation_id": "translate",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:facts",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "facts",
+                "sha256": "0694aacb66d62e742a92e8d5f1e82bd9d2a8ca1be88744201fbe63d0f5007502",
+                "byte_count": 5
+              },
+              "pointer": ""
+            }
+          ]
+        },
+        {
+          "alignment_id": "aligned#alignment",
+          "row_index": 0,
+          "column_0based": 1,
+          "staged_ungapped_position_0based": 1,
+          "original_member": {
+            "input_binding_id": "original",
+            "member_id": "dna"
+          },
+          "original_interval_0based_half_open": [
+            0,
+            3
+          ],
+          "strand": "-",
+          "translation_table": 11,
+          "transformation_id": "translate",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:facts",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "facts",
+                "sha256": "0694aacb66d62e742a92e8d5f1e82bd9d2a8ca1be88744201fbe63d0f5007502",
+                "byte_count": 5
+              },
+              "pointer": ""
+            }
+          ]
+        },
+        {
+          "alignment_id": "aligned#alignment",
+          "row_index": 0,
+          "column_0based": 2,
+          "staged_ungapped_position_0based": 2,
+          "original_member": {
+            "input_binding_id": "original",
+            "member_id": "other"
+          },
+          "original_interval_0based_half_open": [
+            0,
+            3
+          ],
+          "strand": "+",
+          "translation_table": 11,
+          "transformation_id": "translate-other",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:facts",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "facts",
+                "sha256": "0694aacb66d62e742a92e8d5f1e82bd9d2a8ca1be88744201fbe63d0f5007502",
+                "byte_count": 5
+              },
+              "pointer": ""
+            }
+          ]
+        }
+      ],
+      "feature_genomes": [],
+      "source_records": [],
+      "functions": [],
+      "function_equivalences": [],
+      "taxonomy": [],
+      "member_entities": [],
+      "dependence_groups": [],
+      "requirements": [],
+      "diagnostics": [
+        {
+          "code": "bvbrc_alignment_provider_original_document_incomplete",
+          "phase": "association",
+          "path": "/original_members",
+          "severity": "qualification",
+          "evidence_refs": []
+        }
+      ]
+    },
+    "diagnostics": [
+      {
+        "code": "bvbrc_alignment_provider_original_document_incomplete",
+        "phase": "association",
+        "path": "/original_members",
+        "severity": "qualification",
+        "evidence_refs": []
+      }
+    ]
+  },
+  "metacats_operands": null,
+  "metacats_result": null,
+  "calculations": [],
+  "downstream_operands": {
+    "segments": [
+      {
+        "segment_id": "a",
+        "native_segment_token": "a",
+        "genome_id": null,
+        "genome_sequence_record_id": null,
+        "contig_id": null,
+        "original_interval_0based_half_open": [
+          0,
+          6
+        ],
+        "strand": "-",
+        "input_member": {
+          "input_binding_id": "original",
+          "member_id": "dna",
+          "occurrence_index": 0
+        },
+        "alignment_id": "aligned#alignment",
+        "concatenated_interval_0based_half_open": [
+          0,
+          2
+        ],
+        "order_index": 0,
+        "state": "resolved",
+        "evidence": [
+          {
+            "content": {
+              "source_ref": "source:synthetic-segment-map",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic-segment-map",
+              "sha256": "b12a0e8dcf7c94072372179a5cd1bd91fcdcae7b2dbe9adfaf177d5adeefc3c9",
+              "byte_count": 21
+            },
+            "pointer": ""
+          }
+        ]
+      },
+      {
+        "segment_id": "b",
+        "native_segment_token": "b",
+        "genome_id": null,
+        "genome_sequence_record_id": null,
+        "contig_id": null,
+        "original_interval_0based_half_open": [
+          0,
+          3
+        ],
+        "strand": "+",
+        "input_member": {
+          "input_binding_id": "original",
+          "member_id": "other",
+          "occurrence_index": 0
+        },
+        "alignment_id": "aligned#alignment",
+        "concatenated_interval_0based_half_open": [
+          2,
+          3
+        ],
+        "order_index": 1,
+        "state": "resolved",
+        "evidence": [
+          {
+            "content": {
+              "source_ref": "source:synthetic-segment-map",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "synthetic-segment-map",
+              "sha256": "b12a0e8dcf7c94072372179a5cd1bd91fcdcae7b2dbe9adfaf177d5adeefc3c9",
+              "byte_count": 21
+            },
+            "pointer": ""
+          }
+        ]
+      }
+    ]
+  }
+}

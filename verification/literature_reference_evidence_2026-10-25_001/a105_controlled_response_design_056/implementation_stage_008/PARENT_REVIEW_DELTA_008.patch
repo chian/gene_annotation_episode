@@ -1,0 +1,219 @@
+--- parent_preliminary_001/gene_annotation_episode/literature_controlled_response_inputs.py
++++ gene_annotation_episode/literature_controlled_response_inputs.py
+@@ -9,6 +9,7 @@
+ 
+ from copy import deepcopy
+ from fractions import Fraction
++import errno
+ import hashlib
+ import json
+ import math
+@@ -23,7 +24,7 @@
+     _scale as _native_scale, _check_explicit_unit, _field_contexts,
+ )
+ from .literature_partner_defined_units import defined_rate_unit_schema, _definition_scale
+-from .literature_kinetic_inputs import _count_reading, _interval, _confidence
++from .literature_kinetic_inputs import _count_reading, _interval, _confidence, _cardinal_count
+ from .literature_binding_visual_inputs import _Inputs
+ from .literature_controlled_response_calculations import (
+     INPUT_VERSION, PRIMITIVE_ORDER, validate_controlled_response_inputs,
+@@ -311,7 +312,13 @@
+                 loaded = callback(reference, representation)
+             except PermissionError:
+                 raise
+-            except (OSError, EOFError):
++            except OSError as error:
++                if error.errno not in (errno.ENOENT, errno.EIO, errno.ETIMEDOUT):
++                    raise
++                loaded = _Unavailable()
++                record.update(state="unavailable", diagnostics=[_diag("source_dependency_unavailable",
++                    "sources", "dependency", [reference])])
++            except EOFError:
+                 loaded = _Unavailable()
+                 record.update(state="unavailable", diagnostics=[_diag("source_dependency_unavailable",
+                     "sources", "dependency", [reference])])
+@@ -652,8 +659,9 @@
+     spread = _display(magnitude, effective_unit)["value"]
+     bounds = None
+     if interval and interval["status"] == "parsed" and effective_unit and effective_unit["status"] == "supported":
+-        values = [_finite(Fraction(v.replace("−", "-")) * _fraction(effective_unit["exact_scale"])) for v in interval["raw_values"]]
+-        if all(v is not None for v in values):
++        exact_bounds = [Fraction(v.replace("−", "-")) * _fraction(effective_unit["exact_scale"]) for v in interval["raw_values"]]
++        values = [_finite(v) for v in exact_bounds]
++        if all(v is not None for v in values) and not (values[0] == values[1] and exact_bounds[0] != exact_bounds[1]):
+             bounds = values
+         else:
+             diagnostics.append(_diag("source_numeric_range", field + ".interval", "reader_capability"))
+@@ -1150,7 +1158,10 @@
+ 
+     ``read_source`` must authorize actual received/scope/ancestry references. Its
+     ContractError or malformed success is never swallowed by image helper catches.
+-    Only actual OSError/EOFError availability failures become local partials.
++    Only explicit ENOENT/EIO/ETIMEDOUT OSError, or the callback's explicit EOFError
++    signal for unavailable/truncated retained bytes, become availability partials.
++    Other exceptions (including OSError with no errno) propagate as callback
++    failures, not source findings.
+     This function never calls a sheet calculator or makes an episode observation.
+     """
+     selected = validate_controlled_response_selection(arguments)
+@@ -1436,6 +1447,11 @@
+         _fail("saved_unit_literal_mismatch", field)
+     if defined:
+         definitions = record["definition_witnesses"]
++        if definitions is None:
++            if (record["status"] != "dependency_unavailable" or record["witness"]["canonical_locator"] is not None
++                    or any(record[key] is not None for key in ("raw_unit", "canonical_unit", "exact_scale", "native_registry_unit"))):
++                _fail("saved_unavailable_definition_mismatch", field)
++            return
+         _closed(definitions, selected["definition"], field + ".definition")
+         for key, nomination in selected["definition"].items():
+             if key == "amount":
+@@ -1577,6 +1593,40 @@
+                           and uncertainty["count"]["reading"]["status"] == "exact" else None)
+         if uncertainty["canonical"]["count"] != expected_count:
+             _fail("saved_count_projection_mismatch", role)
++        if uncertainty["count"] and uncertainty["count"]["reading"]:
++            reading = uncertainty["count"]["reading"]
++            raw = reading["raw_number"]
++            value = int(raw.replace("−", "-")) if re.fullmatch(r"[-−]?[0-9]+", raw) else _cardinal_count(raw)
++            if reading["status"] in ("exact", "qualified", "not_positive") and reading["value"] != value:
++                _fail("saved_count_literal_mismatch", role)
++        confidence = uncertainty["confidence_level"]
++        if confidence and confidence["status"] == "parsed":
++            raw = confidence["selection"]["quote"].strip()
++            try:
++                value = _finite(Fraction(raw[:-1].strip().replace("−", "-")) / 100) if raw.endswith("%") else None
++            except ValueError:
++                value = None
++            if confidence["value"] != value or value is None or not 0 < value < 1:
++                _fail("saved_confidence_literal_mismatch", role)
++        effective_unit = uncertainty["effective_unit"]
++        expected_spread = _display(uncertainty["magnitude"], effective_unit)["value"]
++        if uncertainty["canonical"]["magnitude"] != expected_spread:
++            _fail("saved_uncertainty_projection_mismatch", role)
++        expected_interval = None
++        interval = uncertainty["interval"]
++        if interval and interval["status"] == "parsed":
++            selection = interval["selection"]
++            quote = selection["witness"]["quote"]
++            raw_values = [quote[selection[side + "_start"]:selection[side + "_end"]] for side in ("lower", "upper")]
++            if interval["raw_values"] != raw_values or interval["values"] != [float(raw.replace("−", "-")) for raw in raw_values]:
++                _fail("saved_interval_literal_mismatch", role)
++            if effective_unit and effective_unit["status"] == "supported":
++                exact = [Fraction(v.replace("−", "-")) * _fraction(effective_unit["exact_scale"]) for v in raw_values]
++                values = [_finite(v) for v in exact]
++                if all(v is not None for v in values) and not (values[0] == values[1] and exact[0] != exact[1]):
++                    expected_interval = values
++        if uncertainty["canonical"]["interval"] != expected_interval or uncertainty["canonical"]["confidence_level"] != (confidence["value"] if confidence else None):
++            _fail("saved_uncertainty_projection_mismatch", role)
+     relationships = extraction["relationships"]
+     _closed(relationships, selected["relationships"], "relationships")
+     conflict = _cross_control_alias_conflict(extraction["arms"])
+--- parent_preliminary_001/tests/test_literature_controlled_response_inputs.py
++++ tests/test_literature_controlled_response_inputs.py
+@@ -1,6 +1,7 @@
+ """Synthetic source/parsed-model tests only; no primary paper or model run."""
+ from copy import deepcopy
+ from fractions import Fraction
++import errno
+ import hashlib
+ from io import BytesIO
+ import json
+@@ -181,7 +182,7 @@
+ def test_real_source_io_failure_retains_nominations_but_no_authenticated_identity():
+     f = Fixture()
+     def callback(reference, representation):
+-        if reference == f.main_ref: raise FileNotFoundError("synthetic unavailable source")
++        if reference == f.main_ref: raise FileNotFoundError(errno.ENOENT, "synthetic unavailable source")
+         return f.source(reference, representation)
+     result = reader.read_controlled_response_inputs(f.args, read_source=callback)
+     candidate = result["arms"]["protein_condition1"]["measurement"]["candidates"][0]
+@@ -433,7 +434,7 @@
+     assert populate_controlled_response(result["calculation_inputs"])["cells"]["controlled_response_difference"]["value"] == 0
+ 
+ 
+-def test_source_defined_units_are_endpoint_bound_and_converted_once():
++def defined_unit_fixture():
+     f = Fixture()
+     endpoint = "oxidation of NADH"
+     bridge = "One unit was defined as 2 nmol of NADH per min."
+@@ -457,6 +458,12 @@
+         "endpoint": f.witness(endpoint), "endpoint_entity": f.witness("NADH", start=source.index(endpoint)),
+         "definition_entity": f.witness("NADH", start=source.index(bridge))}
+     arm["measurement"]["unit"] = {"kind": "source_defined_rate_unit", "witness": f.witness("U/mg"), "definition": definition}
++    return f
++
++
++def test_source_defined_units_are_endpoint_bound_and_converted_once():
++    f = defined_unit_fixture()
++    arm = f.args["arms"]["protein_condition1"]
+     result = f.read(); quantity = result["arms"]["protein_condition1"]
+     assert quantity["measurement"]["unit"]["status"] == "supported"
+     assert quantity["measurement"]["candidates"][0]["native_value"] == 2
+@@ -467,6 +474,47 @@
+     result = f.read()
+     assert result["arms"]["protein_condition1"]["measurement"]["unit"]["status"] == "endpoint_correspondence_unknown"
+     assert result["arms"]["protein_condition1"]["calculation_operand"]["unit"] is None
++
++
++def test_unavailable_defined_unit_valid_partial_roundtrips_without_source_access(monkeypatch):
++    f = defined_unit_fixture(); missing = identity("source", "invented_missing_defined_unit_witness")
++    f.args["arms"]["protein_condition1"]["measurement"]["unit"]["witness"] = {
++        "source_ref": missing, "representation": "original", "start": 0, "end": 4, "quote": "U/mg"}
++    def callback(ref, rep):
++        if ref == missing: raise FileNotFoundError(errno.ENOENT, "invented missing unit")
++        return f.source(ref, rep)
++    result = reader.read_controlled_response_inputs(f.args, read_source=callback)
++    unit = result["arms"]["protein_condition1"]["measurement"]["unit"]
++    assert unit["status"] == "dependency_unavailable" and unit["definition_witnesses"] is None
++    assert result["calculation_inputs"]["arms"]["empty_condition1"]["value"] == 2
++    def forbidden(*a, **k): raise AssertionError("saved source access")
++    monkeypatch.setattr(reader, "_Sources", forbidden); monkeypatch.setattr(reader, "_Inputs", forbidden)
++    assert reader.validate_controlled_response_extraction(f.args, result) == result
++    unit["status"] = "supported"
++    with pytest.raises(ExperimentalContractError, match="saved_unavailable_definition_mismatch"):
++        reader.validate_controlled_response_extraction(f.args, result)
++
++
++@pytest.mark.parametrize("error", [OSError(errno.EINVAL, "invalid callback"), OSError(errno.EBADF, "bad descriptor"),
++    OSError("no explicit errno"), PermissionError(errno.EACCES, "denied"), RuntimeError("provider bug")])
++def test_callback_programming_and_authorization_errors_never_become_source_findings(error, monkeypatch):
++    f = Fixture()
++    monkeypatch.setattr(reader, "_Inputs", lambda *a: (_ for _ in ()).throw(AssertionError("geometry before callback")))
++    with pytest.raises(type(error)):
++        reader.read_controlled_response_inputs(f.args, read_source=lambda *a: (_ for _ in ()).throw(error))
++
++
++@pytest.mark.parametrize("error", [FileNotFoundError(errno.ENOENT, "missing retained bytes"),
++    OSError(errno.EIO, "retained storage I/O"), TimeoutError(errno.ETIMEDOUT, "retained storage timeout"),
++    EOFError("explicit truncated retained bytes")])
++def test_only_explicit_availability_contract_creates_dependency_partial(error):
++    f = Fixture()
++    def callback(ref, rep):
++        if ref == f.main_ref: raise error
++        return f.source(ref, rep)
++    result = reader.read_controlled_response_inputs(f.args, read_source=callback)
++    assert result["calculation_inputs"]["arms"]["protein_condition1"] is None
++    assert any(d["code"] == "source_dependency_unavailable" for d in result["diagnostics"])
+ 
+ 
+ @pytest.mark.parametrize("variance,source_model,selected_model,expected", [
+@@ -672,3 +720,18 @@
+     assert witness["attribution"] == "investigating_episode_interpretation"
+     assert witness["canonical_locator"]["original_source_ref"] == image_ref
+     assert witness["canonical_locator"]["region"] == [1, 1, 3, 3]
++
++
++def test_narrow_exact_ci_does_not_turn_into_false_zero_width_after_projection():
++    f = Fixture(); text = "[0.10000000000000000001, 0.10000000000000000002]"
++    f.append("Reported narrow CI: " + text + " nmol/min/mg.")
++    selected = f.args["arms"]["protein_condition1"]["reported_uncertainty"]
++    selected.update(statistic=interpretation(f, "ci", "Reported narrow CI"),
++        interval={"witness": f.witness(text), "lower_start": 1, "lower_end": text.index(","),
++            "upper_start": text.index(",")+2, "upper_end": len(text)-1},
++        unit_relationship=interpretation(f, "same_as_response", "nmol/min/mg"))
++    result = f.read(); uncertainty = result["arms"]["protein_condition1"]["reported_uncertainty"]
++    assert uncertainty["interval"]["raw_values"] == ["0.10000000000000000001", "0.10000000000000000002"]
++    assert uncertainty["canonical"]["interval"] is None
++    assert any(d["code"] == "source_numeric_range" for d in uncertainty["diagnostics"])
++    assert reader.validate_controlled_response_extraction(f.args, result) == result

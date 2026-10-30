@@ -1,0 +1,31 @@
+--- baseline/gene_annotation_episode/literature_compiled_assay_render.py
++++ gene_annotation_episode/literature_compiled_assay_render.py
+@@ -29,7 +29,7 @@
+ 
+ def task_relevant(state):
+     assignment = state.get('literature_assignment', {})
+-    if isinstance(assignment, Mapping) and assignment.get('requested_compiled_assay_components'):
++    if isinstance(assignment, Mapping) and (assignment.get('requested_compiled_assay_components') or assignment.get('requested_compiled_assay_components_v2')):
+         return True
+     if state.get('literature_compiled_assay_work', {}).get('version') == 'literature_compiled_assay_task_v1':
+         return True
+@@ -92,9 +92,18 @@
+         section(parts, 'Shared numerical dependencies', table(('Component', 'Original measurement reuse'), dependency_rows))
+         section(parts, 'Operand applicability limits', table(('Role', 'Unresolved or incompatible meaning'),
+             [(role, reason) for role, reason in first['operand_eligibility'].items() if reason is not None]))
++        scoped = [row for row in selected if 'uncertainty' in row and row['uncertainty']['scope'] != 'not_applicable']
++        if scoped:
++            section(parts, 'Uncertainty of requested numerical results', table(
++                ('Component', 'Estimand', 'Scope', 'Operand order', 'Covariance status', 'Origin', 'Propagation'),
++                [(row['component'], row['uncertainty']['estimand_component'], row['uncertainty']['scope'],
++                  ', '.join(row['uncertainty']['operand_order']), row['uncertainty']['variance_status'],
++                  row['uncertainty']['covariance_origin'], row['uncertainty']['propagation_model']) for row in scoped]))
+         section(parts, 'Compilation limits', table(('Question', 'Meaning'), [
+             ('Uncertainty', first['variance_status'] + '; ' + first['observation_model']),
+-            ('Partial normalizations', 'joint uncertainty propagation is unimplemented; no confidence level is inferred'),
++            ('Partial normalizations', 'joint uncertainty propagation is unimplemented; no confidence level is inferred'
++                if first['partial_uncertainty_status'] == 'unimplemented' else
++                'component-scoped first-order joint propagation; distinct residual variability and other corrections remain separate; no confidence level is inferred'),
+             ('Covariance input', first['covariance_input_status']),
+             ('Opaque dependency identities', 'identity across different component families remains unknown; these labels do not count experiments'),
+             ('Repeated transforms', 'shared source quantities, not independent verification'),

@@ -1,0 +1,122 @@
+..............................F.............F.                           [100%]
+=================================== FAILURES ===================================
+___ test_authorized_availability_partial_survives_saved_read_without_repair ____
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1697/test_authorized_availability_p0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72b0ec711550>
+
+    def test_authorized_availability_partial_survives_saved_read_without_repair(tmp_path, monkeypatch):
+        import errno
+        store, context, selection, native = native_case(tmp_path)
+        try:
+            repo = repository(store, context)
+            unavailable = native['result']['view']['original_artifact_ref']
+            get = store.get_artifact
+            def missing(ref):
+                if ref == unavailable:
+                    raise FileNotFoundError(errno.ENOENT, 'synthetic missing native bytes')
+                return get(ref)
+            monkeypatch.setattr(store, 'get_artifact', missing)
+            outcome = repo.populate(context, selection, 'missing-native')
+            saved = repo.read(outcome['result']['sheet_ref'])
+            assert saved['extraction']['views'][0]['state'] == 'unavailable'
+            assert saved['sheet']['cells']['reported_ratio']['value'] is None
+>           assert saved['sheet']['cells']['reported_ratio']['unavailable_reason'] == 'source_dependency_unavailable'
+E           AssertionError: assert 'comparison_a...on_unresolved' == 'source_depen...y_unavailable'
+E             
+E             - source_dependency_unavailable
+E             + comparison_association_unresolved
+
+tests/test_literature_ratio_source_storage.py:347: AssertionError
+_ test_first_projection_in_fresh_readonly_process_never_reads_source_or_mutates _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1697/test_first_projection_in_fresh0')
+
+    def test_first_projection_in_fresh_readonly_process_never_reads_source_or_mutates(tmp_path):
+        directory = tmp_path / 'store'
+        store, context, selection, _ = native_case(directory, known=True)
+        repo = repository(store, context); outcome = repo.populate(context, selection, 'selected')
+        reference = outcome['result']['sheet_ref']; saved = repo.read(reference)
+        owner = owned(context, outcome)
+        cells = repo.fact_cells(owner, [reference], components=['reported_ratio'])
+        parent = replace(owner, episode_id='fixture-parent', role='literature', path=(('literature', 'synthetic-parent'),), assignment={})
+        repo.receive_cells(parent, cells, 'manual-engineering-fixture-receipt')
+        observations = [list(row) for row in store.db.execute('SELECT * FROM runtime_observations ORDER BY episode_id,unit_index')]
+        # No whole database copy: original fixture store is opened via actual mode=ro.
+        fixture = {'run_id': context.run_id, 'episode_id': parent.episode_id, 'scope': dict(context.scope),
+            'received': list(parent.received_record_refs), 'sheet_ref': reference, 'cells': cells,
+            'banned_artifacts': list({store.get(ref)['artifact_ref'] for ref in saved['input_source_refs']}
+                | {value for item in saved['extraction']['views'] for key, value in item['metadata'].items()
+                   if key in ('original_artifact_ref', 'image_artifact_ref')}),
+            'observations': observations, 'selection': selection}
+        path = tmp_path / 'engineering-fixture.json'; path.write_text(json.dumps(fixture))
+        store.close()
+        script = r'''
+    import json, sqlite3, sys
+    from pathlib import Path
+    from types import SimpleNamespace
+    from PIL import Image
+    from gene_annotation_episode.state import Store
+    from gene_annotation_episode.literature_ratio_source_storage import LiteratureRatioSourceRepository
+    from gene_annotation_episode import literature_ratio_source_inputs as inputs
+    from gene_annotation_episode import literature_ratio_source_calculations as calculations
+    fixture=json.loads(Path(sys.argv[2]).read_text())
+    def forbidden(*args,**kwargs):raise AssertionError('forbidden reacquisition, decoder, calculation or mutation')
+    store=Store.__new__(Store);store.path=Path(sys.argv[1]);store._savepoint=0
+    store.db=sqlite3.connect(f'file:{store.path / "state.sqlite3"}?mode=ro',uri=True)
+    store.db.row_factory=sqlite3.Row
+    store.db.execute('PRAGMA query_only=ON')
+    store.db.create_function('library_scope_record',2,store._scope_filter_record)
+    original_get=store.get_artifact
+    reads=[]
+    def saved_only(reference):
+     if reference in fixture['banned_artifacts']:raise AssertionError('original scientific bytes read')
+     reads.append(reference);return original_get(reference)
+    store.get_artifact=saved_only
+    for name in ('artifact','put','transaction','register_material','parse_material'):setattr(store,name,forbidden)
+    inputs.read_relative_signal_source_inputs=forbidden
+    calculations.populate_relative_signal_v2=forbidden
+    Image.open=forbidden
+    repo=LiteratureRatioSourceRepository(store,fixture['run_id'])
+    repo.receive_cells=forbidden
+    context=SimpleNamespace(run_id=fixture['run_id'],episode_id=fixture['episode_id'],role='literature',
+     assignment={},scope=fixture['scope'],received_record_refs=fixture['received'])
+    assert store.db.total_changes==0
+    # First saved projection; no prior read warms or repairs a receipt.
+    actual=repo.fact_cells(context,[fixture['sheet_ref']],components=['reported_ratio'])
+    assert actual==fixture['cells']
+    assert repo.fact_cells(context,[fixture['sheet_ref']],components=['difference_from_reference'])==[]
+    repo.validate_fact_values(context,actual)
+    assert repo.received_cells(context)==actual
+    assert store.db.total_changes==0
+    observed=[list(row) for row in store.db.execute('SELECT * FROM runtime_observations ORDER BY episode_id,unit_index')]
+    assert observed==fixture['observations']
+    assert reads
+    print(json.dumps({'evidence_class':'constructed engineering receipt; not connected C4','mode':'ro',
+     'query_only':store.db.execute('PRAGMA query_only').fetchone()[0], 'total_changes':store.db.total_changes,
+     'first_projection':actual,'source_bytes_read':False,'decoder_or_population_called':False,
+     'observation_rows':observed,'saved_artifact_reads':len(reads),'storage_import':__import__('gene_annotation_episode.literature_ratio_source_storage',fromlist=['']).__file__}))
+    store.close()
+    '''
+        result = subprocess.run([sys.executable, '-c', script, str(directory), str(path)],
+            text=True, capture_output=True, env={**os.environ, 'PYTHONPATH': str(Path(__file__).resolve().parents[1])})
+>       assert result.returncode == 0, result.stdout + result.stderr
+E       AssertionError: Traceback (most recent call last):
+E           File "<string>", line 33, in <module>
+E           File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_rate_storage.py", line 651, in fact_cells
+E             self.project_cells([reference], permitted_record_refs=context.received_record_refs, components=[])
+E           File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_ratio_source_storage.py", line 428, in project_cells
+E             saved = self.read(reference)
+E                     ^^^^^^^^^^^^^^^^^^^^
+E           File "/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_ratio_source_storage.py", line 374, in read
+E             raise ContractError('relative_signal_saved_payload_mismatch')
+E         gene_annotation_episode.domain.ContractError: relative_signal_saved_payload_mismatch
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/home/chia/repos/gene_annotation_episode/.venv/bin/python', '-c', '\nimport json, sqlite3, sys...nal_saved_payload_mismatch\')\ngene_annotation_episode.domain.ContractError: relative_signal_saved_payload_mismatch\n').returncode
+
+tests/test_literature_ratio_source_readonly.py:80: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_literature_ratio_source_storage.py::test_authorized_availability_partial_survives_saved_read_without_repair
+FAILED tests/test_literature_ratio_source_readonly.py::test_first_projection_in_fresh_readonly_process_never_reads_source_or_mutates
+2 failed, 44 passed in 133.29s (0:02:13)

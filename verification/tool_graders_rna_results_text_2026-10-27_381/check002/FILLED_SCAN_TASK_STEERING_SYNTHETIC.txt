@@ -1,0 +1,170 @@
+TASK
+
+Compare the retained RNA inputs against the explicit baseline WT for the parent's finite scan scan. Calculate and return only the selected comparison outputs below.
+
+Use only the independently selected retained RNA inputs named in this assignment. Keep the parent's baseline, membership, correspondence, site selections, model comparison and requested outputs fixed. The routing handoff does not choose the scientific baseline. This calculation uses retained data; it acquires no new native observation and generates no variants.
+
+Declared scan population (input states, not calculation outcomes)
+
+| Declared input category | Entries |
+| --- | --- |
+| All declared entries, including baseline and aliases | 8 |
+| Retained saved inputs | 4 |
+| Received failures | 1 |
+| Not supplied | 1 |
+| Not tested | 1 |
+| Aliases, with no additional rank weight | 1 |
+
+Explicit baseline input
+
+WT: saved sheet.
+
+Fixed scan comparisons
+
+6 baseline-to-canonical-variant comparisons; declared order. Count each canonical sequence variant once. Retain failures and absent entries in population qualifications. Aliases retain their declared relationships without additional population weight.
+
+Selected scan energy
+
+native evaluated structure energy; no per-nucleotide normalization; kcal/mol; ViennaRNA 2.7 retained linear model compatibility profile; no absolute tolerance classification requested.
+
+Rank the explicit baseline with comparable canonical variants under the selected model. Preserve exact ranks, ties and the selected population's exclusions. Rank and energy gap apply only to that declared comparable population; they do not establish a global optimum.
+
+Declared correspondence coverage
+
+| Supplied correspondence kind | Comparisons |
+| --- | --- |
+| not supplied | 6 |
+
+Exact requested comparison outputs
+
+| Parent selection | Output family | Selection scope | Requested values |
+| --- | --- | --- | --- |
+| scan_energy | scan energy | scan scan | baseline rank start (first occupied exact rank); baseline rank end (last occupied exact rank); baseline tie count (including the baseline); lowest-energy tie count; baseline selected energy; minimum selected energy; baseline selected energy above the population minimum; baseline rank class |
+
+Use the selected retained native energy kind and its saved model-compatibility qualification. Native minimum-free-energy prediction and native evaluated structure energy have distinct meanings; neither substitutes for the other. Preserve ordering of stored values, not rounded display values. Exact ties remain separate from any explicitly selected tolerance band. The tolerance is not an uncertainty interval; unavailable comparison uncertainty remains unavailable.
+
+Keep the mandatory scan population qualifications: declared variants, aliases excluded, native energy available, comparable variants, received failures, not supplied, not tested, requested energy unavailable, incompatible model, unknown model and rank population. These states describe different populations; a failure does not prove energy evaluation.
+
+Return the selected fields with their required availability, coverage and model qualifications. Do not add unselected structures, positions, energies or member rows.
+
+Choose the next available operation using the recorded outcomes. execution.results.status checks the selected retained inputs and existing comparison records. execution.results.collect calculates the fixed comparison and prepares exactly the requested return. Both operations take an empty argument object. The calculation uses the bound local limits of 20 GiB memory and 4 GiB scratch, with no wall-time budget. Choose between the available operations as the evidence warrants; no operation order is prescribed.
+
+Preserve native measurements, model assumptions, units, coordinates, valid partial results and specific failure qualifications. Measured zero, unavailable, not tested, failed and incompatible are distinct. The scientific parent interprets the returned comparison; model energy or pairing change alone does not establish experimental stability, biological importance or function.
+
+A completed status action does not complete the requested comparison delivery. The configured controller owns continuation. Validated completion of the original requested delivery sets future expected credit to exact zero through the existing practical endpoint, preserving the final actual gain and prior observations. Select the next action and constrained interpretations through the supplied typed response contract; recorded facts are populated automatically.
+
+Parent's assigned question
+
+| Field | Supplied value |
+| --- | --- |
+| objective | Return the parent's selected retained comparison. |
+| task_context.constraint | Keep the supplied baseline and finite population fixed. |
+
+Assigned result contract
+
+| Field | Supplied value |
+| --- | --- |
+| role | results |
+
+Fixed scope
+
+| Field | Supplied value |
+| --- | --- |
+| subject_refs[0] | selected_subject |
+
+Information requested by the parent
+
+Return WT's qualified rank, ties and energy gap for this declared scan.
+
+Parent return form
+
+| Field | Presence | Type or constraint | Meaning or value |
+| --- | --- | --- | --- |
+| return | required | object |  |
+| return | constraint | additionalProperties | false |
+| return.the_parent_chosen_answer | required | array | WT rank and gap for the selected population.; Automatically supplied requested RNA comparison facts and their required qualifications.; recorded fact from execution_rna_structure_comparison_projections |
+| return.conclusion | required | string | Interpret only the comparable supplied population. |
+| return.conclusion | constraint | enum[0] | lowest |
+| return.conclusion | constraint | enum[1] | not_lowest |
+| return.conclusion | constraint | enum[2] | unresolved |
+| return.basis | required | array |  |
+| return.basis | constraint | minItems | 1 |
+| return.basis | constraint | maxItems | 3 |
+| return.basis | constraint | uniqueItems | true |
+| return.basis[] | each item | integer |  |
+| return.basis[] | constraint | minimum | 0 |
+| return.other_measurement | required | number | Recorded unrelated measurement.; recorded fact from other_measurement |
+
+Meaning of requested recorded facts
+
+| Source | Meaning |
+| --- | --- |
+| execution_rna_structure_comparison_projections | Exactly selected retained RNA comparison facts and required population qualifications; no implied native acquisition or annotation confidence. |
+| other_measurement | Measured signal in the unrelated supplied molecular assay. |
+
+Return interpretation timing
+
+Interpretations are the last actual reasoning basis; later tool outcomes are facts, not a new judgment.
+
+STEERING
+
+Own completed actions
+
+| Category | Completed | Total signed yield | Expected next yield | Uncertainty or unavailable reason | Uncompleted attempts |
+| --- | --- | --- | --- | --- | --- |
+| tool/execution.results.status | 1 | 0 | unavailable | insufficient completed actions | 0 |
+
+Current return interpretation
+
+| Field | Supplied value |
+| --- | --- |
+| conclusion | unresolved |
+| basis[0] | 0 |
+
+Selected RNA comparison facts
+
+Requested RNA scan energy — scan_energy
+
+Baseline WT; scan scan; selected model-energy comparison.
+
+| Measurement | Value | Unit | State | Origin |
+| --- | --- | --- | --- | --- |
+| baseline rank start | 2 | rank | present | derived scan rank |
+| baseline rank end | 3 | rank | present | derived scan rank |
+| baseline tie count | 2 | candidates | present | derived scan count |
+| lowest energy tie count | 1 | candidates | present | derived scan count |
+| baseline selected energy | -4.0 | kcal/mol | present | retained native evaluation |
+| minimum selected energy | -5.0 | kcal/mol | present | retained native evaluation |
+| baseline energy above minimum | 1.0 | kcal/mol | present | derived energy difference |
+
+Baseline rank class: not lowest.
+
+Scan population
+
+| Count | Value |
+| --- | --- |
+| declared variant count | 6 |
+| alias entry count | 1 |
+| native energy available variant count | 3 |
+| comparable variant count | 3 |
+| received failure variant count | 1 |
+| not supplied variant count | 1 |
+| not tested variant count | 1 |
+| sheet energy unavailable variant count | 0 |
+| model incompatible variant count | 0 |
+| model unknown variant count | 0 |
+| rank population count | 4 |
+
+Applies only to the declared comparable population; it does not establish a global optimum.
+
+Scoped qualifications
+
+| Affected selection | Stage | Qualification |
+| --- | --- | --- |
+| scope not supplied | calculate | selected population only |
+| member WT | input | unknown source origin |
+| scope not supplied | compatibility | equal array generation rule used |
+
+Additional input qualifications (member scope not supplied): received failure; sequence identity unverified; duplicate alias excluded; not supplied; not tested; requested energy unavailable; native model missing; model setting missing; parameter identity missing; software generation unverified.
+
+Comparison uncertainty: not produced by the selected inputs.

@@ -1,0 +1,93 @@
+{
+  "version": "native_hmmer_preparation_run_plan_v1",
+  "identity": {
+    "run_id": "producer267-test",
+    "episode_id": "selected-local-child",
+    "resource_id": "local",
+    "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/temporary/pytest/test_actual_hmmbuild_original_0/native.json",
+    "operation_key": "selected-command",
+    "attempt_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e",
+    "requested_job_sha256": "0656a568db7b2a806d2b0ee42d914790a2f99c38452c25852a9425171164c3d9"
+  },
+  "requested_job": {
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/source_snapshot/resources/software/infernal-1.1.5/hmmer/src/hmmbuild",
+      "--cpu",
+      "1",
+      "--seed",
+      "42",
+      "--wnone",
+      "-n",
+      "input547",
+      "--informat",
+      "A2M",
+      "-O",
+      "outputs/resaved.sto",
+      "outputs/models",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/source_snapshot/verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/a2m_insertions/emitted.out"
+    ],
+    "environment": {},
+    "native_hmmer_preparation": {
+      "version": "native_hmmer_preparation_job_v1",
+      "program": "hmmbuild",
+      "mode": "build_alignment",
+      "software": {
+        "executable": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/source_snapshot/resources/software/infernal-1.1.5/hmmer/src/hmmbuild",
+        "sha256": "f3b383266d3b817d8018be1b3c9ccb73823368b4f1557ad015d518d18788d8a6",
+        "engine_version": "3.4"
+      },
+      "environment": {},
+      "operands": [
+        {
+          "role": "alignment",
+          "ordinal": 0,
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/source_snapshot/verification/tool_graders_infernal_preparation_emission_2026-10-26_250/native/a2m_insertions/emitted.out",
+          "format": "a2m",
+          "sha256": "4a47f0cd7fad3b309d62e69985932c31b12358e0befa0e78d0d4cb92b7ed22e3",
+          "size_bytes": 170,
+          "artifact_ref": "fixture267:alignment:0"
+        }
+      ],
+      "options": [
+        "--cpu",
+        "1",
+        "--seed",
+        "42",
+        "--wnone",
+        "-n",
+        "input547"
+      ],
+      "outputs": [
+        {
+          "role": "stdout",
+          "format": "hmmer_stdout",
+          "relative_path": "outputs/stdout"
+        },
+        {
+          "role": "stderr",
+          "format": "hmmer_stderr",
+          "relative_path": "outputs/stderr"
+        },
+        {
+          "role": "models",
+          "format": "hmmer3_ascii",
+          "relative_path": "outputs/models"
+        },
+        {
+          "role": "resaved_alignment",
+          "format": "stockholm",
+          "relative_path": "outputs/resaved.sto"
+        }
+      ],
+      "key": null,
+      "input_metadata": {},
+      "grading_parameters": {}
+    }
+  },
+  "attempt_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/temporary/pytest/test_actual_hmmbuild_original_0/hmmer-preparation-attempt",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  }
+}

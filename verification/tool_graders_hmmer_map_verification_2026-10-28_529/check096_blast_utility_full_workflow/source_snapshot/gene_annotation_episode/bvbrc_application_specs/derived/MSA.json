@@ -1,0 +1,224 @@
+{
+  "id": "MSA",
+  "script": "App-MSA",
+  "label": "Multiple sequence alignment variation service",
+  "description": "Compute the multiple sequence alignment and analyze SNP/variance.",
+  "parameters": [
+    {
+      "id": "input_status",
+      "allow_multiple": false,
+      "label": "The input status.",
+      "required": 0,
+      "default": "",
+      "desc": "Indicates whether the input is already aligned.",
+      "type": "enum",
+      "enum": [
+        "unaligned",
+        "aligned"
+      ]
+    },
+    {
+      "id": "input_type",
+      "allow_multiple": false,
+      "label": "The type of input selected.",
+      "required": 0,
+      "default": "",
+      "desc": "Selects a type of input file or data to be given to an aligner.",
+      "type": "enum",
+      "enum": [
+        "input_group",
+        "input_fasta",
+        "input_sequence",
+        "input_genomegroup",
+        "input_featurelist",
+        "input_genomelist"
+      ]
+    },
+    {
+      "id": "fasta_files",
+      "type": "group",
+      "allow_multiple": true,
+      "required": 0,
+      "default": null,
+      "group": [
+        {
+          "id": "file",
+          "required": 1,
+          "label": "Fasta file",
+          "desc": "homologous sequences",
+          "wstype": "feature_protein_fasta",
+          "type": "wstype"
+        },
+        {
+          "id": "type",
+          "label": "file format",
+          "required": 1,
+          "default": "feature_dna_fasta",
+          "desc": "The file format type.",
+          "type": "enum",
+          "enum": [
+            "feature_dna_fasta",
+            "feature_protein_fasta"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "select_genomegroup",
+      "allow_multiple": true,
+      "required": 0,
+      "default": null,
+      "label": "Genome groups",
+      "desc": "Genome groups",
+      "wstype": "genome_group",
+      "type": "wstype"
+    },
+    {
+      "id": "genome_selection",
+      "label": "Genome Segment Selection",
+      "required": 0,
+      "type": "group",
+      "group": [
+        {
+          "id": "selected_segments",
+          "label": "Selected Segments",
+          "required": 0,
+          "allow_multiple": 1,
+          "type": "string",
+          "desc": "Segments selected by the user for viral genome group analysis."
+        },
+        {
+          "id": "concat_segments",
+          "label": "Concatenate Selected Segments",
+          "required": 0,
+          "type": "boolean",
+          "desc": "If true, concatenate the selected genome segments before analysis.",
+          "default": false
+        }
+      ]
+    },
+    {
+      "id": "feature_groups",
+      "allow_multiple": true,
+      "required": 0,
+      "default": null,
+      "label": "Feature groups",
+      "desc": "Feature groups",
+      "wstype": "feature_group",
+      "type": "wstype"
+    },
+    {
+        "id": "feature_list",
+        "allow_multiple": true,
+        "required": 0,
+        "default": null,
+        "label": "feature list",
+        "desc": "Feature List",
+        "type": "string"
+    },
+    {
+        "id": "genome_list",
+        "allow_multiple": true,
+        "required": 0,
+        "default": null,
+        "label": "genome list",
+        "desc": "Genome List",
+        "type": "string"
+    },
+    {
+      "id": "aligner",
+      "allow_multiple": false,
+      "label": "multiple sequence aligner",
+      "required": 0,
+      "default": "Muscle",
+      "desc": "Tool used for aligning multiple sequences to each other.",
+      "type": "enum",
+      "enum": [
+        "Muscle",
+        "Mafft",
+        "progressiveMauve"
+      ]
+    },
+    {
+      "id": "alphabet",
+      "allow_multiple": false,
+      "label": "sequence alphabet",
+      "required": 1,
+      "default": "dna",
+      "desc": "Determines which sequence alphabet is present.",
+      "type": "enum",
+      "enum": [
+        "dna",
+        "protein"
+      ]
+    },
+    {
+      "id": "fasta_keyboard_input",
+      "allow_multiple": false,
+      "desc": "Text input for a fasta file.",
+      "required": 0,
+      "default": "",
+      "label": "fasta keyboard input",
+      "type": "string"
+    },
+    {
+      "id": "ref_type",
+      "allow_multiple": false,
+      "label": "Reference sequence type",
+      "required": 0,
+      "default": "none",
+      "desc": "Selects the kind of reference sequence to be used.",
+      "type": "enum",
+      "enum": [
+        "none",
+        "string",
+        "feature_id",
+        "genome_id",
+        "first"
+      ]
+    },
+    {
+      "id": "strategy",
+      "allow_multiple": false,
+      "desc": "Mafft alignment strategy method",
+      "required": 0,
+      "default": "auto",
+      "enum": [
+        "auto",
+        "fftns1",
+        "fftns2",
+        "fftnsi",
+        "einsi",
+        "linsi",
+        "ginsi"
+      ]
+    },
+    {
+      "id": "ref_string",
+      "allow_multiple": false,
+      "desc": "The identity of a reference sequence. It can be empty (no sequence), a string representing a sequence, or an id to download a sequence.",
+      "required": 0,
+      "default": "",
+      "label": "reference sequence identity",
+      "type": "string"
+    },
+    {
+      "id": "output_path",
+      "allow_multiple": false,
+      "label": "Output Folder",
+      "required": 1,
+      "default": null,
+      "desc": "Path to which the output will be written. Defaults to the directory containing the input data. ",
+      "type": "folder"
+    },
+    {
+      "id": "output_file",
+      "allow_multiple": false,
+      "label": "File Basename",
+      "required": 1,
+      "default": null,
+      "desc": "Basename for the generated output files. Defaults to the basename of the input data.",
+      "type": "wsid"
+    }
+  ]
+}

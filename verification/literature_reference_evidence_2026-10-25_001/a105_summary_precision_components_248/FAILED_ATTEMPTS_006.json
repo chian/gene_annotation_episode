@@ -1,0 +1,42 @@
+{
+  "preserved_terminal_failures": [
+    {
+      "stage": "initial workspace status",
+      "command": "git status --short --untracked-files=no",
+      "exit_code": 128,
+      "actual_message": "fatal: not a git repository (or any of the parent directories): .git",
+      "effect": "No status inference made; later source/test dependencies pinned directly."
+    },
+    {
+      "stage": "strengthened own tests first run",
+      "exit_code": 1,
+      "passed": 61,
+      "failed": 3,
+      "failed_cases": [
+        "test_source_count_qualifications_remain_partial_not_statistical_n[four to six-range_or_alternatives]",
+        "test_source_count_qualifications_remain_partial_not_statistical_n[dozen-unsupported]",
+        "test_se_underflow_does_not_erase_representable_relative_se"
+      ],
+      "causes": [
+        "Synthetic fixture replacement changed an enclosing phrase while leaving an inner source witness stale; corrected all repeated count representations and exact numeral selectors.",
+        "The first numerical fixture remained representable at5e-324 after unit scaling; corrected the explicit underflow fixture to1e-327."
+      ],
+      "scientific_source_data_modified": false,
+      "subsequent_terminal_result": "64 own checks pass; final566-check union passes"
+    }
+  ],
+  "earlier_own_test_runs": [
+    {
+      "passed": 59,
+      "elapsed_seconds": 6.82
+    },
+    {
+      "passed": 64,
+      "elapsed_seconds": 6.96
+    }
+  ],
+  "final_logs": "pytest_006.stdout.txt and pytest_006.stderr.txt",
+  "all_owned_processes_terminal": true,
+  "active_unified_sessions": [],
+  "new_model_provider_or_selected_episode_runs": false
+}

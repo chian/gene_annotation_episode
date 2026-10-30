@@ -1,0 +1,177 @@
+{
+  "attempt_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/jackhmmer_search_ordinary/attempt",
+  "identity": {
+    "attempt_id": "original",
+    "episode_id": "no-episode-standalone-verification",
+    "execution_id": "jackhmmer_search_ordinary",
+    "operation_key": "jackhmmer_search_ordinary",
+    "requested_job_sha256": "b7bdef1db8fc13bda14c7fb9e509141baa9bec4c634c9e6c6b29333e8b80ac4d",
+    "resource_id": "local",
+    "run_id": "producer-native-verification-2026-10-24"
+  },
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "requested_job": {
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/jackhmmer",
+      "--cpu",
+      "1",
+      "--notextw",
+      "-N",
+      "2",
+      "--tblout",
+      "outputs/tblout",
+      "--domtblout",
+      "outputs/domtblout",
+      "-A",
+      "outputs/included_msa",
+      "--chkhmm",
+      "outputs/checkpoint_hmm",
+      "--chkali",
+      "outputs/checkpoint_msa",
+      "--qformat",
+      "fasta",
+      "--tformat",
+      "fasta",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_search_2026-10-24/native/query.fa",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_search_2026-10-24/native/targets.fa"
+    ],
+    "environment": {},
+    "native_hmmer": {
+      "environment": {},
+      "grading_parameters": {},
+      "metadata": {
+        "acquisition": {
+          "hit_population_complete": true,
+          "output_complete": true
+        },
+        "native_parameters": {
+          "argv": [
+            "--cpu",
+            "1",
+            "--notextw",
+            "-N",
+            "2"
+          ]
+        },
+        "query": {
+          "accession": null,
+          "alphabet": "protein",
+          "kind": "protein_sequence",
+          "length": 20,
+          "name": "test1",
+          "sequence": "ACDEFGHIKLMNPQRSTVWY"
+        },
+        "targets": [
+          {
+            "accession": null,
+            "alphabet": "protein",
+            "kind": "protein_sequence",
+            "length": 20,
+            "name": "test1",
+            "sequence": "ACDEFGHIKLMNPQRSTVWY"
+          },
+          {
+            "accession": null,
+            "alphabet": "protein",
+            "kind": "protein_sequence",
+            "length": 25,
+            "name": "test2",
+            "sequence": "XXXXACDEFGHIMNXXXPQRSTVWY"
+          },
+          {
+            "accession": null,
+            "alphabet": "protein",
+            "kind": "protein_sequence",
+            "length": 28,
+            "name": "test3",
+            "sequence": "ACDEFGHILMNXXXXXPQRSTVWYXXXX"
+          },
+          {
+            "accession": null,
+            "alphabet": "protein",
+            "kind": "protein_sequence",
+            "length": 26,
+            "name": "test4",
+            "sequence": "XXXACDEFGHIKLMNPQRSTVWYXXX"
+          }
+        ]
+      },
+      "mode": "search",
+      "operand_bindings": [],
+      "operands": [
+        {
+          "artifact_ref": "fixture:sha256:a3364b4239794e1747d80230032f23029f0f03c9f19bb819bb63be70fde025ed",
+          "format": "fasta",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_search_2026-10-24/native/query.fa",
+          "role": "query_sequence",
+          "sha256": "a3364b4239794e1747d80230032f23029f0f03c9f19bb819bb63be70fde025ed",
+          "size_bytes": 28
+        },
+        {
+          "artifact_ref": "fixture:sha256:2adc7239dbf4c090252c1fe4827ee6f92ecd673438214d64033dc899833148f3",
+          "format": "fasta",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_search_2026-10-24/native/targets.fa",
+          "role": "sequence_database",
+          "sha256": "2adc7239dbf4c090252c1fe4827ee6f92ecd673438214d64033dc899833148f3",
+          "size_bytes": 132
+        }
+      ],
+      "options": [
+        "--cpu",
+        "1",
+        "--notextw",
+        "-N",
+        "2"
+      ],
+      "outputs": [
+        {
+          "format": "hmmer_stdout",
+          "relative_path": "outputs/stdout",
+          "role": "stdout"
+        },
+        {
+          "format": "text",
+          "relative_path": "outputs/stderr",
+          "role": "stderr"
+        },
+        {
+          "format": "protein_tblout",
+          "relative_path": "outputs/tblout",
+          "role": "tblout"
+        },
+        {
+          "format": "protein_domtblout",
+          "relative_path": "outputs/domtblout",
+          "role": "domtblout"
+        },
+        {
+          "format": "stockholm",
+          "relative_path": "outputs/included_msa",
+          "role": "included_msa"
+        },
+        {
+          "format": "hmmer3_ascii",
+          "relative_path": "outputs/checkpoint_hmm",
+          "role": "checkpoint_hmm"
+        },
+        {
+          "format": "stockholm",
+          "relative_path": "outputs/checkpoint_msa",
+          "role": "checkpoint_msa"
+        }
+      ],
+      "program": "jackhmmer",
+      "software": {
+        "engine_version": "3.4",
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/jackhmmer",
+        "sha256": "b7db4689a289aaf77122812aa01337b93b9dbd79148d37805fdc69e5325110df"
+      },
+      "version": "native_hmmer_job_v1"
+    }
+  },
+  "version": "native_hmmer_run_plan_v1"
+}

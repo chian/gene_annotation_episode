@@ -1,0 +1,38 @@
+...F                                                                     [100%]
+=================================== FAILURES ===================================
+_ test_two_contracts_and_history_stay_in_one_pending_decision_and_one_actual_observation _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1984/test_two_contracts_and_history0')
+
+    def test_two_contracts_and_history_stay_in_one_pending_decision_and_one_actual_observation(tmp_path):
+        provider = PresentedProvider([])
+        store, value, episode, args = workflow(tmp_path, provider)
+        provider.script = iter([information('episode.operation_contract', operation='literature.kinetic.populate'),
+            information('episode.operation_contract', operation='literature.binding.interaction.populate'), lookup(), populate(args)])
+        try:
+            record = run_child(episode, value)
+            assert record.units_consumed == 1
+            assert store.db.execute('SELECT count(*) FROM runtime_actions').fetchone()[0] == 1
+            assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 1
+            assert store.db.execute('SELECT count(*) FROM literature_kinetic_operations').fetchone()[0] == 1
+            rows = value.decision_exchanges.rows(episode.source.episode_id, 0)
+            assert len(rows) == 4
+            assert len(provider.contexts[-1]['pending_contract_information']) == 2
+            for text in provider.rendered[2:]:
+                task, steering = text.split('\n\nSTEERING\n', 1)
+                assert 'Requested operation/return information: literature.kinetic.populate' in task
+                assert 'Requested operation/return information: literature.binding.interaction.populate' in task
+                assert 'Schema information' in task and 'Complete requested contract' not in steering
+                for reply in provider.contexts[-1]['pending_contract_information']:
+                    assert reply['result']['schema_sha256'] not in text
+            assert rows[0]['request']['context'] == provider.contexts[0]
+            original = json.loads(value.journal.row('runtime_model_calls', episode.source.episode_id, 0)['request'])
+            assert original['contract_information']['version'] == PROFILE
+>           assert len([row for row in original['context']['tools'] if row['name'].startswith('literature.')]) == 19
+E           AssertionError: assert 24 == 19
+E            +  where 24 = len([{'argument_transport': 'json_object_contract_information_v1', 'description': 'Populate source-preparation rate cells ...variance_source_ref', 'distinct_residual_variance', ...], 'type': 'object'}, 'name': 'literature.assay.populate'}, ...])
+
+tests/test_contract_information_runtime_059.py:103: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_contract_information_runtime_059.py::test_two_contracts_and_history_stay_in_one_pending_decision_and_one_actual_observation
+1 failed, 3 passed in 85.74s (0:01:25)

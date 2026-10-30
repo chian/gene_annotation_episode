@@ -1,0 +1,546 @@
+FFF..........FFFFF..........F........FFFFF.........FFF.F.....F.F......   [100%]
+=================================== FAILURES ===================================
+___ test_original_source_six_alternative_precision_models_and_reported_z[0] ____
+
+row_index = 0
+
+    @pytest.mark.parametrize('row_index', range(3))
+    def test_original_source_six_alternative_precision_models_and_reported_z(row_index):
+        s, args, rows, fields = original(row_index)
+>       data, sheet = run(s, args, rows)
+                      ^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_validation_205.py:179: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_validation_205.py:127: in run
+    data = read_measurement_validation_inputs(args, read_source=source.read, read_component=reader)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_validation_inputs.py:389: in read_measurement_validation_inputs
+    _associate(number, witness, sources, 'basis')
+gene_annotation_episode/literature_measurement_validation_inputs.py:247: in _associate
+    _fail('source_quantity_column_mismatch', field)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'source_quantity_column_mismatch', field = 'basis'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: source_quantity_column_mismatch:basis
+
+gene_annotation_episode/literature_measurement_validation_inputs.py:49: ExperimentalContractError
+___ test_original_source_six_alternative_precision_models_and_reported_z[1] ____
+
+row_index = 1
+
+    @pytest.mark.parametrize('row_index', range(3))
+    def test_original_source_six_alternative_precision_models_and_reported_z(row_index):
+        s, args, rows, fields = original(row_index)
+>       data, sheet = run(s, args, rows)
+                      ^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_validation_205.py:179: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_validation_205.py:127: in run
+    data = read_measurement_validation_inputs(args, read_source=source.read, read_component=reader)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_validation_inputs.py:389: in read_measurement_validation_inputs
+    _associate(number, witness, sources, 'basis')
+gene_annotation_episode/literature_measurement_validation_inputs.py:247: in _associate
+    _fail('source_quantity_column_mismatch', field)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'source_quantity_column_mismatch', field = 'basis'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: source_quantity_column_mismatch:basis
+
+gene_annotation_episode/literature_measurement_validation_inputs.py:49: ExperimentalContractError
+___ test_original_source_six_alternative_precision_models_and_reported_z[2] ____
+
+row_index = 2
+
+    @pytest.mark.parametrize('row_index', range(3))
+    def test_original_source_six_alternative_precision_models_and_reported_z(row_index):
+        s, args, rows, fields = original(row_index)
+>       data, sheet = run(s, args, rows)
+                      ^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_validation_205.py:179: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_validation_205.py:127: in run
+    data = read_measurement_validation_inputs(args, read_source=source.read, read_component=reader)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_validation_inputs.py:389: in read_measurement_validation_inputs
+    _associate(number, witness, sources, 'basis')
+gene_annotation_episode/literature_measurement_validation_inputs.py:247: in _associate
+    _fail('source_quantity_column_mismatch', field)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'source_quantity_column_mismatch', field = 'basis'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: source_quantity_column_mismatch:basis
+
+gene_annotation_episode/literature_measurement_validation_inputs.py:49: ExperimentalContractError
+_ test_percent_fraction_conversion_is_exact_and_native_units_stay_native[%-0.8] _
+
+unit = '%', value = '0.8'
+
+    @pytest.mark.parametrize('unit,value', [('%CV','0.8'), ('%', '0.8'), ('percent', '0.8'),
+                                          ('fraction', '0.008'), ('dimensionless', '0.008'), ('1', '0.008')])
+    def test_percent_fraction_conversion_is_exact_and_native_units_stay_native(unit, value):
+        s = Source(unit=unit, within=value)
+>       _, sheet = run(s)
+                   ^^^^^^
+
+tests/test_literature_measurement_validation_205.py:269: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_validation_205.py:127: in run
+    data = read_measurement_validation_inputs(args, read_source=source.read, read_component=reader)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_validation_inputs.py:381: in read_measurement_validation_inputs
+    item = {'number': number, 'quantity_label': _label(selected['quantity_label'], 'cv', number, sources),
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_validation_inputs.py:255: in _label
+    _fail('source_statistic_label_mismatch', 'quantity_label')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'source_statistic_label_mismatch', field = 'quantity_label'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: source_statistic_label_mismatch:quantity_label
+
+gene_annotation_episode/literature_measurement_validation_inputs.py:49: ExperimentalContractError
+_ test_percent_fraction_conversion_is_exact_and_native_units_stay_native[percent-0.8] _
+
+unit = 'percent', value = '0.8'
+
+    @pytest.mark.parametrize('unit,value', [('%CV','0.8'), ('%', '0.8'), ('percent', '0.8'),
+                                          ('fraction', '0.008'), ('dimensionless', '0.008'), ('1', '0.008')])
+    def test_percent_fraction_conversion_is_exact_and_native_units_stay_native(unit, value):
+        s = Source(unit=unit, within=value)
+>       _, sheet = run(s)
+                   ^^^^^^
+
+tests/test_literature_measurement_validation_205.py:269: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_validation_205.py:127: in run
+    data = read_measurement_validation_inputs(args, read_source=source.read, read_component=reader)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_validation_inputs.py:381: in read_measurement_validation_inputs
+    item = {'number': number, 'quantity_label': _label(selected['quantity_label'], 'cv', number, sources),
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_validation_inputs.py:255: in _label
+    _fail('source_statistic_label_mismatch', 'quantity_label')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'source_statistic_label_mismatch', field = 'quantity_label'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: source_statistic_label_mismatch:quantity_label
+
+gene_annotation_episode/literature_measurement_validation_inputs.py:49: ExperimentalContractError
+_ test_percent_fraction_conversion_is_exact_and_native_units_stay_native[fraction-0.008] _
+
+unit = 'fraction', value = '0.008'
+
+    @pytest.mark.parametrize('unit,value', [('%CV','0.8'), ('%', '0.8'), ('percent', '0.8'),
+                                          ('fraction', '0.008'), ('dimensionless', '0.008'), ('1', '0.008')])
+    def test_percent_fraction_conversion_is_exact_and_native_units_stay_native(unit, value):
+        s = Source(unit=unit, within=value)
+>       _, sheet = run(s)
+                   ^^^^^^
+
+tests/test_literature_measurement_validation_205.py:269: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_validation_205.py:127: in run
+    data = read_measurement_validation_inputs(args, read_source=source.read, read_component=reader)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_validation_inputs.py:381: in read_measurement_validation_inputs
+    item = {'number': number, 'quantity_label': _label(selected['quantity_label'], 'cv', number, sources),
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_validation_inputs.py:255: in _label
+    _fail('source_statistic_label_mismatch', 'quantity_label')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'source_statistic_label_mismatch', field = 'quantity_label'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: source_statistic_label_mismatch:quantity_label
+
+gene_annotation_episode/literature_measurement_validation_inputs.py:49: ExperimentalContractError
+_ test_percent_fraction_conversion_is_exact_and_native_units_stay_native[dimensionless-0.008] _
+
+unit = 'dimensionless', value = '0.008'
+
+    @pytest.mark.parametrize('unit,value', [('%CV','0.8'), ('%', '0.8'), ('percent', '0.8'),
+                                          ('fraction', '0.008'), ('dimensionless', '0.008'), ('1', '0.008')])
+    def test_percent_fraction_conversion_is_exact_and_native_units_stay_native(unit, value):
+        s = Source(unit=unit, within=value)
+>       _, sheet = run(s)
+                   ^^^^^^
+
+tests/test_literature_measurement_validation_205.py:269: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_validation_205.py:127: in run
+    data = read_measurement_validation_inputs(args, read_source=source.read, read_component=reader)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_validation_inputs.py:381: in read_measurement_validation_inputs
+    item = {'number': number, 'quantity_label': _label(selected['quantity_label'], 'cv', number, sources),
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_validation_inputs.py:255: in _label
+    _fail('source_statistic_label_mismatch', 'quantity_label')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'source_statistic_label_mismatch', field = 'quantity_label'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: source_statistic_label_mismatch:quantity_label
+
+gene_annotation_episode/literature_measurement_validation_inputs.py:49: ExperimentalContractError
+_ test_percent_fraction_conversion_is_exact_and_native_units_stay_native[1-0.008] _
+
+unit = '1', value = '0.008'
+
+    @pytest.mark.parametrize('unit,value', [('%CV','0.8'), ('%', '0.8'), ('percent', '0.8'),
+                                          ('fraction', '0.008'), ('dimensionless', '0.008'), ('1', '0.008')])
+    def test_percent_fraction_conversion_is_exact_and_native_units_stay_native(unit, value):
+        s = Source(unit=unit, within=value)
+>       _, sheet = run(s)
+                   ^^^^^^
+
+tests/test_literature_measurement_validation_205.py:269: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_validation_205.py:127: in run
+    data = read_measurement_validation_inputs(args, read_source=source.read, read_component=reader)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_validation_inputs.py:381: in read_measurement_validation_inputs
+    item = {'number': number, 'quantity_label': _label(selected['quantity_label'], 'cv', number, sources),
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_validation_inputs.py:255: in _label
+    _fail('source_statistic_label_mismatch', 'quantity_label')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'source_statistic_label_mismatch', field = 'quantity_label'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: source_statistic_label_mismatch:quantity_label
+
+gene_annotation_episode/literature_measurement_validation_inputs.py:49: ExperimentalContractError
+_______________ test_CV_cannot_borrow_RE_or_Z_numeric_column[z] ________________
+
+wrong = 'z'
+
+    @pytest.mark.parametrize('wrong', ['re', 'z'])
+    def test_CV_cannot_borrow_RE_or_Z_numeric_column(wrong):
+        s=Source(); args=s.args()
+        text='1.4' if wrong=='re' else '.99'
+        args['precision'][0]['number']=s.selector(text, after=s.content.index(('<td id="'+wrong+'">').encode()))
+>       with pytest.raises(ExperimentalContractError, match='source_quantity_column_mismatch'):
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'source_quantity_column_mismatch'
+E         Actual message: 'partial_source_numeric_token:number'
+
+tests/test_literature_measurement_validation_205.py:319: AssertionError
+___________ test_incomplete_unit_selection_is_a_repair_error[%/min] ____________
+
+printed = '%/min'
+
+    @pytest.mark.parametrize('printed', ['%/min','%<br/>min−1','%<sup>−1</sup>','percent/min','nonfraction'])
+    def test_incomplete_unit_selection_is_a_repair_error(printed):
+        s=Source(unit=printed); args=s.args()
+        selected='fraction' if printed=='nonfraction' else 'percent' if printed.startswith('percent') else '%'
+        args['precision'][0]['unit']={'value':'fraction' if selected=='fraction' else 'percent','witness':s.witness(selected)}
+>       with pytest.raises(ExperimentalContractError, match='partial_source_unit'):
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'partial_source_unit'
+E         Actual message: 'source_statistic_label_mismatch:quantity_label'
+
+tests/test_literature_measurement_validation_205.py:352: AssertionError
+______ test_incomplete_unit_selection_is_a_repair_error[%<br/>min\u22121] ______
+
+printed = '%<br/>min−1'
+
+    @pytest.mark.parametrize('printed', ['%/min','%<br/>min−1','%<sup>−1</sup>','percent/min','nonfraction'])
+    def test_incomplete_unit_selection_is_a_repair_error(printed):
+        s=Source(unit=printed); args=s.args()
+        selected='fraction' if printed=='nonfraction' else 'percent' if printed.startswith('percent') else '%'
+        args['precision'][0]['unit']={'value':'fraction' if selected=='fraction' else 'percent','witness':s.witness(selected)}
+>       with pytest.raises(ExperimentalContractError, match='partial_source_unit'):
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'partial_source_unit'
+E         Actual message: 'source_statistic_label_mismatch:quantity_label'
+
+tests/test_literature_measurement_validation_205.py:352: AssertionError
+____ test_incomplete_unit_selection_is_a_repair_error[%<sup>\u22121</sup>] _____
+
+printed = '%<sup>−1</sup>'
+
+    @pytest.mark.parametrize('printed', ['%/min','%<br/>min−1','%<sup>−1</sup>','percent/min','nonfraction'])
+    def test_incomplete_unit_selection_is_a_repair_error(printed):
+        s=Source(unit=printed); args=s.args()
+        selected='fraction' if printed=='nonfraction' else 'percent' if printed.startswith('percent') else '%'
+        args['precision'][0]['unit']={'value':'fraction' if selected=='fraction' else 'percent','witness':s.witness(selected)}
+>       with pytest.raises(ExperimentalContractError, match='partial_source_unit'):
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'partial_source_unit'
+E         Actual message: 'source_statistic_label_mismatch:quantity_label'
+
+tests/test_literature_measurement_validation_205.py:352: AssertionError
+________ test_incomplete_unit_selection_is_a_repair_error[percent/min] _________
+
+printed = 'percent/min'
+
+    @pytest.mark.parametrize('printed', ['%/min','%<br/>min−1','%<sup>−1</sup>','percent/min','nonfraction'])
+    def test_incomplete_unit_selection_is_a_repair_error(printed):
+        s=Source(unit=printed); args=s.args()
+        selected='fraction' if printed=='nonfraction' else 'percent' if printed.startswith('percent') else '%'
+        args['precision'][0]['unit']={'value':'fraction' if selected=='fraction' else 'percent','witness':s.witness(selected)}
+>       with pytest.raises(ExperimentalContractError, match='partial_source_unit'):
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'partial_source_unit'
+E         Actual message: 'source_statistic_label_mismatch:quantity_label'
+
+tests/test_literature_measurement_validation_205.py:352: AssertionError
+________ test_incomplete_unit_selection_is_a_repair_error[nonfraction] _________
+
+printed = 'nonfraction'
+
+    @pytest.mark.parametrize('printed', ['%/min','%<br/>min−1','%<sup>−1</sup>','percent/min','nonfraction'])
+    def test_incomplete_unit_selection_is_a_repair_error(printed):
+        s=Source(unit=printed); args=s.args()
+        selected='fraction' if printed=='nonfraction' else 'percent' if printed.startswith('percent') else '%'
+        args['precision'][0]['unit']={'value':'fraction' if selected=='fraction' else 'percent','witness':s.witness(selected)}
+>       with pytest.raises(ExperimentalContractError, match='partial_source_unit'):
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'partial_source_unit'
+E         Actual message: 'source_statistic_label_mismatch:quantity_label'
+
+tests/test_literature_measurement_validation_205.py:352: AssertionError
+_ test_CV_limits_remain_native_limits_and_do_not_supply_point_precision[>0.8-gt] _
+
+printed = '>0.8', relation = 'gt'
+
+    @pytest.mark.parametrize('printed,relation', [('&lt;0.8','lt'), ('≤0.8','le'), ('>0.8','gt'), ('≥0.8','ge')])
+    def test_CV_limits_remain_native_limits_and_do_not_supply_point_precision(printed,relation):
+        s=Source(within=printed); args=s.args(supported=True)
+        args['precision'][0]['number']=s.selector('0.8',after=s.content.index(b'<td id="w">'))
+>       _,sheet=run(s,args,s.recovery_rows()); cells=sheet['precision'][0]['cells']
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_validation_205.py:398: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_validation_205.py:127: in run
+    data = read_measurement_validation_inputs(args, read_source=source.read, read_component=reader)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_validation_inputs.py:380: in read_measurement_validation_inputs
+    number = _read_number(selected['number'], sources, origin)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_validation_inputs.py:169: in _read_number
+    relation = _relation(adjusted_prefix, adjusted_suffix, role='rate', interval_contexts=interval)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_partner_source_fields.py:240: in _relation
+    _fail("lower_bound_source_number_unsupported", "number")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'lower_bound_source_number_unsupported', field = 'number'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: lower_bound_source_number_unsupported:number
+
+gene_annotation_episode/literature_partner_source_fields.py:91: ExperimentalContractError
+_ test_CV_limits_remain_native_limits_and_do_not_supply_point_precision[\u22650.8-ge] _
+
+printed = '≥0.8', relation = 'ge'
+
+    @pytest.mark.parametrize('printed,relation', [('&lt;0.8','lt'), ('≤0.8','le'), ('>0.8','gt'), ('≥0.8','ge')])
+    def test_CV_limits_remain_native_limits_and_do_not_supply_point_precision(printed,relation):
+        s=Source(within=printed); args=s.args(supported=True)
+        args['precision'][0]['number']=s.selector('0.8',after=s.content.index(b'<td id="w">'))
+>       _,sheet=run(s,args,s.recovery_rows()); cells=sheet['precision'][0]['cells']
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_validation_205.py:398: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_validation_205.py:127: in run
+    data = read_measurement_validation_inputs(args, read_source=source.read, read_component=reader)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_validation_inputs.py:380: in read_measurement_validation_inputs
+    number = _read_number(selected['number'], sources, origin)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_validation_inputs.py:169: in _read_number
+    relation = _relation(adjusted_prefix, adjusted_suffix, role='rate', interval_contexts=interval)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_partner_source_fields.py:240: in _relation
+    _fail("lower_bound_source_number_unsupported", "number")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'lower_bound_source_number_unsupported', field = 'number'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: lower_bound_source_number_unsupported:number
+
+gene_annotation_episode/literature_partner_source_fields.py:91: ExperimentalContractError
+_ test_complete_source_approximations_and_ranges_are_per_quantity_capability_gaps[approximately 0.8-0.8-source_approximation_unimplemented] _
+
+printed = 'approximately 0.8', token = '0.8'
+reason = 'source_approximation_unimplemented'
+
+    @pytest.mark.parametrize('printed,token,reason', [('approximately 0.8','0.8','source_approximation_unimplemented'),
+        ('0.7–0.9','0.7–0.9','source_range_unimplemented'), ('between 0.7 and 0.9','between 0.7 and 0.9','source_range_unimplemented')])
+    def test_complete_source_approximations_and_ranges_are_per_quantity_capability_gaps(printed,token,reason):
+        s=Source(within=printed); args=s.args(); args['precision'][0]['number']=s.selector(token,after=s.content.index(b'<td id="w">'))
+>       data,sheet=run(s,args,s.recovery_rows()); cells=sheet['precision'][0]['cells']
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_validation_205.py:408: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_validation_205.py:127: in run
+    data = read_measurement_validation_inputs(args, read_source=source.read, read_component=reader)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_validation_inputs.py:380: in read_measurement_validation_inputs
+    number = _read_number(selected['number'], sources, origin)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_validation_inputs.py:169: in _read_number
+    relation = _relation(adjusted_prefix, adjusted_suffix, role='rate', interval_contexts=interval)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_partner_source_fields.py:240: in _relation
+    _fail("lower_bound_source_number_unsupported", "number")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'lower_bound_source_number_unsupported', field = 'number'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: lower_bound_source_number_unsupported:number
+
+gene_annotation_episode/literature_partner_source_fields.py:91: ExperimentalContractError
+_ test_complete_source_approximations_and_ranges_are_per_quantity_capability_gaps[between 0.7 and 0.9-between 0.7 and 0.9-source_range_unimplemented] _
+
+printed = 'between 0.7 and 0.9', token = 'between 0.7 and 0.9'
+reason = 'source_range_unimplemented'
+
+    @pytest.mark.parametrize('printed,token,reason', [('approximately 0.8','0.8','source_approximation_unimplemented'),
+        ('0.7–0.9','0.7–0.9','source_range_unimplemented'), ('between 0.7 and 0.9','between 0.7 and 0.9','source_range_unimplemented')])
+    def test_complete_source_approximations_and_ranges_are_per_quantity_capability_gaps(printed,token,reason):
+        s=Source(within=printed); args=s.args(); args['precision'][0]['number']=s.selector(token,after=s.content.index(b'<td id="w">'))
+>       data,sheet=run(s,args,s.recovery_rows()); cells=sheet['precision'][0]['cells']
+                              ^^^^^^^^^^^^^^^^^
+
+tests/test_literature_measurement_validation_205.py:408: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_validation_205.py:106: in recovery_rows
+    sheet = populate_calibration_recovery(read_calibration_recovery_inputs(args, read_source=self.read))
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_calibration_recovery_inputs.py:265: in read_calibration_recovery_inputs
+    observations = {name: _read_number(args[name], recovery_unit if name == "reported_recovery" else shared_unit,
+gene_annotation_episode/literature_calibration_recovery_inputs.py:211: in _read_number
+    number = read_source_number(selector, sources=sources,
+gene_annotation_episode/literature_partner_source_fields.py:288: in read_source_number
+    relation = _relation(prefix, suffix, role=role,
+gene_annotation_episode/literature_partner_source_fields.py:247: in _relation
+    _fail("interval_source_number_unsupported", "number")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'interval_source_number_unsupported', field = 'number'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: interval_source_number_unsupported:number
+
+gene_annotation_episode/literature_partner_source_fields.py:91: ExperimentalContractError
+_ test_supported_Z_limits_reverse_in_same_statistic_reexpression[\u22650.9-le] _
+
+printed = '≥0.9', relation = 'le'
+
+    @pytest.mark.parametrize('printed,relation', [('≤0.9','ge'),('≥0.9','le'),('&lt;0.9','gt'),('>0.9','lt')])
+    def test_supported_Z_limits_reverse_in_same_statistic_reexpression(printed,relation):
+        s=Source(zprime=printed); args=s.args(); args['zprime'][0]['number']=s.selector('0.9',after=s.content.index(b'<td id="z">'))
+>       _,sheet=run(s,args); ratio=sheet['zprime'][0]['cells']['control_band_ratio']
+                ^^^^^^^^^^^
+
+tests/test_literature_measurement_validation_205.py:431: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_validation_205.py:127: in run
+    data = read_measurement_validation_inputs(args, read_source=source.read, read_component=reader)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_validation_inputs.py:392: in read_measurement_validation_inputs
+    number = _read_number(selected['number'], sources, origin)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_validation_inputs.py:169: in _read_number
+    relation = _relation(adjusted_prefix, adjusted_suffix, role='rate', interval_contexts=interval)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_partner_source_fields.py:240: in _relation
+    _fail("lower_bound_source_number_unsupported", "number")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'lower_bound_source_number_unsupported', field = 'number'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: lower_bound_source_number_unsupported:number
+
+gene_annotation_episode/literature_partner_source_fields.py:91: ExperimentalContractError
+___ test_supported_Z_limits_reverse_in_same_statistic_reexpression[>0.9-lt] ____
+
+printed = '>0.9', relation = 'lt'
+
+    @pytest.mark.parametrize('printed,relation', [('≤0.9','ge'),('≥0.9','le'),('&lt;0.9','gt'),('>0.9','lt')])
+    def test_supported_Z_limits_reverse_in_same_statistic_reexpression(printed,relation):
+        s=Source(zprime=printed); args=s.args(); args['zprime'][0]['number']=s.selector('0.9',after=s.content.index(b'<td id="z">'))
+>       _,sheet=run(s,args); ratio=sheet['zprime'][0]['cells']['control_band_ratio']
+                ^^^^^^^^^^^
+
+tests/test_literature_measurement_validation_205.py:431: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_validation_205.py:127: in run
+    data = read_measurement_validation_inputs(args, read_source=source.read, read_component=reader)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_validation_inputs.py:392: in read_measurement_validation_inputs
+    number = _read_number(selected['number'], sources, origin)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_validation_inputs.py:169: in _read_number
+    relation = _relation(adjusted_prefix, adjusted_suffix, role='rate', interval_contexts=interval)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_partner_source_fields.py:240: in _relation
+    _fail("lower_bound_source_number_unsupported", "number")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'lower_bound_source_number_unsupported', field = 'number'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: lower_bound_source_number_unsupported:number
+
+gene_annotation_episode/literature_partner_source_fields.py:91: ExperimentalContractError
+=========================== short test summary info ============================
+FAILED tests/test_literature_measurement_validation_205.py::test_original_source_six_alternative_precision_models_and_reported_z[0]
+FAILED tests/test_literature_measurement_validation_205.py::test_original_source_six_alternative_precision_models_and_reported_z[1]
+FAILED tests/test_literature_measurement_validation_205.py::test_original_source_six_alternative_precision_models_and_reported_z[2]
+FAILED tests/test_literature_measurement_validation_205.py::test_percent_fraction_conversion_is_exact_and_native_units_stay_native[%-0.8]
+FAILED tests/test_literature_measurement_validation_205.py::test_percent_fraction_conversion_is_exact_and_native_units_stay_native[percent-0.8]
+FAILED tests/test_literature_measurement_validation_205.py::test_percent_fraction_conversion_is_exact_and_native_units_stay_native[fraction-0.008]
+FAILED tests/test_literature_measurement_validation_205.py::test_percent_fraction_conversion_is_exact_and_native_units_stay_native[dimensionless-0.008]
+FAILED tests/test_literature_measurement_validation_205.py::test_percent_fraction_conversion_is_exact_and_native_units_stay_native[1-0.008]
+FAILED tests/test_literature_measurement_validation_205.py::test_CV_cannot_borrow_RE_or_Z_numeric_column[z]
+FAILED tests/test_literature_measurement_validation_205.py::test_incomplete_unit_selection_is_a_repair_error[%/min]
+FAILED tests/test_literature_measurement_validation_205.py::test_incomplete_unit_selection_is_a_repair_error[%<br/>min\u22121]
+FAILED tests/test_literature_measurement_validation_205.py::test_incomplete_unit_selection_is_a_repair_error[%<sup>\u22121</sup>]
+FAILED tests/test_literature_measurement_validation_205.py::test_incomplete_unit_selection_is_a_repair_error[percent/min]
+FAILED tests/test_literature_measurement_validation_205.py::test_incomplete_unit_selection_is_a_repair_error[nonfraction]
+FAILED tests/test_literature_measurement_validation_205.py::test_CV_limits_remain_native_limits_and_do_not_supply_point_precision[>0.8-gt]
+FAILED tests/test_literature_measurement_validation_205.py::test_CV_limits_remain_native_limits_and_do_not_supply_point_precision[\u22650.8-ge]
+FAILED tests/test_literature_measurement_validation_205.py::test_complete_source_approximations_and_ranges_are_per_quantity_capability_gaps[approximately 0.8-0.8-source_approximation_unimplemented]
+FAILED tests/test_literature_measurement_validation_205.py::test_complete_source_approximations_and_ranges_are_per_quantity_capability_gaps[between 0.7 and 0.9-between 0.7 and 0.9-source_range_unimplemented]
+FAILED tests/test_literature_measurement_validation_205.py::test_supported_Z_limits_reverse_in_same_statistic_reexpression[\u22650.9-le]
+FAILED tests/test_literature_measurement_validation_205.py::test_supported_Z_limits_reverse_in_same_statistic_reexpression[>0.9-lt]
+20 failed, 50 passed in 2.43s

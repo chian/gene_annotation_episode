@@ -1,0 +1,38 @@
+{
+  "frozen_code_manifest": "FINAL_CODE_HASHES_001.json",
+  "verified_frozen_hashes_after_tests": true,
+  "completed_groups": [
+    {
+      "command": ".venv/bin/python -m pytest tests/test_literature_compiled_assay_185.py tests/test_literature_compiled_assay_binding_185.py -q",
+      "passed": 29,
+      "seconds": 145.05,
+      "qualification": "Original compiler/selected-loop/cold regressions passed before the final v2-only finite-integer guard and export-list edits; v1 code/default schemas unchanged afterward."
+    },
+    {
+      "command": ".venv/bin/python -m pytest tests/test_literature_numerical_declarations_203.py tests/test_literature_channel_binding_188.py tests/test_literature_ion_discrimination_binding_199.py -q",
+      "passed": 244,
+      "seconds": 300.54,
+      "qualification": "Ran against final frozen production bytes."
+    },
+    {
+      "command": ".venv/bin/python -m pytest tests/test_literature_compiled_assay_uncertainty_215.py -q",
+      "passed": 25,
+      "seconds": 208.88,
+      "qualification": "Ran against final frozen production and test bytes; includes actual mixed loop and cold reconstruction."
+    }
+  ],
+  "distinct_collected_test_cases_across_these_groups": 298,
+  "prior_subset_runs_not_added": {
+    "new_initial_group": 21,
+    "standalone_mixed_runtime": 1
+  },
+  "actual_selected_cold_artifact": "selected_cold_001/PROOF_RESULT_001.json",
+  "actual_model_or_paper_science_run": false,
+  "a105_adequacy_claim": false,
+  "prohibited_changes": {
+    "original_immutable_goal_changed": false,
+    "repository_goal_accessed_or_created": false,
+    "controller_or_W05_changed": false,
+    "private_actual_provider_payloads_read": false
+  }
+}

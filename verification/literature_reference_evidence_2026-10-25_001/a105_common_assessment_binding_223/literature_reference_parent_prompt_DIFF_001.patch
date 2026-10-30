@@ -1,0 +1,24 @@
+--- before/gene_annotation_episode/literature_reference_parent_prompt.py
++++ final/gene_annotation_episode/literature_reference_parent_prompt.py
+@@ -77,6 +77,10 @@
+     from .literature_measurement_validation_prompt import MEASUREMENT_VALIDATION_TASK
+     if validation_task_relevant(state) and MEASUREMENT_VALIDATION_TASK not in normalized:
+         parts.extend(["", MEASUREMENT_VALIDATION_TASK])
++    from .literature_compiled_assay_render import common_task_relevant
++    from .literature_compiled_assay_prompt import COMMON_ASSESSMENT_TASK
++    if common_task_relevant(state) and COMMON_ASSESSMENT_TASK not in normalized:
++        parts.extend(['', COMMON_ASSESSMENT_TASK])
+     additional = normalized.replace(REFERENCE_PARENT_TASK, "").replace(SAVED_NUMERICAL_RETURN_TASK, "").strip()
+     if additional:
+         parts.extend(["", additional])
+@@ -144,6 +148,10 @@
+ def render_reference_evidence_parent_prompt(state, instructions, *, lookup_results=()):
+     """Render this parent's full task and its own selected factual steering."""
+     state = state_view(state)
++    from .literature_numerical_return_presentation import common_assessment_lookup
++    from .literature_compiled_assay_render import is_common_row, rows_from_values
++    if any(common_assessment_lookup(outcome) for outcome in lookup_results) or any(is_common_row(row) for row in rows_from_values(lookup_results)):
++        state = {**state, 'literature_common_assessment_work': {'version': 'literature_common_assessment_task_v1'}}
+     descriptor = _descriptor(state)
+     # The shared mechanical renderer selects own outcomes, received records and
+     # admitted forms. Do not seed it with a child's assignment or task/history.

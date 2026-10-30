@@ -1,0 +1,14 @@
+Command: PYTHONPATH=. .venv/bin/python verification/literature_reference_evidence_2026-10-25_001/a105_missing_input_semantics_177/generate_legacy_001.py
+Exit 1 after all four authentic v1 selected writers, admissions and checkpoints completed.
+Failure: json.dumps(receipt, indent=2, sort_keys=True)
+TypeError: Object of type BindingContext is not JSON serializable
+Correction: serialize declared context fields explicitly. Existing original state was not deleted or rewritten; recover_legacy_receipt_001.py only reopens it and reads original selected operations, requests, results and admitted subsets. Recovered contexts are labeled verification-only scopes.
+
+Failed patch attempt: changing the transport read version clause using a partial
+line context did not match the existing full line. apply_patch made no change;
+the corrected full-line patch succeeded immediately afterward.
+
+Failed diff command: git diff -- <the four owned production files and four
+prospective expectation files> exited 129 because this workspace is not a Git
+repository. No files were changed. PRODUCTION_DIFF_001.patch uses Python
+difflib against the retained before-change source files instead.

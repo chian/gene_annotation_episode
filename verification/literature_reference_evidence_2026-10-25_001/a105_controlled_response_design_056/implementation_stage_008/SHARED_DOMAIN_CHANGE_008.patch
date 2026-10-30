@@ -1,0 +1,28 @@
+--- before/domain.py
++++ current/domain.py
+@@ -279,6 +279,17 @@
+             "hit_ordinal": {"type": "integer", "minimum": 0},
+             "hsp_ordinal": {"type": "integer", "minimum": 0}, "bundle_artifact_ref": REF}),
+             "description": "Host-authored original native paired BLAST HSP identity; not an NCBI service marker or a union observation."},
++        "native_blast_database": obj({"version": {"const": "native_blast_database_observation_v1"},
++            "program": {"enum": ["psiblast", "deltablast", "rpsblast", "rpstblastn", "blastn_vdb", "tblastn_vdb"]},
++            "record_key": {"type": "string", "minLength": 1},
++            "search_key": obj({"artifact_key": {"type": "string", "minLength": 1},
++                "member_ordinal": {"type": ["integer", "null"], "minimum": 0},
++                "report_index": {"type": "integer", "minimum": 0},
++                "search_pointer": {"type": "string", "pattern": r"^(?:$|/(?:[^~]|~[01])*)$"}}),
++            "hit_ordinal": {"type": "integer", "minimum": 0},
++            "hsp_ordinal": {"type": "integer", "minimum": 0}, "bundle_artifact_ref": REF,
++            "query_axis_kind": {"enum": ["sequence", "msa_master", "pssm_master"]},
++            "reference_axis_kind": {"enum": ["sequence", "profile_model", "vdb_member"]}}),
+         "native_infernal": obj({"version": {"const": "native_infernal_observation_v1"},
+             "program": {"enum": ["cmsearch", "cmscan", "cmalign"]},
+             "family": {"enum": ["search_hit", "search_sequence", "alignment_sequence"]},
+@@ -547,6 +558,7 @@
+ REASONING_SCHEMA["properties"]["observations"]["items"]["properties"].pop("native_cmsearch", None)
+ REASONING_SCHEMA["properties"]["observations"]["items"]["properties"].pop("native_blast", None)
+ REASONING_SCHEMA["properties"]["observations"]["items"]["properties"].pop("native_blast_pairwise", None)
++REASONING_SCHEMA["properties"]["observations"]["items"]["properties"].pop("native_blast_database", None)
+ REASONING_SCHEMA["properties"]["observations"]["items"]["properties"].pop("native_minimap2", None)
+ 
+ 

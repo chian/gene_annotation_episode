@@ -1,0 +1,82 @@
+{
+  "id": "03_seqid_unbound_info",
+  "purpose": "Independently selected native list metadata inspection",
+  "independently_selected_verification_helper": false,
+  "program": "blastdb_aliastool",
+  "argv": [
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdb_aliastool",
+    "-seqid_file_info",
+    "unbound.bsl"
+  ],
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/seqid_unbound",
+  "shell": false,
+  "executable": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdb_aliastool",
+    "sha256": "71c9fa9760f4215b714e762a230486e7ae739c8a363396dd00a4bbb0329f2524",
+    "size_bytes": 22056640
+  },
+  "input_bindings": [
+    {
+      "role": "selected_engineering_text_input",
+      "native_operand": "ids.txt",
+      "content_utf8": "# engineering selection; duplicates and missing ID retained\nlcl|KEEP_B\nlcl|MISSING_644\nlcl|KEEP_B\n",
+      "staged": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/seqid_unbound/ids.txt",
+        "sha256": "873412d702f133748c82237333162263b88f457bf12265a6d840d606506e7503",
+        "size_bytes": 98
+      }
+    }
+  ],
+  "inventory_before": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/seqid_unbound/ids.txt",
+      "sha256": "873412d702f133748c82237333162263b88f457bf12265a6d840d606506e7503",
+      "size_bytes": 98,
+      "relative_path": "ids.txt"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/seqid_unbound/unbound.bsl",
+      "sha256": "fe9df274d8c17d0577ba18309f8bce77e70358312463b5b447f15759296bbb31",
+      "size_bytes": 82,
+      "relative_path": "unbound.bsl"
+    }
+  ],
+  "started": true,
+  "returncode": 0,
+  "launch_error": null,
+  "stdout": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/logs/03_seqid_unbound_info.stdout",
+    "sha256": "681825545844f1dbc177bf92e903956467637b985d0995b74f1255b9d2ad8fcc",
+    "size_bytes": 70
+  },
+  "stderr": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/logs/03_seqid_unbound_info.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "size_bytes": 0
+  },
+  "writer_closed": true,
+  "inventory_complete": true,
+  "captured_bytes_complete": true,
+  "native_status": "succeeded",
+  "semantic_compatibility": "unverified",
+  "inventory_after": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/seqid_unbound/ids.txt",
+      "sha256": "873412d702f133748c82237333162263b88f457bf12265a6d840d606506e7503",
+      "size_bytes": 98,
+      "relative_path": "ids.txt"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/seqid_unbound/unbound.bsl",
+      "sha256": "fe9df274d8c17d0577ba18309f8bce77e70358312463b5b447f15759296bbb31",
+      "size_bytes": 82,
+      "relative_path": "unbound.bsl"
+    }
+  ],
+  "new_files": [],
+  "changed_files": [],
+  "removed_files": [],
+  "stdout_utf8": "Num of Ids: 2\nTitle: 644-unbound\nCreate Date: Oct 28, 2026  06:59 PM\n\n",
+  "stderr_utf8": "",
+  "native_text_outputs": []
+}

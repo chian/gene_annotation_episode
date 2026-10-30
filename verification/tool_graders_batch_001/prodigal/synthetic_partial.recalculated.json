@@ -1,0 +1,235 @@
+{
+  "schema": "prodigal_scores_v1",
+  "status": "partial",
+  "mode": "meta",
+  "translation_code": 11,
+  "candidates": [
+    {
+      "candidate_index": 0,
+      "relative_interval": [
+        0,
+        9
+      ],
+      "parent_interval": [
+        100,
+        109
+      ],
+      "strand": "+",
+      "translation_code": 11,
+      "interval_length_nt": 9,
+      "translated_symbol_count": 3,
+      "protein_length_aa": 2,
+      "native_score": 10.0,
+      "native_confidence_percent": 90.0,
+      "partial_begin": false,
+      "partial_end": false,
+      "partial": false,
+      "internal_stop_positions": [],
+      "internal_stop_count": 0,
+      "terminal_stop": true,
+      "terminal_stop_count": 1,
+      "span_symbol_length_delta_nt": 0,
+      "component_status": {
+        "interval": "valid",
+        "strand": "valid",
+        "code": "valid",
+        "partial_begin": "valid",
+        "partial_end": "valid",
+        "protein_sequence": "valid",
+        "native_confidence": "valid",
+        "native_score": "valid"
+      },
+      "status": "complete",
+      "issues": []
+    },
+    {
+      "candidate_index": 1,
+      "relative_interval": null,
+      "parent_interval": null,
+      "strand": "-",
+      "translation_code": 11,
+      "interval_length_nt": null,
+      "translated_symbol_count": 3,
+      "protein_length_aa": 3,
+      "native_score": -4.0,
+      "native_confidence_percent": null,
+      "partial_begin": null,
+      "partial_end": null,
+      "partial": null,
+      "internal_stop_positions": [],
+      "internal_stop_count": 0,
+      "terminal_stop": false,
+      "terminal_stop_count": 0,
+      "span_symbol_length_delta_nt": null,
+      "component_status": {
+        "interval": "invalid",
+        "strand": "valid",
+        "code": "valid",
+        "partial_begin": "invalid",
+        "partial_end": "missing",
+        "protein_sequence": "valid",
+        "native_confidence": "invalid",
+        "native_score": "valid"
+      },
+      "status": "partial",
+      "issues": [
+        {
+          "code": "candidate_interval_outside_input"
+        },
+        {
+          "code": "invalid_partial_flag",
+          "field": "partial_begin"
+        },
+        {
+          "code": "missing_candidate_component",
+          "field": "partial_end"
+        },
+        {
+          "code": "native_confidence_outside_percent_range",
+          "field": "native_confidence"
+        }
+      ]
+    },
+    {
+      "candidate_index": 2,
+      "relative_interval": null,
+      "parent_interval": null,
+      "strand": null,
+      "translation_code": null,
+      "interval_length_nt": null,
+      "translated_symbol_count": null,
+      "protein_length_aa": null,
+      "native_score": null,
+      "native_confidence_percent": null,
+      "partial_begin": null,
+      "partial_end": null,
+      "partial": null,
+      "internal_stop_positions": null,
+      "internal_stop_count": null,
+      "terminal_stop": null,
+      "terminal_stop_count": null,
+      "span_symbol_length_delta_nt": null,
+      "component_status": {
+        "interval": "invalid",
+        "strand": "invalid",
+        "code": "invalid",
+        "partial_begin": "invalid",
+        "partial_end": "invalid",
+        "protein_sequence": "invalid",
+        "native_confidence": "invalid",
+        "native_score": "invalid"
+      },
+      "status": "invalid",
+      "issues": [
+        {
+          "code": "candidate_object_required"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "reported_candidate_count": 3,
+    "valid_interval_candidate_count": 1,
+    "union_coding_bases": 9,
+    "coding_coverage": 0.45,
+    "coding_coverage_denominator_nt": 20,
+    "coverage_complete_for_reported_candidates": false,
+    "relative_coding_intervals": [
+      [
+        0,
+        9
+      ]
+    ],
+    "partial_candidate_count": 0,
+    "partial_status_known_candidate_count": 1,
+    "partial_status_unknown_candidate_count": 2,
+    "complete_candidate_count": 1,
+    "candidate_with_invalid_component_count": 2,
+    "candidate_with_missing_component_count": 1,
+    "invalid_component_count": 11,
+    "missing_component_count": 1,
+    "component_counts": {
+      "interval": {
+        "valid": 1,
+        "missing": 0,
+        "invalid": 2
+      },
+      "strand": {
+        "valid": 2,
+        "missing": 0,
+        "invalid": 1
+      },
+      "code": {
+        "valid": 2,
+        "missing": 0,
+        "invalid": 1
+      },
+      "partial_begin": {
+        "valid": 1,
+        "missing": 0,
+        "invalid": 2
+      },
+      "partial_end": {
+        "valid": 1,
+        "missing": 1,
+        "invalid": 1
+      },
+      "protein_sequence": {
+        "valid": 2,
+        "missing": 0,
+        "invalid": 1
+      },
+      "native_confidence": {
+        "valid": 1,
+        "missing": 0,
+        "invalid": 2
+      },
+      "native_score": {
+        "valid": 2,
+        "missing": 0,
+        "invalid": 1
+      }
+    }
+  },
+  "calculations": {
+    "population": "all reported candidate rows, including duplicates and invalid rows; order preserved",
+    "interval_length_nt": "validated relative end - start; nt; null for missing/invalid interval",
+    "translated_symbol_count": "len(native protein_sequence); residue/stop symbols; null for missing/invalid string",
+    "protein_length_aa": "len(native protein_sequence) - count('*'); amino-acid symbols, including ambiguous symbols",
+    "native_score": "native_score; native model-score units; no aggregation or normalization",
+    "native_confidence_percent": "native_confidence; native prediction percent; null outside [0,100] or missing",
+    "internal_stop_count": "count('*' in protein_sequence[:-1]); literal markers; zero-based positions retained",
+    "terminal_stop_count": "1 if actual protein_sequence ends in '*' else 0; null if string unavailable",
+    "span_symbol_length_delta_nt": "interval_length_nt - 3 * translated_symbol_count; arithmetic consistency only, not codon verification",
+    "union_coding_bases": "size of union(valid relative candidate intervals), independent of strand; null if reported candidates exist but no interval is valid",
+    "coding_coverage": "union_coding_bases / input_length; dimensionless; null for zero denominator or unknown numerator",
+    "partial_candidate_count": "count with at least one native partial flag true; unknown flags are not false; known and unknown denominators retained",
+    "component_counts": "counts of valid/missing/invalid for each of eight independently validated candidate components",
+    "combinations": "interval union only; no overall score, annotation confidence or mean native score"
+  },
+  "issues": [
+    {
+      "code": "candidate_interval_outside_input",
+      "candidate_index": 1
+    },
+    {
+      "code": "invalid_partial_flag",
+      "field": "partial_begin",
+      "candidate_index": 1
+    },
+    {
+      "code": "missing_candidate_component",
+      "field": "partial_end",
+      "candidate_index": 1
+    },
+    {
+      "code": "native_confidence_outside_percent_range",
+      "field": "native_confidence",
+      "candidate_index": 1
+    },
+    {
+      "code": "candidate_object_required",
+      "candidate_index": 2
+    }
+  ]
+}

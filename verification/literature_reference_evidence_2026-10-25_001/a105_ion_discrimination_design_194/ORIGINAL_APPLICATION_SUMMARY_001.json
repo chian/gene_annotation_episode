@@ -1,0 +1,211 @@
+{
+  "efflux_summary_thresholds": {
+    "preferred_activity": {
+      "value": null,
+      "threshold": 30000.0,
+      "unit": "per_s",
+      "relation": "gt",
+      "origin": "author_inferred",
+      "derivation": "author_inferred_dead_time_and_geometry",
+      "quantity_kind": "per_unit_ion_efflux_rate",
+      "approximation": "source_qualified",
+      "source_qualifications": [
+        "nonadjacent_source_approximation"
+      ],
+      "nominal_domain": null,
+      "reported_domain": {
+        "meaning": "reported_estimate_domain",
+        "lower": 30000.0,
+        "upper": null,
+        "lower_inclusive": false,
+        "upper_inclusive": null,
+        "lower_unbounded": false,
+        "upper_unbounded": true,
+        "lower_exact": {
+          "numerator": "30000",
+          "denominator": "1"
+        },
+        "upper_exact": null
+      },
+      "physical_domain": null,
+      "zero_denominator_case": "not_applicable",
+      "unavailable_reasons": [
+        "subject_construct_unresolved",
+        "physical_domain_support_missing",
+        "physical_parameter_model_unimplemented",
+        "approximation_model_missing",
+        "quantity_relation_unresolved",
+        "normalization_unresolved",
+        "nonintended_conditions_unresolved",
+        "ion_attribution_unresolved"
+      ]
+    },
+    "alternative_activity": {
+      "value": null,
+      "threshold": 30.0,
+      "unit": "ions_per_s",
+      "relation": "lt",
+      "origin": "reported",
+      "derivation": "unknown",
+      "quantity_kind": "per_unit_ion_efflux_rate",
+      "approximation": "not_explicitly_qualified",
+      "source_qualifications": [],
+      "nominal_domain": null,
+      "reported_domain": {
+        "meaning": "reported_estimate_domain",
+        "lower": null,
+        "upper": 30.0,
+        "lower_inclusive": null,
+        "upper_inclusive": false,
+        "lower_unbounded": true,
+        "upper_unbounded": false,
+        "lower_exact": null,
+        "upper_exact": {
+          "numerator": "30",
+          "denominator": "1"
+        }
+      },
+      "physical_domain": null,
+      "zero_denominator_case": "not_applicable",
+      "unavailable_reasons": [
+        "subject_construct_unresolved",
+        "physical_domain_support_missing",
+        "physical_parameter_model_unimplemented",
+        "quantity_relation_unresolved",
+        "normalization_unresolved",
+        "nonintended_conditions_unresolved",
+        "ion_attribution_unresolved"
+      ]
+    },
+    "nominal_threshold_ratio": {
+      "value": null,
+      "threshold": 1000.0,
+      "unit": "dimensionless",
+      "relation": "gt",
+      "origin": "derived",
+      "derivation": "not_applicable",
+      "quantity_kind": "nominal_threshold_comparison",
+      "approximation": "source_qualified",
+      "source_qualifications": [],
+      "nominal_domain": {
+        "meaning": "nominal_threshold_arithmetic_domain",
+        "lower": 1000.0,
+        "upper": null,
+        "lower_inclusive": false,
+        "upper_inclusive": null,
+        "lower_unbounded": false,
+        "upper_unbounded": true,
+        "lower_exact": {
+          "numerator": "1000",
+          "denominator": "1"
+        },
+        "upper_exact": null
+      },
+      "reported_domain": null,
+      "physical_domain": null,
+      "zero_denominator_case": "possible_in_source_domain",
+      "unavailable_reasons": [
+        "subject_construct_unresolved",
+        "quantity_relation_unresolved",
+        "normalization_unresolved",
+        "nonintended_conditions_unresolved",
+        "ion_attribution_unresolved",
+        "physical_domain_support_missing",
+        "physical_parameter_model_unimplemented",
+        "approximation_model_missing"
+      ]
+    }
+  },
+  "Ec2_biionic_reported_permeability": {
+    "reported_selectivity": {
+      "value": null,
+      "threshold": 100.0,
+      "unit": "dimensionless",
+      "relation": "lower_limit",
+      "origin": "author_inferred",
+      "derivation": "author_inferred_electrical_model",
+      "quantity_kind": "reported_permeability_ratio",
+      "approximation": "source_qualified",
+      "source_qualifications": [
+        "adjacent_approximate",
+        "nonadjacent_source_approximation"
+      ],
+      "nominal_domain": null,
+      "reported_domain": {
+        "meaning": "reported_estimate_domain",
+        "lower": 100.0,
+        "upper": null,
+        "lower_inclusive": null,
+        "upper_inclusive": null,
+        "lower_unbounded": false,
+        "upper_unbounded": true,
+        "lower_exact": {
+          "numerator": "100",
+          "denominator": "1"
+        },
+        "upper_exact": null
+      },
+      "physical_domain": null,
+      "zero_denominator_case": "not_applicable",
+      "unavailable_reasons": [
+        "physical_domain_support_missing",
+        "physical_parameter_model_unimplemented",
+        "approximation_model_missing",
+        "reported_estimate_not_physical_bound",
+        "subject_construct_unresolved",
+        "quantity_relation_unresolved",
+        "normalization_unresolved",
+        "nonintended_conditions_unresolved",
+        "ion_attribution_unresolved"
+      ]
+    }
+  },
+  "Fluc_author_summary": {
+    "reported_selectivity": {
+      "value": null,
+      "threshold": 10000.0,
+      "unit": "dimensionless",
+      "relation": "gt",
+      "origin": "author_inferred",
+      "derivation": "author_summary_inference",
+      "quantity_kind": "reported_cross_assay_summary_ratio",
+      "approximation": "not_explicitly_qualified",
+      "source_qualifications": [],
+      "nominal_domain": null,
+      "reported_domain": {
+        "meaning": "reported_estimate_domain",
+        "lower": 10000.0,
+        "upper": null,
+        "lower_inclusive": false,
+        "upper_inclusive": null,
+        "lower_unbounded": false,
+        "upper_unbounded": true,
+        "lower_exact": {
+          "numerator": "10000",
+          "denominator": "1"
+        },
+        "upper_exact": null
+      },
+      "physical_domain": null,
+      "zero_denominator_case": "not_applicable",
+      "unavailable_reasons": [
+        "subject_construct_unresolved",
+        "physical_domain_support_missing",
+        "physical_parameter_model_unimplemented",
+        "reported_estimate_not_physical_bound",
+        "quantity_relation_unresolved",
+        "normalization_unresolved",
+        "nonintended_conditions_unresolved",
+        "ion_attribution_unresolved"
+      ]
+    }
+  },
+  "synthetic_point_example": {
+    "activity_ratio": 6.0,
+    "log_activity_ratio": 1.791759469228055,
+    "activity_ratio_variance": 0.36,
+    "activity_ratio_standard_uncertainty": 0.6,
+    "log_activity_ratio_standard_uncertainty": 0.1
+  },
+  "scope": "Controlled original-source nominations/pure functions and separately synthetic statistics; no actual model/selected episode/storage/reconstruction or A105 adequacy proof."
+}

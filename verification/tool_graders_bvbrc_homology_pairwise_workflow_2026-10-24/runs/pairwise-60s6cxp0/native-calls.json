@@ -1,0 +1,103 @@
+[
+  [
+    "rpc",
+    {
+      "id": "bvbrc_rpc_7481a3b830fee7890d0410c1bf920f2edd7f805853858f1a3627f99b32c99630",
+      "method": "AppService.start_app2",
+      "params": [
+        "Homology",
+        {
+          "blast_max_hits": 3,
+          "blast_program": "blastx",
+          "db_fasta_data": ">SYNTHETIC-subject\nMKTGG\n",
+          "db_source": "fasta_data",
+          "db_type": "faa",
+          "input_fasta_data": ">SYNTHETIC-query\nATGAAAACTGGGTAA\n",
+          "input_source": "fasta_data",
+          "input_type": "dna",
+          "output_file": "selected",
+          "output_path": "/synthetic/work/output"
+        },
+        {}
+      ],
+      "version": "1.1"
+    }
+  ],
+  [
+    "task_info",
+    "123",
+    "job_result_id"
+  ],
+  [
+    "rpc",
+    {
+      "id": "bvbrc_rpc_c407f7eff73bff7c5cfd0fe4a481d72a25abae2532c7b3acbc3ac273226899b3",
+      "method": "Workspace.get",
+      "params": [
+        {
+          "metadata_only": 1,
+          "objects": [
+            "11111111-1111-1111-1111-111111111111"
+          ]
+        }
+      ],
+      "version": "1.1"
+    }
+  ],
+  [
+    "rpc",
+    {
+      "id": "bvbrc_rpc_0fac360c2d1f9adf3ac419aa97e326fdd75f97cbca8e613b8b22d12cba3ff298",
+      "method": "Workspace.get_download_url",
+      "params": [
+        {
+          "objects": [
+            "/synthetic/work/output/selected.job_result"
+          ]
+        }
+      ],
+      "version": "1.1"
+    }
+  ],
+  [
+    "download",
+    "https://fixture.invalid/manifest",
+    null
+  ],
+  [
+    "rpc",
+    {
+      "id": "bvbrc_rpc_cb9c38d6f318acecc84be4f172a8772773c6cc6ce3a80f7ee59179a4148dc1ad",
+      "method": "Workspace.get",
+      "params": [
+        {
+          "metadata_only": 1,
+          "objects": [
+            "/synthetic/work/output/selected.raw.json"
+          ]
+        }
+      ],
+      "version": "1.1"
+    }
+  ],
+  [
+    "rpc",
+    {
+      "id": "bvbrc_rpc_a29cc0d59e32ef6bff2b4d80ff3af3f9e557e0bd21027987534fc33389b56a70",
+      "method": "Workspace.get_download_url",
+      "params": [
+        {
+          "objects": [
+            "/synthetic/work/output/selected.raw.json"
+          ]
+        }
+      ],
+      "version": "1.1"
+    }
+  ],
+  [
+    "download",
+    "https://fixture.invalid/raw",
+    null
+  ]
+]

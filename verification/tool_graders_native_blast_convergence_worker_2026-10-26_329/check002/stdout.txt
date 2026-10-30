@@ -1,0 +1,178 @@
+.........FFFFFF................................                          [100%]
+=================================== FAILURES ===================================
+_ test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet[psiblast] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a0')
+program = 'psiblast'
+
+    @pytest.mark.parametrize("program", views._PROGRAMS)
+    def test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet(tmp_path, program):
+        request = request_fixture(tmp_path, program)
+        manifest = run_request(tmp_path, request, cli=True)
+        output = Path(request["output_directory"])
+        assert manifest["status"] in ("complete", "partial")
+        expected_roles = worker._ARTIFACT_ROLES_V2 if program in ("psiblast", "deltablast") else worker._ARTIFACT_ROLES
+>       assert {r["role"] for r in manifest["artifacts"]} == set(expected_roles)
+E       AssertionError: assert {'calculation...w_index', ...} == {'calculation...ergence', ...}
+E         
+E         Extra items in the right set:
+E         'native_convergence'
+E         Use -v to get more diff
+
+../../../tests/test_native_blast_database_result_worker.py:299: AssertionError
+_ test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet[deltablast] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a1')
+program = 'deltablast'
+
+    @pytest.mark.parametrize("program", views._PROGRAMS)
+    def test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet(tmp_path, program):
+        request = request_fixture(tmp_path, program)
+        manifest = run_request(tmp_path, request, cli=True)
+        output = Path(request["output_directory"])
+        assert manifest["status"] in ("complete", "partial")
+        expected_roles = worker._ARTIFACT_ROLES_V2 if program in ("psiblast", "deltablast") else worker._ARTIFACT_ROLES
+>       assert {r["role"] for r in manifest["artifacts"]} == set(expected_roles)
+E       AssertionError: assert {'calculation...w_index', ...} == {'calculation...ergence', ...}
+E         
+E         Extra items in the right set:
+E         'native_convergence'
+E         Use -v to get more diff
+
+../../../tests/test_native_blast_database_result_worker.py:299: AssertionError
+_ test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet[rpsblast] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a2')
+program = 'rpsblast'
+
+    @pytest.mark.parametrize("program", views._PROGRAMS)
+    def test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet(tmp_path, program):
+        request = request_fixture(tmp_path, program)
+>       manifest = run_request(tmp_path, request, cli=True)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_result_worker.py:295: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a2')
+request = {'version': 'native_blast_database_result_worker_request_v1', 'calculation_id': '606a3dc195b25583d1f26cf79304deb33fa6c...NG': 'explicit', 'SYNTHETIC_BEHAVIOR': 'complete', ...}, ...}, 'bundle_artifact_ref': 'artifact:synthetic-bundle', ...}
+name = 'request.json', cli = True
+
+    def run_request(tmp_path, request, name="request.json", *, cli=False):
+        path = tmp_path / name; path.write_bytes(worker._json_bytes(request))
+        if cli:
+            env = dict(os.environ, PYTHONPATH=str(Path(__file__).resolve().parents[1]), PYTHONDONTWRITEBYTECODE="1")
+            result = subprocess.run([sys.executable, "-B", "-m", "gene_annotation_episode.native_blast_database_result_worker", str(path)],
+                cwd=tmp_path, env=env, capture_output=True, check=False)
+            (tmp_path / (name + ".stdout")).write_bytes(result.stdout)
+            (tmp_path / (name + ".stderr")).write_bytes(result.stderr)
+>           assert result.returncode == 0, result.stderr.decode() + str(request["output_directory"])
+E           AssertionError: /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a2/generation1
+E           assert 1 == 0
+E            +  where 1 = CompletedProcess(args=['/home/chia/repos/gene_annotation_episode/.venv/bin/python', '-B', '-m', 'gene_annotation_episo...-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a2/request.json'], returncode=1, stdout=b'', stderr=b'').returncode
+
+../../../tests/test_native_blast_database_result_worker.py:266: AssertionError
+_ test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet[rpstblastn] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a3')
+program = 'rpstblastn'
+
+    @pytest.mark.parametrize("program", views._PROGRAMS)
+    def test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet(tmp_path, program):
+        request = request_fixture(tmp_path, program)
+>       manifest = run_request(tmp_path, request, cli=True)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_result_worker.py:295: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a3')
+request = {'version': 'native_blast_database_result_worker_request_v1', 'calculation_id': '2bfafc99c4c7b442a021c9cfbd5984ea5aa39...NG': 'explicit', 'SYNTHETIC_BEHAVIOR': 'complete', ...}, ...}, 'bundle_artifact_ref': 'artifact:synthetic-bundle', ...}
+name = 'request.json', cli = True
+
+    def run_request(tmp_path, request, name="request.json", *, cli=False):
+        path = tmp_path / name; path.write_bytes(worker._json_bytes(request))
+        if cli:
+            env = dict(os.environ, PYTHONPATH=str(Path(__file__).resolve().parents[1]), PYTHONDONTWRITEBYTECODE="1")
+            result = subprocess.run([sys.executable, "-B", "-m", "gene_annotation_episode.native_blast_database_result_worker", str(path)],
+                cwd=tmp_path, env=env, capture_output=True, check=False)
+            (tmp_path / (name + ".stdout")).write_bytes(result.stdout)
+            (tmp_path / (name + ".stderr")).write_bytes(result.stderr)
+>           assert result.returncode == 0, result.stderr.decode() + str(request["output_directory"])
+E           AssertionError: /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a3/generation1
+E           assert 1 == 0
+E            +  where 1 = CompletedProcess(args=['/home/chia/repos/gene_annotation_episode/.venv/bin/python', '-B', '-m', 'gene_annotation_episo...-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a3/request.json'], returncode=1, stdout=b'', stderr=b'').returncode
+
+../../../tests/test_native_blast_database_result_worker.py:266: AssertionError
+_ test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet[blastn_vdb] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a4')
+program = 'blastn_vdb'
+
+    @pytest.mark.parametrize("program", views._PROGRAMS)
+    def test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet(tmp_path, program):
+        request = request_fixture(tmp_path, program)
+>       manifest = run_request(tmp_path, request, cli=True)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_result_worker.py:295: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a4')
+request = {'version': 'native_blast_database_result_worker_request_v1', 'calculation_id': 'b2e274405d092dfb210f67d0c87dfd6ce51e5...NG': 'explicit', 'SYNTHETIC_BEHAVIOR': 'complete', ...}, ...}, 'bundle_artifact_ref': 'artifact:synthetic-bundle', ...}
+name = 'request.json', cli = True
+
+    def run_request(tmp_path, request, name="request.json", *, cli=False):
+        path = tmp_path / name; path.write_bytes(worker._json_bytes(request))
+        if cli:
+            env = dict(os.environ, PYTHONPATH=str(Path(__file__).resolve().parents[1]), PYTHONDONTWRITEBYTECODE="1")
+            result = subprocess.run([sys.executable, "-B", "-m", "gene_annotation_episode.native_blast_database_result_worker", str(path)],
+                cwd=tmp_path, env=env, capture_output=True, check=False)
+            (tmp_path / (name + ".stdout")).write_bytes(result.stdout)
+            (tmp_path / (name + ".stderr")).write_bytes(result.stderr)
+>           assert result.returncode == 0, result.stderr.decode() + str(request["output_directory"])
+E           AssertionError: /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a4/generation1
+E           assert 1 == 0
+E            +  where 1 = CompletedProcess(args=['/home/chia/repos/gene_annotation_episode/.venv/bin/python', '-B', '-m', 'gene_annotation_episo...-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a4/request.json'], returncode=1, stdout=b'', stderr=b'').returncode
+
+../../../tests/test_native_blast_database_result_worker.py:266: AssertionError
+_ test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet[tblastn_vdb] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a5')
+program = 'tblastn_vdb'
+
+    @pytest.mark.parametrize("program", views._PROGRAMS)
+    def test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet(tmp_path, program):
+        request = request_fixture(tmp_path, program)
+>       manifest = run_request(tmp_path, request, cli=True)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_result_worker.py:295: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a5')
+request = {'version': 'native_blast_database_result_worker_request_v1', 'calculation_id': '2d12f1683569eb0af0211984f53584903504d...NG': 'explicit', 'SYNTHETIC_BEHAVIOR': 'complete', ...}, ...}, 'bundle_artifact_ref': 'artifact:synthetic-bundle', ...}
+name = 'request.json', cli = True
+
+    def run_request(tmp_path, request, name="request.json", *, cli=False):
+        path = tmp_path / name; path.write_bytes(worker._json_bytes(request))
+        if cli:
+            env = dict(os.environ, PYTHONPATH=str(Path(__file__).resolve().parents[1]), PYTHONDONTWRITEBYTECODE="1")
+            result = subprocess.run([sys.executable, "-B", "-m", "gene_annotation_episode.native_blast_database_result_worker", str(path)],
+                cwd=tmp_path, env=env, capture_output=True, check=False)
+            (tmp_path / (name + ".stdout")).write_bytes(result.stdout)
+            (tmp_path / (name + ".stderr")).write_bytes(result.stderr)
+>           assert result.returncode == 0, result.stderr.decode() + str(request["output_directory"])
+E           AssertionError: /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a5/generation1
+E           assert 1 == 0
+E            +  where 1 = CompletedProcess(args=['/home/chia/repos/gene_annotation_episode/.venv/bin/python', '-B', '-m', 'gene_annotation_episo...-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a5/request.json'], returncode=1, stdout=b'', stderr=b'').returncode
+
+../../../tests/test_native_blast_database_result_worker.py:266: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_database_result_worker.py::test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet[psiblast]
+FAILED ../../../tests/test_native_blast_database_result_worker.py::test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet[deltablast]
+FAILED ../../../tests/test_native_blast_database_result_worker.py::test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet[rpsblast]
+FAILED ../../../tests/test_native_blast_database_result_worker.py::test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet[rpstblastn]
+FAILED ../../../tests/test_native_blast_database_result_worker.py::test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet[blastn_vdb]
+FAILED ../../../tests/test_native_blast_database_result_worker.py::test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet[tblastn_vdb]
+6 failed, 41 passed in 62.53s (0:01:02)

@@ -1,0 +1,398 @@
+{
+  "version": "tool_knowledge_v1",
+  "entries": [
+    {
+      "entry_id": "launch-aurora",
+      "title": "Aurora HPC launch instructions",
+      "summary": "User-owned Aurora access, project storage, reusable software, PBS execution and original-job observations. Historical facts do not establish present access or allocation.",
+      "resource_kinds": [
+        "hpc"
+      ],
+      "tags": [
+        "launch",
+        "Aurora",
+        "ALCF",
+        "HPC",
+        "PBS",
+        "bastion",
+        "Gentner",
+        "BioReason-Aurora-Test",
+        "EpiCalib"
+      ],
+      "tool_names": [
+        "practical.inspect",
+        "practical.inventory.refresh",
+        "practical.context.set",
+        "practical.directory.create",
+        "practical.file.write",
+        "practical.file.read",
+        "practical.command.run",
+        "practical.job.start",
+        "practical.job.status",
+        "practical.job.collect"
+      ],
+      "provenance": [
+        "AGENTS.md",
+        "docs/LAUNCH_INSTRUCTION_SOURCES_2026-10-22_001.md",
+        "gene_annotation_episode/practical_resource_episodes.py",
+        "gene_annotation_episode/practical_pbs_operations.py",
+        "verification/aurora_bioinformatics_2026-10-22_001/README.md",
+        "https://docs.alcf.anl.gov/aurora/running-jobs-aurora/",
+        "https://docs.alcf.anl.gov/running-jobs/"
+      ],
+      "sections": [
+        {
+          "section_id": "access",
+          "title": "Bastion access and durable authentication",
+          "path": "aurora-access.md"
+        },
+        {
+          "section_id": "storage",
+          "title": "Required storage and charging",
+          "path": "aurora-storage.md"
+        },
+        {
+          "section_id": "software",
+          "title": "Existing Gentner setup and environment changes",
+          "path": "aurora-software.md"
+        },
+        {
+          "section_id": "pbs",
+          "title": "PBS allocation, execution and observations",
+          "path": "aurora-pbs.md"
+        },
+        {
+          "section_id": "operations",
+          "title": "Actual practical HPC operations and outcomes",
+          "path": "aurora-operations.md"
+        }
+      ]
+    },
+    {
+      "entry_id": "launch-local",
+      "title": "Local compute launch instructions",
+      "summary": "Prepare or reuse local execution under caller-owned limits: the existing detached phmmer binding and the separate opt-in practical local binding each retain their own actual operations and assignments.",
+      "resource_kinds": [
+        "local"
+      ],
+      "tags": [
+        "launch",
+        "local",
+        "compute",
+        "systemd",
+        "setup",
+        "reuse",
+        "repair",
+        "native",
+        "results"
+      ],
+      "tool_names": [
+        "practical.inspect",
+        "practical.inventory.refresh",
+        "practical.context.set",
+        "practical.directory.create",
+        "practical.file.write",
+        "practical.file.read",
+        "practical.command.run",
+        "practical.job.start",
+        "practical.job.status",
+        "practical.job.collect",
+        "homology.environment",
+        "homology.configure",
+        "homology.stage",
+        "homology.submit",
+        "homology.resume_start",
+        "homology.check_handoff",
+        "homology.sample",
+        "homology.extract",
+        "homology.coverage",
+        "homology.errors"
+      ],
+      "provenance": [
+        "GOAL.md",
+        "docs/PRACTICAL_EXECUTION.md",
+        "docs/LAUNCH_INSTRUCTION_SOURCES_2026-10-22_001.md",
+        "gene_annotation_episode/practical_resource_episodes.py",
+        "gene_annotation_episode/practical_execution_operations.py",
+        "gene_annotation_episode/native_lifecycle.py",
+        "gene_annotation_episode/local_jobs.py",
+        "gene_annotation_episode/homology_episodes.py",
+        "gene_annotation_episode/homology_jobs.py",
+        "gene_annotation_episode/resource_episodes.py",
+        "gene_annotation_episode/knowledge/phmmer-launch.md",
+        "gene_annotation_episode/knowledge/phmmer-monitor.md",
+        "gene_annotation_episode/knowledge/phmmer-results.md"
+      ],
+      "sections": [
+        {
+          "section_id": "preparation",
+          "title": "Assignment, inventory, setup and reuse",
+          "path": "local-preparation.md"
+        },
+        {
+          "section_id": "operations",
+          "title": "Actual local operations and persistent context",
+          "path": "local-operations.md"
+        },
+        {
+          "section_id": "results",
+          "title": "Native handles, output validation and failures",
+          "path": "local-results.md"
+        },
+        {
+          "section_id": "homology",
+          "title": "Existing detached phmmer launch binding and receiving roles",
+          "path": "local-homology.md"
+        }
+      ]
+    },
+    {
+      "entry_id": "launch-api",
+      "title": "API/service launch instructions: bound HMMER operations",
+      "summary": "HMMER API episode instructions: separate preparation, single submission, selected status observations, exact-job monitoring and result-page acquisition. Configured availability remains distinct from observed service state.",
+      "resource_kinds": [
+        "api"
+      ],
+      "tags": [
+        "launch",
+        "API",
+        "service",
+        "HMMER",
+        "EBI",
+        "phmmer",
+        "hmmscan",
+        "protein",
+        "profile",
+        "recovery",
+        "results"
+      ],
+      "tool_names": [
+        "api.hmmer.databases",
+        "api.hmmer.prepare",
+        "api.hmmer.submit",
+        "api.hmmer.status",
+        "api.hmmer.check_handoff",
+        "api.hmmer.result"
+      ],
+      "provenance": [
+        "docs/LAUNCH_INSTRUCTION_SOURCES_2026-10-22_001.md",
+        "docs/EXECUTION_WIRING_CONTRACT_2026-10-22_001.md",
+        "gene_annotation_episode/api_execution.py",
+        "gene_annotation_episode/execution_episodes.py",
+        "gene_annotation_episode/execution_progress.py",
+        "gene_annotation_episode/tools.py",
+        "gene_annotation_episode/acquisition.py",
+        "https://hmmer-web-docs.readthedocs.io/en/latest/api.html",
+        "https://www.ebi.ac.uk/Tools/hmmer/api/v1/openapi.json"
+      ],
+      "sections": [
+        {
+          "section_id": "service",
+          "title": "Bound service, capabilities and HTTP contract",
+          "path": "api-service.md"
+        },
+        {
+          "section_id": "operations",
+          "title": "Actual API operations and durable request identity",
+          "path": "api-operations.md"
+        },
+        {
+          "section_id": "results",
+          "title": "Result pages, native failures and timing limits",
+          "path": "api-results.md"
+        }
+      ]
+    },
+    {
+      "entry_id": "launch-api-uniprot",
+      "title": "UniProt record and paginated search execution",
+      "summary": "Execute the assigned UniProt record or one search page, retain actual source subjects and continuation, and reuse the original response for results without another request.",
+      "resource_kinds": [
+        "api"
+      ],
+      "tags": [
+        "launch",
+        "API",
+        "UniProt",
+        "protein",
+        "reference",
+        "accession",
+        "query",
+        "cursor",
+        "pagination",
+        "results",
+        "reuse"
+      ],
+      "tool_names": [
+        "api.uniprot.record",
+        "api.uniprot.search",
+        "api.uniprot.collect"
+      ],
+      "provenance": [
+        "docs/API_SERVICE_EXPANSION_CONTRACT_2026-10-23_001.md",
+        "gene_annotation_episode/api_uniprot.py",
+        "gene_annotation_episode/api_service_execution.py",
+        "gene_annotation_episode/acquisition.py",
+        "gene_annotation_episode/tools.py",
+        "https://www.uniprot.org/help/api_queries",
+        "https://www.uniprot.org/api-documentation/",
+        "https://academic.oup.com/nar/article/53/W1/W547/8126256"
+      ],
+      "sections": [
+        {
+          "section_id": "service",
+          "title": "Assigned query, selected page, reuse and source interpretation",
+          "path": "api-uniprot.md"
+        }
+      ]
+    },
+    {
+      "entry_id": "launch-api-bvbrc",
+      "title": "BV-BRC public data API query and result instructions",
+      "summary": "Retrieve actual genome, feature and protein-family pages with native subjects, RQL filters, explicit page selection and retained response reuse. Public data queries are immediate; authenticated BV-BRC AppService jobs are separate and are not exposed by this provider.",
+      "resource_kinds": [
+        "api"
+      ],
+      "tags": [
+        "launch",
+        "API",
+        "BV-BRC",
+        "genome",
+        "feature",
+        "protein",
+        "family",
+        "genomic context",
+        "RQL",
+        "pagination",
+        "reuse",
+        "results"
+      ],
+      "tool_names": [
+        "api.bvbrc.query",
+        "api.bvbrc.result"
+      ],
+      "provenance": [
+        "docs/API_SERVICE_EXPANSION_CONTRACT_2026-10-23_001.md",
+        "gene_annotation_episode/api_bvbrc.py",
+        "https://www.bv-brc.org/api/doc/",
+        "https://www.bv-brc.org/api/doc/genome_feature",
+        "https://www.bv-brc.org/api/doc/protein_family_ref",
+        "https://github.com/BV-BRC/BV-BRC-API/blob/master/README.md",
+        "https://github.com/BV-BRC/app_service/blob/master/AppService.spec",
+        "https://github.com/BV-BRC/BV-BRC-Go-SDK/blob/main/appservice/client.go"
+      ],
+      "sections": [
+        {
+          "section_id": "data",
+          "title": "Query public data, retain native subjects and acquire selected pages",
+          "path": "api-bvbrc.md"
+        }
+      ]
+    },
+    {
+      "entry_id": "launch-api-blast",
+      "title": "NCBI BLAST execution with separately selected requests",
+      "summary": "Prepare, submit, observe or fetch the original BLAST search through one selected native request at a time. Preserve provider contact constraints, submission uncertainty, exact native subjects and scores.",
+      "resource_kinds": [
+        "api"
+      ],
+      "tags": [
+        "launch",
+        "API",
+        "NCBI",
+        "BLAST",
+        "blastn",
+        "blastp",
+        "blastx",
+        "tblastn",
+        "tblastx",
+        "sequence",
+        "homology",
+        "RID",
+        "RTOE",
+        "pacing",
+        "status",
+        "results",
+        "recovery"
+      ],
+      "tool_names": [
+        "api.blast.prepare",
+        "api.blast.submit",
+        "api.blast.status",
+        "api.blast.fetch"
+      ],
+      "provenance": [
+        "docs/API_SERVICE_EXPANSION_CONTRACT_2026-10-23_001.md",
+        "gene_annotation_episode/api_blast.py",
+        "gene_annotation_episode/api_service_execution.py",
+        "gene_annotation_episode/acquisition.py",
+        "gene_annotation_episode/blast_search.py",
+        "gene_annotation_episode/tools.py",
+        "https://blast.ncbi.nlm.nih.gov/doc/blast-help/developerinfo.html",
+        "https://blast.ncbi.nlm.nih.gov/doc/blast-help/urlapi.html"
+      ],
+      "sections": [
+        {
+          "section_id": "service",
+          "title": "Original search, native requests, pacing and faithful result publication",
+          "path": "api-blast.md"
+        }
+      ]
+    },
+    {
+      "entry_id": "launch-api-bvbrc-data-v2",
+      "title": "BV-BRC Data API v2 typed queries and numerical result projections",
+      "summary": "Execute one explicitly assigned page, count or facet GET across 22 reviewed BV-BRC Data collections; retain the native Solr response, numerical sheets and deterministic components, then project selected rows or supplied-input sequence and molecular joins through the existing API/results owners.",
+      "resource_kinds": [
+        "api"
+      ],
+      "tags": [
+        "launch",
+        "API",
+        "BV-BRC",
+        "data",
+        "v2",
+        "Solr",
+        "typed filters",
+        "sequence",
+        "genomic context",
+        "taxonomy",
+        "pathway",
+        "structure",
+        "interaction",
+        "expression",
+        "count",
+        "facet",
+        "pagination",
+        "numerical measurements",
+        "results"
+      ],
+      "tool_names": [
+        "api.bvbrc.data.query",
+        "api.bvbrc.data.result"
+      ],
+      "provenance": [
+        "docs/TOOL_GRADER_BVBRC_DATA_CONTRACT_2026-10-24_001.md",
+        "docs/TOOL_GRADER_BVBRC_DATA_CONTRACT_CORRECTIONS_2026-10-24_002.md",
+        "docs/TOOL_GRADER_BVBRC_DATA_UNAVAILABLE_RETURNS_2026-10-24_003.md",
+        "gene_annotation_episode/api_bvbrc.py",
+        "gene_annotation_episode/bvbrc_data_query.py",
+        "gene_annotation_episode/bvbrc_data_readers.py",
+        "gene_annotation_episode/bvbrc_data_calculators.py",
+        "gene_annotation_episode/bvbrc_data_feature_sequences.py",
+        "gene_annotation_episode/bvbrc_data_molecular.py",
+        "gene_annotation_episode/bvbrc_data_publication.py",
+        "gene_annotation_episode/bvbrc_data_views.py",
+        "gene_annotation_episode/execution_episodes.py",
+        "gene_annotation_episode/execution_progress.py"
+      ],
+      "sections": [
+        {
+          "section_id": "data-v2",
+          "title": "Typed queries, frozen projections, explicit joins and retained numerical results",
+          "path": "api-bvbrc-data-v2.md"
+        }
+      ]
+    }
+  ]
+}

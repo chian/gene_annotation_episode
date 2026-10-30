@@ -1,0 +1,70 @@
+[
+  [
+    "rpc",
+    {
+      "id": "bvbrc_rpc_3adcf786aa76ab8e6b342b8c786183327738c7ec3143fbf36f135aa20edebe3d",
+      "method": "AppService.start_app2",
+      "params": [
+        "CodonTree",
+        {
+          "bootstraps": 100,
+          "genome_groups": [],
+          "genome_ids": [
+            "1075089.3",
+            "1171377.3",
+            "1222034.3",
+            "1232659.5"
+          ],
+          "max_allowed_dups": 0,
+          "max_genomes_missing": 1,
+          "number_of_genes": 10,
+          "optional_genome_ids": [],
+          "output_file": "tree",
+          "output_path": "/synthetic/output"
+        },
+        {}
+      ],
+      "version": "1.1"
+    }
+  ],
+  [
+    "rpc",
+    {
+      "id": "bvbrc_rpc_e4ba66b156954bbcc280e8db794b8a72e7bf3bf3073e3c87a5ef9779a583d013",
+      "method": "Workspace.get_download_url",
+      "params": [
+        {
+          "objects": [
+            "/synthetic/output/native-0"
+          ]
+        }
+      ],
+      "version": "1.1"
+    }
+  ],
+  [
+    "download",
+    "https://fixture.invalid/native-0",
+    null
+  ],
+  [
+    "rpc",
+    {
+      "id": "bvbrc_rpc_c64b7b49b83f64213c24527e84a48c861b6f7a76f4dee90fe1be6f7ca2c2199f",
+      "method": "Workspace.get_download_url",
+      "params": [
+        {
+          "objects": [
+            "/synthetic/output/native-1"
+          ]
+        }
+      ],
+      "version": "1.1"
+    }
+  ],
+  [
+    "download",
+    "https://fixture.invalid/native-1",
+    null
+  ]
+]

@@ -1,0 +1,20 @@
+...................................................................F     [100%]
+=================================== FAILURES ===================================
+_________ test_runtime_all_three_schema_definitions_equal_normative008 _________
+
+    def test_runtime_all_three_schema_definitions_equal_normative008():
+        from gene_annotation_episode import literature_ratio_source_inputs as inputs
+        base = Path(__file__).resolve().parents[1] / 'verification/literature_reference_evidence_2026-10-25_001/a105_visual_signal_reader_070/normative'
+        for family in ('REQUEST', 'EXTRACTION', 'SHEET'):
+>           assert getattr(inputs, '_' + family + '_SCHEMA') == json.loads((base / (family + '_SCHEMA_008.json')).read_text())
+E           AssertionError: assert {'type': 'obj...rties': False} == {'type': 'obj...rties': False}
+E             
+E             Omitting 3 identical items, use -vv to show
+E             Differing items:
+E             {'properties': {'version': {'const': 'relative_signal_source_extraction_v3'}, 'selection': {'type': 'object', 'propert...data', 'original_sha256', 'display_sha256', 'own_action_receipt', 'state', ...], 'additionalProperties': False}}, ...}} != {'properties': {'version': {'const': 'relative_signal_source_extraction_v3'}, 'selection': {'type': 'object', 'propert...data', 'original_sha256', 'display_sha256', 'own_action_receipt', 'state', ...], 'additionalProperties': False}}, ...}}
+E             Use -v to get more diff
+
+tests/test_literature_ratio_source_validation.py:141: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_literature_ratio_source_validation.py::test_runtime_all_three_schema_definitions_equal_normative008
+1 failed, 67 passed in 3.81s

@@ -1,0 +1,272 @@
+--- baseline/gene_annotation_episode/literature_compiled_assay_storage.py
++++ gene_annotation_episode/literature_compiled_assay_storage.py
+@@ -15,9 +15,11 @@
+     ROLES, ALLOWLIST, ASSAY_LITERAL_FIELDS, ENDPOINTS, ARRANGEMENTS, STAGES, STAGE_VALUES, LINKS, LINK_LIMITS,
+     compiled_assay_population_schema, read_compiled_assay_inputs, source_schema,
+     NS_ASSAY, NS_OPTICAL, NS_RECOVERY, NS_ACTIVE, NS_AMOUNT, NS_NATIVE, NS_REPLICATE,
++    POPULATION_V2,
+ )
+ from .literature_compiled_assay_calculations import (
+     VERSION as SHEET_VERSION, PRIMITIVES, COMPONENTS, SECTIONS, MEANINGS, REASONS, FORMULA_VARIANTS, QUALIFICATIONS, populate_compiled_assay,
++    VERSION_V2 as SHEET_VERSION_V2, COMPONENTS_V2, SECTIONS_V2, MEANINGS_V2, REASONS_V2, FORMULAS_V2,
+ )
+ 
+ PROVIDER = 'literature.a105.compiled_assay'
+@@ -25,6 +27,9 @@
+ NAMESPACE = 'literature_compiled_assay_cells'
+ REQUESTED = 'requested_compiled_assay_components'
+ VIEW = 'compiled_assay_components'
++VERSION_V2 = 'literature_compiled_assay_record_v2'
++NAMESPACE_V2 = 'literature_compiled_assay_v2_cells'
++REQUESTED_V2 = 'requested_compiled_assay_components_v2'
+ 
+ 
+ def _array(schema, unique=False):
+@@ -54,14 +59,14 @@
+         'identity_stage': {'type': ['string', 'null'], 'enum': [*STAGES, None]}})
+ 
+ 
+-def _numerical_cell():
++def _numerical_cell(version=1):
+     return obj({'value': {'type': ['number', 'null']}, 'unit': {'type': ['string', 'null'], 'enum': ['uM/min', 'uM', 'dimensionless', 'per_min', 'per_min_squared', 'min_squared', 'nM', 'fraction', 'umol/min', 'nmol/min', 'mmol/min', 'nM/min', 'per_s', 'umol/min/mg', 'nmol/min/mg', 'mg/ml', None]},
+         'status': {'type': 'string', 'enum': ['populated', 'unavailable']},
+-        'unavailable_reason': {'type': ['string', 'null'], 'enum': [None, *REASONS]},
+-        'formula': {'type': 'string', 'enum': list(FORMULA_VARIANTS)},
++        'unavailable_reason': {'type': ['string', 'null'], 'enum': [None, *(REASONS_V2 if version == 2 else REASONS)]},
++        'formula': {'type': 'string', 'enum': list(dict.fromkeys((*FORMULA_VARIANTS, *FORMULAS_V2.values()))) if version == 2 else list(FORMULA_VARIANTS)},
+         'origin': {'type': 'string', 'enum': ['reported', 'derived', 'graph_derived', 'synthetic', 'proposed', 'definition_identity']},
+         'section': {'type': 'string', 'enum': list(dict.fromkeys(SECTIONS.values()))},
+-        'meaning': {'type': 'string', 'enum': list(dict.fromkeys(MEANINGS.values()))},
++        'meaning': {'type': 'string', 'enum': list(dict.fromkeys((MEANINGS_V2 if version == 2 else MEANINGS).values()))},
+         'conditional_on': _array({'type': 'string', 'enum': ['first_order_covariance_propagation', 'known_variance', 'known_normal_nonnegative_presence']}),
+         'qualifications': _array({'type': 'string', 'enum': list(QUALIFICATIONS)})})
+ 
+@@ -101,12 +106,13 @@
+         'meaning': 'unchanged_selected_native_component_domain', 'domain_conversion': 'not_converted'}
+ 
+ 
+-def compiled_assay_cells_schema():
+-    return {**_array(obj({'sheet_ref': _ref(), 'evidence_source_ref': _ref(),
++def compiled_assay_cells_schema(version=1):
++    components = COMPONENTS_V2 if version == 2 else COMPONENTS
++    schema = {**_array(obj({'sheet_ref': _ref(), 'evidence_source_ref': _ref(),
+         'evaluation_scope': {'type': 'string', 'const': 'compiled_source_endpoint'},
+-        'component': {'type': 'string', 'enum': list(COMPONENTS)},
+-        **_numerical_cell()['properties'],
+-        'formula_code': {'type': 'string', 'enum': [name + '_compiled_v1' for name in COMPONENTS]},
++        'component': {'type': 'string', 'enum': list(components)},
++        **_numerical_cell(version)['properties'],
++        'formula_code': {'type': 'string', 'enum': [name + ('_compiled_v2' if version == 2 else '_compiled_v1') for name in components]},
+         'dependencies': _array(_dependency()),
+         'native_quantity': _native_quantity_schema(),
+         'operand_meanings': obj({role: {'type': 'string', 'enum': [*LINKS[role], *LINK_LIMITS]} for role in ROLES}),
+@@ -121,15 +127,37 @@
+         'operand_eligibility': obj({role: {'type': ['string', 'null'], 'enum': [None, *REASONS]} for role in ROLES}),
+         'partial_uncertainty_status': {'type': 'string', 'const': 'unimplemented'},
+         'covariance_input_status': {'type': 'string', 'enum': ['not_selected', 'selected_known', 'selected_estimated', 'selected_unknown']},
+-        'annotation_credit': {'type': 'null'}})), 'x-source': NAMESPACE}
++        'annotation_credit': {'type': 'null'}})), 'x-source': NAMESPACE_V2 if version == 2 else NAMESPACE}
++    if version == 2:
++        properties = schema['items']['properties']
++        properties['partial_uncertainty_status'] = {'type': 'string', 'const': 'component_scoped'}
++        properties['uncertainty'] = obj({
++            'estimand_component': {'type': ['string', 'null'], 'enum': [None, 'measured_endpoint_per_selected_amount', 'calibrated_measured_endpoint_per_selected_amount', 'corrected_activity']},
++            'scope': {'type': 'string', 'enum': ['not_applicable', 'operand_propagated', 'total_with_distinct_residual']},
++            'covariance_source_ref': _ref(nullable=True),
++            'source_primitive_order': _array({'type': 'string', 'enum': list(ROLES)}, True),
++            'operand_order': _array({'type': 'string', 'enum': list(ROLES)}, True),
++            'operand_keys': _array(_text()),
++            'variance_status': {'type': 'string', 'enum': ['known', 'estimated', 'unknown']},
++            'covariance_origin': {'type': ['string', 'null'], 'enum': [None, 'reported', 'derived', 'synthetic']},
++            'propagation_model': {'type': 'string', 'enum': ['none', 'first_order_covariance_propagation']}})
++        schema['items']['required'] = list(properties)
++    elif version != 1:
++        raise ValueError('unsupported_compiled_assay_population_version')
++    return schema
++
++
++def compiled_assay_v2_cells_schema():
++    return compiled_assay_cells_schema(2)
+ 
+ 
+ def _project_saved(saved, reference, components):
+     sheet, extraction = saved['sheet'], saved['extraction']
++    v2 = saved['version'] == VERSION_V2
+     meanings = {name: None if extraction['assay'][name] is None else extraction['assay'][name]['value'] for name in ASSAY_LITERAL_FIELDS}
+     return [{'sheet_ref': reference, 'evidence_source_ref': saved['input_source_ref'],
+         'evaluation_scope': 'compiled_source_endpoint', 'component': name,
+-        **deepcopy(sheet['cells'][name]), 'formula_code': name + '_compiled_v1',
++        **deepcopy(sheet['cells'][name]), 'formula_code': name + ('_compiled_v2' if v2 else '_compiled_v1'),
+         'dependencies': deepcopy(sheet['dependencies'][name]), 'assay_meanings': deepcopy(meanings),
+         'native_quantity': _native_quantity(extraction, name),
+         'operand_meanings': {role: extraction['relationships'][role]['value'] for role in ROLES},
+@@ -137,12 +165,13 @@
+         'arrangement_kind': extraction['assay']['arrangement']['value'],
+         'correction_stages': {stage: extraction['correction_stages'][stage]['value'] for stage in STAGES},
+         'variance_status': extraction['variance_status'], 'observation_model': extraction['observation_model'],
+-        'covariance_source_ref': extraction['covariance_source']['source_ref'] if extraction['covariance_source'] else None,
++        'covariance_source_ref': sheet['uncertainty'][name]['covariance_source_ref'] if v2 else extraction['covariance_source']['source_ref'] if extraction['covariance_source'] else None,
+         'residual_variance_source_ref': extraction['distinct_residual_observation']['witness']['source_ref'] if extraction['distinct_residual_observation'] else None,
+         'operand_eligibility': deepcopy(sheet['operand_eligibility_reasons']),
+-        'partial_uncertainty_status': 'unimplemented',
+-        'covariance_input_status': 'not_selected' if extraction['covariance_source'] is None else 'selected_' + extraction['variance_status'],
+-        'annotation_credit': None}
++        'partial_uncertainty_status': 'component_scoped' if v2 else 'unimplemented',
++        'covariance_input_status': ('not_selected' if sheet['uncertainty'][name]['covariance_source_ref'] is None else 'selected_' + sheet['uncertainty'][name]['variance_status']) if v2 else 'not_selected' if extraction['covariance_source'] is None else 'selected_' + extraction['variance_status'],
++        'annotation_credit': None,
++        **({'uncertainty': deepcopy(sheet['uncertainty'][name])} if v2 else {})}
+         for name in components]
+ 
+ 
+@@ -152,10 +181,19 @@
+     received_table = 'literature_compiled_assay_received'
+     binding_fields = ()
+ 
+-    def __init__(self, store, run_id):
++    def __init__(self, store, run_id, version=1):
+         if not isinstance(run_id, str) or not run_id:
+             raise ValueError('explicit_literature_run_required')
+         self.store, self.run_id = store, run_id
++        if version not in (1, 2):
++            raise ValueError('unsupported_compiled_assay_population_version')
++        self.population_version = version
++        if version == 2:
++            self.components, self.record_version = COMPONENTS_V2, VERSION_V2
++            self.received_table = 'literature_compiled_assay_v2_received'
++
++    def v2_projection(self):
++        return type(self)(self.store, self.run_id, 2)
+ 
+     def _installed(self, table):
+         return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (table,)).fetchone() is not None
+@@ -163,9 +201,8 @@
+     def _install(self):
+         super().__init__(self.store, self.run_id)
+ 
+-    @staticmethod
+-    def _components(components):
+-        if not isinstance(components, (list, tuple)) or any(type(name) is not str or name not in COMPONENTS for name in components) or len(set(components)) != len(components):
++    def _components(self, components):
++        if not isinstance(components, (list, tuple)) or any(type(name) is not str or name not in self.components for name in components) or len(set(components)) != len(components):
+             raise ContractError('compiled_assay_component_selection_invalid')
+         return list(components)
+ 
+@@ -204,12 +241,14 @@
+         return refs
+ 
+     def populate(self, context, arguments, operation_key):
++        if arguments.get('population_version') == POPULATION_V2 and self.population_version == 1:
++            return self.v2_projection().populate(context, arguments, operation_key)
+         if context.run_id != self.run_id:
+             raise ContractError('literature_run_mismatch')
+         if not isinstance(operation_key, str) or not operation_key:
+             raise ContractError('operation_key_required')
+-        args = plain(arguments); validate_schema(args, compiled_assay_population_schema())
+-        requested = self._components(plain(context.assignment.get(REQUESTED, [])))
++        args = plain(arguments); validate_schema(args, compiled_assay_population_schema(self.population_version))
++        requested = self._components(plain(context.assignment.get(REQUESTED_V2 if self.population_version == 2 else REQUESTED, [])))
+         request = {'run_id': self.run_id, 'episode_id': context.episode_id, 'operation_key': operation_key,
+                    'arguments': args, 'scope': plain(context.scope), 'components': requested}
+         signature = canonical(request)
+@@ -252,7 +291,7 @@
+         sheet = populate_compiled_assay(extraction)
+         direct = extraction['source_refs']; parents = self._ancestors(context.scope, [*direct, *selected_refs])
+         metadata = {ref: self.store.get(ref) for ref in parents}
+-        payload = {'version': VERSION, 'input_source_ref': args['source_ref'], 'input_artifact_ref': source['artifact_ref'],
++        payload = {'version': self.record_version, 'input_source_ref': args['source_ref'], 'input_artifact_ref': source['artifact_ref'],
+             'direct_input_source_refs': direct, 'input_source_refs': parents, 'selection': args,
+             'component_selections': [item['selection'] for item in snapshots], 'input_snapshots': snapshots,
+             'source_metadata': metadata, 'extraction': extraction, 'sheet': sheet}
+@@ -261,12 +300,12 @@
+             artifact = self.store.artifact(canonical(payload), 'application/json')
+             req_ref = self.store.artifact(canonical(request), 'application/json')
+             value = {'provider': PROVIDER, 'accession': None, 'uri': None, 'artifact_ref': artifact,
+-                'text_ref': artifact, 'request_ref': req_ref, 'version': VERSION, 'retrieved_at': None,
++                'text_ref': artifact, 'request_ref': req_ref, 'version': self.record_version, 'retrieved_at': None,
+                 'parent_source_refs': parents}
+             reference = identity('source', {'origin': 'tool', 'record': value})
+             exists = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (reference,)).fetchone()
+             self.store.put('source', value, origin='tool', scope=plain(context.scope))
+-            rows = _project_saved(payload, reference, requested); validate_schema(rows, compiled_assay_cells_schema())
++            rows = _project_saved(payload, reference, requested); validate_schema(rows, compiled_assay_cells_schema(self.population_version))
+             outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': self.run_id,
+                 'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': [reference],
+                 'changed_record_refs': [] if exists else [reference],
+@@ -287,12 +326,12 @@
+     def read(self, reference):
+         source = self.store.get(reference)
+         value = {k: v for k, v in source.items() if k not in ('id', 'record_type', 'origin')}
+-        if source.get('record_type') != 'source' or source.get('origin') != 'tool' or source.get('provider') != PROVIDER or source.get('version') != VERSION or identity('source', {'origin': 'tool', 'record': value}) != reference:
++        if source.get('record_type') != 'source' or source.get('origin') != 'tool' or source.get('provider') != PROVIDER or source.get('version') != self.record_version or identity('source', {'origin': 'tool', 'record': value}) != reference:
+             raise ContractError('literature_compiled_assay_sheet_required')
+         request = self._json(source['request_ref'])
+         if set(request) != {'run_id', 'episode_id', 'operation_key', 'arguments', 'scope', 'components'} or request['run_id'] != self.run_id:
+             raise ContractError('compiled_assay_saved_request_mismatch')
+-        validate_schema(request['arguments'], compiled_assay_population_schema()); self._components(request['components'])
++        validate_schema(request['arguments'], compiled_assay_population_schema(self.population_version)); self._components(request['components'])
+         operation = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
+             (self.run_id, request['episode_id'], request['operation_key'])).fetchone() if self._installed(self.operations_table) else None
+         if operation is None or operation['signature'] != canonical(request):
+@@ -300,7 +339,7 @@
+         saved = self._json(source['artifact_ref'])
+         expected_fields = {'version', 'input_source_ref', 'input_artifact_ref', 'direct_input_source_refs', 'input_source_refs',
+             'selection', 'component_selections', 'input_snapshots', 'source_metadata', 'extraction', 'sheet'}
+-        if set(saved) != expected_fields or saved['version'] != VERSION or saved['selection'] != request['arguments'] or saved['input_source_ref'] != request['arguments']['source_ref'] or saved['input_source_refs'] != source['parent_source_refs']:
++        if set(saved) != expected_fields or saved['version'] != self.record_version or saved['selection'] != request['arguments'] or saved['input_source_ref'] != request['arguments']['source_ref'] or saved['input_source_refs'] != source['parent_source_refs']:
+             raise ContractError('compiled_assay_saved_selection_mismatch')
+         if self._ancestors(request['scope'], [*saved['direct_input_source_refs'], *(s['sheet_ref'] for s in saved['component_selections'])]) != saved['input_source_refs']:
+             raise ContractError('compiled_assay_saved_source_mismatch')
+@@ -309,7 +348,7 @@
+         if self.store.get(saved['input_source_ref'])['artifact_ref'] != saved['input_artifact_ref']:
+             raise ContractError('compiled_assay_saved_source_mismatch')
+         extraction = saved['extraction']
+-        if extraction['source_ref'] != saved['input_source_ref'] or extraction['artifact_ref'] != saved['input_artifact_ref'] or extraction['source_refs'] != saved['direct_input_source_refs'] or saved['sheet']['version'] != SHEET_VERSION or saved['sheet']['original_extraction'] != extraction:
++        if extraction['source_ref'] != saved['input_source_ref'] or extraction['artifact_ref'] != saved['input_artifact_ref'] or extraction['source_refs'] != saved['direct_input_source_refs'] or saved['sheet']['version'] != (SHEET_VERSION_V2 if self.population_version == 2 else SHEET_VERSION) or saved['sheet']['original_extraction'] != extraction:
+             raise ContractError('compiled_assay_saved_extraction_mismatch')
+         selected = [request['arguments']['operands'][role] for role in ROLES if request['arguments']['operands'][role] is not None]
+         if selected != saved['component_selections'] or selected != [row['selection'] for row in saved['input_snapshots']]:
+@@ -323,13 +362,13 @@
+             selection = request['arguments']['operands'][role]
+             if (operand is None) != (selection is None) or operand is not None and (operand['selection'] != selection or operand['row'] != next(s['row'] for s in saved['input_snapshots'] if s['selection'] == selection)):
+                 raise ContractError('compiled_assay_saved_operand_mismatch')
+-        if set(saved['sheet']['cells']) != set(COMPONENTS) or set(saved['sheet']['dependencies']) != set(COMPONENTS):
++        if set(saved['sheet']['cells']) != set(self.components) or set(saved['sheet']['dependencies']) != set(self.components):
+             raise ContractError('compiled_assay_saved_component_mismatch')
+         for name, cell in saved['sheet']['cells'].items():
+-            validate_schema(cell, _numerical_cell())
+-            if cell['section'] != SECTIONS[name] or cell['meaning'] != MEANINGS[name] or (cell['value'] is None) != (cell['status'] == 'unavailable') or (cell['unavailable_reason'] is None) != (cell['status'] == 'populated'):
++            validate_schema(cell, _numerical_cell(self.population_version))
++            if cell['section'] != (SECTIONS_V2 if self.population_version == 2 else SECTIONS)[name] or cell['meaning'] != (MEANINGS_V2 if self.population_version == 2 else MEANINGS)[name] or (cell['value'] is None) != (cell['status'] == 'unavailable') or (cell['unavailable_reason'] is None) != (cell['status'] == 'populated'):
+                 raise ContractError('compiled_assay_saved_cell_mismatch')
+-        rows = _project_saved(saved, reference, request['components']); validate_schema(rows, compiled_assay_cells_schema())
++        rows = _project_saved(saved, reference, request['components']); validate_schema(rows, compiled_assay_cells_schema(self.population_version))
+         outcome = json.loads(operation['outcome'])
+         expected = {'sheet_ref': reference, 'view': VIEW, 'cells': rows}
+         if outcome.get('status') != 'completed' or canonical(outcome.get('result')) != canonical(expected) or outcome.get('record_refs') != [reference] or outcome.get('operation_ref') != identity('operation', {'run_id': self.run_id, 'episode_id': request['episode_id'], 'key': request['operation_key']}):
+@@ -337,7 +376,7 @@
+         return saved
+ 
+     def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
+-        selected = self._components(COMPONENTS if components is None else components)
++        selected = self._components(self.components if components is None else components)
+         rows = []
+         for ref in dict.fromkeys(sheet_refs):
+             if ref not in permitted_record_refs:
+@@ -374,7 +413,8 @@
+             return []
+         return [json.loads(row['outcome'])['result']['sheet_ref'] for row in self.store.db.execute(
+             f'SELECT outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? ORDER BY rowid', (self.run_id, context.episode_id))
+-            if json.loads(row['outcome'])['result']['sheet_ref'] in context.received_record_refs]
++            if json.loads(row['outcome'])['result']['sheet_ref'] in context.received_record_refs
++            and self.store.get(json.loads(row['outcome'])['result']['sheet_ref']).get('version') == self.record_version]
+ 
+     def available_sheet_refs(self, context):
+         return list(dict.fromkeys([*self.owned_sheet_refs(context), *(r['sheet_ref'] for r in self.received_cells(context) if r['sheet_ref'] in context.received_record_refs)]))
+@@ -386,5 +426,5 @@
+             *[row[name] for name in ('covariance_source_ref', 'residual_variance_source_ref') if row[name] is not None]]))
+ 
+ 
+-__all__ = ['LiteratureCompiledAssayRepository', 'compiled_assay_cells_schema', 'PROVIDER', 'VERSION',
+-    'NAMESPACE', 'REQUESTED', 'VIEW', 'COMPONENTS']
++__all__ = ['LiteratureCompiledAssayRepository', 'compiled_assay_cells_schema', 'compiled_assay_v2_cells_schema',
++    'PROVIDER', 'VERSION', 'VERSION_V2', 'NAMESPACE', 'NAMESPACE_V2', 'REQUESTED', 'REQUESTED_V2', 'VIEW', 'COMPONENTS', 'COMPONENTS_V2']

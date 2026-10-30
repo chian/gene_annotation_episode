@@ -1,0 +1,41 @@
+--- pin_002/gene_annotation_episode/literature_endpoint_signal_storage.py
++++ pin_005/gene_annotation_episode/literature_endpoint_signal_storage.py
+@@ -112,6 +112,19 @@
+             locations.append(_location(w))
+     covariance = extraction['covariance']
+     model = covariance['model'] if covariance and covariance['error'] is None else None
++    if model is not None:
++        # The covariance wire retains its authenticated selectors without the
++        # reader's enriched artifact_ref. Bind those exact support spans using
++        # its actual successful source receipts, including off-page aliases.
++        artifacts = {(item['source_ref'], item['representation']): item['artifact_ref']
++            for item in extraction['source_artifacts'] if item['error'] is None}
++        for witness in _witnesses(model):
++            artifact = artifacts.get((witness['source_ref'], witness['representation']))
++            if artifact is not None:
++                location = {**{key: witness[key] for key in ('source_ref', 'representation', 'start', 'end')},
++                    'artifact_ref': artifact}
++                if location not in locations:
++                    locations.append(location)
+     if covariance and covariance['artifact_ref'] is not None:
+         size = read_sizes.get((covariance['source_ref'], 'original'), 0)
+         if size:
+@@ -283,7 +296,7 @@
+             return self._read(reference)
+         except ContractError:
+             raise
+-        except (KeyError, TypeError, ValueError, OverflowError) as error:
++        except (KeyError, TypeError, ValueError, OverflowError, AttributeError) as error:
+             raise ContractError('endpoint_saved_binding_mismatch') from error
+ 
+     def _read(self, reference):
+@@ -472,6 +485,9 @@
+ 
+     def authorize_source_access(self, context, source_ref, representation, tool_name):
+         source = self.store.get(source_ref)
++        if source.get('record_type') != 'source':
++            # Leave ordinary wrong-kind diagnostics to the selected source tool.
++            return
+         artifact = (source.get('text_ref') or source['artifact_ref']) if representation == 'text' and tool_name == 'source.read' else (
+             source['artifact_ref'] if representation == 'original' else source.get(representation+'_ref'))
+         binding = self._private_binding(source_ref, artifact)

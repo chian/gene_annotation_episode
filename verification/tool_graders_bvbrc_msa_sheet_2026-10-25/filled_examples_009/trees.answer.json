@@ -1,0 +1,1965 @@
+{
+  "parse_result": {
+    "status": "partial",
+    "value": {
+      "schema_version": "bvbrc_msa_sheet_v1",
+      "tool": "C-L204-MSA",
+      "analysis": {
+        "analysis_id": "analysis",
+        "mode": "ordinary_new_alignment",
+        "alignment_id": "aligned#alignment",
+        "frequency_table_id": null,
+        "consensus_alignment_id": null,
+        "tree_id": "gene#tree_document/tree/0",
+        "full_xmfa_slot_id": null,
+        "xmfa_document_id": null,
+        "segment_ids": [],
+        "reference": null,
+        "output_role_evidence": []
+      },
+      "inputs": [],
+      "run": {
+        "original_task_id": "task",
+        "settings": [],
+        "commands": [
+          {
+            "command_id": "cmd",
+            "role": "tree_inference",
+            "argv": [
+              "FastTree",
+              "-nt"
+            ],
+            "raw_command": null,
+            "origin": "observed",
+            "evidence": [
+              {
+                "content": {
+                  "artifact_ref": "declaration",
+                  "artifact_field": "artifact_ref",
+                  "source_ref": "source:declaration",
+                  "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                  "byte_count": 23
+                },
+                "pointer": ""
+              }
+            ],
+            "location": null
+          }
+        ],
+        "versions": [],
+        "conflicts": [],
+        "completeness": "unknown"
+      },
+      "documents": [
+        {
+          "kind": "alignment",
+          "value": {
+            "alignment_id": "aligned#alignment",
+            "artifact": {
+              "raw_artifact_ref": "aligned",
+              "source_ref": "source:aligned",
+              "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+            },
+            "format": "aligned_fasta",
+            "layout": "fasta",
+            "id_rule": "first_whitespace_token",
+            "encoding": "ascii",
+            "declared_row_count": null,
+            "declared_column_count": null,
+            "observed_row_count": 2,
+            "observed_column_count": 2,
+            "completeness": "complete",
+            "rows": [
+              {
+                "row_index": 0,
+                "raw_header": "a",
+                "member_label": "a",
+                "sequence": "AC",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "aligned",
+                    "source_ref": "source:aligned",
+                    "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+                  },
+                  "byte_start_0based": 0,
+                  "byte_end_0based_exclusive": 6,
+                  "line_start_1based": 1,
+                  "line_end_1based_inclusive": 2,
+                  "xml_path": null
+                }
+              },
+              {
+                "row_index": 1,
+                "raw_header": "b",
+                "member_label": "b",
+                "sequence": "AT",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "aligned",
+                    "source_ref": "source:aligned",
+                    "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+                  },
+                  "byte_start_0based": 6,
+                  "byte_end_0based_exclusive": 12,
+                  "line_start_1based": 3,
+                  "line_end_1based_inclusive": 4,
+                  "xml_path": null
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "tree",
+          "value": {
+            "document_id": "gene#tree_document",
+            "artifact": {
+              "raw_artifact_ref": "gene",
+              "source_ref": "source:gene",
+              "sha256": "0d6a16acb8982237780693d34ea1b9a5b9364322f6dbfc9b2c7276e6b8513dd5"
+            },
+            "format": "newick",
+            "dialect": "newick",
+            "completeness": "complete",
+            "trees": [
+              {
+                "tree_id": "gene#tree_document/tree/0",
+                "document_id": "gene#tree_document",
+                "tree_index": 0,
+                "source_format": "newick",
+                "root_node_index": 0,
+                "native_rooted_marker": "unspecified",
+                "nodes": [
+                  {
+                    "node_index": 0,
+                    "parent_index": null,
+                    "child_indices": [
+                      1,
+                      4
+                    ],
+                    "raw_label": null,
+                    "decoded_label": null,
+                    "label_token": null,
+                    "branch_length": null,
+                    "branch_length_token": null,
+                    "comments": [],
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "gene",
+                        "source_ref": "source:gene",
+                        "sha256": "0d6a16acb8982237780693d34ea1b9a5b9364322f6dbfc9b2c7276e6b8513dd5"
+                      },
+                      "byte_start_0based": 0,
+                      "byte_end_0based_exclusive": 29,
+                      "line_start_1based": 1,
+                      "line_end_1based_inclusive": 1,
+                      "xml_path": null
+                    }
+                  },
+                  {
+                    "node_index": 1,
+                    "parent_index": 0,
+                    "child_indices": [
+                      2,
+                      3
+                    ],
+                    "raw_label": "0.9",
+                    "decoded_label": "0.9",
+                    "label_token": "0.9",
+                    "branch_length": 3.0,
+                    "branch_length_token": "3",
+                    "comments": [],
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "gene",
+                        "source_ref": "source:gene",
+                        "sha256": "0d6a16acb8982237780693d34ea1b9a5b9364322f6dbfc9b2c7276e6b8513dd5"
+                      },
+                      "byte_start_0based": 1,
+                      "byte_end_0based_exclusive": 15,
+                      "line_start_1based": 1,
+                      "line_end_1based_inclusive": 1,
+                      "xml_path": null
+                    }
+                  },
+                  {
+                    "node_index": 2,
+                    "parent_index": 1,
+                    "child_indices": [],
+                    "raw_label": "a",
+                    "decoded_label": "a",
+                    "label_token": "a",
+                    "branch_length": 1.0,
+                    "branch_length_token": "1",
+                    "comments": [],
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "gene",
+                        "source_ref": "source:gene",
+                        "sha256": "0d6a16acb8982237780693d34ea1b9a5b9364322f6dbfc9b2c7276e6b8513dd5"
+                      },
+                      "byte_start_0based": 2,
+                      "byte_end_0based_exclusive": 5,
+                      "line_start_1based": 1,
+                      "line_end_1based_inclusive": 1,
+                      "xml_path": null
+                    }
+                  },
+                  {
+                    "node_index": 3,
+                    "parent_index": 1,
+                    "child_indices": [],
+                    "raw_label": "b",
+                    "decoded_label": "b",
+                    "label_token": "b",
+                    "branch_length": 2.0,
+                    "branch_length_token": "2",
+                    "comments": [],
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "gene",
+                        "source_ref": "source:gene",
+                        "sha256": "0d6a16acb8982237780693d34ea1b9a5b9364322f6dbfc9b2c7276e6b8513dd5"
+                      },
+                      "byte_start_0based": 6,
+                      "byte_end_0based_exclusive": 9,
+                      "line_start_1based": 1,
+                      "line_end_1based_inclusive": 1,
+                      "xml_path": null
+                    }
+                  },
+                  {
+                    "node_index": 4,
+                    "parent_index": 0,
+                    "child_indices": [
+                      5,
+                      6
+                    ],
+                    "raw_label": null,
+                    "decoded_label": null,
+                    "label_token": null,
+                    "branch_length": 6.0,
+                    "branch_length_token": "6",
+                    "comments": [],
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "gene",
+                        "source_ref": "source:gene",
+                        "sha256": "0d6a16acb8982237780693d34ea1b9a5b9364322f6dbfc9b2c7276e6b8513dd5"
+                      },
+                      "byte_start_0based": 16,
+                      "byte_end_0based_exclusive": 27,
+                      "line_start_1based": 1,
+                      "line_end_1based_inclusive": 1,
+                      "xml_path": null
+                    }
+                  },
+                  {
+                    "node_index": 5,
+                    "parent_index": 4,
+                    "child_indices": [],
+                    "raw_label": "c",
+                    "decoded_label": "c",
+                    "label_token": "c",
+                    "branch_length": 4.0,
+                    "branch_length_token": "4",
+                    "comments": [],
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "gene",
+                        "source_ref": "source:gene",
+                        "sha256": "0d6a16acb8982237780693d34ea1b9a5b9364322f6dbfc9b2c7276e6b8513dd5"
+                      },
+                      "byte_start_0based": 17,
+                      "byte_end_0based_exclusive": 20,
+                      "line_start_1based": 1,
+                      "line_end_1based_inclusive": 1,
+                      "xml_path": null
+                    }
+                  },
+                  {
+                    "node_index": 6,
+                    "parent_index": 4,
+                    "child_indices": [],
+                    "raw_label": "d",
+                    "decoded_label": "d",
+                    "label_token": "d",
+                    "branch_length": 5.0,
+                    "branch_length_token": "5",
+                    "comments": [],
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "gene",
+                        "source_ref": "source:gene",
+                        "sha256": "0d6a16acb8982237780693d34ea1b9a5b9364322f6dbfc9b2c7276e6b8513dd5"
+                      },
+                      "byte_start_0based": 21,
+                      "byte_end_0based_exclusive": 24,
+                      "line_start_1based": 1,
+                      "line_end_1based_inclusive": 1,
+                      "xml_path": null
+                    }
+                  }
+                ],
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "gene",
+                    "source_ref": "source:gene",
+                    "sha256": "0d6a16acb8982237780693d34ea1b9a5b9364322f6dbfc9b2c7276e6b8513dd5"
+                  },
+                  "byte_start_0based": 0,
+                  "byte_end_0based_exclusive": 29,
+                  "line_start_1based": 1,
+                  "line_end_1based_inclusive": 1,
+                  "xml_path": null
+                }
+              }
+            ]
+          }
+        },
+        {
+          "kind": "tree",
+          "value": {
+            "document_id": "organismal#tree_document",
+            "artifact": {
+              "raw_artifact_ref": "organismal",
+              "source_ref": "source:organismal",
+              "sha256": "3be20ca001b39cd9390939796052c610d182f3426388e86250415e521f94e446"
+            },
+            "format": "newick",
+            "dialect": "newick",
+            "completeness": "complete",
+            "trees": [
+              {
+                "tree_id": "organismal#tree_document/tree/0",
+                "document_id": "organismal#tree_document",
+                "tree_index": 0,
+                "source_format": "newick",
+                "root_node_index": 0,
+                "native_rooted_marker": "unspecified",
+                "nodes": [
+                  {
+                    "node_index": 0,
+                    "parent_index": null,
+                    "child_indices": [
+                      1,
+                      4
+                    ],
+                    "raw_label": null,
+                    "decoded_label": null,
+                    "label_token": null,
+                    "branch_length": null,
+                    "branch_length_token": null,
+                    "comments": [],
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "organismal",
+                        "source_ref": "source:organismal",
+                        "sha256": "3be20ca001b39cd9390939796052c610d182f3426388e86250415e521f94e446"
+                      },
+                      "byte_start_0based": 0,
+                      "byte_end_0based_exclusive": 26,
+                      "line_start_1based": 1,
+                      "line_end_1based_inclusive": 1,
+                      "xml_path": null
+                    }
+                  },
+                  {
+                    "node_index": 1,
+                    "parent_index": 0,
+                    "child_indices": [
+                      2,
+                      3
+                    ],
+                    "raw_label": null,
+                    "decoded_label": null,
+                    "label_token": null,
+                    "branch_length": 3.0,
+                    "branch_length_token": "3",
+                    "comments": [],
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "organismal",
+                        "source_ref": "source:organismal",
+                        "sha256": "3be20ca001b39cd9390939796052c610d182f3426388e86250415e521f94e446"
+                      },
+                      "byte_start_0based": 1,
+                      "byte_end_0based_exclusive": 12,
+                      "line_start_1based": 1,
+                      "line_end_1based_inclusive": 1,
+                      "xml_path": null
+                    }
+                  },
+                  {
+                    "node_index": 2,
+                    "parent_index": 1,
+                    "child_indices": [],
+                    "raw_label": "a",
+                    "decoded_label": "a",
+                    "label_token": "a",
+                    "branch_length": 1.0,
+                    "branch_length_token": "1",
+                    "comments": [],
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "organismal",
+                        "source_ref": "source:organismal",
+                        "sha256": "3be20ca001b39cd9390939796052c610d182f3426388e86250415e521f94e446"
+                      },
+                      "byte_start_0based": 2,
+                      "byte_end_0based_exclusive": 5,
+                      "line_start_1based": 1,
+                      "line_end_1based_inclusive": 1,
+                      "xml_path": null
+                    }
+                  },
+                  {
+                    "node_index": 3,
+                    "parent_index": 1,
+                    "child_indices": [],
+                    "raw_label": "c",
+                    "decoded_label": "c",
+                    "label_token": "c",
+                    "branch_length": 2.0,
+                    "branch_length_token": "2",
+                    "comments": [],
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "organismal",
+                        "source_ref": "source:organismal",
+                        "sha256": "3be20ca001b39cd9390939796052c610d182f3426388e86250415e521f94e446"
+                      },
+                      "byte_start_0based": 6,
+                      "byte_end_0based_exclusive": 9,
+                      "line_start_1based": 1,
+                      "line_end_1based_inclusive": 1,
+                      "xml_path": null
+                    }
+                  },
+                  {
+                    "node_index": 4,
+                    "parent_index": 0,
+                    "child_indices": [
+                      5,
+                      6
+                    ],
+                    "raw_label": null,
+                    "decoded_label": null,
+                    "label_token": null,
+                    "branch_length": 6.0,
+                    "branch_length_token": "6",
+                    "comments": [],
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "organismal",
+                        "source_ref": "source:organismal",
+                        "sha256": "3be20ca001b39cd9390939796052c610d182f3426388e86250415e521f94e446"
+                      },
+                      "byte_start_0based": 13,
+                      "byte_end_0based_exclusive": 24,
+                      "line_start_1based": 1,
+                      "line_end_1based_inclusive": 1,
+                      "xml_path": null
+                    }
+                  },
+                  {
+                    "node_index": 5,
+                    "parent_index": 4,
+                    "child_indices": [],
+                    "raw_label": "b",
+                    "decoded_label": "b",
+                    "label_token": "b",
+                    "branch_length": 4.0,
+                    "branch_length_token": "4",
+                    "comments": [],
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "organismal",
+                        "source_ref": "source:organismal",
+                        "sha256": "3be20ca001b39cd9390939796052c610d182f3426388e86250415e521f94e446"
+                      },
+                      "byte_start_0based": 14,
+                      "byte_end_0based_exclusive": 17,
+                      "line_start_1based": 1,
+                      "line_end_1based_inclusive": 1,
+                      "xml_path": null
+                    }
+                  },
+                  {
+                    "node_index": 6,
+                    "parent_index": 4,
+                    "child_indices": [],
+                    "raw_label": "d",
+                    "decoded_label": "d",
+                    "label_token": "d",
+                    "branch_length": 5.0,
+                    "branch_length_token": "5",
+                    "comments": [],
+                    "source_location": {
+                      "artifact": {
+                        "raw_artifact_ref": "organismal",
+                        "source_ref": "source:organismal",
+                        "sha256": "3be20ca001b39cd9390939796052c610d182f3426388e86250415e521f94e446"
+                      },
+                      "byte_start_0based": 18,
+                      "byte_end_0based_exclusive": 21,
+                      "line_start_1based": 1,
+                      "line_end_1based_inclusive": 1,
+                      "xml_path": null
+                    }
+                  }
+                ],
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "organismal",
+                    "source_ref": "source:organismal",
+                    "sha256": "3be20ca001b39cd9390939796052c610d182f3426388e86250415e521f94e446"
+                  },
+                  "byte_start_0based": 0,
+                  "byte_end_0based_exclusive": 26,
+                  "line_start_1based": 1,
+                  "line_end_1based_inclusive": 1,
+                  "xml_path": null
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "read_outcomes": [],
+      "associations": {
+        "original_members": [],
+        "inline_inputs": [],
+        "row_members": [],
+        "transformations": [],
+        "correspondences": [],
+        "feature_genomes": [],
+        "source_records": [
+          {
+            "source_record_id": "genome:a",
+            "kind": "genome",
+            "evidence": {
+              "content": {
+                "artifact_ref": "declaration",
+                "artifact_field": "artifact_ref",
+                "source_ref": "source:declaration",
+                "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                "byte_count": 23
+              },
+              "pointer": ""
+            }
+          },
+          {
+            "source_record_id": "genome:b",
+            "kind": "genome",
+            "evidence": {
+              "content": {
+                "artifact_ref": "declaration",
+                "artifact_field": "artifact_ref",
+                "source_ref": "source:declaration",
+                "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                "byte_count": 23
+              },
+              "pointer": ""
+            }
+          },
+          {
+            "source_record_id": "genome:c",
+            "kind": "genome",
+            "evidence": {
+              "content": {
+                "artifact_ref": "declaration",
+                "artifact_field": "artifact_ref",
+                "source_ref": "source:declaration",
+                "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                "byte_count": 23
+              },
+              "pointer": ""
+            }
+          },
+          {
+            "source_record_id": "genome:d",
+            "kind": "genome",
+            "evidence": {
+              "content": {
+                "artifact_ref": "declaration",
+                "artifact_field": "artifact_ref",
+                "source_ref": "source:declaration",
+                "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                "byte_count": 23
+              },
+              "pointer": ""
+            }
+          }
+        ],
+        "functions": [],
+        "function_equivalences": [],
+        "taxonomy": [],
+        "member_entities": [],
+        "dependence_groups": [],
+        "requirements": [],
+        "diagnostics": []
+      },
+      "populations": {
+        "alignments": [
+          {
+            "population_id": "all",
+            "alignment_id": "aligned#alignment",
+            "row_indices": [
+              0,
+              1
+            ],
+            "columns_0based": [
+              0,
+              1
+            ],
+            "completeness": "complete",
+            "evidence": []
+          }
+        ],
+        "composition": [],
+        "taxonomy": [],
+        "leaves": [
+          {
+            "population_id": "leaves",
+            "tree_id": "gene#tree_document/tree/0",
+            "node_indices": [
+              2,
+              3,
+              5,
+              6
+            ],
+            "completeness": "complete",
+            "evidence": []
+          }
+        ]
+      },
+      "segments": [],
+      "tree_bindings": [
+        {
+          "tree_id": "gene#tree_document/tree/0",
+          "role": "inference",
+          "source_tree_id": null,
+          "alignment_id": null,
+          "command_id": "cmd",
+          "branch_unit": "expected_substitutions_per_model_site",
+          "support_method": "fasttree_sh_like",
+          "support_scale": "fraction",
+          "tip_rows": [],
+          "evidence": [
+            {
+              "content": {
+                "artifact_ref": "declaration",
+                "artifact_field": "artifact_ref",
+                "source_ref": "source:declaration",
+                "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                "byte_count": 23
+              },
+              "pointer": ""
+            }
+          ]
+        },
+        {
+          "tree_id": "organismal#tree_document/tree/0",
+          "role": "organismal",
+          "source_tree_id": null,
+          "alignment_id": null,
+          "command_id": "cmd",
+          "branch_unit": "expected_substitutions_per_model_site",
+          "support_method": "fasttree_sh_like",
+          "support_scale": "fraction",
+          "tip_rows": [],
+          "evidence": [
+            {
+              "content": {
+                "artifact_ref": "declaration",
+                "artifact_field": "artifact_ref",
+                "source_ref": "source:declaration",
+                "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                "byte_count": 23
+              },
+              "pointer": ""
+            }
+          ]
+        }
+      ],
+      "consensus_associations": [],
+      "native_observations": [],
+      "native_tree_measurements": [
+        {
+          "observation_id": "gene#tree_document/tree/0/node/1/branch_length",
+          "field": "branch_length",
+          "value": 3.0,
+          "raw_token": "3",
+          "state": "available",
+          "unit": "expected_substitutions_per_model_site",
+          "population_id": "gene#tree_document/tree/0",
+          "subject_id": "gene#tree_document/tree/0/node/1",
+          "method": "native_branch_length",
+          "location": {
+            "artifact": {
+              "raw_artifact_ref": "gene",
+              "source_ref": "source:gene",
+              "sha256": "0d6a16acb8982237780693d34ea1b9a5b9364322f6dbfc9b2c7276e6b8513dd5"
+            },
+            "byte_start_0based": 1,
+            "byte_end_0based_exclusive": 15,
+            "line_start_1based": 1,
+            "line_end_1based_inclusive": 1,
+            "xml_path": null
+          },
+          "evidence": [
+            {
+              "content": {
+                "artifact_ref": "declaration",
+                "artifact_field": "artifact_ref",
+                "source_ref": "source:declaration",
+                "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                "byte_count": 23
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        {
+          "observation_id": "gene#tree_document/tree/0/node/1/branch_support_native",
+          "field": "branch_support_native",
+          "value": 0.9,
+          "raw_token": "0.9",
+          "state": "available",
+          "unit": "fraction",
+          "population_id": "gene#tree_document/tree/0",
+          "subject_id": "gene#tree_document/tree/0/node/1",
+          "method": "fasttree_sh_like",
+          "location": {
+            "artifact": {
+              "raw_artifact_ref": "gene",
+              "source_ref": "source:gene",
+              "sha256": "0d6a16acb8982237780693d34ea1b9a5b9364322f6dbfc9b2c7276e6b8513dd5"
+            },
+            "byte_start_0based": 1,
+            "byte_end_0based_exclusive": 15,
+            "line_start_1based": 1,
+            "line_end_1based_inclusive": 1,
+            "xml_path": null
+          },
+          "evidence": [
+            {
+              "content": {
+                "artifact_ref": "declaration",
+                "artifact_field": "artifact_ref",
+                "source_ref": "source:declaration",
+                "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                "byte_count": 23
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        {
+          "observation_id": "gene#tree_document/tree/0/node/2/branch_length",
+          "field": "branch_length",
+          "value": 1.0,
+          "raw_token": "1",
+          "state": "available",
+          "unit": "expected_substitutions_per_model_site",
+          "population_id": "gene#tree_document/tree/0",
+          "subject_id": "gene#tree_document/tree/0/node/2",
+          "method": "native_branch_length",
+          "location": {
+            "artifact": {
+              "raw_artifact_ref": "gene",
+              "source_ref": "source:gene",
+              "sha256": "0d6a16acb8982237780693d34ea1b9a5b9364322f6dbfc9b2c7276e6b8513dd5"
+            },
+            "byte_start_0based": 2,
+            "byte_end_0based_exclusive": 5,
+            "line_start_1based": 1,
+            "line_end_1based_inclusive": 1,
+            "xml_path": null
+          },
+          "evidence": [
+            {
+              "content": {
+                "artifact_ref": "declaration",
+                "artifact_field": "artifact_ref",
+                "source_ref": "source:declaration",
+                "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                "byte_count": 23
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        {
+          "observation_id": "gene#tree_document/tree/0/node/3/branch_length",
+          "field": "branch_length",
+          "value": 2.0,
+          "raw_token": "2",
+          "state": "available",
+          "unit": "expected_substitutions_per_model_site",
+          "population_id": "gene#tree_document/tree/0",
+          "subject_id": "gene#tree_document/tree/0/node/3",
+          "method": "native_branch_length",
+          "location": {
+            "artifact": {
+              "raw_artifact_ref": "gene",
+              "source_ref": "source:gene",
+              "sha256": "0d6a16acb8982237780693d34ea1b9a5b9364322f6dbfc9b2c7276e6b8513dd5"
+            },
+            "byte_start_0based": 6,
+            "byte_end_0based_exclusive": 9,
+            "line_start_1based": 1,
+            "line_end_1based_inclusive": 1,
+            "xml_path": null
+          },
+          "evidence": [
+            {
+              "content": {
+                "artifact_ref": "declaration",
+                "artifact_field": "artifact_ref",
+                "source_ref": "source:declaration",
+                "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                "byte_count": 23
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        {
+          "observation_id": "gene#tree_document/tree/0/node/4/branch_length",
+          "field": "branch_length",
+          "value": 6.0,
+          "raw_token": "6",
+          "state": "available",
+          "unit": "expected_substitutions_per_model_site",
+          "population_id": "gene#tree_document/tree/0",
+          "subject_id": "gene#tree_document/tree/0/node/4",
+          "method": "native_branch_length",
+          "location": {
+            "artifact": {
+              "raw_artifact_ref": "gene",
+              "source_ref": "source:gene",
+              "sha256": "0d6a16acb8982237780693d34ea1b9a5b9364322f6dbfc9b2c7276e6b8513dd5"
+            },
+            "byte_start_0based": 16,
+            "byte_end_0based_exclusive": 27,
+            "line_start_1based": 1,
+            "line_end_1based_inclusive": 1,
+            "xml_path": null
+          },
+          "evidence": [
+            {
+              "content": {
+                "artifact_ref": "declaration",
+                "artifact_field": "artifact_ref",
+                "source_ref": "source:declaration",
+                "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                "byte_count": 23
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        {
+          "observation_id": "gene#tree_document/tree/0/node/5/branch_length",
+          "field": "branch_length",
+          "value": 4.0,
+          "raw_token": "4",
+          "state": "available",
+          "unit": "expected_substitutions_per_model_site",
+          "population_id": "gene#tree_document/tree/0",
+          "subject_id": "gene#tree_document/tree/0/node/5",
+          "method": "native_branch_length",
+          "location": {
+            "artifact": {
+              "raw_artifact_ref": "gene",
+              "source_ref": "source:gene",
+              "sha256": "0d6a16acb8982237780693d34ea1b9a5b9364322f6dbfc9b2c7276e6b8513dd5"
+            },
+            "byte_start_0based": 17,
+            "byte_end_0based_exclusive": 20,
+            "line_start_1based": 1,
+            "line_end_1based_inclusive": 1,
+            "xml_path": null
+          },
+          "evidence": [
+            {
+              "content": {
+                "artifact_ref": "declaration",
+                "artifact_field": "artifact_ref",
+                "source_ref": "source:declaration",
+                "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                "byte_count": 23
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        {
+          "observation_id": "gene#tree_document/tree/0/node/6/branch_length",
+          "field": "branch_length",
+          "value": 5.0,
+          "raw_token": "5",
+          "state": "available",
+          "unit": "expected_substitutions_per_model_site",
+          "population_id": "gene#tree_document/tree/0",
+          "subject_id": "gene#tree_document/tree/0/node/6",
+          "method": "native_branch_length",
+          "location": {
+            "artifact": {
+              "raw_artifact_ref": "gene",
+              "source_ref": "source:gene",
+              "sha256": "0d6a16acb8982237780693d34ea1b9a5b9364322f6dbfc9b2c7276e6b8513dd5"
+            },
+            "byte_start_0based": 21,
+            "byte_end_0based_exclusive": 24,
+            "line_start_1based": 1,
+            "line_end_1based_inclusive": 1,
+            "xml_path": null
+          },
+          "evidence": [
+            {
+              "content": {
+                "artifact_ref": "declaration",
+                "artifact_field": "artifact_ref",
+                "source_ref": "source:declaration",
+                "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                "byte_count": 23
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        {
+          "observation_id": "organismal#tree_document/tree/0/node/1/branch_length",
+          "field": "branch_length",
+          "value": 3.0,
+          "raw_token": "3",
+          "state": "available",
+          "unit": "expected_substitutions_per_model_site",
+          "population_id": "organismal#tree_document/tree/0",
+          "subject_id": "organismal#tree_document/tree/0/node/1",
+          "method": "native_branch_length",
+          "location": {
+            "artifact": {
+              "raw_artifact_ref": "organismal",
+              "source_ref": "source:organismal",
+              "sha256": "3be20ca001b39cd9390939796052c610d182f3426388e86250415e521f94e446"
+            },
+            "byte_start_0based": 1,
+            "byte_end_0based_exclusive": 12,
+            "line_start_1based": 1,
+            "line_end_1based_inclusive": 1,
+            "xml_path": null
+          },
+          "evidence": [
+            {
+              "content": {
+                "artifact_ref": "declaration",
+                "artifact_field": "artifact_ref",
+                "source_ref": "source:declaration",
+                "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                "byte_count": 23
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        {
+          "observation_id": "organismal#tree_document/tree/0/node/2/branch_length",
+          "field": "branch_length",
+          "value": 1.0,
+          "raw_token": "1",
+          "state": "available",
+          "unit": "expected_substitutions_per_model_site",
+          "population_id": "organismal#tree_document/tree/0",
+          "subject_id": "organismal#tree_document/tree/0/node/2",
+          "method": "native_branch_length",
+          "location": {
+            "artifact": {
+              "raw_artifact_ref": "organismal",
+              "source_ref": "source:organismal",
+              "sha256": "3be20ca001b39cd9390939796052c610d182f3426388e86250415e521f94e446"
+            },
+            "byte_start_0based": 2,
+            "byte_end_0based_exclusive": 5,
+            "line_start_1based": 1,
+            "line_end_1based_inclusive": 1,
+            "xml_path": null
+          },
+          "evidence": [
+            {
+              "content": {
+                "artifact_ref": "declaration",
+                "artifact_field": "artifact_ref",
+                "source_ref": "source:declaration",
+                "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                "byte_count": 23
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        {
+          "observation_id": "organismal#tree_document/tree/0/node/3/branch_length",
+          "field": "branch_length",
+          "value": 2.0,
+          "raw_token": "2",
+          "state": "available",
+          "unit": "expected_substitutions_per_model_site",
+          "population_id": "organismal#tree_document/tree/0",
+          "subject_id": "organismal#tree_document/tree/0/node/3",
+          "method": "native_branch_length",
+          "location": {
+            "artifact": {
+              "raw_artifact_ref": "organismal",
+              "source_ref": "source:organismal",
+              "sha256": "3be20ca001b39cd9390939796052c610d182f3426388e86250415e521f94e446"
+            },
+            "byte_start_0based": 6,
+            "byte_end_0based_exclusive": 9,
+            "line_start_1based": 1,
+            "line_end_1based_inclusive": 1,
+            "xml_path": null
+          },
+          "evidence": [
+            {
+              "content": {
+                "artifact_ref": "declaration",
+                "artifact_field": "artifact_ref",
+                "source_ref": "source:declaration",
+                "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                "byte_count": 23
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        {
+          "observation_id": "organismal#tree_document/tree/0/node/4/branch_length",
+          "field": "branch_length",
+          "value": 6.0,
+          "raw_token": "6",
+          "state": "available",
+          "unit": "expected_substitutions_per_model_site",
+          "population_id": "organismal#tree_document/tree/0",
+          "subject_id": "organismal#tree_document/tree/0/node/4",
+          "method": "native_branch_length",
+          "location": {
+            "artifact": {
+              "raw_artifact_ref": "organismal",
+              "source_ref": "source:organismal",
+              "sha256": "3be20ca001b39cd9390939796052c610d182f3426388e86250415e521f94e446"
+            },
+            "byte_start_0based": 13,
+            "byte_end_0based_exclusive": 24,
+            "line_start_1based": 1,
+            "line_end_1based_inclusive": 1,
+            "xml_path": null
+          },
+          "evidence": [
+            {
+              "content": {
+                "artifact_ref": "declaration",
+                "artifact_field": "artifact_ref",
+                "source_ref": "source:declaration",
+                "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                "byte_count": 23
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        {
+          "observation_id": "organismal#tree_document/tree/0/node/5/branch_length",
+          "field": "branch_length",
+          "value": 4.0,
+          "raw_token": "4",
+          "state": "available",
+          "unit": "expected_substitutions_per_model_site",
+          "population_id": "organismal#tree_document/tree/0",
+          "subject_id": "organismal#tree_document/tree/0/node/5",
+          "method": "native_branch_length",
+          "location": {
+            "artifact": {
+              "raw_artifact_ref": "organismal",
+              "source_ref": "source:organismal",
+              "sha256": "3be20ca001b39cd9390939796052c610d182f3426388e86250415e521f94e446"
+            },
+            "byte_start_0based": 14,
+            "byte_end_0based_exclusive": 17,
+            "line_start_1based": 1,
+            "line_end_1based_inclusive": 1,
+            "xml_path": null
+          },
+          "evidence": [
+            {
+              "content": {
+                "artifact_ref": "declaration",
+                "artifact_field": "artifact_ref",
+                "source_ref": "source:declaration",
+                "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                "byte_count": 23
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        {
+          "observation_id": "organismal#tree_document/tree/0/node/6/branch_length",
+          "field": "branch_length",
+          "value": 5.0,
+          "raw_token": "5",
+          "state": "available",
+          "unit": "expected_substitutions_per_model_site",
+          "population_id": "organismal#tree_document/tree/0",
+          "subject_id": "organismal#tree_document/tree/0/node/6",
+          "method": "native_branch_length",
+          "location": {
+            "artifact": {
+              "raw_artifact_ref": "organismal",
+              "source_ref": "source:organismal",
+              "sha256": "3be20ca001b39cd9390939796052c610d182f3426388e86250415e521f94e446"
+            },
+            "byte_start_0based": 18,
+            "byte_end_0based_exclusive": 21,
+            "line_start_1based": 1,
+            "line_end_1based_inclusive": 1,
+            "xml_path": null
+          },
+          "evidence": [
+            {
+              "content": {
+                "artifact_ref": "declaration",
+                "artifact_field": "artifact_ref",
+                "source_ref": "source:declaration",
+                "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                "byte_count": 23
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        }
+      ],
+      "support_observations": [
+        {
+          "tree_id": "gene#tree_document/tree/0",
+          "node_index": 1,
+          "native_observation_id": "gene#tree_document/tree/0/node/1/branch_support_native",
+          "source_kind": "internal_label",
+          "method": "fasttree_sh_like",
+          "scale": "fraction",
+          "command_id": "cmd",
+          "bootstrap_population_id": null,
+          "evidence": [
+            {
+              "content": {
+                "artifact_ref": "declaration",
+                "artifact_field": "artifact_ref",
+                "source_ref": "source:declaration",
+                "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                "byte_count": 23
+              },
+              "pointer": ""
+            }
+          ]
+        }
+      ],
+      "xmfa_bindings": [],
+      "requirements": [
+        {
+          "requirement_id": "msa/analysis/run/alignment_deployed_version_unproven",
+          "kind": "scientific_metadata",
+          "role": "run",
+          "source_refs": [],
+          "reason_code": "alignment_deployed_version_unproven"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "alignment_deployed_version_unproven",
+          "phase": "association",
+          "path": "/run",
+          "severity": "qualification",
+          "evidence_refs": []
+        }
+      ]
+    },
+    "diagnostics": [
+      {
+        "code": "alignment_deployed_version_unproven",
+        "phase": "association",
+        "path": "/run",
+        "severity": "qualification",
+        "evidence_refs": []
+      }
+    ]
+  },
+  "components": {
+    "schema_version": "bvbrc_msa_components_v1",
+    "analysis_id": "analysis",
+    "parameters": {
+      "version": "bvbrc_msa_components_v1",
+      "requests": [
+        {
+          "kind": "tree",
+          "request_id": "tree",
+          "population_id": "leaves",
+          "branch_unit": "expected_substitutions_per_model_site",
+          "pairs": [
+            [
+              2,
+              3
+            ]
+          ]
+        },
+        {
+          "kind": "relationship_comparison",
+          "request_id": "relationship_comparison",
+          "comparison_id": "comparison",
+          "gene_tree_id": "gene#tree_document/tree/0",
+          "organismal_tree_id": "organismal#tree_document/tree/0",
+          "injective_tip_join": [
+            {
+              "gene_tree_id": "gene#tree_document/tree/0",
+              "gene_node_index": 2,
+              "organismal_tree_id": "organismal#tree_document/tree/0",
+              "organismal_node_index": 2,
+              "subject": {
+                "kind": "genome",
+                "id": "a",
+                "source_record_id": "genome:a"
+              },
+              "evidence": [
+                {
+                  "content": {
+                    "artifact_ref": "declaration",
+                    "artifact_field": "artifact_ref",
+                    "source_ref": "source:declaration",
+                    "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                    "byte_count": 23
+                  },
+                  "pointer": ""
+                }
+              ]
+            },
+            {
+              "gene_tree_id": "gene#tree_document/tree/0",
+              "gene_node_index": 3,
+              "organismal_tree_id": "organismal#tree_document/tree/0",
+              "organismal_node_index": 5,
+              "subject": {
+                "kind": "genome",
+                "id": "b",
+                "source_record_id": "genome:b"
+              },
+              "evidence": [
+                {
+                  "content": {
+                    "artifact_ref": "declaration",
+                    "artifact_field": "artifact_ref",
+                    "source_ref": "source:declaration",
+                    "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                    "byte_count": 23
+                  },
+                  "pointer": ""
+                }
+              ]
+            },
+            {
+              "gene_tree_id": "gene#tree_document/tree/0",
+              "gene_node_index": 5,
+              "organismal_tree_id": "organismal#tree_document/tree/0",
+              "organismal_node_index": 3,
+              "subject": {
+                "kind": "genome",
+                "id": "c",
+                "source_record_id": "genome:c"
+              },
+              "evidence": [
+                {
+                  "content": {
+                    "artifact_ref": "declaration",
+                    "artifact_field": "artifact_ref",
+                    "source_ref": "source:declaration",
+                    "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                    "byte_count": 23
+                  },
+                  "pointer": ""
+                }
+              ]
+            },
+            {
+              "gene_tree_id": "gene#tree_document/tree/0",
+              "gene_node_index": 6,
+              "organismal_tree_id": "organismal#tree_document/tree/0",
+              "organismal_node_index": 6,
+              "subject": {
+                "kind": "genome",
+                "id": "d",
+                "source_record_id": "genome:d"
+              },
+              "evidence": [
+                {
+                  "content": {
+                    "artifact_ref": "declaration",
+                    "artifact_field": "artifact_ref",
+                    "source_ref": "source:declaration",
+                    "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                    "byte_count": 23
+                  },
+                  "pointer": ""
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "results": [
+      {
+        "request_id": "tree",
+        "kind": "tree",
+        "status": "ok",
+        "value": {
+          "population_id": "leaves",
+          "tree_id": "gene#tree_document/tree/0",
+          "tip_count": {
+            "value": 4,
+            "state": "available",
+            "unit": "tips",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "leaves",
+            "method": "tree_tip_count",
+            "evidence": [],
+            "requirement_ids": []
+          },
+          "internal_node_count": {
+            "value": 3,
+            "state": "available",
+            "unit": "nodes",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "leaves",
+            "method": "internal_node_count",
+            "evidence": [],
+            "requirement_ids": []
+          },
+          "rooted_representation_polytomies": {
+            "value": 0,
+            "state": "available",
+            "unit": "nodes",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "leaves",
+            "method": "rooted_child_degree_gt2",
+            "evidence": [],
+            "requirement_ids": []
+          },
+          "unrooted_degree_polytomies": {
+            "value": 0,
+            "state": "available",
+            "unit": "nodes",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "leaves",
+            "method": "unrooted_degree_gt3",
+            "evidence": [],
+            "requirement_ids": []
+          },
+          "branch_length_sum": {
+            "value": 21.0,
+            "state": "available",
+            "unit": "expected_substitutions_per_model_site",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "leaves",
+            "method": "branch_length_sum",
+            "evidence": [],
+            "requirement_ids": []
+          },
+          "known_branch_length_sum": {
+            "value": 21.0,
+            "state": "available",
+            "unit": "expected_substitutions_per_model_site",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "leaves",
+            "method": "known_branch_length_sum",
+            "evidence": [],
+            "requirement_ids": []
+          },
+          "missing_branch_length_count": {
+            "value": 0,
+            "state": "available",
+            "unit": "edges",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "leaves",
+            "method": "missing_branch_length_count",
+            "evidence": [],
+            "requirement_ids": []
+          },
+          "splits": [
+            {
+              "split_id": "gene#tree_document/tree/0/split/2,3",
+              "tree_id": "gene#tree_document/tree/0",
+              "side_node_indices": [
+                2,
+                3
+              ],
+              "complement_node_indices": [
+                5,
+                6
+              ],
+              "edge_node_indices": [
+                1,
+                4
+              ]
+            }
+          ],
+          "branches": [
+            {
+              "node_index": 1,
+              "split_id": "gene#tree_document/tree/0/split/2,3",
+              "length": {
+                "value": 3.0,
+                "state": "available",
+                "unit": "expected_substitutions_per_model_site",
+                "origin": "native_fitted",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "leaves",
+                "method": "native_branch_length",
+                "evidence": [
+                  {
+                    "content": {
+                      "artifact_ref": "declaration",
+                      "artifact_field": "artifact_ref",
+                      "source_ref": "source:declaration",
+                      "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                      "byte_count": 23
+                    },
+                    "pointer": ""
+                  }
+                ],
+                "requirement_ids": []
+              },
+              "native_support_observation_ids": [
+                "gene#tree_document/tree/0/node/1/branch_support_native"
+              ],
+              "support_method": "fasttree_sh_like",
+              "support_scale": "fraction",
+              "support_rescaled": {
+                "value": 0.9,
+                "state": "available",
+                "unit": "fraction",
+                "origin": "derived",
+                "numerator": 0.9,
+                "denominator": 1,
+                "population_ref": "leaves",
+                "method": "fasttree_sh_like",
+                "evidence": [
+                  {
+                    "content": {
+                      "artifact_ref": "declaration",
+                      "artifact_field": "artifact_ref",
+                      "source_ref": "source:declaration",
+                      "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                      "byte_count": 23
+                    },
+                    "pointer": ""
+                  }
+                ],
+                "requirement_ids": []
+              }
+            },
+            {
+              "node_index": 2,
+              "split_id": null,
+              "length": {
+                "value": 1.0,
+                "state": "available",
+                "unit": "expected_substitutions_per_model_site",
+                "origin": "native_fitted",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "leaves",
+                "method": "native_branch_length",
+                "evidence": [
+                  {
+                    "content": {
+                      "artifact_ref": "declaration",
+                      "artifact_field": "artifact_ref",
+                      "source_ref": "source:declaration",
+                      "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                      "byte_count": 23
+                    },
+                    "pointer": ""
+                  }
+                ],
+                "requirement_ids": []
+              },
+              "native_support_observation_ids": [],
+              "support_method": "native_unknown",
+              "support_scale": "native_unknown",
+              "support_rescaled": {
+                "value": null,
+                "state": "not_measured",
+                "unit": "fraction",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "leaves",
+                "method": "native_unknown",
+                "evidence": [],
+                "requirement_ids": []
+              }
+            },
+            {
+              "node_index": 3,
+              "split_id": null,
+              "length": {
+                "value": 2.0,
+                "state": "available",
+                "unit": "expected_substitutions_per_model_site",
+                "origin": "native_fitted",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "leaves",
+                "method": "native_branch_length",
+                "evidence": [
+                  {
+                    "content": {
+                      "artifact_ref": "declaration",
+                      "artifact_field": "artifact_ref",
+                      "source_ref": "source:declaration",
+                      "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                      "byte_count": 23
+                    },
+                    "pointer": ""
+                  }
+                ],
+                "requirement_ids": []
+              },
+              "native_support_observation_ids": [],
+              "support_method": "native_unknown",
+              "support_scale": "native_unknown",
+              "support_rescaled": {
+                "value": null,
+                "state": "not_measured",
+                "unit": "fraction",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "leaves",
+                "method": "native_unknown",
+                "evidence": [],
+                "requirement_ids": []
+              }
+            },
+            {
+              "node_index": 4,
+              "split_id": "gene#tree_document/tree/0/split/2,3",
+              "length": {
+                "value": 6.0,
+                "state": "available",
+                "unit": "expected_substitutions_per_model_site",
+                "origin": "native_fitted",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "leaves",
+                "method": "native_branch_length",
+                "evidence": [
+                  {
+                    "content": {
+                      "artifact_ref": "declaration",
+                      "artifact_field": "artifact_ref",
+                      "source_ref": "source:declaration",
+                      "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                      "byte_count": 23
+                    },
+                    "pointer": ""
+                  }
+                ],
+                "requirement_ids": []
+              },
+              "native_support_observation_ids": [],
+              "support_method": "native_unknown",
+              "support_scale": "native_unknown",
+              "support_rescaled": {
+                "value": null,
+                "state": "not_measured",
+                "unit": "fraction",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "leaves",
+                "method": "native_unknown",
+                "evidence": [],
+                "requirement_ids": []
+              }
+            },
+            {
+              "node_index": 5,
+              "split_id": null,
+              "length": {
+                "value": 4.0,
+                "state": "available",
+                "unit": "expected_substitutions_per_model_site",
+                "origin": "native_fitted",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "leaves",
+                "method": "native_branch_length",
+                "evidence": [
+                  {
+                    "content": {
+                      "artifact_ref": "declaration",
+                      "artifact_field": "artifact_ref",
+                      "source_ref": "source:declaration",
+                      "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                      "byte_count": 23
+                    },
+                    "pointer": ""
+                  }
+                ],
+                "requirement_ids": []
+              },
+              "native_support_observation_ids": [],
+              "support_method": "native_unknown",
+              "support_scale": "native_unknown",
+              "support_rescaled": {
+                "value": null,
+                "state": "not_measured",
+                "unit": "fraction",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "leaves",
+                "method": "native_unknown",
+                "evidence": [],
+                "requirement_ids": []
+              }
+            },
+            {
+              "node_index": 6,
+              "split_id": null,
+              "length": {
+                "value": 5.0,
+                "state": "available",
+                "unit": "expected_substitutions_per_model_site",
+                "origin": "native_fitted",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "leaves",
+                "method": "native_branch_length",
+                "evidence": [
+                  {
+                    "content": {
+                      "artifact_ref": "declaration",
+                      "artifact_field": "artifact_ref",
+                      "source_ref": "source:declaration",
+                      "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                      "byte_count": 23
+                    },
+                    "pointer": ""
+                  }
+                ],
+                "requirement_ids": []
+              },
+              "native_support_observation_ids": [],
+              "support_method": "native_unknown",
+              "support_scale": "native_unknown",
+              "support_rescaled": {
+                "value": null,
+                "state": "not_measured",
+                "unit": "fraction",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "leaves",
+                "method": "native_unknown",
+                "evidence": [],
+                "requirement_ids": []
+              }
+            }
+          ],
+          "distances": [
+            {
+              "node_a": 2,
+              "node_b": 3,
+              "value": {
+                "value": 3.0,
+                "state": "available",
+                "unit": "expected_substitutions_per_model_site",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "leaves",
+                "method": "patristic_distance",
+                "evidence": [],
+                "requirement_ids": []
+              }
+            }
+          ]
+        },
+        "requirements": [],
+        "diagnostics": []
+      },
+      {
+        "request_id": "relationship_comparison",
+        "kind": "relationship_comparison",
+        "status": "ok",
+        "value": {
+          "comparison_id": "comparison",
+          "matched_tip_pairs": [
+            {
+              "gene_tree_id": "gene#tree_document/tree/0",
+              "gene_node_index": 2,
+              "organismal_tree_id": "organismal#tree_document/tree/0",
+              "organismal_node_index": 2,
+              "subject": {
+                "kind": "genome",
+                "id": "a",
+                "source_record_id": "genome:a"
+              },
+              "evidence": [
+                {
+                  "content": {
+                    "artifact_ref": "declaration",
+                    "artifact_field": "artifact_ref",
+                    "source_ref": "source:declaration",
+                    "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                    "byte_count": 23
+                  },
+                  "pointer": ""
+                }
+              ]
+            },
+            {
+              "gene_tree_id": "gene#tree_document/tree/0",
+              "gene_node_index": 3,
+              "organismal_tree_id": "organismal#tree_document/tree/0",
+              "organismal_node_index": 5,
+              "subject": {
+                "kind": "genome",
+                "id": "b",
+                "source_record_id": "genome:b"
+              },
+              "evidence": [
+                {
+                  "content": {
+                    "artifact_ref": "declaration",
+                    "artifact_field": "artifact_ref",
+                    "source_ref": "source:declaration",
+                    "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                    "byte_count": 23
+                  },
+                  "pointer": ""
+                }
+              ]
+            },
+            {
+              "gene_tree_id": "gene#tree_document/tree/0",
+              "gene_node_index": 5,
+              "organismal_tree_id": "organismal#tree_document/tree/0",
+              "organismal_node_index": 3,
+              "subject": {
+                "kind": "genome",
+                "id": "c",
+                "source_record_id": "genome:c"
+              },
+              "evidence": [
+                {
+                  "content": {
+                    "artifact_ref": "declaration",
+                    "artifact_field": "artifact_ref",
+                    "source_ref": "source:declaration",
+                    "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                    "byte_count": 23
+                  },
+                  "pointer": ""
+                }
+              ]
+            },
+            {
+              "gene_tree_id": "gene#tree_document/tree/0",
+              "gene_node_index": 6,
+              "organismal_tree_id": "organismal#tree_document/tree/0",
+              "organismal_node_index": 6,
+              "subject": {
+                "kind": "genome",
+                "id": "d",
+                "source_record_id": "genome:d"
+              },
+              "evidence": [
+                {
+                  "content": {
+                    "artifact_ref": "declaration",
+                    "artifact_field": "artifact_ref",
+                    "source_ref": "source:declaration",
+                    "sha256": "71ecaa7bfbb69d07e901c7d49234029237e6f6ae6b703263c2b7e2331ab901db",
+                    "byte_count": 23
+                  },
+                  "pointer": ""
+                }
+              ]
+            }
+          ],
+          "omitted_gene_tips": [],
+          "omitted_organismal_tips": [],
+          "matched_tips": {
+            "value": 4,
+            "state": "available",
+            "unit": "tips",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "comparison",
+            "method": "explicit_matched_tip_count",
+            "evidence": [],
+            "requirement_ids": []
+          },
+          "gene_splits": {
+            "value": 1,
+            "state": "available",
+            "unit": "splits",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "comparison",
+            "method": "restricted_gene_nontrivial_unrooted_splits",
+            "evidence": [],
+            "requirement_ids": []
+          },
+          "organismal_splits": {
+            "value": 1,
+            "state": "available",
+            "unit": "splits",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "comparison",
+            "method": "restricted_organismal_nontrivial_unrooted_splits",
+            "evidence": [],
+            "requirement_ids": []
+          },
+          "shared_splits": {
+            "value": 0,
+            "state": "available",
+            "unit": "splits",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "comparison",
+            "method": "shared_nontrivial_unrooted_splits",
+            "evidence": [],
+            "requirement_ids": []
+          },
+          "rf": {
+            "value": 2,
+            "state": "available",
+            "unit": "splits",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "comparison",
+            "method": "unrooted_robinson_foulds",
+            "evidence": [],
+            "requirement_ids": []
+          },
+          "rf_fraction": {
+            "value": 1.0,
+            "state": "available",
+            "unit": "fraction",
+            "origin": "derived",
+            "numerator": 2,
+            "denominator": 2,
+            "population_ref": "comparison",
+            "method": "unrooted_robinson_foulds_fraction",
+            "evidence": [],
+            "requirement_ids": []
+          },
+          "restricted_gene_splits": [
+            {
+              "split_id": "comparison/gene/split/2,3",
+              "tree_id": "gene#tree_document/tree/0",
+              "side_node_indices": [
+                2,
+                3
+              ],
+              "complement_node_indices": [
+                5,
+                6
+              ],
+              "edge_node_indices": [
+                1,
+                4
+              ]
+            }
+          ],
+          "restricted_organismal_splits": [
+            {
+              "split_id": "comparison/organismal/split/2,3",
+              "tree_id": "organismal#tree_document/tree/0",
+              "side_node_indices": [
+                2,
+                3
+              ],
+              "complement_node_indices": [
+                5,
+                6
+              ],
+              "edge_node_indices": [
+                1,
+                4
+              ]
+            }
+          ],
+          "shared_split_pairs": []
+        },
+        "requirements": [],
+        "diagnostics": []
+      }
+    ],
+    "requirements": [],
+    "diagnostics": []
+  },
+  "changed_components": null
+}

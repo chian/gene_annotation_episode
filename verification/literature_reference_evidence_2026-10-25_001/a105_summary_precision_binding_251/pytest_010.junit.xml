@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="19.827" timestamp="2026-10-28T03:49:19.972800-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_explicit_all_thirty_cells_keep_source_scenario_and_component_identities" time="15.124" /><testcase classname="tests.test_literature_kinetic_summary_precision_binding_251" name="test_parent_history_admitted_subset_does_not_expand_owner_rows_or_recipe" time="3.526"><failure message="AssertionError: assert ('mean_standard_error' in '\nOwn action yields\n\nNone supplied.\n\nRequested information; continue this decision\n\n| Field | Supplied value |\...mmary contribution; they are not additional experiments. Shared calibration and systematic uncertainty remain unknown.' and 'reported_sd' not in '\nOwn actio...ain unknown.'&#10;  &#10;  'reported_sd' is contained here:&#10;    upported; reported_sd_summarizes_counted_preparation_estimates=source_supported; sample_sd_n_minus_one=source_supported; iid_common_mean_finite_variance=source_supported | sample_sd_n_minus_one, iid_common_mean_finite_variance |  |&#10;  ?           +++++++++++&#10;    &#10;    Summary precision meaning&#10;    &#10;    Sample-derived variance and SE estimate random mean precision. Source facts and explicit scenarios remain separate. SD, counts, variance, SE and interval parameters describe dependent views of one summary contribution; they are not additional experiments. Shared calibration and systematic uncertainty remain unknown.)">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_summary_precision_binding_251/attempt_010/test_parent_history_admitted_s0')
+
+    def test_parent_history_admitted_subset_does_not_expand_owner_rows_or_recipe(tmp_path):
+        store, ctx, args, binding, _ = setup(tmp_path/'state')
+        try:
+            _, out, rows = selected(store, ctx, args, binding)
+            history = {'status': 'completed', 'result': {'view': 'records', 'records': [{
+                'selection': {'kind': 'tool', 'tool': 'literature.kinetic.populate', 'arguments': args},
+                'outcome': out, 'admitted_report': {'precision': rows[:1]}}]}}
+            state = {'literature_experimental_work': {'version': 'literature_experimental_task_v1', 'aspect': 'source_experimental_evidence'},
+                'working_state': {}, 'literature_assignment': {REQUESTED: SELECTED[:1]}}
+            text = render_literature_experimental_prompt(state, 'Assess only admitted precision.', lookup_results=[history])
+            steering = text.split('\n\nSTEERING\n')[1]
+&gt;           assert 'mean_standard_error' in steering and 'reported_sd' not in steering
+E           AssertionError: assert ('mean_standard_error' in '\nOwn action yields\n\nNone supplied.\n\nRequested information; continue this decision\n\n| Field | Supplied value |\...mmary contribution; they are not additional experiments. Shared calibration and systematic uncertainty remain unknown.' and 'reported_sd' not in '\nOwn actio...ain unknown.'
+E             
+E             'reported_sd' is contained here:
+E               upported; reported_sd_summarizes_counted_preparation_estimates=source_supported; sample_sd_n_minus_one=source_supported; iid_common_mean_finite_variance=source_supported | sample_sd_n_minus_one, iid_common_mean_finite_variance |  |
+E             ?           +++++++++++
+E               
+E               Summary precision meaning
+E               
+E               Sample-derived variance and SE estimate random mean precision. Source facts and explicit scenarios remain separate. SD, counts, variance, SE and interval parameters describe dependent views of one summary contribution; they are not additional experiments. Shared calibration and systematic uncertainty remain unknown.)
+
+tests/test_literature_kinetic_summary_precision_binding_251.py:406: AssertionError</failure></testcase></testsuite></testsuites>

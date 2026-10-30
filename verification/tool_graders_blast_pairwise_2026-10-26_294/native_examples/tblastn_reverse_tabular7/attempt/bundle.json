@@ -1,0 +1,236 @@
+{
+  "artifacts": [
+    {
+      "format": "text",
+      "relative_path": "stdout.txt",
+      "role": "stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "format": "text",
+      "relative_path": "stderr.txt",
+      "role": "stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "format": "tabular7",
+      "relative_path": "report.tsv",
+      "role": "primary_report",
+      "sha256": "715b804d311792fa2c8d9ca70e0460f590599a3f722434f22b2034029f2416db",
+      "size_bytes": 801
+    }
+  ],
+  "environment": {
+    "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastn_reverse_tabular7/attempt/tmp",
+    "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastn_reverse_tabular7/attempt/tmp",
+    "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastn_reverse_tabular7/attempt/tmp",
+    "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastn_reverse_tabular7/attempt/cache"
+  },
+  "failures": [],
+  "finished_at": "2026-10-26T13:18:06.305219+00:00",
+  "identity": {
+    "attempt_id": "tblastn_reverse_tabular7",
+    "episode_id": "explicit-example-selection",
+    "execution_id": "tblastn_reverse_tabular7",
+    "operation_key": "selected:tblastn_reverse_tabular7",
+    "requested_job_sha256": "a6e87dcf1f6a96433c1ea6ea932fcde03cd3a5e9caf2b3cc4e2716973bf0bc47",
+    "resource_id": "local",
+    "run_id": "verification294"
+  },
+  "inputs": [
+    {
+      "actual_sha256": "144e5f4e23c9a4dbd91ec74ab943a92cf849c2b8a6bd6ce29b66a9e9d0c24a17",
+      "artifact_ref": null,
+      "expected_sha256": "144e5f4e23c9a4dbd91ec74ab943a92cf849c2b8a6bd6ce29b66a9e9d0c24a17",
+      "expected_size_bytes": 104,
+      "format": "fasta",
+      "original_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastn_reverse_tabular7/query_sequence.fa",
+      "relative_path": "inputs/query_sequence.fa",
+      "role": "query_sequence",
+      "size_bytes": 104
+    },
+    {
+      "actual_sha256": "37d0559961138e6d2ad59faafc6e59377f431be229905bb14bbe38b1e318551c",
+      "artifact_ref": null,
+      "expected_sha256": "37d0559961138e6d2ad59faafc6e59377f431be229905bb14bbe38b1e318551c",
+      "expected_size_bytes": 269,
+      "format": "fasta",
+      "original_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastn_reverse_tabular7/subject_sequence.fa",
+      "relative_path": "inputs/subject_sequence.fa",
+      "role": "subject_sequence",
+      "size_bytes": 269
+    }
+  ],
+  "mode": "pairwise",
+  "operand_bindings": [
+    {
+      "native_accession": null,
+      "native_name": "query_tblastn_reverse",
+      "operand_role": "query_sequence",
+      "record_ordinal": 0,
+      "reference_ref": null,
+      "subject_ref": "query_subject"
+    },
+    {
+      "native_accession": null,
+      "native_name": "subject_tblastn_reverse",
+      "operand_role": "subject_sequence",
+      "record_ordinal": 0,
+      "reference_ref": "paired_reference",
+      "subject_ref": null
+    }
+  ],
+  "program": "tblastn",
+  "realized_argv": [
+    "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/tblastn",
+    "-db_gencode",
+    "11",
+    "-seg",
+    "no",
+    "-num_threads",
+    "1",
+    "-query",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastn_reverse_tabular7/attempt/inputs/query_sequence.fa",
+    "-subject",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastn_reverse_tabular7/attempt/inputs/subject_sequence.fa",
+    "-outfmt",
+    "7 qseqid sseqid qlen slen qstart qend sstart send qframe sframe length nident gaps mismatch score bitscore evalue qseq sseq btop",
+    "-out",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastn_reverse_tabular7/attempt/report.tsv"
+  ],
+  "requested_job": {
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/tblastn",
+      "-db_gencode",
+      "11",
+      "-seg",
+      "no",
+      "-num_threads",
+      "1",
+      "-query",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastn_reverse_tabular7/query_sequence.fa",
+      "-subject",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastn_reverse_tabular7/subject_sequence.fa",
+      "-outfmt",
+      "7 qseqid sseqid qlen slen qstart qend sstart send qframe sframe length nident gaps mismatch score bitscore evalue qseq sseq btop",
+      "-out",
+      "report.tsv"
+    ],
+    "environment": {},
+    "native_blast": {
+      "environment": {},
+      "grading_parameters": {},
+      "metadata": {
+        "engineering_example": "tblastn_reverse_tabular7",
+        "input_kind": "synthetic_derivative_of_retained_public_sequence"
+      },
+      "mode": "pairwise",
+      "operand_bindings": [
+        {
+          "native_accession": null,
+          "native_name": "query_tblastn_reverse",
+          "operand_role": "query_sequence",
+          "record_ordinal": 0,
+          "reference_ref": null,
+          "subject_ref": "query_subject"
+        },
+        {
+          "native_accession": null,
+          "native_name": "subject_tblastn_reverse",
+          "operand_role": "subject_sequence",
+          "record_ordinal": 0,
+          "reference_ref": "paired_reference",
+          "subject_ref": null
+        }
+      ],
+      "operands": [
+        {
+          "artifact_ref": null,
+          "format": "fasta",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastn_reverse_tabular7/query_sequence.fa",
+          "role": "query_sequence",
+          "sha256": "144e5f4e23c9a4dbd91ec74ab943a92cf849c2b8a6bd6ce29b66a9e9d0c24a17",
+          "size_bytes": 104
+        },
+        {
+          "artifact_ref": null,
+          "format": "fasta",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/tblastn_reverse_tabular7/subject_sequence.fa",
+          "role": "subject_sequence",
+          "sha256": "37d0559961138e6d2ad59faafc6e59377f431be229905bb14bbe38b1e318551c",
+          "size_bytes": 269
+        }
+      ],
+      "options": [
+        "-db_gencode",
+        "11",
+        "-seg",
+        "no",
+        "-num_threads",
+        "1"
+      ],
+      "outputs": [
+        {
+          "delimiter": null,
+          "fields": null,
+          "format": "text",
+          "relative_path": "stdout.txt",
+          "role": "stdout"
+        },
+        {
+          "delimiter": null,
+          "fields": null,
+          "format": "text",
+          "relative_path": "stderr.txt",
+          "role": "stderr"
+        },
+        {
+          "delimiter": "\t",
+          "fields": [
+            "qseqid",
+            "sseqid",
+            "qlen",
+            "slen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "qframe",
+            "sframe",
+            "length",
+            "nident",
+            "gaps",
+            "mismatch",
+            "score",
+            "bitscore",
+            "evalue",
+            "qseq",
+            "sseq",
+            "btop"
+          ],
+          "format": "tabular7",
+          "relative_path": "report.tsv",
+          "role": "primary_report"
+        }
+      ],
+      "program": "tblastn",
+      "software": {
+        "engine_version": "2.17.0+",
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/tblastn",
+        "sha256": "fea14b77d4452a524a003196824f414812126bd3fb64d950feec8bacccf4976c"
+      },
+      "version": "native_blast_job_v1"
+    }
+  },
+  "returncode": 0,
+  "software": {
+    "actual_sha256": "fea14b77d4452a524a003196824f414812126bd3fb64d950feec8bacccf4976c",
+    "declared_engine_version": "2.17.0+",
+    "executable": "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/tblastn",
+    "expected_sha256": "fea14b77d4452a524a003196824f414812126bd3fb64d950feec8bacccf4976c"
+  },
+  "started_at": "2026-10-26T13:18:05.817066+00:00",
+  "version": "native_blast_bundle_v1"
+}

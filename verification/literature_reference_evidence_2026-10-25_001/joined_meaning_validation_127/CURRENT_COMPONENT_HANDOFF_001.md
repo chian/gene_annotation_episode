@@ -1,0 +1,36 @@
+# Experimental reference-component handoff: snapshot127
+
+This describes the implemented interfaces captured in `pin_001`. It is a handoff artifact requested by the fixed literature goal, not a replacement goal, amendment, adopted scoring policy or completion claim. Later125/126/128 changes require their own evidence. `PIN_MANIFEST_001.json` identifies all2,041 files; `RESULT_001.json` records18 passing joined engineering checks and unchanged snapshot bytes.
+
+## What can be received
+
+`FROZEN_FACT_CONTRACTS_001.json` contains the actual closed typed fact contracts and their scientific meanings, generated from the pinned `LiteratureEpisodes._rate_fact_sources`. `FROZEN_POPULATION_CONTRACTS_001.json` contains the actual population-operation argument schemas/descriptions, including the three explicitly enabled optional profiles. These contain24 return views and22 population operations. Those are API counts, not counts of scoring sheets, assay graders, independent experiments or evidence axes. Several views describe the same numerical sheet.
+
+| Responsibility | Available component contracts in this snapshot | Interpretation and boundary |
+| --- | --- | --- |
+| A105 molecular activity | Rate/table/native-domain, assay correction, single quantity, amount, optical, kinetic, binding parameter/model/interaction, transport-response, relative-signal, graph and optional controlled-response/gel views | Native measurements and conditional calculations retain their own endpoint, calibration, normalization, model and uncertainty meanings. Optical depletion, gel signal and coupled-product differences do not by themselves identify isolated molecular activity. Dependent transforms are not additional experiments. |
+| A106 perturbation/restoration | `literature_perturbation_cells`, `literature_perturbation_summary_cells` | Reference/perturbed/restored outcomes; difference, symmetric effect, restoration fraction/agreement, one nuisance-amount comparison and supplied effect-isolation bounds. Summary extension retains descriptive statistics and conditional mean-variance/covariance calculations. Full source-index uncertainty is unimplemented. Covariance interpretation custody remains a demonstrated gap, tracked by122audit and128workload. |
+| A111 experimental structure | `literature_structure_cells` | Conditional deposited-model geometry and matching local validation. This does not establish population occupancy, causal mechanism or target structural correspondence. |
+| A108 organism/sample compatibility | `literature_context_cells`, `literature_context_semantic_cells` | The same15 numerical components distinguish existential capability from defined-sample coverage. Named requirements/routes retain their domains, biological meanings and exact membership. Native positive source-context extraction and separately requested observations are unfinished126work. |
+| A110 reaction/resource constraints | `literature_reaction_cells` | The15 components describe ratio errors/comparison and a stated fixed-consumption budget. Supplied reagent coverage differs from native usable capacity. Named prediction/resource return repair125 and native report extraction are outside this snapshot. |
+| Experimental partner facts for later A107 use | `literature_partner_cells` | Conditional removal/addback rates, loss and restoration fractions preserve actual measured operand subjects and conditions. This supplies experimental partner information, without genomic-presence or coexpression grading. |
+
+## How the existing boundary works
+
+The assigning parent chooses the question, scope, original closed form and requested components. A selected existing literature operation records its extraction, numerical sheet, experimental bindings, original request and outcome. The ordinary child return supplies only the admitted component selection and its declared scientific metadata. Separate received-view receipts constrain later use and forwarding; possessing a sheet identifier does not grant unreturned component values or scientific source access.
+
+The receiving episode resolves scientific labels only from records actually received within scope. Persistent references preserve custody and relationships; their existence is not evidence that their source contents were read. Saved reconstruction uses committed payloads, requests and receipts rather than reacquiring a paper or rerunning a reader/calculator. The joined18-check selection exercises original typed delivery, parent/child decisions, strict subsets, statistical qualifiers and read-only reconstruction with forbidden source/model/mutation callbacks. These are scripted engineering cases, not a live-model scientific demonstration.
+
+## Quantities available for later combination
+
+For the finite A106 source product, the defined proposal is `orientation * symmetric_effect * restoration_agreement * amount_comparability * effect_isolation`. Missing required factors leave it unknown. `restoration_fraction_raw` preserves overshoot separately; no target-correspondence factor is supplied or assumed. A105 aspect-specific calculations retain their own explicit formula codes and conditional models in the closed contracts and saved sheets; there is no universal paper-quality average.
+
+Later target-to-reference correspondence and annotation-credit work remain separate owners. The handoff preserves the actual assayed molecule/construct, endpoint, conditions, normalization, uncertainty, source identity and missing reasons available in each contract. It supplies no alignment multiplier, target-transfer weight, final aggregation, hypervolume change or investigation reward. Numerical cells derived from a common measurement, baseline, fitted curve, calibration or source representation remain dependent. Where the selected public view does not expose enough dependency information, that relationship remains unresolved until appropriately requested; it cannot be inferred from equal values, different record IDs or publication counts.
+
+Reported, graph-derived, calculated, proposed and synthetic origins remain distinct. Unknown is not zero; nondetection is not exact absence. Logical domains, digitization constraints, SD/SEM and confidence intervals retain their different meanings. The later consumer receives these qualifications with the actual numbers rather than converting a missing calculation into a categorical confidence grade.
+
+## Evidence and outstanding work
+
+The earlier116/117/119 composition has213 unique passing test IDs across124's original185 passing checks and its final28-check tail, with zero overlap; its initial stale-test failure and both terminal generations remain recorded. Snapshot127 independently establishes18 focused joined checks for121partner binding,122statistical basis and missing amount unit, and123context meanings. Neither proof covers later125/126/128 production changes.
+
+The fixed goal remains incomplete. The native A108/A110 report paths, A110 scientific-meaning repair, A106 covariance-meaning custody, affected joined validation and a final requirement-by-requirement completion audit remain outstanding. Existing fixtures, primary-byte examples and actual model-backed literature traces require their own stated evidence; these engineering results do not substitute for them.

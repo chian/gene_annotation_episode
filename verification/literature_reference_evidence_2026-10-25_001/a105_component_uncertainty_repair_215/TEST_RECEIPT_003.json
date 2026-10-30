@@ -1,0 +1,32 @@
+{
+  "scope": "Post-correction targeted engineering checks; earlier receipts unchanged",
+  "frozen_manifest": "FINAL_CODE_HASHES_002.json",
+  "final_hashes_verified_after_tests": true,
+  "completed_groups": [
+    {
+      "command": ".venv/bin/python -m pytest tests/test_literature_compiled_assay_uncertainty_215.py::test_selected_large_integer_covariance_symmetry_before_float_projection -q --junitxml=.../SYMMETRY_TESTS_002.xml",
+      "passed": 2,
+      "seconds": 21.08,
+      "coverage": [
+        "Actual selected-operation exact asymmetric integer rejection with existing failure code",
+        "Exactly symmetric large integer acceptance, exact typed form, retained covariance and Fraction oracle"
+      ]
+    },
+    {
+      "command": ".venv/bin/python -m pytest tests/test_literature_compiled_assay_uncertainty_215.py::test_v1_defaults_and_original_record_do_not_promote_to_v2 tests/test_literature_compiled_assay_uncertainty_215.py::test_exact_mixed_v1_v2_declarations_preserve_original_snapshot_without_factories -q --junitxml=.../COMPATIBILITY_TESTS_002.xml",
+      "passed": 2,
+      "seconds": 9.42,
+      "coverage": [
+        "Original exact v1 schema snapshots and record replay",
+        "V1/v2 mixed original declaration with current fact factories blocked"
+      ]
+    }
+  ],
+  "distinct_post_correction_cases": 4,
+  "earlier298_case_receipts_not_rewritten_or_claimed_as_new_runs": true,
+  "root220_pin001_preserved": true,
+  "root_newpin002_cold_compatibility_run": "Pending separate root verification; not claimed performed by this correction",
+  "scope_gap_recorded_not_fixed": "Broad assay_meanings context quotes can carry unrequested numbers; CORRECTION_002.md qualifies original scope statement",
+  "saved_schemas_or_values_rewritten": false,
+  "actual_model_or_paper_science": false
+}

@@ -1,0 +1,23 @@
+--- pin_002/gene_annotation_episode/literature_endpoint_signal_render.py
++++ pin_005/gene_annotation_episode/literature_endpoint_signal_render.py
+@@ -53,6 +53,13 @@
+     return (bool(list(rows_from_values(outcome))) or result.get('information_kind') == 'return_contract_information_v1'
+         and result.get('source') == NAMESPACE or result.get('information_kind') == 'operation_contract_information_v1'
+         and result.get('operation') == 'literature.figure.populate')
++
++
++def endpoint_history_record(record):
++    selection = record.get('selection') if isinstance(record, Mapping) else None
++    arguments = selection.get('arguments') if isinstance(selection, Mapping) else None
++    return (isinstance(selection, Mapping) and selection.get('tool') == 'literature.figure.populate'
++        and isinstance(arguments, Mapping) and arguments.get('version') == 'literature_figure_endpoint_signal_population_v1')
+ 
+ 
+ def hidden_records(rows, records, bindings=None):
+@@ -154,4 +161,5 @@
+ 
+ 
+ __all__ = ['ENDPOINT_SIGNAL_TASK', 'is_row', 'rows_from_values', 'rows_from_reports', 'task_relevant',
+-    'legacy_task_relevant', 'lookup_relevant', 'hidden_records', 'render_received', 'state_view', 'sanitize_private']
++    'legacy_task_relevant', 'lookup_relevant', 'hidden_records', 'render_received', 'state_view', 'sanitize_private',
++    'endpoint_history_record']

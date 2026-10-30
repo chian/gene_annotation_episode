@@ -1,0 +1,148 @@
+{
+  "status": "Proposed for root review; no production integration",
+  "constructor_new_keywords": {
+    "ratio_source_population": {
+      "type": "boolean",
+      "default": false,
+      "requires_when_true": {
+        "rate_population": true
+      }
+    },
+    "ratio_source_evidence_origin": {
+      "type": "string",
+      "enum": [
+        "reported_source",
+        "synthetic_fixture"
+      ],
+      "default": "reported_source",
+      "owner": "caller only",
+      "nondefault_requires_opt_in": true
+    }
+  },
+  "operation": {
+    "name": "literature.ratio.source.populate",
+    "description": "Read the selected source-reported relative signal from exact JATS percentage syntax or literal nominations in this episode's own native image views. Preserve actual subject, constructs, organism, conditions, arrangement, endpoint, normalization, joint numerator/reference alternatives, source association and physical identity. Pair division requires a supported common scale. Candidates, censor domains and unresolved selected representations remain explicit; ratio/difference/log are dependent descriptions. Numeric uncertainty, calibrated amount, functional-response and observation-model readers remain unimplemented here, not paper-level absence findings. No OCR, densitometry, target transfer or annotation credit.",
+    "schema_file": "REQUEST_SCHEMA_001.json",
+    "argument_transport_when_profile": "json_object_contract_information_v1"
+  },
+  "assignment_field": "requested_ratio_source_components",
+  "components": [
+    "reported_ratio",
+    "difference_from_reference",
+    "log_reported_ratio",
+    "calibrated_amount_ratio",
+    "amount_adjusted_effect",
+    "source_profile_log_ratio",
+    "source_signed_index"
+  ],
+  "namespace": "literature_ratio_source_cells",
+  "return_schema_file": "RETURN_SCHEMA_001.json",
+  "provider": "literature.experimental.relative_signal_source",
+  "source_record_version": "literature_relative_signal_source_record_v3",
+  "source_request_version": "relative_signal_source_selection_v2",
+  "extraction_version": "relative_signal_source_extraction_v3",
+  "sheet_version": "relative_signal_sheet_v2",
+  "calculation_version": "relative_signal_calculation_v2",
+  "service": "WorkflowServices.literature_ratio_source_repository(*, evidence_origin=\"reported_source\")",
+  "repository": "LiteratureRatioSourceRepository(store,run_id,*,evidence_origin=\"reported_source\")",
+  "descriptor": {
+    "binding_id": "literature",
+    "version": "literature_episode_binding_v1",
+    "enabled_configuration_addition": {
+      "ratio_source_population": true,
+      "ratio_source_evidence_origin": "reported_source"
+    },
+    "disabled_additional_configuration_keys": []
+  },
+  "new_prompt_marker": {
+    "literature_ratio_source_work": {
+      "version": "literature_ratio_source_task_v1"
+    }
+  },
+  "additional_production_file_proposed": "gene_annotation_episode/literature_reference_parent_prompt.py",
+  "internal_label_projection": {
+    "type": "object",
+    "properties": {
+      "version": {
+        "type": "string",
+        "const": "ratio_source_prompt_meanings_v1"
+      },
+      "sheets": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "sheet_ref": {
+              "type": "string"
+            },
+            "roles": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "role": {
+                    "type": "string",
+                    "enum": [
+                      "subject",
+                      "variant",
+                      "reference",
+                      "organism",
+                      "genotype",
+                      "construct_variant",
+                      "construct_reference",
+                      "preparation_variant",
+                      "preparation_reference",
+                      "experiment",
+                      "condition",
+                      "endpoint",
+                      "normalization"
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "known",
+                      "unknown",
+                      "conflicting"
+                    ]
+                  },
+                  "label": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "display_status": {
+                    "type": "string",
+                    "enum": [
+                      "supplied_definition",
+                      "retained_for_scoped_access",
+                      "unresolved_source_meaning"
+                    ]
+                  }
+                },
+                "required": [
+                  "role",
+                  "status",
+                  "label",
+                  "display_status"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "sheet_ref",
+            "roles"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "version",
+      "sheets"
+    ],
+    "additionalProperties": false
+  }
+}

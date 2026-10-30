@@ -1,0 +1,112 @@
+{
+  "id": "14_profile_delta",
+  "purpose": "Genuine retained upstream PSSM; explicit missing-required-input boundary; no invented fields",
+  "independently_selected_verification_helper": false,
+  "program": "makeprofiledb",
+  "argv": [
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/makeprofiledb",
+    "-in",
+    "profiles.list",
+    "-dbtype",
+    "delta",
+    "-out",
+    "profiles",
+    "-blastdb_version",
+    "5",
+    "-index",
+    "true",
+    "-threshold",
+    "9.82",
+    "-force",
+    "-max_smp_vol",
+    "2500"
+  ],
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/profile_delta",
+  "shell": false,
+  "executable": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/makeprofiledb",
+    "sha256": "d81da87fc0260ebea804fb8a36769a7d7ce8ee404bfd2dfb87da0c95036eff0a",
+    "size_bytes": 24818656
+  },
+  "input_bindings": [
+    {
+      "role": "selected_engineering_text_input",
+      "native_operand": "profiles.list",
+      "content_utf8": "profiles/pssm_freq_ratios.asn\n",
+      "staged": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/profile_delta/profiles.list",
+        "sha256": "0a9cdf447c2612a3baa04977130929744d135e95627286f63b5771cbe55b4fb8",
+        "size_bytes": 30
+      }
+    },
+    {
+      "role": "profile_input",
+      "list_ordinal": 0,
+      "original_list_token": "profiles/pssm_freq_ratios.asn",
+      "original": {
+        "url": "https://raw.githubusercontent.com/ncbi/ncbi-cxx-toolkit-public/d4d56d4aa4fe16964e54c8c101fb1ec631ec6c05/src/algo/blast/unit_tests/api/data/pssm_freq_ratios.asn",
+        "repository_path": "src/algo/blast/unit_tests/api/data/pssm_freq_ratios.asn",
+        "file": "verification/tool_graders_blast_pssm_2026-10-26_306/sources/pssm_freq_ratios.asn",
+        "bytes": 208617,
+        "sha256": "56bc1fdf3e1591254e5e031e4b3d84067525954093ab74e3b868a586b7aa613b"
+      },
+      "staged": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/profile_delta/profiles/pssm_freq_ratios.asn",
+        "sha256": "56bc1fdf3e1591254e5e031e4b3d84067525954093ab74e3b868a586b7aa613b",
+        "size_bytes": 208617
+      }
+    }
+  ],
+  "inventory_before": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/profile_delta/profiles/pssm_freq_ratios.asn",
+      "sha256": "56bc1fdf3e1591254e5e031e4b3d84067525954093ab74e3b868a586b7aa613b",
+      "size_bytes": 208617,
+      "relative_path": "profiles/pssm_freq_ratios.asn"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/profile_delta/profiles.list",
+      "sha256": "0a9cdf447c2612a3baa04977130929744d135e95627286f63b5771cbe55b4fb8",
+      "size_bytes": 30,
+      "relative_path": "profiles.list"
+    }
+  ],
+  "started": true,
+  "returncode": 1,
+  "launch_error": null,
+  "stdout": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/logs/14_profile_delta.stdout",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "size_bytes": 0
+  },
+  "stderr": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/logs/14_profile_delta.stderr",
+    "sha256": "cf10c821fff37116e5396bc81778ead8e512d3e74965b591e3768d57c451fb10",
+    "size_bytes": 119
+  },
+  "writer_closed": true,
+  "inventory_complete": true,
+  "captured_bytes_complete": true,
+  "native_status": "failed",
+  "semantic_compatibility": "unverified",
+  "inventory_after": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/profile_delta/profiles/pssm_freq_ratios.asn",
+      "sha256": "56bc1fdf3e1591254e5e031e4b3d84067525954093ab74e3b868a586b7aa613b",
+      "size_bytes": 208617,
+      "relative_path": "profiles/pssm_freq_ratios.asn"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/profile_delta/profiles.list",
+      "sha256": "0a9cdf447c2612a3baa04977130929744d135e95627286f63b5771cbe55b4fb8",
+      "size_bytes": 30,
+      "relative_path": "profiles.list"
+    }
+  ],
+  "new_files": [],
+  "changed_files": [],
+  "removed_files": [],
+  "stdout_utf8": "",
+  "stderr_utf8": "Error: INPUT ERROR: profiles/pssm_freq_ratios.asn contains no weighted residue frequencies for building delta database\n",
+  "native_text_outputs": []
+}

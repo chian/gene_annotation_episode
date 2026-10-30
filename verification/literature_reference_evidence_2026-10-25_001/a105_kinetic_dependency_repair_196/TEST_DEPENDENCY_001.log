@@ -1,0 +1,306 @@
+FFFFFF................                                                   [100%]
+=================================== FAILURES ===================================
+_______ test_authentic_original_v2_exact_readonly_reconstruction[point] ________
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1980/test_authentic_original_v2_exa0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x799b6ef131a0>
+case = 'point'
+
+    @pytest.mark.parametrize("case", ["point", "censored", "missing_unit", "model"])
+    def test_authentic_original_v2_exact_readonly_reconstruction(tmp_path, monkeypatch, case):
+        original = hashes(BASE)
+        snapshot = json.loads((BASE / f"{case}_SNAPSHOT.json").read_text())
+        assert snapshot.get("native_saved", snapshot["saved"])["version"] == "literature_kinetic_population_record_v2"
+        shutil.copytree(BASE / case, tmp_path / "state")
+>       check_saved(tmp_path / "state", snapshot, monkeypatch, model=case == "model")
+
+tests/test_literature_kinetic_dependency_binding_196.py:106: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-chia/pytest-1980/test_authentic_original_v2_exa0/state')
+snapshot = {'context': {'run_id': 'kinetic-run', 'episode_id': 'kinetic-child', 'role': 'literature', 'path': [['literature', 'ca...e039bcb871cd2cc4693b0dbf', 'reference_f27fe0442bcdc79d6c581db6', 'reference_18636de079cb5b1bb14b49d6', ...], ...}, ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x799b6ef131a0>
+model = False
+
+    def check_saved(path, snapshot, monkeypatch, *, model=False):
+        before = hashes(path)
+        with readonly(path) as store:
+            context, parent = BindingContext(**snapshot["context"]), BindingContext(**snapshot["parent"])
+            allowed = set()
+            for row in store.list("source"):
+                if row.get("provider") in ("literature.a105.kinetic_population", "literature.a105.kinetic_model_population"):
+                    allowed.update((row["artifact_ref"], row["request_ref"]))
+            forbid_science(monkeypatch, store, allowed)
+            repo = (LiteratureKineticModelRepository if model else LiteratureKineticRepository)(store, context.run_id)
+            assert repo.read(snapshot["sheet_ref"]) == snapshot["saved"]
+            request = json.loads(store.get_artifact(store.get(snapshot["sheet_ref"])["request_ref"]))
+            assert repo.populate(context, snapshot["arguments"], request["operation_key"]) == snapshot["outcome"]
+            assert repo.project_cells([snapshot["sheet_ref"]], permitted_record_refs=snapshot["outcome"]["record_refs"]) == snapshot["projected"]
+            assert repo.received_cells(parent) == snapshot["admitted"]
+>           assert repo.fact_cells(parent, [snapshot["sheet_ref"]]) == snapshot["admitted"]
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: LiteratureRateRepository.fact_cells() missing 1 required keyword-only argument: 'components'
+
+tests/test_literature_kinetic_dependency_binding_196.py:87: TypeError
+______ test_authentic_original_v2_exact_readonly_reconstruction[censored] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1980/test_authentic_original_v2_exa1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x799b6ef7fb60>
+case = 'censored'
+
+    @pytest.mark.parametrize("case", ["point", "censored", "missing_unit", "model"])
+    def test_authentic_original_v2_exact_readonly_reconstruction(tmp_path, monkeypatch, case):
+        original = hashes(BASE)
+        snapshot = json.loads((BASE / f"{case}_SNAPSHOT.json").read_text())
+        assert snapshot.get("native_saved", snapshot["saved"])["version"] == "literature_kinetic_population_record_v2"
+        shutil.copytree(BASE / case, tmp_path / "state")
+>       check_saved(tmp_path / "state", snapshot, monkeypatch, model=case == "model")
+
+tests/test_literature_kinetic_dependency_binding_196.py:106: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-chia/pytest-1980/test_authentic_original_v2_exa1/state')
+snapshot = {'context': {'run_id': 'kinetic-run', 'episode_id': 'kinetic-child', 'role': 'literature', 'path': [['literature', 'ca...f2037cbca724b84dcceb7876', 'reference_8c590d206575c5cf5e1e294c', 'reference_1a459b80f976d7ce87fff821', ...], ...}, ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x799b6ef7fb60>
+model = False
+
+    def check_saved(path, snapshot, monkeypatch, *, model=False):
+        before = hashes(path)
+        with readonly(path) as store:
+            context, parent = BindingContext(**snapshot["context"]), BindingContext(**snapshot["parent"])
+            allowed = set()
+            for row in store.list("source"):
+                if row.get("provider") in ("literature.a105.kinetic_population", "literature.a105.kinetic_model_population"):
+                    allowed.update((row["artifact_ref"], row["request_ref"]))
+            forbid_science(monkeypatch, store, allowed)
+            repo = (LiteratureKineticModelRepository if model else LiteratureKineticRepository)(store, context.run_id)
+            assert repo.read(snapshot["sheet_ref"]) == snapshot["saved"]
+            request = json.loads(store.get_artifact(store.get(snapshot["sheet_ref"])["request_ref"]))
+            assert repo.populate(context, snapshot["arguments"], request["operation_key"]) == snapshot["outcome"]
+            assert repo.project_cells([snapshot["sheet_ref"]], permitted_record_refs=snapshot["outcome"]["record_refs"]) == snapshot["projected"]
+            assert repo.received_cells(parent) == snapshot["admitted"]
+>           assert repo.fact_cells(parent, [snapshot["sheet_ref"]]) == snapshot["admitted"]
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: LiteratureRateRepository.fact_cells() missing 1 required keyword-only argument: 'components'
+
+tests/test_literature_kinetic_dependency_binding_196.py:87: TypeError
+____ test_authentic_original_v2_exact_readonly_reconstruction[missing_unit] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1980/test_authentic_original_v2_exa2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x799b6efefa40>
+case = 'missing_unit'
+
+    @pytest.mark.parametrize("case", ["point", "censored", "missing_unit", "model"])
+    def test_authentic_original_v2_exact_readonly_reconstruction(tmp_path, monkeypatch, case):
+        original = hashes(BASE)
+        snapshot = json.loads((BASE / f"{case}_SNAPSHOT.json").read_text())
+        assert snapshot.get("native_saved", snapshot["saved"])["version"] == "literature_kinetic_population_record_v2"
+        shutil.copytree(BASE / case, tmp_path / "state")
+>       check_saved(tmp_path / "state", snapshot, monkeypatch, model=case == "model")
+
+tests/test_literature_kinetic_dependency_binding_196.py:106: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-chia/pytest-1980/test_authentic_original_v2_exa2/state')
+snapshot = {'context': {'run_id': 'kinetic-run', 'episode_id': 'kinetic-child', 'role': 'literature', 'path': [['literature', 'ca...f27fe0442bcdc79d6c581db6', 'reference_18636de079cb5b1bb14b49d6', 'reference_cd90f430b12e33ac02aa4b03', ...], ...}, ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x799b6efefa40>
+model = False
+
+    def check_saved(path, snapshot, monkeypatch, *, model=False):
+        before = hashes(path)
+        with readonly(path) as store:
+            context, parent = BindingContext(**snapshot["context"]), BindingContext(**snapshot["parent"])
+            allowed = set()
+            for row in store.list("source"):
+                if row.get("provider") in ("literature.a105.kinetic_population", "literature.a105.kinetic_model_population"):
+                    allowed.update((row["artifact_ref"], row["request_ref"]))
+            forbid_science(monkeypatch, store, allowed)
+            repo = (LiteratureKineticModelRepository if model else LiteratureKineticRepository)(store, context.run_id)
+            assert repo.read(snapshot["sheet_ref"]) == snapshot["saved"]
+            request = json.loads(store.get_artifact(store.get(snapshot["sheet_ref"])["request_ref"]))
+            assert repo.populate(context, snapshot["arguments"], request["operation_key"]) == snapshot["outcome"]
+            assert repo.project_cells([snapshot["sheet_ref"]], permitted_record_refs=snapshot["outcome"]["record_refs"]) == snapshot["projected"]
+            assert repo.received_cells(parent) == snapshot["admitted"]
+>           assert repo.fact_cells(parent, [snapshot["sheet_ref"]]) == snapshot["admitted"]
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: LiteratureRateRepository.fact_cells() missing 1 required keyword-only argument: 'components'
+
+tests/test_literature_kinetic_dependency_binding_196.py:87: TypeError
+_______ test_authentic_original_v2_exact_readonly_reconstruction[model] ________
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1980/test_authentic_original_v2_exa3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x799b6ee4d790>
+case = 'model'
+
+    @pytest.mark.parametrize("case", ["point", "censored", "missing_unit", "model"])
+    def test_authentic_original_v2_exact_readonly_reconstruction(tmp_path, monkeypatch, case):
+        original = hashes(BASE)
+        snapshot = json.loads((BASE / f"{case}_SNAPSHOT.json").read_text())
+        assert snapshot.get("native_saved", snapshot["saved"])["version"] == "literature_kinetic_population_record_v2"
+        shutil.copytree(BASE / case, tmp_path / "state")
+>       check_saved(tmp_path / "state", snapshot, monkeypatch, model=case == "model")
+
+tests/test_literature_kinetic_dependency_binding_196.py:106: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-chia/pytest-1980/test_authentic_original_v2_exa3/state')
+snapshot = {'context': {'run_id': 'kinetic-run', 'episode_id': 'kinetic-child', 'role': 'literature', 'path': [['literature', 'ca...eb', ...], 'changed_record_refs': ['reference_267a2e237a322558269a3b35', 'source_9d388e53e8cf59b73f271e9f'], ...}, ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x799b6ee4d790>
+model = True
+
+    def check_saved(path, snapshot, monkeypatch, *, model=False):
+        before = hashes(path)
+        with readonly(path) as store:
+            context, parent = BindingContext(**snapshot["context"]), BindingContext(**snapshot["parent"])
+            allowed = set()
+            for row in store.list("source"):
+                if row.get("provider") in ("literature.a105.kinetic_population", "literature.a105.kinetic_model_population"):
+                    allowed.update((row["artifact_ref"], row["request_ref"]))
+            forbid_science(monkeypatch, store, allowed)
+            repo = (LiteratureKineticModelRepository if model else LiteratureKineticRepository)(store, context.run_id)
+            assert repo.read(snapshot["sheet_ref"]) == snapshot["saved"]
+            request = json.loads(store.get_artifact(store.get(snapshot["sheet_ref"])["request_ref"]))
+            assert repo.populate(context, snapshot["arguments"], request["operation_key"]) == snapshot["outcome"]
+            assert repo.project_cells([snapshot["sheet_ref"]], permitted_record_refs=snapshot["outcome"]["record_refs"]) == snapshot["projected"]
+            assert repo.received_cells(parent) == snapshot["admitted"]
+>           assert repo.fact_cells(parent, [snapshot["sheet_ref"]]) == snapshot["admitted"]
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: LiteratureRateRepository.fact_cells() missing 1 required keyword-only argument: 'components'
+
+tests/test_literature_kinetic_dependency_binding_196.py:87: TypeError
+___________ test_prospective_v3_exact_readonly_reconstruction[False] ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1980/test_prospective_v3_exact_read0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x799b6ee4e5a0>
+model = False
+
+    @pytest.mark.parametrize("model", [False, True])
+    def test_prospective_v3_exact_readonly_reconstruction(tmp_path, monkeypatch, model):
+        path = tmp_path / "state"
+        if model:
+            store, context, args, model_args, _, _ = setup_model(path)
+            repo, owner, args, outcome, native = populate(store, context, args, model_args)
+            native_saved = LiteratureKineticRepository(store, context.run_id).read(native["result"]["sheet_ref"])
+        else:
+            store, context, args = setup(path, kind="Km", unit="mM", n=".008", d=".002")
+            repo = LiteratureKineticRepository(store, context.run_id)
+            outcome = repo.populate(context, args, "selected-v3")
+            owner = replace(context, received_record_refs=(*context.received_record_refs, *outcome["record_refs"]))
+            native_saved = repo.read(outcome["result"]["sheet_ref"])
+        assert native_saved["version"] == "literature_kinetic_population_record_v3"
+        assert native_saved["extraction"]["version"] == "a105_kinetic_source_extraction_v3"
+        assert native_saved["calculation"]["cells"]["numerator_parameter"]["value"] == (20 if model else 8)
+        reference = outcome["result"]["sheet_ref"]
+        projected = repo.project_cells([reference], permitted_record_refs=outcome["record_refs"])
+        parent = replace(owner, episode_id="parent", role="annotation", path=(("annotation", "parent"),), assignment={})
+        admitted = [projected[-1]]
+        repo.receive_cells(parent, admitted, "trusted-current-admission")
+        snapshot = {"context": context.__dict__ if not model else owner.__dict__, "parent": parent.__dict__,
+                    "arguments": args, "outcome": outcome, "sheet_ref": reference,
+                    "saved": repo.read(reference), "projected": projected, "admitted": admitted}
+        if model:
+            snapshot.update(native_saved=native_saved, native_sheet_ref=native["result"]["sheet_ref"])
+        store.db.execute("PRAGMA wal_checkpoint(TRUNCATE)")
+        store.close()
+>       check_saved(path, snapshot, monkeypatch, model=model)
+
+tests/test_literature_kinetic_dependency_binding_196.py:138: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-chia/pytest-1980/test_prospective_v3_exact_read0/state')
+snapshot = {'context': {'run_id': 'kinetic-run', 'episode_id': 'kinetic-child', 'role': 'literature', 'path': (('literature', 'ca...e039bcb871cd2cc4693b0dbf', 'reference_f27fe0442bcdc79d6c581db6', 'reference_18636de079cb5b1bb14b49d6', ...], ...}, ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x799b6ee4e5a0>
+model = False
+
+    def check_saved(path, snapshot, monkeypatch, *, model=False):
+        before = hashes(path)
+        with readonly(path) as store:
+            context, parent = BindingContext(**snapshot["context"]), BindingContext(**snapshot["parent"])
+            allowed = set()
+            for row in store.list("source"):
+                if row.get("provider") in ("literature.a105.kinetic_population", "literature.a105.kinetic_model_population"):
+                    allowed.update((row["artifact_ref"], row["request_ref"]))
+            forbid_science(monkeypatch, store, allowed)
+            repo = (LiteratureKineticModelRepository if model else LiteratureKineticRepository)(store, context.run_id)
+            assert repo.read(snapshot["sheet_ref"]) == snapshot["saved"]
+            request = json.loads(store.get_artifact(store.get(snapshot["sheet_ref"])["request_ref"]))
+            assert repo.populate(context, snapshot["arguments"], request["operation_key"]) == snapshot["outcome"]
+            assert repo.project_cells([snapshot["sheet_ref"]], permitted_record_refs=snapshot["outcome"]["record_refs"]) == snapshot["projected"]
+            assert repo.received_cells(parent) == snapshot["admitted"]
+>           assert repo.fact_cells(parent, [snapshot["sheet_ref"]]) == snapshot["admitted"]
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: LiteratureRateRepository.fact_cells() missing 1 required keyword-only argument: 'components'
+
+tests/test_literature_kinetic_dependency_binding_196.py:87: TypeError
+___________ test_prospective_v3_exact_readonly_reconstruction[True] ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1980/test_prospective_v3_exact_read1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x799b6ee01820>
+model = True
+
+    @pytest.mark.parametrize("model", [False, True])
+    def test_prospective_v3_exact_readonly_reconstruction(tmp_path, monkeypatch, model):
+        path = tmp_path / "state"
+        if model:
+            store, context, args, model_args, _, _ = setup_model(path)
+            repo, owner, args, outcome, native = populate(store, context, args, model_args)
+            native_saved = LiteratureKineticRepository(store, context.run_id).read(native["result"]["sheet_ref"])
+        else:
+            store, context, args = setup(path, kind="Km", unit="mM", n=".008", d=".002")
+            repo = LiteratureKineticRepository(store, context.run_id)
+            outcome = repo.populate(context, args, "selected-v3")
+            owner = replace(context, received_record_refs=(*context.received_record_refs, *outcome["record_refs"]))
+            native_saved = repo.read(outcome["result"]["sheet_ref"])
+        assert native_saved["version"] == "literature_kinetic_population_record_v3"
+        assert native_saved["extraction"]["version"] == "a105_kinetic_source_extraction_v3"
+        assert native_saved["calculation"]["cells"]["numerator_parameter"]["value"] == (20 if model else 8)
+        reference = outcome["result"]["sheet_ref"]
+        projected = repo.project_cells([reference], permitted_record_refs=outcome["record_refs"])
+        parent = replace(owner, episode_id="parent", role="annotation", path=(("annotation", "parent"),), assignment={})
+        admitted = [projected[-1]]
+        repo.receive_cells(parent, admitted, "trusted-current-admission")
+        snapshot = {"context": context.__dict__ if not model else owner.__dict__, "parent": parent.__dict__,
+                    "arguments": args, "outcome": outcome, "sheet_ref": reference,
+                    "saved": repo.read(reference), "projected": projected, "admitted": admitted}
+        if model:
+            snapshot.update(native_saved=native_saved, native_sheet_ref=native["result"]["sheet_ref"])
+        store.db.execute("PRAGMA wal_checkpoint(TRUNCATE)")
+        store.close()
+>       check_saved(path, snapshot, monkeypatch, model=model)
+
+tests/test_literature_kinetic_dependency_binding_196.py:138: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/pytest-of-chia/pytest-1980/test_prospective_v3_exact_read1/state')
+snapshot = {'context': {'run_id': 'kinetic-run', 'episode_id': 'kinetic-child', 'role': 'literature', 'path': (('literature', 'ca...eb', ...], 'changed_record_refs': ['reference_267a2e237a322558269a3b35', 'source_2397cf36132e562c91c12512'], ...}, ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x799b6ee01820>
+model = True
+
+    def check_saved(path, snapshot, monkeypatch, *, model=False):
+        before = hashes(path)
+        with readonly(path) as store:
+            context, parent = BindingContext(**snapshot["context"]), BindingContext(**snapshot["parent"])
+            allowed = set()
+            for row in store.list("source"):
+                if row.get("provider") in ("literature.a105.kinetic_population", "literature.a105.kinetic_model_population"):
+                    allowed.update((row["artifact_ref"], row["request_ref"]))
+            forbid_science(monkeypatch, store, allowed)
+            repo = (LiteratureKineticModelRepository if model else LiteratureKineticRepository)(store, context.run_id)
+            assert repo.read(snapshot["sheet_ref"]) == snapshot["saved"]
+            request = json.loads(store.get_artifact(store.get(snapshot["sheet_ref"])["request_ref"]))
+            assert repo.populate(context, snapshot["arguments"], request["operation_key"]) == snapshot["outcome"]
+            assert repo.project_cells([snapshot["sheet_ref"]], permitted_record_refs=snapshot["outcome"]["record_refs"]) == snapshot["projected"]
+            assert repo.received_cells(parent) == snapshot["admitted"]
+>           assert repo.fact_cells(parent, [snapshot["sheet_ref"]]) == snapshot["admitted"]
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: LiteratureRateRepository.fact_cells() missing 1 required keyword-only argument: 'components'
+
+tests/test_literature_kinetic_dependency_binding_196.py:87: TypeError
+=========================== short test summary info ============================
+FAILED tests/test_literature_kinetic_dependency_binding_196.py::test_authentic_original_v2_exact_readonly_reconstruction[point]
+FAILED tests/test_literature_kinetic_dependency_binding_196.py::test_authentic_original_v2_exact_readonly_reconstruction[censored]
+FAILED tests/test_literature_kinetic_dependency_binding_196.py::test_authentic_original_v2_exact_readonly_reconstruction[missing_unit]
+FAILED tests/test_literature_kinetic_dependency_binding_196.py::test_authentic_original_v2_exact_readonly_reconstruction[model]
+FAILED tests/test_literature_kinetic_dependency_binding_196.py::test_prospective_v3_exact_readonly_reconstruction[False]
+FAILED tests/test_literature_kinetic_dependency_binding_196.py::test_prospective_v3_exact_readonly_reconstruction[True]
+6 failed, 16 passed in 24.82s

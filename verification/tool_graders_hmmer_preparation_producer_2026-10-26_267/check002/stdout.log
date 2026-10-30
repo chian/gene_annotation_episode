@@ -1,0 +1,77 @@
+........................................................................ [ 33%]
+........................................................................ [ 66%]
+...............................F.......F................................ [ 99%]
+.                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_supplied_fm_structure_is_checked_before_native_reader[reader_spacing-native_reader_header_incompatible] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check002/temporary/test_supplied_fm_structure_is_5')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x75d813691fa0>
+mutation = 'reader_spacing', expected = 'native_reader_header_incompatible'
+
+    @pytest.mark.parametrize("mutation,expected", [
+        ("truncated", "truncated_array"),
+        ("sa_in_range", "native_sa_invalid"),
+        ("counter_in_range", "native_counter_invalid"),
+        ("bwt", "native_bwt_invalid"),
+        ("segment", "native_segment_bounds"),
+        ("reader_spacing", "native_reader_header_incompatible"),
+        ("amino", "dna_reader_incompatible"),
+    ])
+    def test_supplied_fm_structure_is_checked_before_native_reader(tmp_path, monkeypatch, mutation, expected):
+        from gene_annotation_episode.hmmer_fm_data import extract_hmmer_fm_database
+        selected = job("hmmerfm-exactmatch", "locations")
+        original = Path(selected["operands"][1]["path"])
+        raw = bytearray(original.read_bytes())
+        occurrence = {"occurrence_id": "fixture:fm", "direction": "input", "role": "fm_database", "ordinal": 0,
+            "artifact_ref": "fixture:fm", "sha256": digest(original), "size_bytes": len(raw), "completeness": "complete"}
+        decoded = extract_hmmer_fm_database(bytes(raw), occurrence=occurrence, producer_contract=FM_CONTRACT)
+        arrays = decoded["blocks"][0]["arrays"]
+        if mutation == "truncated":
+            del raw[-5:]
+        elif mutation == "sa_in_range":
+            position = arrays["SA"]["locator"]["byte_start"] + 4
+            struct.pack_into("<I", raw, position, (arrays["SA"]["values"][1] + 1) % 28)
+        elif mutation == "counter_in_range":
+            position = arrays["counters_b"]["locator"]["byte_start"] + 8
+            struct.pack_into("<H", raw, position, arrays["counters_b"]["values"][1][0] + 1)
+        elif mutation == "bwt":
+            raw[arrays["BWT"]["locator"]["byte_start"]] ^= 1
+        elif mutation == "segment":
+            struct.pack_into("<Q", raw, decoded["segments"][0]["locator"]["byte_start"] + 4, 0)
+        elif mutation == "reader_spacing":
+            struct.pack_into("<I", raw, 8, 32)
+        else:
+            raw = bytearray((NATIVE / "makehmmerdb_protein/index.fm").read_bytes())
+        supplied = tmp_path / "supplied.fm"
+        supplied.write_bytes(raw)
+        selected["operands"][1] = operand("fm_database", supplied, "hmmer_fm_3_4")
+        monkeypatch.setattr(driver.subprocess, "run", lambda *a, **k: pytest.fail("unsafe imported FM native invocation"))
+        plan = make_plan(tmp_path, selected)
+        bundle = driver.run_native_hmmer_preparation(plan)
+        assert bundle["returncode"] is None
+        failures = [f for f in bundle["failures"] if f["code"].endswith("invalid_fm_database")]
+>       assert failures and expected in failures[0]["detail"]["issue_codes"]
+E       AssertionError: assert ([{'stage': 'preflight', 'code': 'native_hmmer_preparation_invalid_fm_database', 'role': 'fm_database', 'detail': {'reason': 'invalid_fm_framing', 'issue_codes': ['invalid_header']}}] and 'native_reader_header_incompatible' in ['invalid_header'])
+
+../../../tests/test_native_hmmer_preparation_driver.py:268: AssertionError
+________ test_actual_supplied_matrix_and_resaved_alignment_are_retained ________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check002/temporary/test_actual_supplied_matrix_an0')
+
+    def test_actual_supplied_matrix_and_resaved_alignment_are_retained(tmp_path):
+        selected = job("hmmbuild", "build_single_sequence_matrix")
+        selected["operands"].append(operand("matrix", BIN.parents[1] / "easel/formats/BLOSUM62", "substitution_matrix"))
+        selected["outputs"] += [{"role": "resaved_alignment", "format": "stockholm", "relative_path": "outputs/resaved"},
+            {"role": "summary", "format": "hmmbuild_summary", "relative_path": "outputs/summary"}]
+        plan, bundle = run_actual(tmp_path, selected)
+        assert not bundle["failures"]
+>       assert b"# STOCKHOLM" in output_bytes(plan, bundle, "resaved_alignment")
+E       AssertionError: assert b'# STOCKHOLM' in b''
+E        +  where b'' = output_bytes({'version': 'native_hmmer_preparation_run_plan_v1', 'identity': {'run_id': 'producer267-test', 'episode_id': 'selected...preparation_producer_2026-10-26_267/check002/temporary/test_actual_supplied_matrix_an0/hmmer-preparation-attempt', ...}, {'artifacts': [{'format': 'hmmer_stdout', 'relative_path': 'outputs/stdout', 'role': 'stdout', 'sha256': 'e3b0c44298fc...d_matrix_an0/hmmer-preparation-attempt/cache'}, 'failures': [], 'finished_at': '2026-10-26T09:01:10.278229+00:00', ...}, 'resaved_alignment')
+
+../../../tests/test_native_hmmer_preparation_driver.py:317: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_hmmer_preparation_driver.py::test_supplied_fm_structure_is_checked_before_native_reader[reader_spacing-native_reader_header_incompatible]
+FAILED ../../../tests/test_native_hmmer_preparation_driver.py::test_actual_supplied_matrix_and_resaved_alignment_are_retained
+2 failed, 215 passed in 101.79s (0:01:41)

@@ -1,0 +1,645 @@
+{
+  "body": {
+    "arguments": {
+      "mode": "saved",
+      "result_source_ref": "source_d059b7af1aa40b59310b2a7d"
+    },
+    "execution_proof_artifact_ref": "artifact_fe7a8b2ececbee5df9ef0e52f67de07006aa9c33a28b0ad87137376706930321",
+    "failure_code": null,
+    "files": {
+      "catalog": {
+        "artifact_ref": "artifact_f693086bc49d8b3f185770db83bf437f33bd1f77c16b080b32ff5dad8defc8ae",
+        "format": "restriction_catalog_v1",
+        "sha256": "f693086bc49d8b3f185770db83bf437f33bd1f77c16b080b32ff5dad8defc8ae",
+        "size_bytes": 1586
+      },
+      "manifest": {
+        "artifact_ref": "artifact_f2d48c185f6975053151d78f75a5467964e750541ee144e936c55ee5bc8ede5d",
+        "format": "restriction_manifest_v1",
+        "sha256": "f2d48c185f6975053151d78f75a5467964e750541ee144e936c55ee5bc8ede5d",
+        "size_bytes": 1357
+      },
+      "mapping": {
+        "artifact_ref": "artifact_09c3e0c354bc4a79bc232c8fb095b21ff744006a43a4f0f6755d4574e3e8506e",
+        "format": "restriction_mapping_v1",
+        "sha256": "09c3e0c354bc4a79bc232c8fb095b21ff744006a43a4f0f6755d4574e3e8506e",
+        "size_bytes": 3609
+      },
+      "native": {
+        "artifact_ref": "artifact_c2c36ce53fe2c0cef710cbefe6c4ef118aa48e61e0e16c8b3c05eb1c8ad79396",
+        "format": "restriction_native_v1",
+        "sha256": "c2c36ce53fe2c0cef710cbefe6c4ef118aa48e61e0e16c8b3c05eb1c8ad79396",
+        "size_bytes": 3408
+      },
+      "stderr": {
+        "artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "format": "restriction_stderr_v1",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stdout": {
+        "artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "format": "restriction_stdout_v1",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      }
+    },
+    "input_source_ref": "source_5d7979a762cd9d4d49a7bf1e",
+    "issues": [],
+    "operation_key": "restriction728-host-boundary:episode_3004afa9576ed8ad7de8bf821f784d374a6859e5bc70a26fa360401130fad7b2:0",
+    "operation_ref": "operation_caf37ef6ac2c0d088ca3abed",
+    "prior_result_source_ref": "source_d059b7af1aa40b59310b2a7d",
+    "reservation_artifact_ref": "artifact_c2778bfa401d69cd3c78a3bfc4a5c5549d4de55eaa19ae11c12cd12abb53b1b4",
+    "scope": {
+      "subject_refs": [
+        "input_0c6c52ed04ff8c413a28cb73"
+      ]
+    },
+    "status": "completed",
+    "tool_name": "find_restriction_sites",
+    "validation": {
+      "catalog": "validated",
+      "mapping": "validated",
+      "native": "validated"
+    },
+    "version": "restriction_published_result_v1",
+    "work_mode": "saved"
+  },
+  "catalog": {
+    "biopython_version": "1.88",
+    "dictionary_file": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check188_jobs726/dependencies/Bio/Restriction/Restriction_Dictionary.py",
+      "sha256": "2a79099295dbad6061ea67a11e053787c591fcb2eb10fc8c0f89ead908dfa02b",
+      "size_bytes": 562312
+    },
+    "enzymes": [
+      {
+        "cut_kind": "one_cut",
+        "dictionary_entry_json": "{\"charac\":{\"items\":[1,-1,null,null,\"GAATTC\"],\"native_type\":\"tuple\"},\"compsite\":\"(?=(?P<EcoRI>GAATTC))\",\"dna\":null,\"freq\":4096.0,\"fst3\":-1,\"fst5\":1,\"id\":993,\"inact_temp\":65,\"opt_temp\":37,\"ovhg\":-4,\"ovhgseq\":\"AATT\",\"results\":null,\"scd3\":null,\"scd5\":null,\"site\":\"GAATTC\",\"size\":6,\"substrat\":\"DNA\",\"suppl\":{\"items\":[\"B\",\"C\",\"I\",\"J\",\"K\",\"M\",\"N\",\"O\",\"Q\",\"R\",\"S\",\"V\",\"X\",\"Y\"],\"native_type\":\"tuple\"},\"uri\":\"https://identifiers.org/rebase:993\"}",
+        "elucidate_error": null,
+        "elucidate_text": "G^AATT_C",
+        "fst3": -1,
+        "fst5": 1,
+        "is_commercial": true,
+        "name": "EcoRI",
+        "native_class_mro": [
+          "EcoRI",
+          "Palindromic",
+          "OneCut",
+          "Ov5",
+          "Defined",
+          "Meth_Dep",
+          "Commercially_available",
+          "AbstractCut",
+          "RestrictionType",
+          "type",
+          "object"
+        ],
+        "native_ovhg": -4,
+        "native_pattern": {
+          "flags": 32,
+          "text": "(?=(?P<EcoRI>GAATTC))"
+        },
+        "native_site": "GAATTC",
+        "ordinal": 0,
+        "position_meaning": "first_base_after_cut_1based",
+        "rebase_id": 993,
+        "rebase_uri": "https://identifiers.org/rebase:993",
+        "scd3": null,
+        "scd5": null,
+        "size_nt": 6,
+        "symmetry": "palindromic"
+      }
+    ],
+    "resolved_names": [
+      "EcoRI"
+    ],
+    "selection": {
+      "kind": "explicit",
+      "names": [
+        "EcoRI"
+      ]
+    },
+    "version": "restriction_catalog_snapshot_v1"
+  },
+  "input_source": {
+    "accession": null,
+    "artifact_ref": "artifact_55b12a8115addc1e568207e9ea9eb27107e399a2e52cde8fc776651b980c9481",
+    "id": "source_5d7979a762cd9d4d49a7bf1e",
+    "operand_refs": [
+      "input_0c6c52ed04ff8c413a28cb73"
+    ],
+    "origin": "tool",
+    "parent_source_refs": [
+      "source_76a0b684b56f19bad65922d5"
+    ],
+    "provider": "episode.restriction_input",
+    "record_type": "source",
+    "request_ref": null,
+    "retrieved_at": null,
+    "text_ref": null,
+    "uri": null,
+    "version": "restriction_input_source_v1"
+  },
+  "mapping": {
+    "binding_status": "matched",
+    "catalog_identity": {
+      "biopython_version": "1.88",
+      "dictionary_file": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check188_jobs726/dependencies/Bio/Restriction/Restriction_Dictionary.py",
+        "sha256": "2a79099295dbad6061ea67a11e053787c591fcb2eb10fc8c0f89ead908dfa02b",
+        "size_bytes": 562312
+      }
+    },
+    "enzyme_rows": [
+      {
+        "catalog_ordinal": 0,
+        "catalog_row": {
+          "cut_kind": "one_cut",
+          "dictionary_entry_json": "{\"charac\":{\"items\":[1,-1,null,null,\"GAATTC\"],\"native_type\":\"tuple\"},\"compsite\":\"(?=(?P<EcoRI>GAATTC))\",\"dna\":null,\"freq\":4096.0,\"fst3\":-1,\"fst5\":1,\"id\":993,\"inact_temp\":65,\"opt_temp\":37,\"ovhg\":-4,\"ovhgseq\":\"AATT\",\"results\":null,\"scd3\":null,\"scd5\":null,\"site\":\"GAATTC\",\"size\":6,\"substrat\":\"DNA\",\"suppl\":{\"items\":[\"B\",\"C\",\"I\",\"J\",\"K\",\"M\",\"N\",\"O\",\"Q\",\"R\",\"S\",\"V\",\"X\",\"Y\"],\"native_type\":\"tuple\"},\"uri\":\"https://identifiers.org/rebase:993\"}",
+          "elucidate_error": null,
+          "elucidate_text": "G^AATT_C",
+          "fst3": -1,
+          "fst5": 1,
+          "is_commercial": true,
+          "name": "EcoRI",
+          "native_class_mro": [
+            "EcoRI",
+            "Palindromic",
+            "OneCut",
+            "Ov5",
+            "Defined",
+            "Meth_Dep",
+            "Commercially_available",
+            "AbstractCut",
+            "RestrictionType",
+            "type",
+            "object"
+          ],
+          "native_ovhg": -4,
+          "native_pattern": {
+            "flags": 32,
+            "text": "(?=(?P<EcoRI>GAATTC))"
+          },
+          "native_site": "GAATTC",
+          "ordinal": 0,
+          "position_meaning": "first_base_after_cut_1based",
+          "rebase_id": 993,
+          "rebase_uri": "https://identifiers.org/rebase:993",
+          "scd3": null,
+          "scd5": null,
+          "size_nt": 6,
+          "symmetry": "palindromic"
+        },
+        "issues": [
+          {
+            "code": "association_unavailable",
+            "enzyme_ordinal": 0,
+            "match_ordinal": null,
+            "phase": "association",
+            "position_ordinal": null
+          }
+        ],
+        "name": "EcoRI",
+        "native_search_positions_1based": [
+          6
+        ],
+        "position_meaning": "first_base_after_cut_1based",
+        "positions": [
+          {
+            "crick_boundary_0based": 9,
+            "crick_canonical_boundary_0based": 9,
+            "geometry_state": "known",
+            "native_position": 6,
+            "position_ordinal": 0,
+            "recognition_association": "not_recorded",
+            "recognition_event_ordinal": null,
+            "watson_boundary_0based": 5,
+            "watson_canonical_boundary_0based": 5
+          }
+        ],
+        "recognition_events": [
+          {
+            "crosses_origin": false,
+            "match_call_ordinal": 0,
+            "match_ordinal": 0,
+            "native_groups": [
+              {
+                "name": "EcoRI",
+                "text": "GAATTC"
+              }
+            ],
+            "native_start_1based": 5,
+            "orientation": "palindromic",
+            "segments": [
+              {
+                "end": 10,
+                "start": 4
+              }
+            ],
+            "unwrapped_span_0based": [
+              4,
+              10
+            ]
+          }
+        ],
+        "recognition_match_count": 1,
+        "returned_position_count": 1,
+        "search_state": "returned"
+      }
+    ],
+    "enzyme_selection": {
+      "kind": "explicit",
+      "names": [
+        "EcoRI"
+      ]
+    },
+    "issues": [
+      {
+        "code": "association_unavailable",
+        "enzyme_ordinal": 0,
+        "match_ordinal": null,
+        "phase": "association",
+        "position_ordinal": null
+      }
+    ],
+    "native_sequence": {
+      "content_sha256": "38f2833eef4a0affe67e35fb9365e7099ab25020362997959a80c32201f22406",
+      "length_nt": 14,
+      "namespace": "subject",
+      "origin_mapping_ref": null,
+      "sequence_ref": "input_0c6c52ed04ff8c413a28cb73",
+      "sequence_version": null,
+      "source_ref": "source_5d7979a762cd9d4d49a7bf1e",
+      "version": "restriction_selected_sequence_v1"
+    },
+    "native_sha256": "4b8498fd7e1a3601f06c2b6fa4f3bd2b5f1f9377928b9ad87f1aac4497713800",
+    "population": {
+      "attempted_enzyme_count": 1,
+      "complete_empty_enzyme_count": 0,
+      "recognition_match_count": 1,
+      "returned_enzyme_count": 1,
+      "selected_enzyme_count": 1
+    },
+    "selected_sequence": {
+      "content_sha256": "38f2833eef4a0affe67e35fb9365e7099ab25020362997959a80c32201f22406",
+      "length_nt": 14,
+      "namespace": "subject",
+      "origin_mapping_ref": null,
+      "sequence_ref": "input_0c6c52ed04ff8c413a28cb73",
+      "sequence_version": null,
+      "source_ref": "source_5d7979a762cd9d4d49a7bf1e",
+      "version": "restriction_selected_sequence_v1"
+    },
+    "status": "complete",
+    "topology": "linear",
+    "unassociated_match_calls": [],
+    "version": "restriction_mapping_result_v1"
+  },
+  "native": {
+    "batch_state": "returned",
+    "catalog": {
+      "biopython_version": "1.88",
+      "dictionary_file": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check188_jobs726/dependencies/Bio/Restriction/Restriction_Dictionary.py",
+        "sha256": "2a79099295dbad6061ea67a11e053787c591fcb2eb10fc8c0f89ead908dfa02b",
+        "size_bytes": 562312
+      },
+      "enzymes": [
+        {
+          "cut_kind": "one_cut",
+          "dictionary_entry_json": "{\"charac\":{\"items\":[1,-1,null,null,\"GAATTC\"],\"native_type\":\"tuple\"},\"compsite\":\"(?=(?P<EcoRI>GAATTC))\",\"dna\":null,\"freq\":4096.0,\"fst3\":-1,\"fst5\":1,\"id\":993,\"inact_temp\":65,\"opt_temp\":37,\"ovhg\":-4,\"ovhgseq\":\"AATT\",\"results\":null,\"scd3\":null,\"scd5\":null,\"site\":\"GAATTC\",\"size\":6,\"substrat\":\"DNA\",\"suppl\":{\"items\":[\"B\",\"C\",\"I\",\"J\",\"K\",\"M\",\"N\",\"O\",\"Q\",\"R\",\"S\",\"V\",\"X\",\"Y\"],\"native_type\":\"tuple\"},\"uri\":\"https://identifiers.org/rebase:993\"}",
+          "elucidate_error": null,
+          "elucidate_text": "G^AATT_C",
+          "fst3": -1,
+          "fst5": 1,
+          "is_commercial": true,
+          "name": "EcoRI",
+          "native_class_mro": [
+            "EcoRI",
+            "Palindromic",
+            "OneCut",
+            "Ov5",
+            "Defined",
+            "Meth_Dep",
+            "Commercially_available",
+            "AbstractCut",
+            "RestrictionType",
+            "type",
+            "object"
+          ],
+          "native_ovhg": -4,
+          "native_pattern": {
+            "flags": 32,
+            "text": "(?=(?P<EcoRI>GAATTC))"
+          },
+          "native_site": "GAATTC",
+          "ordinal": 0,
+          "position_meaning": "first_base_after_cut_1based",
+          "rebase_id": 993,
+          "rebase_uri": "https://identifiers.org/rebase:993",
+          "scd3": null,
+          "scd5": null,
+          "size_nt": 6,
+          "symmetry": "palindromic"
+        }
+      ],
+      "resolved_names": [
+        "EcoRI"
+      ],
+      "selection": {
+        "kind": "explicit",
+        "names": [
+          "EcoRI"
+        ]
+      },
+      "version": "restriction_catalog_snapshot_v1"
+    },
+    "enzyme_searches": [
+      {
+        "catalog_ordinal": 0,
+        "error": null,
+        "name": "EcoRI",
+        "native_on_minus_before_drop": null,
+        "native_search_positions_1based": [
+          6
+        ],
+        "search_ordinal": 0,
+        "state": "returned"
+      }
+    ],
+    "exception": null,
+    "formatted_sequence": " AAAAGAATTCTTTT",
+    "issues": [],
+    "match_observations": [
+      {
+        "call_ordinal": 0,
+        "error": null,
+        "linear": true,
+        "matches": [
+          {
+            "groups": [
+              {
+                "name": "EcoRI",
+                "text": "GAATTC"
+              }
+            ],
+            "match_ordinal": 0,
+            "native_start_1based": 5
+          }
+        ],
+        "native_pattern": {
+          "flags": 32,
+          "text": "(?=(?P<EcoRI>GAATTC))"
+        },
+        "owner_ordinals": [
+          0
+        ],
+        "site_size_nt": 6,
+        "state": "returned"
+      }
+    ],
+    "native_batch_member_order": [
+      "EcoRI"
+    ],
+    "native_mapping_order": [
+      "EcoRI"
+    ],
+    "request": {
+      "enzyme_selection": {
+        "kind": "explicit",
+        "names": [
+          "EcoRI"
+        ]
+      },
+      "normalized_sequence": "AAAAGAATTCTTTT",
+      "sequence": "AAAAGAATTCTTTT",
+      "sequence_binding": {
+        "content_sha256": "38f2833eef4a0affe67e35fb9365e7099ab25020362997959a80c32201f22406",
+        "length_nt": 14,
+        "namespace": "subject",
+        "origin_mapping_ref": null,
+        "sequence_ref": "input_0c6c52ed04ff8c413a28cb73",
+        "sequence_version": null,
+        "source_ref": "source_5d7979a762cd9d4d49a7bf1e",
+        "version": "restriction_selected_sequence_v1"
+      },
+      "topology": "linear"
+    },
+    "software": {
+      "biopython_version": "1.88",
+      "dictionary_file": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check188_jobs726/dependencies/Bio/Restriction/Restriction_Dictionary.py",
+        "sha256": "2a79099295dbad6061ea67a11e053787c591fcb2eb10fc8c0f89ead908dfa02b",
+        "size_bytes": 562312
+      },
+      "native_source_file": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check188_jobs726/dependencies/Bio/Restriction/Restriction.py",
+        "sha256": "f498ed1766263bf15a90a3a36749fa99d0a00798255e3326668790834aa20208",
+        "size_bytes": 83768
+      }
+    },
+    "version": "restriction_mapping_native_v1",
+    "warnings": []
+  },
+  "sequence_binding": {
+    "content_sha256": "38f2833eef4a0affe67e35fb9365e7099ab25020362997959a80c32201f22406",
+    "length_nt": 14,
+    "namespace": "subject",
+    "origin_mapping_ref": null,
+    "sequence_ref": "input_0c6c52ed04ff8c413a28cb73",
+    "sequence_version": null,
+    "source_ref": "source_5d7979a762cd9d4d49a7bf1e",
+    "version": "restriction_selected_sequence_v1"
+  },
+  "source": {
+    "accession": null,
+    "artifact_ref": "artifact_dfc13c3bbedcd6c39198630c32fb2fb01159fa5e29b6709b47f98a1712f7e730",
+    "auxiliary_artifact_refs": [
+      "artifact_c2c36ce53fe2c0cef710cbefe6c4ef118aa48e61e0e16c8b3c05eb1c8ad79396",
+      "artifact_f693086bc49d8b3f185770db83bf437f33bd1f77c16b080b32ff5dad8defc8ae",
+      "artifact_09c3e0c354bc4a79bc232c8fb095b21ff744006a43a4f0f6755d4574e3e8506e",
+      "artifact_f2d48c185f6975053151d78f75a5467964e750541ee144e936c55ee5bc8ede5d",
+      "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_c2778bfa401d69cd3c78a3bfc4a5c5549d4de55eaa19ae11c12cd12abb53b1b4",
+      "artifact_fe7a8b2ececbee5df9ef0e52f67de07006aa9c33a28b0ad87137376706930321"
+    ],
+    "id": "source_b3b63e918ec655a74a744413",
+    "operand_refs": [
+      "input_0c6c52ed04ff8c413a28cb73"
+    ],
+    "origin": "tool",
+    "parent_source_refs": [
+      "source_5d7979a762cd9d4d49a7bf1e",
+      "source_d059b7af1aa40b59310b2a7d"
+    ],
+    "provider": "episode.restriction_result",
+    "record_type": "source",
+    "request_ref": null,
+    "retrieved_at": null,
+    "stderr_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "text_ref": "artifact_09c3e0c354bc4a79bc232c8fb095b21ff744006a43a4f0f6755d4574e3e8506e",
+    "uri": null,
+    "version": "restriction_published_result_v1"
+  },
+  "witness": {
+    "artifacts": [
+      {
+        "artifact_ref": "artifact_38f2833eef4a0affe67e35fb9365e7099ab25020362997959a80c32201f22406",
+        "sha256": "38f2833eef4a0affe67e35fb9365e7099ab25020362997959a80c32201f22406",
+        "size_bytes": 14
+      },
+      {
+        "artifact_ref": "artifact_c96c6d5be8d08a12e7b5cdc1b207fa6b2430974c86803d8891675e76fd992c20",
+        "sha256": "c96c6d5be8d08a12e7b5cdc1b207fa6b2430974c86803d8891675e76fd992c20",
+        "size_bytes": 5
+      }
+    ],
+    "content_sha256": "38f2833eef4a0affe67e35fb9365e7099ab25020362997959a80c32201f22406",
+    "length_nt": 14,
+    "mapping": {
+      "path": [
+        {
+          "end": 14,
+          "start": 0,
+          "strand": "+",
+          "subject_ref": "input_0c6c52ed04ff8c413a28cb73",
+          "unit": "nt"
+        }
+      ],
+      "symbol_length": 14,
+      "units_per_symbol": 1,
+      "version": "oriented_source_subject_path_v2"
+    },
+    "mapping_issue": null,
+    "mapping_state": "available",
+    "molecule": "dna",
+    "namespace": "subject",
+    "packed_components": [],
+    "records": [
+      {
+        "record": {
+          "complete": true,
+          "context_source_refs": [],
+          "id": "collection_4482da3ffe5f79e48bbed602",
+          "library_ref": null,
+          "material_ref": "material_c2814de904bbbbe6955d5759",
+          "member_count": 1,
+          "molecule": "dna",
+          "origin": "tool",
+          "parse_key": "parse_80c003cfd82919074a6cf1c0",
+          "parser_version": "supplied_material_parsing_v5.biopython_1.88",
+          "quality_encoding": "unspecified",
+          "record_type": "collection",
+          "representation": "raw",
+          "role": "unspecified",
+          "sample_ref": null,
+          "sequence_symbols": 14,
+          "source_ref": "source_76a0b684b56f19bad65922d5"
+        },
+        "record_ref": "collection_4482da3ffe5f79e48bbed602",
+        "record_type": "collection"
+      },
+      {
+        "record": {
+          "context_source_refs": [],
+          "description": "",
+          "id": "input_0c6c52ed04ff8c413a28cb73",
+          "input_issues": [],
+          "length": 14,
+          "molecule": "dna",
+          "name": "input",
+          "origin": "caller",
+          "record_type": "input",
+          "role": "unspecified",
+          "sample_ref": null,
+          "sequence_ref": "artifact_38f2833eef4a0affe67e35fb9365e7099ab25020362997959a80c32201f22406",
+          "source_record": {
+            "identifier": "input",
+            "material_ref": "material_c2814de904bbbbe6955d5759",
+            "member_ref": "member_b809cb0d2d065de5fd349bc1",
+            "occurrence": 0,
+            "ordinal": 0
+          },
+          "source_ref": "source_76a0b684b56f19bad65922d5",
+          "unit": "nt"
+        },
+        "record_ref": "input_0c6c52ed04ff8c413a28cb73",
+        "record_type": "input"
+      },
+      {
+        "record": {
+          "context_source_refs": [],
+          "id": "material_c2814de904bbbbe6955d5759",
+          "library_ref": null,
+          "molecule": "dna",
+          "name": "input",
+          "origin": "caller",
+          "quality_encoding": "unspecified",
+          "record_type": "material",
+          "requested_format": "raw",
+          "role": "unspecified",
+          "sample_ref": null,
+          "source_ref": "source_76a0b684b56f19bad65922d5",
+          "use": "target"
+        },
+        "record_ref": "material_c2814de904bbbbe6955d5759",
+        "record_type": "material"
+      },
+      {
+        "record": {
+          "collection_ref": "collection_4482da3ffe5f79e48bbed602",
+          "description": "",
+          "header_ref": "artifact_c96c6d5be8d08a12e7b5cdc1b207fa6b2430974c86803d8891675e76fd992c20",
+          "header_representation": "caller_material_name",
+          "id": "member_b809cb0d2d065de5fd349bc1",
+          "issues": [],
+          "length": 14,
+          "material_ref": "material_c2814de904bbbbe6955d5759",
+          "molecule": "dna",
+          "name": "input",
+          "occurrence": 0,
+          "ordinal": 0,
+          "origin": "tool",
+          "parser_version": "supplied_material_parsing_v5.biopython_1.88",
+          "quality_encoding": "unspecified",
+          "quality_ref": null,
+          "record_type": "collection_member",
+          "role": "unspecified",
+          "sequence_ref": "artifact_38f2833eef4a0affe67e35fb9365e7099ab25020362997959a80c32201f22406",
+          "source_byte_offset": 0,
+          "source_ref": "source_76a0b684b56f19bad65922d5"
+        },
+        "record_ref": "member_b809cb0d2d065de5fd349bc1",
+        "record_type": "collection_member"
+      },
+      {
+        "record": {
+          "accession": null,
+          "artifact_ref": "artifact_38f2833eef4a0affe67e35fb9365e7099ab25020362997959a80c32201f22406",
+          "id": "source_76a0b684b56f19bad65922d5",
+          "origin": "caller",
+          "provider": "caller",
+          "record_type": "source",
+          "request_ref": null,
+          "retrieved_at": null,
+          "text_ref": "artifact_38f2833eef4a0affe67e35fb9365e7099ab25020362997959a80c32201f22406",
+          "uri": null,
+          "version": null
+        },
+        "record_ref": "source_76a0b684b56f19bad65922d5",
+        "record_type": "source"
+      }
+    ],
+    "scope": {
+      "subject_refs": [
+        "input_0c6c52ed04ff8c413a28cb73"
+      ]
+    },
+    "sequence": "AAAAGAATTCTTTT",
+    "sequence_ref": "input_0c6c52ed04ff8c413a28cb73",
+    "sequence_version": null,
+    "version": "restriction_sequence_witness_v1"
+  }
+}

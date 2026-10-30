@@ -1,0 +1,15 @@
+# cmconvert :: convert CM file to a different Infernal format
+# INFERNAL 1.1.5 (Sep 2023)
+# Copyright (C) 2023 Howard Hughes Medical Institute.
+# Freely distributed under the BSD open source license.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Usage: cmconvert [-options] <cmfile>
+
+Options:
+  -h      : show brief help on version and usage
+  -a      : ascii:  output models in INFERNAL 1.1 ASCII format  [default]
+  -b      : binary: output models in INFERNAL 1.1 binary format
+  -1      : output backward compatible Infernal v0.7-->v1.0.2 ASCII format
+  -o <f>  : save CM file to file <f>, not stdout
+  --mlhmm : output maximum likelihood HMM for CM in HMMER3 format
+  --fhmm  : output filter HMM for CM in HMMER3 format

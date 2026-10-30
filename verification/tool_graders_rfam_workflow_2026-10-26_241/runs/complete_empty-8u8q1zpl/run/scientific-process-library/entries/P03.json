@@ -1,0 +1,66 @@
+{
+  "slot": "thought_pattern",
+  "id": "P03",
+  "name": "Discriminate competing inputs by their predicted chemistry",
+  "description": "Keep the candidate system explicit while choosing substrates, co-substrates or acceptors that distinguish competing recognition hypotheses. Refine the candidate space using identified products and bounded non-products.",
+  "use_when": "Several chemically plausible inputs remain and another family match will not distinguish them.",
+  "live_alternatives": [
+    "Candidate inputs differ at a recognized chemical feature.",
+    "A side reaction is being mistaken for the preferred reaction.",
+    "Apparent specificity belongs to another preparation component or coupled partner."
+  ],
+  "decision_guidance": [
+    "Choose contrasts changing the feature on which the hypotheses disagree, including close analogues and plausible pathway inputs.",
+    "Positives may motivate adjacent candidates omitted from the initial library; unavailable compounds remain untested.",
+    "Interpret the profile at the level of the assayed preparation with conditions and product identity retained; component attribution may need P06."
+  ],
+  "outcome_contingencies": [
+    {
+      "if_observed": "A coherent product pattern supports one recognition hypothesis",
+      "then_consider": "Narrow the tested profile and choose an informative untested boundary."
+    },
+    {
+      "if_observed": "An attractive input fails under competent conditions",
+      "then_consider": "Revise input recognition without discarding every supported catalytic relationship."
+    },
+    {
+      "if_observed": "Comparative kinetics or products are missing",
+      "then_consider": "Report bounded capacity rather than rank untested native inputs."
+    }
+  ],
+  "boundary": "The unknown is which input or recognized chemical feature differentiates candidate reactions in a fixed system. P14 instead asks what transformation actually occurred; P06 asks which component caused it; P11 asks whether the measured capacity is used natively. A proposed assay panel is not an available tool or an instruction to perform new experiments.",
+  "evidence": [
+    {
+      "case_group": "TM0936_Hermann_2007",
+      "case_id": "TM0936_Hermann_2007",
+      "source_url": "https://doi.org/10.1038/nature05981",
+      "source_locator": "Case-record observation; inspected scope: Read relevant primary results and methods; live deposited binding-site API retrievals. Original API URLs lacking entity ID returned 404 and were repaired using current PDBe documentation. No repository changes or scientific-case runs.",
+      "observation": "Cytosine derivatives failed while SAH/MTA/adenosine reacted; AMP was a docking false positive and SAM did not turn over.",
+      "limit": "Published author assays; no docking or screening rerun."
+    },
+    {
+      "case_group": "context_archaeal_shikimate_kinase_2001",
+      "case_id": "context_archaeal_shikimate_kinase_2001",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC94878/",
+      "source_locator": "Case-record observation; inspected scope: Complete main paper, genome-analysis methods, results, and substrate-assay methods read. No WIT reconstruction, alignment, or enzyme assay rerun. Historical WIT identifier retained without an unverified modern-locus mapping.",
+      "observation": "Shikimate-versus-homoserine panels distinguished two GHMP-like paralogs despite family resemblance.",
+      "limit": "Context prioritized candidates; author assays established the specificity."
+    },
+    {
+      "case_group": "spec_cysq_pap_not_imp",
+      "case_id": "spec_cysq_pap_not_imp",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2711008/",
+      "source_locator": "Case-record observation; inspected scope: 2008 primary relevant full methods/results/discussion inspected. 2010 CysQ deletion, extract-activity and discussion sections inspected; no genome analysis of putative suppressors.",
+      "observation": "PAP kinetics contrasted with over 1,000-fold weaker IMP/FBP efficiencies, exposing a preferred substrate omitted from the old interpretation.",
+      "limit": "PAP/PAPS assay limits remain; native flux was not measured."
+    },
+    {
+      "case_group": "sulfoglycolysis_selectivity",
+      "case_id": "sulfoglycolysis_selectivity",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8006165/",
+      "source_locator": "Case-record observation; inspected scope: 2021 primary full text inspected, 2014 and 2008 references screened at primary abstract level; raw 2021 XML retained.",
+      "observation": "Sulfosugar versus ordinary-sugar/phosphosugar comparisons constrained cross-use despite parallel pathway organization.",
+      "limit": "Cross-paper comparisons retain organism/assay context; spectra were not independently reprocessed."
+    }
+  ]
+}

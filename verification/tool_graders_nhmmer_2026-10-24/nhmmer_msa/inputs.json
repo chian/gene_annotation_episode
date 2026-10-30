@@ -1,0 +1,39 @@
+{
+  "query": {
+    "name": "model",
+    "kind": "msa",
+    "alphabet": "DNA",
+    "length": 100
+  },
+  "native_parameters": {
+    "query_construction_mode": "msa",
+    "argv": []
+  },
+  "targets": [
+    {
+      "name": "forward",
+      "kind": "nucleotide_sequence",
+      "length": 120,
+      "sequence": "ACGCTAGCATGGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTGGACTAGCATG",
+      "alphabet": "DNA"
+    },
+    {
+      "name": "reverse",
+      "kind": "nucleotide_sequence",
+      "length": 120,
+      "sequence": "AGTCAGTCAGCAATGGGAAGAGTGAGTCTGCCAAAAAGCGAGATCTTGCCCCCGTCAGGCTTACTGTTAGTGATGGACTTATCGTAAAGGGAGGTTGACACGCCACTGCCTCAGTCAGTC",
+      "alphabet": "DNA"
+    },
+    {
+      "name": "gapped",
+      "kind": "nucleotide_sequence",
+      "length": 121,
+      "sequence": "ACTGACTGACGGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCAGTACTAACAGTAAGCCTGACGGGGGCAAGATCTCTTTTTGGCAGACTCACTCTTCCCATTGTCGATCGATC",
+      "alphabet": "DNA"
+    }
+  ],
+  "acquisition": {
+    "output_complete": true,
+    "hit_population_complete": true
+  }
+}

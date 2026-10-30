@@ -1,0 +1,47 @@
+
+==================================== ERRORS ====================================
+_________ ERROR collecting tests/test_episode_assignment_transport.py __________
+source_snapshot/tests/test_episode_assignment_transport.py:25: in <module>
+    from test_assembled_case_reconstruction import initialize_case, reopen
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:935: in _load_unlocked
+    ???
+../../../reference/episode_tools/.venv/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:188: in exec_module
+    exec(co, module.__dict__)
+source_snapshot/tests/test_assembled_case_reconstruction.py:34: in <module>
+    from test_case_execution import prepared
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:935: in _load_unlocked
+    ???
+../../../reference/episode_tools/.venv/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:188: in exec_module
+    exec(co, module.__dict__)
+source_snapshot/tests/test_case_execution.py:18: in <module>
+    from test_homology_jobs import PROGRAM, PROJECT, QUERY
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:935: in _load_unlocked
+    ???
+../../../reference/episode_tools/.venv/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:188: in exec_module
+    exec(co, module.__dict__)
+source_snapshot/tests/test_homology_jobs.py:20: in <module>
+    QUERY = (PROJECT/'cases/gene_001/target.faa').read_text()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_composed_assignment_transport_2026-10-27_458/check009/source_snapshot/cases/gene_001/target.faa'
+=========================== short test summary info ============================
+ERROR source_snapshot/tests/test_episode_assignment_transport.py - FileNotFou...
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 2.71s

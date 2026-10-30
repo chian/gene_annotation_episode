@@ -1,0 +1,174 @@
+{
+  "adapter_id": "bvbrc_fastqutils",
+  "adapter_version": "2",
+  "implementation_sha256": "72a25500a523a2c354529ec5e34f73d1c5e448ba0b9b95497ed1ef79999f0ae4",
+  "scientific_dependency_count": 24,
+  "status": "ok",
+  "selected_field_count": 9,
+  "fact_families": [
+    "association",
+    "category",
+    "component",
+    "measurement",
+    "population",
+    "request_status",
+    "requirements"
+  ],
+  "native_documents": 3,
+  "measurements": 22,
+  "components": 11,
+  "complete_sheet_sha256": "56fc59bad9e62b2b6385e2dceaaa7145a43e6e821dd27bc926d45280936df007",
+  "calculator_parameters_sha256": "553c6a1fe9544af8410d3ff4c93d90ea52a07c69d9f6f429a14379c086f772aa",
+  "provider_result_sha256": "9f8bfed5c8921fdde4289f0ce4ebd3b34f6aabb4020aa9e3ed7291f073e738ed",
+  "stages": [
+    {
+      "recipe_ordinal": 0,
+      "observed_state": "unknown"
+    },
+    {
+      "recipe_ordinal": 1,
+      "observed_state": "unknown"
+    },
+    {
+      "recipe_ordinal": 2,
+      "observed_state": "unknown"
+    },
+    {
+      "recipe_ordinal": 3,
+      "observed_state": "unknown"
+    },
+    {
+      "recipe_ordinal": 4,
+      "observed_state": "unknown"
+    },
+    {
+      "recipe_ordinal": 5,
+      "observed_state": "unknown"
+    }
+  ],
+  "values": {
+    "read_count": {
+      "state": "available",
+      "value": 2,
+      "unit": "reads",
+      "meaning": "observed_count",
+      "precision": "exact_for_retained_population",
+      "population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+      "association_ref": null,
+      "measurement_ref": "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F0",
+      "document_id": "reads",
+      "quantity": "fastq_read_count",
+      "axis": {
+        "kind": "none",
+        "lower": null,
+        "upper": null,
+        "label_ref": null
+      },
+      "native_token_ref": null
+    },
+    "gc": {
+      "state": "available",
+      "value": 0.5555555555555556,
+      "unit": "fraction",
+      "method": "composition_v1",
+      "population_refs": [
+        "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+        "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0"
+      ],
+      "operand_measurement_refs": [
+        "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F4",
+        "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F3",
+        "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F2",
+        "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F5",
+        "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F8"
+      ],
+      "numerator": 5,
+      "denominator": 9,
+      "threshold": null,
+      "meaning": "derived_descriptive",
+      "uncertainty": "not_estimated",
+      "parameter_sha256": "553c6a1fe9544af8410d3ff4c93d90ea52a07c69d9f6f429a14379c086f772aa",
+      "calculation_id": "composition_reads",
+      "encoding_basis": null,
+      "lineage_basis": null,
+      "component_ref": "bvbrc_fastqutils_component:testC198/%2Fsheets%2F56fc59bad9e62b2b6385e2dceaaa7145a43e6e821dd27bc926d45280936df007%2Fparameters%2F553c6a1fe9544af8410d3ff4c93d90ea52a07c69d9f6f429a14379c086f772aa%2Fcalculations%2Fcomposition_reads%2Fgc_acgt_fraction%2Fnone",
+      "quantity": "gc_acgt_fraction"
+    },
+    "errors": {
+      "state": "available",
+      "value": 0.001,
+      "unit": "expected_errors",
+      "method": "quality_phred_v1",
+      "population_refs": [
+        "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0"
+      ],
+      "operand_measurement_refs": [
+        "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F12"
+      ],
+      "numerator": 0.001,
+      "denominator": null,
+      "threshold": null,
+      "meaning": "phred_model_prediction",
+      "uncertainty": "phred_model_only",
+      "parameter_sha256": "553c6a1fe9544af8410d3ff4c93d90ea52a07c69d9f6f429a14379c086f772aa",
+      "calculation_id": "quality_reads",
+      "encoding_basis": {
+        "basis": "explicit_source_bound_declaration",
+        "encoding": "phred33",
+        "metadata_id": "encoding_reads",
+        "evidence": {
+          "content": {
+            "source_ref": "source_declarations",
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "artifact_declarations",
+            "sha256": "791c277c58e040f26b68b730d258ae1d1f2f9f1d86a3b1a711d91319491a8f70",
+            "byte_count": 334
+          },
+          "pointer": "/declarations/0"
+        },
+        "declaration": {
+          "version": "fastqutils_encoding_declaration_v1",
+          "document_id": "reads",
+          "encoding": "phred33",
+          "basis": "explicit_assumption"
+        },
+        "native_locator": null
+      },
+      "lineage_basis": null,
+      "component_ref": "bvbrc_fastqutils_component:testC198/%2Fsheets%2F56fc59bad9e62b2b6385e2dceaaa7145a43e6e821dd27bc926d45280936df007%2Fparameters%2F553c6a1fe9544af8410d3ff4c93d90ea52a07c69d9f6f429a14379c086f772aa%2Fcalculations%2Fquality_reads%2Fphred_implied_expected_errors%2Fnone",
+      "quantity": "phred_implied_expected_errors"
+    },
+    "retained": {
+      "state": "available",
+      "value": 0.75,
+      "unit": "fraction",
+      "method": "retention_v1",
+      "population_refs": [
+        "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+        "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_out%2F0"
+      ],
+      "operand_measurement_refs": [
+        "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F0",
+        "bvbrc_fastqutils_cell:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F1"
+      ],
+      "numerator": 6,
+      "denominator": 8,
+      "threshold": null,
+      "meaning": "native_report_derived",
+      "uncertainty": "native_reporting_precision",
+      "parameter_sha256": "553c6a1fe9544af8410d3ff4c93d90ea52a07c69d9f6f429a14379c086f772aa",
+      "calculation_id": "retention_hostile",
+      "encoding_basis": null,
+      "lineage_basis": {
+        "basis": "native_report",
+        "metadata_id": null,
+        "evidence": null,
+        "declaration": null,
+        "native_lineage_ref": "bvbrc_fastqutils_lineage:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flineage%2F0"
+      },
+      "component_ref": "bvbrc_fastqutils_component:testC198/%2Fsheets%2F56fc59bad9e62b2b6385e2dceaaa7145a43e6e821dd27bc926d45280936df007%2Fparameters%2F553c6a1fe9544af8410d3ff4c93d90ea52a07c69d9f6f429a14379c086f772aa%2Fcalculations%2Fretention_hostile%2Fnative_report_retention_fraction%2Fnone",
+      "quantity": "native_report_retention_fraction"
+    }
+  },
+  "verification": "Pure parsers, metadata, sheet, calculators, provider, exact projection and saved validation executed against frozen source; all native bytes handcrafted for this fixture. No native executable or live service ran. Host custody and full ResultSelector validation are separate root work."
+}

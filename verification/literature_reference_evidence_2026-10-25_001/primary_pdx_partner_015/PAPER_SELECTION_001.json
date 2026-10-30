@@ -1,0 +1,95 @@
+{
+  "version": "literature_partner_selection_v1",
+  "inputs": {
+    "version": "literature_partner_inputs_v1",
+    "arms": {
+      "reference": {
+        "subject_ref": "Mtb_Rv2606c_Pdx1_Cterminal_6His_as_reported",
+        "partner_ref": "Mtb_Rv2604c_Pdx2_Cterminal_6His_as_reported",
+        "partner_state": "present",
+        "endpoint_ref": "PLP_formation_A414",
+        "normalization_ref": null,
+        "unit": "pmol/min/mg",
+        "conditions": {
+          "coverage": "partial",
+          "factors": [
+            {
+              "factor": "nitrogen_source",
+              "level": "L-glutamine",
+              "unit": "chemical_identity"
+            },
+            {
+              "factor": "nitrogen_reagent_concentration",
+              "level": 10,
+              "unit": "mM"
+            },
+            {
+              "factor": "temperature",
+              "level": 37,
+              "unit": "degC"
+            },
+            {
+              "factor": "pH",
+              "level": 8,
+              "unit": "dimensionless"
+            }
+          ]
+        },
+        "measurement": {
+          "measurement_id": "Dick2010_PLPrate_Pdx1_Pdx2_Gln_R5P_G3P_reported",
+          "status": "observed",
+          "value": 774,
+          "origin": "reported",
+          "spread": {
+            "kind": "unspecified",
+            "magnitude": 58
+          }
+        }
+      },
+      "omitted": {
+        "subject_ref": "Mtb_Rv2606c_Pdx1_Cterminal_6His_as_reported",
+        "partner_ref": "Mtb_Rv2604c_Pdx2_Cterminal_6His_as_reported",
+        "partner_state": "absent",
+        "endpoint_ref": "PLP_formation_A414",
+        "normalization_ref": null,
+        "unit": "pmol/min/mg",
+        "conditions": {
+          "coverage": "partial",
+          "factors": [
+            {
+              "factor": "nitrogen_source",
+              "level": "ammonium_sulfate",
+              "unit": "chemical_identity"
+            },
+            {
+              "factor": "nitrogen_reagent_concentration",
+              "level": 10,
+              "unit": "mM"
+            },
+            {
+              "factor": "temperature",
+              "level": 37,
+              "unit": "degC"
+            },
+            {
+              "factor": "pH",
+              "level": 8,
+              "unit": "dimensionless"
+            }
+          ]
+        },
+        "measurement": {
+          "measurement_id": "Dick2010_PLPrate_Pdx1_ammonium_R5P_G3P_reported",
+          "status": "observed",
+          "value": 284,
+          "origin": "reported",
+          "spread": {
+            "kind": "unspecified",
+            "magnitude": 33
+          }
+        }
+      },
+      "addback": null
+    }
+  }
+}

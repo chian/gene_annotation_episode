@@ -1,0 +1,69 @@
+{
+  "version": "native_hmmer_preparation_run_plan_v1",
+  "identity": {
+    "run_id": "producer267-test",
+    "episode_id": "selected-local-child",
+    "resource_id": "local",
+    "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check004/temporary/test_actual_press_index_privat0/index/native.json",
+    "operation_key": "selected-command",
+    "attempt_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e",
+    "requested_job_sha256": "233444f00650734aef280e44289f801a916d2b5a305f3f4c4d6a2436e17ec602"
+  },
+  "requested_job": {
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmfetch",
+      "--index",
+      "work/models.hmm"
+    ],
+    "environment": {},
+    "native_hmmer_preparation": {
+      "version": "native_hmmer_preparation_job_v1",
+      "program": "hmmfetch",
+      "mode": "index",
+      "software": {
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmfetch",
+        "sha256": "87a57888d9bb60fd4be66dc382c7f72d29f0fa1f87e10d012703e6b66da0afb0",
+        "engine_version": "3.4"
+      },
+      "environment": {},
+      "operands": [
+        {
+          "role": "models",
+          "ordinal": 0,
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_protein/profile.hmm",
+          "format": "hmmer3_ascii",
+          "sha256": "f744b16d69df05ddf8239af3bc4a68d36a6e2764f31ad1b8274507e958056ea5",
+          "size_bytes": 6670,
+          "artifact_ref": "fixture267:models:0"
+        }
+      ],
+      "options": [],
+      "outputs": [
+        {
+          "role": "stdout",
+          "format": "hmmer_stdout",
+          "relative_path": "outputs/stdout"
+        },
+        {
+          "role": "stderr",
+          "format": "hmmer_stderr",
+          "relative_path": "outputs/stderr"
+        },
+        {
+          "role": "ssi",
+          "format": "hmmer_ssi",
+          "relative_path": "work/models.hmm.ssi"
+        }
+      ],
+      "key": null,
+      "input_metadata": {},
+      "grading_parameters": {}
+    }
+  },
+  "attempt_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check004/temporary/test_actual_press_index_privat0/index/hmmer-preparation-attempt",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  }
+}

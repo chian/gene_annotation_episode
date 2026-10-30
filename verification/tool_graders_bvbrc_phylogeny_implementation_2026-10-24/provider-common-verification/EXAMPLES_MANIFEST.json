@@ -1,0 +1,321 @@
+{
+  "version": 1,
+  "scope": "S pure common provider only",
+  "examples": [
+    {
+      "name": "synthetic_hand",
+      "evidence_type": "synthetic_hand_calculation",
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/provider-common-verification/synthetic_hand.json.gz",
+      "uncompressed_bytes": 106853,
+      "compressed_bytes": 5958,
+      "sha256": "fdbdb45702866ae98e5465da5452fe2fa88e3bc039035f08747f9ee0297907ff",
+      "extraction_status": "ok",
+      "offline_saved_replay": true,
+      "complete_input_and_output": true,
+      "limitations": "Explicit fixture evidence only; original maps unavailable; native branch/support methods unknown; no C4 authentication or scientific execution.",
+      "numerical_examples": {
+        "alignment": {
+          "member_count": 4,
+          "site_count": 4,
+          "cell_count": 16,
+          "gap_cells": 2,
+          "gap_fraction": 0.125,
+          "canonical_cells": 10,
+          "ambiguity_cells": 4
+        },
+        "tree": {
+          "tip_count": 4,
+          "branch_length_sum": 13.0,
+          "unit": "native_unknown"
+        },
+        "composition": [
+          {
+            "function_key": "A",
+            "member_subjects": [
+              {
+                "kind": "input_member",
+                "id": "member/file-0/q",
+                "source_record_id": "anchor/0"
+              },
+              {
+                "kind": "input_member",
+                "id": "member/file-1/q",
+                "source_record_id": "anchor/1"
+              }
+            ],
+            "assigned_members": {
+              "value": 2,
+              "state": "available",
+              "unit": "members",
+              "origin": "derived",
+              "numerator": null,
+              "denominator": null,
+              "population_ref": "composition",
+              "method": "members_assigned_function",
+              "evidence": [],
+              "requirement_ids": []
+            },
+            "fraction_all": {
+              "value": 0.5,
+              "state": "available",
+              "unit": "fraction",
+              "origin": "derived",
+              "numerator": 2,
+              "denominator": 4,
+              "population_ref": "composition",
+              "method": "function_fraction_all_members",
+              "evidence": [],
+              "requirement_ids": []
+            },
+            "fraction_recorded": {
+              "value": 0.6666666666666666,
+              "state": "available",
+              "unit": "fraction",
+              "origin": "derived",
+              "numerator": 2,
+              "denominator": 3,
+              "population_ref": "composition",
+              "method": "function_fraction_recorded_members",
+              "evidence": [],
+              "requirement_ids": []
+            }
+          },
+          {
+            "function_key": "B",
+            "member_subjects": [
+              {
+                "kind": "input_member",
+                "id": "member/file-2/c",
+                "source_record_id": "anchor/2"
+              }
+            ],
+            "assigned_members": {
+              "value": 1,
+              "state": "available",
+              "unit": "members",
+              "origin": "derived",
+              "numerator": null,
+              "denominator": null,
+              "population_ref": "composition",
+              "method": "members_assigned_function",
+              "evidence": [],
+              "requirement_ids": []
+            },
+            "fraction_all": {
+              "value": 0.25,
+              "state": "available",
+              "unit": "fraction",
+              "origin": "derived",
+              "numerator": 1,
+              "denominator": 4,
+              "population_ref": "composition",
+              "method": "function_fraction_all_members",
+              "evidence": [],
+              "requirement_ids": []
+            },
+            "fraction_recorded": {
+              "value": 0.3333333333333333,
+              "state": "available",
+              "unit": "fraction",
+              "origin": "derived",
+              "numerator": 1,
+              "denominator": 3,
+              "population_ref": "composition",
+              "method": "function_fraction_recorded_members",
+              "evidence": [],
+              "requirement_ids": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "synthetic_partial_alignment",
+      "evidence_type": "synthetic_failure_case",
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/provider-common-verification/synthetic_partial_alignment.json.gz",
+      "uncompressed_bytes": 73578,
+      "compressed_bytes": 4001,
+      "sha256": "c4238d205966be6b9b67ab5f3a158e13ef4f8a637d646855d44d1f3a282bf2ec",
+      "extraction_status": "partial",
+      "offline_saved_replay": true,
+      "complete_input_and_output": true,
+      "limitations": "Malformed matrix keeps unavailable dimensions; independent four-tip tree retained. No repaired/padded rows.",
+      "numerical_examples": {
+        "alignment": {
+          "member_count": null,
+          "site_count": null,
+          "cell_count": null,
+          "gap_cells": null,
+          "gap_fraction": null,
+          "canonical_cells": null,
+          "ambiguity_cells": null
+        },
+        "tree": {
+          "tip_count": 4,
+          "branch_length_sum": 13.0,
+          "unit": "native_unknown"
+        }
+      }
+    },
+    {
+      "name": "synthetic_missing_interpretations",
+      "evidence_type": "synthetic_missing_metadata",
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/provider-common-verification/synthetic_missing_interpretations.json.gz",
+      "uncompressed_bytes": 82608,
+      "compressed_bytes": 4398,
+      "sha256": "7c3b591f09f725854cc333ef74dabc2985cba35d56b2e2c3174e89419cdd8aa5",
+      "extraction_status": "ok",
+      "offline_saved_replay": true,
+      "complete_input_and_output": true,
+      "limitations": "Unproved alphabet is unknown; named branch unit unavailable; unsupported bootstrap omitted with exact requirements, independent counts retained.",
+      "numerical_examples": {
+        "alignment": {
+          "member_count": 4,
+          "site_count": 4,
+          "cell_count": 16,
+          "gap_cells": 2,
+          "gap_fraction": 0.125,
+          "canonical_cells": null,
+          "ambiguity_cells": null
+        },
+        "tree": {
+          "tip_count": 4,
+          "branch_length_sum": 13.0,
+          "unit": "native_unknown"
+        }
+      }
+    },
+    {
+      "name": "retained_codon_matrix_tree",
+      "evidence_type": "retained_official_native_output",
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/provider-common-verification/retained_codon_matrix_tree.json.gz",
+      "uncompressed_bytes": 89402103,
+      "compressed_bytes": 1434333,
+      "sha256": "55ddb4245e113fdd352cf16d0ff48644e46ae911de772fbe37e95c14883fa7b0",
+      "extraction_status": "ok",
+      "offline_saved_replay": true,
+      "complete_input_and_output": true,
+      "limitations": "Complete retained repository example bytes; no original service/task custody. Mixed alphabet remains unknown for the whole matrix; original maps and run units remain unknown.",
+      "numerical_examples": {
+        "alignment": {
+          "member_count": 9,
+          "site_count": 15300,
+          "cell_count": 137700,
+          "gap_cells": 17308,
+          "gap_fraction": 0.12569353667392882,
+          "canonical_cells": null,
+          "ambiguity_cells": null
+        },
+        "tree": {
+          "tip_count": 9,
+          "branch_length_sum": 1.5146846400093905,
+          "unit": "native_unknown"
+        }
+      }
+    },
+    {
+      "name": "retained_gene_xml_1",
+      "evidence_type": "retained_official_native_output",
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/provider-common-verification/retained_gene_xml_1.json.gz",
+      "uncompressed_bytes": 695364,
+      "compressed_bytes": 27970,
+      "sha256": "b6cf82069490f05eb4c154e3533602ccef6cc4c7a718519cd7b3459b6f176380",
+      "extraction_status": "ok",
+      "offline_saved_replay": true,
+      "complete_input_and_output": true,
+      "limitations": "Complete native XML derivative; generic support method/unit remain unknown, XML inserted-zero/lost-zero-support qualifications retained. No original raw tree or service/task custody.",
+      "numerical_examples": {
+        "tree": {
+          "tip_count": 17,
+          "branch_length_sum": 0.22376544591028014,
+          "unit": "native_unknown"
+        }
+      }
+    },
+    {
+      "name": "retained_gene_xml_2",
+      "evidence_type": "retained_official_native_output",
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/provider-common-verification/retained_gene_xml_2.json.gz",
+      "uncompressed_bytes": 891796,
+      "compressed_bytes": 32299,
+      "sha256": "d56cd7e1e63f81d0c85eb71396212fd98c20988308c059d34799802d1533e552",
+      "extraction_status": "ok",
+      "offline_saved_replay": true,
+      "complete_input_and_output": true,
+      "limitations": "Complete native XML derivative; generic support method/unit remain unknown, XML inserted-zero/lost-zero-support qualifications retained. No original raw tree or service/task custody.",
+      "numerical_examples": {
+        "tree": {
+          "tip_count": 17,
+          "branch_length_sum": 0.22376544591028014,
+          "unit": "native_unknown"
+        }
+      }
+    }
+  ],
+  "raw_artifacts": [
+    {
+      "original_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/official_example/test9_genome_dir/test9_genome_8taxa_10cds_10proteins_codonAndProteins.phy",
+      "retained_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/provider-common-verification/raw/test9_genome_8taxa_10cds_10proteins_codonAndProteins.phy",
+      "byte_count": 138016,
+      "sha256": "405a5d67d39dd69a4e2f88d33bc5b89d101b1b6f8ed60fccb395f8aa7c85d671"
+    },
+    {
+      "original_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/official_example/test9_genome_dir/RAxML_bestTree.test9_genome_8taxa_10cds_10proteins_codonAndProteins",
+      "retained_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/provider-common-verification/raw/RAxML_bestTree.test9_genome_8taxa_10cds_10proteins_codonAndProteins",
+      "byte_count": 454,
+      "sha256": "33e1704ca7da280efa4d43fc7fc1696543dd6ba0fb07ec99eb827430973c5d45"
+    },
+    {
+      "original_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/additional_sources/bvbrc_gene_tree/tests/Buchnera_acpS_fg_dna_raxml_hky85.xml",
+      "retained_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/provider-common-verification/raw/Buchnera_acpS_fg_dna_raxml_hky85.xml",
+      "byte_count": 12969,
+      "sha256": "2a4eb93c64d2b9639139ea9b3a4b2aa9ee6a8bbad1ee640f63cdd3dde5008d88"
+    },
+    {
+      "original_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/additional_sources/bvbrc_gene_tree/tests/Buchnera_acpS_fg_dna_raxml_hky85_RAxML_tree_rell.xml",
+      "retained_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/provider-common-verification/raw/Buchnera_acpS_fg_dna_raxml_hky85_RAxML_tree_rell.xml",
+      "byte_count": 16976,
+      "sha256": "f37bab7cd3edcc632c5aac213f5cda199cd2d080a34276cde1d0eead5cfa2dc0"
+    }
+  ],
+  "implementation": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/bvbrc_phylogeny_common_inputs.py",
+      "sha256": "c014f4b510a4f349d55ec3d5255d266417e058a8ab5f8d9cf26fa1b133d32f9d",
+      "bytes": 34994
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/bvbrc_phylogeny_common_contracts.py",
+      "sha256": "d081167ec5571a728b6ec8a827033c1fd24c58e9d8bd458b9bb28963ee121a04",
+      "bytes": 67177
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/gene_annotation_episode/bvbrc_phylogeny_common_grader.py",
+      "sha256": "ce4095410739cf2e8b1fdc2b97903717be44f6b00c93b4fe7e21abd342a5fb05",
+      "bytes": 22114
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/staging/tests/test_bvbrc_phylogeny_common.py",
+      "sha256": "5354fa8af512b7afb71defc9db966b1ebc25f9e69c420e52ee780259320dacce",
+      "bytes": 45287
+    }
+  ],
+  "guard": [
+    "builtins.open",
+    "io.open",
+    "pathlib.Path.open",
+    "socket.socket",
+    "socket.create_connection",
+    "subprocess.run",
+    "subprocess.Popen"
+  ],
+  "not_verified": [
+    "C4 Store authentication/byte custody",
+    "production installation/registries",
+    "selected child execution binding",
+    "typed episode communication",
+    "live service execution",
+    "PhyML/FastTree native log acquisition",
+    "W05/annotation scoring"
+  ]
+}

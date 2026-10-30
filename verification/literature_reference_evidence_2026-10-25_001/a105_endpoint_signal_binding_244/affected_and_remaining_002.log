@@ -1,0 +1,117 @@
+........................................................................ [ 10%]
+........................................................................ [ 20%]
+..............................................................FF..FF..F. [ 30%]
+........................................................................ [ 40%]
+........................................................................ [ 50%]
+...........F...............F............................................ [ 60%]
+........................................................................ [ 70%]
+........................................................................ [ 80%]
+........................................................................ [ 91%]
+................................................................         [100%]
+=================================== FAILURES ===================================
+_ test_selected_native_cells_and_saved_only_binding_reconstruction[primary_swap] _
+tests/test_literature_figure_integration.py:170: in test_selected_native_cells_and_saved_only_binding_reconstruction
+    store, context, args = setup_case(tmp_path, case=case)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_figure_integration.py:57: in setup_case
+    raw = ((PRIMARY/'PMC8764529.xml').read_bytes() if primary else
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_endpoint_signal_binding_244/pin_002/verification/literature_reference_evidence_2026-10-25_001/primary_f420_partner_013/PMC8764529.xml'
+_ test_selected_native_cells_and_saved_only_binding_reconstruction[primary_representation] _
+tests/test_literature_figure_integration.py:170: in test_selected_native_cells_and_saved_only_binding_reconstruction
+    store, context, args = setup_case(tmp_path, case=case)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_figure_integration.py:57: in setup_case
+    raw = ((PRIMARY/'PMC8764529.xml').read_bytes() if primary else
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_endpoint_signal_binding_244/pin_002/verification/literature_reference_evidence_2026-10-25_001/primary_f420_partner_013/PMC8764529.xml'
+_ test_ordinary_figure_child_parent_delivery_and_observation_counts[primary_swap] _
+tests/test_literature_figure_integration.py:213: in test_ordinary_figure_child_parent_delivery_and_observation_counts
+    store, context, args = setup_case(tmp_path/'state', case=case)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_figure_integration.py:57: in setup_case
+    raw = ((PRIMARY/'PMC8764529.xml').read_bytes() if primary else
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_endpoint_signal_binding_244/pin_002/verification/literature_reference_evidence_2026-10-25_001/primary_f420_partner_013/PMC8764529.xml'
+_ test_ordinary_figure_child_parent_delivery_and_observation_counts[primary_representation] _
+tests/test_literature_figure_integration.py:213: in test_ordinary_figure_child_parent_delivery_and_observation_counts
+    store, context, args = setup_case(tmp_path/'state', case=case)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_figure_integration.py:57: in setup_case
+    raw = ((PRIMARY/'PMC8764529.xml').read_bytes() if primary else
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_endpoint_signal_binding_244/pin_002/verification/literature_reference_evidence_2026-10-25_001/primary_f420_partner_013/PMC8764529.xml'
+___ test_parent_receives_requested_difference_and_experimental_meanings_once ___
+tests/test_literature_figure_integration.py:259: in test_parent_receives_requested_difference_and_experimental_meanings_once
+    store, context, args = setup_case(tmp_path, components=['ordinate_difference'])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_figure_integration.py:57: in setup_case
+    raw = ((PRIMARY/'PMC8764529.xml').read_bytes() if primary else
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_endpoint_signal_binding_244/pin_002/verification/literature_reference_evidence_2026-10-25_001/primary_f420_partner_013/PMC8764529.xml'
+______ test_only_enabled_literature_binding_supplies_experimental_marker _______
+tests/test_literature_experimental_prompt_delivery.py:261: in test_only_enabled_literature_binding_supplies_experimental_marker
+    assert enabled.decision_context(context, None)["literature_experimental_work"] == {
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:845: in decision_context
+    if assignment.get("requested_rate_grid_components") or self._rate_grid_repository().has_work(context):
+                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:1092: in _rate_grid_repository
+    return self.services.literature_rate_observation_repository().grid_projection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'EmptyServices' object has no attribute 'literature_rate_observation_repository'
+____ test_explicit_parent_sources_are_receipt_bound_fixed_and_reconstructed ____
+tests/test_literature_reference_parent_delivery.py:32: in test_explicit_parent_sources_are_receipt_bound_fixed_and_reconstructed
+    assert enabled.initial_decision_context(replace(parent,received_record_refs=(*parent.received_record_refs,'extra')))==information
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:822: in initial_decision_context
+    result.update(self._native_rate_display_context(context))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:1281: in _native_rate_display_context
+    record = self.services.read_record(reference)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/episode_services.py:96: in read_record
+    return self.workflow.store.get(reference)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/state.py:229: in get
+    raise ContractError("unknown_reference")
+E   gene_annotation_episode.domain.ContractError: unknown_reference
+=========================== short test summary info ============================
+FAILED tests/test_literature_figure_integration.py::test_selected_native_cells_and_saved_only_binding_reconstruction[primary_swap]
+FAILED tests/test_literature_figure_integration.py::test_selected_native_cells_and_saved_only_binding_reconstruction[primary_representation]
+FAILED tests/test_literature_figure_integration.py::test_ordinary_figure_child_parent_delivery_and_observation_counts[primary_swap]
+FAILED tests/test_literature_figure_integration.py::test_ordinary_figure_child_parent_delivery_and_observation_counts[primary_representation]
+FAILED tests/test_literature_figure_integration.py::test_parent_receives_requested_difference_and_experimental_meanings_once
+FAILED tests/test_literature_experimental_prompt_delivery.py::test_only_enabled_literature_binding_supplies_experimental_marker
+FAILED tests/test_literature_reference_parent_delivery.py::test_explicit_parent_sources_are_receipt_bound_fixed_and_reconstructed
+7 failed, 705 passed in 1282.97s (0:21:22)

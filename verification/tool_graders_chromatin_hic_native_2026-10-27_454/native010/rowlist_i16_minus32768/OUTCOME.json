@@ -1,0 +1,49 @@
+{
+  "case": "rowlist_i16_minus32768",
+  "writer": "packet454_explicit_whole_native_file_serializer",
+  "independent_reader": "official hictk-v2.2.0 release binary",
+  "validate_exit": 0,
+  "dump_exit": 0,
+  "native_dump_matches": true,
+  "byte_audit_matches": true,
+  "file": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/native010/rowlist_i16_minus32768/output.hic",
+    "sha256": "46f4d816e2e282f97aa89d7d182fb20c76da1f8e8d0f07a3be98b6b8536968a2",
+    "size_bytes": 264
+  },
+  "native_dump_rows": [
+    [
+      0,
+      0,
+      4.0
+    ],
+    [
+      0,
+      1,
+      -32768.0
+    ],
+    [
+      1,
+      1,
+      4.0
+    ]
+  ],
+  "expected_rows": [
+    [
+      0,
+      0,
+      4
+    ],
+    [
+      0,
+      1,
+      -32768
+    ],
+    [
+      1,
+      1,
+      4
+    ]
+  ],
+  "scientific_count_status": "retained_invalid_negative_or_nonfinite"
+}

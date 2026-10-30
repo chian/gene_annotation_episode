@@ -1,0 +1,326 @@
+{
+  "alimask_executable": {
+    "sha256": "4cf273b7b4b52363468b758a39bedf8f00540b01983bf6641ffd36140afad547",
+    "size_bytes": 472176
+  },
+  "alimask_source": {
+    "sha256": "504e52c49a249facca5887d96f5efeaaf8012820b47bbe75e782aa14af7034ab",
+    "size_bytes": 25455
+  },
+  "compile_flags": [
+    "-std=c99",
+    "-O2",
+    "-fno-fast-math",
+    "-ffp-contract=off",
+    "-I",
+    "<staged Easel>",
+    "-MMD",
+    "-MF",
+    "<per-object dependency file>"
+  ],
+  "compile_native_sources": [
+    "esl_tree.c",
+    "esl_distance.c",
+    "esl_msacluster.c",
+    "esl_cluster.c",
+    "esl_vectorops.c",
+    "esl_rand64.c"
+  ],
+  "diagnostic_sources": {
+    "verification/tool_graders_hmmer_native_weight_oracles_2026-10-28_528/weight_oracle.c": {
+      "sha256": "6b74253295199a827f41a45801b87c3bf02afb563acc157c060ffeb3bc480e4b",
+      "size_bytes": 8755
+    },
+    "verification/tool_graders_hmmer_pb_sampling_2026-10-28_525/sampler_oracle.c": {
+      "sha256": "812d5549e7b52639d9140917438bbae288cfd8d8b85d06b51e995eaecbf1612c",
+      "size_bytes": 2372
+    }
+  },
+  "easel_files": {
+    "easel.h": {
+      "sha256": "e67237dad50a9e19d7b5279e507e0fdbe2c7a58cc2f4814058465376e9613017",
+      "size_bytes": 22227
+    },
+    "esl_alphabet.h": {
+      "sha256": "6eb03a4ae55d7e651acfd5bf4ba5a5c226f16633928c017860e495aa7963e332",
+      "size_bytes": 7523
+    },
+    "esl_arr2.h": {
+      "sha256": "83712e75f74080341d7b9ecb7c8126d436e4349852f6599d5698529f46160ba5",
+      "size_bytes": 204
+    },
+    "esl_bitfield.h": {
+      "sha256": "d3f5657af08b7ad2ad87bb25e0786a1df11f44a17de37e8b52f6e537a1d43469",
+      "size_bytes": 867
+    },
+    "esl_buffer.h": {
+      "sha256": "4924f906a226754c07bf4063f28b063db3e109a1d14beb54fe7cb3bbf477ab9d",
+      "size_bytes": 5643
+    },
+    "esl_cluster.c": {
+      "sha256": "97f116ba83af6fcc77ba5e5dd2c220ff185021e660fbd2d4623ed84b00b1e836",
+      "size_bytes": 12525
+    },
+    "esl_cluster.h": {
+      "sha256": "8ad78ab8af375d339cdd87b1f7e3f7fb68b406af88b73d86522fd892ae417ae5",
+      "size_bytes": 434
+    },
+    "esl_config.h": {
+      "sha256": "d42b433448d08cc2cb08e13a98dbf82c812dd5755afc8ce31d1d425f7268acc5",
+      "size_bytes": 2454
+    },
+    "esl_distance.c": {
+      "sha256": "cd6bd49339e502da9f172cf4404788d97beebe9eb11312bf85ba3a73bed18f3a",
+      "size_bytes": 72036
+    },
+    "esl_distance.h": {
+      "sha256": "ffe3e8594fee781bfa2a3ad6b2d99031bea0ed66dca6ee9837a30bf0e970f9b5",
+      "size_bytes": 2939
+    },
+    "esl_dmatrix.h": {
+      "sha256": "46bdf58d092a3f9d5d428c3e2cc38045a05bfb5235a95cd923254f2753c489ba",
+      "size_bytes": 3860
+    },
+    "esl_getopts.h": {
+      "sha256": "615aabdd0b3ca40b92b59623ec8c1e3df1db3b00260653daddcd1fae21ea221f",
+      "size_bytes": 5585
+    },
+    "esl_keyhash.h": {
+      "sha256": "8fd8e6a68d08a94e8ed2c75bf734f5768470712a95796871c771e3bbb428744b",
+      "size_bytes": 2755
+    },
+    "esl_matrixops.h": {
+      "sha256": "81068dd28f398a0b60a27b97fee47a30c805e342b7617f04de60a186149b346f",
+      "size_bytes": 2831
+    },
+    "esl_msa.h": {
+      "sha256": "c008da661a554a1b1566be8588bf7351e30b34c7872b8bec5a837ff06dc3809f",
+      "size_bytes": 10707
+    },
+    "esl_msacluster.c": {
+      "sha256": "c3a3076d464fac4e2c4f0fecbe389754d4c505a10ae893a9bf4a7b78b17d694c",
+      "size_bytes": 15435
+    },
+    "esl_msacluster.h": {
+      "sha256": "66f64ae019031a29c0166daf67fd4b3ed6d32509fdc64321b0f6e09c6b46b192",
+      "size_bytes": 318
+    },
+    "esl_msafile.h": {
+      "sha256": "ef3fa13683d28bf7583017871b85981f55f1859d49e4e903d459c30ab6016dc6",
+      "size_bytes": 6927
+    },
+    "esl_msafile_a2m.h": {
+      "sha256": "c3b0ed1352781b1ba3561d6b7d541c10afe5e1db3f3676716504d3e2c5339711",
+      "size_bytes": 539
+    },
+    "esl_msafile_afa.h": {
+      "sha256": "d94e860d617c3b3b5a328dc9539678494f94d7e8dbd5126cb2682e422a49b157",
+      "size_bytes": 533
+    },
+    "esl_msafile_clustal.h": {
+      "sha256": "50919c7b75ded7a24b2b7aeb4e0daf51669de1454409553f2db33c7c7fd2fcb1",
+      "size_bytes": 573
+    },
+    "esl_msafile_phylip.h": {
+      "sha256": "ed623225cb1ab0b837720a82d9df2397f7a861cb01621447316d4a0427a7feea",
+      "size_bytes": 686
+    },
+    "esl_msafile_psiblast.h": {
+      "sha256": "6116cc6af101cb5307b38095638f9ea03b9a8df5f172fce641c3a5149d54fa05",
+      "size_bytes": 559
+    },
+    "esl_msafile_selex.h": {
+      "sha256": "a122fce0cf0e43035dfeb1255df73a7565897f23340f82cf52cf1c9ed8c64a54",
+      "size_bytes": 542
+    },
+    "esl_msafile_stockholm.h": {
+      "sha256": "d32ddda6ea637c36181fbba7bb0f9d505532dc1a20c7391ea60853d9fd23335b",
+      "size_bytes": 573
+    },
+    "esl_msaweight.c": {
+      "sha256": "0195e7c2a4428f02a84e3c239922090e72a5a72a5cc5de8a3a5551f06b6efe68",
+      "size_bytes": 75553
+    },
+    "esl_msaweight.h": {
+      "sha256": "caf345d5c9053af80e899b697a648430306f2db6240f8724b017490b94ffb106",
+      "size_bytes": 3609
+    },
+    "esl_quicksort.h": {
+      "sha256": "117d7b1fe7d111dbbf323511f22f2d7d92544ba01bd35bf9885c86e097d1335a",
+      "size_bytes": 270
+    },
+    "esl_rand64.c": {
+      "sha256": "abd4b05b7bf619f196b1ca99c0de452e0fe38b3ffa0f7e2f5991d88d763e5359",
+      "size_bytes": 28417
+    },
+    "esl_rand64.h": {
+      "sha256": "5b16b1d8bfe71047252fb0c6ad837b1f31e88e16f3f54c820c0c8a39e298ea00",
+      "size_bytes": 1167
+    },
+    "esl_random.h": {
+      "sha256": "16fe08499fdedadf98730e8a070911daa6ca4d41376769faa00a4678fb2e5427",
+      "size_bytes": 2709
+    },
+    "esl_randomseq.h": {
+      "sha256": "c6887cd816188f04b772417e933807524d34be867b75944cbe3206ad07ea6dfa",
+      "size_bytes": 3366
+    },
+    "esl_ssi.h": {
+      "sha256": "b0fd2a1db1c36645eecc695fdbdf9044115c9b6d9a158b5a57bf5d3e0fa63800",
+      "size_bytes": 6679
+    },
+    "esl_stack.h": {
+      "sha256": "f71eadbb6b71ea9f85f62c011e954819cd2f9ef82437268ce0c454de958e769d",
+      "size_bytes": 2290
+    },
+    "esl_stats.h": {
+      "sha256": "3260c7e3120bc788d60ff6645f43330e7fc1d6424330c629f7d2d63d7b8e690a",
+      "size_bytes": 4732
+    },
+    "esl_stopwatch.h": {
+      "sha256": "9e44eef9f9bccbe22b53463ad348783f2eee7175da70dc80823d580a81809cd9",
+      "size_bytes": 1702
+    },
+    "esl_tree.c": {
+      "sha256": "9da088a37c18db13f6ebf5519e4ad62db323233faebaebfff88c704222151125",
+      "size_bytes": 73795
+    },
+    "esl_tree.h": {
+      "sha256": "dcae04cc12d8a4d39d8c2a0a680567809576f685461ff12f9a6a43e95f218e8f",
+      "size_bytes": 4877
+    },
+    "esl_vectorops.c": {
+      "sha256": "6226cb25818a1319811f7fdec2aa590df0b60f40aa01521a806cf484ea117463",
+      "size_bytes": 55624
+    },
+    "esl_vectorops.h": {
+      "sha256": "b8e1fc5912bc66026e9a50f41f4616e42a807b9de749b72efa493e1caa36f509",
+      "size_bytes": 8435
+    },
+    "libeasel.a": {
+      "sha256": "94db21cb1a09e54abf99682d2120571915cdf70bfeef8b7515969691248dd48d",
+      "size_bytes": 1503690
+    }
+  },
+  "environment": {
+    "HMMER_NATIVE_ORACLE_ALIMASK": "<snapshot>/resources/software/infernal-1.1.5/hmmer/src/alimask",
+    "HMMER_NATIVE_ORACLE_CC": "<root-selected pinned C99 compiler executable>",
+    "HMMER_NATIVE_ORACLE_EASEL_DIR": "<snapshot>/resources/software/infernal-1.1.5/easel"
+  },
+  "harnesses": {
+    "sampler": "verification/tool_graders_hmmer_pb_sampling_2026-10-28_525/sampler_oracle.c",
+    "weights": "verification/tool_graders_hmmer_native_weight_oracles_2026-10-28_528/weight_oracle.c"
+  },
+  "link_libraries": [
+    "<staged Easel>/libeasel.a",
+    "-lm",
+    "-lpthread"
+  ],
+  "profile": {
+    "association_limit": "Explicit retained profile; diagnostic compilation does not recover original alimask build history.",
+    "easel_version": "0.49",
+    "engine_version": "3.4",
+    "executable_sha256": "4cf273b7b4b52363468b758a39bedf8f00540b01983bf6641ffd36140afad547",
+    "infernal_version": "1.1.5",
+    "name": "infernal_1_1_5_hmmer_3_4_alimask",
+    "source_sha256s": {
+      "easel/esl_msaweight.c": "0195e7c2a4428f02a84e3c239922090e72a5a72a5cc5de8a3a5551f06b6efe68",
+      "easel/esl_msaweight.h": "caf345d5c9053af80e899b697a648430306f2db6240f8724b017490b94ffb106",
+      "easel/esl_rand64.c": "abd4b05b7bf619f196b1ca99c0de452e0fe38b3ffa0f7e2f5991d88d763e5359",
+      "easel/esl_vectorops.c": "6226cb25818a1319811f7fdec2aa590df0b60f40aa01521a806cf484ea117463",
+      "hmmer/src/alimask.c": "504e52c49a249facca5887d96f5efeaaf8012820b47bbe75e782aa14af7034ab"
+    }
+  },
+  "root_owned_system_dependencies": [
+    "C99 compiler and internal compiler/linker programs",
+    "system C headers and C runtime",
+    "libm",
+    "pthread library"
+  ],
+  "source_inspection": {
+    "esl_cluster.c": [
+      "complete native SingleLinkage lines 1-183"
+    ],
+    "esl_distance.c": [
+      "complete esl_dst_XPairId lines 249-308",
+      "complete esl_dst_XPairIdMx/esl_dst_XDiffMx lines 613-712"
+    ],
+    "esl_msacluster.c": [
+      "complete native SingleLinkage and callbacks lines 1-231"
+    ],
+    "esl_msaweight.c": [
+      "includes lines 1-55",
+      "complete GSC/BLOSUM documentation and functions lines 650-894"
+    ],
+    "esl_rand64.c": [
+      "all production RNG/Deal/MT19937-64 functions lines 1-536"
+    ],
+    "esl_tree.c": [
+      "complete esl_tree_SetCladesizes lines 279-311",
+      "complete cluster_engine and esl_tree_UPGMA lines 1544-1747"
+    ],
+    "esl_vectorops.c": [
+      "complete DScale lines 62-67",
+      "complete DSum lines 198-212",
+      "complete DNorm lines 1142-1152"
+    ],
+    "headers": "Pinned include closure; config and required tree/MSA API definitions inspected, not a claim of semantic review of every header."
+  },
+  "status": "source_pins_and_unexecuted_diagnostic_recipe_not_native_results",
+  "support_files": [
+    "resources/software/infernal-1.1.5/easel/easel.h",
+    "resources/software/infernal-1.1.5/easel/esl_alphabet.h",
+    "resources/software/infernal-1.1.5/easel/esl_arr2.h",
+    "resources/software/infernal-1.1.5/easel/esl_bitfield.h",
+    "resources/software/infernal-1.1.5/easel/esl_buffer.h",
+    "resources/software/infernal-1.1.5/easel/esl_cluster.c",
+    "resources/software/infernal-1.1.5/easel/esl_cluster.h",
+    "resources/software/infernal-1.1.5/easel/esl_config.h",
+    "resources/software/infernal-1.1.5/easel/esl_distance.c",
+    "resources/software/infernal-1.1.5/easel/esl_distance.h",
+    "resources/software/infernal-1.1.5/easel/esl_dmatrix.h",
+    "resources/software/infernal-1.1.5/easel/esl_getopts.h",
+    "resources/software/infernal-1.1.5/easel/esl_keyhash.h",
+    "resources/software/infernal-1.1.5/easel/esl_matrixops.h",
+    "resources/software/infernal-1.1.5/easel/esl_msa.h",
+    "resources/software/infernal-1.1.5/easel/esl_msacluster.c",
+    "resources/software/infernal-1.1.5/easel/esl_msacluster.h",
+    "resources/software/infernal-1.1.5/easel/esl_msafile.h",
+    "resources/software/infernal-1.1.5/easel/esl_msafile_a2m.h",
+    "resources/software/infernal-1.1.5/easel/esl_msafile_afa.h",
+    "resources/software/infernal-1.1.5/easel/esl_msafile_clustal.h",
+    "resources/software/infernal-1.1.5/easel/esl_msafile_phylip.h",
+    "resources/software/infernal-1.1.5/easel/esl_msafile_psiblast.h",
+    "resources/software/infernal-1.1.5/easel/esl_msafile_selex.h",
+    "resources/software/infernal-1.1.5/easel/esl_msafile_stockholm.h",
+    "resources/software/infernal-1.1.5/easel/esl_msaweight.c",
+    "resources/software/infernal-1.1.5/easel/esl_msaweight.h",
+    "resources/software/infernal-1.1.5/easel/esl_quicksort.h",
+    "resources/software/infernal-1.1.5/easel/esl_rand64.c",
+    "resources/software/infernal-1.1.5/easel/esl_rand64.h",
+    "resources/software/infernal-1.1.5/easel/esl_random.h",
+    "resources/software/infernal-1.1.5/easel/esl_randomseq.h",
+    "resources/software/infernal-1.1.5/easel/esl_ssi.h",
+    "resources/software/infernal-1.1.5/easel/esl_stack.h",
+    "resources/software/infernal-1.1.5/easel/esl_stats.h",
+    "resources/software/infernal-1.1.5/easel/esl_stopwatch.h",
+    "resources/software/infernal-1.1.5/easel/esl_tree.c",
+    "resources/software/infernal-1.1.5/easel/esl_tree.h",
+    "resources/software/infernal-1.1.5/easel/esl_vectorops.c",
+    "resources/software/infernal-1.1.5/easel/esl_vectorops.h",
+    "resources/software/infernal-1.1.5/easel/libeasel.a",
+    "resources/software/infernal-1.1.5/hmmer/src/alimask",
+    "resources/software/infernal-1.1.5/hmmer/src/alimask.c",
+    "verification/tool_graders_hmmer_native_weight_oracles_2026-10-28_528/weight_oracle.c",
+    "verification/tool_graders_hmmer_pb_sampling_2026-10-28_525/sampler_oracle.c",
+    "verification/tool_graders_hmmer_native_weight_oracles_2026-10-28_528/SOURCE_PINS.json"
+  ],
+  "weight_link_sources": [
+    "esl_tree.c",
+    "esl_distance.c",
+    "esl_msacluster.c",
+    "esl_cluster.c",
+    "esl_vectorops.c",
+    "esl_rand64.c"
+  ]
+}

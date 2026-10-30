@@ -1,0 +1,74 @@
+{
+  "version": "native_hmmer_preparation_run_plan_v1",
+  "identity": {
+    "run_id": "producer267-test",
+    "episode_id": "selected-local-child",
+    "resource_id": "local",
+    "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check004/temporary/test_actual_alimask_reads_firs0/native.json",
+    "operation_key": "selected-command",
+    "attempt_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e",
+    "requested_job_sha256": "d82b771c68f52724d43da9a299cb5ab0f220a0af6338cb7d75291cc148d52532"
+  },
+  "requested_job": {
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/alimask",
+      "--amino",
+      "--hand",
+      "--ali2model",
+      "2-4",
+      "--informat",
+      "Stockholm",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check004/temporary/test_actual_alimask_reads_firs0/two-alignments.sto"
+    ],
+    "environment": {},
+    "native_hmmer_preparation": {
+      "version": "native_hmmer_preparation_job_v1",
+      "program": "alimask",
+      "mode": "alignment_to_model",
+      "software": {
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/alimask",
+        "sha256": "4cf273b7b4b52363468b758a39bedf8f00540b01983bf6641ffd36140afad547",
+        "engine_version": "3.4"
+      },
+      "environment": {},
+      "operands": [
+        {
+          "role": "alignment",
+          "ordinal": 0,
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check004/temporary/test_actual_alimask_reads_firs0/two-alignments.sto",
+          "format": "stockholm",
+          "sha256": "11bee2b3a6f9b4470f24f2729d720cf2ea4b7d023bdc42f093b7b19e3f9403b0",
+          "size_bytes": 434,
+          "artifact_ref": "fixture267:alignment:0"
+        }
+      ],
+      "options": [
+        "--amino",
+        "--hand",
+        "--ali2model",
+        "2-4"
+      ],
+      "outputs": [
+        {
+          "role": "stdout",
+          "format": "hmmer_stdout",
+          "relative_path": "outputs/stdout"
+        },
+        {
+          "role": "stderr",
+          "format": "hmmer_stderr",
+          "relative_path": "outputs/stderr"
+        }
+      ],
+      "key": null,
+      "input_metadata": {},
+      "grading_parameters": {}
+    }
+  },
+  "attempt_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check004/temporary/test_actual_alimask_reads_firs0/hmmer-preparation-attempt",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  }
+}

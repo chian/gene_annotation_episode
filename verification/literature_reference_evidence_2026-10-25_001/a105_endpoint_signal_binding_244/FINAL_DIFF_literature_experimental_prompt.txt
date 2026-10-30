@@ -1,0 +1,12 @@
+--- pin_002/gene_annotation_episode/literature_experimental_prompt.py
++++ pin_005/gene_annotation_episode/literature_experimental_prompt.py
+@@ -625,7 +625,8 @@
+         return
+     if (isinstance(content, Mapping) and content.get("view") == "records"
+             and isinstance(content.get("records"), (tuple, list))
+-            and (any(_endpoint_signal.rows_from_values(content["records"]))
++            and (any(_endpoint_signal.endpoint_history_record(row) for row in content['records'])
++                or any(_endpoint_signal.rows_from_values(content["records"]))
+                 or any(_product_coupling.rows_from_values(content["records"]))
+                 or any(_measurement_validation.rows_from_values(content["records"]))
+                 or any(_ion_discrimination.rows_from_values(content["records"]))

@@ -1,0 +1,53 @@
+{
+  "scope": "Separate verification of the already-submitted NCBI BLAST job; outside the active tool-grader goal.",
+  "recorded_at": "2026-10-24T22:39:35.244886+00:00",
+  "rid": "DTKE1D4G016",
+  "status_observation": {
+    "observed_at": "2026-10-24T22:38:31.790469+00:00",
+    "http_status": 200,
+    "status": "READY",
+    "has_hits": true,
+    "body_path": "verification/w04_blast_graders_2026-10-24_001/live_api/status_20261024T223831Z.body",
+    "metadata_path": "verification/w04_blast_graders_2026-10-24_001/live_api/status_20261024T223831Z.metadata.json"
+  },
+  "native_result": {
+    "retrieved_at": "2026-10-24T22:38:44.560190+00:00",
+    "http_status": 200,
+    "format": "JSON2",
+    "body_path": "verification/w04_blast_graders_2026-10-24_001/live_api/fetch_20261024T223844Z.body",
+    "metadata_path": "verification/w04_blast_graders_2026-10-24_001/live_api/fetch_20261024T223844Z.metadata.json",
+    "bytes": 2911,
+    "sha256": "38908947ffab7a09a8260c6c6933b53cd35c066a3630e5e072c61be0a51c771f",
+    "archive_member": {
+      "ordinal": 1,
+      "name": "DTKE1D4G016_1.json"
+    },
+    "program": "blastp",
+    "database": "swissprot",
+    "query_title": "gene_001",
+    "query_length": 253,
+    "hit_count": 7,
+    "hsp_count": 7
+  },
+  "identity_checks": {
+    "job_rid_matches_original_submission": true,
+    "status_request_uses_original_rid": true,
+    "fetch_request_uses_original_rid": true,
+    "submitted_sequence_matches_saved_query": true,
+    "program_matches_original_submission_and_native_result": true,
+    "database_matches_original_submission_and_native_result": true,
+    "query_title_matches_native_result": true,
+    "query_length_matches_native_result": true,
+    "all_native_hsp_query_sequences_match_submitted_residues": true,
+    "convenience_native_copy_matches_timestamped_receipt": true
+  },
+  "limitations": [
+    "This check verifies job and native result identity; it does not establish biological function or annotation credit."
+  ],
+  "actions": {
+    "status_requests": 1,
+    "result_fetch_requests": 1,
+    "new_submissions": 0,
+    "goal_or_grader_changes": false
+  }
+}

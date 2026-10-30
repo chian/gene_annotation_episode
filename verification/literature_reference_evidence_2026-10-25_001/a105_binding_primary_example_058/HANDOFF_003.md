@@ -1,0 +1,57 @@
+058 is delivered as one retained-primary example of the existing accepted native005 binding-interaction component. The successful fresh controlled run is `run_003`; `AUDIT_003.json` independently checks its immutable code pin, actual action/observation counts and original typed parent forms. No production, test, shared document, accepted052/055 artifact, original042 packet or old run was edited.
+
+The experiment is still one paper and one Table 3 competition-assay series, evaluated for two competitor substitutions. Neither the repaired run003 nor the separate C4 fixture is a second scientific experiment or independent replicate. No grader, axis sheet, router, A101 operation, W05 aggregation or annotation-transfer weight was added. The library still targets ten evidence axes; this delivery does not establish full A105 completion.
+
+The retained source is Rajagopalan et al., DOI 10.1038/nsmb.2568 / PMC3676455. The full primary Methods/Results and original 600 × 221 Table 3 image were inspected during the sealed proposal stage, followed by this agent's own complete post-paper authority reset. `READ_RECEIPT_001.json`, `FINAL_RESET_DIRECTION_001.json`, `READ_PROVENANCE_001.md` and `CODE_READS_001.json` preserve those actual reads. `CODE_READS_002.json` records the additional bounded Store/runtime/controller/provider consumer reads for implementation, with complete-file claims distinguished from complete-method/range reads. No other paper packet or uninspected supplement was opened.
+
+`run_003/SOURCE_PROOF.json` recomputes the primary HTML/article-text equivalence from this pin's copied bytes: 51,567 non-whitespace characters, and the actual original Table 3 image URI extracted from retained HTML. All three original-source hashes match `SOURCE_IDENTITIES_001.json`. The original image is an explicitly retained asset child of the primary article; its selected image source equals its original image source, with no fabricated crop ancestry. All primary source witnesses remain bound to the actual original source/text representations. The old042 manually authored numerical JSON was never an experimental input.
+
+The source assay meaning and numerical result are:
+
+| Item | Meaning retained |
+| --- | --- |
+| Assayed subjects | apo-WT IscR and apo-E43A IscR in separate assays; binding-construct boundaries/tags/preparation counts remain unknown |
+| Arrangement | 5 nM Texas Red labelled WT hya DNA with unlabeled competitor; WT and E43A proteins replace each other between assays, labelled and unlabeled DNA coexist |
+| Protein inputs | WT 22 nM versus E43A 20 nM: a reported protocol difference, without a correction inferred from it |
+| Conditions | Anaerobic competition protocol, 40 mM TrisCl pH 7.9, 250 mM KCl, 5% glycerol, 10 μM DTT; protocol incubation/delay retained, temperature unknown |
+| Measured signal | Fluorescence anisotropy converted to fraction bound using source Afree/Abound definitions; Abound is the no-competitor reference at the selected input, not proven absolute occupancy |
+| Fitted endpoint | Four-parameter logistic IC50 in nM; not an intrinsic Kd or physiological activation measurement |
+| Uncertainty | SD of a fit to averaged titration data, not SD between independently fitted parameters, SEM, known covariance or independent protein preparations |
+| Repetition wording | Actual literal “at least three” independent titration experiments is preserved; frozen scalar reader returns `unsupported_literal` and canonical minimum_count remains null |
+
+| Competitor | WT self IC50 | WT competitor IC50 | E43A self IC50 | E43A competitor IC50 | WT ratio | E43A ratio | Ratio of ratios | Natural log ratio of ratios |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 7C→G | 32 ± 2 nM | >510 nM | 11 ± 1 nM | 17 ± 3 nM | >15.9375 | 1.5454545454545454 | >10.3125 | >2.333356751660799 |
+| 8C→G | 32 ± 2 nM | >740 nM | 11 ± 1 nM | 7 ± 3 nM | >23.125 | 0.6363636363636364 | >36.339285714285715 | >3.5928994071415454 |
+
+These inequalities are printed-limit arithmetic only: the native limited cells have `value=null`, their actual threshold and relation, and `bound_kind=reported_limit_arithmetic`. They are not true-parameter bounds, confidence limits or a censored likelihood fit. Raw parameter cells preserve visual-transcription origin; computed comparisons preserve derived origin. The parameter kind is IC50, with reported-protocol scope and `common_conditions=not_matched`.
+
+The two comparisons share the same actual WT and E43A self-control cells. `run_003/SHARED_CONTROLS.json` proves their identical source-bound physical-fit identities and operand keys across both populations. Six distinct fits occupy the eight comparison slots; duplicate controls are not independent evidence. Source-cell identity and physical-fit identity stay separate. Canonical construct identities only identify the named construct within a comparison; they do not supply boundaries or tags from a crystal/3CA construct.
+
+`run_003/SAVED_EXTRACTION_AND_CALCULATION.json` pairs the actual extraction with the numerical inputs, native/calculated cells, source witnesses, physical identities and qualification codes. Every role's word-count literal stays exact while its scalar interpretation is unsupported and canonical count null. The calculation model is null. Native model/covariance-reader capability remains `unimplemented`, input status `not_supplied_by_native_operation`; the four private model-dependent components were never selected or returned.
+
+The interpretation is competition discrimination under the two reported protocols. Unequal protein inputs, unknown construct/preparation details and the fitted-curve uncertainty prevent an intrinsic-affinity, mutation-only common-condition, physiological-activation or target-transfer claim. Other experiments in this article may address other questions; they were not converted into extra independent replication here. The fixed 762 nt supplied target remains the host target only; these source measurements are on the IscR reference and establish no target correspondence.
+
+The successful runtime evidence is separated by responsibility:
+
+| Evidence | What actually ran / what it establishes |
+| --- | --- |
+| `run_003/SELECTED_RECEIPT.json` | Real selected LiteratureEpisodes, existing shared method_loop, two selected `literature.binding.interaction.populate` actions, one original typed child→parent form containing all sixteen native rows, then one source-subject reasoning commitment |
+| `run_003/SELECTED_NATIVE_ROWS.json` | Actual sixteen returned cells with source/role/relationship/uncertainty bindings; numerical results equal the pre-reviewed arithmetic |
+| `AUDIT_003.json` | Two episodes, four ordinary actual actions and four observations: two child populations, one returned parent commission and one parent reasoning action. All action deltas and scientific credit zero; source processing did not fabricate scientific findings/credit. No observation/assessment records or annotation credit were created |
+| `run_003/SELECTED_RECEIPT.json` read-only section | Closed Store, fresh actual SQLite `mode=ro` checked before the first reconstructed parent projection. Original source/image file reads, artifact access, image decode, native reader/calculator, receiving and repricing forbidden. Sixteen rows reconstruct unchanged; complete SQL dump unchanged |
+| `run_003/PROVIDER_TEXT_all_native.txt` | Actual `_SessionConnection.complete`/presentation/turn boundary over controlled RPC; displays the all-sixteen parent return |
+| `run_003/PROVIDER_TEXT_derived_only.txt` | Presentation formatting probe with a filtered derived report. This parent already admitted all sixteen cells and legitimately knows raw numbers. This is **not** an authorization or never-received-raw proof |
+| `run_003/C4_RECEIPT.json` | Separate explicitly direct-populated original-C4 engineering fixture, not a selected detached model run. Its original assignment/form admits interaction_ratio alone. An interruption after receiving rolls back the entire SQL state; authentic admission succeeds; replacing the receipt with an expanded raw subset, even with recomputed local digest, fails original-delivery validation |
+| `run_003/C4_ORIGINAL_COMMISSION.json`, `C4_ORIGINAL_RETURN.json`, `C4_ADMISSION.json` | Actual original parent/child owner identities, typed contract, saved runtime facts/form, authentic return envelope and admission. Read-only exact replay uses the original admitted record with semantic receive/reprice/controller callbacks forbidden, adding no observation and leaving whole SQL unchanged |
+| `provider_permission_run_004/RECEIPT.json` | Additional sealed engineering presentation probe of that **actual original derived-only C4 form**, on a fresh `mode=ro` connection before its first projection. Exactly one admitted interaction_ratio row; all unrequested raw numeric fields null; actual complete/turn text masks raw numeric witnesses. No source/image/reader/calculator/receive/reprice, episode, observation or scientific calculation. Original sources remain available for a later explicit selected read |
+
+The provider choices/source nominations are controlled fixtures, not actual configured-model scientific interpretations. FixtureController supplies a controlled two-action continuation seam, not the production scientific estimator or a new stopping policy. The actual provider presentation probes use a scripted RPC wire with no process/server/model inference. No private provider history, credentials, network messages or full argv was accessed.
+
+`prepare_pin_003.py` sealed 699 files, including complete current application/method_loop package trees, exact primary inputs, target and harness, before execution. `pin_003/PIN_MANIFEST.json` records every file's current hash and origin; files/directories are read-only. `run_003/IMPORT_PROVENANCE_BEFORE.json` and `IMPORT_PROVENANCE_AFTER.json` check all pin files and prove every imported application/method_loop module came from this own immutable pin. The nine relevant accepted native005/C7/service/renderer hashes equal the parent's frozen identities. The additive `provider_permission_004.py` is sealed read-only and identifies both its own hash and the imported native003 pin manifest in its receipt.
+
+`launch_003.py` is the one-shot launcher. Actual preparation/run exited zero, recorded in `EXIT_PREPARE_003.json`, `EXIT_RUN_003.json` and corresponding terminal files. `audit_003.py` reads existing persisted outputs/SQL without source processing or run resumption and passed.
+
+`pin_002` and `run_002` are preserved exactly. Its selected run already passed, including read-only reconstruction/provider formatting. Its subsequent C4 harness assertion failed because it assumed rollback retained an empty newly created admission table; SQLite correctly removed that table. `ADDITIVE_CORRECTION_003.json` records the correction. Fresh run003 uses complete SQL equality after rollback. No prior run was restarted, resumed, hot-patched or relabelled as a new scientific experiment.
+
+The final additive inventory is `MANIFEST_003.json`; `verify_delivery_003.py` checks that inventory, the original sealed proposal inventory, original source identities and relevant accepted native hashes. All final files are confined to this own058 directory. Root independent acceptance/review remains separate from this child's actual-run evidence.

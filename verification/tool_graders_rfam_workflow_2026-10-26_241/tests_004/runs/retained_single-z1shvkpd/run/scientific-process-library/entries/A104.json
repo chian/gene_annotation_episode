@@ -1,0 +1,66 @@
+{
+  "entry_version": "evidence_axis_instruction_v1",
+  "id": "A104",
+  "slot": "evidence_axis",
+  "name": "Evolutionary history and phylogenetic placement",
+  "description": "Investigate protein-family history against the organismal tree and characterized clades, preserving mixed-function, horizontal-transfer and outlier limits.",
+  "investigation_instructions": "Determine what functions the supplied gene or protein may perform by examining its evolutionary history and placement among functionally characterized relatives. Start from the supplied sequence, selected file record or region, or snippets. No candidate annotation or searchable public name is required. Preserve the boundaries of partial material; possible functions can emerge from the comparison.\n\nUse an actual protein-family phylogeny and a reference organismal evolutionary tree at a meaningful shared taxonomic scope. For a conserved function, ask whether the family history agrees with the organismal tree and whether the target sits within a clade containing only that function. Establish the members’ functions from relevant characterization rather than copied family labels. Uncharacterized members do not establish that a clade has only one function. Distinguish the target’s placement from nearest-hit similarity and simple presence/absence patterns.\n\nRetain sampled sequences and taxa, alignment boundaries, tree method/model, the relevant topology and branch lengths, and native branch or placement support with its scale and uncertainty. Bootstrap support and posterior support describe the phylogenetic analysis, not the probability of a functional annotation. Account for paralogs, duplication/loss, missing taxa and unresolved branches when comparing histories.\n\nFrequent horizontal transfer, as in many viral or mobile families, makes broad organismal-tree agreement unsuitable for this inference. A meaningful very-local tree of near relatives may still help; state the restricted scope and what can be learned there. Do not repair an outlying placement with an unsupported transfer story. An outlier by itself yields very little functional information.\n\nWhere functions change rapidly, as in some ion-transporter families, closely related members can form mixed-function clades. Placement in such a clade alone cannot identify a narrow function; use only the shared or broader function that the evidence establishes to limit the remaining possibilities. Keep unresolved specificity, conflicting characterized members and exceptions explicit, and revise possible functions as informative comparisons become available.",
+  "evidence": [
+    {
+      "case_group": "seq_yjeH_exporter_ecoli",
+      "case_id": "seq_yjeH_exporter_ecoli",
+      "limit": "Primary sequence-modeling methods, phylogenetic results and functional assays inspected through indexed full-text sections. No transport experiment rerun.",
+      "observation": "Authors compared YjeH with AdiC, PotE and CadB and constructed an APC-transporter tree; YjeH grouped with the amino-acid efflux branch.",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:4#/actual_observations/0",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4616930/"
+    },
+    {
+      "case_group": "context_oarx_thiamin_2024",
+      "case_id": "context_oarx_thiamin_2024",
+      "limit": "Complete primary methods/results read through Europe PMC XML; deposited XLSX parsed; actual ENA genome record retrieved. No annotation run or experiment performed. Table and experimental strains were kept distinct. | Group source-use limits: The original workbook-derived 87/22/65 counts and ENA inspection are preserved in coverage but not extra biological replications. ATCC13032 table and ATCC14067 experiments remain different.",
+      "observation": "OarX coexists with canonical FabG and belongs to a separate clade. Neighborhoods connect it to thiamin enzymes/transporters and TPP riboswitches; FmnO occurs only in a subset. Canonical thiamin biosynthesis is already accounted for. Physiological-dose growth tests failed to support salvage of PCA, MTA, oxo-HET, oxo-thiamin, or thiamin acetic acid.",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:1#/actual_observations/paper_reported",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11223231/"
+    },
+    {
+      "case_group": "context_archaeal_shikimate_kinase_2001",
+      "case_id": "context_archaeal_shikimate_kinase_2001",
+      "limit": "Complete main paper, genome-analysis methods, results, and substrate-assay methods read. No WIT reconstruction, alignment, or enzyme assay rerun. Historical WIT identifier retained without an unverified modern-locus mapping. | Group source-use limits: Related genome occurrences are not asserted independent tests. The historical WIT/gi identity is preserved without an invented modern locus mapping; none of the analyses was rerun.",
+      "observation": "The target genome has dispersed chorismate genes. In Aeropyrum pernix and Pyrococcus abyssi, an unknown GHMP-kinase-like gene lies immediately downstream of shikimate dehydrogenase. Its homologs occur in pathway-bearing archaea but not the pathway-lacking P. horikoshii comparison. A separate GHMP paralog, RMJ01903, tracks threonine-biosynthesis genes in other archaeal genomes.",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:2#/actual_observations",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC94878/"
+    },
+    {
+      "case_group": "quef",
+      "case_id": "context_quef_nitrile_reductase_2005",
+      "limit": "Primary introduction, bioinformatics comparisons, relevant complete results, and assay/product-analysis methods read. Earlier 2004 discovery paper not fully inspected and not counted separately; no searches or assays rerun.",
+      "observation": "The authors’ preceding genomic search associated QueCDEF with queuosine. QueF lacks an archaeal counterpart, unlike QueCDE. Cyclohydrolase assays were negative with positive controls. Reconsidering the distribution placed QueF after preQ0, the shared queuosine/archaeosine intermediate. Lack of a B12-binding motif favored testing preQ0 reduction before epoxyqueuosine reduction.",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:4#/actual_observations",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC555470/"
+    },
+    {
+      "case_group": "replacement_queH",
+      "case_id": "replacement_queH",
+      "limit": "Full relevant primary results/methods in both papers; independent read-only 7LC5 coordinate probe recorded separately. No cultures, mass-spectrometric assays or mechanism reconstruction rerun.",
+      "observation": "Authors found inverse QueG/DUF208 distribution, Q-pathway neighborhoods and QueA fusions.",
+      "source_locator": "research/slotted_process_library/corpus/replacement/cases.jsonl:1#/actual_observations/0/observation",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5495094/"
+    },
+    {
+      "case_group": "seq_hisZ_lactococcus",
+      "case_id": "seq_hisZ_lactococcus",
+      "limit": "Primary abstract, genetic results, direct-subunit investigation and discussion inspected through indexed full-text sections. No new comparative genomics run.",
+      "observation": "Comparative genomics linked HisZ occurrence to systematic HisG length differences.",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:16#/actual_observations/0",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC17719/"
+    },
+    {
+      "case_group": "seq_ygbP_ispD_ecoli",
+      "case_id": "seq_ygbP_ispD_ecoli",
+      "limit": "Primary results for purification, nucleotide preference, NMR and the database-search narrative inspected through indexed full-text sections; no live pathway analysis.",
+      "observation": "Homolog occurrence correlated with the nonmevalonate pathway in the examined genomes.",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:8#/actual_observations/2",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC18359/"
+    }
+  ]
+}

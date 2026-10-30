@@ -1,0 +1,45 @@
+{
+  "FORMULAS": {
+    "total_amplitude": "s*(a-t)",
+    "corrected_amplitude": "s*(a-b)",
+    "additional_amplitude": "s*(b-t)",
+    "retained_fraction": "(a-b)/(a-t)",
+    "additional_fraction": "1-(a-b)/(a-t)",
+    "total_amplitude_variance": "J_D*Sigma*J_D_transpose",
+    "corrected_amplitude_variance": "J_C*Sigma*J_C_transpose",
+    "additional_amplitude_variance": "J_G*Sigma*J_G_transpose",
+    "retained_fraction_variance": "J_F*Sigma*J_F_transpose",
+    "additional_fraction_variance": "J_H*Sigma*J_H_transpose"
+  },
+  "MEANINGS": {
+    "total_amplitude": "Selected total reporter amplitude in direction-oriented native pixels.",
+    "corrected_amplitude": "Reporter amplitude retained under the selected baseline correction model.",
+    "additional_amplitude": "Additional reporter amplitude under the selected baseline correction model.",
+    "retained_fraction": "Corrected-to-total reporter amplitude ratio under the selected model.",
+    "additional_fraction": "Additional-to-total reporter amplitude ratio under the selected model.",
+    "total_amplitude_variance": "First-order variance of the total amplitude in the supplied joint estimate model.",
+    "corrected_amplitude_variance": "First-order variance of the corrected amplitude in the supplied joint estimate model.",
+    "additional_amplitude_variance": "First-order variance of the additional amplitude in the supplied joint estimate model.",
+    "retained_fraction_variance": "First-order variance of the retained fraction in the supplied joint estimate model.",
+    "additional_fraction_variance": "First-order variance of the additional fraction in the supplied joint estimate model."
+  },
+  "conditional_on": [
+    "common_affine_native_ordinate",
+    "selected_ordinate_direction",
+    "selected_finite_time_coordinate",
+    "source_displayed_baseline",
+    "baseline_extrapolation_supported",
+    "baseline_extrapolation_stipulated",
+    "fast_component_completion_supported",
+    "fast_component_completion_stipulated",
+    "uncorrected_source_trace",
+    "same_trace_shared_initial_ordinate",
+    "joint_manual_reading_error_model",
+    "joint_physical_ordinate_estimate_model",
+    "covariance_already_in_native_coordinate_units",
+    "known_covariance",
+    "estimated_covariance",
+    "first_order_covariance_propagation",
+    "synthetic_uncertainty_scenario"
+  ]
+}

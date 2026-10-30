@@ -1,0 +1,29 @@
+# One actual model-backed A105 return: bounded review packet111
+
+This packet reports an audit, not a new goal, amendment or scoring policy. It concerns the actual admitted H2-rate return from configured-model run030, child episode76758a... to its original parent decision18, and that parent's actual next decision23.
+
+Source: Li et al., *Coupled Ferredoxin and Crotonyl Coenzyme A (CoA) Reduction with NADH Catalyzed by the Butyryl-CoA Dehydrogenase/Etf Complex from Clostridium kluyveri*, DOI10.1128/JB.01417-07, PMC2223550. I read all54,148bytes of the supplied deterministic text projection in three contiguous windows. OriginalHTML content was not independently reread; its retained artifact and hash remain identified. Exact retained Table2 and unit-definition spans are in SOURCE_EXCERPTS_001.json. All78 source witnesses nominated in the two actual successful population actions29/31 exactly match source bytes.
+
+The experiment concerns a native purified Bcd/Etf complex from C.kluyveriDSM555. Ferredoxin and hydrogenase used in the assay came from C.pasteurianum. No recombinant construct or tag is established by these selected rate rows. The H2 assay is a coupled proxy for ferredoxin reduction, measured by gas chromatography, not an isolated Bcd-subunit readout. The Table2 H2 mixture uses0.5ml at37°C, pH7.5,50mMTris-HCl,2mMDTT,2.5mMNADH,1mMcrotonyl-CoA,10µMFAD,0.05mg purified complex, with50µMferredoxin and1.6Uhydrogenase where indicated. These protocol values are source context, not additional independent observations or score multipliers.
+
+The source's Table2 unit definition is endpoint-specific:1U corresponds to1µmolH2 formed/min for this endpoint. Its separate NADH/TTC definitions are not substituted. Normalization is per mg purified complex.
+
+| Actual mixture | Source H2 specific rate, µmol/min/mg | Returned point or bound |
+| --- | ---: | --- |
+| Fd+Hyd |5|5.0 reported point |
+| Fd, hydrogenase omitted |0.02|0.02 reported point |
+| Hyd, ferredoxin omitted |<0.01|null point, boundlt, threshold0.01 |
+
+For the first contrast, the actual deterministic return contains difference5−0.02=4.98µmol/min/mg, retained fraction0.02/5=0.004, and fractional decrease1−0.004=0.996. These are correct arithmetic on the supplied source values. The0.004 evaluates retained *coupled H2 endpoint* signal after hydrogenase omission. Removing hydrogenase removes the reporter needed to produce H2; this is not an isolated0.4% residual Bcd catalytic activity or a99.6% probability/quality score. It does not establish universal endogenous hydrogenase partner necessity. The Hyd-only censored comparison retains the limit and leaves its three derived point contrasts unavailable withcensored_measurement; it never treats the nondetection as zero.
+
+Both contrasts reuse the same Table2 Fd+Hyd rate5. They are two contrasts, not independent repeats. The selections leave physicalmeasurement identitynull, uncertaintyunreported, countnull, sampling basisunspecified, dependenceunknown and observationmodelnone. The source expressly describes preparation variation, lability, lag periods and nonproportional enzyme-response behavior. Missing quantitative uncertainty, independent preparation count and per-arm physicalpreparation identity are scientific unknowns here; inventing SD/n/independence would be wrong. No statistical likelihood or final annotation credit is justified by these rates alone. The numerical return's shared preparation reference names the purification class; it does not prove a common physical aliquot.
+
+The source organism/strain is available in the full primary text but not an explicit field of this24field rate return. The parent next commissions source/genotype/construct/preparation identity resolution through a separate typed child. That is visible unfinished integration at this boundary, rather than proof the paper lacks the organism information.
+
+Original-child closed form, admitted form, parent's receivedcells and decision23 bootstrap all contain exactly the same10native cells. The original commissioned contract equals the admission contract. The parent's actual next selected action23 asks to distinguish the assayed Bcd/Etf identity from the C.pasteurianum hydrogenase reporter, qualify endpoint-specific partner claims, preserve unresolved identities, and avoid treating this H2 sheet as independent evidence. This is actual model-selected follow-on work using a scientific limitation of the return. It is not proof that every later interpretation is correct or that the whole investigation has closed.
+
+Presentation remains unfinished. On the saved original public bootstrap, both pinned030 and current-main deterministic renderers produce identical42,194character STEERING within293,243character total input. Meanings, numbers and censoring survive, but STEERING includes240raw cell-field rows and290hostID occurrences/30unique IDs. This does not satisfy the requested concise scientific presentation without host bookkeeping. The source-free current-versus-pinned comparison is in CURRENT_VS_PINNED_PRESENTATION_002.json. It reconstructs the declared provider-selected text from the original request; it is not an original transport capture, and no providerprivatehistory was opened.
+
+The module dispatch marker isliterature_experimental_task_v1/aspectreference_evidence_parent, profile reference_evidence_parent_v1; render_literature_experimental_prompt selects render_reference_evidence_parent_prompt. Current hashes are recorded in the comparison receipt.
+
+Own post-paper reset was completed before scientific interpretation. Exact coverage and repaired truncation are in POST_PAPER_RESET_PROVENANCE_001.json. All database connections were mode=ro/query_only, totalchanges0. No active run, saved request, numerical result, code, controller or goal was edited. Only new111 audit artifacts were written.

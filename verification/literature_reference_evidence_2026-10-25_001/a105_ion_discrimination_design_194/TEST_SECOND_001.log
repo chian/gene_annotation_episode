@@ -1,0 +1,40 @@
+..................................................F..                    [100%]
+=================================== FAILURES ===================================
+__ test_nonnegative_physical_parameter_cannot_have_a_strict_upper_limit_zero ___
+
+    def test_nonnegative_physical_parameter_cannot_have_a_strict_upper_limit_zero():
+        text='Synthetic preferred rate >10 per_s; alternative rate <0 ions/s.'
+        args={**common(text),'route':'reported_threshold_pair','thresholds':{
+            'preferred':source_quantity(text,'10','per_s',physical=True),
+            'alternative':source_quantity(text,'0','ions/s',physical=True)}}
+>       _,s=calculate(args,[],{SOURCE:text.encode()})
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_ion_discrimination_components_194.py:341: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_ion_discrimination_components_194.py:92: in calculate
+    e=read(args,rows,sources);return e,populate_ion_discrimination(e)
+      ^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_ion_discrimination_components_194.py:88: in read
+    return read_ion_discrimination_inputs(args,read_source=source,read_component=component)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_ion_discrimination_inputs.py:785: in read_ion_discrimination_inputs
+    operands={role:_read_quantity(selected,sources,field=role) for role,selected in args['thresholds'].items()}
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_ion_discrimination_inputs.py:660: in _read_quantity
+    number = read_ion_number(selected['number'], sources=sources)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_ion_discrimination_numbers.py:86: in read_ion_number
+    _fail('partial_source_numeric_token')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'partial_source_numeric_token', field = 'number'
+
+    def _fail(code, field='number'):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: partial_source_numeric_token:number
+
+gene_annotation_episode/literature_ion_discrimination_numbers.py:33: ExperimentalContractError
+=========================== short test summary info ============================
+FAILED tests/test_literature_ion_discrimination_components_194.py::test_nonnegative_physical_parameter_cannot_have_a_strict_upper_limit_zero
+1 failed, 52 passed in 1.65s

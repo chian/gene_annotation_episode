@@ -1,0 +1,67 @@
+{
+  "slot": "thought_pattern",
+  "id": "P13",
+  "name": "Resolve an aggregate claim at the biological level that separates explanations",
+  "description": "Ask whether pooled change reflects uniform effects, selective subsets or changed mixtures. Choose biologically meaningful units whose contrasts separate those explanations.",
+  "use_when": "A population, protein or process label pools outcomes with potentially different biological meanings.",
+  "live_alternatives": [
+    "Units change similarly.",
+    "A subset changes while others retain function.",
+    "Mixture/baseline changes rather than each unit’s response.",
+    "Missing/censored/differently normalized measurements leave quantification open."
+  ],
+  "decision_guidance": [
+    "Choose resolution from the competing biological explanations, not just because finer data exist.",
+    "Compare affected/retained units while preserving baseline versus response and readout definition.",
+    "When needed resolution was not measured, qualify the aggregate claim rather than impute cell fates, occupancy or missing values."
+  ],
+  "outcome_contingencies": [
+    {
+      "if_observed": "Retained units contradict uniform loss",
+      "then_consider": "Bound dependence to the affected subset."
+    },
+    {
+      "if_observed": "Distributions differ beyond a simple average shift",
+      "then_consider": "Retain heterogeneous-state explanations; fate needs independent evidence."
+    },
+    {
+      "if_observed": "Site/condition records do not support pooling",
+      "then_consider": "Return separate records; missing ratios are not zero abundance."
+    }
+  ],
+  "boundary": "The competing explanations differ across biologically meaningful units or mixtures, not simply across more rows in a table. P12 contrasts phases or repeated operation. Record identity and normalization remain prerequisites for either pattern; finer extraction alone is a tool task and a changed phosphosite does not establish direct catalysis.",
+  "evidence": [
+    {
+      "case_group": "yeag",
+      "case_id": "cellular_yeaG",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4664914/",
+      "source_locator": "Gated distributions and flow Methods; organism/yeag/trace.json route 1.",
+      "observation": "WT and mutant recovery had different GFP distributions, making a uniform population-shift explanation inadequate.",
+      "limit": "GFP is a proxy; no joint cell-lineage/survival data."
+    },
+    {
+      "case_group": "yeag",
+      "case_id": "cellular_yeaG",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8055822/",
+      "source_locator": "Phospho sites table rows 3–6,53,128; workbook_probe in organism/yeag/trace.json.",
+      "observation": "Actual XLSX extraction separated AceA sites and response ratios from occupancy, exposing incompatible records under a pooled AceA label.",
+      "limit": "Selected descriptive rows, unequal replicate coverage, no raw spectra or zero imputation."
+    },
+    {
+      "case_group": "cellular_y_complex",
+      "case_id": "cellular_y_complex",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6004469/",
+      "source_locator": "Selected RNA Results; recorded GEO extraction in cellular/detailed_traces.json.",
+      "observation": "Selected processing ends fell while rnpB behaved differently from rny loss, limiting uniform RNase Y dependence.",
+      "limit": "Processed tracks are descriptive and do not resolve the historical mechanism disagreement."
+    },
+    {
+      "case_group": "cellular_yqfG",
+      "case_id": "cellular_yqfG",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6144821/",
+      "source_locator": "Case-record observation; inspected scope: Full Results examined, including specificity controls and rescue. Same protein-family investigation group as cellular_ybeY; not independent replication of all E. coli claims.",
+      "observation": "16S3-prime processing changed while other tested rRNA ends stayed normal.",
+      "limit": "A selected end panel is not all RNA processing."
+    }
+  ]
+}

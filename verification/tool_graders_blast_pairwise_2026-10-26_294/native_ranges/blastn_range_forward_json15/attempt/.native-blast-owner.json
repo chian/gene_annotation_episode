@@ -1,0 +1,133 @@
+{
+  "attempt_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastn_range_forward_json15/attempt",
+  "identity": {
+    "attempt_id": "blastn_range_forward_json15",
+    "episode_id": "explicit-example-selection",
+    "execution_id": "blastn_range_forward_json15",
+    "operation_key": "selected:blastn_range_forward_json15",
+    "requested_job_sha256": "e206c0e526f65440a2ef61636821df05592e018e08c4e6afc2025591b6a9c6f0",
+    "resource_id": "local",
+    "run_id": "verification294"
+  },
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "requested_job": {
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastn",
+      "-task",
+      "blastn",
+      "-dust",
+      "no",
+      "-strand",
+      "plus",
+      "-query_loc",
+      "31-210",
+      "-subject_loc",
+      "31-240",
+      "-num_threads",
+      "1",
+      "-query",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastn_range_forward_json15/query_sequence.fa",
+      "-subject",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastn_range_forward_json15/subject_sequence.fa",
+      "-outfmt",
+      "15",
+      "-out",
+      "report.json"
+    ],
+    "environment": {},
+    "native_blast": {
+      "environment": {},
+      "grading_parameters": {},
+      "metadata": {
+        "engineering_example": "blastn_range_forward_json15",
+        "input_kind": "synthetic_derivative_of_retained_public_sequence"
+      },
+      "mode": "pairwise",
+      "operand_bindings": [
+        {
+          "native_accession": null,
+          "native_name": "query_blastn_range_forward",
+          "operand_role": "query_sequence",
+          "record_ordinal": 0,
+          "reference_ref": null,
+          "subject_ref": "query_subject"
+        },
+        {
+          "native_accession": null,
+          "native_name": "subject_blastn_range_forward",
+          "operand_role": "subject_sequence",
+          "record_ordinal": 0,
+          "reference_ref": "paired_reference",
+          "subject_ref": null
+        }
+      ],
+      "operands": [
+        {
+          "artifact_ref": null,
+          "format": "fasta",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastn_range_forward_json15/query_sequence.fa",
+          "role": "query_sequence",
+          "sha256": "b93426cf0a95f5a48d11869e92e84d4f74d46059c2e1444ee53afe6c72573727",
+          "size_bytes": 269
+        },
+        {
+          "artifact_ref": null,
+          "format": "fasta",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_ranges/blastn_range_forward_json15/subject_sequence.fa",
+          "role": "subject_sequence",
+          "sha256": "4718a8c93aef9137c34ed4f745a2ce49c88e3c92086a1f68e957cd99d0cc1ffc",
+          "size_bytes": 271
+        }
+      ],
+      "options": [
+        "-task",
+        "blastn",
+        "-dust",
+        "no",
+        "-strand",
+        "plus",
+        "-query_loc",
+        "31-210",
+        "-subject_loc",
+        "31-240",
+        "-num_threads",
+        "1"
+      ],
+      "outputs": [
+        {
+          "delimiter": null,
+          "fields": null,
+          "format": "text",
+          "relative_path": "stdout.txt",
+          "role": "stdout"
+        },
+        {
+          "delimiter": null,
+          "fields": null,
+          "format": "text",
+          "relative_path": "stderr.txt",
+          "role": "stderr"
+        },
+        {
+          "delimiter": null,
+          "fields": null,
+          "format": "json15",
+          "relative_path": "report.json",
+          "role": "primary_report"
+        }
+      ],
+      "program": "blastn",
+      "software": {
+        "engine_version": "2.17.0+",
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastn",
+        "sha256": "33b64bc67d3149cee2459b2f7766b363323df632cf12c099546de00aea9698b5"
+      },
+      "version": "native_blast_job_v1"
+    }
+  },
+  "version": "native_blast_run_plan_v1"
+}

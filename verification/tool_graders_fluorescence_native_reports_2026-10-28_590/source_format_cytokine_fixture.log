@@ -1,0 +1,31 @@
+# Cytokine Production Analysis by Flow Cytometry
+
+## Data Loading and Preprocessing
+WARNING: Missing data for conditions: CMV, SEB
+
+Processing unstimulated condition from file: control.fcs
+- No compensation matrix found, using uncompensated data
+- Identified channels: CD4=CD4-A, Cytokines=IFN-A, IL-17-A
+- Applied CD4+ gating: 4 cells (from 6 total)
+- IFN-γ+ frequency: 75.00% of CD4+ T cells
+- IL-17+ frequency: 25.00% of CD4+ T cells
+
+Processing Mtb300 condition from file: target.fcs
+- No compensation matrix found, using uncompensated data
+- Identified channels: CD4=CD4-A, Cytokines=IFN-A, IL-17-A
+- Applied CD4+ gating: 4 cells (from 6 total)
+- IFN-γ+ frequency: 50.00% of CD4+ T cells
+- IL-17+ frequency: 25.00% of CD4+ T cells
+
+## Results Summary
+
+### Background-subtracted frequencies
+
+Results saved to: /synthetic-fixture/cytokine_frequencies.csv
+
+### Frequencies of cytokine-producing CD4+ T cells (%)
+              IFN-γ  IL-17
+unstimulated   75.0   25.0
+Mtb300         50.0   25.0
+
+## Interpretation

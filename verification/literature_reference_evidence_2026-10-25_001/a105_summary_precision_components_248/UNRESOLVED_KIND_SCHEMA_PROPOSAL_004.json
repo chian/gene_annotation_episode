@@ -1,0 +1,69 @@
+{
+  "status": "proposal_awaiting_root_review_not_adopted_in_production",
+  "exact_delta": {
+    "CALCULATION_INPUTS_SCHEMA_002.json": {
+      "revised_file": "CALCULATION_INPUTS_SCHEMA_004.json",
+      "rfc6902_patch": [
+        {
+          "op": "add",
+          "path": "/properties/source_parameter_reason/anyOf/0/enum/-",
+          "value": "source_parameter_kind_unknown"
+        },
+        {
+          "op": "add",
+          "path": "/properties/source_parameter_reason/anyOf/0/enum/-",
+          "value": "source_parameter_kind_conflicting"
+        }
+      ]
+    },
+    "EXTRACTION_SCHEMA_002.json": {
+      "revised_file": "EXTRACTION_SCHEMA_004.json",
+      "rfc6902_patch": [
+        {
+          "op": "add",
+          "path": "/properties/calculation_inputs/properties/source_parameter_reason/anyOf/0/enum/-",
+          "value": "source_parameter_kind_unknown"
+        },
+        {
+          "op": "add",
+          "path": "/properties/calculation_inputs/properties/source_parameter_reason/anyOf/0/enum/-",
+          "value": "source_parameter_kind_conflicting"
+        }
+      ]
+    },
+    "SHEET_SCHEMA_003.json": {
+      "revised_file": "SHEET_SCHEMA_004.json",
+      "rfc6902_patch": [
+        {
+          "op": "add",
+          "path": "/properties/inputs/properties/source_parameter_reason/anyOf/0/enum/-",
+          "value": "source_parameter_kind_unknown"
+        },
+        {
+          "op": "add",
+          "path": "/properties/inputs/properties/source_parameter_reason/anyOf/0/enum/-",
+          "value": "source_parameter_kind_conflicting"
+        },
+        {
+          "op": "add",
+          "path": "/$defs/Cell/properties/unavailable_reason/anyOf/0/enum/-",
+          "value": "source_parameter_kind_unknown"
+        },
+        {
+          "op": "add",
+          "path": "/$defs/Cell/properties/unavailable_reason/anyOf/0/enum/-",
+          "value": "source_parameter_kind_conflicting"
+        }
+      ]
+    }
+  },
+  "changes_only_two_accurate_reason_codes": true,
+  "selection_schema_002_unchanged": true,
+  "no_existing_reader_schema_changed": true,
+  "semantic_proposal": {
+    "source_parameter_status_for_unknown_kind": "missing",
+    "source_parameter_status_for_conflicting_kind": "conflicting",
+    "retain": "Complete authenticated kinetic extraction, source numeral/SD statistic and exact count facts; physical/statistical count cells subject to their ordinary ownership requirements; proposed95% calculation parameter; df when its own SD-estimator/sample-convention prerequisites are supported.",
+    "unavailable": "Parameter/SD/variance/SE/ratios/endpoints lacking a supported kinetic dimension get the exact source_parameter_kind_unknown/conflicting reason; canonical parameter/SD unit and scale remain null. No default dimension or raw-unit ratio assumption."
+  }
+}

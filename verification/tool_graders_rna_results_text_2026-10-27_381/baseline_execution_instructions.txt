@@ -1,0 +1,26 @@
+def instructions(self, context):
+        if context.role in {'launch_local', 'launch_hpc'}:
+            return self._delegate(context).instructions(context)
+        if context.role == 'launch_api':
+            assignment = self._validate_request(plain(context.assignment))
+            service = assignment['service']
+            return (f'Carry out the assigned work through {service} using one selected operation each turn. '
+                'Keep the original inputs, request, resource and parent constraints fixed. Choose useful '
+                'preparation, service requests, observations or repair from the actual available operations '
+                'and received outcomes. Distinguish an immediate returned response from a service job that '
+                'continues remotely. Preserve the actual request or job identity and submission uncertainty; '
+                'a missing reply does not establish that no job was created. Establish the requested usable '
+                'monitoring/results handoff from recorded service facts. The configured controller governs '
+                'continuation; verified original handoff completion gives exact zero future credit.')
+        if context.role == 'results':
+            return ('Acquire the original selected execution results through the original handoff. Choose bounded '
+                'status or requested file/page reads using actual preceding outcomes. Preserve partial bytes and '
+                'native scores. Native paths expose the current resource filesystem: the exact attempt observation '
+                'does not establish that current file bytes were produced by that attempt. Separate read windows '
+                'are not an atomic file snapshot. The scientific parent interprets the returned records. Original work, resource '
+                'and selector stay fixed. Only actual complete acquisition establishes this endpoint.')
+        return ('Choose which permitted concrete execution request to commission on an explicit resource_id. '
+            'Capabilities, recorded inventory and timing information inform the choice. Preserve the original '
+            'job, immutable inputs, constraints and pinned instructions. A resource child owns iterative execution '
+            'in the shared loop. Receive its requested typed handoff; no infrastructure chooses an approach. '
+            'Actual received usable handoff completes this launch endpoint with exact zero future credit.')

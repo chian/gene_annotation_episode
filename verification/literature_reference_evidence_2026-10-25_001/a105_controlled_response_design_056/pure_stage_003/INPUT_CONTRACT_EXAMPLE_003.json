@@ -1,0 +1,166 @@
+{
+  "version": "controlled_response_inputs_v1",
+  "arms": {
+    "protein_condition1": {
+      "value": 12,
+      "threshold": null,
+      "relation": "eq",
+      "approximate": false,
+      "unit": "nmol/min/mg",
+      "status": "point",
+      "endpoint_id": "synthetic_retained_tracer_initial_rate",
+      "normalization_id": "synthetic_common_positive_paired_reference_protein_mass",
+      "subject_construct_id": "synthetic_protein_construct",
+      "condition_id": "synthetic_condition1",
+      "physical_observation_id": "synthetic_actual_protein_condition1",
+      "source_observation_id": "synthetic_source_protein_condition1",
+      "origin": "synthetic",
+      "digitization_interval": null,
+      "protein_arrangement": "protein_present",
+      "meaning_statuses": {
+        "endpoint": "known",
+        "normalization": "known",
+        "subject_construct": "known",
+        "condition": "known",
+        "physical_observation": "known"
+      }
+    },
+    "empty_condition1": {
+      "value": 2,
+      "threshold": null,
+      "relation": "eq",
+      "approximate": false,
+      "unit": "nmol/min/mg",
+      "status": "point",
+      "endpoint_id": "synthetic_retained_tracer_initial_rate",
+      "normalization_id": "synthetic_common_positive_paired_reference_protein_mass",
+      "subject_construct_id": "synthetic_empty_preparation",
+      "condition_id": "synthetic_condition1",
+      "physical_observation_id": "synthetic_actual_empty_condition1",
+      "source_observation_id": "synthetic_source_empty_condition1",
+      "origin": "synthetic",
+      "digitization_interval": null,
+      "protein_arrangement": "protein_free_control",
+      "meaning_statuses": {
+        "endpoint": "known",
+        "normalization": "known",
+        "subject_construct": "known",
+        "condition": "known",
+        "physical_observation": "known"
+      }
+    },
+    "protein_condition0": {
+      "value": 5,
+      "threshold": null,
+      "relation": "eq",
+      "approximate": false,
+      "unit": "nmol/min/mg",
+      "status": "point",
+      "endpoint_id": "synthetic_retained_tracer_initial_rate",
+      "normalization_id": "synthetic_common_positive_paired_reference_protein_mass",
+      "subject_construct_id": "synthetic_protein_construct",
+      "condition_id": "synthetic_condition0",
+      "physical_observation_id": "synthetic_actual_protein_condition0",
+      "source_observation_id": "synthetic_source_protein_condition0",
+      "origin": "synthetic",
+      "digitization_interval": null,
+      "protein_arrangement": "protein_present",
+      "meaning_statuses": {
+        "endpoint": "known",
+        "normalization": "known",
+        "subject_construct": "known",
+        "condition": "known",
+        "physical_observation": "known"
+      }
+    },
+    "empty_condition0": {
+      "value": 1,
+      "threshold": null,
+      "relation": "eq",
+      "approximate": false,
+      "unit": "nmol/min/mg",
+      "status": "point",
+      "endpoint_id": "synthetic_retained_tracer_initial_rate",
+      "normalization_id": "synthetic_common_positive_paired_reference_protein_mass",
+      "subject_construct_id": "synthetic_empty_preparation",
+      "condition_id": "synthetic_condition0",
+      "physical_observation_id": "synthetic_actual_empty_condition0",
+      "source_observation_id": "synthetic_source_empty_condition0",
+      "origin": "synthetic",
+      "digitization_interval": null,
+      "protein_arrangement": "protein_free_control",
+      "meaning_statuses": {
+        "endpoint": "known",
+        "normalization": "known",
+        "subject_construct": "known",
+        "condition": "known",
+        "physical_observation": "known"
+      }
+    }
+  },
+  "relationships": {
+    "condition1_target": {
+      "status": "known",
+      "canonical_id": "synthetic_condition1"
+    },
+    "condition0_target": {
+      "status": "known",
+      "canonical_id": "synthetic_condition0"
+    },
+    "condition_levels_relation": "different",
+    "condition1_control_application": "matched_condition_control",
+    "condition0_control_application": "matched_condition_control",
+    "subject_construct_across_conditions": "same",
+    "control_reference_reuse": "distinct_observations",
+    "nonintended_conditions": "unknown",
+    "intended_factor": "synthetic_witness_intended_protocol_change"
+  },
+  "covariance": {
+    "primitive_order": [
+      "protein_condition1",
+      "empty_condition1",
+      "protein_condition0",
+      "empty_condition0"
+    ],
+    "physical_observation_ids": [
+      "synthetic_actual_protein_condition1",
+      "synthetic_actual_empty_condition1",
+      "synthetic_actual_protein_condition0",
+      "synthetic_actual_empty_condition0"
+    ],
+    "units": [
+      "nmol/min/mg",
+      "nmol/min/mg",
+      "nmol/min/mg",
+      "nmol/min/mg"
+    ],
+    "matrix": [
+      [
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0.25,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0.36,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0.09
+      ]
+    ]
+  },
+  "variance_status": "known",
+  "model_kind": "none"
+}

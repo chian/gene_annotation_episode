@@ -1,0 +1,262 @@
+{
+  "base": "EXACT_SCHEMAS_001.json",
+  "changes": [
+    {
+      "op": "add",
+      "path": "/return_schema/items/allOf",
+      "value": [
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "total_amplitude"
+              }
+            },
+            "required": [
+              "component"
+            ]
+          },
+          "then": {
+            "properties": {
+              "unit": {
+                "const": "direction_oriented_pixel"
+              },
+              "formula": {
+                "const": "s*(a-t)"
+              },
+              "meaning": {
+                "const": "Selected total reporter amplitude in direction-oriented native pixels."
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "corrected_amplitude"
+              }
+            },
+            "required": [
+              "component"
+            ]
+          },
+          "then": {
+            "properties": {
+              "unit": {
+                "const": "direction_oriented_pixel"
+              },
+              "formula": {
+                "const": "s*(a-b)"
+              },
+              "meaning": {
+                "const": "Reporter amplitude retained under the selected baseline correction model."
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "additional_amplitude"
+              }
+            },
+            "required": [
+              "component"
+            ]
+          },
+          "then": {
+            "properties": {
+              "unit": {
+                "const": "direction_oriented_pixel"
+              },
+              "formula": {
+                "const": "s*(b-t)"
+              },
+              "meaning": {
+                "const": "Additional reporter amplitude under the selected baseline correction model."
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "retained_fraction"
+              }
+            },
+            "required": [
+              "component"
+            ]
+          },
+          "then": {
+            "properties": {
+              "unit": {
+                "const": "dimensionless"
+              },
+              "formula": {
+                "const": "(a-b)/(a-t)"
+              },
+              "meaning": {
+                "const": "Corrected-to-total reporter amplitude ratio under the selected model."
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "additional_fraction"
+              }
+            },
+            "required": [
+              "component"
+            ]
+          },
+          "then": {
+            "properties": {
+              "unit": {
+                "const": "dimensionless"
+              },
+              "formula": {
+                "const": "1-(a-b)/(a-t)"
+              },
+              "meaning": {
+                "const": "Additional-to-total reporter amplitude ratio under the selected model."
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "total_amplitude_variance"
+              }
+            },
+            "required": [
+              "component"
+            ]
+          },
+          "then": {
+            "properties": {
+              "unit": {
+                "const": "pixel^2"
+              },
+              "formula": {
+                "const": "J_D*Sigma*J_D_transpose"
+              },
+              "meaning": {
+                "const": "First-order variance of the total amplitude in the supplied joint estimate model."
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "corrected_amplitude_variance"
+              }
+            },
+            "required": [
+              "component"
+            ]
+          },
+          "then": {
+            "properties": {
+              "unit": {
+                "const": "pixel^2"
+              },
+              "formula": {
+                "const": "J_C*Sigma*J_C_transpose"
+              },
+              "meaning": {
+                "const": "First-order variance of the corrected amplitude in the supplied joint estimate model."
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "additional_amplitude_variance"
+              }
+            },
+            "required": [
+              "component"
+            ]
+          },
+          "then": {
+            "properties": {
+              "unit": {
+                "const": "pixel^2"
+              },
+              "formula": {
+                "const": "J_G*Sigma*J_G_transpose"
+              },
+              "meaning": {
+                "const": "First-order variance of the additional amplitude in the supplied joint estimate model."
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "retained_fraction_variance"
+              }
+            },
+            "required": [
+              "component"
+            ]
+          },
+          "then": {
+            "properties": {
+              "unit": {
+                "const": "dimensionless^2"
+              },
+              "formula": {
+                "const": "J_F*Sigma*J_F_transpose"
+              },
+              "meaning": {
+                "const": "First-order variance of the retained fraction in the supplied joint estimate model."
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "component": {
+                "const": "additional_fraction_variance"
+              }
+            },
+            "required": [
+              "component"
+            ]
+          },
+          "then": {
+            "properties": {
+              "unit": {
+                "const": "dimensionless^2"
+              },
+              "formula": {
+                "const": "J_H*Sigma*J_H_transpose"
+              },
+              "meaning": {
+                "const": "First-order variance of the additional fraction in the supplied joint estimate model."
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "unchanged": "Every existing node, including base closed row fields, operation/request/assignment schemas and identifiers."
+}

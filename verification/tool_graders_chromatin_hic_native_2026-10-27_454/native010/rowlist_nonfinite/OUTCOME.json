@@ -1,0 +1,89 @@
+{
+  "case": "rowlist_nonfinite",
+  "writer": "packet454_explicit_whole_native_file_serializer",
+  "independent_reader": "official hictk-v2.2.0 release binary",
+  "validate_exit": 0,
+  "dump_exit": 0,
+  "native_dump_matches": true,
+  "byte_audit_matches": true,
+  "file": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_hic_native_2026-10-27_454/native010/rowlist_nonfinite/output.hic",
+    "sha256": "49f030a9a22069fae129599196a990ae40a45482d251da2ea314bad05eba13a1",
+    "size_bytes": 280
+  },
+  "native_dump_rows": [
+    [
+      0,
+      0,
+      4.0
+    ],
+    [
+      0,
+      1,
+      "NaN"
+    ],
+    [
+      0,
+      2,
+      "+Inf"
+    ],
+    [
+      0,
+      3,
+      "-Inf"
+    ],
+    [
+      1,
+      1,
+      -2.0
+    ],
+    [
+      2,
+      2,
+      0.0
+    ],
+    [
+      3,
+      3,
+      4.0
+    ]
+  ],
+  "expected_rows": [
+    [
+      0,
+      0,
+      4
+    ],
+    [
+      0,
+      1,
+      "NaN"
+    ],
+    [
+      0,
+      2,
+      "+Inf"
+    ],
+    [
+      0,
+      3,
+      "-Inf"
+    ],
+    [
+      1,
+      1,
+      -2
+    ],
+    [
+      2,
+      2,
+      0
+    ],
+    [
+      3,
+      3,
+      4
+    ]
+  ],
+  "scientific_count_status": "retained_invalid_negative_or_nonfinite"
+}

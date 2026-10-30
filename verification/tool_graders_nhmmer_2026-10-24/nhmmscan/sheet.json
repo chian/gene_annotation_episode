@@ -1,0 +1,3018 @@
+{
+  "completeness": {
+    "acquisition": {
+      "hit_population_complete": true,
+      "output_complete": true
+    },
+    "hit_population_complete": true,
+    "native_artifacts": {
+      "stdout": true,
+      "tblout": true
+    },
+    "status": "complete"
+  },
+  "inputs": {
+    "acquisition": {
+      "hit_population_complete": true,
+      "output_complete": true
+    },
+    "native_parameters": {
+      "argv": []
+    },
+    "targets": [
+      {
+        "alphabet": "DNA",
+        "kind": "profile",
+        "length": 100,
+        "name": "model"
+      }
+    ]
+  },
+  "issues": [],
+  "loci": [
+    {
+      "alignment": {
+        "chunks": [
+          {
+            "annotations": [
+              {
+                "locator": {
+                  "artifact_ref": "nhmmscan/stdout.txt",
+                  "artifact_role": "stdout",
+                  "byte_end": 1764,
+                  "byte_start": 1649,
+                  "line_number": 29
+                },
+                "raw": "              ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg\n"
+              }
+            ],
+            "model": {
+              "column_offset": 14,
+              "from": 1,
+              "label": "model",
+              "locator": {
+                "artifact_ref": "nhmmscan/stdout.txt",
+                "artifact_role": "stdout",
+                "byte_end": 1649,
+                "byte_start": 1530,
+                "line_number": 28
+              },
+              "text": "ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+              "to": 100
+            },
+            "posterior": "79***********************************************************************************************986",
+            "posterior_locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 2001,
+              "byte_start": 1883,
+              "line_number": 31
+            },
+            "sequence": {
+              "column_offset": 14,
+              "from": 11,
+              "label": "forward",
+              "locator": {
+                "artifact_ref": "nhmmscan/stdout.txt",
+                "artifact_role": "stdout",
+                "byte_end": 1883,
+                "byte_start": 1764,
+                "line_number": 30
+              },
+              "text": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG",
+              "to": 110
+            }
+          }
+        ],
+        "issues": [],
+        "model_aligned": "ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+        "posterior": "79***********************************************************************************************986",
+        "posterior_valid": true,
+        "sequence_aligned": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG",
+        "valid": true
+      },
+      "coordinates": {
+        "convention": "zero_based_half_open",
+        "model_interval": [
+          0,
+          100
+        ],
+        "native_convention": "one_based_inclusive",
+        "sequence_envelope_interval": [
+          10,
+          110
+        ],
+        "sequence_interval": [
+          10,
+          110
+        ]
+      },
+      "issues": [],
+      "joins": {
+        "query": "stdout:query:1",
+        "stdout": "stdout:query:1:locus:1",
+        "target_metadata": "inputs/targets/0"
+      },
+      "length_sources": {
+        "model_length": [
+          {
+            "field": "native.length_field",
+            "value": 100
+          },
+          {
+            "field": "inputs.model.length_or_sequence",
+            "value": 100
+          }
+        ],
+        "sequence_length": [
+          {
+            "field": "stdout:query:1.length",
+            "value": 120
+          }
+        ]
+      },
+      "locator": {
+        "artifact_ref": "nhmmscan/hits.tbl",
+        "artifact_role": "tblout",
+        "byte_end": 497,
+        "byte_start": 344,
+        "line_number": 3,
+        "row_occurrence": 1
+      },
+      "model_length": 100,
+      "model_metadata": {
+        "alphabet": "DNA",
+        "kind": "profile",
+        "length": 100,
+        "name": "model"
+      },
+      "native": {
+        "accuracy": 0.99,
+        "ali_from": 11,
+        "ali_to": 110,
+        "bias_bits": 0.9,
+        "boundary_flags": [
+          "[]",
+          "..",
+          ".."
+        ],
+        "description": "-",
+        "env_from": 11,
+        "env_to": 110,
+        "evalue": 2e-39,
+        "hmm_from": 1,
+        "hmm_to": 100,
+        "included": true,
+        "inclusion_flag": "!",
+        "length_field": 100,
+        "length_field_meaning": "model_length",
+        "query_accession": null,
+        "query_name": "forward",
+        "reported": true,
+        "score_bits": 120.9,
+        "strand": "+",
+        "target_accession": null,
+        "target_name": "model"
+      },
+      "query_occurrence": 1,
+      "query_record_key": "stdout:query:1",
+      "raw": "model                -          forward              -                1     100      11     110      11     110     100    +       2e-39  120.9   0.9  -\n",
+      "raw_fields": {
+        "ali_from": "11",
+        "ali_to": "110",
+        "bias_bits": "0.9",
+        "env_from": "11",
+        "env_to": "110",
+        "evalue": "2e-39",
+        "hmm_from": "1",
+        "hmm_to": "100",
+        "length_field": "100",
+        "query_accession": "-",
+        "query_name": "forward",
+        "score_bits": "120.9",
+        "strand": "+",
+        "target_accession": "-",
+        "target_name": "model"
+      },
+      "record_key": "tblout:line:3",
+      "sequence_length": 120,
+      "sequence_metadata": null,
+      "sequence_metadata_alignment_validated": null,
+      "source_records": [
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/hits.tbl",
+            "artifact_role": "tblout",
+            "byte_end": 497,
+            "byte_start": 344,
+            "line_number": 3,
+            "row_occurrence": 1
+          },
+          "record_key": "tblout:line:3"
+        },
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 2004,
+            "byte_start": 1146,
+            "end_line_number": 34,
+            "line_number": 21,
+            "query_occurrence": 1,
+            "target_occurrence": 1
+          },
+          "record_key": "stdout:query:1:locus:1"
+        }
+      ],
+      "status": "valid",
+      "target_occurrence": 1,
+      "union_identity": {
+        "iteration": null,
+        "query": "stdout:query:1",
+        "strand": "+",
+        "target": "inputs/targets/0"
+      }
+    },
+    {
+      "alignment": {
+        "chunks": [
+          {
+            "annotations": [
+              {
+                "locator": {
+                  "artifact_ref": "nhmmscan/stdout.txt",
+                  "artifact_role": "stdout",
+                  "byte_end": 3508,
+                  "byte_start": 3393,
+                  "line_number": 63
+                },
+                "raw": "              ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg\n"
+              }
+            ],
+            "model": {
+              "column_offset": 14,
+              "from": 1,
+              "label": "model",
+              "locator": {
+                "artifact_ref": "nhmmscan/stdout.txt",
+                "artifact_role": "stdout",
+                "byte_end": 3393,
+                "byte_start": 3274,
+                "line_number": 62
+              },
+              "text": "ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+              "to": 100
+            },
+            "posterior": "79***********************************************************************************************986",
+            "posterior_locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 3745,
+              "byte_start": 3627,
+              "line_number": 65
+            },
+            "sequence": {
+              "column_offset": 14,
+              "from": 110,
+              "label": "reverse",
+              "locator": {
+                "artifact_ref": "nhmmscan/stdout.txt",
+                "artifact_role": "stdout",
+                "byte_end": 3627,
+                "byte_start": 3508,
+                "line_number": 64
+              },
+              "text": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG",
+              "to": 11
+            }
+          }
+        ],
+        "issues": [],
+        "model_aligned": "ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+        "posterior": "79***********************************************************************************************986",
+        "posterior_valid": true,
+        "sequence_aligned": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG",
+        "valid": true
+      },
+      "coordinates": {
+        "convention": "zero_based_half_open",
+        "model_interval": [
+          0,
+          100
+        ],
+        "native_convention": "one_based_inclusive",
+        "sequence_envelope_interval": [
+          10,
+          110
+        ],
+        "sequence_interval": [
+          10,
+          110
+        ]
+      },
+      "issues": [],
+      "joins": {
+        "query": "stdout:query:2",
+        "stdout": "stdout:query:2:locus:1",
+        "target_metadata": "inputs/targets/0"
+      },
+      "length_sources": {
+        "model_length": [
+          {
+            "field": "native.length_field",
+            "value": 100
+          },
+          {
+            "field": "inputs.model.length_or_sequence",
+            "value": 100
+          }
+        ],
+        "sequence_length": [
+          {
+            "field": "stdout:query:2.length",
+            "value": 120
+          }
+        ]
+      },
+      "locator": {
+        "artifact_ref": "nhmmscan/hits.tbl",
+        "artifact_role": "tblout",
+        "byte_end": 650,
+        "byte_start": 497,
+        "line_number": 4,
+        "row_occurrence": 2
+      },
+      "model_length": 100,
+      "model_metadata": {
+        "alphabet": "DNA",
+        "kind": "profile",
+        "length": 100,
+        "name": "model"
+      },
+      "native": {
+        "accuracy": 0.99,
+        "ali_from": 110,
+        "ali_to": 11,
+        "bias_bits": 0.9,
+        "boundary_flags": [
+          "[]",
+          "..",
+          ".."
+        ],
+        "description": "-",
+        "env_from": 110,
+        "env_to": 11,
+        "evalue": 2e-39,
+        "hmm_from": 1,
+        "hmm_to": 100,
+        "included": true,
+        "inclusion_flag": "!",
+        "length_field": 100,
+        "length_field_meaning": "model_length",
+        "query_accession": null,
+        "query_name": "reverse",
+        "reported": true,
+        "score_bits": 120.9,
+        "strand": "-",
+        "target_accession": null,
+        "target_name": "model"
+      },
+      "query_occurrence": 2,
+      "query_record_key": "stdout:query:2",
+      "raw": "model                -          reverse              -                1     100     110      11     110      11     100    -       2e-39  120.9   0.9  -\n",
+      "raw_fields": {
+        "ali_from": "110",
+        "ali_to": "11",
+        "bias_bits": "0.9",
+        "env_from": "110",
+        "env_to": "11",
+        "evalue": "2e-39",
+        "hmm_from": "1",
+        "hmm_to": "100",
+        "length_field": "100",
+        "query_accession": "-",
+        "query_name": "reverse",
+        "score_bits": "120.9",
+        "strand": "-",
+        "target_accession": "-",
+        "target_name": "model"
+      },
+      "record_key": "tblout:line:4",
+      "sequence_length": 120,
+      "sequence_metadata": null,
+      "sequence_metadata_alignment_validated": null,
+      "source_records": [
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/hits.tbl",
+            "artifact_role": "tblout",
+            "byte_end": 650,
+            "byte_start": 497,
+            "line_number": 4,
+            "row_occurrence": 2
+          },
+          "record_key": "tblout:line:4"
+        },
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 3748,
+            "byte_start": 2890,
+            "end_line_number": 68,
+            "line_number": 55,
+            "query_occurrence": 2,
+            "target_occurrence": 1
+          },
+          "record_key": "stdout:query:2:locus:1"
+        }
+      ],
+      "status": "valid",
+      "target_occurrence": 1,
+      "union_identity": {
+        "iteration": null,
+        "query": "stdout:query:2",
+        "strand": "-",
+        "target": "inputs/targets/0"
+      }
+    },
+    {
+      "alignment": {
+        "chunks": [
+          {
+            "annotations": [
+              {
+                "locator": {
+                  "artifact_ref": "nhmmscan/stdout.txt",
+                  "artifact_role": "stdout",
+                  "byte_end": 5255,
+                  "byte_start": 5138,
+                  "line_number": 97
+                },
+                "raw": "             ggcagtggcgtgtcaacctccctttacgataagtccatca   ctaacagtaagcctgacgggggcaagatct  ctttttggcagactcactcttcccattg\n"
+              }
+            ],
+            "model": {
+              "column_offset": 13,
+              "from": 1,
+              "label": "model",
+              "locator": {
+                "artifact_ref": "nhmmscan/stdout.txt",
+                "artifact_role": "stdout",
+                "byte_end": 5138,
+                "byte_start": 5017,
+                "line_number": 96
+              },
+              "text": "ggcagtggcgtgtcaacctccctttacgataagtccatca...ctaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+              "to": 100
+            },
+            "posterior": "79************************************95444899************************998..599**********************986",
+            "posterior_locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 5496,
+              "byte_start": 5376,
+              "line_number": 99
+            },
+            "sequence": {
+              "column_offset": 13,
+              "from": 11,
+              "label": "gapped",
+              "locator": {
+                "artifact_ref": "nhmmscan/stdout.txt",
+                "artifact_role": "stdout",
+                "byte_end": 5376,
+                "byte_start": 5255,
+                "line_number": 98
+              },
+              "text": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCAgtaCTAACAGTAAGCCTGACGGGGGCAAGATCT--CTTTTTGGCAGACTCACTCTTCCCATTG",
+              "to": 111
+            }
+          }
+        ],
+        "issues": [],
+        "model_aligned": "ggcagtggcgtgtcaacctccctttacgataagtccatca...ctaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+        "posterior": "79************************************95444899************************998..599**********************986",
+        "posterior_valid": true,
+        "sequence_aligned": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCAgtaCTAACAGTAAGCCTGACGGGGGCAAGATCT--CTTTTTGGCAGACTCACTCTTCCCATTG",
+        "valid": true
+      },
+      "coordinates": {
+        "convention": "zero_based_half_open",
+        "model_interval": [
+          0,
+          100
+        ],
+        "native_convention": "one_based_inclusive",
+        "sequence_envelope_interval": [
+          10,
+          111
+        ],
+        "sequence_interval": [
+          10,
+          111
+        ]
+      },
+      "issues": [],
+      "joins": {
+        "query": "stdout:query:3",
+        "stdout": "stdout:query:3:locus:1",
+        "target_metadata": "inputs/targets/0"
+      },
+      "length_sources": {
+        "model_length": [
+          {
+            "field": "native.length_field",
+            "value": 100
+          },
+          {
+            "field": "inputs.model.length_or_sequence",
+            "value": 100
+          }
+        ],
+        "sequence_length": [
+          {
+            "field": "stdout:query:3.length",
+            "value": 121
+          }
+        ]
+      },
+      "locator": {
+        "artifact_ref": "nhmmscan/hits.tbl",
+        "artifact_role": "tblout",
+        "byte_end": 803,
+        "byte_start": 650,
+        "line_number": 5,
+        "row_occurrence": 3
+      },
+      "model_length": 100,
+      "model_metadata": {
+        "alphabet": "DNA",
+        "kind": "profile",
+        "length": 100,
+        "name": "model"
+      },
+      "native": {
+        "accuracy": 0.95,
+        "ali_from": 11,
+        "ali_to": 111,
+        "bias_bits": 0.7,
+        "boundary_flags": [
+          "[]",
+          "..",
+          ".."
+        ],
+        "description": "-",
+        "env_from": 11,
+        "env_to": 111,
+        "evalue": 1.1e-34,
+        "hmm_from": 1,
+        "hmm_to": 100,
+        "included": true,
+        "inclusion_flag": "!",
+        "length_field": 100,
+        "length_field_meaning": "model_length",
+        "query_accession": null,
+        "query_name": "gapped",
+        "reported": true,
+        "score_bits": 105.7,
+        "strand": "+",
+        "target_accession": null,
+        "target_name": "model"
+      },
+      "query_occurrence": 3,
+      "query_record_key": "stdout:query:3",
+      "raw": "model                -          gapped               -                1     100      11     111      11     111     100    +     1.1e-34  105.7   0.7  -\n",
+      "raw_fields": {
+        "ali_from": "11",
+        "ali_to": "111",
+        "bias_bits": "0.7",
+        "env_from": "11",
+        "env_to": "111",
+        "evalue": "1.1e-34",
+        "hmm_from": "1",
+        "hmm_to": "100",
+        "length_field": "100",
+        "query_accession": "-",
+        "query_name": "gapped",
+        "score_bits": "105.7",
+        "strand": "+",
+        "target_accession": "-",
+        "target_name": "model"
+      },
+      "record_key": "tblout:line:5",
+      "sequence_length": 121,
+      "sequence_metadata": null,
+      "sequence_metadata_alignment_validated": null,
+      "source_records": [
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/hits.tbl",
+            "artifact_role": "tblout",
+            "byte_end": 803,
+            "byte_start": 650,
+            "line_number": 5,
+            "row_occurrence": 3
+          },
+          "record_key": "tblout:line:5"
+        },
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 5499,
+            "byte_start": 4633,
+            "end_line_number": 102,
+            "line_number": 89,
+            "query_occurrence": 3,
+            "target_occurrence": 1
+          },
+          "record_key": "stdout:query:3:locus:1"
+        }
+      ],
+      "status": "valid",
+      "target_occurrence": 1,
+      "union_identity": {
+        "iteration": null,
+        "query": "stdout:query:3",
+        "strand": "+",
+        "target": "inputs/targets/0"
+      }
+    }
+  ],
+  "native": {
+    "artifacts": {
+      "stdout": {
+        "artifact_ref": "nhmmscan/stdout.txt",
+        "byte_length": 6116,
+        "completion_marker_observed": true,
+        "format": "stdout",
+        "native_complete": true,
+        "status": "complete",
+        "text": "# nhmmscan :: search DNA sequence(s) against a DNA profile database\n# HMMER 3.4 (Aug 2023); http://hmmer.org/\n# Copyright (C) 2023 Howard Hughes Medical Institute.\n# Freely distributed under the BSD open source license.\n# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n# query sequence file:             /home/chia/repos/gene_annotation_episode/verification/tool_graders_nhmmer_2026-10-24/inputs/targets.fa\n# target HMM database:             /home/chia/repos/gene_annotation_episode/verification/tool_graders_nhmmer_2026-10-24/inputs/model.hmm\n# per-seq hits tabular output:     /home/chia/repos/gene_annotation_episode/verification/tool_graders_nhmmer_2026-10-24/nhmmscan/hits.tbl\n# max ASCII text line length:      unlimited\n# multithread parallelization:     1 workers\n# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n\nQuery:       forward  [L=120]\nScores for complete hit:\n    E-value  score  bias  Model     start    end  Description\n    ------- ------ -----  --------  -----  -----  -----------\n      2e-39  120.9   0.9  model        11    110 \n\n\nAnnotation for each hit  (and alignments):\n>> model  \n    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc\n   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----\n !  120.9   0.9     2e-39         1       100 []        11       110 ..        11       110 ..       100    0.99\n\n  Alignment:\n  score: 120.9 bits\n    model   1 ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg 100\n              ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg\n  forward  11 GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG 110\n              79***********************************************************************************************986 PP\n\n\n\nInternal pipeline statistics summary:\n-------------------------------------\nQuery sequence(s):                         1  (240 residues searched)\nTarget model(s):                           1  (100 nodes)\nResidues passing SSV filter:             120  (0.5); expected (0.02)\nResidues passing bias filter:            120  (0.5); expected (0.02)\nResidues passing Vit filter:             120  (0.5); expected (0.003)\nResidues passing Fwd filter:             120  (0.5); expected (3e-05)\nTotal number of hits:                      1  (0.417)\n# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00\n# Mc/sec: 10.36\n//\nQuery:       reverse  [L=120]\nScores for complete hit:\n    E-value  score  bias  Model     start    end  Description\n    ------- ------ -----  --------  -----  -----  -----------\n      2e-39  120.9   0.9  model       110     11 \n\n\nAnnotation for each hit  (and alignments):\n>> model  \n    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc\n   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----\n !  120.9   0.9     2e-39         1       100 []       110        11 ..       110        11 ..       100    0.99\n\n  Alignment:\n  score: 120.9 bits\n    model   1 ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg 100\n              ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg\n  reverse 110 GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG 11 \n              79***********************************************************************************************986 PP\n\n\n\nInternal pipeline statistics summary:\n-------------------------------------\nQuery sequence(s):                         1  (240 residues searched)\nTarget model(s):                           1  (100 nodes)\nResidues passing SSV filter:             120  (0.5); expected (0.02)\nResidues passing bias filter:            120  (0.5); expected (0.02)\nResidues passing Vit filter:             120  (0.5); expected (0.003)\nResidues passing Fwd filter:             120  (0.5); expected (3e-05)\nTotal number of hits:                      1  (0.417)\n# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00\n# Mc/sec: 14.92\n//\nQuery:       gapped  [L=121]\nScores for complete hit:\n    E-value  score  bias  Model     start    end  Description\n    ------- ------ -----  --------  -----  -----  -----------\n    1.1e-34  105.7   0.7  model        11    111 \n\n\nAnnotation for each hit  (and alignments):\n>> model  \n    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc\n   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----\n !  105.7   0.7   1.1e-34         1       100 []        11       111 ..        11       111 ..       100    0.95\n\n  Alignment:\n  score: 105.7 bits\n   model   1 ggcagtggcgtgtcaacctccctttacgataagtccatca...ctaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg 100\n             ggcagtggcgtgtcaacctccctttacgataagtccatca   ctaacagtaagcctgacgggggcaagatct  ctttttggcagactcactcttcccattg\n  gapped  11 GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCAgtaCTAACAGTAAGCCTGACGGGGGCAAGATCT--CTTTTTGGCAGACTCACTCTTCCCATTG 111\n             79************************************95444899************************998..599**********************986 PP\n\n\n\nInternal pipeline statistics summary:\n-------------------------------------\nQuery sequence(s):                         1  (242 residues searched)\nTarget model(s):                           1  (100 nodes)\nResidues passing SSV filter:             121  (0.5); expected (0.02)\nResidues passing bias filter:            121  (0.5); expected (0.02)\nResidues passing Vit filter:             121  (0.5); expected (0.003)\nResidues passing Fwd filter:             121  (0.5); expected (3e-05)\nTotal number of hits:                      1  (0.417)\n# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00\n# Mc/sec: 13.35\n//\n[ok]\n"
+      },
+      "tblout": {
+        "artifact_ref": "nhmmscan/hits.tbl",
+        "byte_length": 1747,
+        "completion_marker_observed": true,
+        "format": "tblout",
+        "native_complete": true,
+        "status": "complete",
+        "text": "# target name        accession  query name           accession  hmmfrom hmm to alifrom  ali to envfrom  env to  modlen strand   E-value  score  bias  description of target\n#------------------- ---------- -------------------- ---------- ------- ------- ------- ------- ------- ------- ------- ------ --------- ------ ----- ---------------------\nmodel                -          forward              -                1     100      11     110      11     110     100    +       2e-39  120.9   0.9  -\nmodel                -          reverse              -                1     100     110      11     110      11     100    -       2e-39  120.9   0.9  -\nmodel                -          gapped               -                1     100      11     111      11     111     100    +     1.1e-34  105.7   0.7  -\n#\n# Program:         nhmmscan\n# Version:         3.4 (Aug 2023)\n# Pipeline mode:   SCAN\n# Query file:      /home/chia/repos/gene_annotation_episode/verification/tool_graders_nhmmer_2026-10-24/inputs/targets.fa\n# Target file:     /home/chia/repos/gene_annotation_episode/verification/tool_graders_nhmmer_2026-10-24/inputs/model.hmm\n# Option settings: /home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/nhmmscan --tblout /home/chia/repos/gene_annotation_episode/verification/tool_graders_nhmmer_2026-10-24/nhmmscan/hits.tbl --notextw --cpu 1 /home/chia/repos/gene_annotation_episode/verification/tool_graders_nhmmer_2026-10-24/inputs/model.hmm /home/chia/repos/gene_annotation_episode/verification/tool_graders_nhmmer_2026-10-24/inputs/targets.fa \n# Current dir:     /home/chia/repos/gene_annotation_episode/verification/tool_graders_nhmmer_2026-10-24/nhmmscan\n# Date:            Sat Oct 24 14:42:46 2026\n# [ok]\n"
+      }
+    },
+    "headers": [
+      {
+        "issues": [],
+        "kind": "header",
+        "locator": {
+          "artifact_ref": "nhmmscan/stdout.txt",
+          "artifact_role": "stdout",
+          "byte_end": 68,
+          "byte_start": 0,
+          "line_number": 1
+        },
+        "raw": "# nhmmscan :: search DNA sequence(s) against a DNA profile database\n"
+      },
+      {
+        "issues": [],
+        "kind": "header",
+        "locator": {
+          "artifact_ref": "nhmmscan/stdout.txt",
+          "artifact_role": "stdout",
+          "byte_end": 110,
+          "byte_start": 68,
+          "line_number": 2
+        },
+        "raw": "# HMMER 3.4 (Aug 2023); http://hmmer.org/\n"
+      },
+      {
+        "issues": [],
+        "kind": "header",
+        "locator": {
+          "artifact_ref": "nhmmscan/stdout.txt",
+          "artifact_role": "stdout",
+          "byte_end": 164,
+          "byte_start": 110,
+          "line_number": 3
+        },
+        "raw": "# Copyright (C) 2023 Howard Hughes Medical Institute.\n"
+      },
+      {
+        "issues": [],
+        "kind": "header",
+        "locator": {
+          "artifact_ref": "nhmmscan/stdout.txt",
+          "artifact_role": "stdout",
+          "byte_end": 220,
+          "byte_start": 164,
+          "line_number": 4
+        },
+        "raw": "# Freely distributed under the BSD open source license.\n"
+      },
+      {
+        "issues": [],
+        "kind": "header",
+        "locator": {
+          "artifact_ref": "nhmmscan/stdout.txt",
+          "artifact_role": "stdout",
+          "byte_end": 294,
+          "byte_start": 220,
+          "line_number": 5
+        },
+        "raw": "# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n"
+      },
+      {
+        "issues": [],
+        "kind": "header",
+        "locator": {
+          "artifact_ref": "nhmmscan/stdout.txt",
+          "artifact_role": "stdout",
+          "byte_end": 432,
+          "byte_start": 294,
+          "line_number": 6
+        },
+        "raw": "# query sequence file:             /home/chia/repos/gene_annotation_episode/verification/tool_graders_nhmmer_2026-10-24/inputs/targets.fa\n"
+      },
+      {
+        "issues": [],
+        "kind": "header",
+        "locator": {
+          "artifact_ref": "nhmmscan/stdout.txt",
+          "artifact_role": "stdout",
+          "byte_end": 569,
+          "byte_start": 432,
+          "line_number": 7
+        },
+        "raw": "# target HMM database:             /home/chia/repos/gene_annotation_episode/verification/tool_graders_nhmmer_2026-10-24/inputs/model.hmm\n"
+      },
+      {
+        "issues": [],
+        "kind": "header",
+        "locator": {
+          "artifact_ref": "nhmmscan/stdout.txt",
+          "artifact_role": "stdout",
+          "byte_end": 707,
+          "byte_start": 569,
+          "line_number": 8
+        },
+        "raw": "# per-seq hits tabular output:     /home/chia/repos/gene_annotation_episode/verification/tool_graders_nhmmer_2026-10-24/nhmmscan/hits.tbl\n"
+      },
+      {
+        "issues": [],
+        "kind": "header",
+        "locator": {
+          "artifact_ref": "nhmmscan/stdout.txt",
+          "artifact_role": "stdout",
+          "byte_end": 752,
+          "byte_start": 707,
+          "line_number": 9
+        },
+        "raw": "# max ASCII text line length:      unlimited\n"
+      },
+      {
+        "issues": [],
+        "kind": "header",
+        "locator": {
+          "artifact_ref": "nhmmscan/stdout.txt",
+          "artifact_role": "stdout",
+          "byte_end": 797,
+          "byte_start": 752,
+          "line_number": 10
+        },
+        "raw": "# multithread parallelization:     1 workers\n"
+      },
+      {
+        "issues": [],
+        "kind": "header",
+        "locator": {
+          "artifact_ref": "nhmmscan/stdout.txt",
+          "artifact_role": "stdout",
+          "byte_end": 871,
+          "byte_start": 797,
+          "line_number": 11
+        },
+        "raw": "# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n"
+      }
+    ],
+    "issues": [],
+    "native_settings": [],
+    "observed_engine_versions": [
+      {
+        "artifact_role": "stdout",
+        "version": "3.4"
+      },
+      {
+        "artifact_role": "tblout",
+        "version": "3.4"
+      }
+    ],
+    "operation": {
+      "alphabet": null,
+      "engine_version": "3.4",
+      "format": "hmmer3_nucleotide_native",
+      "mode": "sequence_to_profile_database",
+      "program": "nhmmscan"
+    },
+    "queries": [
+      {
+        "accession": null,
+        "annotations": [
+          {
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 927,
+              "byte_start": 902,
+              "line_number": 14
+            },
+            "raw": "Scores for complete hit:\n"
+          },
+          {
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 989,
+              "byte_start": 927,
+              "line_number": 15
+            },
+            "raw": "    E-value  score  bias  Model     start    end  Description\n"
+          },
+          {
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 1051,
+              "byte_start": 989,
+              "line_number": 16
+            },
+            "raw": "    ------- ------ -----  --------  -----  -----  -----------\n"
+          },
+          {
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 1101,
+              "byte_start": 1051,
+              "line_number": 17
+            },
+            "raw": "      2e-39  120.9   0.9  model        11    110 \n"
+          },
+          {
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 1146,
+              "byte_start": 1103,
+              "line_number": 20
+            },
+            "raw": "Annotation for each hit  (and alignments):\n"
+          },
+          {
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 2080,
+              "byte_start": 2042,
+              "line_number": 36
+            },
+            "raw": "-------------------------------------\n"
+          }
+        ],
+        "issues": [],
+        "kind": "query_end",
+        "length": 120,
+        "length_axis": "sequence",
+        "locator": {
+          "artifact_ref": "nhmmscan/stdout.txt",
+          "artifact_role": "stdout",
+          "byte_end": 2616,
+          "byte_start": 872,
+          "end_line_number": 46,
+          "line_number": 13
+        },
+        "locus_count": 1,
+        "name": "forward",
+        "occurrence": 1,
+        "record_key": "stdout:query:1",
+        "statistics": [
+          {
+            "count": 1,
+            "count_unit": "sequences",
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 2150,
+              "byte_start": 2080,
+              "line_number": 37
+            },
+            "name": "Query sequence(s)",
+            "positions": 240,
+            "positions_unit": "nucleotides_searched",
+            "raw": "Query sequence(s):                         1  (240 residues searched)\n"
+          },
+          {
+            "count": 1,
+            "count_unit": "models",
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 2208,
+              "byte_start": 2150,
+              "line_number": 38
+            },
+            "name": "Target model(s)",
+            "positions": 100,
+            "positions_unit": "model_nodes",
+            "raw": "Target model(s):                           1  (100 nodes)\n"
+          },
+          {
+            "count": 120,
+            "count_unit": "nucleotide_positions",
+            "expected_fraction": 0.02,
+            "fraction_denominator": 240,
+            "fraction_input_fields": [
+              "native.filter_position_count",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator": 120,
+            "fraction_numerator_unavailable_reason": null,
+            "fraction_precision": "native_rounded_three_significant_digits",
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "issues": [],
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 2277,
+              "byte_start": 2208,
+              "line_number": 39
+            },
+            "name": "Residues passing SSV filter",
+            "native_fraction": 0.5,
+            "raw": "Residues passing SSV filter:             120  (0.5); expected (0.02)\n"
+          },
+          {
+            "count": 120,
+            "count_unit": "nucleotide_positions",
+            "expected_fraction": 0.02,
+            "fraction_denominator": 240,
+            "fraction_input_fields": [
+              "native.filter_position_count",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator": 120,
+            "fraction_numerator_unavailable_reason": null,
+            "fraction_precision": "native_rounded_three_significant_digits",
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "issues": [],
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 2346,
+              "byte_start": 2277,
+              "line_number": 40
+            },
+            "name": "Residues passing bias filter",
+            "native_fraction": 0.5,
+            "raw": "Residues passing bias filter:            120  (0.5); expected (0.02)\n"
+          },
+          {
+            "count": 120,
+            "count_unit": "nucleotide_positions",
+            "expected_fraction": 0.003,
+            "fraction_denominator": 240,
+            "fraction_input_fields": [
+              "native.filter_position_count",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator": 120,
+            "fraction_numerator_unavailable_reason": null,
+            "fraction_precision": "native_rounded_three_significant_digits",
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "issues": [],
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 2416,
+              "byte_start": 2346,
+              "line_number": 41
+            },
+            "name": "Residues passing Vit filter",
+            "native_fraction": 0.5,
+            "raw": "Residues passing Vit filter:             120  (0.5); expected (0.003)\n"
+          },
+          {
+            "count": 120,
+            "count_unit": "nucleotide_positions",
+            "expected_fraction": 3e-05,
+            "fraction_denominator": 240,
+            "fraction_input_fields": [
+              "native.filter_position_count",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator": 120,
+            "fraction_numerator_unavailable_reason": null,
+            "fraction_precision": "native_rounded_three_significant_digits",
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "issues": [],
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 2486,
+              "byte_start": 2416,
+              "line_number": 42
+            },
+            "name": "Residues passing Fwd filter",
+            "native_fraction": 0.5,
+            "raw": "Residues passing Fwd filter:             120  (0.5); expected (3e-05)\n"
+          },
+          {
+            "count": 1,
+            "count_unit": "loci",
+            "expected_fraction": null,
+            "fraction_denominator": 240,
+            "fraction_input_fields": [
+              "native.pos_output",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator": null,
+            "fraction_numerator_unavailable_reason": "summed_aligned_position_count_not_printed",
+            "fraction_precision": "native_rounded_three_significant_digits",
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "issues": [],
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 2540,
+              "byte_start": 2486,
+              "line_number": 43
+            },
+            "name": "Total number of hits",
+            "native_fraction": 0.417,
+            "raw": "Total number of hits:                      1  (0.417)\n"
+          },
+          {
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 2597,
+              "byte_start": 2540,
+              "line_number": 44
+            },
+            "name": null,
+            "raw": "# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00\n"
+          },
+          {
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 2613,
+              "byte_start": 2597,
+              "line_number": 45
+            },
+            "name": null,
+            "raw": "# Mc/sec: 10.36\n"
+          }
+        ],
+        "terminated": true
+      },
+      {
+        "accession": null,
+        "annotations": [
+          {
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 2671,
+              "byte_start": 2646,
+              "line_number": 48
+            },
+            "raw": "Scores for complete hit:\n"
+          },
+          {
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 2733,
+              "byte_start": 2671,
+              "line_number": 49
+            },
+            "raw": "    E-value  score  bias  Model     start    end  Description\n"
+          },
+          {
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 2795,
+              "byte_start": 2733,
+              "line_number": 50
+            },
+            "raw": "    ------- ------ -----  --------  -----  -----  -----------\n"
+          },
+          {
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 2845,
+              "byte_start": 2795,
+              "line_number": 51
+            },
+            "raw": "      2e-39  120.9   0.9  model       110     11 \n"
+          },
+          {
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 2890,
+              "byte_start": 2847,
+              "line_number": 54
+            },
+            "raw": "Annotation for each hit  (and alignments):\n"
+          },
+          {
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 3824,
+              "byte_start": 3786,
+              "line_number": 70
+            },
+            "raw": "-------------------------------------\n"
+          }
+        ],
+        "issues": [],
+        "kind": "query_end",
+        "length": 120,
+        "length_axis": "sequence",
+        "locator": {
+          "artifact_ref": "nhmmscan/stdout.txt",
+          "artifact_role": "stdout",
+          "byte_end": 4360,
+          "byte_start": 2616,
+          "end_line_number": 80,
+          "line_number": 47
+        },
+        "locus_count": 1,
+        "name": "reverse",
+        "occurrence": 2,
+        "record_key": "stdout:query:2",
+        "statistics": [
+          {
+            "count": 1,
+            "count_unit": "sequences",
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 3894,
+              "byte_start": 3824,
+              "line_number": 71
+            },
+            "name": "Query sequence(s)",
+            "positions": 240,
+            "positions_unit": "nucleotides_searched",
+            "raw": "Query sequence(s):                         1  (240 residues searched)\n"
+          },
+          {
+            "count": 1,
+            "count_unit": "models",
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 3952,
+              "byte_start": 3894,
+              "line_number": 72
+            },
+            "name": "Target model(s)",
+            "positions": 100,
+            "positions_unit": "model_nodes",
+            "raw": "Target model(s):                           1  (100 nodes)\n"
+          },
+          {
+            "count": 120,
+            "count_unit": "nucleotide_positions",
+            "expected_fraction": 0.02,
+            "fraction_denominator": 240,
+            "fraction_input_fields": [
+              "native.filter_position_count",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator": 120,
+            "fraction_numerator_unavailable_reason": null,
+            "fraction_precision": "native_rounded_three_significant_digits",
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "issues": [],
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 4021,
+              "byte_start": 3952,
+              "line_number": 73
+            },
+            "name": "Residues passing SSV filter",
+            "native_fraction": 0.5,
+            "raw": "Residues passing SSV filter:             120  (0.5); expected (0.02)\n"
+          },
+          {
+            "count": 120,
+            "count_unit": "nucleotide_positions",
+            "expected_fraction": 0.02,
+            "fraction_denominator": 240,
+            "fraction_input_fields": [
+              "native.filter_position_count",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator": 120,
+            "fraction_numerator_unavailable_reason": null,
+            "fraction_precision": "native_rounded_three_significant_digits",
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "issues": [],
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 4090,
+              "byte_start": 4021,
+              "line_number": 74
+            },
+            "name": "Residues passing bias filter",
+            "native_fraction": 0.5,
+            "raw": "Residues passing bias filter:            120  (0.5); expected (0.02)\n"
+          },
+          {
+            "count": 120,
+            "count_unit": "nucleotide_positions",
+            "expected_fraction": 0.003,
+            "fraction_denominator": 240,
+            "fraction_input_fields": [
+              "native.filter_position_count",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator": 120,
+            "fraction_numerator_unavailable_reason": null,
+            "fraction_precision": "native_rounded_three_significant_digits",
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "issues": [],
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 4160,
+              "byte_start": 4090,
+              "line_number": 75
+            },
+            "name": "Residues passing Vit filter",
+            "native_fraction": 0.5,
+            "raw": "Residues passing Vit filter:             120  (0.5); expected (0.003)\n"
+          },
+          {
+            "count": 120,
+            "count_unit": "nucleotide_positions",
+            "expected_fraction": 3e-05,
+            "fraction_denominator": 240,
+            "fraction_input_fields": [
+              "native.filter_position_count",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator": 120,
+            "fraction_numerator_unavailable_reason": null,
+            "fraction_precision": "native_rounded_three_significant_digits",
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "issues": [],
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 4230,
+              "byte_start": 4160,
+              "line_number": 76
+            },
+            "name": "Residues passing Fwd filter",
+            "native_fraction": 0.5,
+            "raw": "Residues passing Fwd filter:             120  (0.5); expected (3e-05)\n"
+          },
+          {
+            "count": 1,
+            "count_unit": "loci",
+            "expected_fraction": null,
+            "fraction_denominator": 240,
+            "fraction_input_fields": [
+              "native.pos_output",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator": null,
+            "fraction_numerator_unavailable_reason": "summed_aligned_position_count_not_printed",
+            "fraction_precision": "native_rounded_three_significant_digits",
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "issues": [],
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 4284,
+              "byte_start": 4230,
+              "line_number": 77
+            },
+            "name": "Total number of hits",
+            "native_fraction": 0.417,
+            "raw": "Total number of hits:                      1  (0.417)\n"
+          },
+          {
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 4341,
+              "byte_start": 4284,
+              "line_number": 78
+            },
+            "name": null,
+            "raw": "# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00\n"
+          },
+          {
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 4357,
+              "byte_start": 4341,
+              "line_number": 79
+            },
+            "name": null,
+            "raw": "# Mc/sec: 14.92\n"
+          }
+        ],
+        "terminated": true
+      },
+      {
+        "accession": null,
+        "annotations": [
+          {
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 4414,
+              "byte_start": 4389,
+              "line_number": 82
+            },
+            "raw": "Scores for complete hit:\n"
+          },
+          {
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 4476,
+              "byte_start": 4414,
+              "line_number": 83
+            },
+            "raw": "    E-value  score  bias  Model     start    end  Description\n"
+          },
+          {
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 4538,
+              "byte_start": 4476,
+              "line_number": 84
+            },
+            "raw": "    ------- ------ -----  --------  -----  -----  -----------\n"
+          },
+          {
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 4588,
+              "byte_start": 4538,
+              "line_number": 85
+            },
+            "raw": "    1.1e-34  105.7   0.7  model        11    111 \n"
+          },
+          {
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 4633,
+              "byte_start": 4590,
+              "line_number": 88
+            },
+            "raw": "Annotation for each hit  (and alignments):\n"
+          },
+          {
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 5575,
+              "byte_start": 5537,
+              "line_number": 104
+            },
+            "raw": "-------------------------------------\n"
+          }
+        ],
+        "issues": [],
+        "kind": "query_end",
+        "length": 121,
+        "length_axis": "sequence",
+        "locator": {
+          "artifact_ref": "nhmmscan/stdout.txt",
+          "artifact_role": "stdout",
+          "byte_end": 6111,
+          "byte_start": 4360,
+          "end_line_number": 114,
+          "line_number": 81
+        },
+        "locus_count": 1,
+        "name": "gapped",
+        "occurrence": 3,
+        "record_key": "stdout:query:3",
+        "statistics": [
+          {
+            "count": 1,
+            "count_unit": "sequences",
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 5645,
+              "byte_start": 5575,
+              "line_number": 105
+            },
+            "name": "Query sequence(s)",
+            "positions": 242,
+            "positions_unit": "nucleotides_searched",
+            "raw": "Query sequence(s):                         1  (242 residues searched)\n"
+          },
+          {
+            "count": 1,
+            "count_unit": "models",
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 5703,
+              "byte_start": 5645,
+              "line_number": 106
+            },
+            "name": "Target model(s)",
+            "positions": 100,
+            "positions_unit": "model_nodes",
+            "raw": "Target model(s):                           1  (100 nodes)\n"
+          },
+          {
+            "count": 121,
+            "count_unit": "nucleotide_positions",
+            "expected_fraction": 0.02,
+            "fraction_denominator": 242,
+            "fraction_input_fields": [
+              "native.filter_position_count",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator": 121,
+            "fraction_numerator_unavailable_reason": null,
+            "fraction_precision": "native_rounded_three_significant_digits",
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "issues": [],
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 5772,
+              "byte_start": 5703,
+              "line_number": 107
+            },
+            "name": "Residues passing SSV filter",
+            "native_fraction": 0.5,
+            "raw": "Residues passing SSV filter:             121  (0.5); expected (0.02)\n"
+          },
+          {
+            "count": 121,
+            "count_unit": "nucleotide_positions",
+            "expected_fraction": 0.02,
+            "fraction_denominator": 242,
+            "fraction_input_fields": [
+              "native.filter_position_count",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator": 121,
+            "fraction_numerator_unavailable_reason": null,
+            "fraction_precision": "native_rounded_three_significant_digits",
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "issues": [],
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 5841,
+              "byte_start": 5772,
+              "line_number": 108
+            },
+            "name": "Residues passing bias filter",
+            "native_fraction": 0.5,
+            "raw": "Residues passing bias filter:            121  (0.5); expected (0.02)\n"
+          },
+          {
+            "count": 121,
+            "count_unit": "nucleotide_positions",
+            "expected_fraction": 0.003,
+            "fraction_denominator": 242,
+            "fraction_input_fields": [
+              "native.filter_position_count",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator": 121,
+            "fraction_numerator_unavailable_reason": null,
+            "fraction_precision": "native_rounded_three_significant_digits",
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "issues": [],
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 5911,
+              "byte_start": 5841,
+              "line_number": 109
+            },
+            "name": "Residues passing Vit filter",
+            "native_fraction": 0.5,
+            "raw": "Residues passing Vit filter:             121  (0.5); expected (0.003)\n"
+          },
+          {
+            "count": 121,
+            "count_unit": "nucleotide_positions",
+            "expected_fraction": 3e-05,
+            "fraction_denominator": 242,
+            "fraction_input_fields": [
+              "native.filter_position_count",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator": 121,
+            "fraction_numerator_unavailable_reason": null,
+            "fraction_precision": "native_rounded_three_significant_digits",
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "issues": [],
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 5981,
+              "byte_start": 5911,
+              "line_number": 110
+            },
+            "name": "Residues passing Fwd filter",
+            "native_fraction": 0.5,
+            "raw": "Residues passing Fwd filter:             121  (0.5); expected (3e-05)\n"
+          },
+          {
+            "count": 1,
+            "count_unit": "loci",
+            "expected_fraction": null,
+            "fraction_denominator": 242,
+            "fraction_input_fields": [
+              "native.pos_output",
+              "native.nres",
+              "native.nmodels"
+            ],
+            "fraction_numerator": null,
+            "fraction_numerator_unavailable_reason": "summed_aligned_position_count_not_printed",
+            "fraction_precision": "native_rounded_three_significant_digits",
+            "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+            "issues": [],
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 6035,
+              "byte_start": 5981,
+              "line_number": 111
+            },
+            "name": "Total number of hits",
+            "native_fraction": 0.417,
+            "raw": "Total number of hits:                      1  (0.417)\n"
+          },
+          {
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 6092,
+              "byte_start": 6035,
+              "line_number": 112
+            },
+            "name": null,
+            "raw": "# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00\n"
+          },
+          {
+            "locator": {
+              "artifact_ref": "nhmmscan/stdout.txt",
+              "artifact_role": "stdout",
+              "byte_end": 6108,
+              "byte_start": 6092,
+              "line_number": 113
+            },
+            "name": null,
+            "raw": "# Mc/sec: 13.35\n"
+          }
+        ],
+        "terminated": true
+      }
+    ],
+    "schema": "nhmmer_native_v1",
+    "stdout_loci": [
+      {
+        "alignment": {
+          "chunks": [
+            {
+              "annotations": [
+                {
+                  "locator": {
+                    "artifact_ref": "nhmmscan/stdout.txt",
+                    "artifact_role": "stdout",
+                    "byte_end": 1764,
+                    "byte_start": 1649,
+                    "line_number": 29
+                  },
+                  "raw": "              ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg\n"
+                }
+              ],
+              "model": {
+                "column_offset": 14,
+                "from": 1,
+                "label": "model",
+                "locator": {
+                  "artifact_ref": "nhmmscan/stdout.txt",
+                  "artifact_role": "stdout",
+                  "byte_end": 1649,
+                  "byte_start": 1530,
+                  "line_number": 28
+                },
+                "text": "ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+                "to": 100
+              },
+              "posterior": "79***********************************************************************************************986",
+              "posterior_locator": {
+                "artifact_ref": "nhmmscan/stdout.txt",
+                "artifact_role": "stdout",
+                "byte_end": 2001,
+                "byte_start": 1883,
+                "line_number": 31
+              },
+              "sequence": {
+                "column_offset": 14,
+                "from": 11,
+                "label": "forward",
+                "locator": {
+                  "artifact_ref": "nhmmscan/stdout.txt",
+                  "artifact_role": "stdout",
+                  "byte_end": 1883,
+                  "byte_start": 1764,
+                  "line_number": 30
+                },
+                "text": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG",
+                "to": 110
+              }
+            }
+          ],
+          "issues": [],
+          "model_aligned": "ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+          "posterior": "79***********************************************************************************************986",
+          "posterior_valid": true,
+          "sequence_aligned": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG",
+          "valid": true
+        },
+        "coordinates": {
+          "convention": "zero_based_half_open",
+          "model_interval": [
+            0,
+            100
+          ],
+          "native_convention": "one_based_inclusive",
+          "sequence_envelope_interval": [
+            10,
+            110
+          ],
+          "sequence_interval": [
+            10,
+            110
+          ]
+        },
+        "issues": [],
+        "kind": "locus",
+        "locator": {
+          "artifact_ref": "nhmmscan/stdout.txt",
+          "artifact_role": "stdout",
+          "byte_end": 2004,
+          "byte_start": 1146,
+          "end_line_number": 34,
+          "line_number": 21,
+          "query_occurrence": 1,
+          "target_occurrence": 1
+        },
+        "native": {
+          "accuracy": 0.99,
+          "ali_from": 11,
+          "ali_to": 110,
+          "bias_bits": 0.9,
+          "boundary_flags": [
+            "[]",
+            "..",
+            ".."
+          ],
+          "description": "",
+          "env_from": 11,
+          "env_to": 110,
+          "evalue": 2e-39,
+          "hmm_from": 1,
+          "hmm_to": 100,
+          "included": true,
+          "inclusion_flag": "!",
+          "length_field": 100,
+          "length_field_meaning": "model_length",
+          "query_accession": null,
+          "query_name": "forward",
+          "reported": true,
+          "score_bits": 120.9,
+          "strand": "+",
+          "target_accession": null,
+          "target_display_id": "model",
+          "target_name": "model"
+        },
+        "query_occurrence": 1,
+        "query_record_key": "stdout:query:1",
+        "raw": ">> model  \n    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc\n   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----\n !  120.9   0.9     2e-39         1       100 []        11       110 ..        11       110 ..       100    0.99\n\n  Alignment:\n  score: 120.9 bits\n    model   1 ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg 100\n              ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg\n  forward  11 GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG 110\n              79***********************************************************************************************986 PP\n\n\n\n",
+        "record_key": "stdout:query:1:locus:1",
+        "status": "valid",
+        "target_occurrence": 1
+      },
+      {
+        "alignment": {
+          "chunks": [
+            {
+              "annotations": [
+                {
+                  "locator": {
+                    "artifact_ref": "nhmmscan/stdout.txt",
+                    "artifact_role": "stdout",
+                    "byte_end": 3508,
+                    "byte_start": 3393,
+                    "line_number": 63
+                  },
+                  "raw": "              ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg\n"
+                }
+              ],
+              "model": {
+                "column_offset": 14,
+                "from": 1,
+                "label": "model",
+                "locator": {
+                  "artifact_ref": "nhmmscan/stdout.txt",
+                  "artifact_role": "stdout",
+                  "byte_end": 3393,
+                  "byte_start": 3274,
+                  "line_number": 62
+                },
+                "text": "ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+                "to": 100
+              },
+              "posterior": "79***********************************************************************************************986",
+              "posterior_locator": {
+                "artifact_ref": "nhmmscan/stdout.txt",
+                "artifact_role": "stdout",
+                "byte_end": 3745,
+                "byte_start": 3627,
+                "line_number": 65
+              },
+              "sequence": {
+                "column_offset": 14,
+                "from": 110,
+                "label": "reverse",
+                "locator": {
+                  "artifact_ref": "nhmmscan/stdout.txt",
+                  "artifact_role": "stdout",
+                  "byte_end": 3627,
+                  "byte_start": 3508,
+                  "line_number": 64
+                },
+                "text": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG",
+                "to": 11
+              }
+            }
+          ],
+          "issues": [],
+          "model_aligned": "ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+          "posterior": "79***********************************************************************************************986",
+          "posterior_valid": true,
+          "sequence_aligned": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG",
+          "valid": true
+        },
+        "coordinates": {
+          "convention": "zero_based_half_open",
+          "model_interval": [
+            0,
+            100
+          ],
+          "native_convention": "one_based_inclusive",
+          "sequence_envelope_interval": [
+            10,
+            110
+          ],
+          "sequence_interval": [
+            10,
+            110
+          ]
+        },
+        "issues": [],
+        "kind": "locus",
+        "locator": {
+          "artifact_ref": "nhmmscan/stdout.txt",
+          "artifact_role": "stdout",
+          "byte_end": 3748,
+          "byte_start": 2890,
+          "end_line_number": 68,
+          "line_number": 55,
+          "query_occurrence": 2,
+          "target_occurrence": 1
+        },
+        "native": {
+          "accuracy": 0.99,
+          "ali_from": 110,
+          "ali_to": 11,
+          "bias_bits": 0.9,
+          "boundary_flags": [
+            "[]",
+            "..",
+            ".."
+          ],
+          "description": "",
+          "env_from": 110,
+          "env_to": 11,
+          "evalue": 2e-39,
+          "hmm_from": 1,
+          "hmm_to": 100,
+          "included": true,
+          "inclusion_flag": "!",
+          "length_field": 100,
+          "length_field_meaning": "model_length",
+          "query_accession": null,
+          "query_name": "reverse",
+          "reported": true,
+          "score_bits": 120.9,
+          "strand": "-",
+          "target_accession": null,
+          "target_display_id": "model",
+          "target_name": "model"
+        },
+        "query_occurrence": 2,
+        "query_record_key": "stdout:query:2",
+        "raw": ">> model  \n    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc\n   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----\n !  120.9   0.9     2e-39         1       100 []       110        11 ..       110        11 ..       100    0.99\n\n  Alignment:\n  score: 120.9 bits\n    model   1 ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg 100\n              ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg\n  reverse 110 GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG 11 \n              79***********************************************************************************************986 PP\n\n\n\n",
+        "record_key": "stdout:query:2:locus:1",
+        "status": "valid",
+        "target_occurrence": 1
+      },
+      {
+        "alignment": {
+          "chunks": [
+            {
+              "annotations": [
+                {
+                  "locator": {
+                    "artifact_ref": "nhmmscan/stdout.txt",
+                    "artifact_role": "stdout",
+                    "byte_end": 5255,
+                    "byte_start": 5138,
+                    "line_number": 97
+                  },
+                  "raw": "             ggcagtggcgtgtcaacctccctttacgataagtccatca   ctaacagtaagcctgacgggggcaagatct  ctttttggcagactcactcttcccattg\n"
+                }
+              ],
+              "model": {
+                "column_offset": 13,
+                "from": 1,
+                "label": "model",
+                "locator": {
+                  "artifact_ref": "nhmmscan/stdout.txt",
+                  "artifact_role": "stdout",
+                  "byte_end": 5138,
+                  "byte_start": 5017,
+                  "line_number": 96
+                },
+                "text": "ggcagtggcgtgtcaacctccctttacgataagtccatca...ctaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+                "to": 100
+              },
+              "posterior": "79************************************95444899************************998..599**********************986",
+              "posterior_locator": {
+                "artifact_ref": "nhmmscan/stdout.txt",
+                "artifact_role": "stdout",
+                "byte_end": 5496,
+                "byte_start": 5376,
+                "line_number": 99
+              },
+              "sequence": {
+                "column_offset": 13,
+                "from": 11,
+                "label": "gapped",
+                "locator": {
+                  "artifact_ref": "nhmmscan/stdout.txt",
+                  "artifact_role": "stdout",
+                  "byte_end": 5376,
+                  "byte_start": 5255,
+                  "line_number": 98
+                },
+                "text": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCAgtaCTAACAGTAAGCCTGACGGGGGCAAGATCT--CTTTTTGGCAGACTCACTCTTCCCATTG",
+                "to": 111
+              }
+            }
+          ],
+          "issues": [],
+          "model_aligned": "ggcagtggcgtgtcaacctccctttacgataagtccatca...ctaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg",
+          "posterior": "79************************************95444899************************998..599**********************986",
+          "posterior_valid": true,
+          "sequence_aligned": "GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCAgtaCTAACAGTAAGCCTGACGGGGGCAAGATCT--CTTTTTGGCAGACTCACTCTTCCCATTG",
+          "valid": true
+        },
+        "coordinates": {
+          "convention": "zero_based_half_open",
+          "model_interval": [
+            0,
+            100
+          ],
+          "native_convention": "one_based_inclusive",
+          "sequence_envelope_interval": [
+            10,
+            111
+          ],
+          "sequence_interval": [
+            10,
+            111
+          ]
+        },
+        "issues": [],
+        "kind": "locus",
+        "locator": {
+          "artifact_ref": "nhmmscan/stdout.txt",
+          "artifact_role": "stdout",
+          "byte_end": 5499,
+          "byte_start": 4633,
+          "end_line_number": 102,
+          "line_number": 89,
+          "query_occurrence": 3,
+          "target_occurrence": 1
+        },
+        "native": {
+          "accuracy": 0.95,
+          "ali_from": 11,
+          "ali_to": 111,
+          "bias_bits": 0.7,
+          "boundary_flags": [
+            "[]",
+            "..",
+            ".."
+          ],
+          "description": "",
+          "env_from": 11,
+          "env_to": 111,
+          "evalue": 1.1e-34,
+          "hmm_from": 1,
+          "hmm_to": 100,
+          "included": true,
+          "inclusion_flag": "!",
+          "length_field": 100,
+          "length_field_meaning": "model_length",
+          "query_accession": null,
+          "query_name": "gapped",
+          "reported": true,
+          "score_bits": 105.7,
+          "strand": "+",
+          "target_accession": null,
+          "target_display_id": "model",
+          "target_name": "model"
+        },
+        "query_occurrence": 3,
+        "query_record_key": "stdout:query:3",
+        "raw": ">> model  \n    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc\n   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----\n !  105.7   0.7   1.1e-34         1       100 []        11       111 ..        11       111 ..       100    0.95\n\n  Alignment:\n  score: 105.7 bits\n   model   1 ggcagtggcgtgtcaacctccctttacgataagtccatca...ctaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg 100\n             ggcagtggcgtgtcaacctccctttacgataagtccatca   ctaacagtaagcctgacgggggcaagatct  ctttttggcagactcactcttcccattg\n  gapped  11 GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCAgtaCTAACAGTAAGCCTGACGGGGGCAAGATCT--CTTTTTGGCAGACTCACTCTTCCCATTG 111\n             79************************************95444899************************998..599**********************986 PP\n\n\n\n",
+        "record_key": "stdout:query:3:locus:1",
+        "status": "valid",
+        "target_occurrence": 1
+      }
+    ],
+    "table_rows": [
+      {
+        "coordinates": {
+          "convention": "zero_based_half_open",
+          "model_interval": [
+            0,
+            100
+          ],
+          "native_convention": "one_based_inclusive",
+          "sequence_envelope_interval": [
+            10,
+            110
+          ],
+          "sequence_interval": [
+            10,
+            110
+          ]
+        },
+        "issues": [],
+        "locator": {
+          "artifact_ref": "nhmmscan/hits.tbl",
+          "artifact_role": "tblout",
+          "byte_end": 497,
+          "byte_start": 344,
+          "line_number": 3,
+          "row_occurrence": 1
+        },
+        "native": {
+          "ali_from": 11,
+          "ali_to": 110,
+          "bias_bits": 0.9,
+          "description": "-",
+          "env_from": 11,
+          "env_to": 110,
+          "evalue": 2e-39,
+          "hmm_from": 1,
+          "hmm_to": 100,
+          "included": null,
+          "length_field": 100,
+          "length_field_meaning": "model_length",
+          "query_accession": null,
+          "query_name": "forward",
+          "reported": true,
+          "score_bits": 120.9,
+          "strand": "+",
+          "target_accession": null,
+          "target_name": "model"
+        },
+        "query_occurrence": null,
+        "raw": "model                -          forward              -                1     100      11     110      11     110     100    +       2e-39  120.9   0.9  -\n",
+        "raw_fields": {
+          "ali_from": "11",
+          "ali_to": "110",
+          "bias_bits": "0.9",
+          "env_from": "11",
+          "env_to": "110",
+          "evalue": "2e-39",
+          "hmm_from": "1",
+          "hmm_to": "100",
+          "length_field": "100",
+          "query_accession": "-",
+          "query_name": "forward",
+          "score_bits": "120.9",
+          "strand": "+",
+          "target_accession": "-",
+          "target_name": "model"
+        },
+        "record_key": "tblout:line:3",
+        "status": "valid",
+        "target_occurrence": null
+      },
+      {
+        "coordinates": {
+          "convention": "zero_based_half_open",
+          "model_interval": [
+            0,
+            100
+          ],
+          "native_convention": "one_based_inclusive",
+          "sequence_envelope_interval": [
+            10,
+            110
+          ],
+          "sequence_interval": [
+            10,
+            110
+          ]
+        },
+        "issues": [],
+        "locator": {
+          "artifact_ref": "nhmmscan/hits.tbl",
+          "artifact_role": "tblout",
+          "byte_end": 650,
+          "byte_start": 497,
+          "line_number": 4,
+          "row_occurrence": 2
+        },
+        "native": {
+          "ali_from": 110,
+          "ali_to": 11,
+          "bias_bits": 0.9,
+          "description": "-",
+          "env_from": 110,
+          "env_to": 11,
+          "evalue": 2e-39,
+          "hmm_from": 1,
+          "hmm_to": 100,
+          "included": null,
+          "length_field": 100,
+          "length_field_meaning": "model_length",
+          "query_accession": null,
+          "query_name": "reverse",
+          "reported": true,
+          "score_bits": 120.9,
+          "strand": "-",
+          "target_accession": null,
+          "target_name": "model"
+        },
+        "query_occurrence": null,
+        "raw": "model                -          reverse              -                1     100     110      11     110      11     100    -       2e-39  120.9   0.9  -\n",
+        "raw_fields": {
+          "ali_from": "110",
+          "ali_to": "11",
+          "bias_bits": "0.9",
+          "env_from": "110",
+          "env_to": "11",
+          "evalue": "2e-39",
+          "hmm_from": "1",
+          "hmm_to": "100",
+          "length_field": "100",
+          "query_accession": "-",
+          "query_name": "reverse",
+          "score_bits": "120.9",
+          "strand": "-",
+          "target_accession": "-",
+          "target_name": "model"
+        },
+        "record_key": "tblout:line:4",
+        "status": "valid",
+        "target_occurrence": null
+      },
+      {
+        "coordinates": {
+          "convention": "zero_based_half_open",
+          "model_interval": [
+            0,
+            100
+          ],
+          "native_convention": "one_based_inclusive",
+          "sequence_envelope_interval": [
+            10,
+            111
+          ],
+          "sequence_interval": [
+            10,
+            111
+          ]
+        },
+        "issues": [],
+        "locator": {
+          "artifact_ref": "nhmmscan/hits.tbl",
+          "artifact_role": "tblout",
+          "byte_end": 803,
+          "byte_start": 650,
+          "line_number": 5,
+          "row_occurrence": 3
+        },
+        "native": {
+          "ali_from": 11,
+          "ali_to": 111,
+          "bias_bits": 0.7,
+          "description": "-",
+          "env_from": 11,
+          "env_to": 111,
+          "evalue": 1.1e-34,
+          "hmm_from": 1,
+          "hmm_to": 100,
+          "included": null,
+          "length_field": 100,
+          "length_field_meaning": "model_length",
+          "query_accession": null,
+          "query_name": "gapped",
+          "reported": true,
+          "score_bits": 105.7,
+          "strand": "+",
+          "target_accession": null,
+          "target_name": "model"
+        },
+        "query_occurrence": null,
+        "raw": "model                -          gapped               -                1     100      11     111      11     111     100    +     1.1e-34  105.7   0.7  -\n",
+        "raw_fields": {
+          "ali_from": "11",
+          "ali_to": "111",
+          "bias_bits": "0.7",
+          "env_from": "11",
+          "env_to": "111",
+          "evalue": "1.1e-34",
+          "hmm_from": "1",
+          "hmm_to": "100",
+          "length_field": "100",
+          "query_accession": "-",
+          "query_name": "gapped",
+          "score_bits": "105.7",
+          "strand": "+",
+          "target_accession": "-",
+          "target_name": "model"
+        },
+        "record_key": "tblout:line:5",
+        "status": "valid",
+        "target_occurrence": null
+      }
+    ]
+  },
+  "native_settings": [],
+  "operation": {
+    "alphabet": "DNA",
+    "engine_version": "3.4",
+    "format": "hmmer3_nucleotide_native",
+    "mode": "sequence_to_profile_database",
+    "program": "nhmmscan",
+    "query_construction_mode": null
+  },
+  "queries": [
+    {
+      "accession": null,
+      "annotations": [
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 927,
+            "byte_start": 902,
+            "line_number": 14
+          },
+          "raw": "Scores for complete hit:\n"
+        },
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 989,
+            "byte_start": 927,
+            "line_number": 15
+          },
+          "raw": "    E-value  score  bias  Model     start    end  Description\n"
+        },
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 1051,
+            "byte_start": 989,
+            "line_number": 16
+          },
+          "raw": "    ------- ------ -----  --------  -----  -----  -----------\n"
+        },
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 1101,
+            "byte_start": 1051,
+            "line_number": 17
+          },
+          "raw": "      2e-39  120.9   0.9  model        11    110 \n"
+        },
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 1146,
+            "byte_start": 1103,
+            "line_number": 20
+          },
+          "raw": "Annotation for each hit  (and alignments):\n"
+        },
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 2080,
+            "byte_start": 2042,
+            "line_number": 36
+          },
+          "raw": "-------------------------------------\n"
+        }
+      ],
+      "issues": [],
+      "kind": "query_end",
+      "length": 120,
+      "length_axis": "sequence",
+      "locator": {
+        "artifact_ref": "nhmmscan/stdout.txt",
+        "artifact_role": "stdout",
+        "byte_end": 2616,
+        "byte_start": 872,
+        "end_line_number": 46,
+        "line_number": 13
+      },
+      "locus_count": 1,
+      "name": "forward",
+      "occurrence": 1,
+      "record_key": "stdout:query:1",
+      "statistics": [
+        {
+          "count": 1,
+          "count_unit": "sequences",
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 2150,
+            "byte_start": 2080,
+            "line_number": 37
+          },
+          "name": "Query sequence(s)",
+          "positions": 240,
+          "positions_unit": "nucleotides_searched",
+          "raw": "Query sequence(s):                         1  (240 residues searched)\n"
+        },
+        {
+          "count": 1,
+          "count_unit": "models",
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 2208,
+            "byte_start": 2150,
+            "line_number": 38
+          },
+          "name": "Target model(s)",
+          "positions": 100,
+          "positions_unit": "model_nodes",
+          "raw": "Target model(s):                           1  (100 nodes)\n"
+        },
+        {
+          "count": 120,
+          "count_unit": "nucleotide_positions",
+          "expected_fraction": 0.02,
+          "fraction_denominator": 240,
+          "fraction_input_fields": [
+            "native.filter_position_count",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator": 120,
+          "fraction_numerator_unavailable_reason": null,
+          "fraction_precision": "native_rounded_three_significant_digits",
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "issues": [],
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 2277,
+            "byte_start": 2208,
+            "line_number": 39
+          },
+          "name": "Residues passing SSV filter",
+          "native_fraction": 0.5,
+          "raw": "Residues passing SSV filter:             120  (0.5); expected (0.02)\n"
+        },
+        {
+          "count": 120,
+          "count_unit": "nucleotide_positions",
+          "expected_fraction": 0.02,
+          "fraction_denominator": 240,
+          "fraction_input_fields": [
+            "native.filter_position_count",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator": 120,
+          "fraction_numerator_unavailable_reason": null,
+          "fraction_precision": "native_rounded_three_significant_digits",
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "issues": [],
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 2346,
+            "byte_start": 2277,
+            "line_number": 40
+          },
+          "name": "Residues passing bias filter",
+          "native_fraction": 0.5,
+          "raw": "Residues passing bias filter:            120  (0.5); expected (0.02)\n"
+        },
+        {
+          "count": 120,
+          "count_unit": "nucleotide_positions",
+          "expected_fraction": 0.003,
+          "fraction_denominator": 240,
+          "fraction_input_fields": [
+            "native.filter_position_count",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator": 120,
+          "fraction_numerator_unavailable_reason": null,
+          "fraction_precision": "native_rounded_three_significant_digits",
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "issues": [],
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 2416,
+            "byte_start": 2346,
+            "line_number": 41
+          },
+          "name": "Residues passing Vit filter",
+          "native_fraction": 0.5,
+          "raw": "Residues passing Vit filter:             120  (0.5); expected (0.003)\n"
+        },
+        {
+          "count": 120,
+          "count_unit": "nucleotide_positions",
+          "expected_fraction": 3e-05,
+          "fraction_denominator": 240,
+          "fraction_input_fields": [
+            "native.filter_position_count",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator": 120,
+          "fraction_numerator_unavailable_reason": null,
+          "fraction_precision": "native_rounded_three_significant_digits",
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "issues": [],
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 2486,
+            "byte_start": 2416,
+            "line_number": 42
+          },
+          "name": "Residues passing Fwd filter",
+          "native_fraction": 0.5,
+          "raw": "Residues passing Fwd filter:             120  (0.5); expected (3e-05)\n"
+        },
+        {
+          "count": 1,
+          "count_unit": "loci",
+          "expected_fraction": null,
+          "fraction_denominator": 240,
+          "fraction_input_fields": [
+            "native.pos_output",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator": null,
+          "fraction_numerator_unavailable_reason": "summed_aligned_position_count_not_printed",
+          "fraction_precision": "native_rounded_three_significant_digits",
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "issues": [],
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 2540,
+            "byte_start": 2486,
+            "line_number": 43
+          },
+          "name": "Total number of hits",
+          "native_fraction": 0.417,
+          "raw": "Total number of hits:                      1  (0.417)\n"
+        },
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 2597,
+            "byte_start": 2540,
+            "line_number": 44
+          },
+          "name": null,
+          "raw": "# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00\n"
+        },
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 2613,
+            "byte_start": 2597,
+            "line_number": 45
+          },
+          "name": null,
+          "raw": "# Mc/sec: 10.36\n"
+        }
+      ],
+      "terminated": true
+    },
+    {
+      "accession": null,
+      "annotations": [
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 2671,
+            "byte_start": 2646,
+            "line_number": 48
+          },
+          "raw": "Scores for complete hit:\n"
+        },
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 2733,
+            "byte_start": 2671,
+            "line_number": 49
+          },
+          "raw": "    E-value  score  bias  Model     start    end  Description\n"
+        },
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 2795,
+            "byte_start": 2733,
+            "line_number": 50
+          },
+          "raw": "    ------- ------ -----  --------  -----  -----  -----------\n"
+        },
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 2845,
+            "byte_start": 2795,
+            "line_number": 51
+          },
+          "raw": "      2e-39  120.9   0.9  model       110     11 \n"
+        },
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 2890,
+            "byte_start": 2847,
+            "line_number": 54
+          },
+          "raw": "Annotation for each hit  (and alignments):\n"
+        },
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 3824,
+            "byte_start": 3786,
+            "line_number": 70
+          },
+          "raw": "-------------------------------------\n"
+        }
+      ],
+      "issues": [],
+      "kind": "query_end",
+      "length": 120,
+      "length_axis": "sequence",
+      "locator": {
+        "artifact_ref": "nhmmscan/stdout.txt",
+        "artifact_role": "stdout",
+        "byte_end": 4360,
+        "byte_start": 2616,
+        "end_line_number": 80,
+        "line_number": 47
+      },
+      "locus_count": 1,
+      "name": "reverse",
+      "occurrence": 2,
+      "record_key": "stdout:query:2",
+      "statistics": [
+        {
+          "count": 1,
+          "count_unit": "sequences",
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 3894,
+            "byte_start": 3824,
+            "line_number": 71
+          },
+          "name": "Query sequence(s)",
+          "positions": 240,
+          "positions_unit": "nucleotides_searched",
+          "raw": "Query sequence(s):                         1  (240 residues searched)\n"
+        },
+        {
+          "count": 1,
+          "count_unit": "models",
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 3952,
+            "byte_start": 3894,
+            "line_number": 72
+          },
+          "name": "Target model(s)",
+          "positions": 100,
+          "positions_unit": "model_nodes",
+          "raw": "Target model(s):                           1  (100 nodes)\n"
+        },
+        {
+          "count": 120,
+          "count_unit": "nucleotide_positions",
+          "expected_fraction": 0.02,
+          "fraction_denominator": 240,
+          "fraction_input_fields": [
+            "native.filter_position_count",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator": 120,
+          "fraction_numerator_unavailable_reason": null,
+          "fraction_precision": "native_rounded_three_significant_digits",
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "issues": [],
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 4021,
+            "byte_start": 3952,
+            "line_number": 73
+          },
+          "name": "Residues passing SSV filter",
+          "native_fraction": 0.5,
+          "raw": "Residues passing SSV filter:             120  (0.5); expected (0.02)\n"
+        },
+        {
+          "count": 120,
+          "count_unit": "nucleotide_positions",
+          "expected_fraction": 0.02,
+          "fraction_denominator": 240,
+          "fraction_input_fields": [
+            "native.filter_position_count",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator": 120,
+          "fraction_numerator_unavailable_reason": null,
+          "fraction_precision": "native_rounded_three_significant_digits",
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "issues": [],
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 4090,
+            "byte_start": 4021,
+            "line_number": 74
+          },
+          "name": "Residues passing bias filter",
+          "native_fraction": 0.5,
+          "raw": "Residues passing bias filter:            120  (0.5); expected (0.02)\n"
+        },
+        {
+          "count": 120,
+          "count_unit": "nucleotide_positions",
+          "expected_fraction": 0.003,
+          "fraction_denominator": 240,
+          "fraction_input_fields": [
+            "native.filter_position_count",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator": 120,
+          "fraction_numerator_unavailable_reason": null,
+          "fraction_precision": "native_rounded_three_significant_digits",
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "issues": [],
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 4160,
+            "byte_start": 4090,
+            "line_number": 75
+          },
+          "name": "Residues passing Vit filter",
+          "native_fraction": 0.5,
+          "raw": "Residues passing Vit filter:             120  (0.5); expected (0.003)\n"
+        },
+        {
+          "count": 120,
+          "count_unit": "nucleotide_positions",
+          "expected_fraction": 3e-05,
+          "fraction_denominator": 240,
+          "fraction_input_fields": [
+            "native.filter_position_count",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator": 120,
+          "fraction_numerator_unavailable_reason": null,
+          "fraction_precision": "native_rounded_three_significant_digits",
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "issues": [],
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 4230,
+            "byte_start": 4160,
+            "line_number": 76
+          },
+          "name": "Residues passing Fwd filter",
+          "native_fraction": 0.5,
+          "raw": "Residues passing Fwd filter:             120  (0.5); expected (3e-05)\n"
+        },
+        {
+          "count": 1,
+          "count_unit": "loci",
+          "expected_fraction": null,
+          "fraction_denominator": 240,
+          "fraction_input_fields": [
+            "native.pos_output",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator": null,
+          "fraction_numerator_unavailable_reason": "summed_aligned_position_count_not_printed",
+          "fraction_precision": "native_rounded_three_significant_digits",
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "issues": [],
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 4284,
+            "byte_start": 4230,
+            "line_number": 77
+          },
+          "name": "Total number of hits",
+          "native_fraction": 0.417,
+          "raw": "Total number of hits:                      1  (0.417)\n"
+        },
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 4341,
+            "byte_start": 4284,
+            "line_number": 78
+          },
+          "name": null,
+          "raw": "# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00\n"
+        },
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 4357,
+            "byte_start": 4341,
+            "line_number": 79
+          },
+          "name": null,
+          "raw": "# Mc/sec: 14.92\n"
+        }
+      ],
+      "terminated": true
+    },
+    {
+      "accession": null,
+      "annotations": [
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 4414,
+            "byte_start": 4389,
+            "line_number": 82
+          },
+          "raw": "Scores for complete hit:\n"
+        },
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 4476,
+            "byte_start": 4414,
+            "line_number": 83
+          },
+          "raw": "    E-value  score  bias  Model     start    end  Description\n"
+        },
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 4538,
+            "byte_start": 4476,
+            "line_number": 84
+          },
+          "raw": "    ------- ------ -----  --------  -----  -----  -----------\n"
+        },
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 4588,
+            "byte_start": 4538,
+            "line_number": 85
+          },
+          "raw": "    1.1e-34  105.7   0.7  model        11    111 \n"
+        },
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 4633,
+            "byte_start": 4590,
+            "line_number": 88
+          },
+          "raw": "Annotation for each hit  (and alignments):\n"
+        },
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 5575,
+            "byte_start": 5537,
+            "line_number": 104
+          },
+          "raw": "-------------------------------------\n"
+        }
+      ],
+      "issues": [],
+      "kind": "query_end",
+      "length": 121,
+      "length_axis": "sequence",
+      "locator": {
+        "artifact_ref": "nhmmscan/stdout.txt",
+        "artifact_role": "stdout",
+        "byte_end": 6111,
+        "byte_start": 4360,
+        "end_line_number": 114,
+        "line_number": 81
+      },
+      "locus_count": 1,
+      "name": "gapped",
+      "occurrence": 3,
+      "record_key": "stdout:query:3",
+      "statistics": [
+        {
+          "count": 1,
+          "count_unit": "sequences",
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 5645,
+            "byte_start": 5575,
+            "line_number": 105
+          },
+          "name": "Query sequence(s)",
+          "positions": 242,
+          "positions_unit": "nucleotides_searched",
+          "raw": "Query sequence(s):                         1  (242 residues searched)\n"
+        },
+        {
+          "count": 1,
+          "count_unit": "models",
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 5703,
+            "byte_start": 5645,
+            "line_number": 106
+          },
+          "name": "Target model(s)",
+          "positions": 100,
+          "positions_unit": "model_nodes",
+          "raw": "Target model(s):                           1  (100 nodes)\n"
+        },
+        {
+          "count": 121,
+          "count_unit": "nucleotide_positions",
+          "expected_fraction": 0.02,
+          "fraction_denominator": 242,
+          "fraction_input_fields": [
+            "native.filter_position_count",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator": 121,
+          "fraction_numerator_unavailable_reason": null,
+          "fraction_precision": "native_rounded_three_significant_digits",
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "issues": [],
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 5772,
+            "byte_start": 5703,
+            "line_number": 107
+          },
+          "name": "Residues passing SSV filter",
+          "native_fraction": 0.5,
+          "raw": "Residues passing SSV filter:             121  (0.5); expected (0.02)\n"
+        },
+        {
+          "count": 121,
+          "count_unit": "nucleotide_positions",
+          "expected_fraction": 0.02,
+          "fraction_denominator": 242,
+          "fraction_input_fields": [
+            "native.filter_position_count",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator": 121,
+          "fraction_numerator_unavailable_reason": null,
+          "fraction_precision": "native_rounded_three_significant_digits",
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "issues": [],
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 5841,
+            "byte_start": 5772,
+            "line_number": 108
+          },
+          "name": "Residues passing bias filter",
+          "native_fraction": 0.5,
+          "raw": "Residues passing bias filter:            121  (0.5); expected (0.02)\n"
+        },
+        {
+          "count": 121,
+          "count_unit": "nucleotide_positions",
+          "expected_fraction": 0.003,
+          "fraction_denominator": 242,
+          "fraction_input_fields": [
+            "native.filter_position_count",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator": 121,
+          "fraction_numerator_unavailable_reason": null,
+          "fraction_precision": "native_rounded_three_significant_digits",
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "issues": [],
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 5911,
+            "byte_start": 5841,
+            "line_number": 109
+          },
+          "name": "Residues passing Vit filter",
+          "native_fraction": 0.5,
+          "raw": "Residues passing Vit filter:             121  (0.5); expected (0.003)\n"
+        },
+        {
+          "count": 121,
+          "count_unit": "nucleotide_positions",
+          "expected_fraction": 3e-05,
+          "fraction_denominator": 242,
+          "fraction_input_fields": [
+            "native.filter_position_count",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator": 121,
+          "fraction_numerator_unavailable_reason": null,
+          "fraction_precision": "native_rounded_three_significant_digits",
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "issues": [],
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 5981,
+            "byte_start": 5911,
+            "line_number": 110
+          },
+          "name": "Residues passing Fwd filter",
+          "native_fraction": 0.5,
+          "raw": "Residues passing Fwd filter:             121  (0.5); expected (3e-05)\n"
+        },
+        {
+          "count": 1,
+          "count_unit": "loci",
+          "expected_fraction": null,
+          "fraction_denominator": 242,
+          "fraction_input_fields": [
+            "native.pos_output",
+            "native.nres",
+            "native.nmodels"
+          ],
+          "fraction_numerator": null,
+          "fraction_numerator_unavailable_reason": "summed_aligned_position_count_not_printed",
+          "fraction_precision": "native_rounded_three_significant_digits",
+          "fraction_unit": "fraction_of_nucleotide_model_comparisons",
+          "issues": [],
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 6035,
+            "byte_start": 5981,
+            "line_number": 111
+          },
+          "name": "Total number of hits",
+          "native_fraction": 0.417,
+          "raw": "Total number of hits:                      1  (0.417)\n"
+        },
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 6092,
+            "byte_start": 6035,
+            "line_number": 112
+          },
+          "name": null,
+          "raw": "# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00\n"
+        },
+        {
+          "locator": {
+            "artifact_ref": "nhmmscan/stdout.txt",
+            "artifact_role": "stdout",
+            "byte_end": 6108,
+            "byte_start": 6092,
+            "line_number": 113
+          },
+          "name": null,
+          "raw": "# Mc/sec: 13.35\n"
+        }
+      ],
+      "terminated": true
+    }
+  ],
+  "schema": "nhmmer_sheet_v1"
+}

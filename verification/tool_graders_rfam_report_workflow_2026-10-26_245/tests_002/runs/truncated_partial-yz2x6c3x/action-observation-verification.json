@@ -1,0 +1,44 @@
+{
+  "actions": 7,
+  "model_calls": 7,
+  "observations": 7,
+  "results_final_estimate": {
+    "diagnostics": {
+      "completed_acquisition_turns": 2,
+      "fit_objective": 2.803816252014441,
+      "fitting_scope": "full_history",
+      "history_used": 2,
+      "initialization": "cold_template_prior",
+      "next_gain_variance": 1.1063232678521422,
+      "rank_decay": 0.05644647043803151,
+      "yield_intercept": -0.34291813154194195
+    },
+    "expected_next_gain": {
+      "alpha": 0.05,
+      "lower": 0.0,
+      "status_code": 0,
+      "uncertainty_code": 2,
+      "upper": 3.106707212839038,
+      "value": 1.0451797995287622
+    },
+    "parameters": {
+      "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+      "subsample_size": 1,
+      "uncertainty_alpha": 0.05,
+      "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+      "window_size": 2
+    },
+    "provenance": {
+      "function": "gene_annotation_episode.practical_yield.PracticalYieldEstimator",
+      "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+      "kind": "caller_injected",
+      "template_relationship": "not_inferred"
+    },
+    "turns": 2
+  },
+  "results_gains": [
+    2.0,
+    0.0
+  ],
+  "results_practical_completion": null
+}

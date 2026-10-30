@@ -1,0 +1,35 @@
+# Copyright (C) 2023 Roberto Rossini <roberros@uio.no>
+#
+# SPDX-License-Identifier: MIT
+
+# Ignored directories
+.cache/
+*.egg-info/
+.idea/
+.run/
+.vscode/
+benchmark/data
+build/
+cmake-build*/
+conan-envs/
+docs/_build/
+external/
+__pycache__/
+scratch/
+test/data
+test/packaging
+Testing/
+venv/
+
+# Ignored files
+*.bak
+cmake.lock
+gmon.out
+perf.*
+compile_commands.json
+CMakeUserPresets.json
+src/hictk/telemetry/include/**/*.hpp
+src/libhictk/common/**/include/hictk/git.hpp
+src/libhictk/common/**/include/hictk/license.hpp
+src/libhictk/common/**/include/hictk/version.hpp
+utils/devel/run-clang-tidy.py

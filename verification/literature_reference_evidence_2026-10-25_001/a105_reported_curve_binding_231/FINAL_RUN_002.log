@@ -1,0 +1,185 @@
+...............................F..........F............................. [ 22%]
+........................................................................ [ 44%]
+........................................................................ [ 66%]
+........................................................................ [ 88%]
+................F...............F......                                  [100%]
+=================================== FAILURES ===================================
+_ test_original_workbook_native_arithmetic_exact_lexemes_and_shared_reference __
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_reported_curve_binding_231/final_run_002/test_original_workbook_native_0')
+
+    def test_original_workbook_native_arithmetic_exact_lexemes_and_shared_reference(tmp_path):
+        store,context,args=setup(tmp_path)
+        try:
+            repo,out,current=populated(store,context,args)
+            cells={r['component']:r for r in out['result']['cells']}
+            assert [cells[n]['value'] for n in REQUEST] == pytest.approx([
+                .50447333333333342,.18895333333333334,.034036247345048686,.012470787197820887,
+                .06746887317145673,.06599929716942924,.3155200000000001,.37455564218789226,.6254443578121077])
+            assert cells['reference_rate']['unit']=='U/mg'
+            assert all(row['grouping']=='unknown' and row['physical_conversion']=='unknown' for row in cells.values())
+            saved=repo.read(out['result']['sheet_ref'])
+            entries=saved['sheet']['extraction']['entries']
+            j16=next(e for e in entries if e['value_source']['cell']=='J16')
+            assert j16['value_source']['raw_value']=='0.53756666666666675'
+            assert j16['value_source']['formula'] is None
+            assert j16['value_source']['workbook_sha256']=='e6d31a25930fe62cf10dd13c1b3e8193202687e78ed935cb3dfd21fd51ff4a7a'
+            assert j16['value_source']['member_sha256']=='50a15623fb2543e42d1d09c7990f0e18f1428e6f6253ac1832cbfe56dc63224e'
+            assert repo.populate(context,args,'selected')==out
+            other={**args,'test_group':'DHA'}
+            _,out2,_=populated(store,context,other,'second-comparison')
+            first_ids=cells['rate_difference']['groups']['reference']['observed']['observation_labels']
+            assert first_ids==out2['result']['cells'][0]['groups']['reference']['observed']['observation_labels']
+            assert out2['result']['cells'][1]['value']==pytest.approx(.15676666666666665)
+            # The raw DHA mean remains distinct from the separate S1Table H7 central value.
+            assert out2['result']['cells'][1]['value'] != .1569
+            import xml.etree.ElementTree as ET
+            import hashlib
+>           summary_bytes=(CASE/'originals/S1Table.xlsx').read_bytes()
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_rate_observations_166.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_rep...ing_231/pin_001/research/experimental_scoring_review_2026-10-23/a105_raw_rate_primary_case_164/originals/S1Table.xlsx')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_reported_curve_binding_231/pin_001/research/experimental_scoring_review_2026-10-23/a105_raw_rate_primary_case_164/originals/S1Table.xlsx'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+___ test_original_source_shared_episode_admission_and_cold_readonly_factory ____
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_reported_curve_binding_231/final_run_002/test_original_source_shared_ep0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x79a9bd683410>
+
+    def test_original_source_shared_episode_admission_and_cold_readonly_factory(tmp_path,monkeypatch):
+        import os
+        path=Path(os.environ.get('RATE_OBSERVATION_PROOF_DIR',str(tmp_path)))
+        path.mkdir(parents=True,exist_ok=True)
+        store,context,args=setup(path/'state',requested=['rate_difference','retained_fraction','reference_sample_sd'])
+        # Original article supplies a genuine source-subject anchor for the parent's
+        # selected nonempty reasoning action. It is not a new assay or target.
+>       article_bytes=(CASE/'originals/article.html').read_bytes()
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_rate_observations_166.py:355: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_rep...ing_231/pin_001/research/experimental_scoring_review_2026-10-23/a105_raw_rate_primary_case_164/originals/article.html')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_reported_curve_binding_231/pin_001/research/experimental_scoring_review_2026-10-23/a105_raw_rate_primary_case_164/originals/article.html'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+______ test_only_enabled_literature_binding_supplies_experimental_marker _______
+
+    def test_only_enabled_literature_binding_supplies_experimental_marker():
+        class EmptyServices:
+            def own_outcomes(self, *_args, **_kwargs):
+                return {"records": [], "offset": 0, "limit": 8, "next_offset": None}
+    
+            def literature_rate_repository(self):
+                return self
+    
+            def source_projection(self):
+                return self
+    
+            def source_domain_projection(self):
+                return self
+    
+            def received_cells(self, context):
+                return []
+    
+        assignment = {"version": "literature_assignment_v1", "question_context_refs": [], "source_refs": []}
+        context = BindingContext("run", "episode", "literature", (("literature", "case"),),
+            {"subject_refs": ["input_fixture"]}, assignment, {})
+        enabled = LiteratureEpisodes(EmptyServices(), rate_population=True)
+        disabled = LiteratureEpisodes(EmptyServices())
+>       assert enabled.decision_context(context, None)["literature_experimental_work"] == {
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            "version": "literature_experimental_task_v1", "aspect": "source_experimental_evidence"}
+
+tests/test_literature_experimental_prompt_delivery.py:261: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_episodes.py:838: in decision_context
+    if assignment.get("requested_rate_grid_components") or self._rate_grid_repository().has_work(context):
+                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <gene_annotation_episode.literature_episodes.LiteratureEpisodes object at 0x79a9bc324fe0>
+
+    def _rate_grid_repository(self):
+>       return self.services.literature_rate_observation_repository().grid_projection()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'EmptyServices' object has no attribute 'literature_rate_observation_repository'
+
+gene_annotation_episode/literature_episodes.py:1051: AttributeError
+____ test_explicit_parent_sources_are_receipt_bound_fixed_and_reconstructed ____
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_reported_curve_binding_231/final_run_002/test_explicit_parent_sources_a0')
+
+    def test_explicit_parent_sources_are_receipt_bound_fixed_and_reconstructed(tmp_path):
+>       store,child,args,_=setup_store(tmp_path)
+                           ^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_reference_parent_delivery.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_ratio_integration.py:37: in setup_store
+    original=(PRIMARY/'PMC4664914_original.xml').read_bytes()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1021: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_rep...ve_binding_231/pin_001/verification/literature_reference_evidence_2026-10-25_001/primary_yeag/PMC4664914_original.xml')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_reported_curve_binding_231/pin_001/verification/literature_reference_evidence_2026-10-25_001/primary_yeag/PMC4664914_original.xml'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_literature_rate_observations_166.py::test_original_workbook_native_arithmetic_exact_lexemes_and_shared_reference
+FAILED tests/test_literature_rate_observations_166.py::test_original_source_shared_episode_admission_and_cold_readonly_factory
+FAILED tests/test_literature_experimental_prompt_delivery.py::test_only_enabled_literature_binding_supplies_experimental_marker
+FAILED tests/test_literature_reference_parent_delivery.py::test_explicit_parent_sources_are_receipt_bound_fixed_and_reconstructed
+4 failed, 323 passed in 842.18s (0:14:02)
+{"exit_code": 1, "elapsed_seconds": 843.3484761714935, "selected_test_modules": ["tests/test_literature_reported_curve_binding_231.py", "tests/test_literature_rate_observations_166.py", "tests/test_literature_numerical_declarations_203.py", "tests/test_literature_common_assessment_binding_223.py", "tests/test_literature_experimental_prompt.py", "tests/test_literature_experimental_prompt_delivery.py", "tests/test_literature_reference_parent_prompt.py", "tests/test_literature_reference_parent_delivery.py"], "all_traced_imports_inside_pin": true, "all_pinned_and_external_original_files_unchanged": true, "actual_model_execution": false, "A105_complete": false, "full_goal_complete": false}

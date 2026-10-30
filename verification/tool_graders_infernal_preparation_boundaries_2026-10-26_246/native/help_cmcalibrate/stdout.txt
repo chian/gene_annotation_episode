@@ -1,0 +1,47 @@
+# cmcalibrate :: fit exponential tails for CM E-values
+# INFERNAL 1.1.5 (Sep 2023)
+# Copyright (C) 2023 Howard Hughes Medical Institute.
+# Freely distributed under the BSD open source license.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Usage: cmcalibrate [-options] <cmfile>
+
+Basic options:
+  -h     : show brief help on version and usage
+  -L <x> : set random seq length to search in Mb to <x>  [1.6]  (0.01<=x<=160.)
+
+Options for predicting running time and memory requirements:
+  --forecast      : don't do calibration, predict running time and exit
+  --nforecast <n> : w/--forecast, predict time with <n> processors (maybe for MPI)
+  --memreq        : don't do calibration, print required memory and exit
+  --noforecast    : do calibration, but skip running time prediction
+
+Options controlling exponential tail fits:
+  --gtailn <n> : fit the top <n> hits/Mb in histogram for glocal modes [df: 250]
+  --ltailn <n> : fit the top <n> hits/Mb in histogram for  local modes [df: 750]
+  --tailp <x>  : set fraction of histogram tail to fit to exp tail to <x>
+
+Optional output files:
+  --hfile <f>  : save fitted score histogram(s) to file <f>
+  --sfile <f>  : save survival plot to file <f>
+  --qqfile <f> : save Q-Q plot for score histograms to file <f>
+  --ffile <f>  : save lambdas for different tail fit probs to file <f>
+  --xfile <f>  : save scores in fit tail to file <f>
+
+Options controlling split, partition and merge modes:
+  --split     : prepare partitioned calibration
+  --cfile <f> : with --split, save file with commands for each partition to <f>
+  --cbash     : with --split, output commands as a bash for loop script
+  --proot <s> : with --split or --merge, root for partition output files is <s>
+  --part <n>  : this is partition number <n> (1..<n2> from --ptot <n2>)  (n>0)
+  --ptot <n>  : total number of partitions is <n>  (n>0)
+  --pfile <f> : with --part, save scores to file <f>
+  --merge     : merge scores from multiple partitions for calibration
+
+Other options:
+  --seed <n>  : set RNG seed to <n> (if 0: one-time arbitrary seed)
+  --beta <x>  : set tail loss prob for query dependent banding (QDB) to <x>
+  --nonbanded : do not use QDB
+  --nonull3   : turn OFF the NULL3 post hoc additional null model
+  --random    : use GC content of random null background model of CM
+  --gc <f>    : use GC content distribution from file <f>
+  --cpu <n>   : number of parallel CPU workers to use for multithreads

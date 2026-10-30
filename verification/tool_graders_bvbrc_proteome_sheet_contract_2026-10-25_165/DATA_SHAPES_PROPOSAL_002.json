@@ -1,0 +1,5124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:gene-annotation:genome-comparison:sheet-contract:proposal-002-165",
+  "title": "GenomeComparison modular data-shape proposal 002; additive review correction; not installed",
+  "$comment": "Data shapes only. Formulas are ordinary proposed Python functions in CONTRACT_PROPOSAL_001.md. Native definitions are copied unchanged from accepted native schema c84fecffe0170b7c77948f411593a55ae63e902f976e8a42463a0053c1a1f01d. Finite-number and cross-record semantic validation is additionally required. Additive correction002 adds unavailable-witness-interface codes and permits null for an unavailable incomplete header. See REVIEW_CORRECTION_002.md.",
+  "$defs": {
+    "ContentBinding": {
+      "type": "object",
+      "properties": {
+        "source_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_field": {
+          "enum": [
+            "artifact_ref",
+            "text_ref",
+            "stdout_ref",
+            "stderr_ref"
+          ]
+        },
+        "artifact_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "byte_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "source_ref",
+        "artifact_field",
+        "artifact_ref",
+        "sha256",
+        "byte_count"
+      ],
+      "additionalProperties": false
+    },
+    "Diagnostic": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "enum": [
+            "native_encoding_invalid",
+            "native_json_invalid",
+            "duplicate_json_member",
+            "native_schema_incompatible",
+            "native_number_invalid",
+            "native_fraction_out_of_range",
+            "native_row_invalid",
+            "native_table_header_invalid",
+            "native_table_width_invalid",
+            "native_duplicate_reference_id",
+            "native_comparison_track_missing",
+            "native_source_version_unverified",
+            "native_zero_default_divergence",
+            "source_bytes_incomplete",
+            "source_object_incomplete",
+            "original_task_mismatch",
+            "artifact_binding_unqualified",
+            "artifact_digest_mismatch",
+            "producer_byte_version_unknown",
+            "representation_conflict",
+            "native_staging_collision",
+            "input_arrays_required",
+            "input_count_invalid",
+            "reference_index_invalid",
+            "native_threshold_invalid",
+            "original_input_inventory_missing",
+            "execution_input_binding_unknown",
+            "input_inventory_truncated",
+            "input_sequence_invalid",
+            "input_empty",
+            "native_identifier_ambiguous",
+            "native_identifier_unmatched",
+            "reference_membership_conflict",
+            "subject_membership_conflict",
+            "sequence_digest_conflict",
+            "sequence_length_conflict",
+            "metadata_source_invalid",
+            "metadata_join_missing",
+            "metadata_join_ambiguous",
+            "metadata_coordinate_convention_unknown",
+            "track_materialization_unknown",
+            "projection_incomplete",
+            "native_hit_category_invalid",
+            "legacy_hsp_data_not_retained",
+            "directional_report_missing",
+            "directional_report_truncated",
+            "directional_report_incompatible",
+            "producer_manifest_missing",
+            "producer_exit_status_missing",
+            "producer_query_missing",
+            "native_hit_limit_censoring",
+            "alignment_counts_conflict",
+            "alignment_coordinates_conflict",
+            "alignment_mapping_conflict",
+            "selection_scope_invalid",
+            "requested_field_unavailable",
+            "denominator_zero"
+          ]
+        },
+        "severity": {
+          "enum": [
+            "error",
+            "qualification"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^(|/.*)$"
+        },
+        "scope": {
+          "$ref": "#/$defs/Scope"
+        },
+        "source_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceField"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "severity",
+        "path",
+        "scope",
+        "source_fields"
+      ],
+      "additionalProperties": false
+    },
+    "NativeAssociationRecord": {
+      "type": "object",
+      "properties": {
+        "association_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reference_row_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "track_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "comparison_ordinal": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "native_pointer": {
+          "type": "string",
+          "pattern": "^(|/.*)$"
+        },
+        "hit": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "contig": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "patric_id": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "locus_tag": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "gene_name": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "function": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "gene": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "aa_length": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "percent_identity": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "seq_coverage": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "valid": {
+          "type": "boolean"
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Diagnostic"
+          }
+        }
+      },
+      "required": [
+        "association_key",
+        "reference_row_ordinal",
+        "track_key",
+        "comparison_ordinal",
+        "native_pointer",
+        "hit",
+        "contig",
+        "patric_id",
+        "locus_tag",
+        "gene_name",
+        "function",
+        "gene",
+        "aa_length",
+        "percent_identity",
+        "seq_coverage",
+        "valid",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "NativeJSONDocument": {
+      "type": "object",
+      "properties": {
+        "genome_names": {
+          "type": "object",
+          "properties": {
+            "ref_genome": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "ref_genome"
+          ],
+          "additionalProperties": false,
+          "patternProperties": {
+            "^comp_genome_[1-9][0-9]*$": {
+              "type": "string"
+            }
+          }
+        },
+        "feature_matches": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NativeJSONRow"
+          }
+        }
+      },
+      "required": [
+        "genome_names",
+        "feature_matches"
+      ],
+      "additionalProperties": false
+    },
+    "NativeJSONRow": {
+      "type": "object",
+      "properties": {
+        "ref_genome_contig": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ref_genome_patric_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ref_genome_locus_tag": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ref_genome_gene_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ref_genome_plfam_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ref_genome_pgfam_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ref_genome_function": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ref_genome_strand": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ref_genome_gene": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string",
+              "pattern": "^[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ref_genome_aa_length": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string",
+              "pattern": "^[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ref_genome_start": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string",
+              "pattern": "^[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ref_genome_end": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string",
+              "pattern": "^[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "ref_genome_patric_id"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^comp_genome_[1-9][0-9]*_hit$": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "^comp_genome_[1-9][0-9]*_contig$": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "^comp_genome_[1-9][0-9]*_patric_id$": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "^comp_genome_[1-9][0-9]*_locus_tag$": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "^comp_genome_[1-9][0-9]*_gene_name$": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "^comp_genome_[1-9][0-9]*_function$": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "^comp_genome_[1-9][0-9]*_gene$": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string",
+              "pattern": "^[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "^comp_genome_[1-9][0-9]*_aa_length$": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string",
+              "pattern": "^[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "^comp_genome_[1-9][0-9]*_percent_identity$": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string",
+              "pattern": "^[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "^comp_genome_[1-9][0-9]*_seq_coverage$": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string",
+              "pattern": "^[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "NativeNumber": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "presence": {
+          "enum": [
+            "value",
+            "explicit_null",
+            "omitted",
+            "blank",
+            "invalid"
+          ]
+        },
+        "lexeme": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_field": {
+          "$ref": "#/$defs/SourceField"
+        }
+      },
+      "required": [
+        "value",
+        "presence",
+        "lexeme",
+        "source_field"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "presence": {
+                "const": "value"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "number"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "NativeProjection": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_proteome_native_projection_v1"
+        },
+        "scientific_mode": {
+          "const": "proteome_comparison"
+        },
+        "format": {
+          "enum": [
+            "genome_comparison_json_v1",
+            "genome_comparison_tsv_v1"
+          ]
+        },
+        "source": {
+          "$ref": "#/$defs/NativeSource"
+        },
+        "source_contract": {
+          "$ref": "#/$defs/SourceContract"
+        },
+        "tracks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NativeTrack"
+          }
+        },
+        "reference_rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NativeReferenceRecord"
+          }
+        },
+        "associations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NativeAssociationRecord"
+          }
+        },
+        "physical_record_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "table_field_order": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "projection_completeness": {
+          "enum": [
+            "complete_document",
+            "complete_prefix_only",
+            "partial_or_unknown_artifact",
+            "invalid_document"
+          ]
+        },
+        "unsupported_field_paths": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(|/.*)$"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "scientific_mode",
+        "format",
+        "source",
+        "source_contract",
+        "tracks",
+        "reference_rows",
+        "associations",
+        "physical_record_count",
+        "table_field_order",
+        "projection_completeness",
+        "unsupported_field_paths"
+      ],
+      "additionalProperties": false
+    },
+    "NativeProjectionResult": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "ok",
+            "partial",
+            "invalid"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NativeProjection"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Requirement"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Diagnostic"
+          }
+        }
+      },
+      "required": [
+        "status",
+        "value",
+        "requirements",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "NativeReferenceRecord": {
+      "type": "object",
+      "properties": {
+        "row_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reference_row_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "native_pointer": {
+          "type": "string",
+          "pattern": "^(|/.*)$"
+        },
+        "contig": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "patric_id": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "locus_tag": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "gene_name": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "plfam_id": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "pgfam_id": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "function": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "strand": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "gene": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "aa_length": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "start": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "end": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "valid": {
+          "type": "boolean"
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Diagnostic"
+          }
+        }
+      },
+      "required": [
+        "row_ordinal",
+        "reference_row_key",
+        "native_pointer",
+        "contig",
+        "patric_id",
+        "locus_tag",
+        "gene_name",
+        "plfam_id",
+        "pgfam_id",
+        "function",
+        "strand",
+        "gene",
+        "aa_length",
+        "start",
+        "end",
+        "valid",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "NativeSource": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "$ref": "#/$defs/ContentBinding"
+        },
+        "body_complete": {
+          "type": "boolean"
+        },
+        "object_complete": {
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ]
+        }
+      },
+      "required": [
+        "content",
+        "body_complete",
+        "object_complete"
+      ],
+      "additionalProperties": false
+    },
+    "NativeString": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "presence": {
+          "enum": [
+            "value",
+            "explicit_null",
+            "omitted",
+            "blank",
+            "invalid"
+          ]
+        },
+        "source_field": {
+          "$ref": "#/$defs/SourceField"
+        }
+      },
+      "required": [
+        "value",
+        "presence",
+        "source_field"
+      ],
+      "additionalProperties": false
+    },
+    "NativeTrack": {
+      "type": "object",
+      "properties": {
+        "track_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "comparison_ordinal": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "display_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "materialization": {
+          "enum": [
+            "reference_rows",
+            "table_field_block",
+            "published_association",
+            "producer_manifest",
+            "unknown"
+          ]
+        },
+        "source_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceField"
+          }
+        }
+      },
+      "required": [
+        "track_key",
+        "comparison_ordinal",
+        "display_name",
+        "materialization",
+        "source_fields"
+      ],
+      "additionalProperties": false
+    },
+    "Requirement": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "enum": [
+            "native_encoding_invalid",
+            "native_json_invalid",
+            "duplicate_json_member",
+            "native_schema_incompatible",
+            "native_number_invalid",
+            "native_fraction_out_of_range",
+            "native_row_invalid",
+            "native_table_header_invalid",
+            "native_table_width_invalid",
+            "native_duplicate_reference_id",
+            "native_comparison_track_missing",
+            "native_source_version_unverified",
+            "native_zero_default_divergence",
+            "source_bytes_incomplete",
+            "source_object_incomplete",
+            "original_task_mismatch",
+            "artifact_binding_unqualified",
+            "artifact_digest_mismatch",
+            "producer_byte_version_unknown",
+            "representation_conflict",
+            "native_staging_collision",
+            "input_arrays_required",
+            "input_count_invalid",
+            "reference_index_invalid",
+            "native_threshold_invalid",
+            "original_input_inventory_missing",
+            "execution_input_binding_unknown",
+            "input_inventory_truncated",
+            "input_sequence_invalid",
+            "input_empty",
+            "native_identifier_ambiguous",
+            "native_identifier_unmatched",
+            "reference_membership_conflict",
+            "subject_membership_conflict",
+            "sequence_digest_conflict",
+            "sequence_length_conflict",
+            "metadata_source_invalid",
+            "metadata_join_missing",
+            "metadata_join_ambiguous",
+            "metadata_coordinate_convention_unknown",
+            "track_materialization_unknown",
+            "projection_incomplete",
+            "native_hit_category_invalid",
+            "legacy_hsp_data_not_retained",
+            "directional_report_missing",
+            "directional_report_truncated",
+            "directional_report_incompatible",
+            "producer_manifest_missing",
+            "producer_exit_status_missing",
+            "producer_query_missing",
+            "native_hit_limit_censoring",
+            "alignment_counts_conflict",
+            "alignment_coordinates_conflict",
+            "alignment_mapping_conflict",
+            "selection_scope_invalid",
+            "requested_field_unavailable",
+            "denominator_zero"
+          ]
+        },
+        "scope": {
+          "$ref": "#/$defs/Scope"
+        },
+        "required_input": {
+          "enum": [
+            "complete_artifact_bytes",
+            "exact_input_fasta",
+            "identifier_mapping",
+            "complete_input_membership",
+            "producer_manifest",
+            "directional_blast_report",
+            "feature_metadata",
+            "genome_metadata",
+            "coordinate_convention",
+            "native_producer_version",
+            "requested_calculation_field"
+          ]
+        },
+        "source_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceField"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "scope",
+        "required_input",
+        "source_fields"
+      ],
+      "additionalProperties": false
+    },
+    "Scope": {
+      "type": "object",
+      "properties": {
+        "track_key": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reference_row_ordinal": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "association_key": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "protein_key": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "report_key": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "query_ordinal": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "hit_ordinal": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "hsp_ordinal": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "track_key",
+        "reference_row_ordinal",
+        "association_key",
+        "protein_key",
+        "report_key",
+        "query_ordinal",
+        "hit_ordinal",
+        "hsp_ordinal"
+      ],
+      "additionalProperties": false
+    },
+    "SourceContract": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "const": "GenomeComparison_inspected_source_v1"
+        },
+        "application_tree": {
+          "const": "5c365e1dca2b3a8c311d7d352e862ff1442eefc9"
+        },
+        "application_sha256": {
+          "const": "4267b35bdd5ad858b833fa2b84eb794c91e95b7f5abc0628b90ec4d6a0a33c14"
+        },
+        "dependency_tree": {
+          "const": "18196fe0df123702457e4af2e0b1e0707d5f5281"
+        },
+        "deployment_match": {
+          "enum": [
+            "demonstrated",
+            "unobserved",
+            "different"
+          ]
+        },
+        "deployment_evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceField"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "application_tree",
+        "application_sha256",
+        "dependency_tree",
+        "deployment_match",
+        "deployment_evidence"
+      ],
+      "additionalProperties": false
+    },
+    "SourceField": {
+      "type": "object",
+      "properties": {
+        "source_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "pointer": {
+          "type": "string",
+          "pattern": "^(|/.*)$"
+        },
+        "row_ordinal": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "field_name": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "source_ref",
+        "sha256",
+        "pointer",
+        "row_ordinal",
+        "field_name"
+      ],
+      "additionalProperties": false
+    },
+    "PReason": {
+      "enum": [
+        "source_bytes_incomplete",
+        "source_object_incomplete",
+        "content_binding_mismatch",
+        "encoding_invalid",
+        "format_incompatible",
+        "json_invalid",
+        "duplicate_json_member",
+        "fasta_header_invalid",
+        "fasta_record_incomplete",
+        "fasta_sequence_invalid",
+        "fasta_empty_sequence",
+        "input_empty",
+        "input_arrays_unavailable",
+        "input_reference_index_invalid",
+        "parameter_source_conflict",
+        "input_order_is_not_execution_proof",
+        "exact_executed_input_missing",
+        "input_membership_incomplete",
+        "input_membership_unknown",
+        "inventory_record_invalid",
+        "input_binding_conflict",
+        "staging_collision",
+        "duplicate_identifier",
+        "cross_input_identifier_collision",
+        "identifier_mapping_missing",
+        "identifier_mapping_conflict",
+        "row_join_missing",
+        "row_join_ambiguous",
+        "row_join_conflict",
+        "sequence_digest_conflict",
+        "sequence_length_conflict",
+        "metadata_record_invalid",
+        "metadata_join_missing",
+        "metadata_join_ambiguous",
+        "metadata_join_conflict",
+        "metadata_population_incomplete",
+        "metadata_population_unknown",
+        "coordinate_convention_unknown",
+        "later_snapshot_not_original_input",
+        "unknown_metadata_fields_retained",
+        "native_invalid_cell",
+        "native_missing_cell",
+        "native_table_layout_uncertain",
+        "native_identifier_unavailable",
+        "native_category_invalid",
+        "track_missing_from_projection",
+        "track_materialization_unknown",
+        "projection_incomplete",
+        "reference_membership_unresolved",
+        "representation_correspondence_missing",
+        "representation_conflict",
+        "alternate_representation_not_independent",
+        "duplicate_native_representation",
+        "reported_rows_not_input_population",
+        "legacy_first_hsp_only",
+        "legacy_rounded_fraction",
+        "legacy_subject_endpoint_difference",
+        "legacy_zero_fallback_possible",
+        "native_category_not_orthology_probability",
+        "observed_subset_not_total",
+        "no_eligible_values",
+        "postfilter_cannot_recover_filtered_associations",
+        "native_min_positives_not_enforced_in_projection",
+        "native_zero_default_divergence",
+        "denominator_unavailable",
+        "denominator_zero",
+        "selection_unknown",
+        "published_absence_not_biological_absence",
+        "sequence_equivalence_not_feature_identity",
+        "dependence_not_independence",
+        "full_reports_not_retained",
+        "directional_report_missing",
+        "directional_report_partial",
+        "report_operand_unbound",
+        "report_query_missing",
+        "report_counts_conflict",
+        "report_geometry_conflict",
+        "report_mapping_conflict",
+        "native_hit_limit_censoring",
+        "producer_exit_unknown",
+        "producer_failed",
+        "producer_format_unverified",
+        "calculation_parameters_invalid",
+        "sheet_relationship_invalid",
+        "supplied_contract_invalid",
+        "execution_witness_interface_unavailable",
+        "occurrence_witness_interface_unavailable"
+      ]
+    },
+    "PDiagnostic": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/PReason"
+        },
+        "severity": {
+          "enum": [
+            "error",
+            "qualification"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^(|/.*)$"
+        },
+        "scope": {
+          "$ref": "#/$defs/Scope"
+        },
+        "source_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceField"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "severity",
+        "path",
+        "scope",
+        "source_fields"
+      ],
+      "additionalProperties": false
+    },
+    "PRequirement": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/PReason"
+        },
+        "scope": {
+          "$ref": "#/$defs/Scope"
+        },
+        "required_input": {
+          "enum": [
+            "complete_bytes",
+            "original_parameters",
+            "exact_executed_fasta",
+            "execution_input_witness",
+            "complete_membership",
+            "occurrence_mapping",
+            "feature_metadata",
+            "genome_metadata",
+            "feature_sequence",
+            "coordinate_convention",
+            "representation_correspondence",
+            "directional_report",
+            "producer_execution_facts",
+            "valid_parameters",
+            "valid_saved_sheet"
+          ]
+        },
+        "source_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceField"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "scope",
+        "required_input",
+        "source_fields"
+      ],
+      "additionalProperties": false
+    },
+    "CountCell": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "enum": [
+            "value",
+            "missing_input",
+            "not_retained",
+            "truncated",
+            "ambiguous",
+            "conflicting",
+            "invalid",
+            "not_applicable",
+            "zero_denominator"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PReason"
+          }
+        },
+        "source_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceField"
+          }
+        }
+      },
+      "required": [
+        "state",
+        "value",
+        "reason_codes",
+        "source_fields"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "value"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "ScalarCell": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "enum": [
+            "value",
+            "missing_input",
+            "not_retained",
+            "truncated",
+            "ambiguous",
+            "conflicting",
+            "invalid",
+            "not_applicable",
+            "zero_denominator"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PReason"
+          }
+        },
+        "source_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceField"
+          }
+        }
+      },
+      "required": [
+        "state",
+        "value",
+        "reason_codes",
+        "source_fields"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "value"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "number"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "FractionCell": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "enum": [
+            "value",
+            "missing_input",
+            "not_retained",
+            "truncated",
+            "ambiguous",
+            "conflicting",
+            "invalid",
+            "not_applicable",
+            "zero_denominator"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PReason"
+          }
+        },
+        "source_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceField"
+          }
+        }
+      },
+      "required": [
+        "state",
+        "value",
+        "reason_codes",
+        "source_fields"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "value"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "PercentageCell": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "enum": [
+            "value",
+            "missing_input",
+            "not_retained",
+            "truncated",
+            "ambiguous",
+            "conflicting",
+            "invalid",
+            "not_applicable",
+            "zero_denominator"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PReason"
+          }
+        },
+        "source_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceField"
+          }
+        }
+      },
+      "required": [
+        "state",
+        "value",
+        "reason_codes",
+        "source_fields"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "value"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "Ratio": {
+      "type": "object",
+      "properties": {
+        "numerator": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "denominator": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "fraction": {
+          "$ref": "#/$defs/FractionCell"
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator",
+        "fraction"
+      ],
+      "additionalProperties": false
+    },
+    "ProteinRef": {
+      "type": "object",
+      "properties": {
+        "inventory_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "record_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "inventory_key",
+        "record_ordinal"
+      ],
+      "additionalProperties": false
+    },
+    "MetadataRef": {
+      "type": "object",
+      "properties": {
+        "snapshot_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "row_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "snapshot_key",
+        "row_ordinal"
+      ],
+      "additionalProperties": false
+    },
+    "DuplicateIdentifierGroup": {
+      "type": "object",
+      "properties": {
+        "identifier": {
+          "type": "string",
+          "minLength": 1
+        },
+        "record_ordinals": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "required": [
+        "identifier",
+        "record_ordinals"
+      ],
+      "additionalProperties": false
+    },
+    "SequenceGroup": {
+      "type": "object",
+      "properties": {
+        "molecule": {
+          "const": "aa"
+        },
+        "normalization": {
+          "const": "ascii_whitespace_removed_uppercase_no_symbol_substitution_v1"
+        },
+        "sequence_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "sequence_symbol_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ProteinRef"
+          }
+        }
+      },
+      "required": [
+        "molecule",
+        "normalization",
+        "sequence_sha256",
+        "sequence_symbol_count",
+        "members"
+      ],
+      "additionalProperties": false
+    },
+    "FastaRecord": {
+      "type": "object",
+      "properties": {
+        "record_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "byte_start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "byte_end_exclusive": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "header": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "identifier": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sequence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sequence_symbol_count": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sequence_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sequence_md5": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{32}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "record_complete": {
+          "type": "boolean"
+        },
+        "valid_sequence": {
+          "type": "boolean"
+        },
+        "source_field": {
+          "$ref": "#/$defs/SourceField"
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "record_ordinal",
+        "byte_start",
+        "byte_end_exclusive",
+        "header",
+        "identifier",
+        "description",
+        "sequence",
+        "sequence_symbol_count",
+        "sequence_sha256",
+        "sequence_md5",
+        "record_complete",
+        "valid_sequence",
+        "source_field",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "ProteinInventory": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_proteome_inventory_proposal_v1"
+        },
+        "inventory_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "format": {
+          "const": "protein_fasta_utf8_v1"
+        },
+        "source": {
+          "$ref": "#/$defs/NativeSource"
+        },
+        "molecule": {
+          "const": "aa"
+        },
+        "normalization": {
+          "const": "ascii_whitespace_removed_uppercase_no_symbol_substitution_v1"
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FastaRecord"
+          }
+        },
+        "observed_header_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "complete_record_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "valid_complete_record_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "duplicate_identifier_groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DuplicateIdentifierGroup"
+          }
+        },
+        "sequence_groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SequenceGroup"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "inventory_key",
+        "format",
+        "source",
+        "molecule",
+        "normalization",
+        "records",
+        "observed_header_count",
+        "complete_record_count",
+        "valid_complete_record_count",
+        "duplicate_identifier_groups",
+        "sequence_groups",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "PopulationDescriptor": {
+      "type": "object",
+      "properties": {
+        "origin": {
+          "enum": [
+            "execution_time_snapshot",
+            "supplied_snapshot",
+            "later_database_snapshot",
+            "unknown"
+          ]
+        },
+        "query_source": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SourceField"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "selected_fields": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "offset": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "requested_limit": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reported_total_count": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NativeNumber"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "population_complete": {
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ]
+        },
+        "completeness_evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceField"
+          }
+        }
+      },
+      "required": [
+        "origin",
+        "query_source",
+        "selected_fields",
+        "offset",
+        "requested_limit",
+        "reported_total_count",
+        "population_complete",
+        "completeness_evidence"
+      ],
+      "additionalProperties": false
+    },
+    "CoordinateConvention": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "enum": [
+            "one_based_closed",
+            "zero_based_half_open",
+            "unknown"
+          ]
+        },
+        "source_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceField"
+          }
+        }
+      },
+      "required": [
+        "value",
+        "source_fields"
+      ],
+      "additionalProperties": false
+    },
+    "FeatureRecord": {
+      "type": "object",
+      "properties": {
+        "row_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "source_field": {
+          "$ref": "#/$defs/SourceField"
+        },
+        "valid": {
+          "type": "boolean"
+        },
+        "feature_id": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "patric_id": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "genome_id": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "accession": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "annotation": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "feature_type": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "aa_sequence_md5": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "product": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "refseq_locus_tag": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "gene": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "plfam_id": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "pgfam_id": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "strand": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "start": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "end": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "aa_length": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "row_ordinal",
+        "source_field",
+        "valid",
+        "feature_id",
+        "patric_id",
+        "genome_id",
+        "accession",
+        "annotation",
+        "feature_type",
+        "aa_sequence_md5",
+        "product",
+        "refseq_locus_tag",
+        "gene",
+        "plfam_id",
+        "pgfam_id",
+        "strand",
+        "start",
+        "end",
+        "aa_length",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "GenomeRecord": {
+      "type": "object",
+      "properties": {
+        "row_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "source_field": {
+          "$ref": "#/$defs/SourceField"
+        },
+        "valid": {
+          "type": "boolean"
+        },
+        "genome_id": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "genome_name": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "taxon_id": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "row_ordinal",
+        "source_field",
+        "valid",
+        "genome_id",
+        "genome_name",
+        "taxon_id",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "FeatureSequenceRecord": {
+      "type": "object",
+      "properties": {
+        "row_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "source_field": {
+          "$ref": "#/$defs/SourceField"
+        },
+        "valid": {
+          "type": "boolean"
+        },
+        "md5": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "sequence": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "molecule": {
+          "const": "aa"
+        },
+        "sequence_symbol_count": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "computed_md5": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{32}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "computed_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "row_ordinal",
+        "source_field",
+        "valid",
+        "md5",
+        "sequence",
+        "molecule",
+        "sequence_symbol_count",
+        "computed_md5",
+        "computed_sha256",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "FeatureSnapshot": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_proteome_metadata_proposal_v1"
+        },
+        "snapshot_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "format": {
+          "const": "bvbrc_genome_feature_json_array_v1"
+        },
+        "source": {
+          "$ref": "#/$defs/NativeSource"
+        },
+        "population": {
+          "$ref": "#/$defs/PopulationDescriptor"
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FeatureRecord"
+          }
+        },
+        "unsupported_field_paths": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(|/.*)$"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        },
+        "coordinate_convention": {
+          "$ref": "#/$defs/CoordinateConvention"
+        }
+      },
+      "required": [
+        "version",
+        "snapshot_key",
+        "format",
+        "source",
+        "population",
+        "records",
+        "unsupported_field_paths",
+        "diagnostics",
+        "coordinate_convention"
+      ],
+      "additionalProperties": false
+    },
+    "GenomeSnapshot": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_proteome_metadata_proposal_v1"
+        },
+        "snapshot_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "format": {
+          "const": "bvbrc_genome_json_array_v1"
+        },
+        "source": {
+          "$ref": "#/$defs/NativeSource"
+        },
+        "population": {
+          "$ref": "#/$defs/PopulationDescriptor"
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/GenomeRecord"
+          }
+        },
+        "unsupported_field_paths": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(|/.*)$"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "snapshot_key",
+        "format",
+        "source",
+        "population",
+        "records",
+        "unsupported_field_paths",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "FeatureSequenceSnapshot": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_proteome_metadata_proposal_v1"
+        },
+        "snapshot_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "format": {
+          "const": "bvbrc_feature_sequence_json_array_v1"
+        },
+        "source": {
+          "$ref": "#/$defs/NativeSource"
+        },
+        "population": {
+          "$ref": "#/$defs/PopulationDescriptor"
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FeatureSequenceRecord"
+          }
+        },
+        "unsupported_field_paths": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(|/.*)$"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "snapshot_key",
+        "format",
+        "source",
+        "population",
+        "records",
+        "unsupported_field_paths",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "ParameterSource": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "enum": [
+            "submitted",
+            "effective"
+          ]
+        },
+        "source_field": {
+          "$ref": "#/$defs/SourceField"
+        }
+      },
+      "required": [
+        "kind",
+        "source_field"
+      ],
+      "additionalProperties": false
+    },
+    "RecordedParameterNumber": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "presence": {
+          "enum": [
+            "value",
+            "omitted",
+            "explicit_null",
+            "invalid"
+          ]
+        },
+        "source_field": {
+          "$ref": "#/$defs/SourceField"
+        }
+      },
+      "required": [
+        "value",
+        "presence",
+        "source_field"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "presence": {
+                "const": "value"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "number"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "RunParameterSnapshot": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "enum": [
+            "submitted",
+            "effective"
+          ]
+        },
+        "source_field": {
+          "$ref": "#/$defs/SourceField"
+        },
+        "min_ident": {
+          "$ref": "#/$defs/RecordedParameterNumber"
+        },
+        "min_seq_cov": {
+          "$ref": "#/$defs/RecordedParameterNumber"
+        },
+        "min_positives": {
+          "$ref": "#/$defs/RecordedParameterNumber"
+        },
+        "max_e_val": {
+          "$ref": "#/$defs/RecordedParameterNumber"
+        }
+      },
+      "required": [
+        "kind",
+        "source_field",
+        "min_ident",
+        "min_seq_cov",
+        "min_positives",
+        "max_e_val"
+      ],
+      "additionalProperties": false
+    },
+    "OriginalInputEntry": {
+      "type": "object",
+      "properties": {
+        "input_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "parameter_pointer": {
+          "type": "string",
+          "pattern": "^(|/.*)$"
+        },
+        "original_index": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "kind": {
+          "enum": [
+            "genome_id",
+            "user_genome",
+            "user_feature_group"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expected_track_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_field": {
+          "$ref": "#/$defs/SourceField"
+        }
+      },
+      "required": [
+        "input_key",
+        "parameter_pointer",
+        "original_index",
+        "kind",
+        "value",
+        "expected_track_key",
+        "source_field"
+      ],
+      "additionalProperties": false
+    },
+    "InputIndex": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_proteome_input_index_proposal_v1"
+        },
+        "parameter_source": {
+          "$ref": "#/$defs/ParameterSource"
+        },
+        "reference_original_index": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/OriginalInputEntry"
+          }
+        },
+        "source_contract": {
+          "$ref": "#/$defs/SourceContract"
+        },
+        "run_parameter_snapshots": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RunParameterSnapshot"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "parameter_source",
+        "reference_original_index",
+        "inputs",
+        "source_contract",
+        "run_parameter_snapshots",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "ExecutionInputLink": {
+      "type": "object",
+      "properties": {
+        "input_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "inventory_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "relation": {
+          "enum": [
+            "exact_executed_fasta",
+            "original_supplied_fasta",
+            "later_snapshot",
+            "unknown"
+          ]
+        },
+        "executed_fasta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ContentBinding"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "membership_complete": {
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ]
+        },
+        "staged_path": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "witness_source_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceField"
+          }
+        }
+      },
+      "required": [
+        "input_key",
+        "inventory_key",
+        "relation",
+        "executed_fasta",
+        "membership_complete",
+        "staged_path",
+        "witness_source_fields"
+      ],
+      "additionalProperties": false
+    },
+    "NativeOperandSelector": {
+      "type": "object",
+      "properties": {
+        "source_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "kind": {
+          "enum": [
+            "reference",
+            "association_subject"
+          ]
+        },
+        "reference_row_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "track_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "association_key": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "source_ref",
+        "sha256",
+        "kind",
+        "reference_row_ordinal",
+        "track_key",
+        "association_key"
+      ],
+      "additionalProperties": false
+    },
+    "NativeProteinLink": {
+      "type": "object",
+      "properties": {
+        "native": {
+          "$ref": "#/$defs/NativeOperandSelector"
+        },
+        "protein": {
+          "$ref": "#/$defs/ProteinRef"
+        },
+        "basis": {
+          "enum": [
+            "unique_exact_identifier",
+            "producer_occurrence_mapping"
+          ]
+        },
+        "native_identifier": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mapping_source_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceField"
+          }
+        }
+      },
+      "required": [
+        "native",
+        "protein",
+        "basis",
+        "native_identifier",
+        "mapping_source_fields"
+      ],
+      "additionalProperties": false
+    },
+    "ProteinMetadataLink": {
+      "type": "object",
+      "properties": {
+        "protein": {
+          "$ref": "#/$defs/ProteinRef"
+        },
+        "feature": {
+          "$ref": "#/$defs/MetadataRef"
+        },
+        "genome": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MetadataRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "feature_sequence": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MetadataRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "basis": {
+          "enum": [
+            "exact_feature_identifier",
+            "producer_occurrence_mapping"
+          ]
+        },
+        "mapping_source_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceField"
+          }
+        }
+      },
+      "required": [
+        "protein",
+        "feature",
+        "genome",
+        "feature_sequence",
+        "basis",
+        "mapping_source_fields"
+      ],
+      "additionalProperties": false
+    },
+    "OperandJoin": {
+      "type": "object",
+      "properties": {
+        "native": {
+          "$ref": "#/$defs/NativeOperandSelector"
+        },
+        "state": {
+          "enum": [
+            "joined",
+            "not_supplied",
+            "unmatched",
+            "ambiguous",
+            "conflicting"
+          ]
+        },
+        "protein": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ProteinRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "candidates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ProteinRef"
+          }
+        },
+        "accepted_link_indices": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "native",
+        "state",
+        "protein",
+        "candidates",
+        "accepted_link_indices",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "TrackInputBinding": {
+      "type": "object",
+      "properties": {
+        "track_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "input_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "inventory_key": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "execution_relation": {
+          "enum": [
+            "exact_executed_fasta",
+            "original_supplied_fasta",
+            "later_snapshot",
+            "unknown"
+          ]
+        },
+        "input_record_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "membership_complete": {
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ]
+        },
+        "identifier_collisions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "track_key",
+        "input_key",
+        "inventory_key",
+        "execution_relation",
+        "input_record_count",
+        "membership_complete",
+        "identifier_collisions",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "MetadataJoin": {
+      "type": "object",
+      "properties": {
+        "link_index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "state": {
+          "enum": [
+            "joined",
+            "unmatched",
+            "ambiguous",
+            "conflicting"
+          ]
+        },
+        "protein": {
+          "$ref": "#/$defs/ProteinRef"
+        },
+        "feature": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MetadataRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "genome": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MetadataRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "feature_sequence": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MetadataRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "link_index",
+        "state",
+        "protein",
+        "feature",
+        "genome",
+        "feature_sequence",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "NativeJoins": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_proteome_joins_proposal_v1"
+        },
+        "primary_source_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "execution_links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ExecutionInputLink"
+          }
+        },
+        "requested_native_links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NativeProteinLink"
+          }
+        },
+        "requested_metadata_links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ProteinMetadataLink"
+          }
+        },
+        "track_bindings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TrackInputBinding"
+          }
+        },
+        "reference_joins": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/OperandJoin"
+          }
+        },
+        "subject_joins": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/OperandJoin"
+          }
+        },
+        "metadata_joins": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/MetadataJoin"
+          }
+        },
+        "sequence_groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SequenceGroup"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "primary_source_ref",
+        "execution_links",
+        "requested_native_links",
+        "requested_metadata_links",
+        "track_bindings",
+        "reference_joins",
+        "subject_joins",
+        "metadata_joins",
+        "sequence_groups",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "ReferenceRowPair": {
+      "type": "object",
+      "properties": {
+        "left_row_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "right_row_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "left_row_ordinal",
+        "right_row_ordinal"
+      ],
+      "additionalProperties": false
+    },
+    "AssociationRowPair": {
+      "type": "object",
+      "properties": {
+        "left_association_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "right_association_key": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "left_association_key",
+        "right_association_key"
+      ],
+      "additionalProperties": false
+    },
+    "RepresentationLink": {
+      "type": "object",
+      "properties": {
+        "left_source_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "right_source_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "relation": {
+          "enum": [
+            "alternate_full_projection",
+            "alternate_partial_projection"
+          ]
+        },
+        "reference_pairs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReferenceRowPair"
+          }
+        },
+        "association_pairs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AssociationRowPair"
+          }
+        },
+        "source_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceField"
+          }
+        }
+      },
+      "required": [
+        "left_source_ref",
+        "right_source_ref",
+        "relation",
+        "reference_pairs",
+        "association_pairs",
+        "source_fields"
+      ],
+      "additionalProperties": false
+    },
+    "RepresentationComparison": {
+      "type": "object",
+      "properties": {
+        "link": {
+          "$ref": "#/$defs/RepresentationLink"
+        },
+        "state": {
+          "enum": [
+            "equal_observed_cells",
+            "conflicting",
+            "incomplete_comparison",
+            "unbound"
+          ]
+        },
+        "conflict_source_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceField"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "link",
+        "state",
+        "conflict_source_fields",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "SheetTrack": {
+      "type": "object",
+      "properties": {
+        "track_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "comparison_ordinal": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "original_input_key": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "native_materialization": {
+          "enum": [
+            "reference_rows",
+            "table_field_block",
+            "published_association",
+            "unknown",
+            "not_in_projection"
+          ]
+        },
+        "native_source_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceField"
+          }
+        },
+        "inventory_key": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "input_record_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "complete_reference_row_membership": {
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ]
+        },
+        "complete_published_association_membership": {
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ]
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "track_key",
+        "comparison_ordinal",
+        "original_input_key",
+        "native_materialization",
+        "native_source_fields",
+        "inventory_key",
+        "input_record_count",
+        "complete_reference_row_membership",
+        "complete_published_association_membership",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "SheetReference": {
+      "type": "object",
+      "properties": {
+        "reference_row_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reference_row_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "protein": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ProteinRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "join_state": {
+          "enum": [
+            "joined",
+            "not_supplied",
+            "unmatched",
+            "ambiguous",
+            "conflicting"
+          ]
+        },
+        "native_aa_length": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "inventory_sequence_symbol_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "native_start": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "native_end": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "native_strand": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "coordinate_kind": {
+          "enum": [
+            "artificial_layout",
+            "genomic_metadata",
+            "unknown"
+          ]
+        },
+        "metadata_links": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "reference_row_ordinal",
+        "reference_row_key",
+        "protein",
+        "join_state",
+        "native_aa_length",
+        "inventory_sequence_symbol_count",
+        "native_start",
+        "native_end",
+        "native_strand",
+        "coordinate_kind",
+        "metadata_links",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "SheetAssociation": {
+      "type": "object",
+      "properties": {
+        "association_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reference_row_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "track_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reference_protein": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ProteinRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "subject_protein": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ProteinRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reference_join_state": {
+          "enum": [
+            "joined",
+            "not_supplied",
+            "unmatched",
+            "ambiguous",
+            "conflicting"
+          ]
+        },
+        "subject_join_state": {
+          "enum": [
+            "joined",
+            "not_supplied",
+            "unmatched",
+            "ambiguous",
+            "conflicting"
+          ]
+        },
+        "native_hit_category": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "native_subject_length_aa": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "inventory_subject_sequence_symbol_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "native_first_hsp_alignment_identity_fraction": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "native_subject_endpoint_difference_fraction": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "layout_state": {
+          "enum": [
+            "source_field_located",
+            "uncertain_table_layout"
+          ]
+        },
+        "native_subject_identifier_present": {
+          "type": "boolean"
+        },
+        "metadata_links": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "association_key",
+        "reference_row_ordinal",
+        "track_key",
+        "reference_protein",
+        "subject_protein",
+        "reference_join_state",
+        "subject_join_state",
+        "native_hit_category",
+        "native_subject_length_aa",
+        "inventory_subject_sequence_symbol_count",
+        "native_first_hsp_alignment_identity_fraction",
+        "native_subject_endpoint_difference_fraction",
+        "layout_state",
+        "native_subject_identifier_present",
+        "metadata_links",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "ReportExecution": {
+      "type": "object",
+      "properties": {
+        "argv": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "program": {
+          "const": "blastp"
+        },
+        "executable_version": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "exit_code": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "requested_alignment_limit": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "requested_description_limit": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "stdout": {
+          "$ref": "#/$defs/NativeSource"
+        },
+        "stderr": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NativeSource"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceField"
+          }
+        }
+      },
+      "required": [
+        "argv",
+        "program",
+        "executable_version",
+        "exit_code",
+        "requested_alignment_limit",
+        "requested_description_limit",
+        "stdout",
+        "stderr",
+        "source_fields"
+      ],
+      "additionalProperties": false
+    },
+    "RetainedHSP": {
+      "type": "object",
+      "properties": {
+        "hsp_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "source_field": {
+          "$ref": "#/$defs/SourceField"
+        },
+        "bit_score": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "raw_score": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "evalue": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "alignment_columns": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "identical_columns": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "positive_columns": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "gap_columns": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "query_from": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "query_to": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "subject_from": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "subject_to": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "query_aligned": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "subject_aligned": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "coordinate_unit": {
+          "const": "aa"
+        },
+        "coordinate_convention": {
+          "const": "one_based_closed"
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "hsp_ordinal",
+        "source_field",
+        "bit_score",
+        "raw_score",
+        "evalue",
+        "alignment_columns",
+        "identical_columns",
+        "positive_columns",
+        "gap_columns",
+        "query_from",
+        "query_to",
+        "subject_from",
+        "subject_to",
+        "query_aligned",
+        "subject_aligned",
+        "coordinate_unit",
+        "coordinate_convention",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "RetainedSubject": {
+      "type": "object",
+      "properties": {
+        "hit_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "source_field": {
+          "$ref": "#/$defs/SourceField"
+        },
+        "identifier": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "description": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "length_aa": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "hsp_array_state": {
+          "enum": [
+            "present",
+            "missing",
+            "malformed"
+          ]
+        },
+        "hsps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RetainedHSP"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "hit_ordinal",
+        "source_field",
+        "identifier",
+        "description",
+        "length_aa",
+        "hsp_array_state",
+        "hsps",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "RetainedQuery": {
+      "type": "object",
+      "properties": {
+        "query_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "source_field": {
+          "$ref": "#/$defs/SourceField"
+        },
+        "identifier": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "description": {
+          "$ref": "#/$defs/NativeString"
+        },
+        "length_aa": {
+          "$ref": "#/$defs/NativeNumber"
+        },
+        "query_state": {
+          "enum": [
+            "complete",
+            "partial",
+            "malformed"
+          ]
+        },
+        "reported_outcome": {
+          "enum": [
+            "hits_reported",
+            "explicit_no_hits",
+            "not_established"
+          ]
+        },
+        "outcome_source_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceField"
+          }
+        },
+        "subjects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RetainedSubject"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "query_ordinal",
+        "source_field",
+        "identifier",
+        "description",
+        "length_aa",
+        "query_state",
+        "reported_outcome",
+        "outcome_source_fields",
+        "subjects",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "DirectionalReport": {
+      "type": "object",
+      "properties": {
+        "report_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "$ref": "#/$defs/NativeSource"
+        },
+        "native_format": {
+          "const": "legacy_blast_pairwise_text"
+        },
+        "native_format_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "direction": {
+          "enum": [
+            "reference_to_comparison",
+            "comparison_to_reference"
+          ]
+        },
+        "comparison_track_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "query_inventory_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "subject_inventory_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "execution": {
+          "$ref": "#/$defs/ReportExecution"
+        },
+        "all_emitted_queries_retained": {
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ]
+        },
+        "queries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RetainedQuery"
+          }
+        },
+        "unsupported_source_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceField"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "report_key",
+        "source",
+        "native_format",
+        "native_format_version",
+        "direction",
+        "comparison_track_key",
+        "query_inventory_key",
+        "subject_inventory_key",
+        "execution",
+        "all_emitted_queries_retained",
+        "queries",
+        "unsupported_source_fields",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "ReportOperandLink": {
+      "type": "object",
+      "properties": {
+        "report_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "query_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "hit_ordinal": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "protein": {
+          "$ref": "#/$defs/ProteinRef"
+        },
+        "basis": {
+          "enum": [
+            "unique_exact_identifier",
+            "producer_occurrence_mapping"
+          ]
+        },
+        "mapping_source_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceField"
+          }
+        }
+      },
+      "required": [
+        "report_key",
+        "query_ordinal",
+        "hit_ordinal",
+        "protein",
+        "basis",
+        "mapping_source_fields"
+      ],
+      "additionalProperties": false
+    },
+    "DirectionalScope": {
+      "type": "object",
+      "properties": {
+        "comparison_track_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "direction": {
+          "enum": [
+            "reference_to_comparison",
+            "comparison_to_reference"
+          ]
+        }
+      },
+      "required": [
+        "comparison_track_key",
+        "direction"
+      ],
+      "additionalProperties": false
+    },
+    "DirectionalAttachment": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_proteome_directional_attachment_proposal_v1"
+        },
+        "state": {
+          "enum": [
+            "unavailable",
+            "partial",
+            "complete_emitted_reports"
+          ]
+        },
+        "expected_scopes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DirectionalScope"
+          }
+        },
+        "reports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DirectionalReport"
+          }
+        },
+        "operand_links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReportOperandLink"
+          }
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PRequirement"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "state",
+        "expected_scopes",
+        "reports",
+        "operand_links",
+        "requirements",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "NativeSheet": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_proteome_native_sheet_proposal_v1"
+        },
+        "scientific_mode": {
+          "const": "proteome_comparison"
+        },
+        "primary_source_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "native_results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NativeProjectionResult"
+          }
+        },
+        "input_index": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/InputIndex"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "inventories": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ProteinInventory"
+          }
+        },
+        "feature_snapshots": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FeatureSnapshot"
+          }
+        },
+        "genome_snapshots": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/GenomeSnapshot"
+          }
+        },
+        "sequence_snapshots": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FeatureSequenceSnapshot"
+          }
+        },
+        "joins": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NativeJoins"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "representation_comparisons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RepresentationComparison"
+          }
+        },
+        "tracks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SheetTrack"
+          }
+        },
+        "reference_rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SheetReference"
+          }
+        },
+        "association_rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SheetAssociation"
+          }
+        },
+        "directional_attachment": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DirectionalAttachment"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PRequirement"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "scientific_mode",
+        "primary_source_ref",
+        "native_results",
+        "input_index",
+        "inventories",
+        "feature_snapshots",
+        "genome_snapshots",
+        "sequence_snapshots",
+        "joins",
+        "representation_comparisons",
+        "tracks",
+        "reference_rows",
+        "association_rows",
+        "directional_attachment",
+        "requirements",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "NativeCalculationParameters": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_proteome_native_parameters_proposal_v1"
+        },
+        "track_keys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "minimum_identity_fraction": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "minimum_subject_endpoint_difference_fraction": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "allowed_hit_categories": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "bi (<->)",
+                  "uni (->)"
+                ]
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "version",
+        "track_keys",
+        "minimum_identity_fraction",
+        "minimum_subject_endpoint_difference_fraction",
+        "allowed_hit_categories"
+      ],
+      "additionalProperties": false
+    },
+    "AssociationComponents": {
+      "type": "object",
+      "properties": {
+        "association_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "track_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "first_hsp_alignment_identity_percent": {
+          "$ref": "#/$defs/PercentageCell"
+        },
+        "subject_endpoint_difference_percent": {
+          "$ref": "#/$defs/PercentageCell"
+        },
+        "selection": {
+          "enum": [
+            "pass",
+            "fail",
+            "unknown"
+          ]
+        },
+        "failed_conditions": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "identity",
+              "subject_endpoint_difference",
+              "category"
+            ]
+          }
+        },
+        "unknown_conditions": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "identity",
+              "subject_endpoint_difference",
+              "category"
+            ]
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "association_key",
+        "track_key",
+        "first_hsp_alignment_identity_percent",
+        "subject_endpoint_difference_percent",
+        "selection",
+        "failed_conditions",
+        "unknown_conditions",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "NativeFractionSummary": {
+      "type": "object",
+      "properties": {
+        "used_association_keys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "value_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "omitted_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "null_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "blank_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "invalid_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "layout_uncertain_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "sum": {
+          "$ref": "#/$defs/ScalarCell"
+        },
+        "mean": {
+          "$ref": "#/$defs/FractionCell"
+        },
+        "minimum": {
+          "$ref": "#/$defs/FractionCell"
+        },
+        "maximum": {
+          "$ref": "#/$defs/FractionCell"
+        },
+        "unit": {
+          "const": "fraction"
+        },
+        "native_rounding_quantum": {
+          "const": 0.001
+        }
+      },
+      "required": [
+        "used_association_keys",
+        "value_count",
+        "omitted_count",
+        "null_count",
+        "blank_count",
+        "invalid_count",
+        "layout_uncertain_count",
+        "sum",
+        "mean",
+        "minimum",
+        "maximum",
+        "unit",
+        "native_rounding_quantum"
+      ],
+      "additionalProperties": false
+    },
+    "SelectionCounts": {
+      "type": "object",
+      "properties": {
+        "pass": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "fail": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "unknown": {
+          "$ref": "#/$defs/CountCell"
+        }
+      },
+      "required": [
+        "pass",
+        "fail",
+        "unknown"
+      ],
+      "additionalProperties": false
+    },
+    "NativeTrackComponents": {
+      "type": "object",
+      "properties": {
+        "track_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "materialization": {
+          "enum": [
+            "table_field_block",
+            "published_association",
+            "unknown",
+            "not_in_projection"
+          ]
+        },
+        "source_scope": {
+          "enum": [
+            "complete_document",
+            "complete_prefix_only",
+            "partial_or_unknown_artifact"
+          ]
+        },
+        "source_association_record_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "published_association_record_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "native_bi_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "native_uni_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "native_other_category_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "native_missing_category_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "observed_bound_reference_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "observed_bound_subject_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "unresolved_reference_association_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "unresolved_subject_association_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "reference_input_record_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "comparison_input_record_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "no_published_reference_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "multiple_reference_subject_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "excess_bound_pair_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "observed_selected_reference_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "demonstrated_subject_sequence_group_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "unresolved_subject_sequence_count": {
+          "$ref": "#/$defs/CountCell"
+        },
+        "first_hsp_identity_summary": {
+          "$ref": "#/$defs/NativeFractionSummary"
+        },
+        "subject_endpoint_difference_summary": {
+          "$ref": "#/$defs/NativeFractionSummary"
+        },
+        "observed_reference_fraction": {
+          "$ref": "#/$defs/Ratio"
+        },
+        "complete_published_reference_fraction": {
+          "$ref": "#/$defs/Ratio"
+        },
+        "selection_counts": {
+          "$ref": "#/$defs/SelectionCounts"
+        },
+        "observed_selected_reference_fraction": {
+          "$ref": "#/$defs/Ratio"
+        },
+        "complete_selected_reference_fraction": {
+          "$ref": "#/$defs/Ratio"
+        },
+        "qualifications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PReason"
+          }
+        }
+      },
+      "required": [
+        "track_key",
+        "materialization",
+        "source_scope",
+        "source_association_record_count",
+        "published_association_record_count",
+        "native_bi_count",
+        "native_uni_count",
+        "native_other_category_count",
+        "native_missing_category_count",
+        "observed_bound_reference_count",
+        "observed_bound_subject_count",
+        "unresolved_reference_association_count",
+        "unresolved_subject_association_count",
+        "reference_input_record_count",
+        "comparison_input_record_count",
+        "no_published_reference_count",
+        "multiple_reference_subject_count",
+        "excess_bound_pair_count",
+        "observed_selected_reference_count",
+        "demonstrated_subject_sequence_group_count",
+        "unresolved_subject_sequence_count",
+        "first_hsp_identity_summary",
+        "subject_endpoint_difference_summary",
+        "observed_reference_fraction",
+        "complete_published_reference_fraction",
+        "selection_counts",
+        "observed_selected_reference_fraction",
+        "complete_selected_reference_fraction",
+        "qualifications"
+      ],
+      "additionalProperties": false
+    },
+    "NativeComponents": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "bvbrc_proteome_native_components_proposal_v1"
+        },
+        "formula_version": {
+          "const": "native_descriptive_components_v1"
+        },
+        "sheet_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "parameters": {
+          "$ref": "#/$defs/NativeCalculationParameters"
+        },
+        "associations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AssociationComponents"
+          }
+        },
+        "tracks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NativeTrackComponents"
+          }
+        },
+        "used_component_families": {
+          "const": [
+            "legacy_identity",
+            "legacy_subject_endpoint_difference",
+            "native_category",
+            "explicit_occurrence_membership",
+            "full_sequence_identity"
+          ]
+        },
+        "retained_unused_component_families": {
+          "const": [
+            "feature_function_assignments",
+            "feature_taxonomy",
+            "feature_families",
+            "genomic_or_layout_coordinates",
+            "directional_hsps"
+          ]
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PRequirement"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "formula_version",
+        "sheet_sha256",
+        "parameters",
+        "associations",
+        "tracks",
+        "used_component_families",
+        "retained_unused_component_families",
+        "requirements",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "ProteinInventoryResult": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "ok",
+            "partial",
+            "invalid"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ProteinInventory"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PRequirement"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "status",
+        "value",
+        "requirements",
+        "diagnostics"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "invalid"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "value": {
+                "$ref": "#/$defs/ProteinInventory"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "FeatureSnapshotResult": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "ok",
+            "partial",
+            "invalid"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FeatureSnapshot"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PRequirement"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "status",
+        "value",
+        "requirements",
+        "diagnostics"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "invalid"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "value": {
+                "$ref": "#/$defs/FeatureSnapshot"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "GenomeSnapshotResult": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "ok",
+            "partial",
+            "invalid"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/GenomeSnapshot"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PRequirement"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "status",
+        "value",
+        "requirements",
+        "diagnostics"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "invalid"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "value": {
+                "$ref": "#/$defs/GenomeSnapshot"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "FeatureSequenceSnapshotResult": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "ok",
+            "partial",
+            "invalid"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FeatureSequenceSnapshot"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PRequirement"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "status",
+        "value",
+        "requirements",
+        "diagnostics"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "invalid"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "value": {
+                "$ref": "#/$defs/FeatureSequenceSnapshot"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "InputIndexResult": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "ok",
+            "partial",
+            "invalid"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/InputIndex"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PRequirement"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "status",
+        "value",
+        "requirements",
+        "diagnostics"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "invalid"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "value": {
+                "$ref": "#/$defs/InputIndex"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "NativeJoinsResult": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "ok",
+            "partial",
+            "invalid"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NativeJoins"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PRequirement"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "status",
+        "value",
+        "requirements",
+        "diagnostics"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "invalid"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "value": {
+                "$ref": "#/$defs/NativeJoins"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "NativeSheetResult": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "ok",
+            "partial",
+            "invalid"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NativeSheet"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PRequirement"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "status",
+        "value",
+        "requirements",
+        "diagnostics"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "invalid"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "value": {
+                "$ref": "#/$defs/NativeSheet"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "NativeComponentsResult": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "ok",
+            "partial",
+            "invalid"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NativeComponents"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PRequirement"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "status",
+        "value",
+        "requirements",
+        "diagnostics"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "invalid"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "value": {
+                "$ref": "#/$defs/NativeComponents"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "DirectionalAttachmentResult": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "ok",
+            "partial",
+            "invalid"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DirectionalAttachment"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PRequirement"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PDiagnostic"
+          }
+        }
+      },
+      "required": [
+        "status",
+        "value",
+        "requirements",
+        "diagnostics"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "invalid"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "value": {
+                "$ref": "#/$defs/DirectionalAttachment"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

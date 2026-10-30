@@ -1,0 +1,21 @@
+--- 007/gene_annotation_episode/literature_ratio_source_render.py
++++ 017/gene_annotation_episode/literature_ratio_source_render.py
+@@ -42,9 +42,15 @@
+ 
+ def hidden_records(reports, records):
+     rows = list(rows_from_reports(reports))
+-    sources = {row['evidence_source_ref'] for row in rows}
+-    return {ref for row in rows for ref in _refs(row)} | {
+-        ref for ref, record in records.items() if record.get('source_ref') in sources}
++    hidden = {ref for row in rows for ref in _refs(row)}
++    pending = list(hidden)
++    while pending:
++        reference = pending.pop()
++        for dependency in _refs(records.get(reference, {})):
++            if dependency not in hidden:
++                hidden.add(dependency)
++                pending.append(dependency)
++    return hidden
+ 
+ 
+ def _numeric_loci(payload):

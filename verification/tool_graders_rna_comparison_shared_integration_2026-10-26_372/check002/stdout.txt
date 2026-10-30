@@ -1,0 +1,76 @@
+E                                                                        [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_actual_pair_energy_selected_structures_sites_and_scientific_forwarding _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_comp..._comparison_shared_integration_2026-10-26_372/check002/temporary/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def pair_case(tmp_path_factory):
+        with pytest.MonkeyPatch.context() as patch:
+>           case = F.workflow_case(tmp_path_factory.mktemp('comparison-pair'), patch)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_rna_comparison_workflow.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/fixtures/rna_comparison_shared_372/helpers.py:291: in workflow_case
+    record = asyncio.run(run())
+             ^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+../../../tests/fixtures/rna_comparison_shared_372/helpers.py:288: in run
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:516: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+../../../method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:381: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:1354: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/runtime.py:946: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <rna_shared372.workflow_case.<locals>.Choices object at 0x7a9e6a98d7f0>
+episode_id = 'episode_b06bf36e0cb1bca58724413fee63a765e2f1ab93a4ecaf8dbd0e3baf4ae67065'
+role = 'REASONING'
+instructions = "Determine what the supplied target does within the parent's assigned question, scope and constraints. Start with the ... scientific evidence. Inventory and fresh observations remain separate. No instruction read or selection is mandatory."
+current = {'available_report_facts': {'blast_hsp_column_rows': {'meaning': 'Explicitly selected completed own BLAST column-windo...s_aligned_execution_contexts_v1', 'kind': 'caller_injected', 'template_relationship': 'not_inferred'}, ...}, ...}, ...}
+schema = {'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...: False, 'properties': {}, 'required': []}}, 'required': ['selection', 'report_update'], 'additionalProperties': False}
+
+    async def complete(self, episode_id, role, instructions, current, schema):
+        calls.append({'episode_id': episode_id, 'role': role, 'context': deepcopy(current)})
+>       assert not current.get('feedback'), current.get('feedback')
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: {'category': 'action_contract', 'detail': 'rna_comparison_operand_prefix_proof_unavailable', 'status': 'invalid'}
+
+../../../tests/fixtures/rna_comparison_shared_372/helpers.py:184: AssertionError
+=========================== short test summary info ============================
+ERROR ../../../tests/test_rna_comparison_workflow.py::test_actual_pair_energy_selected_structures_sites_and_scientific_forwarding
+1 error in 67.64s (0:01:07)

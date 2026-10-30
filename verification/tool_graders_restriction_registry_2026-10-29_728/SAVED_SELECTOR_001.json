@@ -1,0 +1,522 @@
+{
+  "arguments": {
+    "mode": "saved",
+    "result_source_ref": "source_d059b7af1aa40b59310b2a7d"
+  },
+  "decision_index": 0,
+  "episode_id": "episode_3004afa9576ed8ad7de8bf821f784d374a6859e5bc70a26fa360401130fad7b2",
+  "operation_key": "restriction728-host-boundary:episode_3004afa9576ed8ad7de8bf821f784d374a6859e5bc70a26fa360401130fad7b2:0",
+  "outcome": {
+    "feedback": null,
+    "operation_ref": "operation_caf37ef6ac2c0d088ca3abed",
+    "record_refs": [
+      "source_5d7979a762cd9d4d49a7bf1e",
+      "source_b3b63e918ec655a74a744413"
+    ],
+    "result": {
+      "data_status": "complete",
+      "input_source_ref": "source_5d7979a762cd9d4d49a7bf1e",
+      "issue_codes": [],
+      "mapping_artifact_ref": "artifact_09c3e0c354bc4a79bc232c8fb095b21ff744006a43a4f0f6755d4574e3e8506e",
+      "namespace": "subject",
+      "native_artifact_ref": "artifact_c2c36ce53fe2c0cef710cbefe6c4ef118aa48e61e0e16c8b3c05eb1c8ad79396",
+      "population": {
+        "attempted_enzyme_count": 1,
+        "complete_empty_enzyme_count": 0,
+        "recognition_match_count": 1,
+        "returned_enzyme_count": 1,
+        "selected_enzyme_count": 1
+      },
+      "sequence_ref": "input_0c6c52ed04ff8c413a28cb73",
+      "source_ref": "source_b3b63e918ec655a74a744413",
+      "topology": "linear",
+      "work_mode": "saved"
+    },
+    "status": "completed"
+  },
+  "path": [
+    [
+      "root",
+      "root"
+    ],
+    [
+      "scientific_process",
+      "child_0"
+    ]
+  ],
+  "permitted": [
+    "input_0c6c52ed04ff8c413a28cb73",
+    "source_d059b7af1aa40b59310b2a7d"
+  ],
+  "provenance": "engineering host-boundary context, real retained data and saved worker; no public catalog",
+  "request": {
+    "message": {
+      "episode_assignment": {},
+      "scope": {
+        "subject_refs": [
+          "input_0c6c52ed04ff8c413a28cb73"
+        ]
+      }
+    },
+    "report_contract": {
+      "measurements": {
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "selected": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "coordinate_unit": {
+                    "const": "nt",
+                    "type": "string"
+                  },
+                  "data_status": {
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "invalid",
+                      "unavailable"
+                    ],
+                    "type": "string"
+                  },
+                  "enzyme_rows": {
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "catalog_ordinal": {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "issue_codes": {
+                          "items": {
+                            "enum": [
+                              "input_invalid",
+                              "sequence_binding_conflict",
+                              "enzyme_unknown",
+                              "catalog_unavailable",
+                              "catalog_incompatible",
+                              "native_search_failed",
+                              "native_mapping_incomplete",
+                              "match_capture_unavailable",
+                              "match_owner_ambiguous",
+                              "native_position_meaning_unknown",
+                              "cut_geometry_unknown",
+                              "association_unavailable",
+                              "association_ambiguous",
+                              "retained_record_conflict",
+                              "unsupported_native_version",
+                              "native_failure",
+                              "request_conflict",
+                              "native_unavailable",
+                              "reader_unavailable",
+                              "mapping_invalid"
+                            ],
+                            "type": "string"
+                          },
+                          "type": "array",
+                          "uniqueItems": true
+                        },
+                        "name": {
+                          "format": "identifier",
+                          "type": "string",
+                          "x-reference-namespace": "restriction_enzyme"
+                        },
+                        "native_search_positions_1based": {
+                          "items": {
+                            "type": "integer"
+                          },
+                          "type": [
+                            "array",
+                            "null"
+                          ]
+                        },
+                        "position_meaning": {
+                          "enum": [
+                            "first_base_after_cut_1based",
+                            "recognition_start_1based",
+                            "unknown"
+                          ],
+                          "type": "string"
+                        },
+                        "positions": {
+                          "items": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "crick_boundary_0based": {
+                                "type": [
+                                  "integer",
+                                  "null"
+                                ]
+                              },
+                              "crick_canonical_boundary_0based": {
+                                "minimum": 0,
+                                "type": [
+                                  "integer",
+                                  "null"
+                                ]
+                              },
+                              "geometry_state": {
+                                "enum": [
+                                  "known",
+                                  "unknown",
+                                  "unavailable"
+                                ],
+                                "type": "string"
+                              },
+                              "native_position": {
+                                "type": "integer"
+                              },
+                              "position_ordinal": {
+                                "minimum": 0,
+                                "type": "integer"
+                              },
+                              "recognition_association": {
+                                "const": "not_recorded",
+                                "type": "string"
+                              },
+                              "recognition_event_ordinal": {
+                                "type": "null"
+                              },
+                              "watson_boundary_0based": {
+                                "type": [
+                                  "integer",
+                                  "null"
+                                ]
+                              },
+                              "watson_canonical_boundary_0based": {
+                                "minimum": 0,
+                                "type": [
+                                  "integer",
+                                  "null"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "position_ordinal",
+                              "native_position",
+                              "watson_boundary_0based",
+                              "crick_boundary_0based",
+                              "watson_canonical_boundary_0based",
+                              "crick_canonical_boundary_0based",
+                              "geometry_state",
+                              "recognition_association",
+                              "recognition_event_ordinal"
+                            ],
+                            "type": "object"
+                          },
+                          "type": [
+                            "array",
+                            "null"
+                          ]
+                        },
+                        "recognition_events": {
+                          "items": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "crosses_origin": {
+                                "type": [
+                                  "boolean",
+                                  "null"
+                                ]
+                              },
+                              "match_call_ordinal": {
+                                "minimum": 0,
+                                "type": "integer"
+                              },
+                              "match_ordinal": {
+                                "minimum": 0,
+                                "type": "integer"
+                              },
+                              "native_start_1based": {
+                                "type": "integer"
+                              },
+                              "orientation": {
+                                "enum": [
+                                  "forward",
+                                  "reverse",
+                                  "palindromic",
+                                  "unknown"
+                                ],
+                                "type": "string"
+                              },
+                              "segments": {
+                                "items": {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "end": {
+                                      "type": "integer"
+                                    },
+                                    "start": {
+                                      "type": "integer"
+                                    }
+                                  },
+                                  "required": [
+                                    "start",
+                                    "end"
+                                  ],
+                                  "type": "object"
+                                },
+                                "type": [
+                                  "array",
+                                  "null"
+                                ]
+                              },
+                              "unwrapped_span_0based": {
+                                "items": {
+                                  "type": "integer"
+                                },
+                                "maxItems": 2,
+                                "minItems": 2,
+                                "type": [
+                                  "array",
+                                  "null"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "match_call_ordinal",
+                              "match_ordinal",
+                              "native_start_1based",
+                              "orientation",
+                              "unwrapped_span_0based",
+                              "segments",
+                              "crosses_origin"
+                            ],
+                            "type": "object"
+                          },
+                          "type": [
+                            "array",
+                            "null"
+                          ]
+                        },
+                        "recognition_match_count": {
+                          "minimum": 0,
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "recognition_motif": {
+                          "format": "dna_sequence",
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "returned_position_count": {
+                          "minimum": 0,
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "search_state": {
+                          "enum": [
+                            "not_started",
+                            "returned",
+                            "failed",
+                            "invalid"
+                          ],
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "catalog_ordinal",
+                        "name",
+                        "search_state",
+                        "position_meaning",
+                        "native_search_positions_1based",
+                        "returned_position_count",
+                        "recognition_match_count",
+                        "positions",
+                        "recognition_events",
+                        "recognition_motif",
+                        "issue_codes"
+                      ],
+                      "type": "object"
+                    },
+                    "type": [
+                      "array",
+                      "null"
+                    ]
+                  },
+                  "input_source_ref": {
+                    "format": "reference",
+                    "type": "string",
+                    "x-reference-namespace": "source"
+                  },
+                  "issue_codes": {
+                    "items": {
+                      "enum": [
+                        "input_invalid",
+                        "sequence_binding_conflict",
+                        "enzyme_unknown",
+                        "catalog_unavailable",
+                        "catalog_incompatible",
+                        "native_search_failed",
+                        "native_mapping_incomplete",
+                        "match_capture_unavailable",
+                        "match_owner_ambiguous",
+                        "native_position_meaning_unknown",
+                        "cut_geometry_unknown",
+                        "association_unavailable",
+                        "association_ambiguous",
+                        "retained_record_conflict",
+                        "unsupported_native_version",
+                        "native_failure",
+                        "request_conflict",
+                        "native_unavailable",
+                        "reader_unavailable",
+                        "mapping_invalid"
+                      ],
+                      "type": "string"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                  },
+                  "namespace": {
+                    "enum": [
+                      "subject",
+                      "reference"
+                    ],
+                    "type": "string"
+                  },
+                  "operation_status": {
+                    "enum": [
+                      "completed",
+                      "partial"
+                    ],
+                    "type": "string"
+                  },
+                  "population": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "attempted_enzyme_count": {
+                        "description": "Validated returned or failed enzyme searches in the selected population.",
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "complete_empty_enzyme_count": {
+                        "description": "Returned enzyme searches whose complete native position list is empty.",
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "recognition_match_count": {
+                        "description": "Actual validated uniquely owned observed recognition matches; unavailable is null.",
+                        "minimum": 0,
+                        "type": [
+                          "integer",
+                          "null"
+                        ]
+                      },
+                      "returned_enzyme_count": {
+                        "description": "Validated returned enzyme searches in the selected population.",
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "selected_enzyme_count": {
+                        "description": "Enzymes in the full validated selected catalog; no prevalence denominator.",
+                        "minimum": 0,
+                        "type": [
+                          "integer",
+                          "null"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "selected_enzyme_count",
+                      "attempted_enzyme_count",
+                      "returned_enzyme_count",
+                      "complete_empty_enzyme_count",
+                      "recognition_match_count"
+                    ],
+                    "type": [
+                      "object",
+                      "null"
+                    ]
+                  },
+                  "population_scope": {
+                    "const": "full_selected_native_enzyme_population",
+                    "type": "string"
+                  },
+                  "selection_policy": {
+                    "const": "all_own_completed_results",
+                    "type": "string"
+                  },
+                  "sequence_ref": {
+                    "format": "reference",
+                    "type": "string"
+                  },
+                  "source_ref": {
+                    "format": "reference",
+                    "type": "string",
+                    "x-reference-namespace": "source"
+                  },
+                  "tool_name": {
+                    "enum": [
+                      "find_restriction_sites",
+                      "find_restriction_enzymes"
+                    ],
+                    "type": "string"
+                  },
+                  "topology": {
+                    "enum": [
+                      "linear",
+                      "circular",
+                      null
+                    ],
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "work_mode": {
+                    "enum": [
+                      "native",
+                      "saved"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "selection_policy",
+                  "sequence_ref",
+                  "namespace",
+                  "tool_name",
+                  "work_mode",
+                  "operation_status",
+                  "source_ref",
+                  "input_source_ref",
+                  "topology",
+                  "data_status",
+                  "coordinate_unit",
+                  "population_scope",
+                  "population",
+                  "enzyme_rows",
+                  "issue_codes"
+                ],
+                "type": "object"
+              },
+              "type": "array",
+              "x-source": "restriction_mapping_results"
+            }
+          },
+          "required": [
+            "selected"
+          ],
+          "type": "object"
+        }
+      }
+    }
+  },
+  "run_id": "restriction728-host-boundary",
+  "scope": {
+    "subject_refs": [
+      "input_0c6c52ed04ff8c413a28cb73"
+    ]
+  },
+  "source_ref": "source_b3b63e918ec655a74a744413",
+  "store_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check188_jobs726/retained-restriction726/store",
+  "tool_name": "find_restriction_sites"
+}

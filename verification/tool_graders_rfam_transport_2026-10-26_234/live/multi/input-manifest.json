@@ -1,0 +1,66 @@
+{
+  "fixture_kind": "public119nt_example_and_disclosed_transformations",
+  "source_url": "https://docs.rfam.org/en/latest/api.html",
+  "source_fixture": "verification/tool_graders_rfam_contract_2026-10-26_232/examples/official-single-result.json",
+  "source_fixture_sha256": "1396240ef8eb2073f3e307915814ca418a6f6bae29088e27c76ee375882362ab",
+  "filename": "public119-transformations.fasta",
+  "file_sha256": "4dc1529db76f089ec36caf8f3d176028d3bb5c828a1d04bfd130e72f92f515f4",
+  "file_bytes": 818,
+  "total_sequence_nt": 665,
+  "records": [
+    {
+      "query_occurrence_key": "public119-multi-occurrence-0",
+      "original_record_ordinal": 0,
+      "original_header": "rfam_example_original",
+      "submitted_sequence": "AGTTACGGCCATACCTCAGAGAATATACCGTATCCCGTTCGATCTGCGAAGTTAAGCTCTGAAGGGCGTCGTCAGTACTATAGTGGGTGACCATATGGGAATACGACGTGCTGTAGCTT",
+      "transformation": "unchanged public documentation sequence",
+      "submitted_sequence_sha256": "af9f4de00e14ab119b18199ef3d9a4eaeb9a5e1cdebf7e028cc9b1b16c3689eb",
+      "submitted_length_nt": 119
+    },
+    {
+      "query_occurrence_key": "public119-multi-occurrence-1",
+      "original_record_ordinal": 1,
+      "original_header": "rfam_example_repeat",
+      "submitted_sequence": "AGTTACGGCCATACCTCAGAGAATATACCGTATCCCGTTCGATCTGCGAAGTTAAGCTCTGAAGGGCGTCGTCAGTACTATAGTGGGTGACCATATGGGAATACGACGTGCTGTAGCTT",
+      "transformation": "same sequence repeated under a different FASTA header",
+      "submitted_sequence_sha256": "af9f4de00e14ab119b18199ef3d9a4eaeb9a5e1cdebf7e028cc9b1b16c3689eb",
+      "submitted_length_nt": 119
+    },
+    {
+      "query_occurrence_key": "public119-multi-occurrence-2",
+      "original_record_ordinal": 2,
+      "original_header": "rfam_example_reverse_complement",
+      "submitted_sequence": "AAGCTACAGCACGTCGTATTCCCATATGGTCACCCACTATAGTACTGACGACGCCCTTCAGAGCTTAACTTCGCAGATCGAACGGGATACGGTATATTCTCTGAGGTATGGCCGTAACT",
+      "transformation": "reverse complement of public sequence; A:T and C:G DNA complement",
+      "submitted_sequence_sha256": "bc14ceb10a830d9f2eab5255af9ff0de4ccb405e0cd93de02af7ba0dcf57b369",
+      "submitted_length_nt": 119
+    },
+    {
+      "query_occurrence_key": "public119-multi-occurrence-3",
+      "original_record_ordinal": 3,
+      "original_header": "rfam_example_prefix70",
+      "submitted_sequence": "AGTTACGGCCATACCTCAGAGAATATACCGTATCCCGTTCGATCTGCGAAGTTAAGCTCTGAAGGGCGTC",
+      "transformation": "first 70 nt of public sequence, original positions 1..70",
+      "submitted_sequence_sha256": "226f945525364a86d5b2ccb563624dd2bc9c22541ff0d082966c4782e2942331",
+      "submitted_length_nt": 70
+    },
+    {
+      "query_occurrence_key": "public119-multi-occurrence-4",
+      "original_record_ordinal": 4,
+      "original_header": "rfam_example_insertion",
+      "submitted_sequence": "AGTTACGGCCATACCTCAGAGAATATACCGTATCCCGTTCGATCTGCGAAGTTAAGCTCTAGAAGGGCGTCGTCAGTACTATAGTGGGTGACCATATGGGAATACGACGTGCTGTAGCTT",
+      "transformation": "insert one A after original position 60",
+      "submitted_sequence_sha256": "c2b5014ddd51280bb5e78cdc0ffb25b6924b14eee9efb2742f1c1f11ae519d9d",
+      "submitted_length_nt": 120
+    },
+    {
+      "query_occurrence_key": "public119-multi-occurrence-5",
+      "original_record_ordinal": 5,
+      "original_header": "rfam_example_deletion",
+      "submitted_sequence": "AGTTACGGCCATACCTCAGAGAATATACCGTATCCCGTTCGATCTGCGAAGTTAAGCTCTAAGGGCGTCGTCAGTACTATAGTGGGTGACCATATGGGAATACGACGTGCTGTAGCTT",
+      "transformation": "delete original position 61",
+      "submitted_sequence_sha256": "a59ec769489179d29c11489e09f1db9e886e383e8028d20a7e4d3c448d8b90d8",
+      "submitted_length_nt": 118
+    }
+  ]
+}

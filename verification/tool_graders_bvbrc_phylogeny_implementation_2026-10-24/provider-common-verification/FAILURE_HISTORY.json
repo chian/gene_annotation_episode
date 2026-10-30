@@ -1,0 +1,11 @@
+{
+  "record_type": "tool_transcript_derived_summary_not_captured_stdout",
+  "failures": [
+    {"suite": "G", "result": "32 passed, 2 failed", "causes": ["Shared extraction omitted explicit root XML zero support; fixed by retaining native/support observation and excluding root only from edge dispatch.", "Gene fixture asserted duplicate_suffix after_label q_2 while actual native row remained q; provider owner corrected actual bytes and parser result."]},
+    {"suite": "S", "result": "no tests ran", "cause": "Initial pytest used root cwd with staging-relative test path; rerun with exact staging cwd."},
+    {"suite": "S", "result": "31 passed, 1 failed, 1 skipped", "causes": ["Wrong-header fixture expected invalid-with-value although actual parser returns null for unsupported header; corrected to exact supported header plus malformed row.", "Native XML test glob used .phyloxml while retained files end .xml; corrected, both native examples now execute."]},
+    {"suite": "S+G", "result": "86 passed, 3 failed", "cause": "New negative alphabet fixtures still supplied complete independent original member molecule evidence. Provider owner removed only that alternative evidence in negative cases and added a positive independent-member-evidence check."},
+    {"suite": "S+G+C", "result": "46 passed, 3 failed before maxfail", "cause": "Same three alphabet fixtures before provider owner correction; no additional common behavior defect established."}
+  ],
+  "limitations": "Exact original stdout was not saved to a file for these exploratory runs. Their command/results remain in the tool conversation; this file does not pretend to be a raw process receipt. Final command stdout is captured separately."
+}

@@ -1,0 +1,23 @@
+# Copyright (C) 2023 Roberto Rossini <roberros@uio.no>
+# SPDX-License-Identifier: MIT
+
+ignore:
+  - "benchmarks"
+  - "examples"
+  - "test"
+
+fixes:
+  - "**/hictk/src/::src/"
+
+coverage:
+  status:
+    project:
+      default: false
+      source:
+        paths:
+          - "src/"
+        target: 75%
+        threshold: 1%
+    patch:
+      default:
+        target: 80%

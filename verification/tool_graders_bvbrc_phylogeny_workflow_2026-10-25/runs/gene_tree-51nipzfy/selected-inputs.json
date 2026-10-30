@@ -1,0 +1,748 @@
+{
+  "original": {
+    "final_rows": [
+      {
+        "label": "A",
+        "sequence": "A-CX"
+      },
+      {
+        "label": "B",
+        "sequence": "ATCX"
+      },
+      {
+        "label": "C",
+        "sequence": "ATGX"
+      },
+      {
+        "label": "D",
+        "sequence": "AT-X"
+      }
+    ],
+    "fixture": "synthetic supplied operands and explicit row/locus correspondence; no phylogeny ran",
+    "loci": [
+      {
+        "aligned_fasta": ">A\nA-CX\n>B\nATCX\n>C\nATGX\n>D\nAT-X\n",
+        "final_columns_0based_half_open": [
+          0,
+          4
+        ],
+        "locus_id": "locusA",
+        "members": [
+          {
+            "length": 3,
+            "member_id": "A",
+            "molecule": "protein",
+            "sequence": "ACX",
+            "sequence_sha256": "674cae843e7c847165923201e74bff06dcc8ddf650d84aabf438fc599029c337"
+          },
+          {
+            "length": 4,
+            "member_id": "B",
+            "molecule": "protein",
+            "sequence": "ATCX",
+            "sequence_sha256": "f7281d76331c03150e3dcf0819dd7b0ebcde364cda9c281357d4c493f5b43e3e"
+          },
+          {
+            "length": 4,
+            "member_id": "C",
+            "molecule": "protein",
+            "sequence": "ATGX",
+            "sequence_sha256": "678bb8fc6e8b845c01baa0560b52cf9699501ce6524413006bdac9be2b416099"
+          },
+          {
+            "length": 3,
+            "member_id": "D",
+            "molecule": "protein",
+            "sequence": "ATX",
+            "sequence_sha256": "b13e28a0b8cd1ee1f4efbf68e1258b074b0ebe9d35ff3c3a7e9adcf70237d18f"
+          }
+        ],
+        "workspace_path": "/synthetic/input/locusA.fa"
+      }
+    ],
+    "mode": "gene_tree",
+    "requested_genomes": []
+  },
+  "request": {
+    "definition_inputs": [],
+    "effect_contract": "selected_api_effects_v1",
+    "input_bindings": [
+      {
+        "binding_id": "locusA",
+        "content": null,
+        "inline_value": null,
+        "kind": "workspace_object",
+        "link_evidence": null,
+        "members": [
+          {
+            "evidence": {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_16d404556122861a87dd8f5a606fa5d3d1ec85f158e24f11566238d27dfe7ce8",
+                "byte_count": 1079,
+                "sha256": "16d404556122861a87dd8f5a606fa5d3d1ec85f158e24f11566238d27dfe7ce8",
+                "source_ref": "source_9f3fff1d9edcb2bc7c9f67b9"
+              },
+              "pointer": "/loci/0/members/0"
+            },
+            "length": 3,
+            "member_id": "A",
+            "member_pointer": "/loci/0/members/0",
+            "molecule": "protein",
+            "sequence_sha256": "674cae843e7c847165923201e74bff06dcc8ddf650d84aabf438fc599029c337"
+          },
+          {
+            "evidence": {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_16d404556122861a87dd8f5a606fa5d3d1ec85f158e24f11566238d27dfe7ce8",
+                "byte_count": 1079,
+                "sha256": "16d404556122861a87dd8f5a606fa5d3d1ec85f158e24f11566238d27dfe7ce8",
+                "source_ref": "source_9f3fff1d9edcb2bc7c9f67b9"
+              },
+              "pointer": "/loci/0/members/1"
+            },
+            "length": 4,
+            "member_id": "B",
+            "member_pointer": "/loci/0/members/1",
+            "molecule": "protein",
+            "sequence_sha256": "f7281d76331c03150e3dcf0819dd7b0ebcde364cda9c281357d4c493f5b43e3e"
+          },
+          {
+            "evidence": {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_16d404556122861a87dd8f5a606fa5d3d1ec85f158e24f11566238d27dfe7ce8",
+                "byte_count": 1079,
+                "sha256": "16d404556122861a87dd8f5a606fa5d3d1ec85f158e24f11566238d27dfe7ce8",
+                "source_ref": "source_9f3fff1d9edcb2bc7c9f67b9"
+              },
+              "pointer": "/loci/0/members/2"
+            },
+            "length": 4,
+            "member_id": "C",
+            "member_pointer": "/loci/0/members/2",
+            "molecule": "protein",
+            "sequence_sha256": "678bb8fc6e8b845c01baa0560b52cf9699501ce6524413006bdac9be2b416099"
+          },
+          {
+            "evidence": {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_16d404556122861a87dd8f5a606fa5d3d1ec85f158e24f11566238d27dfe7ce8",
+                "byte_count": 1079,
+                "sha256": "16d404556122861a87dd8f5a606fa5d3d1ec85f158e24f11566238d27dfe7ce8",
+                "source_ref": "source_9f3fff1d9edcb2bc7c9f67b9"
+              },
+              "pointer": "/loci/0/members/3"
+            },
+            "length": 3,
+            "member_id": "D",
+            "member_pointer": "/loci/0/members/3",
+            "molecule": "protein",
+            "sequence_sha256": "b13e28a0b8cd1ee1f4efbf68e1258b074b0ebe9d35ff3c3a7e9adcf70237d18f"
+          }
+        ],
+        "parameter_pointer": "/sequences/0/filename",
+        "workspace_path": "/synthetic/input/locusA.fa"
+      }
+    ],
+    "parameters": {
+      "alphabet": "Protein",
+      "output_file": "tree",
+      "output_path": "/synthetic/output",
+      "recipe": "RAxML",
+      "sequences": [
+        {
+          "filename": "/synthetic/input/locusA.fa",
+          "type": "aligned_protein_fasta"
+        }
+      ]
+    },
+    "required_application_id": "GeneTree",
+    "start_parameters": {},
+    "version": "bvbrc_appservice_request_v1",
+    "workspace_targets": [
+      {
+        "allow_create_parents": true,
+        "allow_overwrite": false,
+        "input_binding_id": null,
+        "metadata": {},
+        "path": "/synthetic/output/native-0",
+        "purpose": "output_parent",
+        "target_id": "native-0",
+        "type": "file"
+      },
+      {
+        "allow_create_parents": true,
+        "allow_overwrite": false,
+        "input_binding_id": null,
+        "metadata": {},
+        "path": "/synthetic/output/native-1",
+        "purpose": "output_parent",
+        "target_id": "native-1",
+        "type": "file"
+      }
+    ]
+  },
+  "scientific": {
+    "assembly": {
+      "analysis_id": "a",
+      "caller_populations": {
+        "alignments": [],
+        "bootstraps": [],
+        "composition": [],
+        "families": [],
+        "genomes": [],
+        "leaves": [],
+        "native": [],
+        "taxonomy": []
+      },
+      "family_matrices": [],
+      "genome_request_sets": [],
+      "historical_frequencies": [],
+      "locus_bindings": [
+        {
+          "completeness": "complete",
+          "evidence": [
+            {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_16d404556122861a87dd8f5a606fa5d3d1ec85f158e24f11566238d27dfe7ce8",
+                "byte_count": 1079,
+                "sha256": "16d404556122861a87dd8f5a606fa5d3d1ec85f158e24f11566238d27dfe7ce8",
+                "source_ref": "source_9f3fff1d9edcb2bc7c9f67b9"
+              },
+              "pointer": "/loci/0"
+            }
+          ],
+          "input_members": [
+            {
+              "input_binding_id": "locusA",
+              "member_id": "A"
+            },
+            {
+              "input_binding_id": "locusA",
+              "member_id": "B"
+            },
+            {
+              "input_binding_id": "locusA",
+              "member_id": "C"
+            },
+            {
+              "input_binding_id": "locusA",
+              "member_id": "D"
+            }
+          ],
+          "locus_id": "locusA"
+        }
+      ],
+      "model_associations": [],
+      "version": "bvbrc_phylogeny_assembly_v1"
+    },
+    "joins": {
+      "display_tips": [],
+      "feature_genomes": [],
+      "function_equivalences": [],
+      "functions": [],
+      "input_rows": [
+        {
+          "alignment_id": {
+            "analysis_id": "a",
+            "slot_id": "alignment"
+          },
+          "evidence": [
+            {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_16d404556122861a87dd8f5a606fa5d3d1ec85f158e24f11566238d27dfe7ce8",
+                "byte_count": 1079,
+                "sha256": "16d404556122861a87dd8f5a606fa5d3d1ec85f158e24f11566238d27dfe7ce8",
+                "source_ref": "source_9f3fff1d9edcb2bc7c9f67b9"
+              },
+              "pointer": "/loci/0"
+            }
+          ],
+          "input_binding_id": "locusA",
+          "locus_id": "locusA",
+          "member_id": "A",
+          "row_index": 0,
+          "transformation_id": null
+        },
+        {
+          "alignment_id": {
+            "analysis_id": "a",
+            "slot_id": "alignment"
+          },
+          "evidence": [
+            {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_16d404556122861a87dd8f5a606fa5d3d1ec85f158e24f11566238d27dfe7ce8",
+                "byte_count": 1079,
+                "sha256": "16d404556122861a87dd8f5a606fa5d3d1ec85f158e24f11566238d27dfe7ce8",
+                "source_ref": "source_9f3fff1d9edcb2bc7c9f67b9"
+              },
+              "pointer": "/loci/0"
+            }
+          ],
+          "input_binding_id": "locusA",
+          "locus_id": "locusA",
+          "member_id": "B",
+          "row_index": 1,
+          "transformation_id": null
+        },
+        {
+          "alignment_id": {
+            "analysis_id": "a",
+            "slot_id": "alignment"
+          },
+          "evidence": [
+            {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_16d404556122861a87dd8f5a606fa5d3d1ec85f158e24f11566238d27dfe7ce8",
+                "byte_count": 1079,
+                "sha256": "16d404556122861a87dd8f5a606fa5d3d1ec85f158e24f11566238d27dfe7ce8",
+                "source_ref": "source_9f3fff1d9edcb2bc7c9f67b9"
+              },
+              "pointer": "/loci/0"
+            }
+          ],
+          "input_binding_id": "locusA",
+          "locus_id": "locusA",
+          "member_id": "C",
+          "row_index": 2,
+          "transformation_id": null
+        },
+        {
+          "alignment_id": {
+            "analysis_id": "a",
+            "slot_id": "alignment"
+          },
+          "evidence": [
+            {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_16d404556122861a87dd8f5a606fa5d3d1ec85f158e24f11566238d27dfe7ce8",
+                "byte_count": 1079,
+                "sha256": "16d404556122861a87dd8f5a606fa5d3d1ec85f158e24f11566238d27dfe7ce8",
+                "source_ref": "source_9f3fff1d9edcb2bc7c9f67b9"
+              },
+              "pointer": "/loci/0"
+            }
+          ],
+          "input_binding_id": "locusA",
+          "locus_id": "locusA",
+          "member_id": "D",
+          "row_index": 3,
+          "transformation_id": null
+        }
+      ],
+      "organismal_tips": [],
+      "residues": [],
+      "taxa": [],
+      "tip_rows": [
+        {
+          "alignment_id": {
+            "analysis_id": "a",
+            "slot_id": "alignment"
+          },
+          "evidence": [
+            {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_16d404556122861a87dd8f5a606fa5d3d1ec85f158e24f11566238d27dfe7ce8",
+                "byte_count": 1079,
+                "sha256": "16d404556122861a87dd8f5a606fa5d3d1ec85f158e24f11566238d27dfe7ce8",
+                "source_ref": "source_9f3fff1d9edcb2bc7c9f67b9"
+              },
+              "pointer": ""
+            }
+          ],
+          "node_index": 2,
+          "row_index": 0,
+          "tree_id": {
+            "analysis_id": "a",
+            "slot_id": "tree",
+            "tree_index": 0
+          }
+        },
+        {
+          "alignment_id": {
+            "analysis_id": "a",
+            "slot_id": "alignment"
+          },
+          "evidence": [
+            {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_16d404556122861a87dd8f5a606fa5d3d1ec85f158e24f11566238d27dfe7ce8",
+                "byte_count": 1079,
+                "sha256": "16d404556122861a87dd8f5a606fa5d3d1ec85f158e24f11566238d27dfe7ce8",
+                "source_ref": "source_9f3fff1d9edcb2bc7c9f67b9"
+              },
+              "pointer": ""
+            }
+          ],
+          "node_index": 3,
+          "row_index": 1,
+          "tree_id": {
+            "analysis_id": "a",
+            "slot_id": "tree",
+            "tree_index": 0
+          }
+        },
+        {
+          "alignment_id": {
+            "analysis_id": "a",
+            "slot_id": "alignment"
+          },
+          "evidence": [
+            {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_16d404556122861a87dd8f5a606fa5d3d1ec85f158e24f11566238d27dfe7ce8",
+                "byte_count": 1079,
+                "sha256": "16d404556122861a87dd8f5a606fa5d3d1ec85f158e24f11566238d27dfe7ce8",
+                "source_ref": "source_9f3fff1d9edcb2bc7c9f67b9"
+              },
+              "pointer": ""
+            }
+          ],
+          "node_index": 5,
+          "row_index": 2,
+          "tree_id": {
+            "analysis_id": "a",
+            "slot_id": "tree",
+            "tree_index": 0
+          }
+        },
+        {
+          "alignment_id": {
+            "analysis_id": "a",
+            "slot_id": "alignment"
+          },
+          "evidence": [
+            {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_16d404556122861a87dd8f5a606fa5d3d1ec85f158e24f11566238d27dfe7ce8",
+                "byte_count": 1079,
+                "sha256": "16d404556122861a87dd8f5a606fa5d3d1ec85f158e24f11566238d27dfe7ce8",
+                "source_ref": "source_9f3fff1d9edcb2bc7c9f67b9"
+              },
+              "pointer": ""
+            }
+          ],
+          "node_index": 6,
+          "row_index": 3,
+          "tree_id": {
+            "analysis_id": "a",
+            "slot_id": "tree",
+            "tree_index": 0
+          }
+        }
+      ],
+      "transformations": []
+    },
+    "observed_run": {
+      "commands": [],
+      "completeness": "unknown",
+      "conflicts": [],
+      "engines": [],
+      "original_task_id": null,
+      "settings": [],
+      "source_revision": null
+    },
+    "source_records": [],
+    "supplemental_documents": [],
+    "version": "bvbrc_phylogeny_supplied_inputs_v1"
+  },
+  "selector": {
+    "adapter": {
+      "adapter_id": "bvbrc_gene_tree",
+      "adapter_version": "1",
+      "parameters": {
+        "analyses": [
+          {
+            "analysis": {
+              "aligned_document_id": {
+                "analysis_id": "a",
+                "slot_id": "alignment"
+              },
+              "analysis_id": "a",
+              "locus_ids": [
+                "locusA"
+              ],
+              "mode": "gene_tree",
+              "native_engine_slots": [],
+              "output_role_evidence": [],
+              "phyloxml_tree_id": null,
+              "raw_tree_id": {
+                "analysis_id": "a",
+                "slot_id": "tree",
+                "tree_index": 0
+              }
+            },
+            "calculation_parameters": {
+              "alignment_requests": [
+                {
+                  "alphabet": "unknown",
+                  "case_policy": "uppercase",
+                  "pairs": [
+                    [
+                      0,
+                      1
+                    ]
+                  ],
+                  "population_id": "matrix"
+                }
+              ],
+              "bootstrap_requests": [],
+              "comparisons": [],
+              "composition_population_ids": [],
+              "original_coverage_population_ids": [],
+              "taxon_requests": [],
+              "tree_requests": [
+                {
+                  "branch_unit": "native_unknown",
+                  "pairs": [
+                    [
+                      2,
+                      3
+                    ]
+                  ],
+                  "population_id": "leaves"
+                }
+              ],
+              "version": "gene_tree_components_v1"
+            },
+            "population_plans": [
+              {
+                "alignment": {
+                  "analysis_id": "a",
+                  "slot_id": "alignment"
+                },
+                "kind": "whole_alignment",
+                "population_id": "matrix"
+              },
+              {
+                "kind": "whole_tree",
+                "population_id": "leaves",
+                "tree": {
+                  "analysis_id": "a",
+                  "slot_id": "tree",
+                  "tree_index": 0
+                }
+              }
+            ],
+            "read_parameters": {
+              "raw_tree_required_for_branch_facts": false,
+              "source_dialect": "retained_bvbrc_gene_tree"
+            },
+            "scientific_inputs": {
+              "content": {
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_6907349aca4b5f1cc59120df5ea128c0788d639e8caa1d65a7bc36e3c08fb0ad",
+                "byte_count": 5020,
+                "sha256": "6907349aca4b5f1cc59120df5ea128c0788d639e8caa1d65a7bc36e3c08fb0ad",
+                "source_ref": "source_dcc86092ee09382343d85359"
+              },
+              "pointer": ""
+            }
+          }
+        ],
+        "artifact_selection": [
+          {
+            "analysis_id": "a",
+            "reader": {
+              "encoding": "ascii",
+              "id_rule": "first_whitespace_token",
+              "reader": "aligned_fasta"
+            },
+            "role": "a:alignment",
+            "slot_id": "alignment"
+          },
+          {
+            "analysis_id": "a",
+            "reader": {
+              "allow_multiple": true,
+              "dialect": "newick",
+              "reader": "newick"
+            },
+            "role": "a:tree",
+            "slot_id": "tree"
+          }
+        ],
+        "version": "bvbrc_phylogeny_bundle_parameters_v1"
+      }
+    },
+    "endpoint": "requested_projection",
+    "requested_schema": {
+      "additionalProperties": false,
+      "properties": {
+        "cells": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "x-phylogeny-fact": {
+            "analysis_id": "a",
+            "metric": "alignment_cell_count",
+            "population_id": "matrix"
+          }
+        },
+        "gap_fraction": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "x-phylogeny-fact": {
+            "analysis_id": "a",
+            "metric": "alignment_gap_fraction",
+            "population_id": "matrix"
+          }
+        },
+        "missing": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "enum": [
+                  "definition",
+                  "input_metadata",
+                  "input_bytes",
+                  "original_task",
+                  "task_manifest",
+                  "output_metadata",
+                  "output_bytes",
+                  "byte_version_evidence",
+                  "scientific_metadata",
+                  "parser_binding"
+                ]
+              },
+              "reason_code": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "requirement_id": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "role": {
+                "anyOf": [
+                  {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "source_refs": {
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "minItems": 0,
+                "type": "array",
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "requirement_id",
+              "kind",
+              "role",
+              "source_refs",
+              "reason_code"
+            ],
+            "type": "object"
+          },
+          "type": "array",
+          "x-phylogeny-fact": {
+            "metric": "missing_requirements"
+          }
+        },
+        "tips": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "x-phylogeny-fact": {
+            "analysis_id": "a",
+            "metric": "tree_tip_count",
+            "population_id": "leaves",
+            "tree": {
+              "analysis_id": "a",
+              "slot_id": "tree",
+              "tree_index": 0
+            }
+          }
+        }
+      },
+      "required": [
+        "tips",
+        "cells",
+        "gap_fraction",
+        "missing"
+      ],
+      "type": "object"
+    },
+    "requirements": [
+      {
+        "declared_format": {
+          "format": "aligned_fasta",
+          "mode": "gene_tree",
+          "producer_source_ref": null,
+          "transformation_evidence": [],
+          "version": null
+        },
+        "exact_object": null,
+        "producer_rule_evidence": null,
+        "required": true,
+        "requirement_id": "native-0",
+        "role": "a:alignment"
+      },
+      {
+        "declared_format": {
+          "format": "newick",
+          "mode": "gene_tree",
+          "producer_source_ref": null,
+          "transformation_evidence": [],
+          "version": "newick"
+        },
+        "exact_object": null,
+        "producer_rule_evidence": null,
+        "required": true,
+        "requirement_id": "native-1",
+        "role": "a:tree"
+      }
+    ],
+    "supplied_capabilities": [],
+    "supplied_metadata": [
+      {
+        "content": {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_6907349aca4b5f1cc59120df5ea128c0788d639e8caa1d65a7bc36e3c08fb0ad",
+          "byte_count": 5020,
+          "sha256": "6907349aca4b5f1cc59120df5ea128c0788d639e8caa1d65a7bc36e3c08fb0ad",
+          "source_ref": "source_dcc86092ee09382343d85359"
+        },
+        "pointer": ""
+      },
+      {
+        "content": {
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_16d404556122861a87dd8f5a606fa5d3d1ec85f158e24f11566238d27dfe7ce8",
+          "byte_count": 1079,
+          "sha256": "16d404556122861a87dd8f5a606fa5d3d1ec85f158e24f11566238d27dfe7ce8",
+          "source_ref": "source_9f3fff1d9edcb2bc7c9f67b9"
+        },
+        "pointer": ""
+      }
+    ],
+    "version": "bvbrc_appservice_result_selector_v1"
+  }
+}

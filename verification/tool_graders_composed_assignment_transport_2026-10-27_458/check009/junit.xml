@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="2.709" timestamp="2026-10-27T14:31:05.903438-05:00" hostname="chia-Z590-UD"><testcase classname="" name="tests.test_episode_assignment_transport" time="0.000"><error message="collection failure">source_snapshot/tests/test_episode_assignment_transport.py:25: in &lt;module&gt;
+    from test_assembled_case_reconstruction import initialize_case, reopen
+&lt;frozen importlib._bootstrap&gt;:1360: in _find_and_load
+    ???
+&lt;frozen importlib._bootstrap&gt;:1331: in _find_and_load_unlocked
+    ???
+&lt;frozen importlib._bootstrap&gt;:935: in _load_unlocked
+    ???
+../../../reference/episode_tools/.venv/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:188: in exec_module
+    exec(co, module.__dict__)
+source_snapshot/tests/test_assembled_case_reconstruction.py:34: in &lt;module&gt;
+    from test_case_execution import prepared
+&lt;frozen importlib._bootstrap&gt;:1360: in _find_and_load
+    ???
+&lt;frozen importlib._bootstrap&gt;:1331: in _find_and_load_unlocked
+    ???
+&lt;frozen importlib._bootstrap&gt;:935: in _load_unlocked
+    ???
+../../../reference/episode_tools/.venv/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:188: in exec_module
+    exec(co, module.__dict__)
+source_snapshot/tests/test_case_execution.py:18: in &lt;module&gt;
+    from test_homology_jobs import PROGRAM, PROJECT, QUERY
+&lt;frozen importlib._bootstrap&gt;:1360: in _find_and_load
+    ???
+&lt;frozen importlib._bootstrap&gt;:1331: in _find_and_load_unlocked
+    ???
+&lt;frozen importlib._bootstrap&gt;:935: in _load_unlocked
+    ???
+../../../reference/episode_tools/.venv/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:188: in exec_module
+    exec(co, module.__dict__)
+source_snapshot/tests/test_homology_jobs.py:20: in &lt;module&gt;
+    QUERY = (PROJECT/'cases/gene_001/target.faa').read_text()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_composed_assignment_transport_2026-10-27_458/check009/source_snapshot/cases/gene_001/target.faa'</error></testcase></testsuite></testsuites>

@@ -1,0 +1,843 @@
+{
+  "program": "cmemit",
+  "mode": "consensus",
+  "scripted_decisions": true,
+  "root_gains": [
+    0.0,
+    0.0
+  ],
+  "forms": [
+    {
+      "artifacts": [
+        {
+          "artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "completeness": "complete",
+          "direction": "output",
+          "format": "infernal_stderr",
+          "ordinal": 0,
+          "role": "stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0,
+          "source_ref": "source_23621cc06b39ab7252c9d114"
+        },
+        {
+          "artifact_ref": "artifact_bfbd6bb00f08b2e465473de298961f2a0d2e2b092338c2e12686c5ac026ef60e",
+          "completeness": "complete",
+          "direction": "output",
+          "format": "fasta",
+          "ordinal": 0,
+          "role": "generated_sequences",
+          "sha256": "bfbd6bb00f08b2e465473de298961f2a0d2e2b092338c2e12686c5ac026ef60e",
+          "size_bytes": 37,
+          "source_ref": "source_23621cc06b39ab7252c9d114"
+        }
+      ],
+      "completed": false,
+      "population": [
+        {
+          "collection": "calculations",
+          "missing_artifacts": [
+            {
+              "direction": "output",
+              "ordinal": 0,
+              "role": "stdout"
+            }
+          ],
+          "missing_record_keys": [],
+          "omitted_records": 0,
+          "requested_artifact_count": 3,
+          "returned_artifact_count": 2,
+          "returned_records": 2,
+          "source_ref": "source_23621cc06b39ab7252c9d114",
+          "total_records": 2
+        }
+      ],
+      "rows": [
+        {
+          "accession": "TEST246",
+          "artifact_ref": "artifact_5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc",
+          "checks": [
+            {
+              "name": "cmemit_sequence_count_matches",
+              "occurrences": [
+                {
+                  "artifact_ref": "artifact_bfbd6bb00f08b2e465473de298961f2a0d2e2b092338c2e12686c5ac026ef60e",
+                  "direction": "output",
+                  "ordinal": 0,
+                  "role": "generated_sequences"
+                },
+                {
+                  "artifact_ref": "artifact_5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc",
+                  "direction": "input",
+                  "ordinal": 0,
+                  "role": "models"
+                }
+              ],
+              "outcome": "pass"
+            }
+          ],
+          "kind": "calculation",
+          "name": "fixture246",
+          "quantities": [
+            {
+              "basis": "derived",
+              "path": "components.residue_count",
+              "state": "not_measured",
+              "unit": "nt",
+              "value": null
+            },
+            {
+              "basis": "derived",
+              "path": "components.gc_count",
+              "state": "not_measured",
+              "unit": "nt",
+              "value": null
+            },
+            {
+              "basis": "derived",
+              "path": "components.gc_fraction_canonical",
+              "state": "not_measured",
+              "unit": "fraction",
+              "value": null
+            }
+          ],
+          "record_key": "artifact_b21c2296b67ee1f8d7f2fe4c31ee1c39a35ca94e5449cd557d72b01e8dedf463#/inputs/0#model/0",
+          "source_ref": "source_23621cc06b39ab7252c9d114"
+        },
+        {
+          "accession": null,
+          "artifact_ref": "artifact_bfbd6bb00f08b2e465473de298961f2a0d2e2b092338c2e12686c5ac026ef60e",
+          "checks": [
+            {
+              "name": "cmemit_sequence_count_matches",
+              "occurrences": [],
+              "outcome": "unknown"
+            }
+          ],
+          "kind": "calculation",
+          "name": "fixture246-cmconsensus",
+          "quantities": [
+            {
+              "basis": "derived",
+              "path": "components.residue_count",
+              "state": "present",
+              "unit": "nt",
+              "value": 12
+            },
+            {
+              "basis": "derived",
+              "path": "components.gc_count",
+              "state": "present",
+              "unit": "nt",
+              "value": 8
+            },
+            {
+              "basis": "derived",
+              "path": "components.gc_fraction_canonical",
+              "state": "present",
+              "unit": "fraction",
+              "value": 0.6666666666666666
+            }
+          ],
+          "record_key": "artifact_b21c2296b67ee1f8d7f2fe4c31ee1c39a35ca94e5449cd557d72b01e8dedf463#/artifacts/2#generated_sequence/0",
+          "source_ref": "source_23621cc06b39ab7252c9d114"
+        }
+      ]
+    }
+  ],
+  "result_histories": [
+    {
+      "current_credit": 2.0,
+      "decision": {
+        "continuation_cost": 0.0,
+        "decision_basis": "current_estimator_marginal_credit_upper_bound",
+        "projected_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "stop": true
+      },
+      "epoch": "(('annotation', 'root'), ('results', 'child_1'))",
+      "estimate": {
+        "diagnostics": {
+          "fixture": "explicit_partial_result_horizon"
+        },
+        "expected_next_gain": {
+          "alpha": 0.0,
+          "lower": 0.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 0.0,
+          "value": 0.0
+        },
+        "parameters": {
+          "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+          "subsample_size": 50,
+          "uncertainty_alpha": 0.05,
+          "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+          "window_size": 100
+        },
+        "provenance": {
+          "function": "gene_annotation_episode.practical_yield.PracticalYieldEstimator",
+          "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+          "kind": "caller_injected",
+          "template_relationship": "not_inferred"
+        },
+        "turns": 1
+      },
+      "initial_credit": 0.0,
+      "scores": [
+        2.0
+      ]
+    }
+  ],
+  "native_plan": {
+    "attempt_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_2026-10-26_247/workflow_remaining_003/temporary/pytest/test_partial_acquisition_retur1/workspace/.episode-operations/10d4683873845edb579ab2665e38d1985cfa75726f3f1854ac791fd561301a9f/90076cd81be51da806ce3eaf6d34aaf63be2d9254715b7cdff086a3624429059/infernal-preparation-attempt",
+    "identity": {
+      "attempt_id": "90076cd81be51da806ce3eaf6d34aaf63be2d9254715b7cdff086a3624429059",
+      "episode_id": "episode_9e55ea777c1218e7a71546315394c508250b9a1b18dd6d6114160000bf0376b3",
+      "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_2026-10-26_247/workflow_remaining_003/temporary/pytest/test_partial_acquisition_retur1/workspace/.episode-operations/10d4683873845edb579ab2665e38d1985cfa75726f3f1854ac791fd561301a9f/90076cd81be51da806ce3eaf6d34aaf63be2d9254715b7cdff086a3624429059/native.json",
+      "operation_key": "infernal-preparation-workflow247:episode_9e55ea777c1218e7a71546315394c508250b9a1b18dd6d6114160000bf0376b3:0",
+      "requested_job_sha256": "eb1e14a0fe54496efc61b4a5061f0a438e43d8cd983da9f92538686ff35eb9f9",
+      "resource_id": "here",
+      "run_id": "infernal-preparation-workflow247"
+    },
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "requested_job": {
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmemit",
+        "--seed",
+        "181",
+        "-N",
+        "2",
+        "-c",
+        "-o",
+        "outputs/generated_sequences",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmbuild_hand/built.cm"
+      ],
+      "environment": {},
+      "native_infernal_preparation": {
+        "environment": {},
+        "grading_parameters": {},
+        "key": null,
+        "mode": "consensus",
+        "operands": [
+          {
+            "artifact_ref": "fixture:models:0",
+            "format": "infernal_cm_ascii",
+            "ordinal": 0,
+            "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmbuild_hand/built.cm",
+            "role": "models",
+            "sha256": "5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc",
+            "size_bytes": 9695
+          }
+        ],
+        "options": [
+          "--seed",
+          "181",
+          "-N",
+          "2"
+        ],
+        "outputs": [
+          {
+            "format": "infernal_stdout",
+            "relative_path": "outputs/stdout",
+            "role": "stdout"
+          },
+          {
+            "format": "infernal_stderr",
+            "relative_path": "outputs/stderr",
+            "role": "stderr"
+          },
+          {
+            "format": "fasta",
+            "relative_path": "outputs/generated_sequences",
+            "role": "generated_sequences"
+          }
+        ],
+        "program": "cmemit",
+        "software": {
+          "engine_version": "1.1.5",
+          "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmemit",
+          "sha256": "e6ce86ec5fa89157883deed091d9819f6f2469ed4cfe3ef5bcd3688a17fa64fc"
+        },
+        "version": "native_infernal_preparation_job_v1"
+      }
+    },
+    "version": "native_infernal_preparation_run_plan_v1"
+  },
+  "outcomes": [
+    {
+      "changed_record_refs": [
+        "source_23621cc06b39ab7252c9d114",
+        "artifact_5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc",
+        "artifact_bfbd6bb00f08b2e465473de298961f2a0d2e2b092338c2e12686c5ac026ef60e",
+        "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      ],
+      "feedback": null,
+      "pending_work_after_action": {
+        "captured_at": "2026-10-26T06:28:55.270085+00:00",
+        "items": [],
+        "version": "pending_work_v1"
+      },
+      "record_refs": [
+        "source_23621cc06b39ab7252c9d114",
+        "artifact_5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc",
+        "artifact_bfbd6bb00f08b2e465473de298961f2a0d2e2b092338c2e12686c5ac026ef60e",
+        "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      ],
+      "result": {
+        "arguments": {},
+        "artifacts": [
+          {
+            "artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "completeness": "complete",
+            "direction": "output",
+            "format": "infernal_stderr",
+            "ordinal": 0,
+            "role": "stderr",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size_bytes": 0,
+            "source_ref": "source_23621cc06b39ab7252c9d114"
+          },
+          {
+            "artifact_ref": "artifact_bfbd6bb00f08b2e465473de298961f2a0d2e2b092338c2e12686c5ac026ef60e",
+            "completeness": "complete",
+            "direction": "output",
+            "format": "fasta",
+            "ordinal": 0,
+            "role": "generated_sequences",
+            "sha256": "bfbd6bb00f08b2e465473de298961f2a0d2e2b092338c2e12686c5ac026ef60e",
+            "size_bytes": 37,
+            "source_ref": "source_23621cc06b39ab7252c9d114"
+          }
+        ],
+        "assignment": {
+          "handoff_ref": "source_499725647545ec00d3d29b7f",
+          "selector": {
+            "acquisition": "complete_bound_bundle",
+            "artifacts": [
+              {
+                "direction": "output",
+                "ordinal": 0,
+                "role": "stdout"
+              },
+              {
+                "direction": "output",
+                "ordinal": 0,
+                "role": "stderr"
+              },
+              {
+                "direction": "output",
+                "ordinal": 0,
+                "role": "generated_sequences"
+              }
+            ],
+            "projection": {
+              "checks": [
+                "cmemit_sequence_count_matches"
+              ],
+              "collection": "calculations",
+              "quantities": [
+                "components.residue_count",
+                "components.gc_count",
+                "components.gc_fraction_canonical"
+              ],
+              "rows": {
+                "limit": 50,
+                "offset": 0
+              }
+            },
+            "version": "native_infernal_preparation_result_selector_v1"
+          },
+          "version": "execution_results_assignment_v1"
+        },
+        "capture": {
+          "artifacts": [
+            {
+              "artifact_ref": "artifact_5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc",
+              "direction": "input",
+              "format": "infernal_cm_ascii",
+              "ordinal": 0,
+              "relative_path": "inputs/models.cm",
+              "role": "models"
+            },
+            {
+              "artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "direction": "output",
+              "format": "infernal_stderr",
+              "ordinal": 0,
+              "relative_path": "outputs/stderr",
+              "role": "stderr"
+            },
+            {
+              "artifact_ref": "artifact_bfbd6bb00f08b2e465473de298961f2a0d2e2b092338c2e12686c5ac026ef60e",
+              "direction": "output",
+              "format": "fasta",
+              "ordinal": 0,
+              "relative_path": "outputs/generated_sequences",
+              "role": "generated_sequences"
+            }
+          ],
+          "bundle_artifact_ref": "artifact_b21c2296b67ee1f8d7f2fe4c31ee1c39a35ca94e5449cd557d72b01e8dedf463",
+          "bundle_validated": true,
+          "complete": false,
+          "failures": [
+            {
+              "code": "native_infernal_preparation_sealed_artifact_digest_mismatch:output:stdout:0:outputs/stdout",
+              "record_key": null,
+              "stage": "capture"
+            }
+          ],
+          "invalid_artifacts": [
+            {
+              "artifact_ref": "artifact_c1e7255317fdd5aaee7464884f30b4d730e6eba9a70dc21bc5e6f58fc471723f",
+              "direction": "output",
+              "format": "infernal_stdout",
+              "ordinal": 0,
+              "relative_path": "outputs/stdout",
+              "role": "stdout"
+            }
+          ],
+          "version": "native_infernal_preparation_capture_v1"
+        },
+        "complete": false,
+        "episode_id": "episode_9c93966cbca24cff9642419589daf28ac7b4a83a653efa3b2f6c71840a1aa0de",
+        "failures": [
+          {
+            "code": "native_infernal_preparation_sealed_artifact_digest_mismatch:output:stdout:0:outputs/stdout",
+            "record_key": null,
+            "stage": "capture"
+          },
+          {
+            "code": "native_infernal_preparation_sealed_artifact_digest_mismatch:output:stdout:0:outputs/stdout",
+            "record_key": null,
+            "stage": "capture"
+          },
+          {
+            "code": "native_infernal_preparation_sealed_artifact_digest_mismatch:output:stdout:0:outputs/stdout",
+            "record_key": null,
+            "stage": "capture"
+          }
+        ],
+        "observation": {
+          "failure_code": null,
+          "logs": [
+            {
+              "bytes_base64": "Y2hhbmdlZCBhZnRlciBzZWFsZWQgcHJvZHVjZXIgYnVuZGxlCg==",
+              "observed_size": 37,
+              "offset": 0,
+              "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_2026-10-26_247/workflow_remaining_003/temporary/pytest/test_partial_acquisition_retur1/workspace/.episode-operations/10d4683873845edb579ab2665e38d1985cfa75726f3f1854ac791fd561301a9f/90076cd81be51da806ce3eaf6d34aaf63be2d9254715b7cdff086a3624429059/infernal-preparation-attempt/outputs/stdout",
+              "role": "stdout"
+            },
+            {
+              "bytes_base64": "",
+              "observed_size": 0,
+              "offset": 0,
+              "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_2026-10-26_247/workflow_remaining_003/temporary/pytest/test_partial_acquisition_retur1/workspace/.episode-operations/10d4683873845edb579ab2665e38d1985cfa75726f3f1854ac791fd561301a9f/90076cd81be51da806ce3eaf6d34aaf63be2d9254715b7cdff086a3624429059/infernal-preparation-attempt/outputs/stderr",
+              "role": "stderr"
+            }
+          ],
+          "measurements": [
+            {
+              "measure": "systemd_service_wall_seconds",
+              "seconds": 0.98585231
+            }
+          ],
+          "native": {
+            "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_2026-10-26_247/workflow_remaining_003/temporary/pytest/test_partial_acquisition_retur1/workspace/.episode-operations/10d4683873845edb579ab2665e38d1985cfa75726f3f1854ac791fd561301a9f/90076cd81be51da806ce3eaf6d34aaf63be2d9254715b7cdff086a3624429059/native.json",
+            "files": {
+              "stderr": {
+                "available": true,
+                "bytes": 0
+              },
+              "stdout": {
+                "available": true,
+                "bytes": 484
+              }
+            },
+            "metadata": {
+              "duration_measure": "systemd_service_wall_seconds",
+              "elapsed_seconds": 0.98585231,
+              "enforcement": {
+                "filesystem_sandbox": false,
+                "memory": "systemd_cgroup_v2_memory_max",
+                "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+                "process_tree": "systemd_control_group",
+                "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+                "swap": "systemd_memory_swap_max_zero",
+                "wall_time": "unset"
+              },
+              "native_lifecycle_version": "durable_systemd_native_job_v2",
+              "native_returncode": 0,
+              "observed_scratch_bytes": 77824,
+              "policy": {
+                "memory_bytes": 21474836480,
+                "scratch_bytes": 4294967296,
+                "wall_seconds": null
+              },
+              "service_exit": {
+                "EXIT_CODE": "exited",
+                "EXIT_STATUS": "0",
+                "SERVICE_RESULT": "success",
+                "ended": {
+                  "at": "2026-10-26T06:28:39.510174+00:00",
+                  "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+                  "monotonic_ns": 809681207500447
+                }
+              },
+              "verified_cgroup": {
+                "kill_mode": "control-group",
+                "memory_max": 21474836480,
+                "memory_swap_max": 0,
+                "oom_policy": "kill",
+                "runtime_max": "infinity"
+              }
+            },
+            "native_receipt": {
+              "ended": {
+                "at": "2026-10-26T06:28:39.311852+00:00",
+                "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+                "monotonic_ns": 809681009177203
+              },
+              "execution_failure": null,
+              "native_returncode": 0,
+              "observed_scratch_bytes": 77824,
+              "resource_failure": null,
+              "started": {
+                "at": "2026-10-26T06:28:38.756028+00:00",
+                "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+                "monotonic_ns": 809680453356409
+              }
+            },
+            "quiescent": true,
+            "state": "returned",
+            "terminal": true,
+            "version": "durable_systemd_native_job_v2"
+          },
+          "observed_at": "2026-10-26T06:28:44.836291+00:00",
+          "outputs": [
+            {
+              "available": true,
+              "bytes": 37,
+              "role": "stdout",
+              "writer_closed": true
+            },
+            {
+              "available": true,
+              "bytes": 0,
+              "role": "stderr",
+              "writer_closed": true
+            },
+            {
+              "available": true,
+              "bytes": 7603,
+              "role": "native_infernal_preparation_bundle",
+              "writer_closed": true
+            }
+          ],
+          "provenance_refs": [],
+          "result_available": true,
+          "returncode": 0,
+          "state": "completed"
+        },
+        "operation_key": "infernal-preparation-workflow247:episode_9c93966cbca24cff9642419589daf28ac7b4a83a653efa3b2f6c71840a1aa0de:0",
+        "population": {
+          "collection": "calculations",
+          "missing_artifacts": [
+            {
+              "direction": "output",
+              "ordinal": 0,
+              "role": "stdout"
+            }
+          ],
+          "missing_record_keys": [],
+          "omitted_records": 0,
+          "requested_artifact_count": 3,
+          "returned_artifact_count": 2,
+          "returned_records": 2,
+          "source_ref": "source_23621cc06b39ab7252c9d114",
+          "total_records": 2
+        },
+        "prepared": {
+          "bundle_artifact_ref": "artifact_b21c2296b67ee1f8d7f2fe4c31ee1c39a35ca94e5449cd557d72b01e8dedf463",
+          "calculations_artifact_ref": "artifact_9fa3c71c78dcb462e13046c9b04d3d16d47b162632370978d7978cdd0841618d",
+          "failures": [
+            {
+              "code": "native_infernal_preparation_sealed_artifact_digest_mismatch:output:stdout:0:outputs/stdout",
+              "record_key": null,
+              "stage": "capture"
+            }
+          ],
+          "graded": true,
+          "grading_artifact_ref": "artifact_ff71bbaf6dfb11c7e7fd675eb4e78a7983612eda73aaee77ee8c245c377e4da7",
+          "occurrences": [
+            {
+              "artifact_ref": "artifact_5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc",
+              "completeness": "complete",
+              "direction": "input",
+              "format": "infernal_cm_ascii",
+              "occurrence_ref": "artifact_b21c2296b67ee1f8d7f2fe4c31ee1c39a35ca94e5449cd557d72b01e8dedf463#/inputs/0",
+              "ordinal": 0,
+              "relative_path": "inputs/models.cm",
+              "role": "models",
+              "sha256": "5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc",
+              "size_bytes": 9695
+            },
+            {
+              "artifact_ref": "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "completeness": "complete",
+              "direction": "output",
+              "format": "infernal_stderr",
+              "occurrence_ref": "artifact_b21c2296b67ee1f8d7f2fe4c31ee1c39a35ca94e5449cd557d72b01e8dedf463#/artifacts/1",
+              "ordinal": 0,
+              "relative_path": "outputs/stderr",
+              "role": "stderr",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size_bytes": 0
+            },
+            {
+              "artifact_ref": "artifact_bfbd6bb00f08b2e465473de298961f2a0d2e2b092338c2e12686c5ac026ef60e",
+              "completeness": "complete",
+              "direction": "output",
+              "format": "fasta",
+              "occurrence_ref": "artifact_b21c2296b67ee1f8d7f2fe4c31ee1c39a35ca94e5449cd557d72b01e8dedf463#/artifacts/2",
+              "ordinal": 0,
+              "relative_path": "outputs/generated_sequences",
+              "role": "generated_sequences",
+              "sha256": "bfbd6bb00f08b2e465473de298961f2a0d2e2b092338c2e12686c5ac026ef60e",
+              "size_bytes": 37
+            }
+          ],
+          "sheet_artifact_ref": "artifact_5253ff60ae30cc013bf3fa97be5072beab283124f7c5785aa165ce93e6df325b",
+          "source_grading_artifact_ref": "artifact_2f2bee47892b1a8a9103769c2485809e823a54b8ba9f138d321b892ef503d73c",
+          "version": "native_infernal_preparation_prepared_v1"
+        },
+        "record_refs": [
+          "source_23621cc06b39ab7252c9d114",
+          "artifact_5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc",
+          "artifact_bfbd6bb00f08b2e465473de298961f2a0d2e2b092338c2e12686c5ac026ef60e",
+          "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        ],
+        "rows": [
+          {
+            "accession": "TEST246",
+            "artifact_ref": "artifact_5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc",
+            "checks": [
+              {
+                "name": "cmemit_sequence_count_matches",
+                "occurrences": [
+                  {
+                    "artifact_ref": "artifact_bfbd6bb00f08b2e465473de298961f2a0d2e2b092338c2e12686c5ac026ef60e",
+                    "direction": "output",
+                    "ordinal": 0,
+                    "role": "generated_sequences"
+                  },
+                  {
+                    "artifact_ref": "artifact_5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc",
+                    "direction": "input",
+                    "ordinal": 0,
+                    "role": "models"
+                  }
+                ],
+                "outcome": "pass"
+              }
+            ],
+            "kind": "calculation",
+            "name": "fixture246",
+            "quantities": [
+              {
+                "basis": "derived",
+                "path": "components.residue_count",
+                "state": "not_measured",
+                "unit": "nt",
+                "value": null
+              },
+              {
+                "basis": "derived",
+                "path": "components.gc_count",
+                "state": "not_measured",
+                "unit": "nt",
+                "value": null
+              },
+              {
+                "basis": "derived",
+                "path": "components.gc_fraction_canonical",
+                "state": "not_measured",
+                "unit": "fraction",
+                "value": null
+              }
+            ],
+            "record_key": "artifact_b21c2296b67ee1f8d7f2fe4c31ee1c39a35ca94e5449cd557d72b01e8dedf463#/inputs/0#model/0",
+            "source_ref": "source_23621cc06b39ab7252c9d114"
+          },
+          {
+            "accession": null,
+            "artifact_ref": "artifact_bfbd6bb00f08b2e465473de298961f2a0d2e2b092338c2e12686c5ac026ef60e",
+            "checks": [
+              {
+                "name": "cmemit_sequence_count_matches",
+                "occurrences": [],
+                "outcome": "unknown"
+              }
+            ],
+            "kind": "calculation",
+            "name": "fixture246-cmconsensus",
+            "quantities": [
+              {
+                "basis": "derived",
+                "path": "components.residue_count",
+                "state": "present",
+                "unit": "nt",
+                "value": 12
+              },
+              {
+                "basis": "derived",
+                "path": "components.gc_count",
+                "state": "present",
+                "unit": "nt",
+                "value": 8
+              },
+              {
+                "basis": "derived",
+                "path": "components.gc_fraction_canonical",
+                "state": "present",
+                "unit": "fraction",
+                "value": 0.6666666666666666
+              }
+            ],
+            "record_key": "artifact_b21c2296b67ee1f8d7f2fe4c31ee1c39a35ca94e5449cd557d72b01e8dedf463#/artifacts/2#generated_sequence/0",
+            "source_ref": "source_23621cc06b39ab7252c9d114"
+          }
+        ],
+        "run_id": "infernal-preparation-workflow247",
+        "scope": {
+          "subject_refs": [
+            "input_3de8062de30034cd70decb7f"
+          ]
+        },
+        "source_ref": "source_23621cc06b39ab7252c9d114",
+        "target": {
+          "assignment": {
+            "assignment_id": "native-preparation",
+            "completion_keys": [
+              "handoff"
+            ],
+            "constraints": {
+              "allocation": {
+                "memory_bytes": 21474836480,
+                "scratch_bytes": 4294967296,
+                "wall_seconds": null
+              }
+            },
+            "endpoint": "usable_handoff",
+            "initial_context": {
+              "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_2026-10-26_247/workflow_remaining_003/temporary/pytest/test_partial_acquisition_retur1/workspace",
+              "environment": {},
+              "revision": 0
+            },
+            "inventory_snapshot": {},
+            "progress_requirements": [
+              {
+                "credit": 7,
+                "key": "handoff",
+                "predicate": {
+                  "kind": "requested_job_handoff"
+                }
+              }
+            ],
+            "requested_job": {
+              "argv": [
+                "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmemit",
+                "--seed",
+                "181",
+                "-N",
+                "2",
+                "-c",
+                "-o",
+                "outputs/generated_sequences",
+                "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmbuild_hand/built.cm"
+              ],
+              "environment": {},
+              "native_infernal_preparation": {
+                "environment": {},
+                "grading_parameters": {},
+                "key": null,
+                "mode": "consensus",
+                "operands": [
+                  {
+                    "artifact_ref": "fixture:models:0",
+                    "format": "infernal_cm_ascii",
+                    "ordinal": 0,
+                    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmbuild_hand/built.cm",
+                    "role": "models",
+                    "sha256": "5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc",
+                    "size_bytes": 9695
+                  }
+                ],
+                "options": [
+                  "--seed",
+                  "181",
+                  "-N",
+                  "2"
+                ],
+                "outputs": [
+                  {
+                    "format": "infernal_stdout",
+                    "relative_path": "outputs/stdout",
+                    "role": "stdout"
+                  },
+                  {
+                    "format": "infernal_stderr",
+                    "relative_path": "outputs/stderr",
+                    "role": "stderr"
+                  },
+                  {
+                    "format": "fasta",
+                    "relative_path": "outputs/generated_sequences",
+                    "role": "generated_sequences"
+                  }
+                ],
+                "program": "cmemit",
+                "software": {
+                  "engine_version": "1.1.5",
+                  "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmemit",
+                  "sha256": "e6ce86ec5fa89157883deed091d9819f6f2469ed4cfe3ef5bcd3688a17fa64fc"
+                },
+                "version": "native_infernal_preparation_job_v1"
+              }
+            },
+            "resource_id": "here",
+            "resource_kind": "local",
+            "version": "practical_assignment_v1",
+            "workspace": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_2026-10-26_247/workflow_remaining_003/temporary/pytest/test_partial_acquisition_retur1/workspace"
+          },
+          "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_2026-10-26_247/workflow_remaining_003/temporary/pytest/test_partial_acquisition_retur1/workspace/.episode-operations/10d4683873845edb579ab2665e38d1985cfa75726f3f1854ac791fd561301a9f/90076cd81be51da806ce3eaf6d34aaf63be2d9254715b7cdff086a3624429059/native.json",
+          "handle": "source_499725647545ec00d3d29b7f",
+          "origin_episode_id": "episode_9e55ea777c1218e7a71546315394c508250b9a1b18dd6d6114160000bf0376b3",
+          "request_sha256": "eb1e14a0fe54496efc61b4a5061f0a438e43d8cd983da9f92538686ff35eb9f9",
+          "resource_id": "here",
+          "resource_kind": "local",
+          "run_id": "infernal-preparation-workflow247",
+          "scope": {
+            "subject_refs": [
+              "input_3de8062de30034cd70decb7f"
+            ]
+          },
+          "version": "execution_target_v1"
+        },
+        "tool_name": "execution.results.collect",
+        "version": "native_infernal_preparation_acquired_result_v1"
+      },
+      "status": "completed"
+    }
+  ]
+}

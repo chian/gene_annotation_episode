@@ -1,0 +1,246 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+____________ test_oversized_real_in_native_input_is_a_typed_failure ____________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_result_worker_2026-10-27_393/check003/temporary/pytest/test_oversized_real_in_native_0')
+
+    def test_oversized_real_in_native_input_is_a_typed_failure(tmp_path):
+        plan, native = _native_plan(tmp_path)
+        native["sheet"]["native_baseline"]["evaluation"]["evaluation_rmsd"]["value"] = 10 ** 400
+        _replace(plan, "native_result", native)
+>       result = worker.run_protein_structure_result_worker(plan)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_protein_structure_result_worker.py:542: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/protein_structure_result_worker.py:410: in run_protein_structure_result_worker
+    _original(plan, result, outputs)
+source_snapshot/gene_annotation_episode/protein_structure_result_worker.py:287: in _original
+    native = validate_native_protein_structure_result(native)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_protein_structure_contracts.py:461: in validate_native_protein_structure_result
+    value = _checked(value, "NativeProteinResult")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_protein_structure_contracts.py:393: in _checked
+    _require(_STRICT(protein_structure_execution_schema(type_name)).is_valid(value))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:499: in is_valid
+    error = next(self.iter_errors(instance), None)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:383: in iter_errors
+    for error in errors:
+../../../.venv/lib/python3.12/site-packages/jsonschema/_keywords.py:334: in allOf
+    yield from validator.descend(instance, subschema, schema_path=index)
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:431: in descend
+    for error in errors:
+../../../.venv/lib/python3.12/site-packages/jsonschema/_keywords.py:275: in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:431: in descend
+    for error in errors:
+../../../.venv/lib/python3.12/site-packages/jsonschema/_keywords.py:355: in oneOf
+    errs = list(validator.descend(instance, subschema, schema_path=index))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:431: in descend
+    for error in errors:
+../../../.venv/lib/python3.12/site-packages/jsonschema/_keywords.py:275: in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:431: in descend
+    for error in errors:
+../../../.venv/lib/python3.12/site-packages/jsonschema/_keywords.py:296: in properties
+    yield from validator.descend(
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:431: in descend
+    for error in errors:
+../../../.venv/lib/python3.12/site-packages/jsonschema/_keywords.py:340: in anyOf
+    errs = list(validator.descend(instance, subschema, schema_path=index))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:431: in descend
+    for error in errors:
+../../../.venv/lib/python3.12/site-packages/jsonschema/_keywords.py:275: in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:431: in descend
+    for error in errors:
+../../../.venv/lib/python3.12/site-packages/jsonschema/_keywords.py:296: in properties
+    yield from validator.descend(
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:431: in descend
+    for error in errors:
+../../../.venv/lib/python3.12/site-packages/jsonschema/_keywords.py:340: in anyOf
+    errs = list(validator.descend(instance, subschema, schema_path=index))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:431: in descend
+    for error in errors:
+../../../.venv/lib/python3.12/site-packages/jsonschema/_keywords.py:275: in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:431: in descend
+    for error in errors:
+../../../.venv/lib/python3.12/site-packages/jsonschema/_keywords.py:296: in properties
+    yield from validator.descend(
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:431: in descend
+    for error in errors:
+../../../.venv/lib/python3.12/site-packages/jsonschema/_keywords.py:275: in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:431: in descend
+    for error in errors:
+../../../.venv/lib/python3.12/site-packages/jsonschema/_keywords.py:296: in properties
+    yield from validator.descend(
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:431: in descend
+    for error in errors:
+../../../.venv/lib/python3.12/site-packages/jsonschema/_keywords.py:275: in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:431: in descend
+    for error in errors:
+../../../.venv/lib/python3.12/site-packages/jsonschema/_keywords.py:296: in properties
+    yield from validator.descend(
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:431: in descend
+    for error in errors:
+../../../.venv/lib/python3.12/site-packages/jsonschema/_keywords.py:340: in anyOf
+    errs = list(validator.descend(instance, subschema, schema_path=index))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:431: in descend
+    for error in errors:
+../../../.venv/lib/python3.12/site-packages/jsonschema/_keywords.py:285: in type
+    if not any(validator.is_type(instance, type) for type in types):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../.venv/lib/python3.12/site-packages/jsonschema/_keywords.py:285: in <genexpr>
+    if not any(validator.is_type(instance, type) for type in types):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:454: in is_type
+    return self.TYPE_CHECKER.is_type(instance, type)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../.venv/lib/python3.12/site-packages/jsonschema/_types.py:120: in is_type
+    return fn(self, instance)
+           ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+_ = <TypeChecker types={'array', 'boolean', 'integer', 'null', 'number', 'object', 'string'}>
+v = 100000000000000000...0000000000000000000
+
+>   .redefine("number", lambda _, v: type(v) in (int, float) and math.isfinite(v)))
+                                                                 ^^^^^^^^^^^^^^^^
+E   OverflowError: int too large to convert to float
+
+source_snapshot/gene_annotation_episode/native_protein_structure_contracts.py:368: OverflowError
+_____________ test_oversized_real_in_request_is_a_typed_plan_error _____________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_result_worker_2026-10-27_393/check003/temporary/pytest/test_oversized_real_in_request0')
+
+    def test_oversized_real_in_request_is_a_typed_plan_error(tmp_path):
+        plan, _ = _native_plan(tmp_path)
+        plan["expected_request"]["parameters"]["distance_threshold_A"] = 10 ** 400
+        with pytest.raises(ValueError, match="invalid_schema"):
+>           worker.validate_protein_structure_result_worker_plan(plan)
+
+source_snapshot/tests/test_protein_structure_result_worker.py:552: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/protein_structure_result_worker.py:137: in validate_protein_structure_result_worker_plan
+    validate_protein_structure_request(value["expected_request"])
+source_snapshot/gene_annotation_episode/native_protein_structure_contracts.py:423: in validate_protein_structure_request
+    value = _checked(value, "ScientificRequest")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/native_protein_structure_contracts.py:393: in _checked
+    _require(_STRICT(protein_structure_execution_schema(type_name)).is_valid(value))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:499: in is_valid
+    error = next(self.iter_errors(instance), None)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:383: in iter_errors
+    for error in errors:
+../../../.venv/lib/python3.12/site-packages/jsonschema/_keywords.py:334: in allOf
+    yield from validator.descend(instance, subschema, schema_path=index)
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:431: in descend
+    for error in errors:
+../../../.venv/lib/python3.12/site-packages/jsonschema/_keywords.py:275: in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:431: in descend
+    for error in errors:
+../../../.venv/lib/python3.12/site-packages/jsonschema/_keywords.py:355: in oneOf
+    errs = list(validator.descend(instance, subschema, schema_path=index))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:431: in descend
+    for error in errors:
+../../../.venv/lib/python3.12/site-packages/jsonschema/_keywords.py:275: in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:431: in descend
+    for error in errors:
+../../../.venv/lib/python3.12/site-packages/jsonschema/_keywords.py:296: in properties
+    yield from validator.descend(
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:431: in descend
+    for error in errors:
+../../../.venv/lib/python3.12/site-packages/jsonschema/_keywords.py:275: in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:431: in descend
+    for error in errors:
+../../../.venv/lib/python3.12/site-packages/jsonschema/_keywords.py:296: in properties
+    yield from validator.descend(
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:431: in descend
+    for error in errors:
+../../../.venv/lib/python3.12/site-packages/jsonschema/_keywords.py:340: in anyOf
+    errs = list(validator.descend(instance, subschema, schema_path=index))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:431: in descend
+    for error in errors:
+../../../.venv/lib/python3.12/site-packages/jsonschema/_keywords.py:285: in type
+    if not any(validator.is_type(instance, type) for type in types):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../.venv/lib/python3.12/site-packages/jsonschema/_keywords.py:285: in <genexpr>
+    if not any(validator.is_type(instance, type) for type in types):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../.venv/lib/python3.12/site-packages/jsonschema/validators.py:454: in is_type
+    return self.TYPE_CHECKER.is_type(instance, type)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../.venv/lib/python3.12/site-packages/jsonschema/_types.py:120: in is_type
+    return fn(self, instance)
+           ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+_ = <TypeChecker types={'array', 'boolean', 'integer', 'null', 'number', 'object', 'string'}>
+v = 100000000000000000...0000000000000000000
+
+>   .redefine("number", lambda _, v: type(v) in (int, float) and math.isfinite(v)))
+                                                                 ^^^^^^^^^^^^^^^^
+E   OverflowError: int too large to convert to float
+
+source_snapshot/gene_annotation_episode/native_protein_structure_contracts.py:368: OverflowError
+______ test_unfinished_publication_conflict_is_typed_and_not_overwritten _______
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_result_worker_2026-10-27_393/check003/temporary/pytest/test_unfinished_publication_co0')
+
+    def test_unfinished_publication_conflict_is_typed_and_not_overwritten(tmp_path):
+        plan, _ = _native_plan(tmp_path, "inspect")
+        directory = Path(plan["directory"])
+        directory.mkdir()
+        marker = directory / ".native-result.json.writing"
+        marker.write_bytes(b"unfinished prior publication")
+        with pytest.raises(ValueError, match="invalid_output_path"):
+>           worker.run_protein_structure_result_worker(plan)
+
+source_snapshot/tests/test_protein_structure_result_worker.py:563: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/gene_annotation_episode/protein_structure_result_worker.py:415: in run_protein_structure_result_worker
+    _publish(directory, outputs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+directory = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_result_worker_2026-10-27_393/check003/temporary/pytest/test_unfinished_publication_co0/output')
+outputs = {'native-result.json': b'{"inventory":{"chains":[{"atom_count":4,"auth_chain_tokens":[],"available_sequence_bases":["o...n"},"operation":"inspect","sheet_file":null,"state":"complete","version":"protein_structure_result_worker_result_v1"}'}
+
+    def _publish(directory, outputs):
+        # Check the entire public layout before writing anything: stale files from
+        # a conflicting previous result cannot survive a newly unavailable field.
+        for filename in (*_OUTPUT_NAMES.values(), _RESULT_NAME):
+            path = _safe_path(directory / filename)
+            if path.exists():
+                _require(filename in outputs and _read(path) == outputs[filename], "original_commission_mismatch")
+        for filename, raw in outputs.items():
+            path = _safe_path(directory / filename)
+            if path.exists():
+                continue
+            temporary = _safe_path(directory / ("." + filename + ".writing"))
+>           descriptor = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           FileExistsError: [Errno 17] File exists: '/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_result_worker_2026-10-27_393/check003/temporary/pytest/test_unfinished_publication_co0/output/.native-result.json.writing'
+
+source_snapshot/gene_annotation_episode/protein_structure_result_worker.py:366: FileExistsError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_protein_structure_result_worker.py::test_oversized_real_in_native_input_is_a_typed_failure
+FAILED source_snapshot/tests/test_protein_structure_result_worker.py::test_oversized_real_in_request_is_a_typed_plan_error
+FAILED source_snapshot/tests/test_protein_structure_result_worker.py::test_unfinished_publication_conflict_is_typed_and_not_overwritten
+3 failed in 0.62s

@@ -1,0 +1,124 @@
+........................................................................ [ 81%]
+.....F....FF....                                                         [100%]
+=================================== FAILURES ===================================
+_ test_reported_spread_is_retained_as_unimplemented_not_an_exact_physical_bound _
+
+    def test_reported_spread_is_retained_as_unimplemented_not_an_exact_physical_bound():
+        text='A selectivity lower limit of 100 ±3-fold.'
+        args={**common(text),'route':'reported_ratio','reported_ratio':source_quantity(text,'100',None,meaning='reported_transport_selectivity_ratio',physical=True)}
+>       _,s=calculate(args,[],{SOURCE:text.encode()});c=s['cells']['reported_selectivity']
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_ion_discrimination_components_194.py:361: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_ion_discrimination_components_194.py:92: in calculate
+    e=read(args,rows,sources);return e,populate_ion_discrimination(e)
+      ^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_ion_discrimination_components_194.py:88: in read
+    return read_ion_discrimination_inputs(args,read_source=source,read_component=component)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_ion_discrimination_inputs.py:802: in read_ion_discrimination_inputs
+    operands['reported']=_read_quantity(args['reported_ratio'],sources,field='reported_ratio',source_kind=args['source_kind'])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_ion_discrimination_inputs.py:685: in _read_quantity
+    check_explicit_unit(number, unit, sources=sources, dimensionless=ratio)
+gene_annotation_episode/literature_ion_discrimination_numbers.py:174: in check_explicit_unit
+    return check_explicit_unit(spread,unit,sources=sources,dimensionless=dimensionless,_following=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_ion_discrimination_numbers.py:190: in check_explicit_unit
+    _fail('ion_spread_syntax_unsupported')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'ion_spread_syntax_unsupported', field = 'number'
+
+    def _fail(code, field='number'):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: ion_spread_syntax_unsupported:number
+
+gene_annotation_episode/literature_ion_discrimination_numbers.py:33: ExperimentalContractError
+_ test_native_nonion_meaning_and_unknown_derivation_are_never_relabeled[conflicting] _
+
+meaning = 'conflicting'
+
+    @pytest.mark.parametrize('meaning',['charge_equivalent_rate','signed_reporter_estimator','unknown','conflicting'])
+    def test_native_nonion_meaning_and_unknown_derivation_are_never_relabeled(meaning):
+        text='Preferred quantity >30 per_s; alternative <3 ions/s.'
+        preferred=source_quantity(text,'30','per_s',meaning=meaning)
+        preferred['derivation']={'value':'unknown','witnesses':[]}
+        args={**common(text),'source_kind':'primary_source','route':'reported_threshold_pair','thresholds':{
+            'preferred':preferred,'alternative':source_quantity(text,'3','ions/s',at=text.index('<3')+1)}}
+>       _,s=calculate(args,[],{SOURCE:text.encode()});c=s['cells']['preferred_activity']
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_ion_discrimination_components_194.py:382: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_ion_discrimination_components_194.py:92: in calculate
+    e=read(args,rows,sources);return e,populate_ion_discrimination(e)
+      ^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_ion_discrimination_components_194.py:88: in read
+    return read_ion_discrimination_inputs(args,read_source=source,read_component=component)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_ion_discrimination_inputs.py:804: in read_ion_discrimination_inputs
+    operands={role:_read_quantity(selected,sources,field=role,source_kind=args['source_kind']) for role,selected in args['thresholds'].items()}
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_ion_discrimination_inputs.py:662: in _read_quantity
+    result = {name: _meaning(value, schema[name], sources, field + '.' + name)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_ion_discrimination_inputs.py:648: in _meaning
+    return _interpretation(value, allowed, sources, field)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_assay_inputs.py:260: in _interpretation
+    _fail("interpretation_witness_required", field + ".witnesses")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'interpretation_witness_required', field = 'preferred.meaning.witnesses'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: interpretation_witness_required:preferred.meaning.witnesses
+
+gene_annotation_episode/literature_assay_inputs.py:40: ExperimentalContractError
+_____ test_conflicting_qualification_retains_known_adjacent_approximation ______
+
+    def test_conflicting_qualification_retains_known_adjacent_approximation():
+        text='A reported permeability lower limit of ∼100-fold.'
+        q=source_quantity(text,'100',None,meaning='reported_permeability_ratio')
+        q['qualification']=interpretation('conflicting',text)
+        args={**common(text),'route':'reported_ratio','reported_ratio':q}
+>       _,s=calculate(args,[],{SOURCE:text.encode()});c=s['cells']['reported_selectivity']
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_ion_discrimination_components_194.py:392: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_ion_discrimination_components_194.py:92: in calculate
+    e=read(args,rows,sources);return e,populate_ion_discrimination(e)
+      ^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_literature_ion_discrimination_components_194.py:88: in read
+    return read_ion_discrimination_inputs(args,read_source=source,read_component=component)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_ion_discrimination_inputs.py:802: in read_ion_discrimination_inputs
+    operands['reported']=_read_quantity(args['reported_ratio'],sources,field='reported_ratio',source_kind=args['source_kind'])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_ion_discrimination_inputs.py:662: in _read_quantity
+    result = {name: _meaning(value, schema[name], sources, field + '.' + name)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_ion_discrimination_inputs.py:648: in _meaning
+    return _interpretation(value, allowed, sources, field)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_assay_inputs.py:260: in _interpretation
+    _fail("interpretation_witness_required", field + ".witnesses")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'interpretation_witness_required'
+field = 'reported_ratio.qualification.witnesses'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: interpretation_witness_required:reported_ratio.qualification.witnesses
+
+gene_annotation_episode/literature_assay_inputs.py:40: ExperimentalContractError
+=========================== short test summary info ============================
+FAILED tests/test_literature_ion_discrimination_components_194.py::test_reported_spread_is_retained_as_unimplemented_not_an_exact_physical_bound
+FAILED tests/test_literature_ion_discrimination_components_194.py::test_native_nonion_meaning_and_unknown_derivation_are_never_relabeled[conflicting]
+FAILED tests/test_literature_ion_discrimination_components_194.py::test_conflicting_qualification_retains_known_adjacent_approximation
+3 failed, 85 passed in 2.07s

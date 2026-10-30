@@ -1,0 +1,2095 @@
+{
+  "version": "native_hmmer_preparation_grading_v1",
+  "operation": {
+    "engine_version": "3.4",
+    "mode": "count_only",
+    "program": "hmmerfm-exactmatch",
+    "settings": {
+      "--count_only": true,
+      "--fwd_only": false
+    }
+  },
+  "formats": {
+    "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0": "literal_query_lines",
+    "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0": "hmmer_fm_3_4",
+    "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0": "fasta",
+    "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0": "hmmer_stdout",
+    "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stderr/0": "hmmer_stderr",
+    "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/hits/0": "hmmerfm_exactmatch_hits"
+  },
+  "metadata": {
+    "producer_contract": {
+      "byte_order": "little",
+      "engine_version": "3.4",
+      "format": "hmmer_fm_3_4",
+      "int32_bytes": 4,
+      "uint16_bytes": 2,
+      "uint32_bytes": 4,
+      "uint64_bytes": 8,
+      "uint8_bytes": 1
+    }
+  },
+  "native_abi": {
+    "byte_order": "little",
+    "bytes_per_float": 8,
+    "c_float_bytes": 4,
+    "c_int_bytes": 4,
+    "c_long_bytes": 8,
+    "float_format": "ieee754_binary64",
+    "int32_bytes": 4,
+    "uint16_bytes": 2,
+    "uint32_bytes": 4,
+    "uint64_bytes": 8,
+    "uint8_bytes": 1
+  },
+  "requested_parameters": {},
+  "sheet": {
+    "schema": "hmmer_fm_sheet_v1",
+    "operation": {
+      "engine_version": "3.4",
+      "mode": "count_only",
+      "program": "hmmerfm-exactmatch",
+      "settings": {
+        "--count_only": true,
+        "--fwd_only": false
+      }
+    },
+    "artifact_occurrences": [
+      {
+        "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0",
+        "direction": "input",
+        "role": "queries",
+        "ordinal": 0,
+        "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_all_selected_modes25/hmmer-preparation-attempt/inputs/queries/0",
+        "sha256": "a5bdfabf613fae8c4b1037e09b209a559312e6c5b00cc178bd0e361e1a6132f9",
+        "size_bytes": 35,
+        "completeness": "complete"
+      },
+      {
+        "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0",
+        "direction": "input",
+        "role": "fm_database",
+        "ordinal": 0,
+        "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_all_selected_modes25/hmmer-preparation-attempt/inputs/fm_database/0",
+        "sha256": "d413d3cb2f30d486c0a2a7214383614056d771bbfb89374fe0dd067cccd87354",
+        "size_bytes": 314,
+        "completeness": "complete"
+      },
+      {
+        "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0",
+        "direction": "input",
+        "role": "source_sequences",
+        "ordinal": 0,
+        "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_all_selected_modes25/hmmer-preparation-attempt/inputs/source_sequences/0",
+        "sha256": "79ac3da176b7a649fb3ca9d5cc6cb23cb06077e22872dbc2c671fdafce9db26b",
+        "size_bytes": 42,
+        "completeness": "complete"
+      },
+      {
+        "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0",
+        "direction": "output",
+        "role": "stdout",
+        "ordinal": 0,
+        "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_all_selected_modes25/hmmer-preparation-attempt/outputs/stdout",
+        "sha256": "758d8e7c39d192d2b0ffc1ce2544508c5235f14913ee223a8a20fd1b1a1c7b03",
+        "size_bytes": 1287,
+        "completeness": "complete"
+      },
+      {
+        "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stderr/0",
+        "direction": "output",
+        "role": "stderr",
+        "ordinal": 0,
+        "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_all_selected_modes25/hmmer-preparation-attempt/outputs/stderr",
+        "sha256": "226325204e4b698a623ed7fded72f457740ece490fbb6b474f0db464163d423e",
+        "size_bytes": 110,
+        "completeness": "complete"
+      },
+      {
+        "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/hits/0",
+        "direction": "output",
+        "role": "hits",
+        "ordinal": 0,
+        "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_all_selected_modes25/hmmer-preparation-attempt/outputs/hits",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0,
+        "completeness": "complete"
+      }
+    ],
+    "producer_contract": {
+      "byte_order": "little",
+      "engine_version": "3.4",
+      "format": "hmmer_fm_3_4",
+      "int32_bytes": 4,
+      "uint16_bytes": 2,
+      "uint32_bytes": 4,
+      "uint64_bytes": 8,
+      "uint8_bytes": 1
+    },
+    "source_binding": null,
+    "database": {
+      "schema": "hmmer_fm_extraction_v1",
+      "occurrence": {
+        "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0",
+        "direction": "input",
+        "role": "fm_database",
+        "ordinal": 0,
+        "artifact_ref": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_all_selected_modes25/hmmer-preparation-attempt/inputs/fm_database/0",
+        "sha256": "d413d3cb2f30d486c0a2a7214383614056d771bbfb89374fe0dd067cccd87354",
+        "size_bytes": 314,
+        "completeness": "complete"
+      },
+      "producer_contract": {
+        "byte_order": "little",
+        "engine_version": "3.4",
+        "format": "hmmer_fm_3_4",
+        "int32_bytes": 4,
+        "uint16_bytes": 2,
+        "uint32_bytes": 4,
+        "uint64_bytes": 8,
+        "uint8_bytes": 1
+      },
+      "metadata": {
+        "fwd_only": 0,
+        "alph_type": 0,
+        "alph_size": 4,
+        "charBits": 2,
+        "freq_SA": 8,
+        "freq_cnt_sb": 65536,
+        "freq_cnt_b": 256,
+        "block_count": 1,
+        "seq_count": 2,
+        "ambiguity_range_count": 0,
+        "total_char_count": 28,
+        "alphabet_symbols": "ACGT",
+        "storage_encoding": "dna_2bit",
+        "dna_reader_compatibility": "compatible",
+        "actual_bytes": 314,
+        "header_locator": {
+          "byte_start": 0,
+          "byte_end": 34,
+          "line_start": null,
+          "line_end": null,
+          "record_ordinal": null
+        }
+      },
+      "segments": [
+        {
+          "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/0",
+          "locator": {
+            "byte_start": 34,
+            "byte_end": 74,
+            "line_start": null,
+            "line_end": null,
+            "record_ordinal": 0
+          },
+          "target_id": 0,
+          "target_start": 1,
+          "fm_start": 0,
+          "length": 16,
+          "name_length": 4,
+          "acc_length": 0,
+          "source_length": 4,
+          "desc_length": 0,
+          "name": "seq0",
+          "acc": "",
+          "source": "seq0",
+          "desc": ""
+        },
+        {
+          "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/1",
+          "locator": {
+            "byte_start": 74,
+            "byte_end": 114,
+            "line_start": null,
+            "line_end": null,
+            "record_ordinal": 1
+          },
+          "target_id": 1,
+          "target_start": 1,
+          "fm_start": 16,
+          "length": 12,
+          "name_length": 4,
+          "acc_length": 0,
+          "source_length": 4,
+          "desc_length": 0,
+          "name": "seq1",
+          "acc": "",
+          "source": "seq1",
+          "desc": ""
+        }
+      ],
+      "ambiguity_ranges": [],
+      "blocks": [
+        {
+          "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward",
+          "locator": {
+            "byte_start": 114,
+            "byte_end": 226,
+            "line_start": null,
+            "line_end": null,
+            "record_ordinal": 0
+          },
+          "block_ordinal": 0,
+          "section": "forward",
+          "header": {
+            "N": 29,
+            "term_loc": 16,
+            "seq_offset": 0,
+            "ambig_offset": 0,
+            "overlap": 0,
+            "seq_cnt": 2,
+            "ambig_cnt": 0
+          },
+          "arrays": {
+            "T": {
+              "values": [
+                27,
+                27,
+                27,
+                27,
+                255,
+                27,
+                170,
+                0
+              ],
+              "expected_count": 8,
+              "element_bytes": 1,
+              "row_width": 1,
+              "complete": true,
+              "locator": {
+                "byte_start": 146,
+                "byte_end": 154,
+                "line_start": null,
+                "line_end": null,
+                "record_ordinal": null
+              }
+            },
+            "BWT": {
+              "values": [
+                21,
+                90,
+                171,
+                255,
+                42,
+                3,
+                191,
+                0
+              ],
+              "expected_count": 8,
+              "element_bytes": 1,
+              "row_width": 1,
+              "complete": true,
+              "locator": {
+                "byte_start": 154,
+                "byte_end": 162,
+                "line_start": null,
+                "line_end": null,
+                "record_ordinal": null
+              }
+            },
+            "SA": {
+              "values": [
+                0,
+                18,
+                0,
+                4
+              ],
+              "expected_count": 4,
+              "element_bytes": 4,
+              "row_width": 1,
+              "complete": true,
+              "locator": {
+                "byte_start": 162,
+                "byte_end": 178,
+                "line_start": null,
+                "line_end": null,
+                "record_ordinal": null
+              }
+            },
+            "counters_b": {
+              "values": [
+                [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  6,
+                  5,
+                  9,
+                  9
+                ]
+              ],
+              "expected_count": 2,
+              "element_bytes": 2,
+              "row_width": 4,
+              "complete": true,
+              "locator": {
+                "byte_start": 178,
+                "byte_end": 194,
+                "line_start": null,
+                "line_end": null,
+                "record_ordinal": null
+              }
+            },
+            "counters_sb": {
+              "values": [
+                [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  6,
+                  5,
+                  9,
+                  9
+                ]
+              ],
+              "expected_count": 2,
+              "element_bytes": 4,
+              "row_width": 4,
+              "complete": true,
+              "locator": {
+                "byte_start": 194,
+                "byte_end": 226,
+                "line_start": null,
+                "line_end": null,
+                "record_ordinal": null
+              }
+            }
+          },
+          "decoded": {
+            "text": "ACGTACGTACGTACGTTTTTACGTGGGGA",
+            "bwt": "ACCCCCGGGGGTTTTTAGGGAAATGTTTA",
+            "text_sentinel_index": 28,
+            "bwt_sentinel_index": 16,
+            "symbol_kind": "generated_index"
+          },
+          "complete": true
+        },
+        {
+          "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/reverse",
+          "locator": {
+            "byte_start": 226,
+            "byte_end": 314,
+            "line_start": null,
+            "line_end": null,
+            "record_ordinal": 1
+          },
+          "block_ordinal": 0,
+          "section": "reverse",
+          "header": {
+            "N": 29,
+            "term_loc": 1,
+            "seq_offset": 0,
+            "ambig_offset": 0,
+            "overlap": 0,
+            "seq_cnt": 2,
+            "ambig_cnt": 0
+          },
+          "arrays": {
+            "BWT": {
+              "values": [
+                143,
+                240,
+                2,
+                173,
+                85,
+                174,
+                191,
+                128
+              ],
+              "expected_count": 8,
+              "element_bytes": 1,
+              "row_width": 1,
+              "complete": true,
+              "locator": {
+                "byte_start": 258,
+                "byte_end": 266,
+                "line_start": null,
+                "line_end": null,
+                "record_ordinal": null
+              }
+            },
+            "counters_b": {
+              "values": [
+                [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  6,
+                  5,
+                  9,
+                  9
+                ]
+              ],
+              "expected_count": 2,
+              "element_bytes": 2,
+              "row_width": 4,
+              "complete": true,
+              "locator": {
+                "byte_start": 266,
+                "byte_end": 282,
+                "line_start": null,
+                "line_end": null,
+                "record_ordinal": null
+              }
+            },
+            "counters_sb": {
+              "values": [
+                [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  6,
+                  5,
+                  9,
+                  9
+                ]
+              ],
+              "expected_count": 2,
+              "element_bytes": 4,
+              "row_width": 4,
+              "complete": true,
+              "locator": {
+                "byte_start": 282,
+                "byte_end": 314,
+                "line_start": null,
+                "line_end": null,
+                "record_ordinal": null
+              }
+            }
+          },
+          "decoded": {
+            "text": null,
+            "bwt": "GATTTTAAAAAGGGTCCCCCGGTGGTTTG",
+            "text_sentinel_index": null,
+            "bwt_sentinel_index": 1,
+            "symbol_kind": "generated_index"
+          },
+          "complete": true
+        }
+      ],
+      "population": {
+        "state": "decoded",
+        "complete": true,
+        "decoded_segment_count": 2,
+        "decoded_ambiguity_range_count": 0,
+        "decoded_block_section_count": 2,
+        "body_complete": true
+      },
+      "issues": []
+    },
+    "input_records": [
+      {
+        "kind": "fasta",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/0",
+        "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0",
+        "locator": {
+          "byte_start": 0,
+          "byte_end": 23,
+          "line_start": 1,
+          "line_end": 2,
+          "record_ordinal": 0
+        },
+        "source_ordinal": 0,
+        "payload": {
+          "header": "seq0",
+          "raw_header": ">seq0\n",
+          "name": "seq0",
+          "description": "",
+          "sequence": "ACGTACGTACGTACGT",
+          "sequence_lines": [
+            "ACGTACGTACGTACGT\n"
+          ],
+          "complete": true,
+          "valid": true
+        }
+      },
+      {
+        "kind": "fasta",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/1",
+        "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0",
+        "locator": {
+          "byte_start": 23,
+          "byte_end": 42,
+          "line_start": 3,
+          "line_end": 4,
+          "record_ordinal": 1
+        },
+        "source_ordinal": 1,
+        "payload": {
+          "header": "seq1",
+          "raw_header": ">seq1\n",
+          "name": "seq1",
+          "description": "",
+          "sequence": "TTTTACGTGGGG",
+          "sequence_lines": [
+            "TTTTACGTGGGG\n"
+          ],
+          "complete": true,
+          "valid": true
+        }
+      },
+      {
+        "kind": "query",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/0",
+        "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0",
+        "locator": {
+          "byte_start": 0,
+          "byte_end": 5,
+          "line_start": 1,
+          "line_end": 1,
+          "record_ordinal": 0
+        },
+        "source_ordinal": null,
+        "payload": {
+          "text": "ACGT",
+          "raw_line": "ACGT\n",
+          "line_ending": "LF",
+          "valid": true,
+          "complete": true
+        }
+      },
+      {
+        "kind": "query",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/1",
+        "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0",
+        "locator": {
+          "byte_start": 5,
+          "byte_end": 10,
+          "line_start": 2,
+          "line_end": 2,
+          "record_ordinal": 1
+        },
+        "source_ordinal": null,
+        "payload": {
+          "text": "TTTT",
+          "raw_line": "TTTT\n",
+          "line_ending": "LF",
+          "valid": true,
+          "complete": true
+        }
+      },
+      {
+        "kind": "query",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/2",
+        "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0",
+        "locator": {
+          "byte_start": 10,
+          "byte_end": 15,
+          "line_start": 3,
+          "line_end": 3,
+          "record_ordinal": 2
+        },
+        "source_ordinal": null,
+        "payload": {
+          "text": "AAAA",
+          "raw_line": "AAAA\n",
+          "line_ending": "LF",
+          "valid": true,
+          "complete": true
+        }
+      },
+      {
+        "kind": "query",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/3",
+        "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0",
+        "locator": {
+          "byte_start": 15,
+          "byte_end": 20,
+          "line_start": 4,
+          "line_end": 4,
+          "record_ordinal": 3
+        },
+        "source_ordinal": null,
+        "payload": {
+          "text": "CCCC",
+          "raw_line": "CCCC\n",
+          "line_ending": "LF",
+          "valid": true,
+          "complete": true
+        }
+      },
+      {
+        "kind": "query",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/4",
+        "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0",
+        "locator": {
+          "byte_start": 20,
+          "byte_end": 25,
+          "line_start": 5,
+          "line_end": 5,
+          "record_ordinal": 4
+        },
+        "source_ordinal": null,
+        "payload": {
+          "text": "GGGG",
+          "raw_line": "GGGG\n",
+          "line_ending": "LF",
+          "valid": true,
+          "complete": true
+        }
+      },
+      {
+        "kind": "query",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/5",
+        "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0",
+        "locator": {
+          "byte_start": 25,
+          "byte_end": 30,
+          "line_start": 6,
+          "line_end": 6,
+          "record_ordinal": 5
+        },
+        "source_ordinal": null,
+        "payload": {
+          "text": "ACGT",
+          "raw_line": "ACGT\n",
+          "line_ending": "LF",
+          "valid": true,
+          "complete": true
+        }
+      },
+      {
+        "kind": "query",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/6",
+        "occurrence_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0",
+        "locator": {
+          "byte_start": 30,
+          "byte_end": 35,
+          "line_start": 7,
+          "line_end": 7,
+          "record_ordinal": 6
+        },
+        "source_ordinal": null,
+        "payload": {
+          "text": "CGTA",
+          "raw_line": "CGTA\n",
+          "line_ending": "LF",
+          "valid": true,
+          "complete": true
+        }
+      }
+    ],
+    "native_rows": [
+      {
+        "kind": "diagnostic",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0#diagnostic/0",
+        "locator": {
+          "byte_start": 0,
+          "byte_end": 108,
+          "line_start": 1,
+          "line_end": 1,
+          "record_ordinal": 0
+        },
+        "payload": {
+          "text": "# hmmerfm-exactmatch :: Find all instances of each <qfile> sequence in the database represented by <fmfile>",
+          "category": "native_text",
+          "numerical_state": "not_interpreted"
+        }
+      },
+      {
+        "kind": "diagnostic",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0#diagnostic/1",
+        "locator": {
+          "byte_start": 108,
+          "byte_end": 162,
+          "line_start": 2,
+          "line_end": 2,
+          "record_ordinal": 1
+        },
+        "payload": {
+          "text": "# Copyright (C) 2023 Howard Hughes Medical Institute.",
+          "category": "native_text",
+          "numerical_state": "not_interpreted"
+        }
+      },
+      {
+        "kind": "diagnostic",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0#diagnostic/2",
+        "locator": {
+          "byte_start": 162,
+          "byte_end": 218,
+          "line_start": 3,
+          "line_end": 3,
+          "record_ordinal": 2
+        },
+        "payload": {
+          "text": "# Freely distributed under the BSD open source license.",
+          "category": "native_text",
+          "numerical_state": "not_interpreted"
+        }
+      },
+      {
+        "kind": "diagnostic",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0#diagnostic/3",
+        "locator": {
+          "byte_start": 218,
+          "byte_end": 292,
+          "line_start": 4,
+          "line_end": 4,
+          "record_ordinal": 3
+        },
+        "payload": {
+          "text": "# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
+          "category": "native_text",
+          "numerical_state": "not_interpreted"
+        }
+      },
+      {
+        "kind": "diagnostic",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0#diagnostic/4",
+        "locator": {
+          "byte_start": 292,
+          "byte_end": 543,
+          "line_start": 5,
+          "line_end": 5,
+          "record_ordinal": 4
+        },
+        "payload": {
+          "text": "# input binary-formatted HMMER database:   /home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_all_selected_modes25/hmmer-preparation-attempt/inputs/fm_database/0",
+          "category": "native_text",
+          "numerical_state": "not_interpreted"
+        }
+      },
+      {
+        "kind": "diagnostic",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0#diagnostic/5",
+        "locator": {
+          "byte_start": 543,
+          "byte_end": 790,
+          "line_start": 6,
+          "line_end": 6,
+          "record_ordinal": 5
+        },
+        "payload": {
+          "text": "# input file of query sequences:           /home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_all_selected_modes25/hmmer-preparation-attempt/inputs/queries/0",
+          "category": "native_text",
+          "numerical_state": "not_interpreted"
+        }
+      },
+      {
+        "kind": "diagnostic",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0#diagnostic/6",
+        "locator": {
+          "byte_start": 790,
+          "byte_end": 1033,
+          "line_start": 7,
+          "line_end": 7,
+          "record_ordinal": 6
+        },
+        "payload": {
+          "text": "# output file containing list of hits:     /home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_all_selected_modes25/hmmer-preparation-attempt/outputs/hits",
+          "category": "native_text",
+          "numerical_state": "not_interpreted"
+        }
+      },
+      {
+        "kind": "diagnostic",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0#diagnostic/7",
+        "locator": {
+          "byte_start": 1033,
+          "byte_end": 1073,
+          "line_start": 8,
+          "line_end": 8,
+          "record_ordinal": 7
+        },
+        "payload": {
+          "text": "# output only counts, not hit locations",
+          "category": "native_text",
+          "numerical_state": "not_interpreted"
+        }
+      },
+      {
+        "kind": "index_parameters",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0#index_parameters/0",
+        "locator": {
+          "byte_start": 1073,
+          "byte_end": 1120,
+          "line_start": 9,
+          "line_end": 9,
+          "record_ordinal": 0
+        },
+        "payload": {
+          "parameter": "alphabet",
+          "token": "dna",
+          "value": "dna",
+          "state": "present"
+        }
+      },
+      {
+        "kind": "index_parameters",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0#index_parameters/1",
+        "locator": {
+          "byte_start": 1120,
+          "byte_end": 1167,
+          "line_start": 10,
+          "line_end": 10,
+          "record_ordinal": 1
+        },
+        "payload": {
+          "parameter": "bin_length",
+          "token": "256",
+          "value": 256,
+          "state": "present"
+        }
+      },
+      {
+        "kind": "index_parameters",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0#index_parameters/2",
+        "locator": {
+          "byte_start": 1167,
+          "byte_end": 1212,
+          "line_start": 11,
+          "line_end": 11,
+          "record_ordinal": 2
+        },
+        "payload": {
+          "parameter": "suffix array sample rate",
+          "token": "8",
+          "value": 8,
+          "state": "present"
+        }
+      },
+      {
+        "kind": "diagnostic",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0#diagnostic/8",
+        "locator": {
+          "byte_start": 1212,
+          "byte_end": 1286,
+          "line_start": 12,
+          "line_end": 12,
+          "record_ordinal": 8
+        },
+        "payload": {
+          "text": "# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
+          "category": "native_text",
+          "numerical_state": "not_interpreted"
+        }
+      },
+      {
+        "kind": "diagnostic",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stdout/0#diagnostic/9",
+        "locator": {
+          "byte_start": 1286,
+          "byte_end": 1287,
+          "line_start": 13,
+          "line_end": 13,
+          "record_ordinal": 9
+        },
+        "payload": {
+          "text": "",
+          "category": "native_text",
+          "numerical_state": "not_interpreted"
+        }
+      },
+      {
+        "kind": "exactmatch_counts",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stderr/0#exactmatch_counts/0",
+        "locator": {
+          "byte_start": 0,
+          "byte_end": 22,
+          "line_start": 1,
+          "line_end": 1,
+          "record_ordinal": 0
+        },
+        "payload": {
+          "Q": 5,
+          "H": 19,
+          "R": null,
+          "Q_token": "5",
+          "H_token": "19",
+          "R_token": null,
+          "population": "raw_fm_intervals"
+        }
+      },
+      {
+        "kind": "exactmatch_counts",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stderr/0#exactmatch_counts/1",
+        "locator": {
+          "byte_start": 22,
+          "byte_end": 38,
+          "line_start": 2,
+          "line_end": 2,
+          "record_ordinal": 1
+        },
+        "payload": {
+          "Q": null,
+          "H": null,
+          "R": 2,
+          "Q_token": null,
+          "H_token": null,
+          "R_token": "2",
+          "population": "raw_fm_intervals"
+        }
+      },
+      {
+        "kind": "diagnostic",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stderr/0#diagnostic/0",
+        "locator": {
+          "byte_start": 38,
+          "byte_end": 62,
+          "line_start": 3,
+          "line_end": 3,
+          "record_ordinal": 0
+        },
+        "payload": {
+          "text": "run time:  0.00 seconds",
+          "category": "runtime",
+          "numerical_state": "not_interpreted"
+        }
+      },
+      {
+        "kind": "diagnostic",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stderr/0#diagnostic/1",
+        "locator": {
+          "byte_start": 62,
+          "byte_end": 86,
+          "line_start": 4,
+          "line_end": 4,
+          "record_ordinal": 1
+        },
+        "payload": {
+          "text": "occ calls:           56",
+          "category": "unsafe_post_free_statistic",
+          "numerical_state": "incompatible"
+        }
+      },
+      {
+        "kind": "diagnostic",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stderr/0#diagnostic/2",
+        "locator": {
+          "byte_start": 86,
+          "byte_end": 110,
+          "line_start": 5,
+          "line_end": 5,
+          "record_ordinal": 2
+        },
+        "payload": {
+          "text": "occ/sec:              0",
+          "category": "unsafe_post_free_statistic",
+          "numerical_state": "incompatible"
+        }
+      }
+    ],
+    "associations": {
+      "source_binding_state": "unknown",
+      "segments": [
+        {
+          "segment_record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/0",
+          "target_id": 0,
+          "source_record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/0",
+          "basis": "supplied_source_order",
+          "custody_state": "unknown"
+        },
+        {
+          "segment_record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/1",
+          "target_id": 1,
+          "source_record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/1",
+          "basis": "supplied_source_order",
+          "custody_state": "unknown"
+        }
+      ],
+      "query_groups": [],
+      "hit_targets": []
+    },
+    "issues": [
+      {
+        "code": "unreliable_diagnostic",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stderr/0#diagnostic/1",
+        "field": null,
+        "stage": "extract",
+        "detail": null
+      },
+      {
+        "code": "unreliable_diagnostic",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stderr/0#diagnostic/2",
+        "field": null,
+        "stage": "extract",
+        "detail": null
+      }
+    ]
+  },
+  "calculations": {
+    "schema": "hmmer_fm_components_v1",
+    "operation": {
+      "engine_version": "3.4",
+      "mode": "count_only",
+      "program": "hmmerfm-exactmatch",
+      "settings": {
+        "--count_only": true,
+        "--fwd_only": false
+      }
+    },
+    "parameters": {
+      "alphabet_normalization": "none",
+      "coordinate_policy": "native_one_based",
+      "exhaustive_literal_check": false
+    },
+    "rows": [
+      {
+        "kind": "database_summary",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0",
+        "components": {
+          "source_occurrence_count": {
+            "value": 2,
+            "state": "present",
+            "unit": "sequence_occurrences",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/0",
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/1"
+            ]
+          },
+          "source_artifact_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "artifacts",
+            "inputs": [
+              "source_sequences"
+            ]
+          },
+          "source_symbol_total": {
+            "value": 28,
+            "state": "present",
+            "unit": "source_symbols",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/0",
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/1"
+            ]
+          },
+          "stored_segment_count": {
+            "value": 2,
+            "state": "present",
+            "unit": "segments",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0"
+            ]
+          },
+          "distinct_target_count": {
+            "value": 2,
+            "state": "present",
+            "unit": "source_target_ids",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/0",
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/1"
+            ]
+          },
+          "declared_total_char_count": {
+            "value": 28,
+            "state": "present",
+            "unit": "source_symbols_excluding_block_overlap",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0",
+              "total_char_count"
+            ]
+          },
+          "actual_database_bytes": {
+            "value": 314,
+            "state": "present",
+            "unit": "bytes",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0"
+            ]
+          },
+          "indexed_symbols": {
+            "value": 28,
+            "state": "present",
+            "unit": "index_symbols_including_block_overlap",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward"
+            ]
+          },
+          "indexed_unique_symbols": {
+            "value": 28,
+            "state": "present",
+            "unit": "index_symbols_excluding_block_overlap",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward"
+            ]
+          },
+          "sentinel_count": {
+            "value": 1,
+            "state": "present",
+            "unit": "logical_text_block_sentinels",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward"
+            ]
+          },
+          "stored_bwt_sentinel_count": {
+            "value": 2,
+            "state": "present",
+            "unit": "stored_section_sentinels",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward",
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/reverse"
+            ]
+          },
+          "ambiguity_range_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "stored_ranges",
+            "inputs": []
+          },
+          "covered_source_symbols": {
+            "value": 28,
+            "state": "present",
+            "unit": "source_symbols",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0",
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/0",
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/1"
+            ]
+          },
+          "ambiguity_union_symbols": {
+            "value": 0,
+            "state": "present",
+            "unit": "source_symbols",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0",
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/0",
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/1"
+            ]
+          },
+          "ambiguity_fraction": {
+            "value": 0.0,
+            "state": "present",
+            "unit": "fraction",
+            "inputs": {
+              "numerator": "ambiguity_union_symbols",
+              "denominator": "source_symbol_total",
+              "denominator_value": 28
+            }
+          }
+        },
+        "details": {
+          "source_coverage": [
+            {
+              "source_record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/0",
+              "covered_intervals": [
+                {
+                  "start": {
+                    "value": 1,
+                    "state": "present",
+                    "unit": "one_based_source_coordinate",
+                    "inputs": [
+                      "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/0"
+                    ]
+                  },
+                  "end": {
+                    "value": 16,
+                    "state": "present",
+                    "unit": "one_based_source_coordinate",
+                    "inputs": [
+                      "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/0"
+                    ]
+                  }
+                }
+              ],
+              "ambiguity_intervals": []
+            },
+            {
+              "source_record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/1",
+              "covered_intervals": [
+                {
+                  "start": {
+                    "value": 1,
+                    "state": "present",
+                    "unit": "one_based_source_coordinate",
+                    "inputs": [
+                      "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/1"
+                    ]
+                  },
+                  "end": {
+                    "value": 12,
+                    "state": "present",
+                    "unit": "one_based_source_coordinate",
+                    "inputs": [
+                      "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/1"
+                    ]
+                  }
+                }
+              ],
+              "ambiguity_intervals": []
+            }
+          ]
+        }
+      },
+      {
+        "kind": "block_validation",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward",
+        "components": {},
+        "details": {
+          "counter_mismatch_rows": [],
+          "suffix_sample_mismatch_indices": [],
+          "bwt_symbol_mismatch_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "symbols",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward",
+              "T",
+              "BWT"
+            ]
+          },
+          "lf_visited_rows": {
+            "value": 29,
+            "state": "present",
+            "unit": "rows",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward",
+              "BWT",
+              "term_loc"
+            ]
+          }
+        }
+      },
+      {
+        "kind": "segment_validation",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/0",
+        "components": {
+          "compared_symbols": {
+            "value": 16,
+            "state": "present",
+            "unit": "symbols",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/0"
+            ]
+          },
+          "mismatching_symbols": {
+            "value": 0,
+            "state": "present",
+            "unit": "symbols",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/0"
+            ]
+          }
+        },
+        "details": {
+          "source_record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/0",
+          "mismatch_source_positions": []
+        }
+      },
+      {
+        "kind": "segment_validation",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/1",
+        "components": {
+          "compared_symbols": {
+            "value": 12,
+            "state": "present",
+            "unit": "symbols",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/1"
+            ]
+          },
+          "mismatching_symbols": {
+            "value": 0,
+            "state": "present",
+            "unit": "symbols",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/1"
+            ]
+          }
+        },
+        "details": {
+          "source_record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/1",
+          "mismatch_source_positions": []
+        }
+      },
+      {
+        "kind": "block_validation",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/reverse",
+        "components": {},
+        "details": {
+          "counter_mismatch_rows": [],
+          "suffix_sample_mismatch_indices": [],
+          "bwt_symbol_mismatch_count": {
+            "value": 0,
+            "state": "present",
+            "unit": "symbols",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/reverse",
+              "T",
+              "BWT"
+            ]
+          },
+          "lf_visited_rows": {
+            "value": 29,
+            "state": "present",
+            "unit": "rows",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/reverse",
+              "BWT",
+              "term_loc"
+            ]
+          }
+        }
+      },
+      {
+        "kind": "query_validation",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/0",
+        "components": {
+          "valid_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "location_occurrences",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/0"
+            ]
+          },
+          "invalid_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "location_occurrences",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/0"
+            ]
+          },
+          "unresolved_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "location_occurrences",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/0"
+            ]
+          }
+        },
+        "details": {
+          "query_text": "ACGT"
+        }
+      },
+      {
+        "kind": "query_validation",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/1",
+        "components": {
+          "valid_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "location_occurrences",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/1"
+            ]
+          },
+          "invalid_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "location_occurrences",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/1"
+            ]
+          },
+          "unresolved_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "location_occurrences",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/1"
+            ]
+          }
+        },
+        "details": {
+          "query_text": "TTTT"
+        }
+      },
+      {
+        "kind": "query_validation",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/2",
+        "components": {
+          "valid_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "location_occurrences",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/2"
+            ]
+          },
+          "invalid_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "location_occurrences",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/2"
+            ]
+          },
+          "unresolved_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "location_occurrences",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/2"
+            ]
+          }
+        },
+        "details": {
+          "query_text": "AAAA"
+        }
+      },
+      {
+        "kind": "query_validation",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/3",
+        "components": {
+          "valid_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "location_occurrences",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/3"
+            ]
+          },
+          "invalid_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "location_occurrences",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/3"
+            ]
+          },
+          "unresolved_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "location_occurrences",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/3"
+            ]
+          }
+        },
+        "details": {
+          "query_text": "CCCC"
+        }
+      },
+      {
+        "kind": "query_validation",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/4",
+        "components": {
+          "valid_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "location_occurrences",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/4"
+            ]
+          },
+          "invalid_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "location_occurrences",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/4"
+            ]
+          },
+          "unresolved_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "location_occurrences",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/4"
+            ]
+          }
+        },
+        "details": {
+          "query_text": "GGGG"
+        }
+      },
+      {
+        "kind": "query_validation",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/5",
+        "components": {
+          "valid_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "location_occurrences",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/5"
+            ]
+          },
+          "invalid_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "location_occurrences",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/5"
+            ]
+          },
+          "unresolved_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "location_occurrences",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/5"
+            ]
+          }
+        },
+        "details": {
+          "query_text": "ACGT"
+        }
+      },
+      {
+        "kind": "query_validation",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/6",
+        "components": {
+          "valid_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "location_occurrences",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/6"
+            ]
+          },
+          "invalid_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "location_occurrences",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/6"
+            ]
+          },
+          "unresolved_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "location_occurrences",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/6"
+            ]
+          }
+        },
+        "details": {
+          "query_text": "CGTA"
+        }
+      },
+      {
+        "kind": "exactmatch_summary",
+        "record_key": null,
+        "components": {
+          "query_occurrence_count": {
+            "value": 7,
+            "state": "present",
+            "unit": "query_occurrences",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/0",
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/1",
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/2",
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/3",
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/4",
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/5",
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/queries/0#query/6"
+            ]
+          },
+          "native_Q": {
+            "value": 5,
+            "state": "present",
+            "unit": "query_occurrences_with_raw_interval",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stderr/0#exactmatch_counts/0"
+            ]
+          },
+          "native_H": {
+            "value": 19,
+            "state": "present",
+            "unit": "raw_fm_interval_occurrences",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stderr/0#exactmatch_counts/0"
+            ]
+          },
+          "native_R": {
+            "value": 2,
+            "state": "present",
+            "unit": "query_occurrences_with_no_raw_interval",
+            "inputs": [
+              "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stderr/0#exactmatch_counts/1"
+            ]
+          },
+          "native_unclassified_queries": {
+            "value": 0,
+            "state": "present",
+            "unit": "query_occurrences",
+            "inputs": {
+              "formula": "query_occurrence_count-native_Q-native_R",
+              "inputs": [
+                "query_occurrence_count",
+                "native_Q",
+                "native_R"
+              ]
+            }
+          },
+          "emitted_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "emitted_location_occurrences",
+            "inputs": []
+          },
+          "valid_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "emitted_location_occurrences",
+            "inputs": []
+          },
+          "invalid_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "emitted_location_occurrences",
+            "inputs": []
+          },
+          "unresolved_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "emitted_location_occurrences",
+            "inputs": []
+          },
+          "duplicate_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "repeated_resolved_tuple_occurrences",
+            "inputs": []
+          },
+          "valid_location_fraction": {
+            "value": null,
+            "state": "missing",
+            "unit": "fraction",
+            "inputs": {
+              "numerator": "valid_location_count",
+              "denominator": "emitted_location_count",
+              "denominator_value": null
+            }
+          },
+          "invalid_location_fraction": {
+            "value": null,
+            "state": "missing",
+            "unit": "fraction",
+            "inputs": {
+              "numerator": "invalid_location_count",
+              "denominator": "emitted_location_count",
+              "denominator_value": null
+            }
+          },
+          "unresolved_location_fraction": {
+            "value": null,
+            "state": "missing",
+            "unit": "fraction",
+            "inputs": {
+              "numerator": "unresolved_location_count",
+              "denominator": "emitted_location_count",
+              "denominator_value": null
+            }
+          },
+          "expected_literal_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "location_occurrences",
+            "inputs": [
+              "exhaustive_literal_check"
+            ]
+          },
+          "missing_literal_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "location_occurrences",
+            "inputs": [
+              "exhaustive_literal_check"
+            ]
+          },
+          "extra_literal_location_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "location_occurrences",
+            "inputs": [
+              "exhaustive_literal_check"
+            ]
+          }
+        },
+        "details": {
+          "exhaustive": {
+            "requested": false,
+            "state": "not_requested",
+            "expected_tuples": [],
+            "missing_tuples": [],
+            "extra_tuples": []
+          },
+          "enabled_directions": [
+            "f",
+            "r"
+          ]
+        }
+      }
+    ],
+    "checks": [
+      {
+        "name": "source_custody",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0",
+        "state": "unknown",
+        "scope": "supplied producer attempt and exact ordered source artifact identities/digests; independent symbol checks do not establish custody",
+        "inputs": [
+          "source_binding"
+        ]
+      },
+      {
+        "name": "decoded_layout",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0",
+        "state": "pass",
+        "scope": "declared ABI, all metadata/arrays, framing, occurrence digest and byte count",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0"
+        ]
+      },
+      {
+        "name": "dna_reader_compatibility",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0",
+        "state": "pass",
+        "scope": "HMMER 3.4 fm_readFMmeta accepts DNA only; amino writer decoding is separate",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0",
+          "alph_type"
+        ]
+      },
+      {
+        "name": "metadata_partition",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0",
+        "state": "pass",
+        "scope": "forward block sections refer once to every ordered segment/range row; paired sections share those rows",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0"
+        ]
+      },
+      {
+        "name": "block_offsets",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward",
+        "state": "pass",
+        "scope": "segment and ambiguity spans refer to retained metadata rows",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward"
+        ]
+      },
+      {
+        "name": "decoded_array_symbols",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward",
+        "state": "pass",
+        "scope": "saved decoded strings agree with full packed arrays; calculations use the arrays",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward",
+          "arrays",
+          "decoded"
+        ]
+      },
+      {
+        "name": "counter_rows",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward",
+        "state": "pass",
+        "scope": "every b/sb row; encoded BWT includes sentinel as alphabet[0]; native uint16 wrap retained",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward",
+          "BWT",
+          "counters_b",
+          "counters_sb"
+        ]
+      },
+      {
+        "name": "sentinel_encoding",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward",
+        "state": "pass",
+        "scope": "BWT term_loc and stored original T final symbol use alphabet[0] as sentinel placeholder",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward"
+        ]
+      },
+      {
+        "name": "bwt_text_consistency",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward",
+        "state": "pass",
+        "scope": "full LF cycle and each preceding symbol against reversed T (forward section) or T (reverse section)",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward",
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward"
+        ]
+      },
+      {
+        "name": "suffix_samples",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward",
+        "state": "pass",
+        "scope": "all sampled LF suffix positions; sample zero and unused trailing slot are writer zeros",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward",
+          "SA"
+        ]
+      },
+      {
+        "name": "ambiguity_bounds",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward",
+        "state": "pass",
+        "scope": "ordered disjoint zero-based inclusive ranges within this block's nonsentinel text",
+        "inputs": []
+      },
+      {
+        "name": "block_segment_coverage",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward",
+        "state": "pass",
+        "scope": "segments partition nonsentinel T without internal gaps or overlaps",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/0",
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/1"
+        ]
+      },
+      {
+        "name": "segment_coordinates",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/0",
+        "state": "pass",
+        "scope": "target_id indexes supplied original source order; one-based source interval and zero-based block interval",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/0",
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/0"
+        ]
+      },
+      {
+        "name": "segment_name",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/0",
+        "state": "pass",
+        "scope": "label agreement only, not historical custody or unique identity",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/0",
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/0"
+        ]
+      },
+      {
+        "name": "source_symbols_outside_ambiguities",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/0",
+        "state": "pass",
+        "scope": "case-folded source; only caller-selected U-to-T normalization; recorded ambiguous positions excluded",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/0",
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/0",
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward",
+          "alphabet_normalization"
+        ]
+      },
+      {
+        "name": "source_ambiguity_membership",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/0",
+        "state": "pass",
+        "scope": "each original non-ACGTU DNA symbol equals recorded ambiguity membership",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/0",
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/0",
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward"
+        ]
+      },
+      {
+        "name": "segment_coordinates",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/1",
+        "state": "pass",
+        "scope": "target_id indexes supplied original source order; one-based source interval and zero-based block interval",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/1",
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/1"
+        ]
+      },
+      {
+        "name": "segment_name",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/1",
+        "state": "pass",
+        "scope": "label agreement only, not historical custody or unique identity",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/1",
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/1"
+        ]
+      },
+      {
+        "name": "source_symbols_outside_ambiguities",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/1",
+        "state": "pass",
+        "scope": "case-folded source; only caller-selected U-to-T normalization; recorded ambiguous positions excluded",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/1",
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/1",
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward",
+          "alphabet_normalization"
+        ]
+      },
+      {
+        "name": "source_ambiguity_membership",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/1",
+        "state": "pass",
+        "scope": "each original non-ACGTU DNA symbol equals recorded ambiguity membership",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#segment/1",
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/1",
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward"
+        ]
+      },
+      {
+        "name": "block_overlap",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward",
+        "state": "pass",
+        "scope": "declared block overlap equals source-coordinate overlap with earlier blocks",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward"
+        ]
+      },
+      {
+        "name": "block_offsets",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/reverse",
+        "state": "pass",
+        "scope": "segment and ambiguity spans refer to retained metadata rows",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/reverse"
+        ]
+      },
+      {
+        "name": "paired_block_metadata",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/reverse",
+        "state": "pass",
+        "scope": "paired sections share populations; reverse writer overlap is zero",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/reverse",
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward"
+        ]
+      },
+      {
+        "name": "decoded_array_symbols",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/reverse",
+        "state": "pass",
+        "scope": "saved decoded strings agree with full packed arrays; calculations use the arrays",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/reverse",
+          "arrays",
+          "decoded"
+        ]
+      },
+      {
+        "name": "counter_rows",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/reverse",
+        "state": "pass",
+        "scope": "every b/sb row; encoded BWT includes sentinel as alphabet[0]; native uint16 wrap retained",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/reverse",
+          "BWT",
+          "counters_b",
+          "counters_sb"
+        ]
+      },
+      {
+        "name": "sentinel_encoding",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/reverse",
+        "state": "pass",
+        "scope": "BWT term_loc and stored original T final symbol use alphabet[0] as sentinel placeholder",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/reverse"
+        ]
+      },
+      {
+        "name": "bwt_text_consistency",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/reverse",
+        "state": "pass",
+        "scope": "full LF cycle and each preceding symbol against reversed T (forward section) or T (reverse section)",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/reverse",
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/forward"
+        ]
+      },
+      {
+        "name": "suffix_samples",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/reverse",
+        "state": "not_applicable",
+        "scope": "reverse section stores no SA",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0#block/0/reverse"
+        ]
+      },
+      {
+        "name": "source_coverage",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/0",
+        "state": "pass",
+        "scope": "union of source-coordinate segment intervals covers this complete supplied sequence",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/0",
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0"
+        ]
+      },
+      {
+        "name": "source_coverage",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/1",
+        "state": "pass",
+        "scope": "union of source-coordinate segment intervals covers this complete supplied sequence",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/source_sequences/0#fasta/1",
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0"
+        ]
+      },
+      {
+        "name": "total_char_count",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0",
+        "state": "pass",
+        "scope": "declared total, supplied source symbols, and sum(N-1-overlap) agree; no completeness inference for matches",
+        "inputs": [
+          "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/input/fm_database/0",
+          "source_symbol_total",
+          "indexed_unique_symbols"
+        ]
+      },
+      {
+        "name": "native_query_population",
+        "record_key": null,
+        "state": "pass",
+        "scope": "count-only Q+R=N; locations Q+R<=N because native filters can discard every raw match; H>=Q",
+        "inputs": [
+          "native_Q",
+          "native_H",
+          "native_R",
+          "query_occurrence_count"
+        ]
+      },
+      {
+        "name": "native_location_count",
+        "record_key": null,
+        "state": "not_applicable",
+        "scope": "native location H versus parsed emitted rows; does not assert literal validity",
+        "inputs": [
+          "native_H",
+          "emitted_location_count"
+        ]
+      },
+      {
+        "name": "native_location_query_count",
+        "record_key": null,
+        "state": "not_applicable",
+        "scope": "native location Q versus emitted query groups; duplicate query occurrences stay separate",
+        "inputs": [
+          "native_Q",
+          "query_groups"
+        ]
+      },
+      {
+        "name": "count_only_has_no_locations",
+        "record_key": null,
+        "state": "pass",
+        "scope": "count-only output must contain no locations; missing file remains missing",
+        "inputs": [
+          "hits"
+        ]
+      }
+    ],
+    "issues": [
+      {
+        "code": "unreliable_diagnostic",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stderr/0#diagnostic/1",
+        "field": null,
+        "stage": "extract",
+        "detail": null
+      },
+      {
+        "code": "unreliable_diagnostic",
+        "record_key": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e/output/stderr/0#diagnostic/2",
+        "field": null,
+        "stage": "extract",
+        "detail": null
+      }
+    ]
+  }
+}

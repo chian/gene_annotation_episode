@@ -1,0 +1,173 @@
+--- baseline/gene_annotation_episode/literature_compiled_assay_inputs.py
++++ gene_annotation_episode/literature_compiled_assay_inputs.py
+@@ -18,6 +18,8 @@
+ from .literature_experimental_contracts import ExperimentalContractError
+ 
+ VERSION = 'a105_compiled_assay_inputs_v1'
++VERSION_V2 = 'a105_compiled_assay_inputs_v2'
++POPULATION_V2 = 'a105_compiled_assay_population_v2'
+ ROLES = PRIMITIVE_ORDER
+ UNITS = dict(q='uM/min', g='uM/min', k='dimensionless', E='uM', u='uM/min', v='uM/min')
+ NS_ASSAY = 'literature_assay_cells'
+@@ -68,9 +70,9 @@
+         'component': {'enum': list(names)}}) for ns, names in allowed.items()]}
+ 
+ 
+-def compiled_assay_population_schema():
++def compiled_assay_population_schema(version=1):
+     props = assay_arguments_schema()['properties']
+-    return obj({'source_ref': deepcopy(REF), 'source_kind': {'enum': list(SOURCE_KINDS)},
++    schema = obj({'source_ref': deepcopy(REF), 'source_kind': {'enum': list(SOURCE_KINDS)},
+         'assay': deepcopy(props['assay']),
+         'operands': obj({role: _nullable(selector_schema(role)) for role in ROLES}),
+         'relationships': obj({role: interpretation_schema((*LINKS[role], *LINK_LIMITS)) for role in ROLES}),
+@@ -81,6 +83,18 @@
+         'variance_status': {'enum': ['known', 'estimated', 'unknown']},
+         'observation_model': {'enum': ['none', 'known_normal_nonnegative_presence']},
+         'model_witnesses': {'type': 'array', 'items': _witness_schema()}})
++    if version == 2:
++        del schema['properties']['covariance_source_ref']
++        schema['properties'].update(population_version={'const': POPULATION_V2},
++            covariance_source_refs={'type': 'array', 'items': deepcopy(REF), 'uniqueItems': True})
++        schema['required'] = list(schema['properties'])
++    elif version != 1:
++        raise ValueError('unsupported_compiled_assay_population_version')
++    return schema
++
++
++def compiled_assay_operation_schema():
++    return {'anyOf': [compiled_assay_population_schema(), compiled_assay_population_schema(2)]}
+ 
+ 
+ def source_schema(namespace):
+@@ -276,9 +290,105 @@
+     return {'source_ref': reference, 'artifact_ref': raw['artifact_ref'], 'data': data}
+ 
+ 
++def _covariance_v2(references, operands, relationships, sources):
++    """Read actual joint blocks; marginal blocks never imply missing cross terms."""
++    import numpy as np
++    from .literature_compiled_assay_calculations import _role_reason
++    blocks, owner_facts, pair_facts, owner_statuses = [], {}, {}, {}
++    eligibility = {'operands': operands, 'relationships': relationships}
++    for reference in references:
++        raw = sources.source(reference, 'original')
++        def pairs(items):
++            result = {}
++            for key, value in items:
++                if key in result:
++                    _fail('duplicate_json_key', 'covariance_source_refs')
++                result[key] = value
++            return result
++        try:
++            data = json.loads(raw['content'].decode('utf8'), object_pairs_hook=pairs,
++                parse_float=lambda token: _numeric(token, 'covariance'),
++                parse_constant=lambda token: _fail('finite_number_required', 'covariance'))
++        except (UnicodeDecodeError, json.JSONDecodeError) as error:
++            raise ExperimentalContractError('covariance_json_required', 'covariance_source_refs') from error
++        _keys(data, ('version', 'primitive_order', 'operand_keys', 'primitive_units', 'dependency_keys',
++                     'covariance', 'origin', 'basis', 'variance_status'), 'covariance')
++        order = data['primitive_order']
++        if (data['version'] != 'a105_compiled_assay_covariance_v2' or not isinstance(order, list)
++                or not order or any(type(role) is not str or role not in ROLES for role in order)
++                or len(set(order)) != len(order)):
++            _fail('compiled_covariance_order_or_version_mismatch', 'covariance')
++        if any(operands[role] is None or _role_reason(eligibility, role) is not None for role in order):
++            _fail('eligible_covariance_owners_required', 'covariance')
++        owners = [operands[role]['quantity_key'] for role in order]
++        if data['operand_keys'] != owners:
++            _fail('compiled_covariance_owner_mismatch', 'covariance.operand_keys')
++        if (data['primitive_units'] != [operands[role]['unit'] for role in order]
++                or any(operands[role]['unit'] != UNITS[role] for role in order)):
++            _fail('compiled_covariance_unit_mismatch', 'covariance.primitive_units')
++        deps = [list(dict.fromkeys((*operands[role]['canonical_physical_keys'],
++                                   *operands[role]['recorded_dependency_keys']))) for role in order]
++        if data['dependency_keys'] != deps:
++            _fail('compiled_covariance_dependency_mismatch', 'covariance.dependency_keys')
++        if (data['basis'] != 'joint_covariance_of_canonical_compilation_operands'
++                or data['origin'] not in ('reported', 'derived', 'synthetic')):
++            _fail('compiled_covariance_basis_mismatch', 'covariance')
++        status = data['variance_status']
++        if status not in ('known', 'estimated', 'unknown'):
++            _fail('unsupported_variance_status', 'covariance.variance_status')
++        matrix = data['covariance']; n = len(order)
++        if matrix is None and status != 'unknown':
++            _fail('component_joint_covariance_required', 'covariance')
++        if matrix is not None:
++            if not isinstance(matrix, list) or len(matrix) != n or any(not isinstance(row, list) or len(row) != n for row in matrix):
++                _fail('named_subset_covariance_shape_mismatch', 'covariance')
++            for row in matrix:
++                for value in row:
++                    try:
++                        finite = type(value) in (int, float) and math.isfinite(value)
++                    except OverflowError:
++                        finite = False
++                    if not finite:
++                        _fail('finite_number_required', 'covariance')
++            array = np.asarray(matrix, dtype=float)
++            if not np.array_equal(array, array.T):
++                _fail('symmetric_covariance_required', 'covariance')
++            scale = float(np.max(np.abs(array)))
++            try:
++                eig = np.linalg.eigvalsh(array / scale) if scale else np.zeros(n)
++            except np.linalg.LinAlgError:
++                _fail('covariance_eigendecomposition_failed', 'covariance')
++            if (np.any(np.diag(array) < 0) or not np.all(np.isfinite(eig))
++                    or float(np.min(eig)) < -64 * np.finfo(float).eps * n):
++                _fail('positive_semidefinite_covariance_required', 'covariance')
++            for i in range(n):
++                for j in range(i):
++                    if owners[i] == owners[j] and (matrix[i] != matrix[j]
++                            or any(row[i] != row[j] for row in matrix)):
++                        _fail('shared_measurement_covariance_mismatch', 'covariance')
++        for i, role in enumerate(order):
++            owner = owners[i]
++            fact = (operands[role]['value'], operands[role]['unit'], deps[i])
++            if owner in owner_facts and owner_facts[owner] != fact:
++                _fail('shared_compilation_quantity_mismatch', 'covariance')
++            if owner in owner_statuses and owner_statuses[owner] != status:
++                _fail('overlapping_covariance_status_ambiguity', 'covariance')
++            owner_facts[owner], owner_statuses[owner] = fact, status
++            if matrix is not None:
++                for j, other in enumerate(owners):
++                    key = (owner, other)
++                    if key in pair_facts and pair_facts[key] != matrix[i][j]:
++                        _fail('overlapping_covariance_entry_mismatch', 'covariance')
++                    pair_facts[key] = matrix[i][j]
++        blocks.append({'source_ref': reference, 'artifact_ref': raw['artifact_ref'], 'data': data})
++    return blocks
++
++
+ def read_compiled_assay_inputs(arguments, *, read_source, read_component, read_record):
+     """Read scientific context and exact authorized numerical component rows."""
+-    args = deepcopy(arguments); validate_schema(args, compiled_assay_population_schema())
++    args = deepcopy(arguments)
++    v2 = args.get('population_version') == POPULATION_V2
++    validate_schema(args, compiled_assay_population_schema(2 if v2 else 1))
+     sources = _Sources(read_source); original = sources.source(args['source_ref'], 'original')
+     assay = {}
+     for name in ASSAY_LITERAL_FIELDS:
+@@ -314,14 +424,16 @@
+     witnesses = [sources.witness(w, 'model_witnesses') for w in args['model_witnesses']]
+     if (args['variance_status'] != 'unknown' or args['observation_model'] != 'none') and not witnesses:
+         _fail('model_witness_required', 'model_witnesses')
+-    covariance = _covariance(args['covariance_source_ref'], operands, sources)
+-    return {'version': VERSION, 'source_ref': args['source_ref'], 'artifact_ref': original['artifact_ref'],
++    covariance = None if v2 else _covariance(args['covariance_source_ref'], operands, sources)
++    blocks = _covariance_v2(args['covariance_source_refs'], operands, relationships, sources) if v2 else None
++    return {'version': VERSION_V2 if v2 else VERSION, 'source_ref': args['source_ref'], 'artifact_ref': original['artifact_ref'],
+         'source_kind': args['source_kind'], 'assay': assay, 'operands': operands,
+         'relationships': relationships, 'correction_stages': stages, 'covariance_source': covariance,
+         'distinct_residual_observation': residual, 'residual_relationship': residual_link,
+         'variance_status': args['variance_status'], 'observation_model': args['observation_model'],
+-        'model_witnesses': witnesses, 'source_refs': list(sources.references)}
+-
+-
+-__all__ = ['VERSION', 'ROLES', 'UNITS', 'ALLOWLIST', 'LINKS', 'LINK_LIMITS', 'STAGES', 'STAGE_VALUES',
+-    'compiled_assay_population_schema', 'selector_schema', 'source_schema', 'read_compiled_assay_inputs']
++        'model_witnesses': witnesses, 'source_refs': list(sources.references),
++        **({'covariance_sources': blocks} if v2 else {})}
++
++
++__all__ = ['VERSION', 'VERSION_V2', 'POPULATION_V2', 'ROLES', 'UNITS', 'ALLOWLIST', 'LINKS', 'LINK_LIMITS', 'STAGES', 'STAGE_VALUES',
++    'compiled_assay_population_schema', 'compiled_assay_operation_schema', 'selector_schema', 'source_schema', 'read_compiled_assay_inputs']

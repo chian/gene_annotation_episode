@@ -1,0 +1,1718 @@
+--- a/gene_annotation_episode/literature_perturbation_inputs.py
++++ b/gene_annotation_episode/literature_perturbation_inputs.py
+@@ -92,9 +92,15 @@
+     observations = dict.fromkeys(PRIMITIVE_ORDER)
+     if reference is None:
+         # These are absent dimensional declarations, not assumed measured units.
+-        return observations, "unreported", "unreported", None, "unreported"
++        return observations, "unreported", "unreported", None, "unreported", None
+     source = sources.source(reference, "original")
+     data = _json_measurements(source["content"])
++    if isinstance(data, dict) and data.get("version") == "a106_source_measurements_v2":
++        from .literature_perturbation_summary import read_summary_measurements
++        observations, summary = read_summary_measurements(data, sources=sources,
++            reference=reference, artifact_ref=source["artifact_ref"], status=status,
++            key_function=_measurement_key)
++        return observations, data["endpoint_unit"], data["exposure_unit"], data["origin"], "per_measurement", summary
+     _keys(data, _DATA_FIELDS, "data_source")
+     if data["version"] != DATA_VERSION:
+         _fail("unsupported_perturbation_measurements_version", "data_source.version")
+@@ -134,7 +140,7 @@
+             "raw_entry": deepcopy(entry), "source_ref": reference,
+             "artifact_ref": source["artifact_ref"], "measurement_key": key,
+         }
+-    return observations, data["endpoint_unit"], data["exposure_unit"], data["origin"], data["uncertainty_basis"]
++    return observations, data["endpoint_unit"], data["exposure_unit"], data["origin"], data["uncertainty_basis"], None
+ 
+ 
+ def read_perturbation_inputs(arguments, *, read_source):
+@@ -167,9 +173,9 @@
+                  for i, item in enumerate(arguments["interpretation_witnesses"])]
+     if (orientation is not None or any(arguments[field] != "unknown" for field in _INTERPRETATIONS)) and not witnesses:
+         _fail("interpretation_witness_required", "interpretation_witnesses")
+-    observations, endpoint_unit, exposure_unit, origin, uncertainty = _measurements(
++    observations, endpoint_unit, exposure_unit, origin, uncertainty, summary = _measurements(
+         arguments["data_source_ref"], sources, arguments["measurement_status"])
+-    return {
++    result = {
+         "version": VERSION, "source_ref": arguments["source_ref"],
+         "source_kind": arguments["source_kind"], "data_source_ref": arguments["data_source_ref"],
+         "literals": literals, **{field: arguments[field] for field in _INTERPRETATIONS},
+@@ -182,6 +188,9 @@
+         "exposure_unit": exposure_unit, "data_origin": origin,
+         "uncertainty_basis": uncertainty, "source_refs": list(sources.references),
+     }
++    if summary is not None:
++        result.update(version="a106_perturbation_inputs_v2", summary_data=summary)
++    return result
+ 
+ 
+ __all__ = ["VERSION", "DATA_VERSION", "PRIMITIVE_ORDER", "LITERAL_FIELDS", "SOURCE_KINDS", "DESIGNS",
+--- a/gene_annotation_episode/literature_perturbation_calculations.py
++++ b/gene_annotation_episode/literature_perturbation_calculations.py
+@@ -255,5 +255,11 @@
+             "primitive_order": list(PRIMITIVE_ORDER), "cells": cells}
+ 
+ 
++def populate_source_summary_restoration(extraction, *, origin):
++    """Versioned summary extension; the original point calculator stays exact."""
++    from .literature_perturbation_summary import populate_summary_restoration
++    return populate_summary_restoration(extraction, origin=origin)
++
++
+ __all__ = ["VERSION", "PRIMITIVE_ORDER", "COMPONENTS", "REASONS",
+-           "CONDITIONAL_CODES", "populate_source_restoration"]
++           "CONDITIONAL_CODES", "populate_source_restoration", "populate_source_summary_restoration"]
+--- a/gene_annotation_episode/literature_perturbation_storage.py
++++ b/gene_annotation_episode/literature_perturbation_storage.py
+@@ -9,7 +9,7 @@
+ from .literature_rate_storage import LiteratureRateRepository
+ from .literature_perturbation_inputs import perturbation_population_schema, read_perturbation_inputs
+ from .literature_perturbation_calculations import (
+-    COMPONENTS, CONDITIONAL_CODES, REASONS, populate_source_restoration,
++    COMPONENTS, CONDITIONAL_CODES, REASONS, populate_source_restoration, populate_source_summary_restoration,
+ )
+ 
+ PROVIDER = 'literature.experimental.perturbation'
+@@ -100,9 +100,13 @@
+         origin = extraction['data_origin'] or {'primary_source': 'reported',
+             'retained_extraction': 'derived', 'graph_extraction': 'graph_derived',
+             'synthetic_fixture': 'synthetic'}[args['source_kind']]
+-        sheet = populate_source_restoration({**{name: extraction[name] for name in (
+-            'values', 'measurement_keys', 'endpoint_unit', 'exposure_unit', 'design',
+-            'measurement_status', 'same_endpoint_scope', 'amount_role', 'orientation')}, 'origin': origin})
++        summary = extraction['version'] == 'a106_perturbation_inputs_v2'
++        if summary:
++            sheet = populate_source_summary_restoration(extraction, origin=origin)
++        else:
++            sheet = populate_source_restoration({**{name: extraction[name] for name in (
++                'values', 'measurement_keys', 'endpoint_unit', 'exposure_unit', 'design',
++                'measurement_status', 'same_endpoint_scope', 'amount_role', 'orientation')}, 'origin': origin})
+         direct = extraction['source_refs']
+         parents = list(direct)
+         for ref in direct:
+@@ -110,7 +114,8 @@
+                 self._provenance(context, parent)
+                 parents.append(parent)
+         parents = list(dict.fromkeys(parents))
+-        payload = {'version': self.record_version, 'input_source_ref': source['id'],
++        record_version = 'literature_perturbation_record_v2' if summary else self.record_version
++        payload = {'version': record_version, 'input_source_ref': source['id'],
+             'input_artifact_ref': source['artifact_ref'], 'input_source_refs': parents,
+             'direct_input_source_refs': direct, 'extraction': extraction, 'sheet': sheet,
+             'data_source_ref': args['data_source_ref']}
+@@ -151,7 +156,7 @@
+                 'operation_key': operation_key, 'arguments': args}), 'application/json')
+             sheet_ref = publish('source', {'provider': PROVIDER, 'accession': None, 'uri': None,
+                 'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': request,
+-                'version': self.record_version, 'retrieved_at': None, 'parent_source_refs': parents})
++                'version': record_version, 'retrieved_at': None, 'parent_source_refs': parents})
+             outcome = {'status': 'completed', 'operation_ref': identity('operation', {
+                 'run_id': self.run_id, 'episode_id': context.episode_id, 'key': operation_key}),
+                 'record_refs': list(dict.fromkeys([sheet_ref, *parents, *(ref for ref in bindings.values() if ref)])),
+@@ -163,6 +168,8 @@
+         return outcome
+ 
+     def read(self, sheet_ref):
++        if self.store.get(sheet_ref).get('version') == 'literature_perturbation_record_v2':
++            return self.summary_projection().read(sheet_ref)
+         saved = super().read(sheet_ref)
+         source = self.store.get(sheet_ref)
+         request = json.loads(self.store.get_artifact(source['request_ref']))
+@@ -171,6 +178,26 @@
+                 or self.store.get(saved['input_source_ref'])['artifact_ref'] != saved['input_artifact_ref']):
+             raise ContractError('literature_perturbation_sheet_source_mismatch')
+         return saved
++
++    def summary_projection(self):
++        if not hasattr(self, '_summary_projection'):
++            from .literature_perturbation_summary_storage import LiteraturePerturbationSummaryProjection
++            self._summary_projection = LiteraturePerturbationSummaryProjection(self.store, self.run_id)
++        return self._summary_projection
++
++    def validate_empty_return_family(self, context):
++        if context.run_id != self.run_id:
++            raise ContractError('literature_run_mismatch')
++        versions = set()
++        for row in self.store.db.execute(f'SELECT outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=?',
++                (self.run_id, context.episode_id)):
++            outcome = json.loads(row['outcome'])
++            if outcome.get('status') == 'completed':
++                source = self.store.get(outcome['result']['sheet_ref'])
++                if source.get('provider') == PROVIDER:
++                    versions.add(source.get('version'))
++        if self.record_version not in versions and versions & {'literature_perturbation_record_v1', 'literature_perturbation_record_v2'}:
++            raise ContractError('literature_perturbation_projection_version_mismatch')
+ 
+     def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
+         components = self.components if components is None else components
+@@ -183,6 +210,8 @@
+             if ref not in permitted_record_refs:
+                 raise ContractError('literature_sheet_not_received')
+             saved = self.read(ref)
++            if saved['version'] != self.record_version:
++                raise ContractError('literature_perturbation_projection_version_mismatch')
+             for name in components:
+                 cell = {key: deepcopy(value) for key, value in saved['sheet']['cells'][name].items() if key != 'formula'}
+                 rows.append({'sheet_ref': ref, 'evidence_source_ref': saved['input_source_ref'],
+--- a/gene_annotation_episode/literature_perturbation_prompt.py
++++ b/gene_annotation_episode/literature_perturbation_prompt.py
+@@ -6,6 +6,8 @@
+ 
+ Find source-supported numerical reference, perturbed and restored outcomes when they exist. Do not invent a restoration arm or borrow another endpoint to complete a triple. Nominate a measured nuisance amount comparison outside the intended change separately from actual endpoint-scale bounds on alternative explanations for perturbation and restoration. Intended depletion is not a second nuisance penalty; matching conditions do not prove effect isolation. Preserve shared controls, lysates, calibration and physical measurement identities without assuming independence. Complementary assembly or binding experiments address named limitations and are not automatically independent phenotype replications.
+ 
++For every measured arm, retain the reported statistic, the scale on which it was summarized, its spread type and scale, the repetition count and what was repeated. A logarithmic display does not establish that the mean or SD was calculated on a logarithmic scale. Keep SD, SEM, confidence intervals, detection limits and untyped plus-minus values distinct. Group technical readings within their actual biological or preparation unit; descriptive means and variability can be useful even when sampling independence is unknown. A standard error calculated from SD needs a supported independent-unit basis. Reported SEM retains its source interpretation. Preserve pairing, shared controls and covariance between mean estimates; unknown covariance is not zero. Pixel-reading constraints remain separate from sampling uncertainty. Do not discard a useful displayed estimate merely because some statistical metadata is unresolved.
++
+ Interpret the source design and nominate supported operands; deterministic readers and calculators perform arithmetic. Preserve usable native data and explicit scientific unknowns when a source cannot populate a numerical component. The source restoration index is a proposed conditional combination, not a probability, target correspondence, annotation credit or investigation-progress reward. Do not convert paper labels, repetition counts or descriptive selected-event fractions into an overall reliability grade. Return only the parent's requested typed components and necessary experimental qualifications."""
+ 
+ __all__ = ['PERTURBATION_TASK']
+--- a/gene_annotation_episode/literature_episodes.py
++++ b/gene_annotation_episode/literature_episodes.py
+@@ -267,6 +267,8 @@
+                          "literature_transport_inputs.py", "literature_transport_storage.py",
+                          "literature_transport_prompt.py", "literature_perturbation_calculations.py",
+                          "literature_perturbation_inputs.py", "literature_perturbation_storage.py",
++                         "literature_perturbation_summary.py", "literature_perturbation_summary_storage.py",
++                         "literature_summary_figure_reader.py",
+                          "literature_perturbation_prompt.py", "literature_structure_inputs.py",
+                          "literature_structure_calculations.py", "literature_structure_storage.py",
+                          "literature_structure_prompt.py", "communication.py",
+@@ -386,6 +388,9 @@
+             from .literature_perturbation_calculations import COMPONENTS as PERTURBATION_COMPONENTS
+             schema["properties"]["requested_perturbation_components"] = {
+                 "type": "array", "uniqueItems": True, "items": {"enum": list(PERTURBATION_COMPONENTS)}}
++            from .literature_perturbation_summary import COMPONENTS as PERTURBATION_SUMMARY_COMPONENTS
++            schema["properties"]["requested_perturbation_summary_components"] = {
++                "type": "array", "uniqueItems": True, "items": {"enum": list(PERTURBATION_SUMMARY_COMPONENTS)}}
+             from .literature_structure_calculations import COMPONENTS as STRUCTURE_COMPONENTS
+             schema["properties"]["requested_structure_components"] = {
+                 "type": "array", "uniqueItems": True, "items": {"enum": list(STRUCTURE_COMPONENTS)}}
+@@ -923,6 +928,7 @@
+         from .literature_binding_model_storage import binding_model_cells_schema
+         from .literature_transport_storage import transport_response_cells_schema
+         from .literature_perturbation_storage import perturbation_cells_schema
++        from .literature_perturbation_summary_storage import perturbation_summary_cells_schema
+         from .literature_structure_storage import structure_cells_schema
+         from .literature_reaction_storage import reaction_cells_schema
+         from .literature_context_storage import context_cells_schema
+@@ -962,6 +968,9 @@
+             "literature_perturbation_cells": {"type": "array", "meaning":
+                 "Saved reference-perturbation effects and proposed restoration components, retaining actual recipient/construct/partner and endpoint meanings. Calibrated same-endpoint contrasts, real restoration, nuisance comparability and effect isolation are distinct. Missing quantitative outcomes and uncertainty remain unknown. The proposed source index is not target correspondence or annotation credit.",
+                 "report_schema": perturbation_cells_schema()},
++            "literature_perturbation_summary_cells": {"type": "array", "meaning":
++                "The same A106 source experiment and point components with retained per-observation statistics, actual unit counts, raw-unit descriptive summaries, conditional mean variances and shared-control covariance. Unknown covariance is not zero. Reported intervals, digitization constraints and covariance enclosures keep different meanings; no source-index uncertainty, target transfer or annotation credit is invented.",
++                "report_schema": perturbation_summary_cells_schema()},
+             "literature_structure_cells": {"type": "array", "meaning":
+                 "Saved conditional source-model geometry and local residue RSCC components with exact source bindings. Entry/revision validation, fixed required panels, proposed physical predicates and unreported coordinate/measurement uncertainty remain explicit. Conditional state/assignment identities do not establish population occupancy, causal isolation or target annotation credit.",
+                 "report_schema": structure_cells_schema()},
+@@ -1018,6 +1027,7 @@
+         from .literature_binding_model_storage import PROVIDER as BINDING_MODEL_PROVIDER
+         from .literature_transport_storage import COMPONENTS as TRANSPORT_COMPONENTS, PROVIDER as TRANSPORT_PROVIDER
+         from .literature_perturbation_storage import COMPONENTS as PERTURBATION_COMPONENTS, PROVIDER as PERTURBATION_PROVIDER
++        from .literature_perturbation_summary_storage import COMPONENTS as PERTURBATION_SUMMARY_COMPONENTS
+         from .literature_structure_storage import COMPONENTS as STRUCTURE_COMPONENTS, PROVIDER as STRUCTURE_PROVIDER
+         from .literature_reaction_storage import COMPONENTS as REACTION_COMPONENTS, PROVIDER as REACTION_PROVIDER
+         from .literature_context_storage import COMPONENTS as CONTEXT_COMPONENTS, PROVIDER as CONTEXT_PROVIDER
+@@ -1047,6 +1057,8 @@
+                  TRANSPORT_COMPONENTS, self.services.literature_transport_repository),
+                 ("literature_perturbation_cells", "requested_perturbation_components", PERTURBATION_PROVIDER,
+                  PERTURBATION_COMPONENTS, self.services.literature_perturbation_repository),
++                ("literature_perturbation_summary_cells", "requested_perturbation_summary_components", PERTURBATION_PROVIDER,
++                 PERTURBATION_SUMMARY_COMPONENTS, self.services.literature_perturbation_repository().summary_projection),
+                 ("literature_structure_cells", "requested_structure_components", STRUCTURE_PROVIDER,
+                  STRUCTURE_COMPONENTS, self.services.literature_structure_repository),
+                 ("literature_reaction_cells", "requested_reaction_components", REACTION_PROVIDER,
+@@ -1088,6 +1100,11 @@
+                             continue
+                     if namespace == "literature_ratio_source_cells" and row.get("version") != adapter.record_version:
+                         raise ContractError("literature_ratio_source_projection_version_mismatch")
++                    if namespace in {"literature_perturbation_cells", "literature_perturbation_summary_cells"}:
++                        if row.get("version") not in {"literature_perturbation_record_v1", "literature_perturbation_record_v2"}:
++                            raise ContractError("literature_perturbation_projection_version_mismatch")
++                        if row.get("version") != adapter.record_version:
++                            continue
+                     selected.append(reference)
+             components = tuple(context.assignment.get(requested_field, defaults))
+             result[namespace] = adapter.fact_cells(context, selected, components=components)
+@@ -1187,6 +1204,9 @@
+                 try:
+                     if (namespace in {"literature_rate_cells", "literature_rate_source_cells", "literature_rate_source_domain_cells"}
+                             and not rows and context.assignment.get("requested_rate_components") not in ([], ())):
++                        repository().validate_empty_return_family(context)
++                    if (namespace in {"literature_perturbation_cells", "literature_perturbation_summary_cells"}
++                            and not rows and context.assignment.get(requested_field) not in ([], ())):
+                         repository().validate_empty_return_family(context)
+                     # This hook validates the REPORTING episode (also when C4
+                     # reconstructs a child's original contract), before its
+--- a/gene_annotation_episode/literature_experimental_prompt.py
++++ b/gene_annotation_episode/literature_experimental_prompt.py
+@@ -316,7 +316,7 @@
+     assignment = _pick(state.get("literature_assignment", {}), (
+         "question_context_refs", "source_refs", "prior_search_refs", "search_result_refs",
+         "source_ref", "representation", "artifact_ref", "page", "selection",
+-        "requested_rate_components", "requested_quantity_components", "requested_assay_components", "requested_ratio_components", "requested_ratio_source_components", "requested_binding_components", "requested_binding_model_components", "requested_transport_components", "requested_perturbation_components", "requested_structure_components", "requested_reaction_components", "requested_context_components", "requested_figure_components", "requested_partner_components", "requested_amount_components", "requested_optical_components", "requested_kinetic_components", "requested_binding_interaction_components", "requested_controlled_response_components", "requested_controlled_response_views", "requested_controlled_response_component_keys", "requested_gel_components", "requested_gel_views", "requested_gel_component_keys", "constraints", "context"))
++        "requested_rate_components", "requested_quantity_components", "requested_assay_components", "requested_ratio_components", "requested_ratio_source_components", "requested_binding_components", "requested_binding_model_components", "requested_transport_components", "requested_perturbation_components", "requested_perturbation_summary_components", "requested_structure_components", "requested_reaction_components", "requested_context_components", "requested_figure_components", "requested_partner_components", "requested_amount_components", "requested_optical_components", "requested_kinetic_components", "requested_binding_interaction_components", "requested_controlled_response_components", "requested_controlled_response_views", "requested_controlled_response_component_keys", "requested_gel_components", "requested_gel_views", "requested_gel_component_keys", "constraints", "context"))
+     # Version labels identify host assignment schemas, not source science.
+     if isinstance(assignment.get("page"), Mapping):
+         assignment["page"] = {key: value for key, value in assignment["page"].items() if key != "version"}
+--- a/gene_annotation_episode/literature_reference_parent_prompt.py
++++ b/gene_annotation_episode/literature_reference_parent_prompt.py
+@@ -29,7 +29,7 @@
+ 
+ When a narrower literature investigation is useful, define its actual question, source scope, constraints and requested typed information. Ask for the numerical components and experimental relationships needed for your next decision, including relevant uncertainty, controls, unavailable reasons and source identity. Use the declared return projections to construct a closed form; retain actual reference meanings and select only the needed components. Children own their iterative source search, reading and interpretation choices. Their permitted relationships are alternatives, not a required itinerary, reading quota or automatic sequence.
+ 
+-Integrate only information actually received through your own outcomes or requested admitted child forms. A globally stored source or a reference needed for validation is not delivered scientific knowledge. Read scoped evidence when needed. Preserve units, bounds, uncertainty definitions, experimental meaning and dependence when comparing results. Missing values remain unknown; nondetection is not exact zero. Do not convert SD, SEM, confidence intervals or untyped error bars into one another, count technical repetitions as independent experiments, or count repeated representations as new evidence. Models identify source meanings and supported operands; deterministic operations perform parsing, validation, unit conversion and arithmetic.
++Integrate only information actually received through your own outcomes or requested admitted child forms. A globally stored source or a reference needed for validation is not delivered scientific knowledge. Read scoped evidence when needed. Preserve units, bounds, uncertainty definitions, experimental meaning and dependence when comparing results. Missing values remain unknown; nondetection is not exact zero. Do not interchange SD, SEM, confidence intervals or untyped error bars. Convert them only when the required statistical information and assumptions support the calculation. Do not count technical repetitions as independent experiments or repeated representations as new evidence. Models identify source meanings and supported operands; deterministic operations perform parsing, validation, unit conversion and arithmetic.
+ 
+ A numerical source-effect component evaluates its declared experiment and endpoint. It is not a probability of function, target annotation support or investigation-progress credit. Source findings may qualify or weaken a proposed function while still being useful information. Sequence/structural correspondence and later combination into annotation credit remain separate work. Do not invent target-transfer weights, reliability categories, missing controls, covariance or scientific progress. Do not manufacture target assessments merely to give source processing credit or hasten stopping.
+ 
+--- /dev/null
++++ b/gene_annotation_episode/literature_perturbation_summary.py
+@@ -0,0 +1,552 @@
++"""A106 retained summary statistics and explicit mean-covariance arithmetic.
++
++The retained data are an input boundary, not a claim that a paper was parsed.
++Reported spreads, raw-unit descriptive statistics, sampling variance estimates
++and digitization constraints retain different meanings. No distributional fit,
++confidence interval or causal/annotation score is invented here.
++"""
++from __future__ import annotations
++
++from copy import deepcopy
++from decimal import Decimal, localcontext
++from fractions import Fraction
++import math
++
++from .domain import REF, obj, validate_schema
++from .literature_assay_inputs import _fail, _finite, _keys, _nullable, _text, _witness_schema
++from .literature_experimental_contracts import ExperimentalContractError
++from .literature_perturbation_calculations import COMPONENTS as POINT_COMPONENTS, populate_source_restoration, _endpoint_reason
++from .literature_summary_figure_reader import read_summary_figure
++
++DATA_VERSION = "a106_source_measurements_v2"
++VERSION = "a106_source_summary_restoration_v2"
++ROLES = ("W", "K", "R", "A_reference", "A_restored", "B_pert", "B_rest")
++SUMMARY_KINDS = ("arithmetic_mean", "geometric_mean", "median", "single_observation", "unknown")
++SCALES = ("endpoint", "log10_endpoint", "ln_endpoint", "unknown")
++SPREAD_KINDS = ("sd", "sem", "confidence_interval", "detection_limit", "untyped_pm", "unreported")
++VARIANCE_STATUSES = ("known", "estimated", "unknown")
++VARIANCE_SCOPES = ("technical_mean_within_studied_unit", "biological_unit_mean", "preparation_mean",
++    "other_unit_mean", "source_reported_unresolved_scope", "mixed_estimator_scopes", "unavailable", "not_applicable")
++UNIT_KINDS = ("culture", "organism", "preparation", "biological_unit", "technical_reading", "other", "unknown")
++STATISTICS = ("summary_value", "reported_spread", "reported_count", "sample_sd", "mean_se", "mean_variance")
++STAT_COMPONENTS = tuple(role + "_" + name for role in ROLES for name in STATISTICS)
++CONTRAST_COMPONENTS = ("perturbation_mean_variance", "perturbation_variance_lower", "perturbation_variance_upper",
++    "restoration_difference", "restoration_mean_variance", "restoration_variance_lower", "restoration_variance_upper",
++    "shared_contrast_covariance")
++COMPONENTS = (*POINT_COMPONENTS, *STAT_COMPONENTS, *CONTRAST_COMPONENTS)
++DATA_FIELDS = ("version", "endpoint_unit", "exposure_unit", "origin", "uncertainty_basis", "measurements", "covariances")
++ENTRY_FIELDS = ("value", "measurement_id", "value_scale", "summary_kind", "summary_scale", "uncertainty",
++                "count", "raw_units", "graph", "digitization", "meaning_witnesses")
++SPREAD_FIELDS = ("kind", "value", "lower", "upper", "coverage", "scale", "variance_status")
++COUNT_FIELDS = ("n", "unit_kind", "independence")
++COV_FIELDS = ("first", "second", "kind", "value", "variance_status", "witnesses")
++_NUMERIC = {"type": ["number", "null"]}
++_NATURAL_COUNT = {"type": ["integer", "null"], "minimum": 1}
++
++
++def _choice(value, allowed, field):
++    if not isinstance(value, str) or value not in allowed:
++        _fail("unsupported_summary_meaning", field)
++
++
++def _nonnegative(value, field, *, nullable=True):
++    if value is None and nullable:
++        return
++    _finite(value, field)
++    if value < 0:
++        _fail("nonnegative_summary_value_required", field)
++
++
++def _ratio(value):
++    return Fraction(value)
++
++
++def _project(exact):
++    if exact is None:
++        return None
++    try:
++        value = float(exact)
++    except (OverflowError, ValueError):
++        return None
++    return value if math.isfinite(value) and (value != 0 or exact == 0) else None
++
++
++def _sqrt(value):
++    if value is None:
++        return None
++    with localcontext() as ctx:
++        ctx.prec = 100
++        q = Fraction(value)
++        return (Decimal(q.numerator)/Decimal(q.denominator)).sqrt()
++
++
++def _outward_rational(exact, direction):
++    try:
++        value=float(exact)
++    except OverflowError:
++        return math.nextafter(math.inf,0.) if direction<0 and exact>0 else None
++    if not math.isfinite(value):
++        return math.nextafter(math.inf,0.) if direction<0 and exact>0 else None
++    if value==0 and exact>0:
++        # Zero is a conservative lower bound, not a fabricated point estimate.
++        return 0. if direction<0 else math.ulp(0.)
++    actual=Fraction(value)
++    if direction < 0 and actual > exact:
++        value=math.nextafter(value,-math.inf)
++    elif direction > 0 and actual < exact:
++        value=math.nextafter(value,math.inf)
++    return value if math.isfinite(value) else None
++
++
++def covariance_variance_enclosure(first, second):
++    """Sound rational outer bounds for Va+Vb−2Cov with unknown covariance.
++
++    Bound sqrt(Va*Vb) by exact integer-isqrt arithmetic. The equivalent lower
++    identity avoids catastrophic cancellation when the variances nearly agree.
++    No decimal precision choice or sample-count cap establishes containment.
++    """
++    a,b=Fraction(first),Fraction(second)
++    if a<0 or b<0:
++        _fail("nonnegative_mean_variance_required","covariance_enclosure")
++    product=a*b
++    scale=1<<256
++    denominator=product.denominator*scale
++    radicand=product.numerator*product.denominator*scale*scale
++    integer=math.isqrt(radicand)
++    root_upper=Fraction(integer if integer*integer==radicand else integer+1,denominator)
++    sum_upper=a+b+2*root_upper
++    lower=(a-b)**2/sum_upper if sum_upper else Fraction(0)
++    return _outward_rational(lower,-1),_outward_rational(sum_upper,1)
++
++
++def _stat_unit(unit, scale):
++    if scale == "unknown":
++        return "unreported"
++    if scale == "log10_endpoint":
++        return "log10_" + unit
++    if scale == "ln_endpoint":
++        return "ln_" + unit
++    return unit
++
++
++def _raw_summary(raw, field):
++    if raw is None:
++        return None
++    if not isinstance(raw, list) or not raw:
++        _fail("nonempty_raw_unit_table_required", field)
++    units = {}
++    for index, row in enumerate(raw):
++        here = field + f"[{index}]"
++        _keys(row, ("unit_id", "values"), here)
++        _text(row["unit_id"], here + ".unit_id")
++        if row["unit_id"] in units:
++            _fail("duplicate_raw_unit_identity", here + ".unit_id")
++        values = row["values"]
++        if not isinstance(values, list) or not values:
++            _fail("nonempty_unit_readings_required", here + ".values")
++        for i, value in enumerate(values):
++            _finite(value, here + f".values[{i}]")
++        units[row["unit_id"]] = sum(map(Fraction, values)) / len(values)
++    n = len(units)
++    mean = sum(units.values()) / n
++    variance = sum((x-mean)**2 for x in units.values())/(n-1) if n > 1 else None
++    return {"unit_means": units, "n": n, "mean": mean, "sample_variance": variance}
++
++
++def _entry(entry, field, sources, unit):
++    _keys(entry, ENTRY_FIELDS, field)
++    entry = deepcopy(entry)
++    value = entry["value"]
++    if value is not None:
++        _finite(value, field + ".value")
++    if entry["measurement_id"] is not None:
++        _text(entry["measurement_id"], field + ".measurement_id")
++    for name, choices in (("value_scale", SCALES[:-1]), ("summary_kind", SUMMARY_KINDS), ("summary_scale", SCALES)):
++        _choice(entry[name], choices, field + "." + name)
++    _keys(entry["uncertainty"], SPREAD_FIELDS, field + ".uncertainty")
++    spread = entry["uncertainty"]
++    _choice(spread["kind"], SPREAD_KINDS, field + ".uncertainty.kind")
++    _choice(spread["scale"], SCALES, field + ".uncertainty.scale")
++    _choice(spread["variance_status"], VARIANCE_STATUSES, field + ".uncertainty.variance_status")
++    _nonnegative(spread["value"], field + ".uncertainty.value")
++    for name in ("lower", "upper", "coverage"):
++        if spread[name] is not None:
++            _finite(spread[name], field + ".uncertainty." + name)
++    if spread["coverage"] is not None and not 0 < spread["coverage"] < 1:
++        _fail("coverage_fraction_required", field + ".uncertainty.coverage")
++    if spread["lower"] is not None and spread["upper"] is not None and spread["lower"] > spread["upper"]:
++        _fail("ordered_reported_interval_required", field + ".uncertainty")
++    if spread["kind"] == "unreported" and any(spread[k] is not None for k in ("value", "lower", "upper", "coverage")):
++        _fail("unreported_spread_has_no_numbers", field + ".uncertainty")
++    if spread["kind"] in ("sd", "sem", "untyped_pm") and any(spread[k] is not None for k in ("lower", "upper", "coverage")):
++        _fail("spread_is_not_an_interval", field + ".uncertainty")
++    if spread["kind"] == "detection_limit" and spread["coverage"] is not None:
++        _fail("detection_limit_is_not_coverage", field + ".uncertainty")
++    _keys(entry["count"], COUNT_FIELDS, field + ".count")
++    count = entry["count"]
++    n = count["n"]
++    if n is not None and (type(n) is not int or n < 1):
++        _fail("positive_integer_repeat_count_required", field + ".count.n")
++    _choice(count["unit_kind"], UNIT_KINDS, field + ".count.unit_kind")
++    _choice(count["independence"], ("independent", "not_independent", "unknown"), field + ".count.independence")
++    if not isinstance(entry["meaning_witnesses"], list):
++        _fail("witness_list_required", field + ".meaning_witnesses")
++    entry["meaning_witnesses"] = [sources.witness(w, field + f".meaning_witnesses[{i}]")
++                                   for i, w in enumerate(entry["meaning_witnesses"])]
++    digit = entry["digitization"]
++    if digit is not None:
++        _keys(digit, ("lower", "upper", "kind"), field + ".digitization")
++        for name in ("lower", "upper"):
++            _finite(digit[name], field + ".digitization." + name)
++        if digit["kind"] != "conditional_digitization_not_confidence_interval" or digit["lower"] > digit["upper"]:
++            _fail("invalid_digitization_constraint", field + ".digitization")
++        if value is not None and not digit["lower"] <= value <= digit["upper"]:
++            _fail("digitization_must_contain_display_value", field + ".digitization")
++    raw = _raw_summary(entry["raw_units"], field + ".raw_units")
++    if raw is not None and entry["value_scale"] == "endpoint" and any(value < 0 for row in entry["raw_units"] for value in row["values"]):
++        _fail("nonnegative_measurement_required", field + ".raw_units")
++    graph = entry["graph"]
++    if raw is not None and graph is not None:
++        _fail("choose_raw_table_or_graph_representation", field)
++    trace = None
++    if raw is not None:
++        if value is not None or entry["summary_kind"] != "arithmetic_mean" or entry["summary_scale"] != entry["value_scale"]:
++            _fail("raw_unit_mean_representation_required", field)
++        if n is not None and n != raw["n"]:
++            _fail("raw_unit_count_mismatch", field + ".count.n")
++        value = _project(raw["mean"])
++        count["n"] = raw["n"]
++    if graph is not None:
++        _keys(graph, ("source_ref", "selection"), field + ".graph")
++        if value is not None or digit is not None or entry["value_scale"] != "endpoint":
++            _fail("graph_values_come_from_pixels", field + ".graph")
++        image = sources.source(graph["source_ref"], "original")
++        trace = read_summary_figure(image["content"], graph["selection"])
++        if trace["unit"] != unit:
++            _fail("graph_endpoint_unit_mismatch", field + ".graph")
++        trace["source_ref"], trace["artifact_ref"] = graph["source_ref"], image["artifact_ref"]
++        mean = trace["features"]["mean"]
++        value = mean["value"]
++        if value is not None:
++            entry["digitization"] = {"lower": mean["lower"], "upper": mean["upper"], "kind": trace["bound_kind"]}
++        if spread["value"] is not None or spread["lower"] is not None or spread["upper"] is not None:
++            _fail("graph_spreads_come_from_pixels", field + ".uncertainty")
++        caps = [(name, trace["features"][name]) for name in ("upper_error", "lower_error") if trace["features"][name] is not None]
++        transform = {"endpoint": lambda x:Decimal(x), "log10_endpoint": lambda x:Decimal(x).log10(),
++                     "ln_endpoint": lambda x:Decimal(x).ln()}.get(spread["scale"])
++        entry["graph_cap_values"] = {"lower_error_cap":None,"upper_error_cap":None,
++                                      "error_cap_scale":spread["scale"] if transform is not None else "endpoint"}
++        for name,cap in caps:
++            if cap["value"] is not None:
++                with localcontext() as ctx:
++                    ctx.prec=100
++                    endpoint = Decimal(cap["decimal_value"])
++                    projected = _project(transform(endpoint) if transform is not None else endpoint)
++                    entry["graph_cap_values"]["upper_error_cap" if name=="upper_error" else "lower_error_cap"] = projected
++        if value is not None and transform is not None:
++            try:
++                magnitudes, intervals = [], []
++                for name, cap in caps:
++                    if cap["value"] is None:
++                        continue
++                    if spread["kind"] in ("sd", "sem", "untyped_pm"):
++                        central_mean, central_cap = Decimal(mean["decimal_value"]),Decimal(cap["decimal_value"])
++                        if name == "upper_error" and central_cap < central_mean or name == "lower_error" and central_cap > central_mean:
++                            _fail("error_cap_direction_mismatch", field + ".graph." + name)
++                        with localcontext() as ctx:
++                            ctx.prec=100
++                            magnitudes.append(_project(abs(transform(central_cap)-transform(central_mean))))
++                            if name == "upper_error":
++                                low= max(Decimal(0),transform(cap["decimal_lower"])-transform(mean["decimal_upper"]))
++                                high=max(Decimal(0),transform(cap["decimal_upper"])-transform(mean["decimal_lower"]))
++                            else:
++                                low= max(Decimal(0),transform(mean["decimal_lower"])-transform(cap["decimal_upper"]))
++                                high=max(Decimal(0),transform(mean["decimal_upper"])-transform(cap["decimal_lower"]))
++                            low_float,high_float=_project(low),_project(high)
++                            if low_float is not None and high_float is not None:
++                                intervals.append((max(0.,math.nextafter(low_float,-math.inf)),math.nextafter(high_float,math.inf)))
++                    elif spread["kind"] == "confidence_interval":
++                        with localcontext() as ctx:
++                            ctx.prec=100
++                            spread["upper" if name == "upper_error" else "lower"] = _project(transform(cap["decimal_value"]))
++                if magnitudes and intervals:
++                    # Both caps are retained. When their possible magnitudes
++                    # overlap, the midpoint of the overlap is a declared
++                    # digitization estimate of one symmetric spread. Otherwise
++                    # there is no symmetric point, but both ranges survive.
++                    low, high = max(x[0] for x in intervals), min(x[1] for x in intervals)
++                    spread["value"] = magnitudes[0] if len(magnitudes)==1 else low+(high-low)/2 if low<=high else None
++                    entry["graph_spread_digitization"] = {"lower":min(x[0] for x in intervals),"upper":max(x[1] for x in intervals),
++                        "kind":"conditional_digitization_not_confidence_interval",
++                        "interpretation":"symmetric_compatible" if low<=high else "asymmetric_readings"}
++            except ExperimentalContractError:
++                raise
++            except (ValueError, OverflowError):
++                # Keep the native pixel/endpoint trace even when a requested
++                # log-statistical interpretation is outside its domain.
++                spread["value"] = None
++        if spread["lower"] is not None and spread["upper"] is not None and spread["lower"]>spread["upper"]:
++            _fail("ordered_reported_interval_required",field+".uncertainty")
++    if value is not None and entry["measurement_id"] is None:
++        _fail("known_measurement_id_required", field + ".measurement_id")
++    if value is not None and entry["value_scale"] == "endpoint" and value < 0:
++        _fail("nonnegative_measurement_required", field + ".value")
++    entry["value"] = value
++    return entry, raw, trace
++
++
++def read_summary_measurements(data, *, sources, reference, artifact_ref, status, key_function):
++    """Read the exact retained v2 JSON plus any explicitly selected image bytes."""
++    _keys(data, DATA_FIELDS, "data_source")
++    if data["version"] != DATA_VERSION or data["uncertainty_basis"] != "per_measurement":
++        _fail("unsupported_perturbation_summary_version", "data_source.version")
++    from .literature_perturbation_inputs import ENDPOINT_UNITS, EXPOSURE_UNITS
++    _choice(data["endpoint_unit"], ENDPOINT_UNITS, "data_source.endpoint_unit")
++    _choice(data["exposure_unit"], EXPOSURE_UNITS, "data_source.exposure_unit")
++    _choice(data["origin"], ("reported", "graph_derived", "synthetic"), "data_source.origin")
++    _keys(data["measurements"], ROLES, "data_source.measurements")
++    observations, summaries, raw, graphs, owners = {}, {}, {}, {}, {}
++    for role in ROLES:
++        unit = data["exposure_unit"] if role.startswith("A_") else data["endpoint_unit"]
++        entry, table, graph = _entry(data["measurements"][role], "data_source.measurements." + role, sources, unit)
++        key = key_function(reference, artifact_ref, entry["measurement_id"]) if entry["measurement_id"] is not None else None
++        if key in owners and owners[key] != (entry, unit):
++            _fail("shared_summary_measurement_mismatch", "data_source.measurements." + role)
++        if key is not None:
++            owners[key] = (entry, unit)
++        point = entry["value"] if entry["value_scale"] == "endpoint" else None
++        if status == "qualitative_only" and role in ("W", "K", "R") and point is not None:
++            _fail("qualitative_endpoint_has_no_numeric_values", "data_source.measurements." + role)
++        observations[role] = {"role": role, "value": point, "unit": unit,
++            "raw_entry": deepcopy(data["measurements"][role]), "source_ref": reference,
++            "artifact_ref": artifact_ref, "measurement_key": key}
++        summaries[role], raw[role], graphs[role] = entry, table, graph
++    covariances = data["covariances"]
++    if not isinstance(covariances, list):
++        _fail("covariance_list_required", "data_source.covariances")
++    seen, retained_cov = set(), []
++    for index, covariance in enumerate(covariances):
++        field = f"data_source.covariances[{index}]"
++        _keys(covariance, COV_FIELDS, field)
++        row = deepcopy(covariance)
++        for key in ("first", "second"):
++            _choice(row[key], ("W", "K", "R"), field + "." + key)
++        pair = tuple(sorted((row["first"], row["second"])))
++        if pair[0] == pair[1] or pair in seen:
++            _fail("unique_distinct_covariance_pair_required", field)
++        seen.add(pair)
++        _choice(row["kind"], ("unknown", "mean_covariance", "uncorrelated", "paired_units"), field + ".kind")
++        _choice(row["variance_status"], VARIANCE_STATUSES, field + ".variance_status")
++        if row["kind"] == "mean_covariance":
++            _finite(row["value"], field + ".value")
++        elif row["value"] is not None:
++            _fail("covariance_value_not_applicable", field + ".value")
++        if not isinstance(row["witnesses"], list):
++            _fail("witness_list_required", field + ".witnesses")
++        row["witnesses"] = [sources.witness(w, field + f".witnesses[{i}]") for i, w in enumerate(row["witnesses"])]
++        retained_cov.append(row)
++    # Fraction objects are used only while doing arithmetic; saved statistics
++    # are finite JSON numbers plus original raw-unit values for provenance.
++    return observations, {"version": DATA_VERSION, "measurements": summaries,
++        "covariances": retained_cov, "graphs": graphs}
++
++
++def _mean_statistics(entry):
++    raw = _raw_summary(entry["raw_units"], "summary.raw_units")
++    spread, count = entry["uncertainty"], entry["count"]
++    variance = None
++    method, reason, variance_status = "none", "mean_variance_unavailable", "unknown"
++    sample_sd = _sqrt(raw["sample_variance"]) if raw is not None else None
++    compatible = (entry["summary_kind"] == "arithmetic_mean" and entry["summary_scale"] == entry["value_scale"])
++    independent = count["independence"] == "independent"
++    if raw is not None and compatible and independent and raw["sample_variance"] is not None:
++        variance = raw["sample_variance"] / raw["n"]
++        method, reason, variance_status = "raw_independent_unit_mean", None, "estimated"
++    elif spread["kind"] == "sem" and spread["value"] is not None:
++        # This preserves the reported SEM interpretation, even if the source
++        # underdescribes how that estimate was obtained. Contrast eligibility
++        # separately requires the selected estimate/scale to be compatible.
++        variance = Fraction(spread["value"])**2
++        method, reason, variance_status = "reported_sem_squared", None, spread["variance_status"]
++    elif (spread["kind"] == "sd" and spread["value"] is not None and compatible and independent
++          and spread["scale"] == entry["value_scale"] and count["n"] is not None and count["n"] > 1):
++        variance = Fraction(spread["value"])**2 / count["n"]
++        method, reason, variance_status = "sd_squared_over_independent_n", None, spread["variance_status"]
++    eligible = (compatible and entry["value_scale"] == "endpoint" and variance is not None
++                and (raw is not None or spread["scale"] == "endpoint"))
++    scope = ("unavailable" if variance is None else
++        "technical_mean_within_studied_unit" if count["unit_kind"]=="technical_reading" else
++        "preparation_mean" if count["unit_kind"]=="preparation" else
++        "biological_unit_mean" if count["unit_kind"] in ("culture","organism","biological_unit") else
++        "other_unit_mean" if count["unit_kind"]=="other" else "source_reported_unresolved_scope")
++    return {"variance": variance, "se": _sqrt(variance), "sample_sd": sample_sd,
++            "method": method, "reason": reason, "variance_status": variance_status,
++            "contrast_eligible": eligible, "raw": raw,"variance_scope":scope}
++
++
++def _covariances(summary, stats):
++    roles = ("W", "K", "R")
++    result = {(r, r): stats[r]["variance"] if stats[r]["contrast_eligible"] else None for r in roles}
++    kinds, statuses = {}, {}
++    for row in summary["covariances"]:
++        a, b = row["first"], row["second"]
++        cov = None
++        if row["kind"] == "mean_covariance":
++            cov = Fraction(row["value"])
++        elif row["kind"] == "uncorrelated":
++            cov = Fraction(0)
++        elif row["kind"] == "paired_units":
++            x, y = stats[a]["raw"], stats[b]["raw"]
++            if x is None or y is None or set(x["unit_means"]) != set(y["unit_means"]) or x["n"] < 2:
++                _fail("complete_shared_raw_units_required", "covariances")
++            if not stats[a]["contrast_eligible"] or not stats[b]["contrast_eligible"]:
++                _fail("paired_unit_mean_variance_not_supported", "covariances")
++            cov = sum((v-x["mean"])*(y["unit_means"][u]-y["mean"]) for u,v in x["unit_means"].items()) / (x["n"]-1) / x["n"]
++        result[a,b] = result[b,a] = cov
++        kinds[a,b] = kinds[b,a] = row["kind"]
++        statuses[a,b] = statuses[b,a] = "estimated" if row["kind"] == "paired_units" else row["variance_status"]
++    for i, a in enumerate(roles):
++        for b in roles[i+1:]:
++            result.setdefault((a,b), None); result.setdefault((b,a), None)
++            va, vb, cov = result[a,a], result[b,b], result[a,b]
++            if va is not None and vb is not None and cov is not None and cov*cov > va*vb:
++                _fail("mean_covariance_matrix_not_psd", "covariances")
++    if all(value is not None for value in result.values()):
++        a,b,c = (result[r,r] for r in roles)
++        d,e,f = result["W","K"],result["W","R"],result["K","R"]
++        if a*b*c + 2*d*e*f - a*f*f - b*e*e - c*d*d < 0:
++            _fail("mean_covariance_matrix_not_psd", "covariances")
++    return result, kinds, statuses
++
++
++def _cell(value, unit, formula, *, reason=None, method="none", variance_status="unknown", lower=None, upper=None, bound_kind="none", conditional=()):
++    number = _project(value)
++    if value is not None and number is None:
++        reason = "numerical_model_range"
++    return {"value": number, "unit": unit, "status": "populated" if number is not None else "unavailable",
++        "formula": formula, "origin": "derived", "unavailable_reason": reason,
++        "conditional_on": list(conditional), "statistic_method": method, "variance_status": variance_status,
++        "lower": lower, "upper": upper, "bound_kind": bound_kind,
++        "lower_error_cap":None,"upper_error_cap":None,"error_cap_scale":"unknown","spread_reading":"not_applicable"}
++
++
++def populate_summary_restoration(extraction, *, origin):
++    """Calculate paired point and summary components from one validated input."""
++    inputs = {name: extraction[name] for name in ("values", "measurement_keys", "endpoint_unit", "exposure_unit",
++        "design", "measurement_status", "same_endpoint_scope", "amount_role", "orientation")}
++    inputs["origin"] = origin
++    legacy = populate_source_restoration(inputs)
++    summary = extraction["summary_data"]
++    statistics = {role: _mean_statistics(summary["measurements"][role]) for role in ROLES}
++    covariance, kinds, covariance_status = _covariances(summary, statistics)
++    cells = {name: {**deepcopy(cell), "statistic_method": "point_component", "variance_status": "unknown",
++                   "lower": None, "upper": None, "bound_kind": "none", "lower_error_cap":None,"upper_error_cap":None,
++                   "error_cap_scale":"unknown","spread_reading":"not_applicable"} for name, cell in legacy["cells"].items()}
++    descriptors = {}
++    for role in ROLES:
++        entry, stat = summary["measurements"][role], statistics[role]
++        native = {"W":"reference_endpoint","K":"perturbed_endpoint","R":"restored_endpoint"}.get(role)
++        if native is not None:
++            cells[native]["origin"] = "graph_derived" if entry["graph"] is not None else "derived" if entry["raw_units"] is not None else origin
++            if entry["graph"] is not None and entry["value"] is None:
++                cells[native]["unavailable_reason"] = summary["graphs"][role]["features"]["mean"]["unavailable_reason"]
++        physical = extraction["exposure_unit"] if role.startswith("A_") else extraction["endpoint_unit"]
++        unit = _stat_unit(physical, entry["value_scale"])
++        variance_unit = _stat_unit(physical, entry["uncertainty"]["scale"] if stat["method"] == "reported_sem_squared" else entry["value_scale"])
++        descriptors[role] = {"summary_kind": entry["summary_kind"], "value_scale": entry["value_scale"],
++            "summary_scale": entry["summary_scale"], "spread_kind": entry["uncertainty"]["kind"],
++            "spread_scale": entry["uncertainty"]["scale"], "count_unit": entry["count"]["unit_kind"],
++            "independence": entry["count"]["independence"], "n": entry["count"]["n"]}
++        digit = entry["digitization"]
++        cells[role+"_summary_value"] = _cell(entry["value"], unit, "selected_summary_value",
++            reason="summary_value_unreported" if entry["value"] is None else None,
++            method="equal_unit_descriptive_mean" if entry["raw_units"] is not None else "selected_reported_summary",
++            lower=digit["lower"] if digit else None, upper=digit["upper"] if digit else None,
++            bound_kind=digit["kind"] if digit else "none")
++        cells[role+"_summary_value"]["origin"] = "graph_derived" if entry["graph"] is not None else "derived" if entry["raw_units"] is not None else origin
++        if entry["graph"] is not None and entry["value"] is None:
++            cells[role+"_summary_value"]["unavailable_reason"] = summary["graphs"][role]["features"]["mean"]["unavailable_reason"]
++        elif entry["raw_units"] is not None and entry["value"] is None:
++            cells[role+"_summary_value"]["unavailable_reason"] = "numerical_model_range"
++        spread = entry["uncertainty"]
++        spread_digit = entry.get("graph_spread_digitization")
++        cells[role+"_reported_spread"] = _cell(spread["value"], _stat_unit(physical, spread["scale"]), "reported_spread",
++            reason="spread_value_unreported" if spread["value"] is None else None, method="reported_" + spread["kind"],
++            variance_status=spread["variance_status"], lower=spread_digit["lower"] if spread_digit else spread["lower"], upper=spread_digit["upper"] if spread_digit else spread["upper"],
++            bound_kind=spread_digit["kind"] if spread_digit else "reported_confidence_interval" if spread["kind"] == "confidence_interval" else "reported_detection_limit" if spread["kind"] == "detection_limit" else "none")
++        cells[role+"_reported_spread"]["origin"] = "graph_derived" if entry["graph"] is not None else origin
++        if entry["graph"] is not None:
++            cells[role+"_reported_spread"].update(entry["graph_cap_values"],
++                spread_reading=spread_digit["interpretation"] if spread_digit else "unresolved")
++            if spread["kind"]=="confidence_interval" and (spread["lower"] is not None or spread["upper"] is not None):
++                cells[role+"_reported_spread"]["spread_reading"]="reported_interval"
++            if spread["value"] is None and spread["kind"] in ("sd","sem","untyped_pm"):
++                cells[role+"_reported_spread"]["unavailable_reason"]=("graph_spread_scale_unresolved" if spread["scale"]=="unknown"
++                    else "asymmetric_graph_error_readings" if spread_digit and spread_digit["interpretation"]=="asymmetric_readings"
++                    else "graph_spread_unavailable")
++        cells[role+"_reported_count"] = _cell(entry["count"]["n"], "count", "reported_unit_count",
++            reason="count_unreported" if entry["count"]["n"] is None else None, method="reported_count")
++        if entry["raw_units"] is not None:
++            cells[role+"_reported_count"].update(origin="derived")
++        cells[role+"_sample_sd"] = _cell(stat["sample_sd"], unit, "sample_sd_of_unit_means",
++            reason="raw_unit_variation_unavailable" if stat["sample_sd"] is None else None, method="descriptive_sample_sd", variance_status="estimated")
++        cells[role+"_mean_se"] = _cell(stat["se"], variance_unit, "sqrt_mean_variance", reason=stat["reason"],
++            method=stat["method"], variance_status=stat["variance_status"])
++        cells[role+"_mean_variance"] = _cell(stat["variance"], variance_unit+"_squared", "mean_variance", reason=stat["reason"],
++            method=stat["method"], variance_status=stat["variance_status"])
++        for suffix in ("mean_se","mean_variance"):
++            cells[role+"_"+suffix]["variance_scope"] = stat["variance_scope"]
++    rk_reason = _endpoint_reason(inputs, ("R","K"), restoration=True)
++    rk_value = Fraction(inputs["values"]["R"])-Fraction(inputs["values"]["K"]) if rk_reason is None else None
++    for prefix, a, b, prerequisite in (("perturbation", "W", "K", legacy["cells"]["perturbation_difference"]),
++                                     ("restoration", "R", "K", {"value":rk_value,"unavailable_reason":rk_reason})):
++        va, vb, cov = covariance[a,a], covariance[b,b], covariance[a,b]
++        valid = prerequisite["value"] is not None
++        exact = va + vb - 2*cov if valid and va is not None and vb is not None and cov is not None else None
++        reason = prerequisite["unavailable_reason"] if not valid else "mean_variance_unavailable" if va is None or vb is None else "cross_arm_covariance_unknown" if cov is None else None
++        marginal_statuses = [statistics[r]["variance_status"] for r in (a,b)]
++        scopes = [statistics[r]["variance_scope"] for r in (a,b)]
++        scope = scopes[0] if len(set(scopes))==1 else "mixed_estimator_scopes"
++        status = ("unknown" if va is None or vb is None or "unknown" in marginal_statuses
++                  else "known" if all(s=="known" for s in marginal_statuses) and (cov is None or covariance_status.get((a,b))=="known") else "estimated")
++        unit = extraction["endpoint_unit"] + "_squared"
++        cells[prefix+"_mean_variance"] = _cell(exact, unit, "Va+Vb-2Cov_mean", reason=reason,
++            method="mean_covariance_contrast", variance_status=status if exact is not None else "unknown",
++            conditional=("selected_same_endpoint_mean_estimators",))
++        cells[prefix+"_mean_variance"]["variance_scope"] = scope if exact is not None else "unavailable"
++        lo = hi = None
++        if valid and va is not None and vb is not None:
++            if cov is not None:
++                lo = hi = _project(exact)
++            else:
++                lo,hi=covariance_variance_enclosure(va,vb)
++        for suffix, value in (("lower",lo),("upper",hi)):
++            cells[prefix+"_variance_"+suffix] = _cell(value, unit, "covariance_inequality_variance_bound",
++                reason=None if value is not None else reason or "numerical_model_range", method="conditional_marginal_covariance_enclosure",
++                variance_status=status, bound_kind="covariance_enclosure_not_confidence_interval",
++                conditional=("selected_same_endpoint_mean_estimators", "retained_marginal_mean_variances"))
++            cells[prefix+"_variance_"+suffix]["variance_scope"] = scope if value is not None else "unavailable"
++    cells["restoration_difference"] = _cell(rk_value,
++        extraction["endpoint_unit"], "R-K", reason=rk_reason, method="point_component")
++    needed = (covariance["W","R"],covariance["W","K"],covariance["K","R"],covariance["K","K"])
++    valid = cells["restoration_difference"]["value"] is not None and cells["perturbation_difference"]["value"] is not None
++    shared = needed[0]-needed[1]-needed[2]+needed[3] if valid and all(x is not None for x in needed) else None
++    cells["shared_contrast_covariance"] = _cell(shared, extraction["endpoint_unit"]+"_squared", "Cov_WR-Cov_WK-Cov_KR+V_K",
++        reason="shared_contrast_covariance_unavailable" if shared is None else None,
++        method="shared_control_mean_covariance", variance_status="estimated" if shared is not None else "unknown",
++        conditional=("selected_same_endpoint_mean_estimators", "shared_K_measurement"))
++    if shared is not None:
++        scopes=[statistics[r]["variance_scope"] for r in ("W","K","R")]
++        cells["shared_contrast_covariance"]["variance_scope"] = scopes[0] if len(set(scopes))==1 else "mixed_estimator_scopes"
++        statuses=[statistics[r]["variance_status"] for r in ("W","K","R")]
++        statuses += [covariance_status.get((a,b),"unknown") for a,b in (("W","K"),("W","R"),("K","R"))]
++        cells["shared_contrast_covariance"]["variance_status"] = "unknown" if "unknown" in statuses else "known" if set(statuses)=={"known"} else "estimated"
++    for name,cell in cells.items():
++        cell.setdefault("variance_scope","unavailable" if name=="shared_contrast_covariance" else "not_applicable")
++    return {"version": VERSION, "inputs": deepcopy(inputs), "primitive_order": list(ROLES), "cells": cells,
++            "summary_descriptors": descriptors}
++
++
++__all__ = ["DATA_VERSION", "VERSION", "ROLES", "COMPONENTS", "STAT_COMPONENTS", "SUMMARY_KINDS", "SCALES",
++           "SPREAD_KINDS", "VARIANCE_STATUSES", "VARIANCE_SCOPES", "UNIT_KINDS", "read_summary_measurements", "populate_summary_restoration",
++           "covariance_variance_enclosure"]
+--- /dev/null
++++ b/gene_annotation_episode/literature_perturbation_summary_storage.py
+@@ -0,0 +1,149 @@
++"""Closed v2 summary return view over the one A106 operation/sheet store."""
++from __future__ import annotations
++
++from copy import deepcopy
++import hashlib
++import json
++
++from .domain import ContractError, canonical, validate_schema
++from .literature_rate_storage import LiteratureRateRepository
++from .literature_perturbation_inputs import ENDPOINT_UNITS, EXPOSURE_UNITS
++from .literature_perturbation_storage import LiteraturePerturbationRepository, _metadata, perturbation_cells_schema
++from .literature_perturbation_summary import (
++    COMPONENTS, ROLES, SUMMARY_KINDS, SCALES, SPREAD_KINDS, UNIT_KINDS, VARIANCE_STATUSES, VARIANCE_SCOPES,
++)
++
++RECORD_VERSION = "literature_perturbation_record_v2"
++NAMESPACE = "literature_perturbation_summary_cells"
++FORMULA_CODES = {name: "perturbation_summary_"+name+"_v2" for name in COMPONENTS}
++NEW_REASONS = ("summary_value_unreported", "spread_value_unreported", "count_unreported",
++    "raw_unit_variation_unavailable", "mean_variance_unavailable", "cross_arm_covariance_unknown",
++    "shared_contrast_covariance_unavailable", "no_bar_pixels", "ambiguous_bar_runs", "truncated_mean_edge",
++    "pixel_tolerance_outside_image", "truncated_error_cap", "graph_spread_scale_unresolved",
++    "asymmetric_graph_error_readings", "graph_spread_unavailable")
++METHODS = ("none", "point_component", "equal_unit_descriptive_mean", "selected_reported_summary", "reported_count",
++    "descriptive_sample_sd", "raw_independent_unit_mean", "reported_sem_squared", "sd_squared_over_independent_n",
++    "mean_covariance_contrast", "conditional_marginal_covariance_enclosure", "shared_control_mean_covariance",
++    *("reported_"+name for name in SPREAD_KINDS))
++BOUND_KINDS = ("none", "conditional_digitization_not_confidence_interval", "reported_confidence_interval",
++               "reported_detection_limit", "covariance_enclosure_not_confidence_interval")
++_PHYSICAL_UNITS = tuple(dict.fromkeys((*ENDPOINT_UNITS, *EXPOSURE_UNITS, "unreported", "dimensionless")))
++UNITS = (*_PHYSICAL_UNITS, "count", *(f"{scale}_{u}" for scale in ("log10", "ln") for u in _PHYSICAL_UNITS))
++UNITS = (*UNITS, *(u+"_squared" for u in UNITS if u != "count"))
++
++
++def perturbation_summary_cells_schema():
++    """Original point meanings plus numerical summary and covariance cells."""
++    schema = deepcopy(perturbation_cells_schema())
++    properties = schema["items"]["properties"]
++    properties["component"]["enum"] = list(COMPONENTS)
++    properties["component"]["description"] = (
++        "Source perturbation/restoration point components, retained reported summary/spread/count, descriptive raw-unit variation, "
++        "conditional mean-variance estimates and shared-control covariance. Digitization constraints, covariance enclosures and "
++        "reported confidence intervals have separate meanings; none is a probability of function or annotation credit.")
++    properties["unit"]["enum"] = list(UNITS)
++    properties["formula_code"]["enum"] = list(FORMULA_CODES.values())
++    properties["unavailable_reason"]["enum"] += list(NEW_REASONS)
++    properties["conditional_on"]["items"]["enum"] += ["selected_same_endpoint_mean_estimators", "retained_marginal_mean_variances", "shared_K_measurement"]
++    properties["uncertainty_basis"]["enum"] = ["per_measurement"]
++    properties.update({
++        "statistic_method": {"type":"string", "enum":list(METHODS)},
++        "variance_status": {"type":"string", "enum":list(VARIANCE_STATUSES)},
++        "variance_scope": {"type":"string", "enum":list(VARIANCE_SCOPES)},
++        "lower": {"type":["number","null"]}, "upper": {"type":["number","null"]},
++        "bound_kind": {"type":"string", "enum":list(BOUND_KINDS)},
++        "lower_error_cap":{"type":["number","null"]},"upper_error_cap":{"type":["number","null"]},
++        "error_cap_scale":{"type":"string","enum":list(SCALES)},
++        "spread_reading":{"type":"string","enum":["not_applicable","unresolved","symmetric_compatible","asymmetric_readings","reported_interval"]},
++        "measurement_role": {"type":["string","null"], "enum":[None,*ROLES]},
++        "summary_kind": {"type":"string", "enum":list(SUMMARY_KINDS)},
++        "value_scale": {"type":"string", "enum":list(SCALES)},
++        "summary_scale": {"type":"string", "enum":list(SCALES)},
++        "spread_kind": {"type":"string", "enum":list(SPREAD_KINDS)},
++        "spread_scale": {"type":"string", "enum":list(SCALES)},
++        "count_unit": {"type":"string", "enum":list(UNIT_KINDS)},
++        "independence": {"type":"string", "enum":["independent","not_independent","unknown"]},
++        "n": {"type":["integer","null"], "minimum":1},
++        "reported_coverage": {"type":["number","null"], "exclusiveMinimum":0,"exclusiveMaximum":1},
++    })
++    schema["items"]["required"] = list(properties)
++    schema["x-source"] = NAMESPACE
++    return schema
++
++
++class LiteraturePerturbationSummaryProjection(LiteraturePerturbationRepository):
++    """Independent possession of a versioned view, not a second numerical sheet."""
++
++    record_version = RECORD_VERSION
++    components = COMPONENTS
++    received_table = "literature_perturbation_summary_received"
++
++    def __init__(self, store, run_id):
++        if not isinstance(run_id,str) or not run_id:
++            raise ValueError("explicit_literature_run_required")
++        # No DDL during discovery/reconstruction on an old read-only database.
++        self.store, self.run_id = store, run_id
++
++    def _installed(self):
++        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (self.received_table,)).fetchone() is not None
++
++    def read(self, sheet_ref):
++        saved = LiteratureRateRepository.read(self, sheet_ref)
++        source = self.store.get(sheet_ref)
++        payload = self.store.get_artifact(source["artifact_ref"])
++        if "artifact_"+hashlib.sha256(payload).hexdigest() != source["artifact_ref"]:
++            raise ContractError("literature_perturbation_summary_artifact_mismatch")
++        request = json.loads(self.store.get_artifact(source["request_ref"]))
++        operation = self.store.db.execute(f"SELECT outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?",
++            (self.run_id,request["episode_id"],request["operation_key"])).fetchone()
++        outcome = json.loads(operation["outcome"])
++        if (saved.get("version") != RECORD_VERSION or source.get("version") != RECORD_VERSION
++                or saved.get("data_source_ref") != request["arguments"].get("data_source_ref")
++                or saved.get("extraction",{}).get("version") != "a106_perturbation_inputs_v2"
++                or saved.get("sheet",{}).get("version") != "a106_source_summary_restoration_v2"
++                or saved["sheet"]["cells"] != outcome.get("result",{}).get("cells")
++                or self.store.get(saved["input_source_ref"])["artifact_ref"] != saved["input_artifact_ref"]):
++            raise ContractError("literature_perturbation_summary_saved_mismatch")
++        return saved
++
++    def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
++        components = self.components if components is None else components
++        if (not isinstance(components,(list,tuple)) or any(not isinstance(c,str) or c not in COMPONENTS for c in components)
++                or len(set(components)) != len(components)):
++            raise ContractError("literature_perturbation_summary_component_selection_invalid")
++        rows=[]
++        for reference in dict.fromkeys(sheet_refs):
++            if reference not in permitted_record_refs:
++                raise ContractError("literature_sheet_not_received")
++            saved=self.read(reference)
++            for name in components:
++                cell={k:deepcopy(v) for k,v in saved["sheet"]["cells"][name].items() if k != "formula"}
++                role=next((r for r in ROLES if name.startswith(r+"_")),None)
++                if role is None:
++                    role={"reference_endpoint":"W","perturbed_endpoint":"K","restored_endpoint":"R"}.get(name)
++                descriptor=deepcopy(saved["sheet"]["summary_descriptors"][role]) if role else {
++                    "summary_kind":"unknown","value_scale":"unknown","summary_scale":"unknown",
++                    "spread_kind":"unreported","spread_scale":"unknown","count_unit":"unknown",
++                    "independence":"unknown","n":None}
++                coverage=(saved["extraction"]["summary_data"]["measurements"][role]["uncertainty"]["coverage"] if role else None)
++                rows.append({"sheet_ref":reference,"evidence_source_ref":saved["input_source_ref"],
++                    "data_source_ref":saved["data_source_ref"],**saved["experimental_bindings"],
++                    "component":name,**cell,"formula_code":FORMULA_CODES[name],**_metadata(saved["extraction"]),
++                    "measurement_role":role,**descriptor,"reported_coverage":coverage})
++        validate_schema(rows,perturbation_summary_cells_schema())
++        return rows
++
++    def received_cells(self, context):
++        if context.run_id != self.run_id:
++            raise ContractError("literature_run_mismatch")
++        return super().received_cells(context) if self._installed() else []
++
++    def receive_cells(self, context, cells, operation_key):
++        with self.store.transaction():
++            self.store.db.execute(f"""CREATE TABLE IF NOT EXISTS {self.received_table}(
++                run_id TEXT NOT NULL, episode_id TEXT NOT NULL, operation_key TEXT NOT NULL,
++                cells TEXT NOT NULL, PRIMARY KEY(run_id,episode_id,operation_key))""")
++            super().receive_cells(context,cells,operation_key)
++
++
++__all__=["RECORD_VERSION","NAMESPACE","COMPONENTS","LiteraturePerturbationSummaryProjection","perturbation_summary_cells_schema"]
+--- /dev/null
++++ b/gene_annotation_episode/literature_summary_figure_reader.py
+@@ -0,0 +1,145 @@
++"""Explicit image selections for linear/log-displayed means and error caps.
++
++The selections identify ink, never the experimental meaning of an error bar.
++Logarithmic display is independent of the statistic's underlying scale. Bounds
++describe only the supplied pixel tolerance, not sampling uncertainty.
++"""
++from __future__ import annotations
++
++from copy import deepcopy
++from decimal import Decimal, localcontext
++from fractions import Fraction
++import math
++
++from .domain import ContractError
++from .literature_figure_measurements import read_bar_ordinate
++
++VERSION = "literature_summary_figure_v1"
++BOUND_KIND = "conditional_digitization_not_confidence_interval"
++UNITS = ("events_per_100000_cells", "fraction", "CFU_per_mL", "minutes", "per_min",
++         "molecules_per_cell", "normalized_signal", "mg_per_mL")
++
++
++def _fail(code, field):
++    raise ContractError(code, detail={"field_path": field})
++
++
++def _closed(value, fields, field):
++    if not isinstance(value, dict) or set(value) != set(fields):
++        _fail("closed_summary_figure_fields_required", field)
++
++
++def _number(value, field):
++    try:
++        valid = type(value) in (int, float) and math.isfinite(value)
++    except OverflowError:
++        valid = False
++    if not valid:
++        _fail("finite_summary_figure_number_required", field)
++    return Fraction(value)
++
++
++def _decimal(value):
++    value = Fraction(value)
++    return Decimal(value.numerator) / Decimal(value.denominator)
++
++
++def _project(value, direction=0):
++    out = float(value)
++    if not math.isfinite(out) or out == 0 and value != 0:
++        raise OverflowError
++    # The transcendental result has 100 significant decimal digits. One extra
++    # outward binary step also covers its decimal rounding; this is numerical
++    # enclosure, separate from the selected digitization interval.
++    if direction:
++        out = math.nextafter(out, math.inf if direction > 0 else -math.inf)
++    if not math.isfinite(out):
++        raise OverflowError
++    return out
++
++
++def read_summary_figure(image_bytes, selection):
++    """Read selected mean edges and optional cap centres from exact image bytes.
++
++    Each feature uses the old bar reader's validated decoder/threshold counting
++    with an identity pixel calibration. ``top_edge`` selects a fill edge;
++    ``run_center`` selects the centre of one horizontal cap. Multiple runs,
++    clipped selections and missing ink stay explicit; no preferred run is picked.
++    """
++    _closed(selection, ("calibration", "mean", "upper_error", "lower_error"), "selection")
++    calibration = selection["calibration"]
++    _closed(calibration, ("scale", "first", "second", "unit"), "calibration")
++    if calibration["scale"] not in ("linear", "log10") or calibration["unit"] not in UNITS:
++        _fail("unsupported_summary_figure_calibration", "calibration")
++    points = []
++    for key in ("first", "second"):
++        point = calibration[key]
++        _closed(point, ("pixel", "value"), "calibration." + key)
++        p, v = (_number(point[k], "calibration." + key + "." + k) for k in ("pixel", "value"))
++        if calibration["scale"] == "log10" and v <= 0:
++            _fail("positive_log_tick_required", "calibration." + key + ".value")
++        points.append((p, v))
++    if points[0][0] == points[1][0] or points[0][1] == points[1][1]:
++        _fail("degenerate_summary_figure_calibration", "calibration")
++    features = {}
++    identity_calibration = {"first": {"pixel": float(points[0][0]), "value": float(points[0][0])},
++                            "second": {"pixel": float(points[1][0]), "value": float(points[1][0])},
++                            "unit": "arbitrary_signal"}
++    digest = size = None
++    for key in ("mean", "upper_error", "lower_error"):
++        feature = selection[key]
++        if feature is None:
++            if key == "mean":
++                _fail("mean_feature_required", key)
++            features[key] = None
++            continue
++        _closed(feature, ("kind", "roi", "rgb_min", "rgb_max", "minimum_row_fraction",
++                         "minimum_run_rows", "edge_tolerance_pixels"), key)
++        if feature["kind"] not in ("top_edge", "run_center"):
++            _fail("unsupported_summary_figure_feature", key + ".kind")
++        recipe = {k: deepcopy(v) for k, v in feature.items() if k != "kind"}
++        recipe["calibration"] = deepcopy(identity_calibration)
++        read = read_bar_ordinate(image_bytes, recipe)
++        digest, size = read["image_sha256"], read["image_size"]
++        item = {"pixel": None, "value": None, "lower": None, "upper": None,
++                "decimal_value": None, "decimal_lower": None, "decimal_upper": None,
++                "status": read["cell"]["status"], "unavailable_reason": read["cell"]["unavailable_reason"],
++                "qualifying_runs": read["qualifying_runs"]}
++        if read["cell"]["status"] == "populated":
++            run = read["qualifying_runs"][0]
++            if feature["kind"] == "run_center" and run["bottom"] == feature["roi"]["bottom"]:
++                item.update(status="unavailable", unavailable_reason="truncated_error_cap")
++                features[key] = item
++                continue
++            centre = (Fraction(run["top"]) + Fraction(1, 2) if feature["kind"] == "top_edge"
++                      else Fraction(run["top"] + run["bottom"], 2))
++            tolerance = Fraction(feature["edge_tolerance_pixels"])
++            lo, hi = centre - Fraction(1, 2) - tolerance, centre + Fraction(1, 2) + tolerance
++            if lo < 0 or hi > size["height"]:
++                item.update(status="unavailable", unavailable_reason="pixel_tolerance_outside_image")
++            else:
++                item["pixel"] = {"value": float(centre), "lower": float(lo), "upper": float(hi)}
++                try:
++                    with localcontext() as ctx:
++                        ctx.prec = 100
++                        p1, v1 = map(_decimal, points[0]); p2, v2 = map(_decimal, points[1])
++                        if calibration["scale"] == "log10":
++                            v1, v2 = v1.log10(), v2.log10()
++                        def ordinate(pixel):
++                            q = v1 + (_decimal(pixel)-p1)*(v2-v1)/(p2-p1)
++                            return Decimal(10) ** q if calibration["scale"] == "log10" else q
++                        endpoints = sorted((ordinate(lo), ordinate(hi)))
++                        central = ordinate(centre)
++                        item.update(decimal_value=str(central), decimal_lower=str(endpoints[0]), decimal_upper=str(endpoints[1]))
++                        item.update(value=_project(central), lower=_project(endpoints[0], -1),
++                                    upper=_project(endpoints[1], 1))
++                except (OverflowError, ArithmeticError, ValueError):
++                    item.update(status="unavailable", unavailable_reason="numerical_model_range")
++                    item.update(value=None, lower=None, upper=None)
++        features[key] = item
++    return {"version": VERSION, "image_sha256": digest, "image_size": size,
++            "selection": deepcopy(selection), "unit": calibration["unit"],
++            "bound_kind": BOUND_KIND, "features": features}
++
++
++__all__ = ["VERSION", "BOUND_KIND", "read_summary_figure"]
+--- /dev/null
++++ b/tests/test_literature_perturbation_summary.py
+@@ -0,0 +1,382 @@
++"""Constructed v2 summaries; no paper, model service or live database reads."""
++from copy import deepcopy
++from fractions import Fraction
++import io
++import json
++import math
++from decimal import Decimal, localcontext
++
++from PIL import Image, ImageDraw
++import pytest
++
++from gene_annotation_episode.domain import ContractError
++from gene_annotation_episode.literature_experimental_contracts import ExperimentalContractError
++from gene_annotation_episode.literature_perturbation_inputs import LITERAL_FIELDS, read_perturbation_inputs
++from gene_annotation_episode.literature_perturbation_summary import DATA_VERSION, ROLES, populate_summary_restoration, covariance_variance_enclosure
++from gene_annotation_episode.literature_summary_figure_reader import read_summary_figure
++
++SOURCE="source_"+"1"*24
++DATA="source_"+"2"*24
++IMAGE="source_"+"3"*24
++TEXT=b"Constructed matched endpoint in reference, perturbed and restored arms; independent matched blocks. Means and SD, n=4."
++
++
++def entry(value=None, *, sd=None, sem=None, n=None, independence="unknown", unit_kind="unknown", raw=None):
++    return {"value":value,"measurement_id":None if value is None and raw is None else "measurement",
++        "value_scale":"endpoint","summary_kind":"arithmetic_mean","summary_scale":"endpoint",
++        "uncertainty":{"kind":"sd" if sd is not None else "sem" if sem is not None else "unreported",
++            "value":sd if sd is not None else sem,"lower":None,"upper":None,"coverage":None,
++            "scale":"endpoint","variance_status":"estimated"},
++        "count":{"n":n,"unit_kind":unit_kind,"independence":independence},
++        "raw_units":raw,"graph":None,"digitization":None,"meaning_witnesses":[]}
++
++
++def source_data():
++    measurements={role:entry() for role in ROLES}
++    for role,value,sd in (("W",12,2),("K",3,1),("R",11,2)):
++        measurements[role]=entry(value,sd=sd,n=4,independence="independent",unit_kind="culture")
++        measurements[role]["measurement_id"]=role
++    return {"version":DATA_VERSION,"endpoint_unit":"CFU_per_mL","exposure_unit":"molecules_per_cell",
++        "origin":"synthetic","uncertainty_basis":"per_measurement","measurements":measurements,"covariances":[]}
++
++
++def arguments():
++    quote="matched endpoint"
++    start=TEXT.index(quote.encode())
++    witness={"source_ref":SOURCE,"representation":"original","start":start,"end":start+len(quote),"quote":quote}
++    return {"source_ref":SOURCE,"data_source_ref":DATA,"source_kind":"synthetic_fixture",
++        "literals":dict.fromkeys(LITERAL_FIELDS),"design":"selective_perturbation_restoration",
++        "measurement_status":"validated_ratio_scale","same_endpoint_scope":"yes","amount_role":"unknown",
++        "orientation":1,"interpretation_witnesses":[witness]}
++
++
++def extract(data=None, images=None):
++    data=source_data() if data is None else data
++    bodies={SOURCE:TEXT, DATA:json.dumps(data,allow_nan=False).encode(), **(images or {})}
++    calls=[]
++    def read(ref,rep):
++        calls.append((ref,rep))
++        return {"artifact_ref":"artifact_"+ref.split("_")[1],"content":bodies[ref]}
++    result=read_perturbation_inputs(arguments(),read_source=read)
++    return result,calls
++
++
++def calculate(data=None, images=None):
++    result,_=extract(data,images)
++    return populate_summary_restoration(result,origin="synthetic")
++
++
++def covariance(a,b,kind="uncorrelated",value=None):
++    return {"first":a,"second":b,"kind":kind,"value":value,"variance_status":"estimated","witnesses":[]}
++
++
++def paired_data(*, independence="independent", unit_kind="preparation"):
++    data=source_data()
++    for role,values in (("W",[10,12,14]),("K",[2,3,4]),("R",[8,10,12])):
++        raw=[{"unit_id":"block_"+str(i),"values":[v-1,v+1]} for i,v in enumerate(values)]
++        data["measurements"][role]=entry(raw=raw,n=3,independence=independence,unit_kind=unit_kind)
++        data["measurements"][role]["measurement_id"]=role
++    data["covariances"]=[covariance(a,b,"paired_units") for a,b in (("W","K"),("W","R"),("K","R"))]
++    return data
++
++
++def test_reported_sd_and_unknown_covariance_keep_point_and_conditional_enclosure():
++    out=calculate()["cells"]
++    assert out["perturbation_difference"]["value"]==9
++    assert out["W_mean_variance"]["value"]==1
++    assert out["K_mean_variance"]["value"]==.25
++    assert out["perturbation_mean_variance"]["value"] is None
++    assert out["perturbation_mean_variance"]["variance_status"]=="unknown"
++    assert out["perturbation_variance_lower"]["value"]==pytest.approx(.25)
++    assert out["perturbation_variance_upper"]["value"]==pytest.approx(2.25)
++    assert out["perturbation_variance_upper"]["bound_kind"]=="covariance_enclosure_not_confidence_interval"
++    assert out["reference_restoration_index"]["value"] is None
++    assert out["reference_index_lower"]["value"] is None
++
++
++def test_reported_sem_is_not_divided_by_n_again_and_design_unknown_does_not_erase_it():
++    data=source_data(); e=data["measurements"]["W"]
++    e["uncertainty"].update(kind="sem",value=2)
++    e["count"].update(n=None,independence="unknown",unit_kind="unknown")
++    out=calculate(data)["cells"]
++    assert out["W_mean_variance"]["value"]==4
++    assert out["W_mean_se"]["value"]==2
++    assert out["W_mean_variance"]["statistic_method"]=="reported_sem_squared"
++
++
++def test_unknown_spread_scale_retains_number_without_claiming_physical_variance_unit():
++    data=source_data(); e=data["measurements"]["W"]
++    e["uncertainty"].update(kind="sem",value=2,scale="unknown")
++    out=calculate(data)["cells"]
++    assert out["W_reported_spread"]["value"]==2
++    assert out["W_reported_spread"]["unit"]=="unreported"
++    assert out["W_mean_variance"]["value"]==4
++    assert out["W_mean_variance"]["unit"]=="unreported_squared"
++    assert out["perturbation_variance_upper"]["value"] is None
++    assert out["perturbation_difference"]["value"]==9
++
++
++def test_explicit_covariance_and_shared_K_are_used_once():
++    data=source_data()
++    data["covariances"]=[covariance(a,b) for a,b in (("W","K"),("W","R"),("K","R"))]
++    out=calculate(data)["cells"]
++    assert out["perturbation_mean_variance"]["value"]==1.25
++    assert out["restoration_mean_variance"]["value"]==1.25
++    assert out["shared_contrast_covariance"]["value"]==.25
++
++
++def test_paired_raw_units_use_block_means_and_sample_covariance_of_mean():
++    out=calculate(paired_data())["cells"]
++    for name,value in (("W_summary_value",12),("K_summary_value",3),("R_summary_value",10),
++        ("W_sample_sd",2),("K_sample_sd",1),("W_reported_count",3),
++        ("W_mean_variance",4/3),("perturbation_mean_variance",1/3),
++        ("restoration_mean_variance",1/3),("shared_contrast_covariance",1/3)):
++        assert out[name]["value"]==pytest.approx(value)
++    assert out["W_mean_variance"]["variance_status"]=="estimated"
++
++
++@pytest.mark.parametrize("independence,unit_kind",[("unknown","culture"),("not_independent","culture")])
++def test_descriptive_raw_summary_survives_without_sampling_assumptions(independence,unit_kind):
++    data=paired_data(independence=independence,unit_kind=unit_kind);data["covariances"]=[]
++    out=calculate(data)["cells"]
++    assert out["W_summary_value"]["value"]==12
++    assert out["W_sample_sd"]["value"]==2
++    assert out["W_reported_count"]["value"]==3
++    assert out["W_mean_se"]["value"] is None
++    assert out["W_mean_variance"]["value"] is None
++
++
++def test_supported_technical_mean_precision_is_available_with_its_actual_scope():
++    data=paired_data(unit_kind="technical_reading")
++    out=calculate(data)["cells"]
++    assert out["W_mean_variance"]["value"]==pytest.approx(4/3)
++    assert out["W_mean_se"]["value"]==pytest.approx(math.sqrt(4/3))
++    assert out["W_mean_variance"]["variance_scope"]=="technical_mean_within_studied_unit"
++    assert out["perturbation_mean_variance"]["variance_scope"]=="technical_mean_within_studied_unit"
++    assert out["W_reported_count"]["value"]==3
++
++
++def test_mixed_technical_and_biological_estimator_scopes_are_not_relabelled():
++    data=source_data();data["covariances"]=[covariance("W","K")]
++    data["measurements"]["K"]["count"]["unit_kind"]="technical_reading"
++    out=calculate(data)["cells"]
++    assert out["perturbation_mean_variance"]["value"]==1.25
++    assert out["perturbation_mean_variance"]["variance_scope"]=="mixed_estimator_scopes"
++
++
++def test_reported_sem_does_not_create_independence_for_other_units():
++    data=source_data();e=data["measurements"]["W"]
++    e["uncertainty"].update(kind="sem",value=2)
++    e["count"].update(unit_kind="other",independence="unknown")
++    out=calculate(data)["cells"]
++    assert out["W_mean_variance"]["value"]==4
++    assert out["W_mean_variance"]["variance_scope"]=="other_unit_mean"
++
++
++def test_missing_graph_ink_is_a_reader_limitation_not_claim_of_unreported_paper_value():
++    data,images=graph_data()
++    data["measurements"]["W"]["graph"]["selection"]["mean"]["rgb_min"]=[255,0,0]
++    data["measurements"]["W"]["graph"]["selection"]["mean"]["rgb_max"]=[255,0,0]
++    out=calculate(data,images)["cells"]
++    assert out["W_summary_value"]["value"] is None
++    assert out["W_summary_value"]["unavailable_reason"]=="no_bar_pixels"
++    assert out["reference_endpoint"]["unavailable_reason"]=="no_bar_pixels"
++
++
++@pytest.mark.parametrize("missing_W",[True,False])
++def test_R_minus_K_and_its_variance_survive_unusable_W_restoration_denominator(missing_W):
++    data=source_data()
++    data["measurements"]["W"]["value"]=None if missing_W else 3
++    data["covariances"]=[covariance("R","K")]
++    out=calculate(data)["cells"]
++    assert out["restoration_fraction_raw"]["value"] is None
++    assert out["restoration_difference"]["value"]==8
++    assert out["restoration_mean_variance"]["value"]==1.25
++
++
++def test_full_covariance_psd_detects_inconsistent_three_arm_covariance():
++    data=source_data()
++    for e in data["measurements"].values():
++        if e["value"] is not None:e["uncertainty"].update(kind="sem",value=1)
++    data["covariances"]=[covariance("W","K","mean_covariance",.9),
++                         covariance("W","R","mean_covariance",.9),
++                         covariance("K","R","mean_covariance",-.9)]
++    with pytest.raises(ExperimentalContractError,match="not_psd"):
++        calculate(data)
++
++
++@pytest.mark.parametrize("kind",["confidence_interval","detection_limit","untyped_pm"])
++def test_nonvariance_uncertainty_keeps_reported_numbers_and_mean_point(kind):
++    data=source_data();e=data["measurements"]["W"]
++    e["uncertainty"].update(kind=kind,value=.4 if kind=="untyped_pm" else None,
++        lower=None if kind=="untyped_pm" else 10,upper=None if kind=="untyped_pm" else 14,
++        coverage=.95 if kind=="confidence_interval" else None)
++    out=calculate(data)["cells"]
++    assert out["W_summary_value"]["value"]==12
++    assert out["W_mean_variance"]["value"] is None
++    assert out["W_reported_spread"]["lower"]==(None if kind=="untyped_pm" else 10)
++
++
++@pytest.mark.parametrize("mutation",[
++    lambda d:d["measurements"]["W"]["count"].update(n=True),
++    lambda d:d["measurements"]["W"]["count"].update(n=0),
++    lambda d:d["measurements"]["W"]["uncertainty"].update(value=-1),
++    lambda d:d["measurements"]["W"].update(extra=1),
++    lambda d:d["measurements"]["W"].update(summary_scale="guess"),
++    lambda d:d["measurements"]["W"].update(meaning_witnesses=[{"invented":"quote"}]),
++    lambda d:d["covariances"].extend([covariance("W","K"),covariance("K","W")]),
++])
++def test_invalid_summary_inputs_do_not_become_observations(mutation):
++    data=source_data();mutation(data)
++    with pytest.raises((ExperimentalContractError,ContractError)):
++        calculate(data)
++
++
++def figure_fixture(*,lower=False):
++    im=Image.new("RGB",(100,500),"white");draw=ImageDraw.Draw(im)
++    draw.rectangle((10,200,39,349),fill="black")
++    draw.line((55,170,84,170),fill="black",width=1)
++    if lower:draw.line((55,230,84,230),fill="black",width=1)
++    buf=io.BytesIO();im.save(buf,format="PNG");im.close()
++    def feature(left,top,right,bottom,kind):
++        return {"kind":kind,"roi":{"left":left,"top":top,"right":right,"bottom":bottom},
++            "rgb_min":[0,0,0],"rgb_max":[30,30,30],"minimum_row_fraction":.8,
++            "minimum_run_rows":1,"edge_tolerance_pixels":.5}
++    selection={"calibration":{"scale":"log10","first":{"pixel":400.5,"value":1},
++        "second":{"pixel":100.5,"value":1000},"unit":"CFU_per_mL"},
++        "mean":feature(10,190,40,350,"top_edge"),"upper_error":feature(55,165,85,176,"run_center"),
++        "lower_error":feature(55,225,85,236,"run_center") if lower else None}
++    return buf.getvalue(),selection
++
++
++def graph_data(*,scale="endpoint",lower=False,kind="sd"):
++    data=source_data();raw,selection=figure_fixture(lower=lower)
++    e=data["measurements"]["W"]
++    e["value"]=None;e["graph"]={"source_ref":IMAGE,"selection":selection}
++    e["uncertainty"].update(kind=kind,value=None,scale=scale,coverage=.95 if kind=="confidence_interval" else None)
++    return data,{IMAGE:raw}
++
++
++def test_log_display_reader_extracts_native_point_and_preserves_statistical_scale_choice():
++    data,images=graph_data()
++    result,calls=extract(data,images)
++    assert calls.count((IMAGE,"original"))==1
++    assert result["values"]["W"]==pytest.approx(100)
++    out=populate_summary_restoration(result,origin="graph_derived")["cells"]
++    assert out["W_reported_spread"]["value"]==pytest.approx(10**2.3-100)
++    assert out["W_reported_spread"]["bound_kind"]=="conditional_digitization_not_confidence_interval"
++    data,images=graph_data(scale="log10_endpoint")
++    out=calculate(data,images)["cells"]
++    assert out["W_summary_value"]["value"]==pytest.approx(100)
++    assert out["W_reported_spread"]["value"]==pytest.approx(.3)
++    assert out["W_reported_spread"]["unit"]=="log10_CFU_per_mL"
++    assert out["W_mean_variance"]["value"] is None
++
++
++def test_two_caps_keep_asymmetry_instead_of_dropping_selected_numbers():
++    data,images=graph_data(lower=True)
++    out=calculate(data,images)["cells"]["W_reported_spread"]
++    assert out["value"] is None
++    assert out["lower_error_cap"]==pytest.approx(10**1.7)
++    assert out["upper_error_cap"]==pytest.approx(10**2.3)
++    assert out["lower"]<50<out["upper"]
++    assert out["spread_reading"]=="asymmetric_readings"
++    data,images=graph_data(lower=True,scale="log10_endpoint")
++    out=calculate(data,images)["cells"]["W_reported_spread"]
++    assert out["value"]==pytest.approx(.3)
++    assert out["spread_reading"]=="symmetric_compatible"
++
++
++def test_graph_CI_is_transformed_to_its_declared_statistical_scale():
++    data,images=graph_data(lower=True,scale="log10_endpoint",kind="confidence_interval")
++    out=calculate(data,images)["cells"]["W_reported_spread"]
++    assert out["lower"]==pytest.approx(1.7)
++    assert out["upper"]==pytest.approx(2.3)
++    assert out["unit"]=="log10_CFU_per_mL"
++    assert out["bound_kind"]=="reported_confidence_interval"
++
++
++@pytest.mark.parametrize("mutation",[
++    lambda s:s["calibration"]["first"].update(value=0),
++    lambda s:s["calibration"]["first"].update(value=10**400),
++    lambda s:s["calibration"]["first"].update(pixel=True),
++    lambda s:s["mean"]["roi"].update(right=101),
++    lambda s:s.update(extra=True),
++])
++def test_figure_invalid_selections_have_structured_failure(mutation):
++    raw,selection=figure_fixture();mutation(selection)
++    with pytest.raises(ContractError):read_summary_figure(raw,selection)
++
++
++def test_cap_clipping_is_unknown_while_mean_fill_may_end_at_roi_bottom():
++    raw,selection=figure_fixture()
++    selection["upper_error"]["roi"]["bottom"]=171
++    result=read_summary_figure(raw,selection)
++    assert result["features"]["mean"]["value"]==pytest.approx(100)
++    assert result["features"]["upper_error"]["value"] is None
++    assert result["features"]["upper_error"]["unavailable_reason"]=="truncated_error_cap"
++
++
++def test_graph_wrong_upper_cap_is_rejected_without_reinterpreting_it():
++    data,images=graph_data(lower=True)
++    data["measurements"]["W"]["graph"]["selection"]["upper_error"]=deepcopy(data["measurements"]["W"]["graph"]["selection"]["lower_error"])
++    with pytest.raises(ExperimentalContractError,match="error_cap_direction_mismatch"):
++        calculate(data,images)
++
++
++@pytest.mark.parametrize("first,second",[(1e300,1e308),(1e-300,1e-308)])
++def test_log_extrapolation_range_failure_does_not_manufacture_finite_or_zero_value(first,second):
++    raw,selection=figure_fixture()
++    selection["calibration"].update(first={"pixel":350,"value":first},second={"pixel":300,"value":second})
++    out=read_summary_figure(raw,selection)["features"]["mean"]
++    assert out["value"] is None
++    assert out["status"]=="unavailable"
++    assert out["unavailable_reason"]=="numerical_model_range"
++
++
++def test_log_axis_reversed_direction_uses_supplied_tick_calibration():
++    raw,selection=figure_fixture();selection["upper_error"]=None
++    selection["calibration"].update(first={"pixel":100.5,"value":1},second={"pixel":400.5,"value":1000})
++    out=read_summary_figure(raw,selection)["features"]["mean"]
++    assert out["value"]==pytest.approx(10)
++    assert out["lower"]<10<out["upper"]
++
++
++@pytest.mark.parametrize("first,second",[
++    (Fraction(1,10**95-19),Fraction(1,10**95-18)),
++    (Fraction(1),Fraction(1,4)),(Fraction(1),Fraction(2)),
++    (Fraction(0),Fraction(0)),(Fraction(0),Fraction(3)),
++    (Fraction(10**300),Fraction(10**300)),
++    (Fraction(1,10**300),Fraction(1,2*10**300)),
++    (Fraction(1,10**1000),Fraction(1,2*10**1000)),
++])
++def test_covariance_variance_enclosure_contains_high_precision_extrema(first,second):
++    lower,upper=covariance_variance_enclosure(first,second)
++    with localcontext() as context:
++        context.prec=600
++        a=Decimal(first.numerator)/Decimal(first.denominator)
++        b=Decimal(second.numerator)/Decimal(second.denominator)
++        actual_lower=(a.sqrt()-b.sqrt())**2
++        actual_upper=(a.sqrt()+b.sqrt())**2
++        assert lower is not None and Decimal.from_float(lower)<=actual_lower
++        assert upper is not None and Decimal.from_float(upper)>=actual_upper
++    if first==second:assert lower==0
++
++
++def test_covariance_bound_overflow_keeps_finite_lower_without_fabricating_upper():
++    lower,upper=covariance_variance_enclosure(Fraction(10**1000),Fraction(0))
++    assert lower==math.nextafter(math.inf,0.)
++    assert upper is None
++
++
++def test_large_reported_counts_use_sound_enclosure_through_actual_source_reader():
++    data=source_data();n=10**95-19
++    data["measurements"]["W"]["uncertainty"].update(value=1)
++    data["measurements"]["K"]["uncertainty"].update(value=1)
++    data["measurements"]["W"]["count"].update(n=n)
++    data["measurements"]["K"]["count"].update(n=n+1)
++    out=calculate(data)["cells"]
++    with localcontext() as context:
++        context.prec=600
++        expected=(Decimal(1)/Decimal(n)).sqrt()-(Decimal(1)/Decimal(n+1)).sqrt()
++        assert Decimal.from_float(out["perturbation_variance_lower"]["value"])<=expected**2
+--- /dev/null
++++ b/tests/test_literature_perturbation_summary_integration.py
+@@ -0,0 +1,207 @@
++"""Constructed selected A106 summary operations and exact typed possession."""
++import asyncio
++from copy import deepcopy
++from dataclasses import replace
++from functools import partial
++import json
++import sqlite3
++from types import SimpleNamespace
++
++import pytest
++
++from gene_annotation_episode.communication import form_with_facts, plain
++from gene_annotation_episode.domain import ContractError, canonical, obj
++from gene_annotation_episode.episode_bindings import BindingContext, EpisodeBindingRegistry
++from gene_annotation_episode.episode_services import WorkflowServices
++from gene_annotation_episode.episode_receipts import EpisodeReceipts
++from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
++from gene_annotation_episode.literature_episodes import LiteratureEpisodes
++from gene_annotation_episode.literature_perturbation_storage import LiteraturePerturbationRepository, perturbation_cells_schema
++from gene_annotation_episode.literature_perturbation_summary_storage import (
++    LiteraturePerturbationSummaryProjection, perturbation_summary_cells_schema,
++)
++from gene_annotation_episode.runtime import run_workflow
++from gene_annotation_episode.state import Store
++from gene_annotation_episode.tools import ToolRegistry
++from test_runtime import FixtureController, ScriptedProvider
++from test_literature_perturbation_summary import source_data, paired_data, arguments, TEXT, graph_data, IMAGE
++
++REQUESTED=["perturbation_difference","W_mean_variance","perturbation_mean_variance","perturbation_variance_upper","reference_restoration_index"]
++FORM=obj({"measurements":perturbation_summary_cells_schema()})
++
++
++def source(store,body,parents=()):
++    artifact=store.artifact(body,'application/octet-stream')
++    return store.put('source',{'provider':'constructed_a106_summary','accession':None,'uri':None,
++        'artifact_ref':artifact,'text_ref':None,'request_ref':None,'version':None,'retrieved_at':None,
++        'parent_source_refs':list(parents)},origin='caller')
++
++
++def fixture(path,*,paired=False,graph=False):
++    store=Store(path);store.create_problem(raw_sequence='ATGGCT',molecule='dna')
++    root=source(store,TEXT);refs=[root['id']]
++    data=paired_data() if paired else source_data()
++    if graph:
++        data,images=graph_data()
++        image=source(store,images[IMAGE],parents=[root['id']]);refs.append(image['id'])
++        data['measurements']['W']['graph']['source_ref']=image['id']
++    retained=source(store,canonical(data),parents=[root['id']]);refs.append(retained['id'])
++    args=arguments();args.update(source_ref=root['id'],data_source_ref=retained['id'])
++    for witness in args['interpretation_witnesses']:witness['source_ref']=root['id']
++    args['literals']['molecule']={**args['interpretation_witnesses'][0]}
++    assignment={'version':'literature_assignment_v1','question_context_refs':[],'source_refs':refs,
++        'requested_perturbation_summary_components':REQUESTED}
++    context=BindingContext('summary-fixture-run','summary-child','literature',(('literature','fixture'),),
++        store.validate_scope(),assignment,{},tuple(refs))
++    return store,context,args
++
++
++def binding_for(store,context):
++    host=SimpleNamespace(store=store,run_id=context.run_id,tools=ToolRegistry(store))
++    binding=LiteratureEpisodes(WorkflowServices(host),rate_population=True)
++    host.episode_bindings=EpisodeBindingRegistry((binding,))
++    return binding
++
++
++@pytest.mark.parametrize('paired',[False,True])
++def test_selected_summary_saved_exact_subset_no_source_recalculation_and_read_only(tmp_path,monkeypatch,paired):
++    store,context,args=fixture(tmp_path,paired=paired)
++    with store:
++        binding=binding_for(store,context)
++        outcome=asyncio.run(binding.execute(context,'literature.perturbation.populate',args,'selected'))
++        assert outcome['status']=='completed',outcome.get('feedback')
++        current=replace(context,received_record_refs=(*context.received_record_refs,*outcome['record_refs']))
++        sheet=outcome['result']['sheet_ref'];repo=LiteraturePerturbationRepository(store,context.run_id).summary_projection()
++        facts=binding.facts(current,{'committed_record_refs':[sheet]})
++        assert facts['literature_perturbation_cells']==[]
++        form=form_with_facts({},FORM,facts);binding.validate_report(current,form,FORM)
++        assert [r['component'] for r in form['measurements']]==REQUESTED
++        assert form['measurements'][1]['value']==pytest.approx(4/3 if paired else 1)
++        assert form['measurements'][2]['value']==(pytest.approx(1/3) if paired else None)
++        assert form['measurements'][-1]['value'] is None
++        parent=replace(current,episode_id='summary-parent',role='annotation',assignment={},path=(('annotation','root'),))
++        binding.received_form_references(parent,form,FORM,'manual-fixture-admission')
++        assert repo.received_cells(parent)==form['measurements']
++        parent=replace(parent,received_record_refs=(sheet,*[v for v in repo.read(sheet)['experimental_bindings'].values() if v]))
++        assert repo.fact_cells(parent,[sheet],components=['K_summary_value'])==[]
++        private=repo.project_cells([sheet],permitted_record_refs=current.received_record_refs,components=['K_summary_value'])
++        with pytest.raises(ContractError,match='cell_not_received'):
++            repo.validate_fact_values(parent,private)
++        assert [r['component'] for r in repo.fact_cells(parent,[sheet],components=REQUESTED)]==REQUESTED
++        bad=deepcopy(form['measurements']);bad[0]['value']=99
++        with pytest.raises(ContractError,match='differs_from_saved'):
++            repo.validate_returned_values(bad,permitted_record_refs=current.received_record_refs)
++        saved=store.get(sheet);allowed={saved['artifact_ref'],saved['request_ref']}
++        get_artifact=store.get_artifact
++        def saved_only(reference):
++            assert reference in allowed,'read-only replay cannot open source data or images'
++            return get_artifact(reference)
++        def forbidden(*a,**kw):raise AssertionError('no parser, arithmetic or mutation during replay')
++        monkeypatch.setattr(store,'get_artifact',saved_only)
++        monkeypatch.setattr('gene_annotation_episode.literature_perturbation_storage.read_perturbation_inputs',forbidden)
++        monkeypatch.setattr('gene_annotation_episode.literature_perturbation_storage.populate_source_summary_restoration',forbidden)
++        store.db.execute('pragma query_only=ON');before=store.db.total_changes
++        assert LiteraturePerturbationRepository(store,context.run_id).populate(context,args,'selected')==outcome
++        assert repo.received_cells(parent)==form['measurements']
++        assert repo.project_cells([sheet],permitted_record_refs=current.received_record_refs,components=REQUESTED)==form['measurements']
++        assert store.db.total_changes==before
++
++
++def test_graph_bytes_need_actual_receipt_and_assigned_source_before_decoding(tmp_path,monkeypatch):
++    store,context,args=fixture(tmp_path,graph=True)
++    with store:
++        image_ref=context.received_record_refs[1]
++        missing=replace(context,received_record_refs=tuple(r for r in context.received_record_refs if r!=image_ref))
++        repo=LiteraturePerturbationRepository(store,context.run_id)
++        get_artifact=store.get_artifact
++        image_artifact=store.get(image_ref)['artifact_ref']
++        def no_decode(reference):
++            assert reference!=image_artifact,'unpossessed image bytes must never be opened'
++            return get_artifact(reference)
++        monkeypatch.setattr(store,'get_artifact',no_decode)
++        with pytest.raises(ContractError,match='not_received'):repo.populate(missing,args,'denied')
++        monkeypatch.setattr(store,'get_artifact',get_artifact)
++        out=repo.populate(context,args,'selected')
++        saved=repo.read(out['result']['sheet_ref'])
++        assert saved['extraction']['summary_data']['graphs']['W']['source_ref']==image_ref
++        assert out['result']['cells']['W_summary_value']['value']==pytest.approx(100)
++        assert store.db.execute('select count(*) from literature_perturbation_operations').fetchone()[0]==1
++
++
++def test_new_projection_discovery_is_ddl_free_on_old_read_only_database(tmp_path):
++    store,context,_=fixture(tmp_path)
++    with store:
++        LiteraturePerturbationRepository(store,context.run_id)
++        assert store.db.execute("select 1 from sqlite_master where name='literature_perturbation_summary_received'").fetchone() is None
++        store.db.execute('pragma query_only=ON');before=store.db.total_changes
++        projection=LiteraturePerturbationSummaryProjection(store,context.run_id)
++        assert projection.received_cells(context)==[]
++        assert store.db.total_changes==before
++        assert store.db.execute("select 1 from sqlite_master where name='literature_perturbation_summary_received'").fetchone() is None
++
++
++def test_summary_operation_in_ordinary_child_admits_exact_form_once_without_extra_observation(tmp_path):
++    store,context,args=fixture(tmp_path/'state',paired=True)
++    received=[]
++    try:
++        commission={'selection':{'kind':'episode_child','role':'literature','assignment':plain(context.assignment),
++            'goal':'Measure source perturbation precision under actual retained summary relationships',
++            'scope':plain(context.scope),'purpose':'Return requested summary cells with uncertainty meanings',
++            'schema_json':json.dumps(FORM),'initial_report_json':'{}'},'report_update':{}}
++        action={'selection':{'kind':'tool','tool':'literature.perturbation.populate','arguments':args},'report_update':{}}
++        def receive(inputs):
++            form,=inputs['child_reports'];received.append(form)
++            assert [r['component'] for r in form['measurements']]==REQUESTED
++            assert form['measurements'][2]['value']==pytest.approx(1/3)
++            row=store.get(args['source_ref']);start=TEXT.index(b'Constructed')
++            commit={name:[] for name in store.reasoning_schema()['required']}
++            commit['source_subjects']=[{'alias':'source_subject','reference_type':'assay','source_ref':row['id'],
++                'label':'Constructed','anchor':{'source_ref':row['id'],'artifact_ref':row['artifact_ref'],
++                    'start':start,'end':start+11,'quote':'Constructed'}}]
++            return {'selection':{'kind':'reason','commit':commit},'report_update':{}}
++        scorer=ScientificFindingProgress(FindingProgressPolicy(1))
++        result=asyncio.run(run_workflow(store,ToolRegistry(store),provider=ScriptedProvider([commission,action,receive]),
++            run_dir=tmp_path/'run',controller_factory=lambda path,initial:FixtureController(str(path),initial,2 if len(path)==1 else 1),
++            project_credit=scorer,initial_known_record_refs=list(context.received_record_refs),
++            episode_binding_factories=(partial(LiteratureEpisodes,rate_population=True),),binding_definitions={'credit':scorer.as_record()}))
++        assert len(received)==1 and result['credit']==0
++        assert store.db.execute('select count(*) from runtime_observations').fetchone()[0]==3
++        assert store.db.execute('select count(*) from literature_perturbation_operations').fetchone()[0]==1
++        assert store.db.execute('select count(*) from literature_perturbation_summary_received').fetchone()[0]==1
++        assert not store.list('observation') and not store.list('assessment')
++        manifest=json.loads((tmp_path/'run'/'run.json').read_text())
++        run=manifest['run_id']
++        parent_row,=store.db.execute('select * from runtime_episodes where json_array_length(path)=1').fetchall()
++        request=json.loads(parent_row['request'])
++        parent=BindingContext(run,parent_row['episode_id'],'annotation',
++            tuple(tuple(p) for p in json.loads(parent_row['path'])),plain(context.scope),
++            request['message'].get('episode_assignment',{}),request,
++            tuple(EpisodeReceipts(store,run).known(parent_row['episode_id'])))
++        source_artifacts={store.get(ref)['artifact_ref'] for ref in context.received_record_refs}
++        store.close()
++        def forbidden(*a,**kw):raise AssertionError('read-only reconstruction must not parse, calculate, model or mutate')
++        reopened=Store.__new__(Store);reopened.path=(tmp_path/'state').resolve();reopened._savepoint=0
++        reopened.db=sqlite3.connect((reopened.path/'state.sqlite3').as_uri()+'?mode=ro',uri=True,isolation_level=None)
++        reopened.db.row_factory=sqlite3.Row;reopened.db.execute('pragma query_only=ON')
++        reopened.db.create_function('library_scope_record',2,reopened._scope_filter_record)
++        old_get=reopened.get_artifact
++        def saved_only(ref):
++            assert ref not in source_artifacts,'no original source bytes on first read-only reconstruction'
++            return old_get(ref)
++        from unittest.mock import patch
++        with patch.object(reopened,'get_artifact',saved_only), patch.object(reopened,'put',forbidden), patch.object(reopened,'artifact',forbidden), patch.object(reopened,'transaction',forbidden), patch('gene_annotation_episode.literature_perturbation_storage.read_perturbation_inputs',forbidden), patch('gene_annotation_episode.literature_perturbation_storage.populate_source_summary_restoration',forbidden), patch('gene_annotation_episode.providers.ModelConnection',forbidden):
++            from gene_annotation_episode.episode_composition import compose_episode_bindings
++            from gene_annotation_episode.episode_journal import Journal
++            services=WorkflowServices(SimpleNamespace(store=reopened,run_id=run))
++            journal=Journal.__new__(Journal);journal.store=reopened;journal.db=reopened.db;journal.run_id=run
++            composition=compose_episode_bindings(services,store=reopened,journal=journal,
++                execution_backend=None,descriptors=manifest['episode_bindings'],job_episodes=None,
++                resource_estimator=None,role_credit_bindings={})
++            binding,=composition.bindings
++            rows=binding.received_report_facts(parent)['literature_perturbation_summary_cells']
++            assert rows==received[0]['measurements']
++            projection=services.literature_perturbation_repository().summary_projection()
++            assert projection.fact_cells(parent,[rows[0]['sheet_ref']],components=['K_summary_value'])==[]
++            assert reopened.db.total_changes==0
++        reopened.close()
++    finally:store.close()

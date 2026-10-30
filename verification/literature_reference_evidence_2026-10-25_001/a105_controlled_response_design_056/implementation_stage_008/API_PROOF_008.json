@@ -1,0 +1,248 @@
+{
+  "reader_source_sha256": "816868d1c70f97f2b7c67e9206bedf902fca4e55ad33a609a6603da1af1ffb9e",
+  "four_function_signatures": {
+    "controlled_response_arguments_schema": "()",
+    "validate_controlled_response_selection": "(arguments)",
+    "read_controlled_response_inputs": "(arguments, *, read_source)",
+    "validate_controlled_response_extraction": "(arguments, extraction)"
+  },
+  "selection_schema_exact007": true,
+  "result_root_fields": [
+    "version",
+    "selection",
+    "sources",
+    "images",
+    "arms",
+    "relationships",
+    "covariance",
+    "requested_model",
+    "effective_model",
+    "calculation_inputs",
+    "diagnostics",
+    "implementation_dependencies"
+  ],
+  "result_contract": "controlled_response_source_extraction_v1",
+  "closed_record_fields": {
+    "Diagnostic": [
+      "code",
+      "field",
+      "domain",
+      "source_refs"
+    ],
+    "SourceRecord": [
+      "source_ref",
+      "representation",
+      "artifact_ref",
+      "byte_sha256",
+      "state",
+      "diagnostics"
+    ],
+    "WitnessRecord": [
+      "selection",
+      "artifact_ref",
+      "byte_sha256",
+      "canonical_locator",
+      "authentication",
+      "attribution",
+      "diagnostics"
+    ],
+    "TextLocator": [
+      "kind",
+      "source_ref",
+      "artifact_ref",
+      "byte_sha256",
+      "start",
+      "end"
+    ],
+    "ImageLocator": [
+      "kind",
+      "original_source_ref",
+      "original_artifact_ref",
+      "original_byte_sha256",
+      "region"
+    ],
+    "InterpretationExtraction": [
+      "selection",
+      "witnesses",
+      "effective_value",
+      "diagnostics"
+    ],
+    "MeaningExtraction": [
+      "selection",
+      "witnesses",
+      "canonical_witness",
+      "canonical_correspondence",
+      "resolved_state",
+      "canonical_id",
+      "diagnostics"
+    ],
+    "NumberCandidate": [
+      "selection",
+      "witness",
+      "raw_expression",
+      "native_value",
+      "relation",
+      "approximate",
+      "source_locator",
+      "status",
+      "diagnostics"
+    ],
+    "UnitRecord": [
+      "selection",
+      "witness",
+      "raw_unit",
+      "canonical_unit",
+      "exact_scale",
+      "native_registry_unit",
+      "definition_witnesses",
+      "status",
+      "diagnostics"
+    ],
+    "Rational": [
+      "numerator",
+      "denominator"
+    ],
+    "CanonicalDisplay": [
+      "value",
+      "threshold",
+      "unit",
+      "relation",
+      "approximate",
+      "diagnostics"
+    ],
+    "MeasurementExtraction": [
+      "selection",
+      "candidates",
+      "fragments",
+      "unit",
+      "graph_witnesses",
+      "reading_status",
+      "source_observation_id",
+      "canonical_display",
+      "pixel_result",
+      "diagnostics"
+    ],
+    "UncertaintyExtraction": [
+      "selection",
+      "meanings",
+      "magnitude",
+      "interval",
+      "unit",
+      "effective_unit",
+      "confidence_level",
+      "count",
+      "canonical",
+      "diagnostics"
+    ],
+    "IntervalRecord": [
+      "selection",
+      "witness",
+      "raw_values",
+      "values",
+      "status",
+      "diagnostics"
+    ],
+    "ConfidenceRecord": [
+      "selection",
+      "witness",
+      "value",
+      "status",
+      "diagnostics"
+    ],
+    "CountRecord": [
+      "selection",
+      "witness",
+      "reading",
+      "diagnostics"
+    ],
+    "UncertaintyCanonical": [
+      "statistic",
+      "magnitude",
+      "interval",
+      "confidence_level",
+      "count",
+      "repetition_basis",
+      "estimate_basis"
+    ],
+    "ArmExtraction": [
+      "selection",
+      "context",
+      "protein_arrangement",
+      "meanings",
+      "intended_factor_level",
+      "measurement",
+      "reported_uncertainty",
+      "calculation_operand",
+      "diagnostics"
+    ],
+    "RelationshipExtraction": [
+      "condition1_target",
+      "condition0_target",
+      "condition_levels_relation",
+      "subject_construct_across_conditions",
+      "condition1_control_application",
+      "condition0_control_application",
+      "control_reference_reuse",
+      "nonintended_conditions",
+      "intended_factor"
+    ],
+    "CovarianceBindingExtraction": [
+      "selection",
+      "label_witness",
+      "owner_witness",
+      "correspondence",
+      "source_variable_index",
+      "resolved_owner_id",
+      "state",
+      "diagnostics"
+    ],
+    "CovarianceSourceVariable": [
+      "index",
+      "label",
+      "label_witness",
+      "unit",
+      "unit_witness",
+      "description",
+      "description_witness",
+      "native_registry_unit",
+      "exact_scale",
+      "diagnostics"
+    ],
+    "CovarianceExtraction": [
+      "selection",
+      "source_ref",
+      "artifact_ref",
+      "byte_sha256",
+      "raw_text",
+      "variables",
+      "matrix_tokens",
+      "exact_matrix",
+      "source_model",
+      "bindings",
+      "projection_indices",
+      "projected_exact_matrix",
+      "calculation_covariance",
+      "source_validation",
+      "projection_state",
+      "diagnostics"
+    ],
+    "RequestedModel": [
+      "variance_status",
+      "model_kind"
+    ],
+    "EffectiveModel": [
+      "variance_status",
+      "model_kind",
+      "diagnostics"
+    ],
+    "DependencyRecord": [
+      "reader_contract_version",
+      "calculator_contract_version",
+      "expected_module_fingerprints"
+    ]
+  },
+  "reader_does_not_import_populate": true,
+  "saved_validation_callback_parameter": false,
+  "reader_import_path": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_controlled_response_design_056/implementation_stage_008/execution_pin_008/gene_annotation_episode/literature_controlled_response_inputs.py",
+  "interpretation": "Saved consistency is conditional on original runtime authorization and request/source/operation/outcome custody; it does not independently authenticate saved quotes/hashes."
+}

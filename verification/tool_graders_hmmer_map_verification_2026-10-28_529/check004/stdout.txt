@@ -1,0 +1,12 @@
+...F...                                                                  [100%]
+=================================== FAILURES ===================================
+_ test_original_saved_alimask_publication_keeps_absent_context_and_frozen_numbers _
+source_snapshot/tests/test_native_hmmer_preparation_result_publication.py:182: in test_original_saved_alimask_publication_keeps_absent_context_and_frozen_numbers
+    with Store(tmp_path / "state") as store:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/state.py:41: in __init__
+    self.db.execute("PRAGMA journal_mode=WAL")
+E   sqlite3.OperationalError: attempt to write a readonly database
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_native_hmmer_preparation_result_publication.py::test_original_saved_alimask_publication_keeps_absent_context_and_frozen_numbers
+1 failed, 6 passed in 276.73s (0:04:36)

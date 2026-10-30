@@ -1,0 +1,818 @@
+{
+  "cases": [
+    {
+      "id": "01_binary_subset_alias",
+      "program": "blastdb_aliastool",
+      "arguments": [
+        "-db",
+        "db/tiny",
+        "-dbtype",
+        "nucl",
+        "-seqidlist",
+        "bound.bsl",
+        "-out",
+        "subset",
+        "-title",
+        "644 retained binary subset"
+      ],
+      "verification_helper": false,
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdb_aliastool",
+        "-db",
+        "db/tiny",
+        "-dbtype",
+        "nucl",
+        "-seqidlist",
+        "bound.bsl",
+        "-out",
+        "subset",
+        "-title",
+        "644 retained binary subset"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644",
+      "executable": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdb_aliastool",
+        "sha256": "71c9fa9760f4215b714e762a230486e7ae739c8a363396dd00a4bbb0329f2524",
+        "size_bytes": 22056640
+      },
+      "environment_overrides": {
+        "BLAST_USAGE_REPORT": "false",
+        "NCBI_DONT_USE_NCBIRC": "1",
+        "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/tmp",
+        "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/tmp",
+        "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/tmp",
+        "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/cache"
+      },
+      "shell": false,
+      "started": true,
+      "returncode": 0,
+      "writer_closed": true,
+      "captured_bytes_complete": true,
+      "inventory_complete": true,
+      "inventory_before": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/INPUT_BINDINGS_002.json",
+          "sha256": "0c4d7a71cc80633e0569894e6673b05dfd92c5781949a85b7a908f0c8eecb99c",
+          "size_bytes": 14297,
+          "relative_path": "INPUT_BINDINGS_002.json"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/INPUT_PINS_BEFORE_002.json",
+          "sha256": "c5ba2b1060861ca987a7be54ae495fcb5063b54fbbcc226a369408213c930821",
+          "size_bytes": 14485,
+          "relative_path": "INPUT_PINS_BEFORE_002.json"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/RETAINED_BINARY_LIST_DECODE_002.json",
+          "sha256": "ade8bc4ec99cd28404ed8b98cf8160ea9dd79304b6b2f62b89b325217fb5e2c1",
+          "size_bytes": 952,
+          "relative_path": "RETAINED_BINARY_LIST_DECODE_002.json"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/bound.bsl",
+          "sha256": "83ba9e9aa335a18121b1cdf0727652e4ab8399f5c92deec9b0bc00716addc68e",
+          "size_bytes": 98,
+          "relative_path": "bound.bsl"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.ndb",
+          "sha256": "938c2aa8147b6bf0b32547ce667789c00ea5d46ea68ba141cc7682d0a1d4b2d3",
+          "size_bytes": 32768,
+          "relative_path": "db/tiny.ndb"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nhr",
+          "sha256": "efb636621b7bf24073f4c8d95732143aeb6f72f5c3bd01f3798d0aec810884ee",
+          "size_bytes": 135,
+          "relative_path": "db/tiny.nhr"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nin",
+          "sha256": "857201818fa21683eb3d677aa7d6cd61ec206416ef6c13b6f2ad03c232b8d0d5",
+          "size_bytes": 160,
+          "relative_path": "db/tiny.nin"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.njs",
+          "sha256": "eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+          "size_bytes": 477,
+          "relative_path": "db/tiny.njs"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nog",
+          "sha256": "9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+          "size_bytes": 44,
+          "relative_path": "db/tiny.nog"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nos",
+          "sha256": "3f225cdd077a9359f901d700b837d3c890384aa2c61c750804d51a993254ad07",
+          "size_bytes": 53,
+          "relative_path": "db/tiny.nos"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.not",
+          "sha256": "2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+          "size_bytes": 44,
+          "relative_path": "db/tiny.not"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nsq",
+          "sha256": "c65af12543af8568550ee00a76e7a65dc18f482474b1eb7b3dbcfbc698598929",
+          "size_bytes": 28,
+          "relative_path": "db/tiny.nsq"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.ntf",
+          "sha256": "67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+          "size_bytes": 16384,
+          "relative_path": "db/tiny.ntf"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nto",
+          "sha256": "6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+          "size_bytes": 16,
+          "relative_path": "db/tiny.nto"
+        }
+      ],
+      "inventory_after": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/INPUT_BINDINGS_002.json",
+          "sha256": "0c4d7a71cc80633e0569894e6673b05dfd92c5781949a85b7a908f0c8eecb99c",
+          "size_bytes": 14297,
+          "relative_path": "INPUT_BINDINGS_002.json"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/INPUT_PINS_BEFORE_002.json",
+          "sha256": "c5ba2b1060861ca987a7be54ae495fcb5063b54fbbcc226a369408213c930821",
+          "size_bytes": 14485,
+          "relative_path": "INPUT_PINS_BEFORE_002.json"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/RETAINED_BINARY_LIST_DECODE_002.json",
+          "sha256": "ade8bc4ec99cd28404ed8b98cf8160ea9dd79304b6b2f62b89b325217fb5e2c1",
+          "size_bytes": 952,
+          "relative_path": "RETAINED_BINARY_LIST_DECODE_002.json"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/bound.bsl",
+          "sha256": "83ba9e9aa335a18121b1cdf0727652e4ab8399f5c92deec9b0bc00716addc68e",
+          "size_bytes": 98,
+          "relative_path": "bound.bsl"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.ndb",
+          "sha256": "938c2aa8147b6bf0b32547ce667789c00ea5d46ea68ba141cc7682d0a1d4b2d3",
+          "size_bytes": 32768,
+          "relative_path": "db/tiny.ndb"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nhr",
+          "sha256": "efb636621b7bf24073f4c8d95732143aeb6f72f5c3bd01f3798d0aec810884ee",
+          "size_bytes": 135,
+          "relative_path": "db/tiny.nhr"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nin",
+          "sha256": "857201818fa21683eb3d677aa7d6cd61ec206416ef6c13b6f2ad03c232b8d0d5",
+          "size_bytes": 160,
+          "relative_path": "db/tiny.nin"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.njs",
+          "sha256": "eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+          "size_bytes": 477,
+          "relative_path": "db/tiny.njs"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nog",
+          "sha256": "9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+          "size_bytes": 44,
+          "relative_path": "db/tiny.nog"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nos",
+          "sha256": "3f225cdd077a9359f901d700b837d3c890384aa2c61c750804d51a993254ad07",
+          "size_bytes": 53,
+          "relative_path": "db/tiny.nos"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.not",
+          "sha256": "2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+          "size_bytes": 44,
+          "relative_path": "db/tiny.not"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nsq",
+          "sha256": "c65af12543af8568550ee00a76e7a65dc18f482474b1eb7b3dbcfbc698598929",
+          "size_bytes": 28,
+          "relative_path": "db/tiny.nsq"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.ntf",
+          "sha256": "67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+          "size_bytes": 16384,
+          "relative_path": "db/tiny.ntf"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nto",
+          "sha256": "6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+          "size_bytes": 16,
+          "relative_path": "db/tiny.nto"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/logs/01_binary_subset_alias.stderr",
+          "sha256": "e49b12ac06a44ca9d0979fed1542f996ef41e959c2a1020b88e5f28164e45d7e",
+          "size_bytes": 66,
+          "relative_path": "logs/01_binary_subset_alias.stderr"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/logs/01_binary_subset_alias.stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0,
+          "relative_path": "logs/01_binary_subset_alias.stdout"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/subset.nal",
+          "sha256": "7aeebeeeec129eb0ff1c221840e10097ef989e707a53ab50dbce93bb4b999ad8",
+          "size_bytes": 133,
+          "relative_path": "subset.nal"
+        }
+      ],
+      "new_files": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/logs/01_binary_subset_alias.stderr",
+          "sha256": "e49b12ac06a44ca9d0979fed1542f996ef41e959c2a1020b88e5f28164e45d7e",
+          "size_bytes": 66,
+          "relative_path": "logs/01_binary_subset_alias.stderr"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/logs/01_binary_subset_alias.stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0,
+          "relative_path": "logs/01_binary_subset_alias.stdout"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/subset.nal",
+          "sha256": "7aeebeeeec129eb0ff1c221840e10097ef989e707a53ab50dbce93bb4b999ad8",
+          "size_bytes": 133,
+          "relative_path": "subset.nal"
+        }
+      ],
+      "stdout": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/logs/01_binary_subset_alias.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stderr": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/logs/01_binary_subset_alias.stderr",
+        "sha256": "e49b12ac06a44ca9d0979fed1542f996ef41e959c2a1020b88e5f28164e45d7e",
+        "size_bytes": 66
+      },
+      "stdout_utf8": "",
+      "stderr_utf8": "Created nucleotide BLAST (alias) database subset with 1 sequences\n",
+      "native_alias_text": "#\n# Alias file created 10/28/2026 19:12:19\n#\nTITLE 644 retained binary subset\nDBLIST \"db/tiny\" \nSEQIDLIST bound.bsl\nNSEQ 1\nLENGTH 13\n"
+    },
+    {
+      "id": "02_selected_subset_inspection",
+      "program": "blastdbcmd",
+      "arguments": [
+        "-db",
+        "subset",
+        "-dbtype",
+        "nucl",
+        "-entry",
+        "all",
+        "-outfmt",
+        "%o\t%i\t%l\t%s"
+      ],
+      "verification_helper": true,
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "-db",
+        "subset",
+        "-dbtype",
+        "nucl",
+        "-entry",
+        "all",
+        "-outfmt",
+        "%o\t%i\t%l\t%s"
+      ],
+      "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644",
+      "executable": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdbcmd",
+        "sha256": "7b7985134ac696b2f28428baf8a210554c4e2d6c38cc1dfdd46d207dc4cc762f",
+        "size_bytes": 31670200
+      },
+      "environment_overrides": {
+        "BLAST_USAGE_REPORT": "false",
+        "NCBI_DONT_USE_NCBIRC": "1",
+        "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/tmp",
+        "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/tmp",
+        "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/tmp",
+        "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/cache"
+      },
+      "shell": false,
+      "started": true,
+      "returncode": 0,
+      "writer_closed": true,
+      "captured_bytes_complete": true,
+      "inventory_complete": true,
+      "inventory_before": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/CAPTURE_002.json",
+          "sha256": "6b02308f9efd94768661308fb4af84c86b20a9d91df341b0d8f709a4b76aa16e",
+          "size_bytes": 33413,
+          "relative_path": "CAPTURE_002.json"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/INPUT_BINDINGS_002.json",
+          "sha256": "0c4d7a71cc80633e0569894e6673b05dfd92c5781949a85b7a908f0c8eecb99c",
+          "size_bytes": 14297,
+          "relative_path": "INPUT_BINDINGS_002.json"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/INPUT_PINS_BEFORE_002.json",
+          "sha256": "c5ba2b1060861ca987a7be54ae495fcb5063b54fbbcc226a369408213c930821",
+          "size_bytes": 14485,
+          "relative_path": "INPUT_PINS_BEFORE_002.json"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/RETAINED_BINARY_LIST_DECODE_002.json",
+          "sha256": "ade8bc4ec99cd28404ed8b98cf8160ea9dd79304b6b2f62b89b325217fb5e2c1",
+          "size_bytes": 952,
+          "relative_path": "RETAINED_BINARY_LIST_DECODE_002.json"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/bound.bsl",
+          "sha256": "83ba9e9aa335a18121b1cdf0727652e4ab8399f5c92deec9b0bc00716addc68e",
+          "size_bytes": 98,
+          "relative_path": "bound.bsl"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.ndb",
+          "sha256": "938c2aa8147b6bf0b32547ce667789c00ea5d46ea68ba141cc7682d0a1d4b2d3",
+          "size_bytes": 32768,
+          "relative_path": "db/tiny.ndb"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nhr",
+          "sha256": "efb636621b7bf24073f4c8d95732143aeb6f72f5c3bd01f3798d0aec810884ee",
+          "size_bytes": 135,
+          "relative_path": "db/tiny.nhr"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nin",
+          "sha256": "857201818fa21683eb3d677aa7d6cd61ec206416ef6c13b6f2ad03c232b8d0d5",
+          "size_bytes": 160,
+          "relative_path": "db/tiny.nin"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.njs",
+          "sha256": "eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+          "size_bytes": 477,
+          "relative_path": "db/tiny.njs"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nog",
+          "sha256": "9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+          "size_bytes": 44,
+          "relative_path": "db/tiny.nog"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nos",
+          "sha256": "3f225cdd077a9359f901d700b837d3c890384aa2c61c750804d51a993254ad07",
+          "size_bytes": 53,
+          "relative_path": "db/tiny.nos"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.not",
+          "sha256": "2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+          "size_bytes": 44,
+          "relative_path": "db/tiny.not"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nsq",
+          "sha256": "c65af12543af8568550ee00a76e7a65dc18f482474b1eb7b3dbcfbc698598929",
+          "size_bytes": 28,
+          "relative_path": "db/tiny.nsq"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.ntf",
+          "sha256": "67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+          "size_bytes": 16384,
+          "relative_path": "db/tiny.ntf"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nto",
+          "sha256": "6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+          "size_bytes": 16,
+          "relative_path": "db/tiny.nto"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/logs/01_binary_subset_alias.stderr",
+          "sha256": "e49b12ac06a44ca9d0979fed1542f996ef41e959c2a1020b88e5f28164e45d7e",
+          "size_bytes": 66,
+          "relative_path": "logs/01_binary_subset_alias.stderr"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/logs/01_binary_subset_alias.stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0,
+          "relative_path": "logs/01_binary_subset_alias.stdout"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/subset.nal",
+          "sha256": "7aeebeeeec129eb0ff1c221840e10097ef989e707a53ab50dbce93bb4b999ad8",
+          "size_bytes": 133,
+          "relative_path": "subset.nal"
+        }
+      ],
+      "inventory_after": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/CAPTURE_002.json",
+          "sha256": "6b02308f9efd94768661308fb4af84c86b20a9d91df341b0d8f709a4b76aa16e",
+          "size_bytes": 33413,
+          "relative_path": "CAPTURE_002.json"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/INPUT_BINDINGS_002.json",
+          "sha256": "0c4d7a71cc80633e0569894e6673b05dfd92c5781949a85b7a908f0c8eecb99c",
+          "size_bytes": 14297,
+          "relative_path": "INPUT_BINDINGS_002.json"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/INPUT_PINS_BEFORE_002.json",
+          "sha256": "c5ba2b1060861ca987a7be54ae495fcb5063b54fbbcc226a369408213c930821",
+          "size_bytes": 14485,
+          "relative_path": "INPUT_PINS_BEFORE_002.json"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/RETAINED_BINARY_LIST_DECODE_002.json",
+          "sha256": "ade8bc4ec99cd28404ed8b98cf8160ea9dd79304b6b2f62b89b325217fb5e2c1",
+          "size_bytes": 952,
+          "relative_path": "RETAINED_BINARY_LIST_DECODE_002.json"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/bound.bsl",
+          "sha256": "83ba9e9aa335a18121b1cdf0727652e4ab8399f5c92deec9b0bc00716addc68e",
+          "size_bytes": 98,
+          "relative_path": "bound.bsl"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.ndb",
+          "sha256": "938c2aa8147b6bf0b32547ce667789c00ea5d46ea68ba141cc7682d0a1d4b2d3",
+          "size_bytes": 32768,
+          "relative_path": "db/tiny.ndb"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nhr",
+          "sha256": "efb636621b7bf24073f4c8d95732143aeb6f72f5c3bd01f3798d0aec810884ee",
+          "size_bytes": 135,
+          "relative_path": "db/tiny.nhr"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nin",
+          "sha256": "857201818fa21683eb3d677aa7d6cd61ec206416ef6c13b6f2ad03c232b8d0d5",
+          "size_bytes": 160,
+          "relative_path": "db/tiny.nin"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.njs",
+          "sha256": "eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+          "size_bytes": 477,
+          "relative_path": "db/tiny.njs"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nog",
+          "sha256": "9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+          "size_bytes": 44,
+          "relative_path": "db/tiny.nog"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nos",
+          "sha256": "3f225cdd077a9359f901d700b837d3c890384aa2c61c750804d51a993254ad07",
+          "size_bytes": 53,
+          "relative_path": "db/tiny.nos"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.not",
+          "sha256": "2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+          "size_bytes": 44,
+          "relative_path": "db/tiny.not"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nsq",
+          "sha256": "c65af12543af8568550ee00a76e7a65dc18f482474b1eb7b3dbcfbc698598929",
+          "size_bytes": 28,
+          "relative_path": "db/tiny.nsq"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.ntf",
+          "sha256": "67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+          "size_bytes": 16384,
+          "relative_path": "db/tiny.ntf"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nto",
+          "sha256": "6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+          "size_bytes": 16,
+          "relative_path": "db/tiny.nto"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/logs/01_binary_subset_alias.stderr",
+          "sha256": "e49b12ac06a44ca9d0979fed1542f996ef41e959c2a1020b88e5f28164e45d7e",
+          "size_bytes": 66,
+          "relative_path": "logs/01_binary_subset_alias.stderr"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/logs/01_binary_subset_alias.stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0,
+          "relative_path": "logs/01_binary_subset_alias.stdout"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/logs/02_selected_subset_inspection.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0,
+          "relative_path": "logs/02_selected_subset_inspection.stderr"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/logs/02_selected_subset_inspection.stdout",
+          "sha256": "d24b58d68b22c53fe1deb7b50d7821d69024ae17ed0b4517911c5b6a903c2a1a",
+          "size_bytes": 29,
+          "relative_path": "logs/02_selected_subset_inspection.stdout"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/subset.nal",
+          "sha256": "7aeebeeeec129eb0ff1c221840e10097ef989e707a53ab50dbce93bb4b999ad8",
+          "size_bytes": 133,
+          "relative_path": "subset.nal"
+        }
+      ],
+      "new_files": [
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/logs/02_selected_subset_inspection.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0,
+          "relative_path": "logs/02_selected_subset_inspection.stderr"
+        },
+        {
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/logs/02_selected_subset_inspection.stdout",
+          "sha256": "d24b58d68b22c53fe1deb7b50d7821d69024ae17ed0b4517911c5b6a903c2a1a",
+          "size_bytes": 29,
+          "relative_path": "logs/02_selected_subset_inspection.stdout"
+        }
+      ],
+      "stdout": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/logs/02_selected_subset_inspection.stdout",
+        "sha256": "d24b58d68b22c53fe1deb7b50d7821d69024ae17ed0b4517911c5b6a903c2a1a",
+        "size_bytes": 29
+      },
+      "stderr": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/logs/02_selected_subset_inspection.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stdout_utf8": "1\tlcl|KEEP_B\t12\tTTGCAATTGCAA\n",
+      "stderr_utf8": "",
+      "native_alias_text": "#\n# Alias file created 10/28/2026 19:12:19\n#\nTITLE 644 retained binary subset\nDBLIST \"db/tiny\" \nSEQIDLIST bound.bsl\nNSEQ 1\nLENGTH 13\n"
+    }
+  ],
+  "original_bound_list": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/seqid_bound/bound.bsl",
+    "sha256": "83ba9e9aa335a18121b1cdf0727652e4ab8399f5c92deec9b0bc00716addc68e",
+    "size_bytes": 98,
+    "relative_path": "bound.bsl"
+  },
+  "source_manifest": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/source_snapshot/verification/tool_graders_blast_preparation_native_2026-10-28_644/retained_native/inputs/original096-manifest.json",
+    "sha256": "c73d126f5d95d769dbc477b29be72aadefe2b0eb1d132b3d32bc6ab03cc16708",
+    "size_bytes": 8817
+  },
+  "original_bindings": [
+    {
+      "role": "sequence_identifier_list",
+      "original_native": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/seqid_bound/bound.bsl",
+        "sha256": "83ba9e9aa335a18121b1cdf0727652e4ab8399f5c92deec9b0bc00716addc68e",
+        "size_bytes": 98,
+        "relative_path": "bound.bsl"
+      },
+      "retained": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/source_snapshot/verification/tool_graders_blast_preparation_native_2026-10-28_644/retained_native/cases/seqid_bound/bound.bsl",
+        "sha256": "83ba9e9aa335a18121b1cdf0727652e4ab8399f5c92deec9b0bc00716addc68e",
+        "size_bytes": 98
+      },
+      "staged": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/bound.bsl",
+        "sha256": "83ba9e9aa335a18121b1cdf0727652e4ab8399f5c92deec9b0bc00716addc68e",
+        "size_bytes": 98
+      }
+    },
+    {
+      "role": "database_file",
+      "original_native": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/workspace/.episode-operations/17d7e71517d481680d44f1ea482a5a23d4a8551ba8b0b8be3773324ae91366fc/00cfb4ba8246a3ab04baa925eda71b0878f2d294b4bacd352d5a7036cfbe6349/blast-utility-attempt/database/tiny.ndb",
+        "sha256": "938c2aa8147b6bf0b32547ce667789c00ea5d46ea68ba141cc7682d0a1d4b2d3",
+        "size_bytes": 32768
+      },
+      "retained": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/source_snapshot/verification/tool_graders_blast_preparation_native_2026-10-28_644/retained_native/cases/seqid_bound/db/tiny.ndb",
+        "sha256": "938c2aa8147b6bf0b32547ce667789c00ea5d46ea68ba141cc7682d0a1d4b2d3",
+        "size_bytes": 32768
+      },
+      "staged": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.ndb",
+        "sha256": "938c2aa8147b6bf0b32547ce667789c00ea5d46ea68ba141cc7682d0a1d4b2d3",
+        "size_bytes": 32768
+      }
+    },
+    {
+      "role": "database_file",
+      "original_native": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/workspace/.episode-operations/17d7e71517d481680d44f1ea482a5a23d4a8551ba8b0b8be3773324ae91366fc/00cfb4ba8246a3ab04baa925eda71b0878f2d294b4bacd352d5a7036cfbe6349/blast-utility-attempt/database/tiny.nhr",
+        "sha256": "efb636621b7bf24073f4c8d95732143aeb6f72f5c3bd01f3798d0aec810884ee",
+        "size_bytes": 135
+      },
+      "retained": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/source_snapshot/verification/tool_graders_blast_preparation_native_2026-10-28_644/retained_native/cases/seqid_bound/db/tiny.nhr",
+        "sha256": "efb636621b7bf24073f4c8d95732143aeb6f72f5c3bd01f3798d0aec810884ee",
+        "size_bytes": 135
+      },
+      "staged": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nhr",
+        "sha256": "efb636621b7bf24073f4c8d95732143aeb6f72f5c3bd01f3798d0aec810884ee",
+        "size_bytes": 135
+      }
+    },
+    {
+      "role": "database_file",
+      "original_native": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/workspace/.episode-operations/17d7e71517d481680d44f1ea482a5a23d4a8551ba8b0b8be3773324ae91366fc/00cfb4ba8246a3ab04baa925eda71b0878f2d294b4bacd352d5a7036cfbe6349/blast-utility-attempt/database/tiny.nin",
+        "sha256": "857201818fa21683eb3d677aa7d6cd61ec206416ef6c13b6f2ad03c232b8d0d5",
+        "size_bytes": 160
+      },
+      "retained": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/source_snapshot/verification/tool_graders_blast_preparation_native_2026-10-28_644/retained_native/cases/seqid_bound/db/tiny.nin",
+        "sha256": "857201818fa21683eb3d677aa7d6cd61ec206416ef6c13b6f2ad03c232b8d0d5",
+        "size_bytes": 160
+      },
+      "staged": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nin",
+        "sha256": "857201818fa21683eb3d677aa7d6cd61ec206416ef6c13b6f2ad03c232b8d0d5",
+        "size_bytes": 160
+      }
+    },
+    {
+      "role": "database_file",
+      "original_native": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/workspace/.episode-operations/17d7e71517d481680d44f1ea482a5a23d4a8551ba8b0b8be3773324ae91366fc/00cfb4ba8246a3ab04baa925eda71b0878f2d294b4bacd352d5a7036cfbe6349/blast-utility-attempt/database/tiny.njs",
+        "sha256": "eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+        "size_bytes": 477
+      },
+      "retained": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/source_snapshot/verification/tool_graders_blast_preparation_native_2026-10-28_644/retained_native/cases/seqid_bound/db/tiny.njs",
+        "sha256": "eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+        "size_bytes": 477
+      },
+      "staged": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.njs",
+        "sha256": "eb1097142119e55ba9a7fc50587fa3760bbd90b9a7140751728de4d742dd9aa6",
+        "size_bytes": 477
+      }
+    },
+    {
+      "role": "database_file",
+      "original_native": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/workspace/.episode-operations/17d7e71517d481680d44f1ea482a5a23d4a8551ba8b0b8be3773324ae91366fc/00cfb4ba8246a3ab04baa925eda71b0878f2d294b4bacd352d5a7036cfbe6349/blast-utility-attempt/database/tiny.nog",
+        "sha256": "9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+        "size_bytes": 44
+      },
+      "retained": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/source_snapshot/verification/tool_graders_blast_preparation_native_2026-10-28_644/retained_native/cases/seqid_bound/db/tiny.nog",
+        "sha256": "9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+        "size_bytes": 44
+      },
+      "staged": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nog",
+        "sha256": "9737c109bd5ffe7d9ba15395316d061b5b564329611151a4a7c9376d7f4924f2",
+        "size_bytes": 44
+      }
+    },
+    {
+      "role": "database_file",
+      "original_native": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/workspace/.episode-operations/17d7e71517d481680d44f1ea482a5a23d4a8551ba8b0b8be3773324ae91366fc/00cfb4ba8246a3ab04baa925eda71b0878f2d294b4bacd352d5a7036cfbe6349/blast-utility-attempt/database/tiny.nos",
+        "sha256": "3f225cdd077a9359f901d700b837d3c890384aa2c61c750804d51a993254ad07",
+        "size_bytes": 53
+      },
+      "retained": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/source_snapshot/verification/tool_graders_blast_preparation_native_2026-10-28_644/retained_native/cases/seqid_bound/db/tiny.nos",
+        "sha256": "3f225cdd077a9359f901d700b837d3c890384aa2c61c750804d51a993254ad07",
+        "size_bytes": 53
+      },
+      "staged": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nos",
+        "sha256": "3f225cdd077a9359f901d700b837d3c890384aa2c61c750804d51a993254ad07",
+        "size_bytes": 53
+      }
+    },
+    {
+      "role": "database_file",
+      "original_native": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/workspace/.episode-operations/17d7e71517d481680d44f1ea482a5a23d4a8551ba8b0b8be3773324ae91366fc/00cfb4ba8246a3ab04baa925eda71b0878f2d294b4bacd352d5a7036cfbe6349/blast-utility-attempt/database/tiny.not",
+        "sha256": "2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+        "size_bytes": 44
+      },
+      "retained": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/source_snapshot/verification/tool_graders_blast_preparation_native_2026-10-28_644/retained_native/cases/seqid_bound/db/tiny.not",
+        "sha256": "2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+        "size_bytes": 44
+      },
+      "staged": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.not",
+        "sha256": "2fe74ed407f31bcf46d19d27aa6910733f0d9d3861980227f1e06cb61132a444",
+        "size_bytes": 44
+      }
+    },
+    {
+      "role": "database_file",
+      "original_native": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/workspace/.episode-operations/17d7e71517d481680d44f1ea482a5a23d4a8551ba8b0b8be3773324ae91366fc/00cfb4ba8246a3ab04baa925eda71b0878f2d294b4bacd352d5a7036cfbe6349/blast-utility-attempt/database/tiny.nsq",
+        "sha256": "c65af12543af8568550ee00a76e7a65dc18f482474b1eb7b3dbcfbc698598929",
+        "size_bytes": 28
+      },
+      "retained": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/source_snapshot/verification/tool_graders_blast_preparation_native_2026-10-28_644/retained_native/cases/seqid_bound/db/tiny.nsq",
+        "sha256": "c65af12543af8568550ee00a76e7a65dc18f482474b1eb7b3dbcfbc698598929",
+        "size_bytes": 28
+      },
+      "staged": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nsq",
+        "sha256": "c65af12543af8568550ee00a76e7a65dc18f482474b1eb7b3dbcfbc698598929",
+        "size_bytes": 28
+      }
+    },
+    {
+      "role": "database_file",
+      "original_native": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/workspace/.episode-operations/17d7e71517d481680d44f1ea482a5a23d4a8551ba8b0b8be3773324ae91366fc/00cfb4ba8246a3ab04baa925eda71b0878f2d294b4bacd352d5a7036cfbe6349/blast-utility-attempt/database/tiny.ntf",
+        "sha256": "67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+        "size_bytes": 16384
+      },
+      "retained": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/source_snapshot/verification/tool_graders_blast_preparation_native_2026-10-28_644/retained_native/cases/seqid_bound/db/tiny.ntf",
+        "sha256": "67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+        "size_bytes": 16384
+      },
+      "staged": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.ntf",
+        "sha256": "67982e4d7b1490b09cce06e7c29175c6bd011cd542cfacb1a1c310084a50821a",
+        "size_bytes": 16384
+      }
+    },
+    {
+      "role": "database_file",
+      "original_native": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check096_blast_utility_full_workflow/temporary/pytest/utility-workflow6340/workspace/.episode-operations/17d7e71517d481680d44f1ea482a5a23d4a8551ba8b0b8be3773324ae91366fc/00cfb4ba8246a3ab04baa925eda71b0878f2d294b4bacd352d5a7036cfbe6349/blast-utility-attempt/database/tiny.nto",
+        "sha256": "6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+        "size_bytes": 16
+      },
+      "retained": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/source_snapshot/verification/tool_graders_blast_preparation_native_2026-10-28_644/retained_native/cases/seqid_bound/db/tiny.nto",
+        "sha256": "6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+        "size_bytes": 16
+      },
+      "staged": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/temporary/blast_alias_binary644/db/tiny.nto",
+        "sha256": "6256a4b0be4127b6ff9fa076fe7595961bc296521bd01220f64c6f95768c1fdd",
+        "size_bytes": 16
+      }
+    }
+  ],
+  "binary_list_decoding": {
+    "format": "native_v5_seqidlist",
+    "native_byte_order": "little",
+    "file_size": 98,
+    "identifier_count": 1,
+    "title": "644-bound",
+    "created_at_native": "Oct 28, 2026  06:59 PM",
+    "total_database_volume_length": 33,
+    "database_created_at_native": "Oct 28, 2026  6:05 PM",
+    "database_volume_names": "tiny",
+    "identifiers": [
+      {
+        "native_ordinal": 0,
+        "stored_identifier": "KEEP_B"
+      }
+    ],
+    "source_identity": {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102c_blast_alias_binary/source_snapshot/verification/tool_graders_blast_preparation_native_2026-10-28_644/retained_native/cases/seqid_bound/bound.bsl",
+      "sha256": "83ba9e9aa335a18121b1cdf0727652e4ab8399f5c92deec9b0bc00716addc68e",
+      "size_bytes": 98
+    },
+    "definition_source": "verification/tool_graders_blast_preparation_native_2026-10-28_644/official_source/seqidlist_writer.cpp"
+  },
+  "scope": "targeted unchanged-binary alias fixture; not production or episode verification"
+}

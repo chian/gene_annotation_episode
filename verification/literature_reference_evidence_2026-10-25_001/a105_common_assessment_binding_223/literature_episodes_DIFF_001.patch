@@ -1,0 +1,140 @@
+--- before/gene_annotation_episode/literature_episodes.py
++++ final/gene_annotation_episode/literature_episodes.py
+@@ -186,7 +186,7 @@
+             "description": "Populate requested source electrical current, voltage, reported conductance and conditional chord/charge/uncertainty sections from exact original number/unit spans and witnessed experimental meanings. Preserve actual molecular arrangement, current definition, reversal applicability, physical measurement identity and original spread meanings. Distinct electrical arrangements cannot supply a common chord. Full supplied primitive covariance is separate from event counts or printed spread; unknown covariance remains unknown. Charge equivalents do not establish ion flux or pore/polypeptide turnover; no overall reliability, target transfer or annotation credit.",
+             "input_schema": channel_population_schema()})
+     if compiled_assay_population:
+-        from .literature_compiled_assay_inputs import compiled_assay_operation_schema
++        from .literature_compiled_assay_storage import compiled_assay_operation_schema
+         from .literature_compiled_assay_prompt import OPERATION_DESCRIPTION
+         result.append({"name": "literature.assay.components.populate", "description": OPERATION_DESCRIPTION,
+             "input_schema": compiled_assay_operation_schema()})
+@@ -616,7 +616,10 @@
+             schema["properties"][REQUESTED] = {"type": "array", "uniqueItems": True,
+                 "items": {"enum": list(CHANNEL_COMPONENTS)}}
+         if self.compiled_assay_population:
+-            from .literature_compiled_assay_storage import COMPONENTS as COMPILED_COMPONENTS, REQUESTED, COMPONENTS_V2, REQUESTED_V2
++            from .literature_compiled_assay_storage import COMPONENTS as COMPILED_COMPONENTS, REQUESTED, COMPONENTS_V2, REQUESTED_V2, REQUESTED_V3
++            from .literature_compiled_assay_calculations import COMMON_COMPONENTS
++            schema['properties'][REQUESTED_V3] = {'type': 'array', 'uniqueItems': True,
++                'items': {'enum': list(COMMON_COMPONENTS)}}
+             schema["properties"][REQUESTED_V2] = {"type": "array", "uniqueItems": True,
+                 "items": {"enum": list(COMPONENTS_V2)}}
+             schema["properties"][REQUESTED] = {"type": "array", "uniqueItems": True,
+@@ -780,6 +783,8 @@
+                     "aspect": "reference_evidence_parent"}}
+         if self.compiled_assay_population and self._compiled_assay_repository().has_work(context):
+             result["literature_compiled_assay_work"] = {"version": "literature_compiled_assay_task_v1"}
++        if self.compiled_assay_population and self._compiled_assay_v3_repository().has_work(context):
++            result['literature_common_assessment_work'] = {'version': 'literature_common_assessment_task_v1'}
+         if self.ion_discrimination_population and self._ion_discrimination_repository().has_work(context):
+             result["literature_ion_discrimination_work"] = {"version": "literature_ion_discrimination_task_v1"}
+         if self.channel_population and self._channel_repository().has_work(context):
+@@ -833,6 +838,8 @@
+                 result["literature_measurement_validation_work"] = {"version": "literature_measurement_validation_task_v1"}
+         if self.compiled_assay_population and (assignment.get("requested_compiled_assay_components") or assignment.get("requested_compiled_assay_components_v2") or self._compiled_assay_repository().has_work(context)):
+             result["literature_compiled_assay_work"] = {"version": "literature_compiled_assay_task_v1"}
++        if self.compiled_assay_population and (assignment.get('requested_compiled_assay_components_v3') or self._compiled_assay_v3_repository().has_work(context)):
++            result['literature_common_assessment_work'] = {'version': 'literature_common_assessment_task_v1'}
+         if self.ion_discrimination_population and (assignment.get("requested_ion_discrimination_components") or self._ion_discrimination_repository().has_work(context)):
+             result["literature_ion_discrimination_work"] = {"version": "literature_ion_discrimination_task_v1"}
+         if self.channel_population and (assignment.get("requested_channel_components") or self._channel_repository().has_work(context)):
+@@ -1043,6 +1050,9 @@
+ 
+     def _compiled_assay_v2_repository(self):
+         return self._compiled_assay_repository().v2_projection()
++
++    def _compiled_assay_v3_repository(self):
++        return self._compiled_assay_repository().v3_projection()
+ 
+     def _product_coupling_repository(self):
+         """Lazy selected product/cofactor adapter; discovery creates no state."""
+@@ -1452,6 +1462,10 @@
+             result[NAMESPACE_V2] = {"type": "array", "meaning":
+                 "Exactly requested versioned within-assay numerical sections with estimand-scoped joint covariance, known/estimated/unknown status, signed first-order propagation and separate distinct residual variability. Partial uncertainty is not full corrected-activity uncertainty; shared measurements are not independent evidence or annotation credit.",
+                 "report_schema": compiled_assay_v2_cells_schema()}
++            from .literature_compiled_assay_storage import NAMESPACE_V3, compiled_assay_v3_cells_schema
++            result[NAMESPACE_V3] = {'type': 'array', 'meaning':
++                'Exactly requested common source-assessment components for the studied functional assertion and contrast. Keep identified-product, reporter, saturation turnover, low-substrate efficiency and explicitly modeled occupancy meanings distinct. Preserve native and conditional values, actual experimental relationships, source versus implementation limitations, reported spread, joint covariance ownership and shared measurements. Conditional residuals do not isolate their cause. No universal quality grade, independent-evidence count, target transfer or final annotation credit.',
++                'report_schema': compiled_assay_v3_cells_schema()}
+         if self.product_partition_population:
+             from .literature_product_partition_storage import product_partition_cells_schema, NAMESPACE
+             result[NAMESPACE] = {"type": "array", "meaning":
+@@ -1588,6 +1602,8 @@
+             result += ((NAMESPACE, REQUESTED, COMPILED_PROVIDER, (), self._compiled_assay_repository),)
+             from .literature_compiled_assay_storage import NAMESPACE_V2, REQUESTED_V2
+             result += ((NAMESPACE_V2, REQUESTED_V2, COMPILED_PROVIDER, (), self._compiled_assay_v2_repository),)
++            from .literature_compiled_assay_storage import NAMESPACE_V3, REQUESTED_V3
++            result += ((NAMESPACE_V3, REQUESTED_V3, COMPILED_PROVIDER, (), self._compiled_assay_v3_repository),)
+         if self.product_partition_population:
+             from .literature_product_partition_storage import PROVIDER as PARTITION_PROVIDER, NAMESPACE
+             result += ((NAMESPACE, "requested_product_partition_components", PARTITION_PROVIDER,
+@@ -1655,8 +1671,8 @@
+                             raise ContractError("literature_context_projection_version_mismatch")
+                         if row.get("version") != adapter.record_version:
+                             continue
+-                    if namespace in {"literature_compiled_assay_cells", "literature_compiled_assay_v2_cells"}:
+-                        if row.get("version") not in {"literature_compiled_assay_record_v1", "literature_compiled_assay_record_v2"}:
++                    if namespace in {"literature_compiled_assay_cells", "literature_compiled_assay_v2_cells", "literature_compiled_assay_v3_cells"}:
++                        if row.get("version") not in {"literature_compiled_assay_record_v1", "literature_compiled_assay_record_v2", "literature_compiled_assay_record_v3"}:
+                             raise ContractError("literature_compiled_assay_projection_version_mismatch")
+                         if row.get("version") != adapter.record_version:
+                             continue
+@@ -1775,9 +1791,9 @@
+                 if node.get("x-source") == NAMESPACE for row in form[name]]
+             references.extend(self._channel_repository().cell_record_refs(cells))
+         if self.compiled_assay_population:
+-            from .literature_compiled_assay_storage import NAMESPACE, NAMESPACE_V2
++            from .literature_compiled_assay_storage import NAMESPACE, NAMESPACE_V2, NAMESPACE_V3
+             cells = [row for name, node in schema.get("properties", {}).items()
+-                if node.get("x-source") in {NAMESPACE, NAMESPACE_V2} for row in form[name]]
++                if node.get("x-source") in {NAMESPACE, NAMESPACE_V2, NAMESPACE_V3} for row in form[name]]
+             references.extend(self._compiled_assay_repository().cell_record_refs(cells))
+         if self.product_partition_population:
+             from .literature_product_partition_storage import NAMESPACE
+@@ -1835,7 +1851,7 @@
+                     continue
+                 rows = form[name]
+                 permitted = set(context.received_record_refs)
+-                stale_channel_receipt = (namespace in {"literature_product_coupling_cells", "literature_measurement_validation_cells", "literature_channel_cells", "literature_ion_discrimination_cells"}
++                stale_channel_receipt = (namespace in {"literature_compiled_assay_v3_cells", "literature_product_coupling_cells", "literature_measurement_validation_cells", "literature_channel_cells", "literature_ion_discrimination_cells"}
+                     and bool(set(repository().selected_sheet_refs(context)) - permitted))
+                 if any(row["sheet_ref"] not in permitted for row in rows) or stale_channel_receipt:
+                     # Refresh only the exact child's later durable receipts.
+@@ -1846,6 +1862,9 @@
+                             code="literature_rate_receiver_mismatch", field=name)
+                     permitted.update(selection["known_record_refs"])
+                 try:
++                    if (namespace in {'literature_compiled_assay_cells', 'literature_compiled_assay_v2_cells', 'literature_compiled_assay_v3_cells'}
++                            and not rows and context.assignment.get(requested_field) not in ([], ())):
++                        repository().validate_empty_return_family(context)
+                     if (namespace in {"literature_rate_cells", "literature_rate_source_cells", "literature_rate_source_domain_cells", "literature_rate_source_meaning_cells"}
+                             and not rows and context.assignment.get("requested_rate_components") not in ([], ())):
+                         repository().validate_empty_return_family(context)
+@@ -1864,7 +1883,7 @@
+                     repository().validate_fact_values(replace(context,
+                         received_record_refs=tuple(permitted)), rows)
+                     requested = context.assignment.get(requested_field,
+-                        [] if namespace in {"literature_product_coupling_cells", "literature_measurement_validation_cells", "literature_calibration_recovery_cells", "literature_rate_observation_cells", "literature_rate_replicate_cells", "literature_completion_time_cells", "literature_product_partition_cells", "literature_active_site_cells", "literature_compiled_assay_cells", "literature_compiled_assay_v2_cells", "literature_channel_cells", "literature_ion_discrimination_cells"} else None)
++                        [] if namespace in {"literature_product_coupling_cells", "literature_measurement_validation_cells", "literature_calibration_recovery_cells", "literature_rate_observation_cells", "literature_rate_replicate_cells", "literature_completion_time_cells", "literature_product_partition_cells", "literature_active_site_cells", "literature_compiled_assay_cells", "literature_compiled_assay_v2_cells", "literature_compiled_assay_v3_cells", "literature_channel_cells", "literature_ion_discrimination_cells"} else None)
+                     if requested is not None and any(row["component"] not in requested for row in rows):
+                         raise ContractError("unrequested_literature_rate_component")
+                     if namespace == "literature_rate_replicate_cells" and rows:
+@@ -1878,7 +1897,7 @@
+                             components=requested or [])
+                         if canonical(rows) != canonical(expected):
+                             raise ContractError("literature_rate_replicate_requested_subset_mismatch")
+-                    if namespace in {"literature_product_coupling_cells", "literature_measurement_validation_cells", "literature_rate_observation_cells", "literature_calibration_recovery_cells", "literature_compiled_assay_cells", "literature_compiled_assay_v2_cells", "literature_channel_cells", "literature_ion_discrimination_cells"}:
++                    if namespace in {"literature_product_coupling_cells", "literature_measurement_validation_cells", "literature_rate_observation_cells", "literature_calibration_recovery_cells", "literature_compiled_assay_cells", "literature_compiled_assay_v2_cells", "literature_compiled_assay_v3_cells", "literature_channel_cells", "literature_ion_discrimination_cells"}:
+                         from .domain import canonical
+                         owned = repository().available_sheet_refs(replace(context,
+                             received_record_refs=tuple(permitted)))
+@@ -1886,7 +1905,7 @@
+                         expected = repository().fact_cells(replace(context,
+                             received_record_refs=tuple(permitted)), selected, components=requested or [])
+                         if canonical(rows) != canonical(expected):
+-                            raise ContractError("literature_product_coupling_requested_subset_mismatch" if namespace == "literature_product_coupling_cells" else "literature_measurement_validation_requested_subset_mismatch" if namespace == "literature_measurement_validation_cells" else "literature_ion_discrimination_requested_subset_mismatch" if namespace == "literature_ion_discrimination_cells" else "literature_channel_requested_subset_mismatch" if namespace == "literature_channel_cells" else "literature_compiled_assay_requested_subset_mismatch" if namespace in {"literature_compiled_assay_cells", "literature_compiled_assay_v2_cells"} else "literature_calibration_recovery_requested_subset_mismatch" if namespace == "literature_calibration_recovery_cells" else "literature_rate_observation_requested_subset_mismatch")
++                            raise ContractError("literature_product_coupling_requested_subset_mismatch" if namespace == "literature_product_coupling_cells" else "literature_measurement_validation_requested_subset_mismatch" if namespace == "literature_measurement_validation_cells" else "literature_ion_discrimination_requested_subset_mismatch" if namespace == "literature_ion_discrimination_cells" else "literature_channel_requested_subset_mismatch" if namespace == "literature_channel_cells" else "literature_compiled_assay_requested_subset_mismatch" if namespace in {"literature_compiled_assay_cells", "literature_compiled_assay_v2_cells", "literature_compiled_assay_v3_cells"} else "literature_calibration_recovery_requested_subset_mismatch" if namespace == "literature_calibration_recovery_cells" else "literature_rate_observation_requested_subset_mismatch")
+                 except ContractError as error:
+                     raise ReportBoundaryError(str(error), code=str(error), field=name) from error
+         native_adapter = (self.services.literature_context_repository().native_observations()

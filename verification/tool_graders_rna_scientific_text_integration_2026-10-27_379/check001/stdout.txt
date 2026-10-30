@@ -1,0 +1,45 @@
+F
+=================================== FAILURES ===================================
+______ test_actual_scientific_turn_delivers_each_selected_family_once[0] _______
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_scientific_text_integration_2026-10-27_379/check001/temporary/pytest/test_actual_scientific_turn_de0')
+pair = [{'schema': 'rna_comparison_projection_v1', 'projection_id': 'energy_comparison', 'family': 'energy_comparison', 'resu... 'result_receipt_key': 'rna_comparison_receipt:1111111111111111111111111111111111111111111111111111111111111111', ...}]
+scan = [{'schema': 'rna_comparison_projection_v1', 'projection_id': 'scan_energy', 'family': 'scan_energy', 'result_receipt_k... 'result_receipt_key': 'rna_comparison_receipt:1111111111111111111111111111111111111111111111111111111111111111', ...}]
+family_index = 0
+
+    @pytest.mark.parametrize("family_index", range(8))
+    def test_actual_scientific_turn_delivers_each_selected_family_once(tmp_path, pair, scan, family_index):
+        row = (pair + scan)[family_index]
+        state = scientific_state([row])
+        frame = state_frame(state)
+        original = deepcopy((state, frame))
+        wire = ScientificWire(tmp_path / "wire")
+        asyncio.run(complete(wire, frame))
+        turn = wire.turns_sent()[0]
+        text = turn["input"][0]["text"]
+>       assert_full_task(text, state)
+
+source_snapshot/tests/test_rna_comparison_scientific_prompt.py:84: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = "TASK\n\nInvestigate the parent's supplied target iteratively; use the actual scoped evidence.\nYour internal decision...native_energy |\n| [1].another_chosen_field[0].selection.projection_id | energy_comparison |\n| [1].completed | true |"
+state = {'goal': {'goal_id': 'private-goal', 'parent_goal_id': 'private-parent-goal', 'objective': 'Determine what functional ...tional explanations.', 'use_when': 'The reference is informative but the function remains uncertain.', ...}, ...}, ...}
+
+    def assert_full_task(text, state):
+>       assert text.split("\n\nSTEERING\n", 1)[0] == baseline._task(state, INSTRUCTION_TEXT)
+E       AssertionError: assert 'TASK\n\nInve...election_v3 |' == 'TASK\n\nInve...ces | local |'
+E         
+E         Skipping 2047 identical leading characters in diff, use -v to show
+E            --- |
+E         + | segments[0].end | 9 |
+E         + | segments[0].start | 0 |
+E         + | segments[0].subject_ref | input_target |
+E           | subject_refs[0] | input_target |...
+E         
+E         ...Full output truncated (160 lines hidden), use '-vv' to show
+
+source_snapshot/tests/test_rna_comparison_scientific_prompt.py:58: AssertionError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_rna_comparison_scientific_prompt.py::test_actual_scientific_turn_delivers_each_selected_family_once[0]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 0.84s

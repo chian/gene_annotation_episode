@@ -1,0 +1,3339 @@
+{
+  "base": "frozen001",
+  "revisions": {
+    "INPUT_SCHEMA": [
+      {
+        "op": "add",
+        "path": "/properties/context/properties/experimental_system",
+        "value": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "source_ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "representation": {
+                  "enum": [
+                    "original",
+                    "text"
+                  ]
+                },
+                "start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "source_ref",
+                "representation",
+                "start",
+                "end",
+                "quote"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      {
+        "op": "add",
+        "path": "/properties/context/properties/expression_host",
+        "value": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "source_ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "representation": {
+                  "enum": [
+                    "original",
+                    "text"
+                  ]
+                },
+                "start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "source_ref",
+                "representation",
+                "start",
+                "end",
+                "quote"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      {
+        "op": "add",
+        "path": "/properties/context/properties/sampling_window",
+        "value": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "image_region": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "minItems": 4,
+                  "maxItems": 4
+                },
+                "meaning": {
+                  "const": "finite_selected_late_point_no_physical_time_extracted"
+                }
+              },
+              "required": [
+                "image_region",
+                "meaning"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      {
+        "op": "replace",
+        "path": "/properties/context/required",
+        "old_value": [
+          "subject",
+          "organism",
+          "genotype",
+          "construct",
+          "preparation",
+          "partners",
+          "experiment",
+          "condition",
+          "endpoint",
+          "normalization",
+          "intended_variable",
+          "functional_assertion",
+          "correction_discussion",
+          "limitations",
+          "repetition"
+        ],
+        "value": [
+          "subject",
+          "organism",
+          "genotype",
+          "construct",
+          "preparation",
+          "partners",
+          "experiment",
+          "condition",
+          "endpoint",
+          "normalization",
+          "intended_variable",
+          "functional_assertion",
+          "correction_discussion",
+          "limitations",
+          "repetition",
+          "experimental_system",
+          "expression_host",
+          "sampling_window"
+        ]
+      },
+      {
+        "op": "add",
+        "path": "/properties/relationships/properties/arrangement",
+        "value": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "single_preparation",
+                "replacement",
+                "coexistence",
+                "not_applicable",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "image_regions": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "minItems": 4,
+                "maxItems": 4
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses",
+            "image_regions"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "op": "replace",
+        "path": "/properties/relationships/required",
+        "old_value": [
+          "axis_scale",
+          "ordinate_direction",
+          "measurement_stage",
+          "correction_stage",
+          "baseline_basis",
+          "baseline_applicability",
+          "fast_component_completion",
+          "additive_interpretation"
+        ],
+        "value": [
+          "axis_scale",
+          "ordinate_direction",
+          "measurement_stage",
+          "correction_stage",
+          "baseline_basis",
+          "baseline_applicability",
+          "fast_component_completion",
+          "additive_interpretation",
+          "arrangement"
+        ]
+      }
+    ],
+    "EXTRACTION_SCHEMA": [
+      {
+        "op": "add",
+        "path": "/properties/arguments/properties/context/properties/experimental_system",
+        "value": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "source_ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "representation": {
+                  "enum": [
+                    "original",
+                    "text"
+                  ]
+                },
+                "start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "source_ref",
+                "representation",
+                "start",
+                "end",
+                "quote"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      {
+        "op": "add",
+        "path": "/properties/arguments/properties/context/properties/expression_host",
+        "value": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "source_ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "representation": {
+                  "enum": [
+                    "original",
+                    "text"
+                  ]
+                },
+                "start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "source_ref",
+                "representation",
+                "start",
+                "end",
+                "quote"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      {
+        "op": "add",
+        "path": "/properties/arguments/properties/context/properties/sampling_window",
+        "value": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "image_region": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "minItems": 4,
+                  "maxItems": 4
+                },
+                "meaning": {
+                  "const": "finite_selected_late_point_no_physical_time_extracted"
+                }
+              },
+              "required": [
+                "image_region",
+                "meaning"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      {
+        "op": "replace",
+        "path": "/properties/arguments/properties/context/required",
+        "old_value": [
+          "subject",
+          "organism",
+          "genotype",
+          "construct",
+          "preparation",
+          "partners",
+          "experiment",
+          "condition",
+          "endpoint",
+          "normalization",
+          "intended_variable",
+          "functional_assertion",
+          "correction_discussion",
+          "limitations",
+          "repetition"
+        ],
+        "value": [
+          "subject",
+          "organism",
+          "genotype",
+          "construct",
+          "preparation",
+          "partners",
+          "experiment",
+          "condition",
+          "endpoint",
+          "normalization",
+          "intended_variable",
+          "functional_assertion",
+          "correction_discussion",
+          "limitations",
+          "repetition",
+          "experimental_system",
+          "expression_host",
+          "sampling_window"
+        ]
+      },
+      {
+        "op": "add",
+        "path": "/properties/arguments/properties/relationships/properties/arrangement",
+        "value": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "single_preparation",
+                "replacement",
+                "coexistence",
+                "not_applicable",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "image_regions": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "minItems": 4,
+                "maxItems": 4
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses",
+            "image_regions"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "op": "replace",
+        "path": "/properties/arguments/properties/relationships/required",
+        "old_value": [
+          "axis_scale",
+          "ordinate_direction",
+          "measurement_stage",
+          "correction_stage",
+          "baseline_basis",
+          "baseline_applicability",
+          "fast_component_completion",
+          "additive_interpretation"
+        ],
+        "value": [
+          "axis_scale",
+          "ordinate_direction",
+          "measurement_stage",
+          "correction_stage",
+          "baseline_basis",
+          "baseline_applicability",
+          "fast_component_completion",
+          "additive_interpretation",
+          "arrangement"
+        ]
+      },
+      {
+        "op": "add",
+        "path": "/properties/context/properties/experimental_system",
+        "value": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "witness": {
+                  "type": "object",
+                  "properties": {
+                    "source_ref": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "representation": {
+                      "enum": [
+                        "original",
+                        "text"
+                      ]
+                    },
+                    "start": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "end": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "quote": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "artifact_ref": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "representation",
+                    "start",
+                    "end",
+                    "quote",
+                    "artifact_ref"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "value",
+                "witness"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      {
+        "op": "add",
+        "path": "/properties/context/properties/expression_host",
+        "value": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "witness": {
+                  "type": "object",
+                  "properties": {
+                    "source_ref": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "representation": {
+                      "enum": [
+                        "original",
+                        "text"
+                      ]
+                    },
+                    "start": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "end": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "quote": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "artifact_ref": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "representation",
+                    "start",
+                    "end",
+                    "quote",
+                    "artifact_ref"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "value",
+                "witness"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      {
+        "op": "add",
+        "path": "/properties/context/properties/sampling_window",
+        "value": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "const": "finite_selected_late_point_no_physical_time_extracted"
+                },
+                "witness": {
+                  "type": "object",
+                  "properties": {
+                    "image_region": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "minItems": 4,
+                      "maxItems": 4
+                    },
+                    "meaning": {
+                      "const": "finite_selected_late_point_no_physical_time_extracted"
+                    },
+                    "source_ref": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "artifact_ref": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "authentication": {
+                      "const": "source_bytes_and_geometry_only"
+                    }
+                  },
+                  "required": [
+                    "image_region",
+                    "meaning",
+                    "source_ref",
+                    "artifact_ref",
+                    "authentication"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "value",
+                "witness"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      {
+        "op": "replace",
+        "path": "/properties/context/required",
+        "old_value": [
+          "subject",
+          "organism",
+          "genotype",
+          "construct",
+          "preparation",
+          "partners",
+          "experiment",
+          "condition",
+          "endpoint",
+          "normalization",
+          "intended_variable",
+          "functional_assertion",
+          "correction_discussion",
+          "limitations",
+          "repetition"
+        ],
+        "value": [
+          "subject",
+          "organism",
+          "genotype",
+          "construct",
+          "preparation",
+          "partners",
+          "experiment",
+          "condition",
+          "endpoint",
+          "normalization",
+          "intended_variable",
+          "functional_assertion",
+          "correction_discussion",
+          "limitations",
+          "repetition",
+          "experimental_system",
+          "expression_host",
+          "sampling_window"
+        ]
+      },
+      {
+        "op": "add",
+        "path": "/properties/context_errors/properties/experimental_system",
+        "value": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "field": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "code",
+                "field"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      {
+        "op": "add",
+        "path": "/properties/context_errors/properties/expression_host",
+        "value": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "field": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "code",
+                "field"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      {
+        "op": "add",
+        "path": "/properties/context_errors/properties/sampling_window",
+        "value": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "field": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "code",
+                "field"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      {
+        "op": "replace",
+        "path": "/properties/context_errors/required",
+        "old_value": [
+          "subject",
+          "organism",
+          "genotype",
+          "construct",
+          "preparation",
+          "partners",
+          "experiment",
+          "condition",
+          "endpoint",
+          "normalization",
+          "intended_variable",
+          "functional_assertion",
+          "correction_discussion",
+          "limitations",
+          "repetition"
+        ],
+        "value": [
+          "subject",
+          "organism",
+          "genotype",
+          "construct",
+          "preparation",
+          "partners",
+          "experiment",
+          "condition",
+          "endpoint",
+          "normalization",
+          "intended_variable",
+          "functional_assertion",
+          "correction_discussion",
+          "limitations",
+          "repetition",
+          "experimental_system",
+          "expression_host",
+          "sampling_window"
+        ]
+      },
+      {
+        "op": "replace",
+        "path": "/properties/covariance/anyOf",
+        "old_value": [
+          {
+            "type": "object",
+            "properties": {
+              "source_ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "artifact_ref": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "sha256": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "model": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "version": {
+                        "const": "a105_endpoint_signal_covariance_v1"
+                      },
+                      "basis": {
+                        "enum": [
+                          "joint_manual_reading_error",
+                          "joint_physical_ordinate_estimates"
+                        ]
+                      },
+                      "primitive_order": {
+                        "const": [
+                          "initial",
+                          "baseline_at_addition",
+                          "late"
+                        ]
+                      },
+                      "primitive_owners": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "minItems": 3,
+                        "maxItems": 3
+                      },
+                      "primitive_units": {
+                        "const": [
+                          "native_ordinate_pixel",
+                          "native_ordinate_pixel",
+                          "native_ordinate_pixel"
+                        ]
+                      },
+                      "covariance": {
+                        "type": "array",
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "number"
+                          },
+                          "minItems": 3,
+                          "maxItems": 3
+                        },
+                        "minItems": 3,
+                        "maxItems": 3
+                      },
+                      "variance_status": {
+                        "enum": [
+                          "known",
+                          "estimated",
+                          "unknown"
+                        ]
+                      },
+                      "origin": {
+                        "enum": [
+                          "source_reported",
+                          "source_derived",
+                          "synthetic"
+                        ]
+                      },
+                      "provenance_witnesses": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "source_ref": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "representation": {
+                              "enum": [
+                                "original",
+                                "text"
+                              ]
+                            },
+                            "start": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "end": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "source_ref",
+                            "representation",
+                            "start",
+                            "end",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "affine_mapping_witnesses": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "source_ref": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "representation": {
+                              "enum": [
+                                "original",
+                                "text"
+                              ]
+                            },
+                            "start": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "end": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "source_ref",
+                            "representation",
+                            "start",
+                            "end",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "version",
+                      "basis",
+                      "primitive_order",
+                      "primitive_owners",
+                      "primitive_units",
+                      "covariance",
+                      "variance_status",
+                      "origin",
+                      "provenance_witnesses",
+                      "affine_mapping_witnesses"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "exact_covariance": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "numerator": {
+                            "type": "string",
+                            "pattern": "^-?[0-9]+$"
+                          },
+                          "denominator": {
+                            "type": "string",
+                            "pattern": "^[1-9][0-9]*$"
+                          }
+                        },
+                        "required": [
+                          "numerator",
+                          "denominator"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "minItems": 3,
+                      "maxItems": 3
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "error": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "field": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "field"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "source_ref",
+              "artifact_ref",
+              "sha256",
+              "model",
+              "exact_covariance",
+              "error"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "value": [
+          {
+            "type": "object",
+            "properties": {
+              "source_ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "artifact_ref": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "sha256": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "model": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "version": {
+                        "const": "a105_endpoint_signal_covariance_v1"
+                      },
+                      "basis": {
+                        "enum": [
+                          "joint_manual_reading_error",
+                          "joint_physical_ordinate_estimates"
+                        ]
+                      },
+                      "primitive_order": {
+                        "const": [
+                          "initial",
+                          "baseline_at_addition",
+                          "late"
+                        ]
+                      },
+                      "primitive_owners": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "minItems": 3,
+                        "maxItems": 3
+                      },
+                      "primitive_units": {
+                        "const": [
+                          "native_ordinate_pixel",
+                          "native_ordinate_pixel",
+                          "native_ordinate_pixel"
+                        ]
+                      },
+                      "covariance": {
+                        "type": "array",
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "number"
+                          },
+                          "minItems": 3,
+                          "maxItems": 3
+                        },
+                        "minItems": 3,
+                        "maxItems": 3
+                      },
+                      "variance_status": {
+                        "enum": [
+                          "known",
+                          "estimated",
+                          "unknown"
+                        ]
+                      },
+                      "origin": {
+                        "enum": [
+                          "source_reported",
+                          "source_derived",
+                          "synthetic"
+                        ]
+                      },
+                      "provenance_witnesses": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "source_ref": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "representation": {
+                              "enum": [
+                                "original",
+                                "text"
+                              ]
+                            },
+                            "start": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "end": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "source_ref",
+                            "representation",
+                            "start",
+                            "end",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "native_coordinate_basis_witnesses": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "source_ref": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "representation": {
+                              "enum": [
+                                "original",
+                                "text"
+                              ]
+                            },
+                            "start": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "end": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "source_ref",
+                            "representation",
+                            "start",
+                            "end",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "coordinate_units_status": {
+                        "const": "already_in_declared_native_coordinate_units"
+                      }
+                    },
+                    "required": [
+                      "version",
+                      "basis",
+                      "primitive_order",
+                      "primitive_owners",
+                      "primitive_units",
+                      "covariance",
+                      "variance_status",
+                      "origin",
+                      "provenance_witnesses",
+                      "native_coordinate_basis_witnesses",
+                      "coordinate_units_status"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "exact_covariance": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "numerator": {
+                            "type": "string",
+                            "pattern": "^-?[0-9]+$"
+                          },
+                          "denominator": {
+                            "type": "string",
+                            "pattern": "^[1-9][0-9]*$"
+                          }
+                        },
+                        "required": [
+                          "numerator",
+                          "denominator"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "minItems": 3,
+                      "maxItems": 3
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "error": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "field": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "field"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "source_ref",
+              "artifact_ref",
+              "sha256",
+              "model",
+              "exact_covariance",
+              "error"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      {
+        "op": "add",
+        "path": "/properties/relationships/properties/arrangement",
+        "value": {
+          "type": "object",
+          "properties": {
+            "interpretation": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "enum": [
+                        "single_preparation",
+                        "replacement",
+                        "coexistence",
+                        "not_applicable",
+                        "unknown",
+                        "conflicting"
+                      ]
+                    },
+                    "witnesses": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "source_ref": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "representation": {
+                            "enum": [
+                              "original",
+                              "text"
+                            ]
+                          },
+                          "start": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "end": {
+                            "type": "integer",
+                            "minimum": 1
+                          },
+                          "quote": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "artifact_ref": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "source_ref",
+                          "representation",
+                          "start",
+                          "end",
+                          "quote",
+                          "artifact_ref"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "image_regions": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "minItems": 4,
+                        "maxItems": 4
+                      }
+                    },
+                    "kind": {
+                      "const": "source_interpretation"
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "value",
+                    "witnesses",
+                    "image_regions"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "error": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "field": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "field"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "interpretation",
+            "error"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "op": "replace",
+        "path": "/properties/relationships/required",
+        "old_value": [
+          "axis_scale",
+          "ordinate_direction",
+          "measurement_stage",
+          "correction_stage",
+          "baseline_basis",
+          "baseline_applicability",
+          "fast_component_completion",
+          "additive_interpretation"
+        ],
+        "value": [
+          "axis_scale",
+          "ordinate_direction",
+          "measurement_stage",
+          "correction_stage",
+          "baseline_basis",
+          "baseline_applicability",
+          "fast_component_completion",
+          "additive_interpretation",
+          "arrangement"
+        ]
+      }
+    ],
+    "SHEET_SCHEMA": [
+      {
+        "op": "add",
+        "path": "/properties/cells/items/properties/conditional_on/items/enum",
+        "value": [
+          "common_affine_native_ordinate",
+          "selected_ordinate_direction",
+          "selected_finite_time_coordinate",
+          "source_displayed_baseline",
+          "baseline_extrapolation_supported",
+          "baseline_extrapolation_stipulated",
+          "fast_component_completion_supported",
+          "fast_component_completion_stipulated",
+          "uncorrected_source_trace",
+          "same_trace_shared_initial_ordinate",
+          "joint_manual_reading_error_model",
+          "joint_physical_ordinate_estimate_model",
+          "covariance_already_in_native_coordinate_units",
+          "known_covariance",
+          "estimated_covariance",
+          "first_order_covariance_propagation",
+          "synthetic_uncertainty_scenario"
+        ]
+      },
+      {
+        "op": "remove",
+        "path": "/properties/cells/items/properties/conditional_on/items/minLength",
+        "old_value": 1
+      },
+      {
+        "op": "remove",
+        "path": "/properties/cells/items/properties/conditional_on/items/type",
+        "old_value": "string"
+      },
+      {
+        "op": "add",
+        "path": "/properties/cells/items/properties/formula/enum",
+        "value": [
+          "s*(a-t)",
+          "s*(a-b)",
+          "s*(b-t)",
+          "(a-b)/(a-t)",
+          "1-(a-b)/(a-t)",
+          "J_D*Sigma*J_D_transpose",
+          "J_C*Sigma*J_C_transpose",
+          "J_G*Sigma*J_G_transpose",
+          "J_F*Sigma*J_F_transpose",
+          "J_H*Sigma*J_H_transpose"
+        ]
+      },
+      {
+        "op": "remove",
+        "path": "/properties/cells/items/properties/formula/minLength",
+        "old_value": 1
+      },
+      {
+        "op": "remove",
+        "path": "/properties/cells/items/properties/formula/type",
+        "old_value": "string"
+      },
+      {
+        "op": "add",
+        "path": "/properties/cells/items/properties/meaning/enum",
+        "value": [
+          "Selected total reporter amplitude in direction-oriented native pixels.",
+          "Reporter amplitude retained under the selected baseline correction model.",
+          "Additional reporter amplitude under the selected baseline correction model.",
+          "Corrected-to-total reporter amplitude ratio under the selected model.",
+          "Additional-to-total reporter amplitude ratio under the selected model.",
+          "First-order variance of the total amplitude in the supplied joint estimate model.",
+          "First-order variance of the corrected amplitude in the supplied joint estimate model.",
+          "First-order variance of the additional amplitude in the supplied joint estimate model.",
+          "First-order variance of the retained fraction in the supplied joint estimate model.",
+          "First-order variance of the additional fraction in the supplied joint estimate model."
+        ]
+      },
+      {
+        "op": "remove",
+        "path": "/properties/cells/items/properties/meaning/minLength",
+        "old_value": 1
+      },
+      {
+        "op": "remove",
+        "path": "/properties/cells/items/properties/meaning/type",
+        "old_value": "string"
+      },
+      {
+        "op": "add",
+        "path": "/properties/input_snapshot/properties/arguments/properties/context/properties/experimental_system",
+        "value": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "source_ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "representation": {
+                  "enum": [
+                    "original",
+                    "text"
+                  ]
+                },
+                "start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "source_ref",
+                "representation",
+                "start",
+                "end",
+                "quote"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      {
+        "op": "add",
+        "path": "/properties/input_snapshot/properties/arguments/properties/context/properties/expression_host",
+        "value": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "source_ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "representation": {
+                  "enum": [
+                    "original",
+                    "text"
+                  ]
+                },
+                "start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "source_ref",
+                "representation",
+                "start",
+                "end",
+                "quote"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      {
+        "op": "add",
+        "path": "/properties/input_snapshot/properties/arguments/properties/context/properties/sampling_window",
+        "value": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "image_region": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "minItems": 4,
+                  "maxItems": 4
+                },
+                "meaning": {
+                  "const": "finite_selected_late_point_no_physical_time_extracted"
+                }
+              },
+              "required": [
+                "image_region",
+                "meaning"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      {
+        "op": "replace",
+        "path": "/properties/input_snapshot/properties/arguments/properties/context/required",
+        "old_value": [
+          "subject",
+          "organism",
+          "genotype",
+          "construct",
+          "preparation",
+          "partners",
+          "experiment",
+          "condition",
+          "endpoint",
+          "normalization",
+          "intended_variable",
+          "functional_assertion",
+          "correction_discussion",
+          "limitations",
+          "repetition"
+        ],
+        "value": [
+          "subject",
+          "organism",
+          "genotype",
+          "construct",
+          "preparation",
+          "partners",
+          "experiment",
+          "condition",
+          "endpoint",
+          "normalization",
+          "intended_variable",
+          "functional_assertion",
+          "correction_discussion",
+          "limitations",
+          "repetition",
+          "experimental_system",
+          "expression_host",
+          "sampling_window"
+        ]
+      },
+      {
+        "op": "add",
+        "path": "/properties/input_snapshot/properties/arguments/properties/relationships/properties/arrangement",
+        "value": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "enum": [
+                "single_preparation",
+                "replacement",
+                "coexistence",
+                "not_applicable",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "source_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "representation": {
+                    "enum": [
+                      "original",
+                      "text"
+                    ]
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "start",
+                  "end",
+                  "quote"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "image_regions": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "minItems": 4,
+                "maxItems": 4
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses",
+            "image_regions"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "op": "replace",
+        "path": "/properties/input_snapshot/properties/arguments/properties/relationships/required",
+        "old_value": [
+          "axis_scale",
+          "ordinate_direction",
+          "measurement_stage",
+          "correction_stage",
+          "baseline_basis",
+          "baseline_applicability",
+          "fast_component_completion",
+          "additive_interpretation"
+        ],
+        "value": [
+          "axis_scale",
+          "ordinate_direction",
+          "measurement_stage",
+          "correction_stage",
+          "baseline_basis",
+          "baseline_applicability",
+          "fast_component_completion",
+          "additive_interpretation",
+          "arrangement"
+        ]
+      },
+      {
+        "op": "add",
+        "path": "/properties/input_snapshot/properties/context/properties/experimental_system",
+        "value": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "witness": {
+                  "type": "object",
+                  "properties": {
+                    "source_ref": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "representation": {
+                      "enum": [
+                        "original",
+                        "text"
+                      ]
+                    },
+                    "start": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "end": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "quote": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "artifact_ref": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "representation",
+                    "start",
+                    "end",
+                    "quote",
+                    "artifact_ref"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "value",
+                "witness"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      {
+        "op": "add",
+        "path": "/properties/input_snapshot/properties/context/properties/expression_host",
+        "value": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "witness": {
+                  "type": "object",
+                  "properties": {
+                    "source_ref": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "representation": {
+                      "enum": [
+                        "original",
+                        "text"
+                      ]
+                    },
+                    "start": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "end": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "quote": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "artifact_ref": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "representation",
+                    "start",
+                    "end",
+                    "quote",
+                    "artifact_ref"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "value",
+                "witness"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      {
+        "op": "add",
+        "path": "/properties/input_snapshot/properties/context/properties/sampling_window",
+        "value": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "const": "finite_selected_late_point_no_physical_time_extracted"
+                },
+                "witness": {
+                  "type": "object",
+                  "properties": {
+                    "image_region": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "minItems": 4,
+                      "maxItems": 4
+                    },
+                    "meaning": {
+                      "const": "finite_selected_late_point_no_physical_time_extracted"
+                    },
+                    "source_ref": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "artifact_ref": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "authentication": {
+                      "const": "source_bytes_and_geometry_only"
+                    }
+                  },
+                  "required": [
+                    "image_region",
+                    "meaning",
+                    "source_ref",
+                    "artifact_ref",
+                    "authentication"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "value",
+                "witness"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      {
+        "op": "replace",
+        "path": "/properties/input_snapshot/properties/context/required",
+        "old_value": [
+          "subject",
+          "organism",
+          "genotype",
+          "construct",
+          "preparation",
+          "partners",
+          "experiment",
+          "condition",
+          "endpoint",
+          "normalization",
+          "intended_variable",
+          "functional_assertion",
+          "correction_discussion",
+          "limitations",
+          "repetition"
+        ],
+        "value": [
+          "subject",
+          "organism",
+          "genotype",
+          "construct",
+          "preparation",
+          "partners",
+          "experiment",
+          "condition",
+          "endpoint",
+          "normalization",
+          "intended_variable",
+          "functional_assertion",
+          "correction_discussion",
+          "limitations",
+          "repetition",
+          "experimental_system",
+          "expression_host",
+          "sampling_window"
+        ]
+      },
+      {
+        "op": "add",
+        "path": "/properties/input_snapshot/properties/context_errors/properties/experimental_system",
+        "value": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "field": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "code",
+                "field"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      {
+        "op": "add",
+        "path": "/properties/input_snapshot/properties/context_errors/properties/expression_host",
+        "value": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "field": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "code",
+                "field"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      {
+        "op": "add",
+        "path": "/properties/input_snapshot/properties/context_errors/properties/sampling_window",
+        "value": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "field": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "code",
+                "field"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      {
+        "op": "replace",
+        "path": "/properties/input_snapshot/properties/context_errors/required",
+        "old_value": [
+          "subject",
+          "organism",
+          "genotype",
+          "construct",
+          "preparation",
+          "partners",
+          "experiment",
+          "condition",
+          "endpoint",
+          "normalization",
+          "intended_variable",
+          "functional_assertion",
+          "correction_discussion",
+          "limitations",
+          "repetition"
+        ],
+        "value": [
+          "subject",
+          "organism",
+          "genotype",
+          "construct",
+          "preparation",
+          "partners",
+          "experiment",
+          "condition",
+          "endpoint",
+          "normalization",
+          "intended_variable",
+          "functional_assertion",
+          "correction_discussion",
+          "limitations",
+          "repetition",
+          "experimental_system",
+          "expression_host",
+          "sampling_window"
+        ]
+      },
+      {
+        "op": "replace",
+        "path": "/properties/input_snapshot/properties/covariance/anyOf",
+        "old_value": [
+          {
+            "type": "object",
+            "properties": {
+              "source_ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "artifact_ref": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "sha256": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "model": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "version": {
+                        "const": "a105_endpoint_signal_covariance_v1"
+                      },
+                      "basis": {
+                        "enum": [
+                          "joint_manual_reading_error",
+                          "joint_physical_ordinate_estimates"
+                        ]
+                      },
+                      "primitive_order": {
+                        "const": [
+                          "initial",
+                          "baseline_at_addition",
+                          "late"
+                        ]
+                      },
+                      "primitive_owners": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "minItems": 3,
+                        "maxItems": 3
+                      },
+                      "primitive_units": {
+                        "const": [
+                          "native_ordinate_pixel",
+                          "native_ordinate_pixel",
+                          "native_ordinate_pixel"
+                        ]
+                      },
+                      "covariance": {
+                        "type": "array",
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "number"
+                          },
+                          "minItems": 3,
+                          "maxItems": 3
+                        },
+                        "minItems": 3,
+                        "maxItems": 3
+                      },
+                      "variance_status": {
+                        "enum": [
+                          "known",
+                          "estimated",
+                          "unknown"
+                        ]
+                      },
+                      "origin": {
+                        "enum": [
+                          "source_reported",
+                          "source_derived",
+                          "synthetic"
+                        ]
+                      },
+                      "provenance_witnesses": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "source_ref": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "representation": {
+                              "enum": [
+                                "original",
+                                "text"
+                              ]
+                            },
+                            "start": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "end": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "source_ref",
+                            "representation",
+                            "start",
+                            "end",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "affine_mapping_witnesses": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "source_ref": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "representation": {
+                              "enum": [
+                                "original",
+                                "text"
+                              ]
+                            },
+                            "start": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "end": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "source_ref",
+                            "representation",
+                            "start",
+                            "end",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "version",
+                      "basis",
+                      "primitive_order",
+                      "primitive_owners",
+                      "primitive_units",
+                      "covariance",
+                      "variance_status",
+                      "origin",
+                      "provenance_witnesses",
+                      "affine_mapping_witnesses"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "exact_covariance": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "numerator": {
+                            "type": "string",
+                            "pattern": "^-?[0-9]+$"
+                          },
+                          "denominator": {
+                            "type": "string",
+                            "pattern": "^[1-9][0-9]*$"
+                          }
+                        },
+                        "required": [
+                          "numerator",
+                          "denominator"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "minItems": 3,
+                      "maxItems": 3
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "error": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "field": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "field"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "source_ref",
+              "artifact_ref",
+              "sha256",
+              "model",
+              "exact_covariance",
+              "error"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "value": [
+          {
+            "type": "object",
+            "properties": {
+              "source_ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "artifact_ref": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "sha256": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "model": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "version": {
+                        "const": "a105_endpoint_signal_covariance_v1"
+                      },
+                      "basis": {
+                        "enum": [
+                          "joint_manual_reading_error",
+                          "joint_physical_ordinate_estimates"
+                        ]
+                      },
+                      "primitive_order": {
+                        "const": [
+                          "initial",
+                          "baseline_at_addition",
+                          "late"
+                        ]
+                      },
+                      "primitive_owners": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "minItems": 3,
+                        "maxItems": 3
+                      },
+                      "primitive_units": {
+                        "const": [
+                          "native_ordinate_pixel",
+                          "native_ordinate_pixel",
+                          "native_ordinate_pixel"
+                        ]
+                      },
+                      "covariance": {
+                        "type": "array",
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "number"
+                          },
+                          "minItems": 3,
+                          "maxItems": 3
+                        },
+                        "minItems": 3,
+                        "maxItems": 3
+                      },
+                      "variance_status": {
+                        "enum": [
+                          "known",
+                          "estimated",
+                          "unknown"
+                        ]
+                      },
+                      "origin": {
+                        "enum": [
+                          "source_reported",
+                          "source_derived",
+                          "synthetic"
+                        ]
+                      },
+                      "provenance_witnesses": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "source_ref": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "representation": {
+                              "enum": [
+                                "original",
+                                "text"
+                              ]
+                            },
+                            "start": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "end": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "source_ref",
+                            "representation",
+                            "start",
+                            "end",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "native_coordinate_basis_witnesses": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "source_ref": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "representation": {
+                              "enum": [
+                                "original",
+                                "text"
+                              ]
+                            },
+                            "start": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "end": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "quote": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "source_ref",
+                            "representation",
+                            "start",
+                            "end",
+                            "quote"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "coordinate_units_status": {
+                        "const": "already_in_declared_native_coordinate_units"
+                      }
+                    },
+                    "required": [
+                      "version",
+                      "basis",
+                      "primitive_order",
+                      "primitive_owners",
+                      "primitive_units",
+                      "covariance",
+                      "variance_status",
+                      "origin",
+                      "provenance_witnesses",
+                      "native_coordinate_basis_witnesses",
+                      "coordinate_units_status"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "exact_covariance": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "numerator": {
+                            "type": "string",
+                            "pattern": "^-?[0-9]+$"
+                          },
+                          "denominator": {
+                            "type": "string",
+                            "pattern": "^[1-9][0-9]*$"
+                          }
+                        },
+                        "required": [
+                          "numerator",
+                          "denominator"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "minItems": 3,
+                      "maxItems": 3
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "error": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "field": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "field"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "source_ref",
+              "artifact_ref",
+              "sha256",
+              "model",
+              "exact_covariance",
+              "error"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      {
+        "op": "add",
+        "path": "/properties/input_snapshot/properties/relationships/properties/arrangement",
+        "value": {
+          "type": "object",
+          "properties": {
+            "interpretation": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "enum": [
+                        "single_preparation",
+                        "replacement",
+                        "coexistence",
+                        "not_applicable",
+                        "unknown",
+                        "conflicting"
+                      ]
+                    },
+                    "witnesses": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "source_ref": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "representation": {
+                            "enum": [
+                              "original",
+                              "text"
+                            ]
+                          },
+                          "start": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "end": {
+                            "type": "integer",
+                            "minimum": 1
+                          },
+                          "quote": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "artifact_ref": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "source_ref",
+                          "representation",
+                          "start",
+                          "end",
+                          "quote",
+                          "artifact_ref"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "image_regions": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "minItems": 4,
+                        "maxItems": 4
+                      }
+                    },
+                    "kind": {
+                      "const": "source_interpretation"
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "value",
+                    "witnesses",
+                    "image_regions"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "error": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "field": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "field"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "interpretation",
+            "error"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "op": "replace",
+        "path": "/properties/input_snapshot/properties/relationships/required",
+        "old_value": [
+          "axis_scale",
+          "ordinate_direction",
+          "measurement_stage",
+          "correction_stage",
+          "baseline_basis",
+          "baseline_applicability",
+          "fast_component_completion",
+          "additive_interpretation"
+        ],
+        "value": [
+          "axis_scale",
+          "ordinate_direction",
+          "measurement_stage",
+          "correction_stage",
+          "baseline_basis",
+          "baseline_applicability",
+          "fast_component_completion",
+          "additive_interpretation",
+          "arrangement"
+        ]
+      }
+    ],
+    "COVARIANCE_SCHEMA": [
+      {
+        "op": "remove",
+        "path": "/properties/affine_mapping_witnesses",
+        "old_value": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "source_ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "representation": {
+                "enum": [
+                  "original",
+                  "text"
+                ]
+              },
+              "start": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "end": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "quote": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "source_ref",
+              "representation",
+              "start",
+              "end",
+              "quote"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      {
+        "op": "add",
+        "path": "/properties/coordinate_units_status",
+        "value": {
+          "const": "already_in_declared_native_coordinate_units"
+        }
+      },
+      {
+        "op": "add",
+        "path": "/properties/native_coordinate_basis_witnesses",
+        "value": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "source_ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "representation": {
+                "enum": [
+                  "original",
+                  "text"
+                ]
+              },
+              "start": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "end": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "quote": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "source_ref",
+              "representation",
+              "start",
+              "end",
+              "quote"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      {
+        "op": "replace",
+        "path": "/required",
+        "old_value": [
+          "version",
+          "basis",
+          "primitive_order",
+          "primitive_owners",
+          "primitive_units",
+          "covariance",
+          "variance_status",
+          "origin",
+          "provenance_witnesses",
+          "affine_mapping_witnesses"
+        ],
+        "value": [
+          "version",
+          "basis",
+          "primitive_order",
+          "primitive_owners",
+          "primitive_units",
+          "covariance",
+          "variance_status",
+          "origin",
+          "provenance_witnesses",
+          "native_coordinate_basis_witnesses",
+          "coordinate_units_status"
+        ]
+      }
+    ],
+    "EXAMPLE_INPUT": [
+      {
+        "op": "replace",
+        "path": "/context/condition/end",
+        "old_value": 10336,
+        "value": 21574
+      },
+      {
+        "op": "replace",
+        "path": "/context/condition/quote",
+        "old_value": "1.6 M potassium phosphate (pH 7)",
+        "value": "The assays were performed at 60 °C in 1.5-mL anaerobic cuvettetes containing 0.75 mL assay mixture with 1.6 M potassium phosphate (pH 7), MvhADG/HdrABC complex (∼0.1 unit), MTZ (90 nmol), and CoM-S-S-CoB as indicated."
+      },
+      {
+        "op": "replace",
+        "path": "/context/condition/start",
+        "old_value": 10304,
+        "value": 21354
+      },
+      {
+        "op": "add",
+        "path": "/context/experimental_system",
+        "value": {
+          "source_ref": "source_kaster_primary",
+          "representation": "text",
+          "start": 21393,
+          "end": 21453,
+          "quote": "1.5-mL anaerobic cuvettetes containing 0.75 mL assay mixture"
+        }
+      },
+      {
+        "op": "add",
+        "path": "/context/expression_host",
+        "value": null
+      },
+      {
+        "op": "replace",
+        "path": "/context/organism/end",
+        "old_value": 30367,
+        "value": 21226
+      },
+      {
+        "op": "replace",
+        "path": "/context/organism/quote",
+        "old_value": "M. marburgensis (DSM 2133)",
+        "value": "M. marburgensis"
+      },
+      {
+        "op": "replace",
+        "path": "/context/organism/start",
+        "old_value": 30341,
+        "value": 21211
+      },
+      {
+        "op": "replace",
+        "path": "/context/partners/end",
+        "old_value": 1747,
+        "value": 21166
+      },
+      {
+        "op": "replace",
+        "path": "/context/partners/start",
+        "old_value": 1736,
+        "value": 21155
+      },
+      {
+        "op": "add",
+        "path": "/context/sampling_window",
+        "value": {
+          "image_region": [
+            180,
+            174,
+            202,
+            191
+          ],
+          "meaning": "finite_selected_late_point_no_physical_time_extracted"
+        }
+      },
+      {
+        "op": "replace",
+        "path": "/context/subject/end",
+        "old_value": 1947,
+        "value": 21226
+      },
+      {
+        "op": "replace",
+        "path": "/context/subject/quote",
+        "old_value": "MvhADG/HdrABC complex",
+        "value": "MvhADG/HdrABC complex from M. marburgensis"
+      },
+      {
+        "op": "replace",
+        "path": "/context/subject/start",
+        "old_value": 1926,
+        "value": 21184
+      },
+      {
+        "op": "replace",
+        "path": "/image/panel_region",
+        "old_value": [
+          58,
+          8,
+          226,
+          226
+        ],
+        "value": [
+          0,
+          0,
+          238,
+          262
+        ]
+      },
+      {
+        "op": "add",
+        "path": "/relationships/arrangement",
+        "value": {
+          "value": "coexistence",
+          "witnesses": [
+            {
+              "source_ref": "source_kaster_primary",
+              "representation": "text",
+              "start": 21184,
+              "end": 21226,
+              "quote": "MvhADG/HdrABC complex from M. marburgensis"
+            }
+          ],
+          "image_regions": [
+            [
+              60,
+              8,
+              170,
+              40
+            ]
+          ]
+        }
+      },
+      {
+        "op": "replace",
+        "path": "/relationships/axis_scale/image_regions",
+        "old_value": [
+          [
+            58,
+            8,
+            226,
+            226
+          ]
+        ],
+        "value": [
+          [
+            18,
+            35,
+            65,
+            225
+          ]
+        ]
+      },
+      {
+        "op": "replace",
+        "path": "/relationships/axis_scale/witnesses",
+        "old_value": [
+          {
+            "source_ref": "source_kaster_primary",
+            "representation": "text",
+            "start": 20591,
+            "end": 20619,
+            "quote": "correct for by extrapolation"
+          }
+        ],
+        "value": []
+      },
+      {
+        "op": "replace",
+        "path": "/relationships/measurement_stage/witnesses",
+        "old_value": [
+          {
+            "source_ref": "source_kaster_primary",
+            "representation": "text",
+            "start": 20591,
+            "end": 20619,
+            "quote": "correct for by extrapolation"
+          }
+        ],
+        "value": [
+          {
+            "source_ref": "source_kaster_primary",
+            "representation": "text",
+            "start": 21623,
+            "end": 21657,
+            "quote": "followed photometrically at 320 nm"
+          }
+        ]
+      },
+      {
+        "op": "replace",
+        "path": "/relationships/ordinate_direction/image_regions",
+        "old_value": [
+          [
+            58,
+            8,
+            226,
+            226
+          ]
+        ],
+        "value": [
+          [
+            18,
+            35,
+            65,
+            225
+          ]
+        ]
+      },
+      {
+        "op": "replace",
+        "path": "/relationships/ordinate_direction/witnesses",
+        "old_value": [
+          {
+            "source_ref": "source_kaster_primary",
+            "representation": "text",
+            "start": 20591,
+            "end": 20619,
+            "quote": "correct for by extrapolation"
+          }
+        ],
+        "value": []
+      }
+    ]
+  }
+}

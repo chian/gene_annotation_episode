@@ -1,0 +1,139 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmcalibrate",
+    "--cpu",
+    "1",
+    "-L",
+    "0.01",
+    "--tailp",
+    "0.1",
+    "--seed",
+    "181",
+    "--noforecast",
+    "--hfile",
+    "hist.dat",
+    "--sfile",
+    "survival.dat",
+    "--qqfile",
+    "qq.dat",
+    "--ffile",
+    "fits.dat",
+    "--xfile",
+    "tail.dat",
+    "model.cm"
+  ],
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_tiny",
+  "binary_sha256": "41be3917e970bfd0981663b0a09513702fbfd2bb69ee58c790d1f6f7df5569be",
+  "inputs": [
+    {
+      "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmbuild_hand/built.cm",
+      "path": "model.cm",
+      "sha256": "5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc",
+      "size_bytes": 9695
+    },
+    {
+      "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmbuild_hand/built.cm",
+      "path": "original.cm",
+      "sha256": "5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc",
+      "size_bytes": 9695
+    }
+  ],
+  "started_at": "2026-10-26T04:39:48.580871+00:00",
+  "returncode": 0,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "success",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "ended": {
+        "at": "2026-10-26T04:39:49.601596+00:00",
+        "monotonic_ns": 803151298924777,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 0.798189323,
+    "native_returncode": 0,
+    "observed_scratch_bytes": 294912
+  },
+  "finished_at": "2026-10-26T04:39:49.841563+00:00",
+  "files": [
+    {
+      "path": "fits.dat",
+      "size_bytes": 9112,
+      "sha256": "57d0d527b90e858507795bc838360e6d096378884d3ce334edc208c0a2d1ab95"
+    },
+    {
+      "path": "hist.dat",
+      "size_bytes": 89744,
+      "sha256": "6ec910170fcc1121acffde36a416087af5095c496b32d94bda71fbae959a7f30"
+    },
+    {
+      "path": "model.cm",
+      "size_bytes": 10256,
+      "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514"
+    },
+    {
+      "path": "original.cm",
+      "size_bytes": 9695,
+      "sha256": "5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc"
+    },
+    {
+      "path": "qq.dat",
+      "size_bytes": 11381,
+      "sha256": "62b6b5cb1d15d6d753524cb3777598a9d8ecfd70e94d1f939b88f8e62449d8d3"
+    },
+    {
+      "path": "request.json",
+      "size_bytes": 1457,
+      "sha256": "78494da35c2de764e19545abe1a6d38606305742cd4b6d16060fe9f260338167"
+    },
+    {
+      "path": "stderr.txt",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "stdout.txt",
+      "size_bytes": 2346,
+      "sha256": "639a0dae35d6d21715ff910b51a2a750bfd4ca4883e1397b2557e064a7c68016"
+    },
+    {
+      "path": "survival.dat",
+      "size_bytes": 112948,
+      "sha256": "08eb78875cda8a23fa41b1266a6cc410d29a09685b66d7696be701ba2d64b9a3"
+    },
+    {
+      "path": "tail.dat",
+      "size_bytes": 12409,
+      "sha256": "af4977eaa884853d62435660b59e2920893551a28428554c187efb8aeee5cb61"
+    }
+  ]
+}

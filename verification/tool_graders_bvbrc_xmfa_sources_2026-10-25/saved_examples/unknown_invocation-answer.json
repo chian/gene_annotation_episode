@@ -1,0 +1,208 @@
+{
+  "schema_version": "mauve_xmfa_source_bindings_v1",
+  "document_id": "mauve_xmfa:ecd03e7b97c30e7c5b85b4e500333f5a179e081a628ab3c53b47bf46d767102e",
+  "status": "partial",
+  "invocation_mode": "unknown",
+  "member_registry_completeness": "partial",
+  "members": [
+    {
+      "member_number": 1,
+      "metadata_indices": [
+        1,
+        2,
+        3
+      ],
+      "state": "missing",
+      "file_id": null,
+      "native_file_token": "combined.fa",
+      "entry_1based": 1,
+      "source_length": null,
+      "source_sequence": null,
+      "components": [],
+      "evidence": []
+    },
+    {
+      "member_number": 2,
+      "metadata_indices": [
+        4,
+        5,
+        6
+      ],
+      "state": "missing",
+      "file_id": null,
+      "native_file_token": "combined.fa",
+      "entry_1based": 2,
+      "source_length": null,
+      "source_sequence": null,
+      "components": [],
+      "evidence": []
+    },
+    {
+      "member_number": 3,
+      "metadata_indices": [
+        7,
+        8,
+        9
+      ],
+      "state": "missing",
+      "file_id": null,
+      "native_file_token": "combined.fa",
+      "entry_1based": 3,
+      "source_length": null,
+      "source_sequence": null,
+      "components": [],
+      "evidence": []
+    }
+  ],
+  "source_checks": [
+    {
+      "record": {
+        "block_index": 0,
+        "record_index": 0
+      },
+      "member_number": 1,
+      "state": "not_checked",
+      "compared_bases": 0,
+      "mismatch_columns_0based": [],
+      "evidence": []
+    },
+    {
+      "record": {
+        "block_index": 0,
+        "record_index": 1
+      },
+      "member_number": 2,
+      "state": "absent_zero",
+      "compared_bases": 0,
+      "mismatch_columns_0based": [],
+      "evidence": []
+    },
+    {
+      "record": {
+        "block_index": 0,
+        "record_index": 2
+      },
+      "member_number": 3,
+      "state": "not_checked",
+      "compared_bases": 0,
+      "mismatch_columns_0based": [],
+      "evidence": []
+    },
+    {
+      "record": {
+        "block_index": 1,
+        "record_index": 0
+      },
+      "member_number": 1,
+      "state": "not_checked",
+      "compared_bases": 0,
+      "mismatch_columns_0based": [],
+      "evidence": []
+    },
+    {
+      "record": {
+        "block_index": 2,
+        "record_index": 0
+      },
+      "member_number": 1,
+      "state": "not_checked",
+      "compared_bases": 0,
+      "mismatch_columns_0based": [],
+      "evidence": []
+    },
+    {
+      "record": {
+        "block_index": 3,
+        "record_index": 0
+      },
+      "member_number": 2,
+      "state": "not_checked",
+      "compared_bases": 0,
+      "mismatch_columns_0based": [],
+      "evidence": []
+    },
+    {
+      "record": {
+        "block_index": 4,
+        "record_index": 0
+      },
+      "member_number": 3,
+      "state": "not_checked",
+      "compared_bases": 0,
+      "mismatch_columns_0based": [],
+      "evidence": []
+    },
+    {
+      "record": {
+        "block_index": 5,
+        "record_index": 0
+      },
+      "member_number": 3,
+      "state": "not_checked",
+      "compared_bases": 0,
+      "mismatch_columns_0based": [],
+      "evidence": []
+    }
+  ],
+  "original_maps": [],
+  "requirements": [
+    {
+      "requirement_id": "xmfa_source:5e27f91e3c859cee5a591b84aa0aaf291b6b57d2f67f3ac8d3ffc7e260f5dad9",
+      "kind": "scientific_metadata",
+      "role": "xmfa_input_binding",
+      "source_refs": [],
+      "reason_code": "xmfa_invocation_mode_missing"
+    },
+    {
+      "requirement_id": "xmfa_source:a1164fdfbc0b47f721cc81dc8ca7995e1f0d364579ff324f65efbaebf62d40ed",
+      "kind": "scientific_metadata",
+      "role": "xmfa_input_binding",
+      "source_refs": [],
+      "reason_code": "xmfa_invocation_mode_missing"
+    },
+    {
+      "requirement_id": "xmfa_source:21cd5953404072c6817fff7afba5418f2beeddd8173be82accca9ee159063525",
+      "kind": "scientific_metadata",
+      "role": "xmfa_input_binding",
+      "source_refs": [],
+      "reason_code": "xmfa_invocation_mode_missing"
+    },
+    {
+      "requirement_id": "xmfa_source:368d114c94f9f849cbef19df00a053517a55b7c6d5fe07ae391518300f60d7fe",
+      "kind": "input_metadata",
+      "role": "xmfa_input_records",
+      "source_refs": [],
+      "reason_code": "xmfa_input_population_partial"
+    }
+  ],
+  "diagnostics": [
+    {
+      "code": "xmfa_invocation_mode_missing",
+      "phase": "association",
+      "path": "/members/1",
+      "severity": "qualification",
+      "evidence_refs": []
+    },
+    {
+      "code": "xmfa_invocation_mode_missing",
+      "phase": "association",
+      "path": "/members/2",
+      "severity": "qualification",
+      "evidence_refs": []
+    },
+    {
+      "code": "xmfa_invocation_mode_missing",
+      "phase": "association",
+      "path": "/members/3",
+      "severity": "qualification",
+      "evidence_refs": []
+    },
+    {
+      "code": "xmfa_input_population_partial",
+      "phase": "association",
+      "path": "/members",
+      "severity": "qualification",
+      "evidence_refs": []
+    }
+  ]
+}

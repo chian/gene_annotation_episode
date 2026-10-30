@@ -1,0 +1,116 @@
+.........F.F.F.F........................................................ [ 15%]
+.......
+=================================== FAILURES ===================================
+_ test_selected_shared_loop_original_form_and_first_readonly_cold_composition[positive-literal-explicit] _
+tests/test_literature_common_assessment_binding_223.py:272: in test_selected_shared_loop_original_form_and_first_readonly_cold_composition
+    _selected_shared_loop_case(tmp_path, monkeypatch, profile, alias, index)
+tests/test_literature_common_assessment_binding_223.py:351: in _selected_shared_loop_case
+    asyncio.run(run_workflow(case.store, ToolRegistry(case.store), provider=provider, run_dir=tmp_path/'run',
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4324: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4591: in _run_bound_workflow
+    workflow = assemble_workflow(store, tools, provider, directory, run_id, settings,
+gene_annotation_episode/runtime.py:4233: in assemble_workflow
+    return Workflow(store, tools, provider, directory, run_id, controller_factory, project_credit,
+gene_annotation_episode/runtime.py:1873: in __init__
+    self.validate_contract_information_configuration(profile)
+gene_annotation_episode/runtime.py:2203: in validate_contract_information_configuration
+    raise ContractInformationError('contract_information_requires_pending_decision_protocol',
+E   gene_annotation_episode.episode_contract_information.ContractInformationError: contract_information_requires_pending_decision_protocol:decision_protocol
+_ test_selected_shared_loop_original_form_and_first_readonly_cold_composition[positive-alias-explicit] _
+tests/test_literature_common_assessment_binding_223.py:272: in test_selected_shared_loop_original_form_and_first_readonly_cold_composition
+    _selected_shared_loop_case(tmp_path, monkeypatch, profile, alias, index)
+tests/test_literature_common_assessment_binding_223.py:351: in _selected_shared_loop_case
+    asyncio.run(run_workflow(case.store, ToolRegistry(case.store), provider=provider, run_dir=tmp_path/'run',
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4324: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4591: in _run_bound_workflow
+    workflow = assemble_workflow(store, tools, provider, directory, run_id, settings,
+gene_annotation_episode/runtime.py:4233: in assemble_workflow
+    return Workflow(store, tools, provider, directory, run_id, controller_factory, project_credit,
+gene_annotation_episode/runtime.py:1873: in __init__
+    self.validate_contract_information_configuration(profile)
+gene_annotation_episode/runtime.py:2203: in validate_contract_information_configuration
+    raise ContractInformationError('contract_information_requires_pending_decision_protocol',
+E   gene_annotation_episode.episode_contract_information.ContractInformationError: contract_information_requires_pending_decision_protocol:decision_protocol
+_ test_selected_shared_loop_original_form_and_first_readonly_cold_composition[nondetection-literal-explicit] _
+tests/test_literature_common_assessment_binding_223.py:272: in test_selected_shared_loop_original_form_and_first_readonly_cold_composition
+    _selected_shared_loop_case(tmp_path, monkeypatch, profile, alias, index)
+tests/test_literature_common_assessment_binding_223.py:351: in _selected_shared_loop_case
+    asyncio.run(run_workflow(case.store, ToolRegistry(case.store), provider=provider, run_dir=tmp_path/'run',
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4324: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4591: in _run_bound_workflow
+    workflow = assemble_workflow(store, tools, provider, directory, run_id, settings,
+gene_annotation_episode/runtime.py:4233: in assemble_workflow
+    return Workflow(store, tools, provider, directory, run_id, controller_factory, project_credit,
+gene_annotation_episode/runtime.py:1873: in __init__
+    self.validate_contract_information_configuration(profile)
+gene_annotation_episode/runtime.py:2203: in validate_contract_information_configuration
+    raise ContractInformationError('contract_information_requires_pending_decision_protocol',
+E   gene_annotation_episode.episode_contract_information.ContractInformationError: contract_information_requires_pending_decision_protocol:decision_protocol
+_ test_selected_shared_loop_original_form_and_first_readonly_cold_composition[nondetection-alias-explicit] _
+tests/test_literature_common_assessment_binding_223.py:272: in test_selected_shared_loop_original_form_and_first_readonly_cold_composition
+    _selected_shared_loop_case(tmp_path, monkeypatch, profile, alias, index)
+tests/test_literature_common_assessment_binding_223.py:351: in _selected_shared_loop_case
+    asyncio.run(run_workflow(case.store, ToolRegistry(case.store), provider=provider, run_dir=tmp_path/'run',
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4324: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4591: in _run_bound_workflow
+    workflow = assemble_workflow(store, tools, provider, directory, run_id, settings,
+gene_annotation_episode/runtime.py:4233: in assemble_workflow
+    return Workflow(store, tools, provider, directory, run_id, controller_factory, project_credit,
+gene_annotation_episode/runtime.py:1873: in __init__
+    self.validate_contract_information_configuration(profile)
+gene_annotation_episode/runtime.py:2203: in validate_contract_information_configuration
+    raise ContractInformationError('contract_information_requires_pending_decision_protocol',
+E   gene_annotation_episode.episode_contract_information.ContractInformationError: contract_information_requires_pending_decision_protocol:decision_protocol
+=========================== short test summary info ============================
+FAILED tests/test_literature_common_assessment_binding_223.py::test_selected_shared_loop_original_form_and_first_readonly_cold_composition[positive-literal-explicit]
+FAILED tests/test_literature_common_assessment_binding_223.py::test_selected_shared_loop_original_form_and_first_readonly_cold_composition[positive-alias-explicit]
+FAILED tests/test_literature_common_assessment_binding_223.py::test_selected_shared_loop_original_form_and_first_readonly_cold_composition[nondetection-literal-explicit]
+FAILED tests/test_literature_common_assessment_binding_223.py::test_selected_shared_loop_original_form_and_first_readonly_cold_composition[nondetection-alias-explicit]
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! KeyboardInterrupt !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+/usr/lib/python3.12/asyncio/runners.py:123: KeyboardInterrupt
+(to show a full traceback on KeyboardInterrupt use --full-trace)
+4 failed, 75 passed in 625.15s (0:10:25)

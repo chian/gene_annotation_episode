@@ -1,0 +1,41 @@
+# Independent review of the bounded product/cofactor integration
+
+The corrected218 product/cofactor integration is accepted within the scope below. A105 adequacy, common assessment assembly and the full immutable goal remain unfinished. This record changes no goal, scientific scoring policy, saved result, controller or annotation-credit function.
+
+## Independently executed evidence
+
+Root pin002 reproduces the original218 integration: **155 passing tests**, pytest XML time326.004s and runner time326.1896s. It contains the original51 integration cases,71 pure212 cases, one existing compiler215 cold case and32 exact declaration203 cases. This original display policy had the subsequently demonstrated defects described below.
+
+Root pin003 reproduces the corrected218 code: **33 targeted passing tests**, pytest XML time281.556s and runner time281.7466s. These exercise twelve attached-statistic/chemical-name/construct/condition cases, two actual old-markerless-state reads, unsupported host-policy and altered-display rejection, eight TASK/surface cases, the broad context alias case, and eight selected-loop/current-descriptor cold compositions. These cohorts overlap:155+33 must not be reported as188 distinct tests or graders. Imports were inside their respective pins; every pinned file remained unchanged.
+
+The owner separately completed **638 passing checks** on corrected pin002, including67 new218 cases. Root inspected the executed XML, result, CLI summary and release artifact hashes; this is owner-executed evidence, not a638-test root rerun. The CLI reports992.46s, XML reports992.185s and the external runner reports994.0295s; these are separately measured durations. All owner release artifact hashes and nine owned live file hashes matched at review.
+
+Root independently audited all eight current cold proofs and two actual old-markerless-state compatibility proofs. Each saved state still has exactly three runtime actions/ordinary observations and one selected product/cofactor operation. Their recorded zero-write results and every retained state-file hash were reverified. No private actual-model payload was inspected. Original source/covariance/parser/calculator/scientific-validator/model/receive calls are blocked before read-only composition in the controlled test. Two old-state fixtures intentionally refer to actual earlier owner218 closed states outside the root code pin; this is a fixed data dependency, not an outside-pin code import.
+
+Five additional root synthetic storage/fact/text properties passed: same numerical value at different coordinates does not suppress an independently selected true condition; unrequested reaction coefficient is withheld; the chemical name survives while an attached statistic is withheld; requested native activity and original source custody are preserved; and fact/text projections agree. These are synthetic scope checks, not additional experimental assays or model-backed scientific execution.
+
+## Scientific and delivery meanings inspected
+
+One selected `literature.product_coupling.populate` call uses the unchanged212 reader/calculator and existing LiteratureEpisodes/shared method_loop. Native product activity P, cofactor activity H and author-reported percent remain separate. Descriptive rho=P/H is distinct from conditional eta=nu*rho, and neither establishes molecule-specific effect isolation. Nu has no default; unknown pairing/normalization/preparation relationships remain explicit. Nondetection preserves the source's reported zero with nondetection semantics and supplies no physical point ratio, inferred limit or exact biological zero.
+
+The eleven dependent numerical views are a product/cofactor section of one logical A105 sheet, not eleven independent assay graders. Returned uncertainty preserves actual ordered owners, units, variance basis/status/origin and shared measurement/contribution/model identities. The raw covariance matrix and unrequested native operands are withheld. Fixed substitution of uncertain nu explicitly excludes nu uncertainty; full uncertain-nu and cross-arm propagation remain unfinished.
+
+Default requested components are empty. Selected population validates custody, scope and page ancestry. Complete source, extraction, sheet and original implementation receipt stay in host storage. Only requested rows pass through exact literal/episode-fact schema, authenticated admission and parent-specific subset forwarding. Pending declarations preserve their original snapshot. The nested forwarding test has five ordinary observations across three episodes; eight basic cases have three each. No internal calculation, report construction or reconstruction creates observations.
+
+Full recurring scientific TASK remains separate from concise STEERING. The affected paths cover own tool outcome, received child, current report, history, operation/return lookup and direct parent presentation. Binding fingerprints include the selected product implementation and the actual transitive helpers through the existing population binding; the three-file pure receipt alone is not claimed to cover every transitive dependency.
+
+## Display correction and preservation
+
+Root reproduced original-policy attached-statistic escapes (`mean 5mM`/`mean5mM`) and unwanted redaction of the chemical locant in5-exo-hydroxycamphor. Corrected fresh payloads have a host-only projection generation marker. The new bounded guard handles supported attached statistics and this camphor chemical-name family while retaining construct labels. This is not a universal prose, chemical-name, PDF, OCR or graph reader.
+
+Markerless records retain their original display behavior. The executable AST statements of the legacy helper equal the original helper; the new explanatory docstring is the sole body difference before excluding docstrings. Unknown markers and altered saved outcomes are rejected. Current readers can read actual old rows/forms unchanged without source/scientific/model/receive calls. This does not migrate the old runtime descriptor: it still requires its original code pin. Current-descriptor cold composition is verified separately.
+
+The corrected root pin differs from the original root pin in storage, its test and the explicit local pytest.ini harness configuration. Six shared consumer changes were inspected against retained before files and earlier complete root213 consumer reads; complete updated `_tool_arguments` and `execute` functions were reread after an earlier truncated attempt. An AST definition delta and17 protected dependency hashes were checked, with the explicitly authorized215 input/test repair incorporated. Authorized221 input/calculation work in progress is excluded from these immutable cohorts.
+
+## Preserved engineering failures and limits
+
+The first root runner failed before pytest collection because it expected a missing pytest.ini. The original pin/script/log remain; pin002 adds an explicit harness configuration. The independent proof-audit script first expected only two changed files and encountered the distinct harness configurations, then included an added docstring in an overly strict AST comparison. Both failed scripts and additive failure records remain; corrected verify_retained_proofs_003.py passed. None of these failures changes the scientific result or hides a failed scientific assertion.
+
+No new paper was opened or scientifically converted in this integration review. It uses the already reviewed207/211/219 case and explicitly synthetic covariance/controlled-provider fixtures. Root reread the complete immutable goal and applicable repository instructions; scientific post-paper interpretation remains in219's own reset record. This review is implementation evidence, not a replacement authority.
+
+Still required: implement and integrate the reviewed common assessment calculations; establish source-grounded validity, reliability, effect-isolation, functional relevance and cross-assay dependence/complementarity/contradiction coverage; obtain missing covariance/population producers where implementable; test contrasting experimental arrangements; and establish A105 adequacy before expanding to other literature responsibilities. No W05, target correspondence, final credit, later-axis or actual configured-model scientific completion is asserted.

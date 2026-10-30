@@ -1,0 +1,67 @@
+{
+  "slot": "thought_pattern",
+  "id": "P17",
+  "name": "Separate linked functions through selective dissociation",
+  "description": "Seek comparisons preserving one property while changing another. Use their dissociation to distinguish a required functional relation from amount, delivery, stability or another linked activity.",
+  "use_when": "A mutant phenotype is assigned to one molecular function despite several potentially affected properties.",
+  "live_alternatives": [
+    "Named function is required.",
+    "Amount/localization/assembly/another function explains the effect.",
+    "Distinct connections jointly contribute but can reside on different molecules.",
+    "The measured activity and native role dissociate."
+  ],
+  "decision_guidance": [
+    "Prefer positive evidence that alternative properties survive; a failed construct is not automatically selective.",
+    "Reciprocal/complementary contrasts are informative when their predicted results differ, without requiring them universally.",
+    "Keep incomplete perturbation validation as a limit rather than claiming a specific null from its label."
+  ],
+  "outcome_contingencies": [
+    {
+      "if_observed": "Function fails despite retained amount/delivery",
+      "then_consider": "Exclude simple instability/mislocalization without inventing direct binding."
+    },
+    {
+      "if_observed": "Complementary defects restore function but same-defect controls do not",
+      "then_consider": "Support joint contribution of distinct connections."
+    },
+    {
+      "if_observed": "Endpoint survives a supposed catalytic-null mutation without null validation",
+      "then_consider": "Do not infer catalytic dispensability from the label."
+    }
+  ],
+  "boundary": "The contrast must preserve relevant alternative properties while perturbing a proposed causal relation. P02 can use natural feature/function discordance without causal selectivity; P15 can preserve successful upstream and failed downstream events without isolating the cause. Ordinary suppression is not reciprocal separation-of-function evidence; mutagenesis is not an available operation merely because a case reports it.",
+  "evidence": [
+    {
+      "case_group": "cellular_yabA",
+      "case_id": "cellular_yabA",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1413692/",
+      "source_locator": "Case-record observation; inspected scope: Primary full Results examined, including mutant fold/function controls and the mixed-complex repair experiment.",
+      "observation": "DnaA- or DnaN-interaction defects complemented in trans with same-defect controls, restoring foci/initiation control.",
+      "limit": "The result does not settle every molecular YabA model."
+    },
+    {
+      "case_group": "causal_envC_activation",
+      "case_id": "causal_envC_activation",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3923381/",
+      "source_locator": "Primary Table 1 and functional/localization Results; EnvC detailed trace.",
+      "observation": "Stable septally localized variants lost cell separation and AmiB activation.",
+      "limit": "The proposed direct helix interaction remained uncaptured."
+    },
+    {
+      "case_group": "causal_tsaE_turnover",
+      "case_id": "causal_tsaE_turnover",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6614819/",
+      "source_locator": "Switch-mutant/turnover Results, Methods and Discussion, 2019.",
+      "observation": "Switch variants retained ATPase yet lost efficient repeated t6A synthesis.",
+      "limit": "Tested Thermotoga result does not resolve the E. coli endpoint comparison."
+    },
+    {
+      "case_group": "spec_suhb_catalysis_vs_rrna",
+      "case_id": "spec_suhb_catalysis_vs_rrna",
+      "source_url": "https://pubs.acs.org/doi/10.1021/bi992424f",
+      "source_locator": "Primary abstract only, 2000; inspection boundary in specificity case record.",
+      "observation": "Active heterologous IMPases failed rescue while inactive native D87N retained it.",
+      "limit": "This 2000 comparison was abstract-only; later rRNA/Nus results were inspected more fully."
+    }
+  ]
+}

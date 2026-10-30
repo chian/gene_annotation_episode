@@ -1,0 +1,12 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+______ test_metadata_module_bytes_participate_in_actual_binding_identity _______
+tests/test_literature_partner_operand_information.py:313: in test_metadata_module_bytes_participate_in_actual_binding_identity
+    assert len(binding.fact_sources("literature")) == 18
+E   AssertionError: assert 20 == 18
+E    +  where 20 = len({'literature_rate_cells': {'type': 'array', 'meaning': 'Saved source-preparation rate cells with measured subject/expe...nent', 'value', 'unit', 'status', ...], 'additionalProperties': False}, 'x-source': 'literature_quantity_cells'}}, ...})
+E    +    where {'literature_rate_cells': {'type': 'array', 'meaning': 'Saved source-preparation rate cells with measured subject/expe...nent', 'value', 'unit', 'status', ...], 'additionalProperties': False}, 'x-source': 'literature_quantity_cells'}}, ...} = fact_sources('literature')
+E    +      where fact_sources = <gene_annotation_episode.literature_episodes.LiteratureEpisodes object at 0x7f012dedb770>.fact_sources
+=========================== short test summary info ============================
+FAILED tests/test_literature_partner_operand_information.py::test_metadata_module_bytes_participate_in_actual_binding_identity
+1 failed in 0.75s

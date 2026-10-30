@@ -1,0 +1,206 @@
+{
+  "reported_parameter": {
+    "maximum_condition_names": [],
+    "maximum_numeric_dependency_names": [
+      "parameter_source",
+      "parameter_unit_source"
+    ],
+    "rule": "Return only members actually used by the selected source/statistical-count route; absent dependencies remain absent. Condition states do not carry witness quotes or unrequested numerical inputs."
+  },
+  "reported_sd": {
+    "maximum_condition_names": [],
+    "maximum_numeric_dependency_names": [
+      "spread_source",
+      "spread_unit_source"
+    ],
+    "rule": "Return only members actually used by the selected source/statistical-count route; absent dependencies remain absent. Condition states do not carry witness quotes or unrequested numerical inputs."
+  },
+  "source_summary_count": {
+    "maximum_condition_names": [],
+    "maximum_numeric_dependency_names": [
+      "count_source"
+    ],
+    "rule": "Return only members actually used by the selected source/statistical-count route; absent dependencies remain absent. Condition states do not carry witness quotes or unrequested numerical inputs."
+  },
+  "independent_preparation_count": {
+    "maximum_condition_names": [
+      "row_footnote_applicability"
+    ],
+    "maximum_numeric_dependency_names": [
+      "count_source"
+    ],
+    "rule": "Return only members actually used by the selected source/statistical-count route; absent dependencies remain absent. Condition states do not carry witness quotes or unrequested numerical inputs."
+  },
+  "statistical_estimator_count": {
+    "maximum_condition_names": [
+      "row_footnote_applicability",
+      "statistical_count_matches_sd",
+      "one_estimate_per_preparation",
+      "reported_sd_summarizes_counted_preparation_estimates"
+    ],
+    "maximum_numeric_dependency_names": [
+      "count_source",
+      "statistical_count_source"
+    ],
+    "rule": "Return only members actually used by the selected source/statistical-count route; absent dependencies remain absent. Condition states do not carry witness quotes or unrequested numerical inputs."
+  },
+  "relative_reported_sd": {
+    "maximum_condition_names": [],
+    "maximum_numeric_dependency_names": [
+      "parameter_source",
+      "parameter_unit_source",
+      "spread_source",
+      "spread_unit_source"
+    ],
+    "rule": "Return only members actually used by the selected source/statistical-count route; absent dependencies remain absent. Condition states do not carry witness quotes or unrequested numerical inputs."
+  },
+  "mean_variance": {
+    "maximum_condition_names": [
+      "row_footnote_applicability",
+      "statistical_count_matches_sd",
+      "one_estimate_per_preparation",
+      "reported_sd_summarizes_counted_preparation_estimates",
+      "sample_sd_n_minus_one",
+      "iid_common_mean_finite_variance"
+    ],
+    "maximum_numeric_dependency_names": [
+      "spread_source",
+      "spread_unit_source",
+      "count_source",
+      "statistical_count_source"
+    ],
+    "rule": "Return only members actually used by the selected source/statistical-count route; absent dependencies remain absent. Condition states do not carry witness quotes or unrequested numerical inputs."
+  },
+  "mean_standard_error": {
+    "maximum_condition_names": [
+      "row_footnote_applicability",
+      "statistical_count_matches_sd",
+      "one_estimate_per_preparation",
+      "reported_sd_summarizes_counted_preparation_estimates",
+      "sample_sd_n_minus_one",
+      "iid_common_mean_finite_variance"
+    ],
+    "maximum_numeric_dependency_names": [
+      "spread_source",
+      "spread_unit_source",
+      "count_source",
+      "statistical_count_source"
+    ],
+    "rule": "Return only members actually used by the selected source/statistical-count route; absent dependencies remain absent. Condition states do not carry witness quotes or unrequested numerical inputs."
+  },
+  "relative_mean_standard_error": {
+    "maximum_condition_names": [
+      "row_footnote_applicability",
+      "statistical_count_matches_sd",
+      "one_estimate_per_preparation",
+      "reported_sd_summarizes_counted_preparation_estimates",
+      "sample_sd_n_minus_one",
+      "iid_common_mean_finite_variance",
+      "equal_weight_arithmetic_mean"
+    ],
+    "maximum_numeric_dependency_names": [
+      "parameter_source",
+      "parameter_unit_source",
+      "spread_source",
+      "spread_unit_source",
+      "count_source",
+      "statistical_count_source"
+    ],
+    "rule": "Return only members actually used by the selected source/statistical-count route; absent dependencies remain absent. Condition states do not carry witness quotes or unrequested numerical inputs."
+  },
+  "mean_interval_df": {
+    "maximum_condition_names": [
+      "row_footnote_applicability",
+      "statistical_count_matches_sd",
+      "one_estimate_per_preparation",
+      "reported_sd_summarizes_counted_preparation_estimates",
+      "sample_sd_n_minus_one"
+    ],
+    "maximum_numeric_dependency_names": [
+      "count_source",
+      "statistical_count_source"
+    ],
+    "rule": "Return only members actually used by the selected source/statistical-count route; absent dependencies remain absent. Condition states do not carry witness quotes or unrequested numerical inputs."
+  },
+  "mean_interval_confidence_level": {
+    "maximum_condition_names": [],
+    "maximum_numeric_dependency_names": [],
+    "rule": "Return only members actually used by the selected source/statistical-count route; absent dependencies remain absent. Condition states do not carry witness quotes or unrequested numerical inputs."
+  },
+  "mean_interval_t_multiplier": {
+    "maximum_condition_names": [
+      "row_footnote_applicability",
+      "statistical_count_matches_sd",
+      "one_estimate_per_preparation",
+      "reported_sd_summarizes_counted_preparation_estimates",
+      "sample_sd_n_minus_one",
+      "iid_common_mean_finite_variance",
+      "normal_sampling_units"
+    ],
+    "maximum_numeric_dependency_names": [
+      "count_source",
+      "statistical_count_source"
+    ],
+    "rule": "Return only members actually used by the selected source/statistical-count route; absent dependencies remain absent. Condition states do not carry witness quotes or unrequested numerical inputs."
+  },
+  "mean_interval_halfwidth": {
+    "maximum_condition_names": [
+      "row_footnote_applicability",
+      "statistical_count_matches_sd",
+      "one_estimate_per_preparation",
+      "reported_sd_summarizes_counted_preparation_estimates",
+      "sample_sd_n_minus_one",
+      "iid_common_mean_finite_variance",
+      "normal_sampling_units"
+    ],
+    "maximum_numeric_dependency_names": [
+      "spread_source",
+      "spread_unit_source",
+      "count_source",
+      "statistical_count_source"
+    ],
+    "rule": "Return only members actually used by the selected source/statistical-count route; absent dependencies remain absent. Condition states do not carry witness quotes or unrequested numerical inputs."
+  },
+  "mean_interval_lower": {
+    "maximum_condition_names": [
+      "row_footnote_applicability",
+      "statistical_count_matches_sd",
+      "one_estimate_per_preparation",
+      "reported_sd_summarizes_counted_preparation_estimates",
+      "sample_sd_n_minus_one",
+      "iid_common_mean_finite_variance",
+      "normal_sampling_units",
+      "equal_weight_arithmetic_mean"
+    ],
+    "maximum_numeric_dependency_names": [
+      "parameter_source",
+      "parameter_unit_source",
+      "spread_source",
+      "spread_unit_source",
+      "count_source",
+      "statistical_count_source"
+    ],
+    "rule": "Return only members actually used by the selected source/statistical-count route; absent dependencies remain absent. Condition states do not carry witness quotes or unrequested numerical inputs."
+  },
+  "mean_interval_upper": {
+    "maximum_condition_names": [
+      "row_footnote_applicability",
+      "statistical_count_matches_sd",
+      "one_estimate_per_preparation",
+      "reported_sd_summarizes_counted_preparation_estimates",
+      "sample_sd_n_minus_one",
+      "iid_common_mean_finite_variance",
+      "normal_sampling_units",
+      "equal_weight_arithmetic_mean"
+    ],
+    "maximum_numeric_dependency_names": [
+      "parameter_source",
+      "parameter_unit_source",
+      "spread_source",
+      "spread_unit_source",
+      "count_source",
+      "statistical_count_source"
+    ],
+    "rule": "Return only members actually used by the selected source/statistical-count route; absent dependencies remain absent. Condition states do not carry witness quotes or unrequested numerical inputs."
+  }
+}

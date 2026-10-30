@@ -1,0 +1,595 @@
+                                                                                                                                                    Article
+
+                                                                                                                                       pubs.acs.org/JACS
+
+
+
+
+Assignment of Pterin Deaminase Activity to an Enzyme of Unknown
+Function Guided by Homology Modeling and Docking
+Hao Fan,†,‡,§,∇ Daniel S. Hitchcock,∥,∇ Ronald D. Seidel II,# Brandan Hillerich,# Henry Lin,‡
+Steven C. Almo,# Andrej Sali,*,†,‡,§ Brian K. Shoichet,*,‡ and Frank M. Raushel*,∥,⊥
+†
+ Department of Bioengineering and Therapeutic Sciences, ‡Department of Pharmaceutical Chemistry, and §California Institute for
+ Quantitative Biosciences, University of California, San Francisco, California 94143, United States
+∥
+  Department of Biochemistry & Biophysics, and ⊥Department of Chemistry, Texas A&M University, College Station, Texas 77843,
+ United States
+#
+ Albert Einstein College of Medicine, 1300 Morris Park Avenue, Bronx, New York 10461, United States
+    *
+    S Supporting Information
+
+
+
+    ABSTRACT: Of the over 22 million protein sequences in the nonredundant
+    TrEMBL database, fewer than 1% have experimentally conﬁrmed functions.
+    Structure-based methods have been used to predict enzyme activities from
+    experimentally determined structures; however, for the vast majority of proteins,
+    no such structures are available. Here, homology models of a functionally
+    uncharacterized amidohydrolase from Agrobacterium radiobacter K84 (Arad3529)
+    were computed on the basis of a remote template structure. The protein backbone
+    of two loops near the active site was remodeled, resulting in four distinct active site
+    conformations. Substrates of Arad3529 were predicted by docking of 57 672 high-
+    energy intermediate (HEI) forms of 6440 metabolites against these four homology
+    models. On the basis of docking ranks and geometries, a set of modiﬁed pterins
+    were suggested as candidate substrates for Arad3529. The predictions were tested
+    by enzymology experiments, and Arad3529 deaminated many pterin metabolites
+    (substrate, kcat/Km [M−1 s−1]): formylpterin, 5.2 × 106; pterin-6-carboxylate, 4.0 × 106; pterin-7-carboxylate, 3.7 × 106; pterin, 3.3
+    × 106; hydroxymethylpterin, 1.2 × 106; biopterin, 1.0 × 106; D-(+)-neopterin, 3.1 × 105; isoxanthopterin, 2.8 × 105; sepiapterin,
+    1.3 × 105; folate, 1.3 × 105, xanthopterin, 1.17 × 105; and 7,8-dihydrohydroxymethylpterin, 3.3 × 104. While pterin is a
+    ubiquitous oxidative product of folate degradation, genomic analysis suggests that the ﬁrst step of an undescribed pterin
+    degradation pathway is catalyzed by Arad3529. Homology model-based virtual screening, especially with modeling of protein
+    backbone ﬂexibility, may be broadly useful for enzyme function annotation and discovering new pathways and drug targets.
+
+
+■     INTRODUCTION
+With increasing availability of genomic sequences, a pressing
+                                                                           sylhomocysteine (SAH). This approach has been subsequently
+                                                                           applied to three other enzymes for activity determination.10−12
+challenge in biology is a reliable assignment of function to the           These studies suggest that structure-based docking might be a
+proteins encoded by these genomes. Functional annotation of                useful tool for enzyme function annotation, when an
+an uncharacterized protein can be conveniently accomplished                experimentally determined atomic structure of the enzyme is
+by matching its sequence to that of a characterized protein.1,2            available.
+However, this strategy is often inaccurate and imprecise.3,4                  Often, however, an enzyme of unknown function has no
+Conservatively, over 50% of the sequences in the public                    experimentally determined three-dimensional structure. In such
+databases have uncertain, unknown, or incorrectly annotated                situations, a three-dimensional model of the target sequence
+functions.5 Annotation of enzymes in functionally diverse                  can be computed by homology modeling if a template structure
+superfamilies is particularly challenging.6                                of a related protein is known.13 Currently, the total fraction of
+   A promising method to functional assignment is the                      protein sequences in a typical genome for which reliable
+identiﬁcation of the substrate by docking potential substrates             homology models can be obtained varies from 20% to 75%,
+against the binding site of an experimentally determined                   increasing the number of structurally characterized protein
+enzyme structure.7,8 This method was used to predict the                   sequences by more than 2 orders of magnitude relative to the
+substrates of Tm0936 from Thermotoga maritima.9 High-energy                PDB.14 Therefore, homology models can, in principle, greatly
+intermediate forms of thousands of candidate metabolites were              extend the applicability of virtual screening for ligand
+docked to the X-ray structure of Tm0936, and those highly
+ranked by docking energy score were tested experimentally,                 Received: October 1, 2012
+conﬁrming a signiﬁcant deaminase activity against S-adeno-                 Published: December 20, 2012
+
+                               © 2012 American Chemical Society      795                    dx.doi.org/10.1021/ja309680b | J. Am. Chem. Soc. 2013, 135, 795−803
+Journal of the American Chemical Society                                                                                                                Article
+
+
+
+
+Figure 1. Sequence similarity network for cog0402. Protein sequences for cog0402 were retrieved from NCBI, subjected to an All-by-All BLAST to
+determine overall sequence similarity to all of the other proteins within this network.27 Each dot (node) represents an enzyme, and each connection
+between two nodes (an edge) represents those enzyme pairs that are more closely related than the arbitrary E-value cutoﬀ (10−70). Groups are
+arbitrarily numbered; those groups with experimentally determined substrate proﬁles are as follows: (1) S-adenosylhomocysteine/5′-deoxy-5′-
+methylthioadenosine deaminase (red nodes); (2) guanine deaminase (orange nodes); (4) 8-oxoguanine/isoxanthopterin deaminase (green nodes);
+(6) cytosine deaminase (light blue nodes); and (8) N-formimino-L-glutamate deiminase (purple nodes).
+
+discovery.15−20 For example, this strategy was successfully                  1). Although 40% of the proteins in cog0402 can be reliably
+employed in the prediction of function for Bc0371 from Bacillus              annotated as catalyzing the deamination of an aromatic base or
+cereus as an N-succinyl arginine/lysine racemase by docking                  a similar functional group,11,29−34 the rest remain uncharac-
+dipeptides and N-succinyl amino acids to a homology model of                 terized. Here, we have attempted to predict the substrate proﬁle
+Bc0371 based on the X-ray structure of the closest structural                for enzymes of unknown function represented by group 14 of
+homologue, L-alanine-D/L-glutamate epimerase.21                              cog0402, containing approximately 140 proteins. In particular,
+   The accuracy of a homology model can be estimated from                    Arad3529 from Agrobacterium radiobacter K84 was cloned,
+the target-template sequence identity. When the sequence                     expressed, and puriﬁed to homogeneity. Substrates of Arad3529
+identity exceeds 30%, a reliable alignment can typically be                  were predicted by docking high-energy intermediate forms of
+constructed, and the resulting models may be useful for virtual              candidate metabolites to the homology models constructed for
+screening. When the sequence identity decreases much below                   Arad3529. High-ranking predictions were acquired and tested
+30%, the target structure often deviates signiﬁcantly from that              as candidate substrates by enzymology. The sequence identity
+of the template, resulting in large errors in side chain packing,            between Arad3529 and its closest structurally characterized
+loop conformations, core backbone conformations, alignment,                  homologue, cytosine deaminase from E. coli, is only 26%,
+and even fold assignment. Unfortunately, for many proteins                   making the construction of the homology model and
+from newly sequenced genomes, only distantly related template                subsequent computational docking highly challenging.
+
+                                                                             ■
+structures are available. Hence, it is of pressing interest to
+develop modeling and docking methods that account for                            MATERIALS AND METHODS
+backbone variation between homologues, so that homology
+models based on distant templates can be used for annotation                    General. All chemicals were obtained from Sigma-Aldrich unless
+                                                                             otherwise speciﬁed. 7,8-Dihydro-L-biopterin was purchased from Santa
+of protein function.                                                         Cruz Biotechnology. Formylpterin, pterin-7-carboxylate, hydroxyme-
+   The functionally diverse amidohydrolase superfamily (AHS)                 thylpterin, xanthopterin, 7,8-dihydrohydroxymethylpterin, and 7,8-
+of enzymes provides a test case for developing robust                        dihydroneopterin were purchased from Schirks Laboratories.
+computational methods for function identiﬁcation of unchar-                     Cloning, Expression, and Puriﬁcation of Arad3529. The gene
+acterized enzymes. Enzymes within this superfamily possess a                 for Arad3529 was ampliﬁed from Agrobacterium radiobacter Strain K84
+mononuclear or binuclear metal center embedded within a (β/                  genomic DNA using 5′-TTAAGAAGGAGATATACCATGTCA-
+α)8-barrel structural fold,22 and catalyze diverse reactions,                TACAGTTTCATGTCCCCGCC-3′ as the forward primer and 5′-
+including ester and amide hydrolysis, nucleic acid deamination,              GATTGGAAGTAGAGGTTCTCTGCTGCGCCAATCACGGTGT-
+double bond hydration, carbohydrate isomerization, and                       CCAG-3′ as the reverse primer. PCR was performed using KOD Hot
+                                                                             Start DNA Polymerase (Novagen). The ampliﬁed fragment was
+decarboxylation.23 To date, more than 24 000 unique bacterial
+                                                                             cloned into the C-terminal TEV cleavable StrepII-6x-His-tag
+proteins have been assigned to this superfamily, segregating                 containing vector, CHS30, by ligation-independent cloning.35
+into 24 clusters of orthologous groups (COGs).24,25                             The Arad3529-CHS30 vector was used to transform BL21(DE3) E.
+   One of these COGs, cog0402, contains approximately 1400                   coli containing the pRIL plasmid (Stratagene), which was used to
+distinct proteins. At BLAST26 E-value of 10−70, cog0402 can be               inoculate a 5 mL 2xYT culture containing 25 μg/mL kanamycin and
+divided into 14 major groups of similar sequences27,28 (Figure               34 μg/mL chloramphenicol. The culture was allowed to grow
+
+                                                                       796                      dx.doi.org/10.1021/ja309680b | J. Am. Chem. Soc. 2013, 135, 795−803
+Journal of the American Chemical Society                                                                                                                   Article
+
+overnight at 37 °C in a shaking incubator. The overnight culture was            loop regions (residues 83−89, 174−186) in Model-1 were reﬁned with
+used to inoculate 1 L of PASM-5052 autoinduction media36 containing             the “loopmodel” class in MODELLER, resulting in Models-2, -3, and
+150 mM 2−2-bipyridyl, 1.0 mM ZnCl2, and 1.0 mM MnCl2. The                       -4 (Figure 3). The “loopmodel” class in MODELLER includes several
+culture was placed in a LEX48 airlift fermenter and incubated at 37 °C
+for 5 h and then at 22 °C overnight. The culture was harvested and
+pelleted by centrifugation.
+   Cells were resuspended in lysis buﬀer (20 mM HEPES pH 7.5, 500
+mM NaCl, 20 mM imidazole, and 10% glycerol) and lysed by
+sonication. The lysate was clariﬁed by centrifugation at 35 000g for 30
+min. The clariﬁed lysate was loaded onto a 5 mL Strep-Tactin column
+(IBA), washed with 5 column volumes of lysis buﬀer, and then eluted
+in StrepB buﬀer (20 mM HEPES pH 7.5, 500 mM NaCl, 20 mM
+imidazole, 10% glycerol, and 2.5 mM desthiobiotin). The eluent was
+loaded onto a 1.0 mL HisTrap FF column (GE Healthcare), washed
+with 10 column volumes of lysis buﬀer, and eluted in buﬀer containing
+20 mM HEPES pH 7.5, 500 mM NaCl, 500 mM imidazole, and 10%
+glycerol. The puriﬁed sample was loaded onto a HiLoad S200 16/60
+PR gel ﬁltration column, which was equilibrated with SECB buﬀer (20
+mM HEPES pH7.5, 150 mM NaCl, 10% glycerol, and 5 mM DTT).
+Peak fractions were collected, analyzed by SDS-PAGE, snap frozen in
+liquid nitrogen, and stored at −80 °C. The puriﬁed protein was
+submitted to ICP-MS for metal content analysis and found to contain
+0.8 equiv of Mn, 0.1 equiv of Fe, 0.1 equiv of Ni, and 0.1 equiv of Zn.
+   Homology Modeling of Arad3529. The amino acid sequence of
+Arad3529 from Agrobacterium radiobacter K84 (gi|222086854) was
+retrieved from the Structure Function Linkage Database (SFLD).37
+Homology models of Arad3529 were generated in four steps. First, the
+primary sequence was submitted to the PSI-BLAST server at NCBI to
+search for suitable template structures.38 Cytosine deaminase (CDA)
+from E. coli (PDB id: 1K70) is the most closely related sequence of
+known structure. Cytosine deaminase is from group 6 of cog0402 and
+shares a 26% sequence identity to Arad3529 (Figure 1). In this                  Figure 3. The active site conformations of four representative models
+structure, the enzyme is complexed with a mechanism-based inhibitor,            of Arad3529 used in virtual screening. Model-1 is ranked the best by
+4-(S)-hydroxyl-3,4-dihydropyrimidine. Second, a sequence alignment              DOPE score among 500 homology models generated automatically by
+between Arad3529 and cystosine deaminase was computed by                        MODELLER. Model-2, Model-3, and Model-4 are diﬀerent from
+MUSCLE39 (Multiple Sequence Comparison by Log-Expectation)                      Model-1 in Loop-1, Loop-2, and both Loop-1 and Loop-2,
+(Figure S1). Third, 500 homology models were generated with the                 respectively.
+standard “automodel” class in MODELLER,40 and the model with the
+best DOPE41 score was selected (Model-1) (Figure 2). Finally, two               loop optimization methods, which all rely on scoring functions and
+                                                                                optimization protocols adapted for loop modeling.42 Side chains in
+                                                                                these two loops were optimized using the “side chain prediction”
+                                                                                protocol in PLOP.43 The Fe2+ ion was included in all modeling steps.
+                                                                                The cocrystallized inhibitor from the template structure was included
+                                                                                in the third step for the construction of the initial homology model,
+                                                                                but was removed from the modeled active site in the last step.
+                                                                                   Docking Screen against Arad3529. A high-energy intermediate
+                                                                                (HEI) library44,45 that contains 57 672 diﬀerent stereoisomers
+                                                                                generated by hydroxide attacking from the re and si faces of prochiral
+                                                                                molecules and by exploring all possibilities of protonation state of
+                                                                                6440 KEGG (Kyoto Encyclopedia of Genes and Genomes)
+                                                                                molecules46 was screened against the X-ray structure of the cytosine
+                                                                                deaminase template (PDB id: 1K70) as a control, and each of the four
+                                                                                homology models of Arad3529, using DOCK 3.6.47 The computed
+                                                                                poses were subjected to a distance cutoﬀ to ensure that the O− moiety
+                                                                                of the HEI portion of the molecule is found within 4 Å of the metal
+                                                                                ion in the active site. The top 500 compounds ranked by the docking
+                                                                                score (the sum of van der Waals, Poisson−Boltzmann electrostatic,
+Figure 2. The active site of E. coli CDA and residues predicted to be           and ligand desolvation penalty terms) were inspected visually to
+important for Arad3529. Residues drawn in white are conserved across            ensure the compatibility of the pose with the amidohydrolase reaction
+all members of cog0402. Thr-66, Gln-156, and Asp-314 in CDA,                    mechanism. The details of the HEI docking library preparation, the
+displayed in green, diﬀered signiﬁcantly in the sequence of Arad3529            molecular docking procedure, and the protocol for analyzing docking
+and may be important for substrate binding. Thr-66 corresponds to               results have been previously described.9,48−50
+Lys-85, Gln-156 corresponds to Leu-177, and Asp-314 corresponds to                 Chemoinformatic Analysis of the Docking Hit-Lists. The top
+Asn-332. In the X-ray structure of CDA, Gln-156 forms hydrogen                  200 highest ranked compounds for each model were combined into
+bonds with the bound inhibitor; Asp-314 is found within 4 Å of the              ligand sets and used to calculate self-consistency expectation values (E-
+CDA inhibitor but only forms steric interactions with it; Thr-66 is             value) within each set using the Similarity Ensemble Approach
+more distant from the active site. The conversion of a large lysine in          (SEA).51,52 Brieﬂy, each ligand was broken into molecular ﬁngerprints,
+Arad3529 suggests that the Lys-85 may reach into the active site and            here ChemAxon path ﬁngerprints. The similarity between molecules is
+play a role in substrate binding.                                               quantiﬁed by the number of bits they have in common divided by the
+
+                                                                          797                      dx.doi.org/10.1021/ja309680b | J. Am. Chem. Soc. 2013, 135, 795−803
+Journal of the American Chemical Society                                                                                                                     Article
+
+Table 1. Virtual Screening of the HEI Database against Four Homology Models of Arad3529a
+                                                                                                                  docking rank
+                                name                             KEGG ID              Model-1             Model-2                Model-3                Model-4
+    melamine                                                      C08737                    10
+    cyclopropylmelamine                                           C14147                    13                    18
+    diethylatrazine                                               C06559                    28                    32
+    diisopropylatrazine                                           C06556                    29                    33
+    diisopropylhydroxyatrazine                                    C06557                    31
+    cytosine                                                      C00380                    52                 45                    185                     126
+    2-amino-4-hydroxy-6-hydroxymethyl-7,8-dihydropteridine        C01300              108 (N1)           135 (N1)                10 (N1)                 12 (N3)
+    thioguanine                                                   C07648                                       11
+    guanine                                                       C00242                                       20
+    pterin                                                        C00715                                  31 (N3)                27 (N1)               102 (N3)
+                                                                                                                                                       127 (N1)
+    phenazopyridine                                               C07429                                        50
+    biopterin                                                     C06313                                   66 (N3)               14 (N1)                 51 (N1)
+                                                                                                                                                         71 (N3)
+    adenine                                                       C00147                                          99
+    neopterin                                                     C05926                                                         15 (N1)               143 (N1)
+    7-methylguanine                                               C02242                                                                                     23
+    deoxycytidine                                                 C00881                                                                                     49
+    cytidine                                                      C00475                                                                                     75
+    5′-deoxy-5′-ﬂuorocytidine                                     C16635                                                                                    132
+    2-aminoadenosine                                              C00939                                                                                    206
+a
+ The names of three molecules that were found in the control are in italic. The 2-aminopteridine-4(3H)-one and the 2-aminopteridine-4(1H)-one
+tautomers were attacked by the hydroxide from the re-face and the si-face, and have the N-1 ring nitrogen and N-3 ring nitrogen protonated by
+Glu234, resulting in two intermediates named N1 and N3, respectively.
+
+total number of bits using the Tanimoto coeﬃcient (Tc). The sum of               carboxylate (271 nm, 6211 M−1 cm−1); pterin (255 and 314 nm, 7021,
+all pairwise Tc values over a deﬁned cutoﬀ is calculated and compared            and 1877 M−1 cm−1); biopterin (260 nm, 6527 M−1 cm−1); D-
+to what is expected at random between two ligand sets of the same                neopterin (320 nm, 4431 M−1 cm−1); isoxanthopterin (350 nm, 2223
+size. The ratio of the calculated sum of Tc values over the sum of Tc            M−1 cm−1); sepiapterin (260 nm, 3137 M−1 cm−1); folate (364 nm,
+values expected at random is divided by the standard deviation of the            4312 M−1 cm−1); formylpterin (316 nm, 2963 M−1 cm−1); pterin-7-
+random similarity to give a Z-score and plotted against an extreme               carboxylate (264 nm, 3706 M−1 cm−1); hydroxymethylpterin (264 nm,
+value distribution to yield an E-value. The self-similarity between the          7356 M−1 cm−1); xanthopterin (282 nm, 9704 M−1 cm−1); 7,8-
+ligands of the same set provides a metric to how diverse or similar the          dihydrohydroxymethylpterin (536 nm, 3220 M−1 cm−1); and 7,8-
+ligands are based on the E-value. The more signiﬁcant is the E-value             dihydroneopterin (282 nm, 9424 M−1 cm−1). The values of kcat and Km
+(lower), the tighter the chemical space is in the ligand set with likely         were determined by ﬁtting the parameters in eq 1 to the experimental
+fewer numbers of distinct chemotypes. Each docking model’s self-                 data, using SigmaPlot 11, where v is the initial velocity, Et is enzyme
+consistency E-value was then compared to the number of true                      concentration, and A is the substrate concentration.
+substrates found from each ligand set.
+    Physical Library Screening. The initial screen of catalytic activity             v /Et = kcatK a /(A + K a)                                                    (1)
+monitored changes in the UV−visible spectrum from 240 to 400 nm                     Conﬁrmation of Product Formation. 100 μM pterin-6-
+after the addition of 1.0 μM Arad3529 to a solution containing 100               carboxylate was incubated with 150 nM Arad3529 in 50 mM
+μM of the target compound in 20 mM HEPES, pH 7.7 in a 96-well                    NH4CO3H for 1 h at 25 °C. The reaction mixture was ﬁltered with
+quartz plate using a Molecular Devices Spectramax 384 Plus                       a 30 000 MW cutoﬀ spin column, and the ﬂow-through was collected.
+spectrophotometer. The compounds that exhibited observable spectral              This ﬂow-through and a sample of 100 μM pterin-6-carboxylate was
+change were subjected to more quantitative kinetic assays. On the                submitted to ESI− mass spectrometry at the Texas A&M Laboratory
+basis of the docking ranks and compound availability, 11 compounds               for biological mass spectrometry. The reaction showed an m/z change
+prioritized by docking were tested as potential substrates, including            from 206.04 to 207.02, consistent with the product 2,4-dihydrox-
+melamine, cytosine, thioguanine, guanine, adenine, 7-methylguanine,              ypteridine-6-carboxylate from the deamination of pterin-6-carboxylate.
+
+                                                                                 ■
+cytidine, 2′-deoxycytidine, pterin, biopterin, and neopterin. In
+addition, 104 compounds that were substrates of annotated
+amidohydrolases were tested as potential substrates (see the
+                                                                                      RESULTS
+Supporting Information). After the pterins were identiﬁed as                        Sequence Comparison of Arad3529 with Cytosine
+substrates, 11 compounds composed of a pteridine ring were added                 Deaminase from E. coli. Cytosine deaminase from E. coli is
+to the screening.                                                                currently the closest structurally characterized protein to
+    Determination of Kinetic Constants. Once candidate substrates                Arad3529. The four metal binding residues in cytosine
+had been identiﬁed in parallel by docking and plate-based screening,             deaminase (H61, H63, H214, and D313) align well with
+quantitative kcat and kcat/Km were determined in 20 mM HEPES buﬀer
+                                                                                 H80, H82, H231, and D331 from Arad3529, along with two
+at pH 7.7. For each compound, the change in the extinction coeﬃcient
+between the substrate and the deaminated product was determined                  additional residues (H246 and E217 aligned with H263 and
+experimentally by subtraction of the absorbance spectrum of the                  E234 in Arad3529, respectively) that function as proton
+product from the spectrum of the substrate. The wavelengths (nm)                 shuttles in cytosine deaminase (Figure S1). Because these
+and the diﬀerential extinction coeﬃcients, Δε (M−1 cm−1), for each of            active site residues to perform a deamination were all intact in
+the compounds utilized in this investigation are as follows: pterin-6-           Arad3529, it is very likely also a deaminase. However, in
+                                                                           798                       dx.doi.org/10.1021/ja309680b | J. Am. Chem. Soc. 2013, 135, 795−803
+Journal of the American Chemical Society                                                                                                             Article
+
+Arad3529 there are three notable changes in the amino acid                  This was quantiﬁed by an expectation value (E-value) of the
+sequence, relative to that found in most other cytosine                     likelihood the self-similarity of each hit-list would occur at
+deaminases from cog0402. In Arad3529, Thr66, Gln156, and                    random. Of the four models, Model-3 and Model-4 had more
+Asp314 from CDA are replaced by Lys85, Leu177, and Asn332,                  self-consistent hit-lists (SEA E-value 1.5 × 10−100 and 4.9 ×
+respectively (Figure 2). In CDA from E. coli, Thr66 located                 10−98, respectively) as compared to Model-1 and Model-2
+near the active site does not appear to hydrogen bond with                  (SEA E-value 2.7 × 10−89 and 1.2 × 10−85, respectively).
+cytosine. Conversely, Gln156 forms a pair of hydrogen bonds                 Comfortingly, the structures of what turned out to be the true
+to the carbamoyl moiety of cytosine, while Asp314 is located                pterin substrates of the enzyme were docked in catalytically
+immediately after the invariant Asp313 and within 4 Å of the                competent geometries in Model-3 and Model-4. Naturally, this
+bound inhibitor in the CDA structure. The substitutions to the              criterion has nothing to recommend it other than consistency,
+active site residues thus suggest that Arad3529 deaminates a                but it may merit further study as a metric to select multiple
+substrate diﬀerent from cytosine.                                           possible hit-lists for targets adopting diﬀerent structures.
+   Molecular Docking. In the initial homology model of                         Substrate Proﬁle for Arad3529. On the basis of
+Arad3529 (Model-1), which overall adopts the same backbone                  commercial availability, eight compounds predicted to be
+conformation as the template, changes are located in two                    potential substrates for Arad3529 were tested as enzyme
+unstructured loop regions that help deﬁne the active site                   substrates, as were three “negative control” nucleosides that
+(Loop-1, residues 83−89; Loop-2, residues 174−186). There-                  also ranked well against the CDA template (Table 1). Arad3529
+fore, Loop-1 and Loop-2 were remodeled separately, resulting                was found to deaminate three of the eight: pterin, biopterin,
+in Model-2 and Model-3 (Figure 3). Finally, the Loop-1                      and neopterin with kcat/Km values of greater than 106 M−1 s−1.
+conformation in Model-2 and the Loop-2 conformation in                      We docked the ground states of three substrates, pterin,
+Model-3 were combined in Model-4. Thus, four homology                       biopterin, and neopterin, to Model-3. The docking scores of
+models were obtained that are distinct from each other in their             these ground states (−19.29, −27.30, and −23.08, respectively)
+active site conformations.                                                  were substantially higher (worse) than the corresponding HEI
+   Because homology models are constructed from template                    states (−53.83, −58.45, and −58.26, respectively), consistent
+structures, the models often share some structural features with            with the catalytic mechanism. The pterin deaminase (PDA)
+the templates, and thus recognize similar ligands. Here,                    reaction is illustrated in Scheme 1. To investigate the
+however, small molecules that are highly ranked by the
+template structure (PDB id: 1K70) are unlikely to be the                    Scheme 1
+true substrate of the remote homologue. Therefore, before
+targeting the homology models of Arad3529, the template
+structure 1K70 was docked against as a negative control. 57 672
+high-energy intermediates (HEI) were docked into the
+template structure. As expected, cytosine, the natural substrate
+of the template, was ranked highly (10th out of 57 672), as
+were several other nucleosides (Table S1). These molecules                  mechanism further, the enzyme was screened with other
+were deprioritized for testing against Arad3529; we instead                 substituted pterins and was found to deaminate several pterins
+looked for molecules with high diﬀerential ranks between the                (Scheme S1). Various substitutions on C6 of the pteridine ring
+models and the template docking screens.                                    are allowed (Table 2), and with the exception of sepiapterin,
+   The same HEI database was docked to each of the four                     the fully aromatic pteridine ring is preferred. 7,8-Dihydro-
+homology models of Arad3529. From each model, putative                      neopterin and 7,8-dihydrobiopterin were deaminated very
+substrates were selected from the top 500 scored molecules                  slowly, and the deamination of dihydrofolate or tetrahydrofo-
+(Table 1). The compound sets selected using diﬀerent                        late could not be measured (<0.0008 s−1). 2,4-Diamino-6-
+homology models are overlapping but distinct. For Model-1,                  hydroxymethylpteridine was not deaminated.
+the docking hits were dominated by relatively small compounds                  Variations on Binding Orientation of Pterin. In all of
+with a 1,3,5-triazine skeleton. This pattern is also observed in            the structurally characterized members of the amidohydrolase
+the docking hits from Model-2. However, compounds                           superfamily, the re-face of the carbonyl group of amide and
+composed of the purine or pteridine ring were also favored                  ester substrates is presented to the attacking hydroxide; the
+by Model-2. For Model-3, the 1,3,5-triazine skeleton                        same orientation was observed for the amidine or guanidine
+completely disappeared, and the docking hits were dominated                 moieties of substrates in the deamination reactions. In docking
+by compounds composed of the pteridine ring. Model-4 shared                 screens against Arad3529, we observed two chiral intermediates
+the pteridine pattern with Model-3, but also favored nucleo-                of pterin (named as N1 and N3) that were generated by
+sides having a ribose group.                                                hydroxide re- and si-face attacking two pterin tautomers 2-
+   Chemoinformatic Analysis of the Docking Hit-Lists.                       aminopteridin-4(3H)-one and 2-aminopteridin-4(1H)-one, and
+On the basis of docking energies alone, it is diﬃcult to prioritize         by Glu234 protonating the N-1 and N-3 nitrogen in the
+one of these overall hit-lists over another, although the                   pteridine ring, respectively (Scheme 2). In particular, N3 was
+geometry of the interactions does provide guidance (below).                 selected by Model-2, N1 was selected by Model-3, and both
+One can, however, pose extra-thermodynamic criteria to judge                intermediates were selected by Model-4 (Table 1). In Model-2,
+among them. One such is to expect that in a well-behaved                    the docking pose of N3 had a stranded C-4 carbonyl group,
+docking hit-list, the highly ranked molecules will resemble one             which in N1 forms hydrogen bonds with Asn332 in Model-3
+another, and thus the hit-list will resemble itself by chemical             (Figure 4). This C-4 carbonyl group and the N-5 ring nitrogen
+similarity. We therefore compared the top-ranked 200                        in N1 also hydrogen bonded with Lys85 in Model-3.
+molecules for each of the four models of Arad3529 against                   Furthermore, it is known that the 2-aminopteridin-4(1H)-one
+themselves using the Similarity Ensemble Approach (SEA).51,52               tautomer is less stable than the 2-aminopteridin-4(3H)-one
+                                                                      799                    dx.doi.org/10.1021/ja309680b | J. Am. Chem. Soc. 2013, 135, 795−803
+Journal of the American Chemical Society                                                                                                              Article
+
+Table 2. Catalytic Constants for Substrates of Arad3529
+                 substrate                    kcat/Km (M−1 s−1)                kcat (s−1)                  Km (μM)                       docking ranka
+      formylpterin                             5.2 (0.5) × 106
+                                                                               64 ± 12                     12 ± 2
+      pterin-6-carboxylate                     4.0 (0.2) × 106                110 ± 3                      27 ± 2
+      pterin-7-carboxylate                     3.7 (0.2) × 106                 48 ± 2                      13 ± 1
+      pterin                                   3.3 (0.3) × 106                131 ± 4                      39 ± 4                               27
+      hydroxymethylpterin                      1.2 (0.1) × 106                 28 ± 1                      23 ± 3
+      biopterin                                1.0 (0.1) × 106                 46 ± 4                      47 ± 9                               14
+      D-(+)-neopterin                          3.1 (0.1) × 105                 19 ± 1                      61 ± 7                               15
+      isoxanthopterin                          2.8 (0.2) × 105                 1.6 ± 0.1                   5.7 ± 0.5
+      sepiapterin                              1.3 (0.4) × 105                 2.9 ± 0.3                   22 ± 9
+      folate                                   1.3 (0.2) × 105                 6.4 ± 0.5                   50 ± 10
+      xanthopterin                             1.2 (0.1) × 105               0.46 ± 0.01                   40 ± 1
+      7,8-dihydro-hydroxymethylpterin          3.3 (0.4) × 104                 1.2 ± 0.1                   37 ± 7
+      7,8-dihydroneopterin                     2.6 (0.3) × 102              0.036 ± 0.008                 200 ± 100
+      7,8-dihydrobiopterin                     9.3 (0.5) × 102              0.090 ± 0.007                  93 ± 13
+a
+ In docking against Model-3 (Table 1), compounds were ranked out of the 57 672 high-energy intermediates in the virtual library, which only
+contains pterin, biopterin, and neopterin among the pterin substrates.
+
+Scheme 2
+
+
+
+
+                                                                           Figure 4. (Top) The binding pose of pterin intermediate N3 (yellow
+                                                                           stick) formed by the activated hydroxide attacking the C-2 atom on
+tautomer (in ab initio and free energy perturbation calculations,          the si-face of the aromatic ring of the tautomer 2-aminopteridin-
+the ratio is 1:6).53 It seems clear that the N1 orientation is the         4(1H)-one, in the active site of Model-2 of Arad3529 (white stick).
+true binding motif, and that an important feature for                      (Bottom) The binding pose of pterin intermediate N1 (yellow stick)
+                                                                           formed by the activated hydroxide attacking the C-2 atom on the re-
+recognition of a pterin deaminase is the DN dyad (D331,                    face of the aromatic ring of the tautomer 2-aminopteridin-4(3H)-one,
+N332) found on β-strand 8 and the Lys85 found on β-strand 1.
+
+■
+                                                                           in the active site of Model-3 of Arad3529 (white stick). Polar
+                                                                           interactions between the docked pterin and the modeled active site are
+     DISCUSSION                                                            shown by red dashed lines.
+Three techniques were crucial for what turned out to be the
+correct prediction of pterin deaminase activity for Arad3529.              functional annotation of about 140 previously uncharacterized
+First, to leverage a distantly related template, detailed modeling         amidohydrolase enzymes in group 14 of cog0402. These
+of two active-site loops was required to ﬁnd models that were at           proteins may be used by bacteria to salvage oxidized pterins,
+once structurally sensible and catalytically competent, and that           and form the pterin degradation pathway with neighboring
+could discriminate new substrates from these from the                      genes.
+template. Second, the selectivity of models was enhanced by                   Enzyme Speciﬁcity Recapitulated by Loop Modeling.
+negative control docking screens against the template structure;           The substrate speciﬁcity of enzymes comes from the
+we sought substrates ranked highly by the models and poorly                corresponding compositions of binding-site residues. Remark-
+by the template. Finally, a close cycle of bioinformatics,                 able changes in the binding-site residues between two enzyme
+biophysical modeling, and enzymology made this approach                    sequences lead to diﬀerences in their binding-site structures.
+pragmatic. Identifying substrates for Arad3529 allows the                  However, a homology model tends to inherit the backbone
+                                                                     800                      dx.doi.org/10.1021/ja309680b | J. Am. Chem. Soc. 2013, 135, 795−803
+Journal of the American Chemical Society                                                                                                           Article
+
+conformations of aligned regions from the template. Therefore,            carboxylate, formylpterin, and pterin can be formed by
+a homology model of the target enzyme often contains errors in            photolysis of folate.58,59 It seems possible that Arad3529 and
+the packing of side chains, and backbone conformations of                 its orthologues are used by the bacteria to degrade oxidized
+structurally undeﬁned regions (loops), especially when                    pterins.
+computed on the basis of a remote template. Accurate substrate               The gene for Arad3529 is situated in an apparent operon
+prediction by docking against homology models of unknown                  along with the genes TauC, GlcD, and MdaB, which are ﬂanked
+enzymes requires precise positioning of the binding site                  by TauA, TauB, LysR, and a protein from cog1402 (Figure S2).
+residues that interact with the new substrates. In this study,            TauA, TauB, and TauC resemble ATP-cassette binding
+we attempted to capture binding-site features in Arad3529 by              transporters, and LysR is a transcription factor. MdaB, GlcD,
+remodeling two binding-site loops in the initial homology                 and cog1402 are uncharacterized proteins resembling quinone
+model. Because no target ligand is known, four models that are            oxidase, glycolate oxidase D, and creatininase, respectively.
+structurally diverse were selected and docked against                     MdaB is predicted to contain an NAD(P)H binding domain,
+independently, followed by combining the screening results.               GlcD is predicted to be a ﬂavin-dependent redox enzyme, and
+True substrates of Arad3529, pterins, were not captured by the            the cog1402 protein will likely catalyze the hydrolysis of an
+initial homology model, but were captured by the models with              amide bond. These enzymes may form a degradative pathway
+reﬁned loops, illustrating the necessity of the directed                  for catabolizing pterin rings. To our knowledge, the only
+reﬁnement of binding-site loops that contain residues diﬀerent            known instance for the degradation of a pterin ring is by the
+from the template.                                                        soil bacteria Alcaligenes faecalis.60 In this bacterium, isoxan-
+   Docking against the Template as a Negative Control.                    thopterin is deaminated to form 7-oxylumazine, which is further
+When a homology model of the target enzyme is computed on                 oxidized to 6,7-dioxylumazine (tetraoxypteridine). An isomer-
+the basis of a distantly related template structure, on one side,         ase then cleaves the C6/C7 bond, and reattaches, forming
+the target enzyme very likely has diﬀerent substrates from those          xanthine-8-carboxylate.61 Xanthine-8-carboxylate is then decar-
+of the template; on the other side, however, the homology                 boxylated, forming xanthine.62 Unfortunately, the recently
+model of the target even after reﬁnement could still share some           sequenced genome of A. faecalis does not possess an
+structural features with the template and thus prioritize similar         Arad3529 homologue or any of its operon-related genes, and
+compounds as the template structure in docking screens. Here,             the protein that deaminates isoxanthopterin remains to be
+we ﬁrst docked to the template as a negative control, and                 discovered.
+compared these hits to those against the homology models.                    Certain caveats merit mentioning. Here, homology models of
+Compounds that were ranked highly by the template and by                  Arad3529 were predicted from a cytosine deaminase structure
+the homology models were discounted, and indeed none of                   in complex with a mechanism-based inhibitor. This likely gave
+them was conﬁrmed as substrates of Arad3529. This suggests                us an advantage over modeling from a ligand-free template.
+that, for enzyme substrate prediction by homology model-based             When such an apo- template is the only choice, enhanced
+docking, it may be useful to account for compounds that are               sampling may be needed.19 Inevitably, this will lead to more
+recognized by the template as negative control, especially when           models. To judge among these possible structures, and the
+there is only a remote relationship between the target and the            docked molecules to which they lead, the criterion of a self-
+template sequence.                                                        similar hit-list may be useful, as we found it to be. Admittedly,
+   Additional Enzymes in cog0402 That Catalyze Pterin                     this metric remains largely untested, and its only theoretical
+Deamination. Figure 1 depicts 22 sequences in group 14. To                virtue is that it quantiﬁes an expectation that a well-behaved
+identify a more comprehensive list of proteins in the current             docking calculation should ﬁnd putative ligands that resemble
+databases that share the same substrate proﬁle as Arad3529, a             one another. From a docking standpoint, we have continued to
+BLAST search was conducted with the sequence of Arad3529.                 use high-energy intermediate forms of substrates, rather than
+Of the top 200 hits, 165 proteins contained the characteristic β-         their ground states. This seems well-justiﬁed for amidohy-
+strand 8 “DN” dyad, and a total of 139 of these would populate            drolases, where we have a good understanding of the structures
+group 14 if included in the network diagram. The remaining 26             that such intermediates adopt, and conﬁdence that the chemical
+sequences cluster with the currently uncharacterized group 13.            step is rate determining for the reactions the enzymes catalyze.
+Group 13 is closely related to cytosine deaminase and also                For other families of enzymes, our ability to anticipate high-
+possesses a mixture of enzymes that have either a “DN” or                 energy structures, and conﬁdence that the chemical step is rate
+“NN” dyad. While the enzymatic function of group 13 is                    limiting, may be more limited. Finally, docking screens, in our
+unknown, all members of group 14 are predicted to deaminate               hands, retain a human element as a ﬁnal arbiter of which among
+pterins (Table S2). Of course, this remains just a prediction,            the tens-to-hundreds of high-ranking metabolites to actually
+because even proteins with high sequence identity sometimes               test experimentally. We have argued that human inspection
+have diﬀerent activities.54                                               integrates aspects of docking that are captured by the
+   Biological Relevance of Substrates, Genomic Context                    experience of the trained modeler, enzymologist, or medicinal
+                                                                          chemist that are diﬃcult to fully capture algorithmically.63
+
+                                                                          ■
+in Agrobacterium radiobacter. Pterin rings form the
+backbone of the coenzymes folate and tetrahydrobiopterin.
+The 7,8-dihydro forms of hydroxymethylpterin and neopterin                    CONCLUSION
+are intermediates in folate synthesis, whereas sepiapterin is an          Members of the amidohydrolase superfamily have been found
+intermediate in the synthesis of biopterin. During the                    in every sequenced genome; the functions of most of these
+biosynthesis of these cofactors, the pterin substructure remains          proteins remain unknown. Here, we focused on one
+reduced in the 7,8-dihydro form. Fully oxidized pterins, formed           amidohydrolase, Arad3529 from Agrobacterium radiobacter
+by oxidation of 7,8-dihydropterins,55 are not known to be                 K84, which represents proteins from group 14 in cog0402.
+salvaged by reduction.56 Isoxanthopterin is formed by oxygen-             Proteins in group 14 were uncharacterized, with sequence
+ation of pterin by xanthine dehydrogenase,57 while pterin-6-              similarity and knowledge of the mechanistically related
+                                                                    801                    dx.doi.org/10.1021/ja309680b | J. Am. Chem. Soc. 2013, 135, 795−803
+Journal of the American Chemical Society                                                                                                                        Article
+
+chemistries within the superfamily wrongly suggesting roles as                        (13) Marti-Renom, M. A.; Stuart, A. C.; Fiser, A.; Sanchez, R.; Melo,
+chlorohydrolases or cytosine deaminases. To determine the                           F.; Sali, A. Annu. Rev. Biophys. Biomol. 2000, 29, 291.
+function of Arad3529, we used a multidisciplinary approach                            (14) Pieper, U.; Eswar, N.; Webb, B. M.; Eramian, D.; Kelly, L.;
+that integrated homology modeling, molecular docking screens                        Barkan, D. T.; Carter, H.; Mankoo, P.; Karchin, R.; Marti-Renom, M.
+of a metabolite library, and physical library screening by kinetic                  A.; Davis, F. P.; Sali, A. Nucleic Acids Res. 2009, 37, D347.
+                                                                                      (15) Evers, A.; Klebe, G. J. Med. Chem. 2004, 47, 5381.
+assays. This led to what we believe are the true substrates of                        (16) Kairys, V.; Fernandes, M. X.; Gilson, M. K. J. Chem. Inf. Model.
+Arad3529, a set of modiﬁed pterins. On the basis of the                             2006, 46, 365.
+conservation of characteristic residues that interact with                            (17) Katritch, V.; Byrd, C. M.; Tseitin, V.; Dai, D. C.; Raush, E.;
+substrates in the docked structure, about 140 other previously                      Totrov, M.; Abagyan, R.; Jordan, R.; Hruby, D. E. J. Comput.-Aided
+unannotated amidohydrolases from diﬀerent species may now                           Mol. Des. 2007, 21, 549.
+be assigned as pterin deaminases. This approach may be useful                         (18) Fan, H.; Irwin, J. J.; Webb, B. M.; Klebe, G.; Shoichet, B. K.;
+in the discovery of in vitro enzymatic and in vivo metabolical                      Sali, A. J. Chem. Inf. Model. 2009, 49, 2512.
+functions of unknown enzymes discovered in genome projects,                           (19) Carlsson, J.; Coleman, R. G.; Setola, V.; Irwin, J. J.; Fan, H.;
+especially for those targets with marginal sequence identities to                   Schlessinger, A.; Sali, A.; Roth, B. L.; Shoichet, B. K. Nat. Chem. Biol.
+template structures of known function.                                              2011, 7, 769.
+
+
+■
+                                                                                      (20) Schlessinger, A.; Geier, E.; Fan, H.; Irwin, J. J.; Shoichet, B. K.;
+                                                                                    Giacomini, K. M.; Sali, A. Proc. Natl. Acad. Sci. U.S.A. 2011, 108,
+     ASSOCIATED CONTENT
+                                                                                    15810.
+*
+S Supporting Information                                                              (21) Song, L.; Kalyanaraman, C.; Fedorov, A. A.; Fedorov, E. V.;
+Compounds tested in physical library screening. This material                       Glasner, M. E.; Brown, S.; Imker, H. J.; Babbitt, P. C.; Almo, S. C.;
+is available free of charge via the Internet at http://pubs.acs.org.                Jacobson, M. P.; Gerlt, J. A. Nat. Chem. Biol. 2007, 3, 486.
+
+■
+                                                                                      (22) Holm, L.; Sander, C. Proteins: Struct., Funct., Bioinf. 1997, 28, 72.
+     AUTHOR INFORMATION                                                               (23) Seibert, C. M.; Raushel, F. M. Biochemistry 2005, 44, 6383.
+                                                                                      (24) Tatusov, R. L.; Koonin, E. V.; Lipman, D. J. Science 1997, 278,
+Corresponding Author                                                                631.
+raushel@tamu.edu; shoichet@cgl.ucsf.edu; sali@salilab.org                             (25) Pieper, U.; Chiang, R.; Seffernick, J. J.; Brown, S. D.; Glasner, M.
+Author Contributions                                                                E.; Kelly, L.; Eswar, N.; Sauder, J. M.; Bonanno, J. B.; Swaminathan, S.;
+∇                                                                                   Burley, S. K.; Zheng, X.; Chance, M. R.; Almo, S. C.; Gerlt, J. A.;
+ These authors contributed equally.
+                                                                                    Raushel, F. M.; Jacobson, M. P.; Babbitt, P. C.; Sali, A. J. Struct. Funct.
+Notes
+                                                                                    Genomics 2009, 10, 107.
+The authors declare no competing ﬁnancial interest.
+
+■
+                                                                                      (26) Altschul, S. F.; Gish, W.; Miller, W.; Myers, E. W.; Lipman, D. J.
+                                                                                    J. Mol. Biol. 1990, 215, 403.
+    ACKNOWLEDGMENTS                                                                   (27) Atkinson, H. J.; Morris, J. H.; Ferrin, T. E.; Babbitt, P. C. PLoS
+This work was supported by NIH grants (GM071790 and U54                             One 2009, 4, e4345.
+GM093342; R01 GM054762 to A.S.) and the Robert A. Welch                               (28) Cline, M. S.; Smoot, M.; Cerami, E.; Kuchinsky, A.; Landys, N.;
+Foundation (A-840 to F.M.R.). We thank Dr. Patricia Babbitt                         Workman, C.; Christmas, R.; Avila-Campilo, I.; Creech, M.; Gross, B.;
+                                                                                    Hanspers, K.; Isserlin, R.; Kelley, R.; Killcoyne, S.; Lotia, S.; Maere, S.;
+and Dr. Sunil Ojha for discussion about amidohydrolse
+                                                                                    Morris, J.; Ono, K.; Pavlovic, V.; Pico, A. R.; Vailaya, A.; Wang, P.-L.;
+superfamily and sequence analysis. We thank Dr. Peter Kolb                          Adler, A.; Conklin, B. R.; Hood, L.; Kuiper, M.; Sander, C.;
+and Dr. Magdalena Korczynska for discussion about the high-                         Schmulevich, I.; Schwikowski, B.; Warner, G. J.; Ideker, T.; Bader,
+energy intermediate (HEI) docking database.
+
+■
+                                                                                    G. D. Nat. Protoc. 2007, 2, 2366.
+                                                                                      (29) Maynes, J. T.; Yuan, R. G.; Snyder, F. F. J. Bacteriol. 2000, 182,
+     REFERENCES                                                                     4658.
+ (1) Whisstock, J. C.; Lesk, A. M. Q. Rev. Biophys. 2003, 36, 307.                    (30) Yuan, G.; Bin, J. C.; McKay, D. J.; Snyder, F. F. J. Biol. Chem.
+ (2) Gerlt, J. A.; Babbitt, P. C. Genome Biol. 2000, 1.                             1999, 274, 8175.
+ (3) Brenner, S. E. Trends Genet. 1999, 15, 132.                                      (31) Ireton, G. C.; McDermott, G.; Black, M. E.; Stoddard, B. L. J.
+ (4) Devos, D.; Valencia, A. Trends Genet. 2001, 17, 429.                           Mol. Biol. 2002, 315, 687.
+ (5) Gerlt, J. A.; Allen, K. N.; Almo, S. C.; Armstrong, R. N.; Babbitt,              (32) Danielsen, S.; Kilstrup, M.; Barilla, K.; Jochimsen, B.; Neuhard,
+P. C.; Cronan, J. E.; Dunaway-Mariano, D.; Imker, H. J.; Jacobson, M.               J. Mol. Microbiol. 1992, 6, 1335.
+P.; Minor, W.; Poulter, C. D.; Raushel, F. M.; Sali, A.; Shoichet, B. K.;             (33) Hall, R. S.; Agarwal, R.; Hitchcock, D.; Sauder, J. M.; Burley, S.
+Sweedler, J. V. Biochemistry 2011, 50, 9950.                                        K.; Swaminathan, S.; Raushel, F. M. Biochemistry 2010, 49, 4374.
+ (6) Schnoes, A. M.; Brown, S. D.; Dodevski, I.; Babbitt, P. C. PLoS                  (34) Marti-Arbona, R.; Xu, C. F.; Steele, S.; Weeks, A.; Kuty, G. F.;
+Comput. Biol. 2009, 5, e1000605.                                                    Seibert, C. M.; Raushel, F. M. Biochemistry 2006, 45, 1997.
+ (7) Glasner, M. E.; Fayazmanesh, N.; Chiang, R. A.; Sakai, A.;                       (35) Aslanidis, C.; Dejong, P. J. Nucleic Acids Res. 1990, 18, 6069.
+Jacobson, M. P.; Gerlt, J. A.; Babbitt, P. C. J. Mol. Biol. 2006, 360, 228.           (36) Studier, F. W. Protein Expression Purif. 2005, 41, 207.
+ (8) Favia, A. D.; Nobeli, I.; Glaser, F.; Thornton, J. M. J. Mol. Biol.              (37) Pegg, S. C. H.; Brown, S. D.; Ojha, S.; Seffernick, J.; Meng, E.
+2008, 375, 855.                                                                     C.; Morris, J. H.; Chang, P. J.; Huang, C. C.; Ferrin, T. E.; Babbitt, P.
+ (9) Hermann, J. C.; Marti-Arbona, R.; Fedorov, A. A.; Fedorov, E.;                 C. Biochemistry 2006, 45, 2545.
+Almo, S. C.; Shoichet, B. K.; Raushel, F. M. Nature 2007, 448, 775.                   (38) Altschul, S. F.; Madden, T. L.; Schaffer, A. A.; Zhang, J. H.;
+ (10) Cummings, J. A.; Nguyen, T. T.; Fedorov, A. A.; Kolb, P.; Xu, C.              Zhang, Z.; Miller, W.; Lipman, D. J. Nucleic Acids Res. 1997, 25, 3389.
+F.; Fedorov, E. V.; Shoichet, B. K.; Barondeau, D. P.; Almo, S. C.;                   (39) Edgar, R. C. Nucleic Acids Res. 2004, 32, 1792.
+Raushel, F. M. Biochemistry 2010, 49, 611.                                            (40) Sali, A.; Blundell, T. L. J. Mol. Biol. 1993, 234, 779.
+ (11) Hall, R. S.; Fedorov, A. A.; Marti-Arbona, R.; Fedorov, E. V.;                  (41) Shen, M. Y.; Sali, A. Protein Sci. 2006, 15, 2507.
+Kolb, P.; Sauder, J. M.; Burley, S. K.; Shoichet, B. K.; Almo, S. C.;                 (42) Fiser, A.; Do, R. K. G.; Sali, A. Protein Sci. 2000, 9, 1753.
+Raushel, F. M. J. Am. Chem. Soc. 2010, 132, 1762.                                     (43) Sherman, W.; Day, T.; Jacobson, M. P.; Friesner, R. A.; Farid, R.
+ (12) Xiang, D. F.; Kolb, P.; Fedorov, A. A.; Xu, C. F.; Fedorov, E. V.;            J. Med. Chem. 2006, 49, 534.
+Narindoshivili, T.; Williams, H. J.; Shoichet, B. K.; Almo, S. C.;                    (44) Hermann, J. C.; Ghanem, E.; Li, Y. C.; Raushel, F. M.; Irwin, J.
+Raushel, F. M. Biochemistry 2012, 51, 1762.                                         J.; Shoichet, B. K. J. Am. Chem. Soc. 2006, 128, 15882.
+
+                                                                              802                       dx.doi.org/10.1021/ja309680b | J. Am. Chem. Soc. 2013, 135, 795−803
+Journal of the American Chemical Society                                                                                                       Article
+
+  (45) Xiang, D. F.; Kolb, P.; Fedorov, A. A.; Meier, M. M.; Fedorov, L.
+V.; Nguyen, T. T.; Sterner, R.; Almo, S. C.; Shoichet, B. K.; Raushel, F.
+M. Biochemistry 2009, 48, 2237.
+  (46) Kanehisa, M.; Goto, S.; Hattori, M.; Aoki-Kinoshita, K. F.; Itoh,
+M.; Kawashima, S.; Katayama, T.; Araki, M.; Hirakawa, M. Nucleic
+Acids Res. 2006, 34, D354.
+  (47) Mysinger, M. M.; Shoichet, B. K. J. Chem. Inf. Model. 2010, 50,
+1561.
+  (48) Goble, A. M.; Fan, H.; Sali, A.; Raushel, F. M. ACS Chem. Biol.
+2011, 6, 1036.
+  (49) Kamat, S. S.; Bagaria, A.; Kumaran, D.; Holmes-Hampton, G. P.;
+Fan, H.; Sali, A.; Sauder, J. M.; Burley, S. K.; Lindahl, P. A.;
+Swaminathan, S.; Raushel, F. M. Biochemistry 2011, 50, 1917.
+  (50) Kamat, S. S.; Fan, H.; Sauder, J. M.; Burley, S. K.; Shoichet, B.
+K.; Sali, A.; Raushel, F. M. J. Am. Chem. Soc. 2011, 133, 2080.
+  (51) Keiser, M. J.; Roth, B. L.; Armbruster, B. N.; Ernsberger, P.;
+Irwin, J. J.; Shoichet, B. K. Nat. Biotechnol. 2007, 25, 197.
+  (52) Hert, J.; Keiser, M. J.; Irwin, J. J.; Oprea, T. I.; Shoichet, B. K. J.
+Chem. Inf. Model. 2008, 48, 755.
+  (53) Schwalbe, C. H.; Lowis, D. R.; Richards, W. G. J. Chem. Soc.
+Chem. Commun. 1993, 1199.
+  (54) Seffernick, J. L.; de Souza, M. L.; Sadowsky, M. J.; Wackett, L. P.
+J. Bacteriol. 2001, 183, 2405.
+  (55) Pfleiderer, W. Folates Pterins 1984, 2, 43.
+  (56) Noiriel, A.; Naponelli, V.; Gregory, J. F.; Hanson, A. D. Plant
+Physiol. 2007, 143, 1101.
+  (57) Forrest, H. S.; Glassman, E.; Mitchell, H. K. Science 1956, 124,
+725.
+  (58) Lowry, O. H.; Bessey, O. A.; Crawford, E. J. J. Biol. Chem. 1949,
+180, 389.
+  (59) Off, M. K.; Steindal, A. E.; Porojnicu, A. C.; Juzeniene, A.;
+Vorobey, A.; Johnsson, A.; Moan, J. J. Photochem. Photobiol., B 2005,
+80, 47.
+  (60) McNutt, W. S., Jr. J. Biol. Chem. 1968, 238, 1116.
+  (61) McNutt, W. S.; Damle, S. P. J. Biol. Chem. 1964, 239, 4272.
+  (62) Dairman, W. M.; McNutt, W. S. J. Biol. Chem. 1964, 239, 3407.
+  (63) Mysinger, M. M.; Weiss, D. R.; Ziarek, J. J.; Gravel, S.; Doak, A.
+K.; Karpiak, J.; Heveker, N.; Shoichet, B. K.; Volkman, B. F. Proc. Natl.
+Acad. Sci. U.S.A. 2012, 109, 5517.
+
+
+
+
+                                                                                 803   dx.doi.org/10.1021/ja309680b | J. Am. Chem. Soc. 2013, 135, 795−803
+

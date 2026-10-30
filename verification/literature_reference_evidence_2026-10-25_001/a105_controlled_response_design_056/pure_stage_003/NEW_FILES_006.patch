@@ -1,0 +1,1309 @@
+--- /dev/null
++++ b/gene_annotation_episode/literature_controlled_response_calculations.py
+@@ -0,0 +1,655 @@
++"""Pure four-arm source-response arithmetic within A105.
++
++This accepts already parsed, explicitly interpreted inputs, never model-selected
++scientific numbers or source documents. Source custody, condition/normalization
++interpretation, reader partials, selected execution and annotation credit belong
++elsewhere. The controlled effect is conditional on actual control applicability;
++it does not establish isolated causal protein action or proton coupling.
++"""
++from __future__ import annotations
++
++from copy import deepcopy
++from dataclasses import dataclass
++from decimal import Decimal, localcontext
++from fractions import Fraction
++from itertools import combinations, permutations
++import math
++
++from .literature_experimental_contracts import ExperimentalContractError, RATE_UNITS
++
++
++INPUT_VERSION = "controlled_response_inputs_v1"
++VERSION = "controlled_response_sheet_v1"
++PRIMITIVE_ORDER = ("protein_condition1", "empty_condition1",
++                   "protein_condition0", "empty_condition0")
++COMPONENTS = tuple(name + "_response" for name in PRIMITIVE_ORDER) + (
++    "condition1_controlled_response", "condition0_controlled_response",
++    "controlled_response_difference", "contrast_variance",
++    "contrast_standard_uncertainty", "contrast_precision",
++    "source_profile_log_ratio", "source_signed_index")
++CELL_FIELDS = ("value", "lower", "upper", "relation", "approximate", "unit",
++               "status", "origin", "unavailable_reason", "formula_code",
++               "conditional_on", "bound_kind", "bound_state")
++ARM_FIELDS = ("value", "threshold", "relation", "approximate", "unit", "status",
++              "endpoint_id", "normalization_id", "subject_construct_id",
++              "condition_id", "physical_observation_id", "source_observation_id",
++              "origin", "digitization_interval", "protein_arrangement",
++              "meaning_statuses")
++RELATIONSHIP_FIELDS = ("condition1_target", "condition0_target",
++    "condition_levels_relation", "condition1_control_application",
++    "condition0_control_application", "subject_construct_across_conditions",
++    "control_reference_reuse", "nonintended_conditions", "intended_factor")
++_MEANINGS = ("endpoint", "normalization", "subject_construct", "condition",
++             "physical_observation")
++_STATES = ("known", "unknown", "conflicting")
++_ARRANGEMENTS = ("protein_present", "protein_free_control", "empty_vector_control",
++                 "other_specified", "unknown", "conflicting")
++_APPLICATIONS = ("matched_condition_control", "shared_reference_assumption",
++                 "unknown", "conflicting")
++_REUSE = ("distinct_observations", "same_reference_with_stated_invariance",
++          "unknown", "conflicting")
++_BASE_UNITS = {"amount_rate": "umol/min", "concentration_rate": "uM/min",
++               "turnover_rate": "per_min", "specific_amount_rate": "umol/min/mg"}
++_FORMULAS = ("source_response",) * 4 + ("condition_control_difference",) * 2 + (
++    "four_arm_condition_difference", "linear_joint_covariance",
++    "square_root_variance", "inverse_variance", "signed_known_normal_profile",
++    "tanh_half_signed_profile")
++REASONS = (
++    "missing_arm", "unknown_unit", "incompatible_unit_dimension",
++    "unknown_endpoint", "different_endpoint", "conflicting_endpoint",
++    "unknown_normalization", "different_normalization", "conflicting_normalization",
++    "unknown_subject_correspondence", "different_subject_correspondence",
++    "conflicting_subject_correspondence", "unknown_control_application",
++    "conflicting_control_application", "unknown_protein_arrangement",
++    "conflicting_protein_arrangement", "incompatible_control_arrangement",
++    "unknown_condition_correspondence", "different_condition_correspondence",
++    "conflicting_condition_correspondence", "condition_levels_not_distinct",
++    "missing_intended_factor", "conflicting_control_reuse",
++    "unsupported_source_expression", "ambiguous_source_literal",
++    "conflicting_source_literal", "unavailable_source_dependency",
++    "unknown_covariance", "estimated_covariance", "nonpositive_variance_for_model",
++    "observation_model_unselected", "unresolved_censoring_model",
++    "unresolved_reading_model", "numeric_range_failure", "uninformative_bounds")
++
++
++def _fail(code, field):
++    raise ExperimentalContractError(code, field)
++
++
++def _closed(value, fields, field):
++    if not isinstance(value, dict) or set(value) != set(fields):
++        _fail("closed_fields_required", field)
++
++
++def _enum(value, allowed, field):
++    if not isinstance(value, str) or value not in allowed:
++        _fail("unsupported_value", field)
++
++
++def _identity(value, field, *, nullable=True):
++    if value is None and nullable:
++        return
++    if not isinstance(value, str) or not value.strip():
++        _fail("nonempty_identity_required", field)
++
++
++def _finite(value, field, *, nullable=False):
++    if value is None and nullable:
++        return
++    try:
++        valid = type(value) in (int, float) and math.isfinite(value)
++    except OverflowError:
++        valid = False
++    if not valid:
++        _fail("finite_number_required", field)
++
++
++def _q(value):
++    # The pure interface is finite JSON numbers. Interpret their stable decimal
++    # spelling exactly, not successive floating products/subtractions.
++    return Fraction(str(value))
++
++
++def _scale(unit):
++    return _q(RATE_UNITS[unit][1])
++
++
++def _validate_arm(arm, field):
++    if arm is None:
++        return
++    _closed(arm, ARM_FIELDS, field)
++    _enum(arm["status"], ("point", "bound", "missing", "ambiguous", "conflicting",
++                           "unsupported"), field + ".status")
++    _enum(arm["relation"], ("eq", "lt", "le", "gt", "ge", "interval", "none"),
++          field + ".relation")
++    _enum(arm["origin"], ("reported", "graph_derived", "synthetic"), field + ".origin")
++    _enum(arm["protein_arrangement"], _ARRANGEMENTS, field + ".protein_arrangement")
++    if type(arm["approximate"]) is not bool:
++        _fail("boolean_required", field + ".approximate")
++    if arm["unit"] is not None:
++        _enum(arm["unit"], tuple(RATE_UNITS), field + ".unit")
++    _finite(arm["value"], field + ".value", nullable=True)
++    _finite(arm["threshold"], field + ".threshold", nullable=True)
++    status, relation = arm["status"], arm["relation"]
++    if status == "point":
++        if arm["value"] is None or arm["threshold"] is not None or relation not in ("eq", "interval"):
++            _fail("point_contract_mismatch", field)
++    elif status == "bound":
++        if arm["value"] is not None or arm["threshold"] is None or relation not in ("lt", "le", "gt", "ge"):
++            _fail("bound_contract_mismatch", field)
++    elif arm["value"] is not None or arm["threshold"] is not None or relation != "none":
++        _fail("unavailable_measurement_must_be_null", field)
++    interval = arm["digitization_interval"]
++    if interval is not None:
++        _closed(interval, ("lower", "upper"), field + ".digitization_interval")
++        for side in ("lower", "upper"):
++            _finite(interval[side], field + ".digitization_interval." + side)
++        if (status != "point" or relation != "interval" or arm["origin"] != "graph_derived"
++                or not interval["lower"] <= arm["value"] <= interval["upper"]):
++            _fail("digitization_interval_mismatch", field)
++    elif relation == "interval":
++        _fail("digitization_interval_required", field)
++    _closed(arm["meaning_statuses"], _MEANINGS, field + ".meaning_statuses")
++    for meaning in _MEANINGS:
++        state = arm["meaning_statuses"][meaning]
++        _enum(state, _STATES, field + ".meaning_statuses." + meaning)
++        identity = arm[meaning + "_id"]
++        _identity(identity, field + "." + meaning + "_id")
++        if (state == "known") != (identity is not None):
++            _fail("meaning_identity_mismatch", field + "." + meaning + "_id")
++    _identity(arm["source_observation_id"], field + ".source_observation_id",
++              nullable=status == "missing")
++    if status == "missing" and arm["source_observation_id"] is not None:
++        _fail("missing_source_identity_must_be_null", field)
++
++
++def _determinant(matrix):
++    size = len(matrix)
++    total = Fraction(0)
++    for perm in permutations(range(size)):
++        inversions = sum(perm[i] > perm[j] for i in range(size) for j in range(i + 1, size))
++        product = Fraction((-1) ** inversions)
++        for i in range(size):
++            product *= matrix[i][perm[i]]
++        total += product
++    return total
++
++
++def _validate_covariance(inputs):
++    raw, status = inputs["covariance"], inputs["variance_status"]
++    if (raw is None) != (status == "unknown"):
++        _fail("covariance_status_mismatch", "variance_status")
++    if raw is None:
++        return None
++    _closed(raw, ("primitive_order", "physical_observation_ids", "units", "matrix"), "covariance")
++    if raw["primitive_order"] != list(PRIMITIVE_ORDER):
++        _fail("covariance_order_mismatch", "covariance.primitive_order")
++    for field in ("physical_observation_ids", "units"):
++        if not isinstance(raw[field], list) or len(raw[field]) != 4:
++            _fail("four_operands_required", "covariance." + field)
++    for i, name in enumerate(PRIMITIVE_ORDER):
++        arm = inputs["arms"][name]
++        owner = raw["physical_observation_ids"][i]
++        _identity(owner, "covariance.physical_observation_ids", nullable=False)
++        _enum(raw["units"][i], tuple(RATE_UNITS), "covariance.units")
++        if arm is None or owner != arm["physical_observation_id"]:
++            _fail("covariance_owner_mismatch", "covariance.physical_observation_ids")
++        if arm["unit"] is None or RATE_UNITS[raw["units"][i]][0] != RATE_UNITS[arm["unit"]][0]:
++            _fail("covariance_unit_mismatch", "covariance.units")
++    matrix = raw["matrix"]
++    if not isinstance(matrix, list) or len(matrix) != 4 or any(
++            not isinstance(row, list) or len(row) != 4 for row in matrix):
++        _fail("four_by_four_covariance_required", "covariance.matrix")
++    for i, row in enumerate(matrix):
++        for j, value in enumerate(row):
++            _finite(value, f"covariance.matrix[{i}][{j}]")
++    matrix = [[_q(value) for value in row] for row in matrix]
++    if any(matrix[i][j] != matrix[j][i] for i in range(4) for j in range(4)):
++        _fail("symmetric_covariance_required", "covariance.matrix")
++    for size in range(1, 5):
++        for indices in combinations(range(4), size):
++            if _determinant([[matrix[i][j] for j in indices] for i in indices]) < 0:
++                _fail("positive_semidefinite_covariance_required", "covariance.matrix")
++    scales = [_scale(unit) for unit in raw["units"]]
++    matrix = [[matrix[i][j] * scales[i] * scales[j] for j in range(4)] for i in range(4)]
++    for i, name in enumerate(PRIMITIVE_ORDER):
++        for j in range(i):
++            if raw["physical_observation_ids"][i] != raw["physical_observation_ids"][j]:
++                continue
++            if _alias_reasons(inputs["arms"][name], inputs["arms"][PRIMITIVE_ORDER[j]]):
++                _fail("shared_measurement_context_mismatch", "covariance.physical_observation_ids")
++            if matrix[i] != matrix[j] or any(matrix[k][i] != matrix[k][j] for k in range(4)):
++                _fail("shared_measurement_covariance_mismatch", "covariance.matrix")
++    return matrix
++
++
++def _validate(inputs):
++    _closed(inputs, ("version", "arms", "relationships", "covariance", "variance_status", "model_kind"), "inputs")
++    if inputs["version"] != INPUT_VERSION:
++        _fail("unsupported_input_version", "version")
++    _closed(inputs["arms"], PRIMITIVE_ORDER, "arms")
++    for name, arm in inputs["arms"].items():
++        _validate_arm(arm, "arms." + name)
++    relationships = inputs["relationships"]
++    _closed(relationships, RELATIONSHIP_FIELDS, "relationships")
++    for name in ("condition1_target", "condition0_target"):
++        target = relationships[name]
++        _closed(target, ("status", "canonical_id"), "relationships." + name)
++        _enum(target["status"], _STATES, "relationships." + name + ".status")
++        _identity(target["canonical_id"], "relationships." + name + ".canonical_id")
++        if (target["status"] == "known") != (target["canonical_id"] is not None):
++            _fail("meaning_identity_mismatch", "relationships." + name)
++    for name in ("condition_levels_relation", "subject_construct_across_conditions"):
++        _enum(relationships[name], ("same", "different", "unknown", "conflicting"), "relationships." + name)
++    for name in ("condition1_control_application", "condition0_control_application"):
++        _enum(relationships[name], _APPLICATIONS, "relationships." + name)
++    _enum(relationships["control_reference_reuse"], _REUSE, "relationships.control_reference_reuse")
++    _enum(relationships["nonintended_conditions"], ("matched", "different", "unknown", "conflicting"),
++          "relationships.nonintended_conditions")
++    _identity(relationships["intended_factor"], "relationships.intended_factor")
++    _enum(inputs["variance_status"], ("known", "estimated", "unknown"), "variance_status")
++    _enum(inputs["model_kind"], ("none", "known_joint_normal_source_means"), "model_kind")
++    return _validate_covariance(inputs)
++
++
++def validate_controlled_response_inputs(inputs):
++    """Validate the closed parsed-input contract and return a detached copy.
++
++    Invalid direct covariance is an actionable contract error. A future source
++    reader must retain authentic bad covariance as a source partial before
++    calling this function with covariance explicitly unavailable.
++    """
++    _validate(inputs)
++    return deepcopy(inputs)
++
++
++def _operand_reasons(arm):
++    if arm is None:
++        return {"missing_arm"}
++    reasons = set()
++    if arm["unit"] is None:
++        reasons.add("unknown_unit")
++    status_reason = {"missing": "missing_arm", "ambiguous": "ambiguous_source_literal",
++        "conflicting": "conflicting_source_literal", "unsupported": "unsupported_source_expression"}
++    if arm["status"] in status_reason:
++        reasons.add(status_reason[arm["status"]])
++    return reasons
++
++
++def _identity_reasons(arms, meaning):
++    states = [arm["meaning_statuses"][meaning] for arm in arms if arm is not None]
++    if "conflicting" in states:
++        return {"conflicting_" + meaning if meaning in ("endpoint", "normalization") else
++                "conflicting_" + ("subject_correspondence" if meaning == "subject_construct" else "condition_correspondence")}
++    if len(states) != len(arms) or "unknown" in states:
++        return {"unknown_" + meaning if meaning in ("endpoint", "normalization") else
++                "unknown_" + ("subject_correspondence" if meaning == "subject_construct" else "condition_correspondence")}
++    if len({arm[meaning + "_id"] for arm in arms}) != 1:
++        return {"different_" + meaning if meaning in ("endpoint", "normalization") else
++                "different_" + ("subject_correspondence" if meaning == "subject_construct" else "condition_correspondence")}
++    return set()
++
++
++def _alias_reasons(left, right):
++    """Test consistency of an asserted common physical/source observation."""
++    reasons = set()
++    for meaning in _MEANINGS[:-1]:
++        a, b = left[meaning + "_id"], right[meaning + "_id"]
++        if a is not None and b is not None and a != b:
++            reasons |= {"conflicting_" + meaning if meaning in ("endpoint", "normalization") else
++                "conflicting_" + ("subject_correspondence" if meaning == "subject_construct" else "condition_correspondence")}
++    if left["protein_arrangement"] != right["protein_arrangement"]:
++        reasons.add("conflicting_protein_arrangement")
++    if left["unit"] is None or right["unit"] is None:
++        return reasons | {"unknown_unit"}
++    if RATE_UNITS[left["unit"]][0] != RATE_UNITS[right["unit"]][0]:
++        return reasons | {"incompatible_unit_dimension"}
++    for field in ("status", "relation", "approximate"):
++        if left[field] != right[field]:
++            reasons.add("conflicting_source_literal")
++    for field in ("value", "threshold"):
++        a, b = left[field], right[field]
++        if ((a is None) != (b is None) or a is not None and
++                _q(a) * _scale(left["unit"]) != _q(b) * _scale(right["unit"])):
++            reasons.add("conflicting_source_literal")
++    a, b = left["digitization_interval"], right["digitization_interval"]
++    if (a is None) != (b is None) or a is not None and any(
++            _q(a[side]) * _scale(left["unit"]) != _q(b[side]) * _scale(right["unit"])
++            for side in ("lower", "upper")):
++        reasons.add("conflicting_source_literal")
++    return reasons
++
++
++def _common_alias_reasons(arms):
++    reasons = set()
++    for i, left in enumerate(arms):
++        if left is None:
++            continue
++        for right in arms[:i]:
++            if right is None:
++                continue
++            same_owner = left["physical_observation_id"] is not None and left["physical_observation_id"] == right["physical_observation_id"]
++            same_source = left["source_observation_id"] is not None and left["source_observation_id"] == right["source_observation_id"]
++            if same_owner or same_source:
++                reasons |= _alias_reasons(left, right)
++                if same_source and left["physical_observation_id"] is not None and right["physical_observation_id"] is not None and not same_owner:
++                    reasons.add("conflicting_source_literal")
++    return reasons
++
++
++def _unit(arms):
++    units = [arm["unit"] for arm in arms if arm is not None and arm["unit"] is not None]
++    dimensions = {RATE_UNITS[unit][0] for unit in units}
++    return _BASE_UNITS[next(iter(dimensions))] if len(dimensions) == 1 else None
++
++
++def _pair_reasons(inputs, indices, label):
++    arms = [inputs["arms"][PRIMITIVE_ORDER[i]] for i in indices]
++    reasons = set().union(*(_operand_reasons(arm) for arm in arms))
++    for meaning in ("endpoint", "normalization"):
++        reasons |= _identity_reasons(arms, meaning)
++    if len({RATE_UNITS[arm["unit"]][0] for arm in arms if arm and arm["unit"]}) > 1:
++        reasons.add("incompatible_unit_dimension")
++    for arm, allowed in zip(arms, (("protein_present",), ("protein_free_control", "empty_vector_control"))):
++        if arm is None:
++            continue
++        arrangement = arm["protein_arrangement"]
++        if arrangement not in allowed:
++            reasons.add({"unknown": "unknown_protein_arrangement", "conflicting": "conflicting_protein_arrangement"}.get(
++                arrangement, "incompatible_control_arrangement"))
++    target = inputs["relationships"][label + "_target"]
++    application = inputs["relationships"][label + "_control_application"]
++    if target["status"] != "known":
++        reasons.add(target["status"] + "_condition_correspondence")
++    for i, arm in enumerate(arms):
++        if arm is None:
++            continue
++        state = arm["meaning_statuses"]["condition"]
++        if state != "known":
++            reasons.add(state + "_condition_correspondence")
++        elif target["status"] == "known" and (i == 0 or application == "matched_condition_control") and arm["condition_id"] != target["canonical_id"]:
++            reasons.add("different_condition_correspondence")
++    if application in ("unknown", "conflicting"):
++        reasons.add(application + "_control_application")
++    reasons |= _common_alias_reasons(arms)
++    return reasons
++
++
++def _effect_reasons(inputs, pair_reasons):
++    arms = [inputs["arms"][name] for name in PRIMITIVE_ORDER]
++    relationships = inputs["relationships"]
++    reasons = set().union(*pair_reasons)
++    # Two internally compatible pairs can still have different dimensions.
++    # Canonical endpoint/normalization IDs do not authorize dimensional mixing.
++    if len({RATE_UNITS[arm["unit"]][0] for arm in arms if arm and arm["unit"]}) > 1:
++        reasons.add("incompatible_unit_dimension")
++    for meaning in ("endpoint", "normalization"):
++        reasons |= _identity_reasons(arms, meaning)
++    reasons |= _identity_reasons([arms[0], arms[2]], "subject_construct")
++    subject = relationships["subject_construct_across_conditions"]
++    if subject != "same":
++        reasons.add(subject + "_subject_correspondence")
++    levels = relationships["condition_levels_relation"]
++    if levels in ("unknown", "conflicting"):
++        reasons.add(levels + "_condition_correspondence")
++    if levels == "same" or (relationships["condition1_target"]["canonical_id"] is not None and
++            relationships["condition1_target"]["canonical_id"] == relationships["condition0_target"]["canonical_id"]):
++        reasons.add("condition_levels_not_distinct")
++    if relationships["intended_factor"] is None:
++        reasons.add("missing_intended_factor")
++    reuse = relationships["control_reference_reuse"]
++    left, right = arms[1], arms[3]
++    if reuse == "conflicting":
++        reasons.add("conflicting_control_reuse")
++    elif reuse in ("same_reference_with_stated_invariance", "distinct_observations"):
++        if left is None or right is None or left["physical_observation_id"] is None or right["physical_observation_id"] is None:
++            reasons.add("conflicting_control_reuse")
++        else:
++            same = left["physical_observation_id"] == right["physical_observation_id"]
++            if same != (reuse == "same_reference_with_stated_invariance"):
++                reasons.add("conflicting_control_reuse")
++    reasons |= _common_alias_reasons(arms)
++    return reasons
++
++
++@dataclass(frozen=True)
++class _Range:
++    point: Fraction | None
++    lower: Fraction | None
++    upper: Fraction | None
++    lower_closed: bool = True
++    upper_closed: bool = True
++    kinds: frozenset = frozenset()
++
++
++def _range(arm):
++    scale = _scale(arm["unit"])
++    if arm["status"] == "point":
++        point = _q(arm["value"]) * scale
++        interval = arm["digitization_interval"]
++        return (_Range(point, _q(interval["lower"]) * scale, _q(interval["upper"]) * scale,
++                       kinds=frozenset(("conditional_digitization",))) if interval else
++                _Range(point, point, point))
++    threshold = _q(arm["threshold"]) * scale
++    return (_Range(None, None, threshold, upper_closed=arm["relation"] == "le",
++                   kinds=frozenset(("reported_limit",))) if arm["relation"] in ("lt", "le") else
++            _Range(None, threshold, None, lower_closed=arm["relation"] == "ge",
++                   kinds=frozenset(("reported_limit",))))
++
++
++def _linear(arms, coefficients):
++    # Merge only explicit, consistent physical owners. Source labels or equal
++    # scalar values never assert identity. Missing roles are rejected earlier.
++    groups = {}
++    for i, (arm, coefficient) in enumerate(zip(arms, coefficients)):
++        key = ("owner", arm["physical_observation_id"]) if arm["physical_observation_id"] is not None else ("role", i)
++        if key in groups:
++            old, count = groups[key]
++            groups[key] = old, count + coefficient
++        else:
++            groups[key] = arm, coefficient
++    point = lower = upper = Fraction(0)
++    lower_closed = upper_closed = True
++    kinds = set()
++    for arm, coefficient in groups.values():
++        if coefficient == 0:
++            continue
++        value = _range(arm)
++        kinds |= value.kinds
++        point = None if point is None or value.point is None else point + coefficient * value.point
++        lo, hi = (value.lower, value.upper) if coefficient > 0 else (value.upper, value.lower)
++        lc, uc = (value.lower_closed, value.upper_closed) if coefficient > 0 else (value.upper_closed, value.lower_closed)
++        lower = None if lower is None or lo is None else lower + coefficient * lo
++        upper = None if upper is None or hi is None else upper + coefficient * hi
++        lower_closed &= lc
++        upper_closed &= uc
++    return _Range(point, lower, upper, lower_closed, upper_closed, frozenset(kinds))
++
++
++def _number(value):
++    if value is None:
++        return None
++    try:
++        result = float(value)
++    except (OverflowError, ValueError):
++        return None
++    return result if math.isfinite(result) and (result != 0 or value == 0) else None
++
++
++def _origin(arms, *, raw=False):
++    origins = {arm["origin"] for arm in arms if arm is not None}
++    return ("synthetic" if "synthetic" in origins else "graph_derived" if "graph_derived" in origins
++            else next(iter(origins)) if raw and origins else "calculated")
++
++
++def _qualifications(inputs, arms, *, cross=False, covariance=False, model=False):
++    result = set()
++    if any(arm is not None and arm["origin"] == "synthetic" for arm in arms):
++        result.add("synthetic_fixture")
++    if any(arm is not None and arm["approximate"] for arm in arms):
++        result.add("approximate_source_reading")
++    if any(arm is not None and arm["digitization_interval"] is not None for arm in arms):
++        result.add("conditional_digitization")
++    if cross:
++        relationships = inputs["relationships"]
++        state = relationships["nonintended_conditions"]
++        if state != "matched":
++            result.add("nonintended_conditions_" + state)
++        if relationships["control_reference_reuse"] == "unknown":
++            result.add("unknown_control_reuse")
++    if covariance and inputs["variance_status"] == "estimated":
++        result.add("estimated_covariance")
++    if model and inputs["model_kind"] == "known_joint_normal_source_means":
++        result.add("known_normal_source_means")
++    return result
++
++
++def _cell(value, unit, formula, arms, *, reasons=(), qualifications=(), raw=False):
++    reasons, qualifications = set(reasons), set(qualifications)
++    result = {"value": None, "lower": None, "upper": None, "relation": "none",
++        "approximate": any(arm is not None and arm["approximate"] for arm in arms),
++        "unit": unit, "status": "unavailable", "origin": _origin(arms, raw=raw),
++        "unavailable_reason": None, "formula_code": formula,
++        "conditional_on": sorted(qualifications), "bound_kind": "none",
++        "bound_state": {"lower": "unknown", "upper": "unknown"}}
++    if reasons:
++        result["status"] = ("conflicting" if any(reason.startswith("conflicting_") for reason in reasons)
++            else "unsupported" if "unsupported_source_expression" in reasons else
++            "partial" if raw and reasons == {"unknown_unit"} and arms[0]["status"] in ("point", "bound") else "unavailable")
++    elif value is not None:
++        bounded = bool(value.kinds)
++        result["bound_kind"] = "mixed" if len(value.kinds) > 1 else next(iter(value.kinds)) if value.kinds else "none"
++        result["value"] = _number(value.point)
++        if value.point is not None and result["value"] is None:
++            reasons.add("numeric_range_failure")
++        if bounded:
++            for side in ("lower", "upper"):
++                exact = getattr(value, side)
++                converted = _number(exact)
++                result[side] = converted
++                result["bound_state"][side] = "unbounded" if exact is None else "available" if converted is not None else "numeric_range_failure"
++                if exact is not None and converted is None:
++                    reasons.add("numeric_range_failure")
++        else:
++            result["bound_state"] = dict.fromkeys(("lower", "upper"), "not_applicable")
++        lower, upper = result["lower"], result["upper"]
++        if lower is not None and upper is not None:
++            result["relation"] = "interval"
++        elif lower is not None:
++            result["relation"] = "ge" if value.lower_closed else "gt"
++        elif upper is not None:
++            result["relation"] = "le" if value.upper_closed else "lt"
++        elif result["value"] is not None:
++            result["relation"] = "eq"
++        available = any(result[name] is not None for name in ("value", "lower", "upper"))
++        result["status"] = ("partial" if reasons and available else "available" if result["value"] is not None
++                             else "bounded" if available else "unavailable")
++        if not available and not reasons:
++            reasons.add("uninformative_bounds")
++    result["unavailable_reason"] = sorted(reasons) or None
++    return result
++
++
++def _point(value):
++    return None if value is None else _Range(value, value, value)
++
++
++def _sqrt(value):
++    with localcontext() as context:
++        context.prec = 80
++        return (Decimal(value.numerator) / Decimal(value.denominator)).sqrt()
++
++
++def _bounded_index(score):
++    # tanh saturates to a finite endpoint even when the exact S exceeds float
++    # range. A nonzero tiny result must never silently become exact zero.
++    if score == 0:
++        return Fraction(0)
++    if abs(score) > 100:
++        return Fraction(1 if score > 0 else -1)
++    half = _number(score / 2)
++    if half is None:
++        return None
++    result = math.tanh(half)
++    return result if result != 0 else None
++
++
++def populate_controlled_response(inputs):
++    """Populate four raw responses, two controlled pairs and their joint effect.
++
++    e = x0-x1-x2+x3; V = [1,-1,-1,1] C [1,-1,-1,1]^T. Units
++    and the biological normalization identity must both be compatible. Every
++    linear operation uses exact rationals and explicit physical aliases, not
++    independent intermediate pair intervals. Each final numerical dependency
++    has its own finite-range check. Invalid direct covariance raises; missing
++    covariance leaves valid magnitudes intact. No count implies independence.
++    """
++    covariance = _validate(inputs)
++    arms = [inputs["arms"][name] for name in PRIMITIVE_ORDER]
++    cells = {}
++    for i, arm in enumerate(arms):
++        reasons = _operand_reasons(arm)
++        value = _range(arm) if not reasons else None
++        cells[COMPONENTS[i]] = _cell(value, _unit([arm]), _FORMULAS[i], [arm], reasons=reasons,
++            qualifications=_qualifications(inputs, [arm]), raw=True)
++    pair_reasons = []
++    for index, (indices, label) in enumerate((((0, 1), "condition1"), ((2, 3), "condition0"))):
++        selected = [arms[i] for i in indices]
++        reasons = _pair_reasons(inputs, indices, label)
++        pair_reasons.append(reasons)
++        qualifications = _qualifications(inputs, selected)
++        if inputs["relationships"][label + "_control_application"] == "shared_reference_assumption":
++            qualifications.add("shared_reference_assumption")
++        cells[COMPONENTS[4 + index]] = _cell(_linear(selected, (1, -1)) if not reasons else None,
++            _unit(selected), _FORMULAS[4 + index], selected, reasons=reasons, qualifications=qualifications)
++    reasons = _effect_reasons(inputs, pair_reasons)
++    qualifications = _qualifications(inputs, arms, cross=True)
++    if any(inputs["relationships"][label + "_control_application"] == "shared_reference_assumption"
++           for label in ("condition1", "condition0")):
++        qualifications.add("shared_reference_assumption")
++    effect = _linear(arms, (1, -1, -1, 1)) if not reasons else None
++    unit = _unit(arms)
++    cells[COMPONENTS[6]] = _cell(effect, unit, _FORMULAS[6], arms, reasons=reasons, qualifications=qualifications)
++    variance_reasons = set(reasons)
++    if effect is not None and effect.point is None:
++        variance_reasons.add("unresolved_censoring_model")
++    if covariance is None:
++        variance_reasons.add("unknown_covariance")
++    coefficients = (1, -1, -1, 1)
++    variance = (sum(coefficients[i] * covariance[i][j] * coefficients[j] for i in range(4) for j in range(4))
++                if not variance_reasons else None)
++    variance_qualifications = qualifications | _qualifications(inputs, arms, covariance=True)
++    variance_unit = "(" + unit + ")^2" if unit is not None else None
++    cells[COMPONENTS[7]] = _cell(_point(variance), variance_unit, _FORMULAS[7], arms,
++        reasons=variance_reasons, qualifications=variance_qualifications)
++    cells[COMPONENTS[8]] = _cell(_point(_sqrt(variance)) if variance is not None else None, unit,
++        _FORMULAS[8], arms, reasons=variance_reasons, qualifications=variance_qualifications)
++    positive_reasons = variance_reasons | ({"nonpositive_variance_for_model"} if variance is not None and variance <= 0 else set())
++    cells[COMPONENTS[9]] = _cell(_point(1 / variance) if variance is not None and variance > 0 else None,
++        "(" + unit + ")^-2" if unit is not None else None, _FORMULAS[9], arms,
++        reasons=positive_reasons, qualifications=variance_qualifications)
++    model_reasons = set(positive_reasons)
++    if inputs["variance_status"] == "estimated":
++        model_reasons.add("estimated_covariance")
++    if inputs["model_kind"] == "none":
++        model_reasons.add("observation_model_unselected")
++    if any(arm is not None and arm["status"] == "bound" for arm in arms):
++        model_reasons.add("unresolved_censoring_model")
++    if any(arm is not None and (arm["approximate"] or arm["origin"] == "graph_derived"
++                                or arm["digitization_interval"] is not None) for arm in arms):
++        model_reasons.add("unresolved_reading_model")
++    score = effect.point * abs(effect.point) / (2 * variance) if not model_reasons else None
++    model_qualifications = variance_qualifications | _qualifications(inputs, arms, model=True)
++    cells[COMPONENTS[10]] = _cell(_point(score), "dimensionless", _FORMULAS[10], arms,
++        reasons=model_reasons, qualifications=model_qualifications)
++    index = _bounded_index(score) if score is not None else None
++    cells[COMPONENTS[11]] = _cell(_point(index), "dimensionless", _FORMULAS[11], arms,
++        reasons=model_reasons | ({"numeric_range_failure"} if score is not None and index is None else set()),
++        qualifications=model_qualifications)
++    return {"version": VERSION, "primitive_order": list(PRIMITIVE_ORDER),
++            "inputs": deepcopy(inputs), "cells": cells}
++
++
++__all__ = ["INPUT_VERSION", "VERSION", "PRIMITIVE_ORDER", "COMPONENTS", "CELL_FIELDS",
++           "ARM_FIELDS", "RELATIONSHIP_FIELDS", "REASONS",
++           "validate_controlled_response_inputs", "populate_controlled_response"]
+--- /dev/null
++++ b/tests/test_literature_controlled_response_calculations.py
+@@ -0,0 +1,648 @@
++"""Invented parsed-input fixtures only; no paper, graph, model or episode run."""
++from copy import deepcopy
++from fractions import Fraction
++import json
++import math
++
++import pytest
++
++from gene_annotation_episode.literature_experimental_contracts import ExperimentalContractError
++from gene_annotation_episode.literature_controlled_response_calculations import (
++    ARM_FIELDS, CELL_FIELDS, COMPONENTS, INPUT_VERSION, PRIMITIVE_ORDER, REASONS,
++    RELATIONSHIP_FIELDS, VERSION, populate_controlled_response,
++    validate_controlled_response_inputs,
++)
++
++
++def example():
++    arms = {}
++    for i, (name, value) in enumerate(zip(PRIMITIVE_ORDER, (12, 2, 5, 1))):
++        protein = i % 2 == 0
++        arms[name] = {"value": value, "threshold": None, "relation": "eq",
++            "approximate": False, "unit": "nmol/min/mg", "status": "point",
++            "endpoint_id": "synthetic_retained_tracer_initial_rate",
++            "normalization_id": "synthetic_common_positive_paired_reference_protein_mass",
++            "subject_construct_id": "synthetic_protein_construct" if protein else "synthetic_empty_preparation",
++            "condition_id": "synthetic_condition1" if i < 2 else "synthetic_condition0",
++            "physical_observation_id": "synthetic_actual_" + name,
++            "source_observation_id": "synthetic_source_" + name,
++            "origin": "synthetic", "digitization_interval": None,
++            "protein_arrangement": "protein_present" if protein else "protein_free_control",
++            "meaning_statuses": dict.fromkeys(("endpoint", "normalization", "subject_construct",
++                                               "condition", "physical_observation"), "known")}
++    return {"version": INPUT_VERSION, "arms": arms,
++        "relationships": {"condition1_target": {"status": "known", "canonical_id": "synthetic_condition1"},
++            "condition0_target": {"status": "known", "canonical_id": "synthetic_condition0"},
++            "condition_levels_relation": "different",
++            "condition1_control_application": "matched_condition_control",
++            "condition0_control_application": "matched_condition_control",
++            "subject_construct_across_conditions": "same", "control_reference_reuse": "distinct_observations",
++            "nonintended_conditions": "unknown", "intended_factor": "synthetic_witness_intended_protocol_change"},
++        "covariance": {"primitive_order": list(PRIMITIVE_ORDER),
++            "physical_observation_ids": [arms[name]["physical_observation_id"] for name in PRIMITIVE_ORDER],
++            "units": ["nmol/min/mg"] * 4,
++            "matrix": [[(1, .25, .36, .09)[i] if i == j else 0 for j in range(4)] for i in range(4)]},
++        "variance_status": "known", "model_kind": "none"}
++
++
++def cells(inputs=None):
++    return populate_controlled_response(example() if inputs is None else inputs)["cells"]
++
++
++def no_covariance(inputs):
++    inputs.update(covariance=None, variance_status="unknown")
++    return inputs
++
++
++def observed_bound(inputs, index, relation, threshold):
++    inputs["arms"][PRIMITIVE_ORDER[index]].update(status="bound", value=None,
++        threshold=threshold, relation=relation)
++
++
++def meaning_state(inputs, index, meaning, state):
++    arm = inputs["arms"][PRIMITIVE_ORDER[index]]
++    arm["meaning_statuses"][meaning] = state
++    arm[meaning + "_id"] = None
++
++
++def shared_control():
++    inputs = example()
++    left = inputs["arms"][PRIMITIVE_ORDER[1]]
++    right = inputs["arms"][PRIMITIVE_ORDER[3]]
++    right.update(value=left["value"], condition_id=left["condition_id"],
++        physical_observation_id=left["physical_observation_id"])
++    inputs["relationships"].update(condition0_control_application="shared_reference_assumption",
++        control_reference_reuse="same_reference_with_stated_invariance")
++    inputs["covariance"]["physical_observation_ids"][3] = left["physical_observation_id"]
++    inputs["covariance"]["matrix"] = [[1, 0, 0, 0], [0, .25, 0, .25],
++        [0, 0, .36, 0], [0, .25, 0, .25]]
++    return inputs
++
++
++def test_frozen_exact_interface_and_synthetic_native_to_canonical_numbers():
++    inputs = example()
++    before = deepcopy(inputs)
++    result = populate_controlled_response(inputs)
++    assert set(result) == {"version", "primitive_order", "inputs", "cells"}
++    assert result["version"] == VERSION == "controlled_response_sheet_v1"
++    assert INPUT_VERSION == "controlled_response_inputs_v1"
++    assert tuple(result["primitive_order"]) == PRIMITIVE_ORDER
++    assert tuple(result["cells"]) == COMPONENTS
++    assert set(inputs["relationships"]) == set(RELATIONSHIP_FIELDS)
++    assert all(set(arm) == set(ARM_FIELDS) for arm in inputs["arms"].values())
++    expected = (.012, .002, .005, .001, .010, .004, .006, .0000017,
++                math.sqrt(.0000017), 1/.0000017)
++    for name, value in zip(COMPONENTS, expected):
++        assert result["cells"][name]["value"] == pytest.approx(value)
++    assert result["cells"][COMPONENTS[7]]["unit"] == "(umol/min/mg)^2"
++    assert result["cells"][COMPONENTS[9]]["unit"] == "(umol/min/mg)^-2"
++    for name, cell in result["cells"].items():
++        assert set(cell) == set(CELL_FIELDS)
++        assert cell["origin"] == "synthetic"
++        expected_bound_state = dict.fromkeys(("lower", "upper"), "not_applicable" if cell["value"] is not None else "unknown")
++        assert cell["bound_state"] == expected_bound_state
++        assert set(cell["unavailable_reason"] or ()) <= set(REASONS)
++        assert cell["formula_code"]
++    assert result["cells"][COMPONENTS[10]]["value"] is None
++    assert result["cells"][COMPONENTS[10]]["unavailable_reason"] == ["observation_model_unselected"]
++    assert inputs == before
++    result["inputs"]["arms"][PRIMITIVE_ORDER[0]]["value"] = -1
++    assert inputs == before
++    assert validate_controlled_response_inputs(inputs) == inputs
++    json.dumps(result, allow_nan=False)
++
++
++@pytest.mark.parametrize("values", [(1, 2, 5, 1), (6, 2, 5, 1), (0, -2, -5, -1)])
++def test_signed_noisy_and_zero_values_without_logs_or_pseudocounts(values):
++    inputs = example()
++    inputs["model_kind"] = "known_joint_normal_source_means"
++    for name, value in zip(PRIMITIVE_ORDER, values):
++        inputs["arms"][name]["value"] = value
++    result = cells(inputs)
++    e = values[0] - values[1] - values[2] + values[3]
++    expected = e * abs(e) / (2 * 1.7)
++    assert result[COMPONENTS[6]]["value"] == pytest.approx(e * .001)
++    assert result[COMPONENTS[10]]["value"] == pytest.approx(expected)
++    assert result[COMPONENTS[11]]["value"] == pytest.approx(math.tanh(expected / 2))
++
++
++@pytest.mark.parametrize("condition", ["matched", "different", "unknown", "conflicting"])
++def test_intended_factor_is_signal_other_cochanges_never_quality_penalty(condition):
++    inputs = example()
++    inputs["relationships"]["nonintended_conditions"] = condition
++    result = cells(inputs)
++    assert result[COMPONENTS[6]]["value"] == .006
++    if condition != "matched":
++        assert "nonintended_conditions_" + condition in result[COMPONENTS[6]]["conditional_on"]
++
++
++@pytest.mark.parametrize("index", range(4))
++def test_absent_role_never_filled_or_zero_and_other_pair_survives(index):
++    inputs = no_covariance(example())
++    inputs["arms"][PRIMITIVE_ORDER[index]] = None
++    result = cells(inputs)
++    assert result[COMPONENTS[index]]["value"] is None
++    assert result[COMPONENTS[6]]["value"] is None
++    assert "missing_arm" in result[COMPONENTS[6]]["unavailable_reason"]
++    other = COMPONENTS[5 if index < 2 else 4]
++    assert result[other]["value"] == (.004 if index < 2 else .010)
++    for i in range(4):
++        if i != index:
++            assert result[COMPONENTS[i]]["value"] is not None
++
++
++@pytest.mark.parametrize("meaning", ["endpoint", "normalization", "condition"])
++@pytest.mark.parametrize("state", ["unknown", "conflicting"])
++def test_unknown_second_pair_never_erases_first_pair(meaning, state):
++    inputs = example()
++    meaning_state(inputs, 3, meaning, state)
++    result = cells(inputs)
++    assert result[COMPONENTS[4]]["value"] == .010
++    assert result[COMPONENTS[5]]["value"] is None
++    assert result[COMPONENTS[6]]["value"] is None
++    assert result[COMPONENTS[3]]["value"] == .001
++    if state == "conflicting":
++        assert result[COMPONENTS[5]]["status"] == "conflicting"
++
++
++def test_common_unit_spelling_does_not_establish_biological_denominator():
++    inputs = example()
++    inputs["arms"][PRIMITIVE_ORDER[1]]["normalization_id"] = "synthetic_lipid_mass"
++    result = cells(inputs)
++    assert result[COMPONENTS[1]]["value"] == .002
++    assert result[COMPONENTS[4]]["value"] is None
++    assert "different_normalization" in result[COMPONENTS[4]]["unavailable_reason"]
++    assert result[COMPONENTS[5]]["value"] == .004
++
++
++@pytest.mark.parametrize("meaning", ["endpoint", "normalization"])
++def test_two_locally_valid_pairs_with_different_cross_meaning_keep_both_pairs(meaning):
++    inputs = example()
++    for index in (2, 3):
++        inputs["arms"][PRIMITIVE_ORDER[index]][meaning + "_id"] = "synthetic_distinct_" + meaning
++    result = cells(inputs)
++    assert result[COMPONENTS[4]]["value"] == .010
++    assert result[COMPONENTS[5]]["value"] == .004
++    assert result[COMPONENTS[6]]["value"] is None
++
++
++def test_cross_pair_dimensions_must_agree_even_when_local_pairs_and_ids_agree():
++    inputs = no_covariance(example())
++    for index, unit in enumerate(("umol/min", "umol/min", "uM/min", "uM/min")):
++        inputs["arms"][PRIMITIVE_ORDER[index]]["unit"] = unit
++    result = cells(inputs)
++    assert result[COMPONENTS[4]]["value"] == 10
++    assert result[COMPONENTS[4]]["unit"] == "umol/min"
++    assert result[COMPONENTS[5]]["value"] == 4
++    assert result[COMPONENTS[5]]["unit"] == "uM/min"
++    for name in COMPONENTS[6:]:
++        assert result[name]["value"] is None
++        assert "incompatible_unit_dimension" in result[name]["unavailable_reason"]
++
++
++@pytest.mark.parametrize("field,value", [
++    ("subject_construct_across_conditions", "unknown"),
++    ("subject_construct_across_conditions", "different"),
++    ("condition_levels_relation", "unknown"),
++    ("condition_levels_relation", "same"),
++    ("intended_factor", None),
++    ("control_reference_reuse", "conflicting"),
++])
++def test_cross_condition_relationships_do_not_gate_local_pairs(field, value):
++    inputs = example()
++    inputs["relationships"][field] = value
++    result = cells(inputs)
++    assert [result[name]["value"] for name in COMPONENTS[4:6]] == [.010, .004]
++    assert result[COMPONENTS[6]]["value"] is None
++
++
++def test_unknown_reuse_and_ownership_qualify_magnitude_without_independence():
++    inputs = no_covariance(example())
++    inputs["relationships"]["control_reference_reuse"] = "unknown"
++    for index in (1, 3):
++        meaning_state(inputs, index, "physical_observation", "unknown")
++    result = cells(inputs)
++    assert result[COMPONENTS[6]]["value"] == .006
++    assert "unknown_control_reuse" in result[COMPONENTS[6]]["conditional_on"]
++    assert result[COMPONENTS[7]]["value"] is None
++    assert "unknown_covariance" in result[COMPONENTS[7]]["unavailable_reason"]
++
++
++def test_source_condition_correspondence_not_inferred_from_role_label():
++    inputs = example()
++    inputs["arms"][PRIMITIVE_ORDER[1]]["condition_id"] = "synthetic_other_source_condition"
++    result = cells(inputs)
++    assert result[COMPONENTS[4]]["value"] is None
++    assert "different_condition_correspondence" in result[COMPONENTS[4]]["unavailable_reason"]
++    inputs["relationships"]["condition1_control_application"] = "shared_reference_assumption"
++    assert cells(inputs)[COMPONENTS[4]]["value"] == .010
++    meaning_state(inputs, 1, "condition", "unknown")
++    assert cells(inputs)[COMPONENTS[4]]["value"] is None
++
++
++def test_actual_reused_control_keeps_its_measured_condition_and_cancels_jointly():
++    inputs = shared_control()
++    before = deepcopy(inputs)
++    result = cells(inputs)
++    assert [result[name]["value"] for name in COMPONENTS[4:7]] == [.010, .003, .007]
++    assert result[COMPONENTS[7]]["value"] == .00000136
++    assert inputs == before
++    assert inputs["arms"][PRIMITIVE_ORDER[3]]["condition_id"] == "synthetic_condition1"
++    inputs["relationships"]["condition0_control_application"] = "unknown"
++    result = cells(inputs)
++    assert result[COMPONENTS[4]]["value"] == .010
++    assert result[COMPONENTS[5]]["value"] is None
++    assert result[COMPONENTS[6]]["value"] is None
++    assert result[COMPONENTS[3]]["value"] == .002
++
++
++def test_genuinely_shared_censored_control_cancels_but_is_never_a_profile_point():
++    inputs = shared_control()
++    inputs["model_kind"] = "known_joint_normal_source_means"
++    observed_bound(inputs, 1, "ge", 2)
++    observed_bound(inputs, 3, "ge", 2)
++    result = cells(inputs)
++    assert result[COMPONENTS[4]]["value"] is None
++    assert result[COMPONENTS[4]]["upper"] == .010
++    assert result[COMPONENTS[5]]["upper"] == .003
++    assert result[COMPONENTS[6]]["value"] == .007
++    assert result[COMPONENTS[10]]["value"] is None
++    assert "unresolved_censoring_model" in result[COMPONENTS[10]]["unavailable_reason"]
++    no_covariance(inputs)
++    inputs["arms"][PRIMITIVE_ORDER[3]] = None
++    assert cells(inputs)[COMPONENTS[6]]["value"] is None
++
++
++def test_unknown_reuse_cannot_create_alias_but_explicit_owner_identity_can():
++    inputs = no_covariance(shared_control())
++    inputs["relationships"]["control_reference_reuse"] = "unknown"
++    observed_bound(inputs, 1, "ge", 2)
++    observed_bound(inputs, 3, "ge", 2)
++    result = cells(inputs)
++    # Cancellation is established by consistent actual owner identity and the
++    # explicit shared application, not by the unresolved reuse category.
++    assert result[COMPONENTS[6]]["value"] == .007
++    assert "unknown_control_reuse" in result[COMPONENTS[6]]["conditional_on"]
++    for index in (1, 3):
++        meaning_state(inputs, index, "physical_observation", "unknown")
++    result = cells(inputs)
++    assert result[COMPONENTS[6]]["value"] is None
++    assert result[COMPONENTS[6]]["unavailable_reason"] == ["uninformative_bounds"]
++    # Equal thresholds under different actual owners do not supply identity.
++    for index in (1, 3):
++        arm = inputs["arms"][PRIMITIVE_ORDER[index]]
++        arm["meaning_statuses"]["physical_observation"] = "known"
++        arm["physical_observation_id"] = "synthetic_distinct_control_" + str(index)
++    assert cells(inputs)[COMPONENTS[6]]["value"] is None
++
++
++def test_conflicting_reused_source_value_without_covariance_preserves_raw_and_local_pairs():
++    inputs = no_covariance(shared_control())
++    inputs["arms"][PRIMITIVE_ORDER[3]]["value"] = 3
++    result = cells(inputs)
++    assert result[COMPONENTS[3]]["value"] == .003
++    assert result[COMPONENTS[4]]["value"] == .010
++    assert result[COMPONENTS[5]]["value"] == .002
++    assert result[COMPONENTS[6]]["status"] == "conflicting"
++
++
++def test_equal_values_or_shared_preparation_name_do_not_assert_physical_identity():
++    inputs = example()
++    inputs["arms"][PRIMITIVE_ORDER[3]]["value"] = 2
++    result = cells(inputs)
++    assert result[COMPONENTS[6]]["value"] == .007
++    assert result[COMPONENTS[7]]["value"] == .0000017
++    assert result[COMPONENTS[7]]["value"] != .00000136
++
++
++@pytest.mark.parametrize("index,relation", [(0, "lt"), (1, "gt"), (2, "gt"), (3, "lt")])
++def test_each_fixed_sign_and_strict_limit_direction(index, relation):
++    inputs = no_covariance(example())
++    observed_bound(inputs, index, relation, (12, 2, 5, 1)[index])
++    result = cells(inputs)
++    effect = result[COMPONENTS[6]]
++    assert effect["value"] is None and effect["upper"] == .006
++    assert effect["relation"] == "lt" and effect["lower"] is None
++    assert effect["bound_state"] == {"lower": "unbounded", "upper": "available"}
++    assert effect["bound_kind"] == "reported_limit"
++
++
++@pytest.mark.parametrize("strict", [False, True])
++def test_signed_combination_of_reported_limits_preserves_strictness(strict):
++    inputs = no_covariance(example())
++    for index, relation in enumerate(("lt" if strict else "le", "ge", "ge", "le")):
++        observed_bound(inputs, index, relation, (12, 2, 5, 1)[index])
++    result = cells(inputs)[COMPONENTS[6]]
++    assert result["upper"] == .006
++    assert result["relation"] == ("lt" if strict else "le")
++
++
++def test_opposing_uncensored_directions_are_uninformative_not_zero():
++    inputs = no_covariance(example())
++    observed_bound(inputs, 0, "lt", 12)
++    observed_bound(inputs, 1, "lt", 2)
++    result = cells(inputs)[COMPONENTS[4]]
++    assert result["value"] is result["lower"] is result["upper"] is None
++    assert result["unavailable_reason"] == ["uninformative_bounds"]
++    assert result["bound_state"] == {"lower": "unbounded", "upper": "unbounded"}
++
++
++def test_graph_nominal_and_interval_are_not_a_sampling_model():
++    inputs = example()
++    arm = inputs["arms"][PRIMITIVE_ORDER[0]]
++    arm.update(origin="graph_derived", relation="interval", digitization_interval={"lower": 11, "upper": 13})
++    inputs["model_kind"] = "known_joint_normal_source_means"
++    result = cells(inputs)
++    effect = result[COMPONENTS[6]]
++    assert effect["value"] == .006
++    assert (effect["lower"], effect["upper"]) == (.005, .007)
++    assert effect["bound_kind"] == "conditional_digitization"
++    assert result[COMPONENTS[10]]["value"] is None
++    assert "unresolved_reading_model" in result[COMPONENTS[10]]["unavailable_reason"]
++
++
++def test_mixed_graph_and_printed_limits_keep_different_bound_semantics():
++    inputs = no_covariance(example())
++    inputs["arms"][PRIMITIVE_ORDER[0]].update(origin="graph_derived", relation="interval",
++        digitization_interval={"lower": 11, "upper": 13})
++    observed_bound(inputs, 1, "gt", 2)
++    result = cells(inputs)[COMPONENTS[6]]
++    assert result["value"] is None and result["upper"] == .007 and result["relation"] == "lt"
++    assert result["bound_kind"] == "mixed"
++
++
++def test_known_normal_profile_requires_actual_selected_model_and_exact_reading():
++    inputs = example()
++    inputs["model_kind"] = "known_joint_normal_source_means"
++    result = cells(inputs)
++    score = 36 / 3.4
++    assert result[COMPONENTS[10]]["value"] == pytest.approx(score)
++    assert result[COMPONENTS[11]]["value"] == pytest.approx(math.tanh(score / 2))
++    inputs["arms"][PRIMITIVE_ORDER[0]]["approximate"] = True
++    result = cells(inputs)
++    assert result[COMPONENTS[6]]["value"] == .006
++    assert result[COMPONENTS[6]]["approximate"] is True
++    assert result[COMPONENTS[7]]["value"] == .0000017
++    assert result[COMPONENTS[10]]["value"] is None
++
++
++def test_estimated_covariance_is_retained_but_never_a_known_model():
++    inputs = example()
++    inputs.update(variance_status="estimated", model_kind="known_joint_normal_source_means")
++    result = cells(inputs)
++    assert result[COMPONENTS[7]]["value"] == .0000017
++    assert "estimated_covariance" in result[COMPONENTS[7]]["conditional_on"]
++    assert result[COMPONENTS[10]]["unavailable_reason"] == ["estimated_covariance"]
++
++
++def test_actual_full_covariance_and_common_offset_cancellation():
++    inputs = example()
++    inputs["covariance"]["matrix"] = [[value + .16 for value in row] for row in inputs["covariance"]["matrix"]]
++    # Decimal addition before parsing can encode tiny different entries; build
++    # the stipulated source decimals exactly, not rounded floating summands.
++    inputs["covariance"]["matrix"] = [[1.16, .16, .16, .16], [.16, .41, .16, .16],
++        [.16, .16, .52, .16], [.16, .16, .16, .25]]
++    assert cells(inputs)[COMPONENTS[7]]["value"] == .0000017
++    factor = [[1, 0], [.5, 2], [-1, 1], [0, -2]]
++    inputs["covariance"]["matrix"] = [[sum(a*b for a,b in zip(left,right)) for right in factor] for left in factor]
++    assert cells(inputs)[COMPONENTS[7]]["value"] == .00002725
++
++
++def test_singular_full_common_covariance_retains_zero_without_jitter():
++    inputs = example()
++    inputs.update(model_kind="known_joint_normal_source_means")
++    inputs["covariance"]["matrix"] = [[.16]*4 for _ in range(4)]
++    result = cells(inputs)
++    assert result[COMPONENTS[7]]["value"] == 0
++    assert result[COMPONENTS[8]]["value"] == 0
++    for name in COMPONENTS[9:]:
++        assert result[name]["value"] is None
++        assert "nonpositive_variance_for_model" in result[name]["unavailable_reason"]
++
++
++def test_covariance_units_are_each_applied_once_and_alias_rows_reconciled_in_base_units():
++    inputs = shared_control()
++    inputs["arms"][PRIMITIVE_ORDER[3]].update(unit="umol/min/mg", value=.002)
++    inputs["covariance"]["units"][3] = "umol/min/mg"
++    inputs["covariance"]["matrix"] = [[1, 0, 0, 0], [0, .25, 0, .00025],
++        [0, 0, .36, 0], [0, .00025, 0, .00000025]]
++    result = cells(inputs)
++    assert result[COMPONENTS[6]]["value"] == .007
++    assert result[COMPONENTS[7]]["value"] == .00000136
++
++
++@pytest.mark.parametrize("matrix", [
++    [[1, 2, 0, 0], [2, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]],
++    [[1, -.75, -.75, 0], [-.75, 1, -.75, 0], [-.75, -.75, 1, 0], [0, 0, 0, 1]],
++    [[1 if i == j else -.4 for j in range(4)] for i in range(4)],
++    [[0, 1e-300, 0, 0], [1e-300, 1, 0, 0], [0, 0, 1e308, 0], [0, 0, 0, 1]],
++])
++def test_all_psd_principal_minors_without_relative_tolerance(matrix):
++    inputs = example()
++    inputs["covariance"]["matrix"] = matrix
++    with pytest.raises(ExperimentalContractError, match="positive_semidefinite_covariance_required"):
++        cells(inputs)
++
++
++@pytest.mark.parametrize("mutation,code", [
++    (lambda z: z["covariance"]["matrix"][0].__setitem__(1, .1), "symmetric_covariance_required"),
++    (lambda z: z["covariance"]["physical_observation_ids"].__setitem__(0, "wrong"), "covariance_owner_mismatch"),
++    (lambda z: z["covariance"]["units"].__setitem__(0, "uM/min"), "covariance_unit_mismatch"),
++    (lambda z: z["covariance"].update(primitive_order=list(reversed(PRIMITIVE_ORDER))), "covariance_order_mismatch"),
++    (lambda z: z.update(covariance=None), "covariance_status_mismatch"),
++    (lambda z: z.update(variance_status="unknown"), "covariance_status_mismatch"),
++])
++def test_invalid_direct_covariance_raises_instead_of_becoming_independence(mutation, code):
++    inputs = example()
++    mutation(inputs)
++    with pytest.raises(ExperimentalContractError, match=code):
++        cells(inputs)
++
++
++def test_shared_covariance_rows_must_match_and_cannot_hide_bad_source_values():
++    inputs = shared_control()
++    inputs["covariance"]["matrix"] = [[1, 0, 0, 0], [0, .25, 0, 0], [0, 0, .36, 0], [0, 0, 0, .25]]
++    with pytest.raises(ExperimentalContractError, match="shared_measurement_covariance_mismatch"):
++        cells(inputs)
++    inputs = shared_control()
++    inputs["arms"][PRIMITIVE_ORDER[3]]["value"] = 3
++    with pytest.raises(ExperimentalContractError, match="shared_measurement_context_mismatch"):
++        cells(inputs)
++
++
++def test_reader_style_null_covariance_partial_preserves_magnitude_not_fake_statistics():
++    inputs = no_covariance(example())
++    result = cells(inputs)
++    assert result[COMPONENTS[6]]["value"] == .006
++    assert all(result[name]["value"] is None for name in COMPONENTS[7:])
++    assert result[COMPONENTS[7]]["unavailable_reason"] == ["unknown_covariance"]
++
++
++def test_final_variance_underflow_does_not_erase_uncertainty_precision_or_profile():
++    inputs = example()
++    inputs["model_kind"] = "known_joint_normal_source_means"
++    for name, value in zip(PRIMITIVE_ORDER, (2e-160, 0, 1e-160, 0)):
++        inputs["arms"][name]["value"] = value
++    inputs["covariance"]["matrix"] = [[1e-320 if i == j else 0 for j in range(4)] for i in range(4)]
++    result = cells(inputs)
++    assert result[COMPONENTS[7]]["value"] is None
++    assert result[COMPONENTS[7]]["unavailable_reason"] == ["numeric_range_failure"]
++    assert result[COMPONENTS[8]]["value"] == pytest.approx(2e-163, rel=1e-14, abs=0)
++    assert result[COMPONENTS[9]]["value"] is None
++    assert result[COMPONENTS[10]]["value"] == pytest.approx(.125)
++    assert result[COMPONENTS[11]]["value"] == pytest.approx(math.tanh(.0625))
++
++
++def test_scaled_raw_overflow_does_not_erase_canceled_effect():
++    inputs = no_covariance(example())
++    for arm in inputs["arms"].values():
++        arm.update(unit="mmol/min", value=1e308)
++        arm["normalization_id"] = "synthetic_common_unscaled_assay_basis"
++    result = cells(inputs)
++    assert all(result[name]["value"] is None for name in COMPONENTS[:4])
++    assert result[COMPONENTS[4]]["value"] == 0
++    assert result[COMPONENTS[5]]["value"] == 0
++    assert result[COMPONENTS[6]]["value"] == 0
++
++
++def test_variance_overflow_keeps_representable_uncertainty_precision_and_profile():
++    inputs = example()
++    inputs["model_kind"] = "known_joint_normal_source_means"
++    for arm in inputs["arms"].values():
++        arm.update(unit="mmol/min", normalization_id="synthetic_common_unscaled_assay_basis")
++    inputs["covariance"]["units"] = ["mmol/min"] * 4
++    inputs["covariance"]["matrix"] = [[1e308 if i == j else 0 for j in range(4)] for i in range(4)]
++    result = cells(inputs)
++    assert result[COMPONENTS[6]]["value"] == 6000
++    assert result[COMPONENTS[7]]["value"] is None
++    assert result[COMPONENTS[8]]["value"] == 2e157
++    assert result[COMPONENTS[9]]["value"] == pytest.approx(2.5e-315, rel=1e-8, abs=0)
++    assert result[COMPONENTS[10]]["value"] == pytest.approx(4.5e-308, rel=1e-14, abs=0)
++    assert result[COMPONENTS[11]]["value"] == pytest.approx(2.25e-308, rel=1e-14, abs=0)
++    # The exact effect itself can exceed float range while S remains finite.
++    for i, name in enumerate(PRIMITIVE_ORDER):
++        inputs["arms"][name]["value"] = 1e308 if i == 0 else 0
++    result = cells(inputs)
++    assert result[COMPONENTS[6]]["value"] is None
++    assert result[COMPONENTS[10]]["value"] == 1.25e307
++    assert result[COMPONENTS[11]]["value"] == 1
++
++
++def test_tiny_nonzero_profile_and_index_do_not_silently_become_zero():
++    inputs = example()
++    inputs["model_kind"] = "known_joint_normal_source_means"
++    for i, name in enumerate(PRIMITIVE_ORDER):
++        inputs["arms"][name]["value"] = 1e-170 if i == 0 else 0
++    result = cells(inputs)
++    assert result[COMPONENTS[6]]["value"] == 1e-173
++    for name in COMPONENTS[10:]:
++        assert result[name]["value"] is None
++        assert result[name]["unavailable_reason"] == ["numeric_range_failure"]
++
++
++@pytest.mark.parametrize("status,reason", [("missing", "missing_arm"),
++    ("ambiguous", "ambiguous_source_literal"), ("conflicting", "conflicting_source_literal"),
++    ("unsupported", "unsupported_source_expression")])
++def test_unavailable_parsed_measurement_retains_other_raw_and_pair(status, reason):
++    inputs = example()
++    arm = inputs["arms"][PRIMITIVE_ORDER[3]]
++    arm.update(status=status, value=None, relation="none")
++    if status == "missing":
++        arm["source_observation_id"] = None
++    result = cells(inputs)
++    assert result[COMPONENTS[4]]["value"] == .010
++    assert result[COMPONENTS[0]]["value"] == .012
++    assert result[COMPONENTS[3]]["value"] is None
++    assert reason in result[COMPONENTS[3]]["unavailable_reason"]
++    assert reason in result[COMPONENTS[6]]["unavailable_reason"]
++
++
++def test_unknown_unit_preserves_native_input_without_a_dimensionless_numeric_cell():
++    inputs = no_covariance(example())
++    inputs["arms"][PRIMITIVE_ORDER[3]]["unit"] = None
++    result = populate_controlled_response(inputs)
++    raw = result["cells"][COMPONENTS[3]]
++    assert raw["value"] is None and raw["unit"] is None and raw["status"] == "partial"
++    assert result["inputs"]["arms"][PRIMITIVE_ORDER[3]]["value"] == 1
++    assert result["cells"][COMPONENTS[4]]["value"] == .010
++    assert result["cells"][COMPONENTS[5]]["value"] is None
++
++
++def test_one_source_observation_cannot_be_relabelled_as_distinct_actual_measurements():
++    inputs = no_covariance(shared_control())
++    left = inputs["arms"][PRIMITIVE_ORDER[1]]
++    right = inputs["arms"][PRIMITIVE_ORDER[3]]
++    right["source_observation_id"] = left["source_observation_id"]
++    right["physical_observation_id"] = "synthetic_false_distinct_owner"
++    inputs["relationships"]["control_reference_reuse"] = "distinct_observations"
++    assert cells(inputs)[COMPONENTS[6]]["status"] == "conflicting"
++
++
++def test_bounded_range_partial_keeps_each_representable_endpoint_and_its_meaning():
++    inputs = no_covariance(example())
++    inputs["arms"][PRIMITIVE_ORDER[0]].update(unit="mmol/min", origin="graph_derived", value=1e305,
++        relation="interval", digitization_interval={"lower": .001, "upper": 1e308})
++    result = cells(inputs)[COMPONENTS[0]]
++    assert result["value"] == 1e308
++    assert result["lower"] == 1 and result["upper"] is None
++    assert result["status"] == "partial" and result["relation"] == "ge"
++    assert result["bound_state"] == {"lower": "available", "upper": "numeric_range_failure"}
++    assert result["unavailable_reason"] == ["numeric_range_failure"]
++    assert result["bound_kind"] == "conditional_digitization"
++
++
++def test_nonzero_subnormal_bound_must_not_become_zero_or_known_unbounded():
++    inputs = no_covariance(example())
++    observed_bound(inputs, 0, "gt", 5e-324)
++    result = cells(inputs)[COMPONENTS[0]]
++    assert result["lower"] is None and result["status"] == "unavailable"
++    assert result["bound_state"] == {"lower": "numeric_range_failure", "upper": "unbounded"}
++    assert result["unavailable_reason"] == ["numeric_range_failure"]
++
++
++def test_huge_profile_retains_representable_bounded_index():
++    inputs = example()
++    inputs["model_kind"] = "known_joint_normal_source_means"
++    inputs["arms"][PRIMITIVE_ORDER[0]]["value"] = 1e308
++    result = cells(inputs)
++    assert result[COMPONENTS[10]]["value"] is None
++    assert result[COMPONENTS[11]]["value"] == 1
++
++
++@pytest.mark.parametrize("value", [True, False, float("inf"), float("nan"), "12", 10**1000])
++def test_malformed_numbers_rejected(value):
++    inputs = example()
++    inputs["arms"][PRIMITIVE_ORDER[0]]["value"] = value
++    with pytest.raises(ExperimentalContractError, match="finite_number_required"):
++        cells(inputs)
++
++
++@pytest.mark.parametrize("mutation", [
++    lambda z: z.update(extra=1),
++    lambda z: z["arms"][PRIMITIVE_ORDER[0]].update(count=3),
++    lambda z: z["relationships"].update(endpoint_correspondence="same"),
++    lambda z: z["arms"][PRIMITIVE_ORDER[0]]["meaning_statuses"].update(extra="known"),
++    lambda z: z["covariance"].update(origin="derived"),
++])
++def test_closed_contract_prevents_numerical_and_statistical_shortcuts(mutation):
++    inputs = example()
++    mutation(inputs)
++    with pytest.raises(ExperimentalContractError, match="closed_fields_required"):
++        cells(inputs)
++
++
++@pytest.mark.parametrize("mutation,code", [
++    (lambda z: z.update(version="future"), "unsupported_input_version"),
++    (lambda z: z["arms"][PRIMITIVE_ORDER[0]].update(approximate=0), "boolean_required"),
++    (lambda z: z["arms"][PRIMITIVE_ORDER[0]].update(unit="U/mg"), "unsupported_value"),
++    (lambda z: z["arms"][PRIMITIVE_ORDER[0]].update(endpoint_id=None), "meaning_identity_mismatch"),
++    (lambda z: z["arms"][PRIMITIVE_ORDER[0]].update(physical_observation_id=True), "nonempty_identity_required"),
++    (lambda z: z["arms"][PRIMITIVE_ORDER[0]].update(threshold=0), "point_contract_mismatch"),
++    (lambda z: z["relationships"]["condition1_target"].update(status="unknown"), "meaning_identity_mismatch"),
++    (lambda z: z.update(model_kind="independent_normal_groups"), "unsupported_value"),
++])
++def test_semantic_contract_failures_are_actionable(mutation, code):
++    inputs = example()
++    mutation(inputs)
++    with pytest.raises(ExperimentalContractError, match=code):
++        cells(inputs)

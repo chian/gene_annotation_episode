@@ -1,0 +1,84 @@
+...........................................F............................ [ 26%]
+........................................................................ [ 53%]
+........................................................................ [ 80%]
+......................................................                   [100%]
+=================================== FAILURES ===================================
+_ test_summary_operation_in_ordinary_child_admits_exact_form_once_without_extra_observation _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1782/test_summary_operation_in_ordi0')
+
+    def test_summary_operation_in_ordinary_child_admits_exact_form_once_without_extra_observation(tmp_path):
+        store,context,args=fixture(tmp_path/'state',paired=True)
+        received=[]
+        try:
+            commission={'selection':{'kind':'episode_child','role':'literature','assignment':plain(context.assignment),
+                'goal':'Measure source perturbation precision under actual retained summary relationships',
+                'scope':plain(context.scope),'purpose':'Return requested summary cells with uncertainty meanings',
+                'schema_json':json.dumps(FORM),'initial_report_json':'{}'},'report_update':{}}
+            action={'selection':{'kind':'tool','tool':'literature.perturbation.populate','arguments':args},'report_update':{}}
+            def receive(inputs):
+                form,=inputs['child_reports'];received.append(form)
+                assert [r['component'] for r in form['measurements']]==REQUESTED
+                assert form['measurements'][2]['value']==pytest.approx(1/3)
+                row=store.get(args['source_ref']);start=TEXT.index(b'Constructed')
+                commit={name:[] for name in store.reasoning_schema()['required']}
+                commit['source_subjects']=[{'alias':'source_subject','reference_type':'assay','source_ref':row['id'],
+                    'label':'Constructed','anchor':{'source_ref':row['id'],'artifact_ref':row['artifact_ref'],
+                        'start':start,'end':start+11,'quote':'Constructed'}}]
+                return {'selection':{'kind':'reason','commit':commit},'report_update':{}}
+            scorer=ScientificFindingProgress(FindingProgressPolicy(1))
+            result=asyncio.run(run_workflow(store,ToolRegistry(store),provider=ScriptedProvider([commission,action,receive]),
+                run_dir=tmp_path/'run',controller_factory=lambda path,initial:FixtureController(str(path),initial,2 if len(path)==1 else 1),
+                project_credit=scorer,initial_known_record_refs=list(context.received_record_refs),
+                episode_binding_factories=(partial(LiteratureEpisodes,rate_population=True),),binding_definitions={'credit':scorer.as_record()}))
+            assert len(received)==1 and result['credit']==0
+            assert store.db.execute('select count(*) from runtime_observations').fetchone()[0]==3
+            assert store.db.execute('select count(*) from literature_perturbation_operations').fetchone()[0]==1
+            assert store.db.execute('select count(*) from literature_perturbation_summary_received').fetchone()[0]==1
+            assert not store.list('observation') and not store.list('assessment')
+            manifest=json.loads((tmp_path/'run'/'run.json').read_text())
+            run=manifest['run_id']
+            parent_row,=store.db.execute('select * from runtime_episodes where json_array_length(path)=1').fetchall()
+            request=json.loads(parent_row['request'])
+            parent=BindingContext(run,parent_row['episode_id'],'annotation',
+                tuple(tuple(p) for p in json.loads(parent_row['path'])),plain(context.scope),
+                request['message'].get('episode_assignment',{}),request,
+                tuple(EpisodeReceipts(store,run).known(parent_row['episode_id'])))
+            source_artifacts={store.get(ref)['artifact_ref'] for ref in context.received_record_refs}
+            store.close()
+            def forbidden(*a,**kw):raise AssertionError('read-only reconstruction must not parse, calculate, model or mutate')
+            reopened=Store.__new__(Store);reopened.path=(tmp_path/'state').resolve();reopened._savepoint=0
+            reopened.db=sqlite3.connect((reopened.path/'state.sqlite3').as_uri()+'?mode=ro',uri=True,isolation_level=None)
+            reopened.db.row_factory=sqlite3.Row;reopened.db.execute('pragma query_only=ON')
+            reopened.db.create_function('library_scope_record',2,reopened._scope_filter_record)
+            old_get=reopened.get_artifact
+            def saved_only(ref):
+                assert ref not in source_artifacts,'no original source bytes on first read-only reconstruction'
+                return old_get(ref)
+            from unittest.mock import patch
+            with patch.object(reopened,'get_artifact',saved_only), patch.object(reopened,'put',forbidden), patch.object(reopened,'artifact',forbidden), patch.object(reopened,'transaction',forbidden), patch('gene_annotation_episode.literature_perturbation_storage.read_perturbation_inputs',forbidden), patch('gene_annotation_episode.literature_perturbation_storage.populate_source_summary_restoration',forbidden), patch('gene_annotation_episode.providers.ModelConnection',forbidden):
+                from gene_annotation_episode.episode_composition import compose_episode_bindings
+                from gene_annotation_episode.episode_journal import Journal
+                services=WorkflowServices(SimpleNamespace(store=reopened,run_id=run))
+>               composition=compose_episode_bindings(services,store=reopened,journal=Journal(reopened,run),
+                                                                                     ^^^^^^^^^^^^^^^^^^^^^
+                    execution_backend=None,descriptors=manifest['episode_bindings'],job_episodes=None,
+                    resource_estimator=None,role_credit_bindings={})
+
+tests/test_literature_perturbation_summary_integration.py:196: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/episode_journal.py:64: in __init__
+    with self.store.transaction():
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+a = (), kw = {}
+
+>   def forbidden(*a,**kw):raise AssertionError('read-only reconstruction must not parse, calculate, model or mutate')
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: read-only reconstruction must not parse, calculate, model or mutate
+
+tests/test_literature_perturbation_summary_integration.py:182: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_literature_perturbation_summary_integration.py::test_summary_operation_in_ordinary_child_admits_exact_form_once_without_extra_observation
+1 failed, 269 passed, 11 deselected in 33.21s

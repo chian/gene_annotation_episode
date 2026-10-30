@@ -1,0 +1,16 @@
+.......................................................................F [ 90%]
+
+=================================== FAILURES ===================================
+_ test_genome_alignment_native_fact_presentation_preserves_selected_measurements _
+
+    def test_genome_alignment_native_fact_presentation_preserves_selected_measurements():
+        from gene_annotation_episode.bvbrc_genome_alignment_bundle_adapter import consume_bundle
+        from gene_annotation_episode.bvbrc_genome_alignment_bundle_contracts import encode_reference as genome_ref
+>       from test_bvbrc_genome_alignment_bundle_resolution import arguments, measurement
+E       ModuleNotFoundError: No module named 'test_bvbrc_genome_alignment_bundle_resolution'
+
+source_snapshot/tests/test_alignment_result_presentation.py:110: ModuleNotFoundError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_alignment_result_presentation.py::test_genome_alignment_native_fact_presentation_preserves_selected_measurements
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 71 passed in 2.03s

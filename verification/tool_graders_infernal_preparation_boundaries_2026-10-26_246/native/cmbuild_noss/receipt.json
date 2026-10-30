@@ -1,0 +1,91 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmbuild",
+    "--noss",
+    "built.cm",
+    "seed.sto"
+  ],
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmbuild_noss",
+  "binary_sha256": "6e383a9e39ee515546bda2799a00e256d30839c46fd5aace656e985c6d16fb89",
+  "inputs": [
+    {
+      "source": "synthetic_format_fixture",
+      "path": "seed.sto",
+      "sha256": "eff90adc3595e1d55b8fe9a16da83f87ca03a595bca5d43a6850948089c04bcd",
+      "size_bytes": 149
+    }
+  ],
+  "started_at": "2026-10-26T04:39:47.743446+00:00",
+  "returncode": 0,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "success",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "ended": {
+        "at": "2026-10-26T04:39:48.384777+00:00",
+        "monotonic_ns": 803150082108912,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 0.436562554,
+    "native_returncode": 0,
+    "observed_scratch_bytes": 40960
+  },
+  "finished_at": "2026-10-26T04:39:48.578067+00:00",
+  "files": [
+    {
+      "path": "built.cm",
+      "size_bytes": 9674,
+      "sha256": "f88d70d9b14a646e0e77d932e121d3ed75b0d1eab1ec35f00fe748b4708af416"
+    },
+    {
+      "path": "request.json",
+      "size_bytes": 774,
+      "sha256": "b65659112f154c69c8c56c5253a50ed9746443dda4b856fb8e805a598a6ea719"
+    },
+    {
+      "path": "seed.sto",
+      "size_bytes": 149,
+      "sha256": "eff90adc3595e1d55b8fe9a16da83f87ca03a595bca5d43a6850948089c04bcd"
+    },
+    {
+      "path": "stderr.txt",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "stdout.txt",
+      "size_bytes": 1046,
+      "sha256": "9061a50f09e6fb1a2610850b5845452a53d8a64809748c7e1cf5aa77f00fa2b3"
+    }
+  ]
+}

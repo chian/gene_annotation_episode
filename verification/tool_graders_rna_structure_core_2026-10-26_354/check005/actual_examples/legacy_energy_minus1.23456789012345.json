@@ -1,0 +1,677 @@
+{
+  "native": {
+    "expected_mode": "mfe_prediction",
+    "format": "biomni_rna_structure_text_v0",
+    "issues": [
+      {
+        "artifact_role": null,
+        "code": "native_metadata_not_retained",
+        "field": "/model",
+        "index": null,
+        "record_key": "legacy-case",
+        "stage": "parse"
+      }
+    ],
+    "raw_byte_count": 89,
+    "raw_sha256": "ad27761d5186c6abe40f0f0d3749ed6fa27d29b9c4bdd7137af9bd75f60a7273",
+    "record": {
+      "analysis_sequence": {
+        "alphabet": "ACGU",
+        "ambiguous_indices": [],
+        "analysis_sequence": "GGGAAACCC",
+        "case_operation": "exact",
+        "length_nt": 9,
+        "original_sequence": "GGGAAACCC",
+        "original_to_analysis_indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "symbol_counts": {
+          "A": 3,
+          "B": 0,
+          "C": 3,
+          "D": 0,
+          "G": 3,
+          "H": 0,
+          "K": 0,
+          "M": 0,
+          "N": 0,
+          "R": 0,
+          "S": 0,
+          "U": 0,
+          "V": 0,
+          "W": 0,
+          "Y": 0
+        }
+      },
+      "input": null,
+      "issues": [
+        {
+          "artifact_role": null,
+          "code": "native_metadata_not_retained",
+          "field": "/model",
+          "index": null,
+          "record_key": "legacy-case",
+          "stage": "parse"
+        }
+      ],
+      "mode": "mfe_prediction",
+      "model": null,
+      "native_evaluation": {
+        "engine": null,
+        "engine_version": null,
+        "model_key": null,
+        "numeric_text": null,
+        "reason": "not_requested",
+        "state": "not_requested",
+        "structure_key": null,
+        "unit": "kcal/mol",
+        "value": null
+      },
+      "native_mfe": {
+        "engine": "ViennaRNA",
+        "engine_version": null,
+        "model_key": null,
+        "numeric_text": "-1.23456789012345",
+        "reason": null,
+        "state": "present",
+        "structure_key": "legacy-case:structure",
+        "unit": "kcal/mol",
+        "value": -1.23456789012345
+      },
+      "native_uncertainty": {
+        "energy_interval": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "energy_standard_error": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "ensemble_diversity": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "ensemble_free_energy_kcal_mol": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "mfe_frequency": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        },
+        "pair_probabilities": {
+          "reason": "selected_algorithm_does_not_produce_uncertainty",
+          "state": "not_produced",
+          "value": null
+        }
+      },
+      "operation": "predict_rna_secondary_structure",
+      "record_key": "legacy-case",
+      "schema": "rna_native_record_v1",
+      "status": "partial",
+      "structure": {
+        "dot_bracket": "(((...)))",
+        "energy_conversion": {
+          "index_map": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "kind": "identity"
+        },
+        "energy_dot_bracket": "(((...)))",
+        "origin": "native_prediction",
+        "source_ref": null,
+        "structure_id": null,
+        "structure_key": "legacy-case:structure"
+      },
+      "topology": {
+        "coordinate_system": "zero_based_sequence_indices_and_half_open_intervals",
+        "dot_bracket": "(((...)))",
+        "issues": [],
+        "length_nt": 9,
+        "pairs": [
+          {
+            "child_pair_keys": [
+              "pair:1:7"
+            ],
+            "closing_token": ")",
+            "i": 0,
+            "j": 8,
+            "opening_token": "(",
+            "pair_key": "pair:0:8",
+            "parent_pair_key": null,
+            "stem_key": "stem:0:8"
+          },
+          {
+            "child_pair_keys": [
+              "pair:2:6"
+            ],
+            "closing_token": ")",
+            "i": 1,
+            "j": 7,
+            "opening_token": "(",
+            "pair_key": "pair:1:7",
+            "parent_pair_key": "pair:0:8",
+            "stem_key": "stem:0:8"
+          },
+          {
+            "child_pair_keys": [],
+            "closing_token": ")",
+            "i": 2,
+            "j": 6,
+            "opening_token": "(",
+            "pair_key": "pair:2:6",
+            "parent_pair_key": "pair:1:7",
+            "stem_key": "stem:0:8"
+          }
+        ],
+        "positions": [
+          {
+            "bracket": "(",
+            "index": 0,
+            "input_index": 0,
+            "pair_key": "pair:0:8",
+            "partner_index": 8,
+            "stem_key": "stem:0:8",
+            "unpaired_region_key": null
+          },
+          {
+            "bracket": "(",
+            "index": 1,
+            "input_index": 1,
+            "pair_key": "pair:1:7",
+            "partner_index": 7,
+            "stem_key": "stem:0:8",
+            "unpaired_region_key": null
+          },
+          {
+            "bracket": "(",
+            "index": 2,
+            "input_index": 2,
+            "pair_key": "pair:2:6",
+            "partner_index": 6,
+            "stem_key": "stem:0:8",
+            "unpaired_region_key": null
+          },
+          {
+            "bracket": ".",
+            "index": 3,
+            "input_index": 3,
+            "pair_key": null,
+            "partner_index": null,
+            "stem_key": null,
+            "unpaired_region_key": "region:2:6"
+          },
+          {
+            "bracket": ".",
+            "index": 4,
+            "input_index": 4,
+            "pair_key": null,
+            "partner_index": null,
+            "stem_key": null,
+            "unpaired_region_key": "region:2:6"
+          },
+          {
+            "bracket": ".",
+            "index": 5,
+            "input_index": 5,
+            "pair_key": null,
+            "partner_index": null,
+            "stem_key": null,
+            "unpaired_region_key": "region:2:6"
+          },
+          {
+            "bracket": ")",
+            "index": 6,
+            "input_index": 6,
+            "pair_key": "pair:2:6",
+            "partner_index": 2,
+            "stem_key": "stem:0:8",
+            "unpaired_region_key": null
+          },
+          {
+            "bracket": ")",
+            "index": 7,
+            "input_index": 7,
+            "pair_key": "pair:1:7",
+            "partner_index": 1,
+            "stem_key": "stem:0:8",
+            "unpaired_region_key": null
+          },
+          {
+            "bracket": ")",
+            "index": 8,
+            "input_index": 8,
+            "pair_key": "pair:0:8",
+            "partner_index": 0,
+            "stem_key": "stem:0:8",
+            "unpaired_region_key": null
+          }
+        ],
+        "regions": [
+          {
+            "closing_pair_key": "pair:2:6",
+            "five_prime_unpaired_indices": null,
+            "immediate_branch_pair_keys": [],
+            "kind": "hairpin",
+            "region_key": "region:2:6",
+            "three_prime_unpaired_indices": null,
+            "unpaired_indices": [
+              3,
+              4,
+              5
+            ],
+            "unpaired_intervals": [
+              [
+                3,
+                6
+              ]
+            ]
+          },
+          {
+            "closing_pair_key": null,
+            "five_prime_unpaired_indices": null,
+            "immediate_branch_pair_keys": [
+              "pair:0:8"
+            ],
+            "kind": "exterior",
+            "region_key": "region:exterior",
+            "three_prime_unpaired_indices": null,
+            "unpaired_indices": [],
+            "unpaired_intervals": []
+          }
+        ],
+        "schema": "rna_topology_v1",
+        "status": "valid",
+        "stems": [
+          {
+            "inner_pair": [
+              2,
+              6
+            ],
+            "outer_pair": [
+              0,
+              8
+            ],
+            "pair_keys": [
+              "pair:0:8",
+              "pair:1:7",
+              "pair:2:6"
+            ],
+            "stem_key": "stem:0:8"
+          }
+        ]
+      }
+    },
+    "schema": "rna_native_parse_v1",
+    "status": "valid"
+  },
+  "raw_utf8": "Sequence: GGGAAACCC\nStructure: (((...)))\nMinimum Free Energy: -1.23456789012345 kcal/mol\n",
+  "sheet": {
+    "analysis_sequence": {
+      "alphabet": "ACGU",
+      "ambiguous_indices": [],
+      "analysis_sequence": "GGGAAACCC",
+      "case_operation": "exact",
+      "length_nt": 9,
+      "original_sequence": "GGGAAACCC",
+      "original_to_analysis_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "symbol_counts": {
+        "A": 3,
+        "B": 0,
+        "C": 3,
+        "D": 0,
+        "G": 3,
+        "H": 0,
+        "K": 0,
+        "M": 0,
+        "N": 0,
+        "R": 0,
+        "S": 0,
+        "U": 0,
+        "V": 0,
+        "W": 0,
+        "Y": 0
+      }
+    },
+    "coordinate_system": "zero_based_sequence_indices_and_half_open_intervals",
+    "issues": [
+      {
+        "artifact_role": null,
+        "code": "native_metadata_not_retained",
+        "field": "/model",
+        "index": null,
+        "record_key": "legacy-case",
+        "stage": "parse"
+      }
+    ],
+    "legacy_quantities": null,
+    "mode": "mfe_prediction",
+    "model": null,
+    "native_evaluation": {
+      "engine": null,
+      "engine_version": null,
+      "model_key": null,
+      "numeric_text": null,
+      "reason": "not_requested",
+      "state": "not_requested",
+      "structure_key": null,
+      "unit": "kcal/mol",
+      "value": null
+    },
+    "native_input": {
+      "byte_count": 89,
+      "format": "biomni_rna_structure_text_v0",
+      "sha256": "ad27761d5186c6abe40f0f0d3749ed6fa27d29b9c4bdd7137af9bd75f60a7273"
+    },
+    "native_mfe": {
+      "engine": "ViennaRNA",
+      "engine_version": null,
+      "model_key": null,
+      "numeric_text": "-1.23456789012345",
+      "reason": null,
+      "state": "present",
+      "structure_key": "legacy-case:structure",
+      "unit": "kcal/mol",
+      "value": -1.23456789012345
+    },
+    "native_uncertainty": {
+      "energy_interval": {
+        "reason": "selected_algorithm_does_not_produce_uncertainty",
+        "state": "not_produced",
+        "value": null
+      },
+      "energy_standard_error": {
+        "reason": "selected_algorithm_does_not_produce_uncertainty",
+        "state": "not_produced",
+        "value": null
+      },
+      "ensemble_diversity": {
+        "reason": "selected_algorithm_does_not_produce_uncertainty",
+        "state": "not_produced",
+        "value": null
+      },
+      "ensemble_free_energy_kcal_mol": {
+        "reason": "selected_algorithm_does_not_produce_uncertainty",
+        "state": "not_produced",
+        "value": null
+      },
+      "mfe_frequency": {
+        "reason": "selected_algorithm_does_not_produce_uncertainty",
+        "state": "not_produced",
+        "value": null
+      },
+      "pair_probabilities": {
+        "reason": "selected_algorithm_does_not_produce_uncertainty",
+        "state": "not_produced",
+        "value": null
+      }
+    },
+    "operation": "predict_rna_secondary_structure",
+    "original_input": {
+      "normalization": "exact",
+      "record_key": "legacy-case",
+      "schema": "rna_prediction_input_v1",
+      "sequence": "GGGAAACCC",
+      "sequence_id": null,
+      "subject_binding": null
+    },
+    "record_key": "legacy-case",
+    "schema": "rna_mfe_prediction_sheet_v1",
+    "sequence_pairs": [
+      {
+        "ordered_pair": "GC",
+        "pair_key": "pair:0:8",
+        "symbol_i": "G",
+        "symbol_j": "C",
+        "unambiguous": true
+      },
+      {
+        "ordered_pair": "GC",
+        "pair_key": "pair:1:7",
+        "symbol_i": "G",
+        "symbol_j": "C",
+        "unambiguous": true
+      },
+      {
+        "ordered_pair": "GC",
+        "pair_key": "pair:2:6",
+        "symbol_i": "G",
+        "symbol_j": "C",
+        "unambiguous": true
+      }
+    ],
+    "status": "partial",
+    "structure": {
+      "dot_bracket": "(((...)))",
+      "energy_conversion": {
+        "index_map": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "kind": "identity"
+      },
+      "energy_dot_bracket": "(((...)))",
+      "origin": "native_prediction",
+      "source_ref": null,
+      "structure_id": null,
+      "structure_key": "legacy-case:structure"
+    },
+    "subject_binding": null,
+    "topology": {
+      "coordinate_system": "zero_based_sequence_indices_and_half_open_intervals",
+      "dot_bracket": "(((...)))",
+      "issues": [],
+      "length_nt": 9,
+      "pairs": [
+        {
+          "child_pair_keys": [
+            "pair:1:7"
+          ],
+          "closing_token": ")",
+          "i": 0,
+          "j": 8,
+          "opening_token": "(",
+          "pair_key": "pair:0:8",
+          "parent_pair_key": null,
+          "stem_key": "stem:0:8"
+        },
+        {
+          "child_pair_keys": [
+            "pair:2:6"
+          ],
+          "closing_token": ")",
+          "i": 1,
+          "j": 7,
+          "opening_token": "(",
+          "pair_key": "pair:1:7",
+          "parent_pair_key": "pair:0:8",
+          "stem_key": "stem:0:8"
+        },
+        {
+          "child_pair_keys": [],
+          "closing_token": ")",
+          "i": 2,
+          "j": 6,
+          "opening_token": "(",
+          "pair_key": "pair:2:6",
+          "parent_pair_key": "pair:1:7",
+          "stem_key": "stem:0:8"
+        }
+      ],
+      "positions": [
+        {
+          "bracket": "(",
+          "index": 0,
+          "input_index": 0,
+          "pair_key": "pair:0:8",
+          "partner_index": 8,
+          "stem_key": "stem:0:8",
+          "unpaired_region_key": null
+        },
+        {
+          "bracket": "(",
+          "index": 1,
+          "input_index": 1,
+          "pair_key": "pair:1:7",
+          "partner_index": 7,
+          "stem_key": "stem:0:8",
+          "unpaired_region_key": null
+        },
+        {
+          "bracket": "(",
+          "index": 2,
+          "input_index": 2,
+          "pair_key": "pair:2:6",
+          "partner_index": 6,
+          "stem_key": "stem:0:8",
+          "unpaired_region_key": null
+        },
+        {
+          "bracket": ".",
+          "index": 3,
+          "input_index": 3,
+          "pair_key": null,
+          "partner_index": null,
+          "stem_key": null,
+          "unpaired_region_key": "region:2:6"
+        },
+        {
+          "bracket": ".",
+          "index": 4,
+          "input_index": 4,
+          "pair_key": null,
+          "partner_index": null,
+          "stem_key": null,
+          "unpaired_region_key": "region:2:6"
+        },
+        {
+          "bracket": ".",
+          "index": 5,
+          "input_index": 5,
+          "pair_key": null,
+          "partner_index": null,
+          "stem_key": null,
+          "unpaired_region_key": "region:2:6"
+        },
+        {
+          "bracket": ")",
+          "index": 6,
+          "input_index": 6,
+          "pair_key": "pair:2:6",
+          "partner_index": 2,
+          "stem_key": "stem:0:8",
+          "unpaired_region_key": null
+        },
+        {
+          "bracket": ")",
+          "index": 7,
+          "input_index": 7,
+          "pair_key": "pair:1:7",
+          "partner_index": 1,
+          "stem_key": "stem:0:8",
+          "unpaired_region_key": null
+        },
+        {
+          "bracket": ")",
+          "index": 8,
+          "input_index": 8,
+          "pair_key": "pair:0:8",
+          "partner_index": 0,
+          "stem_key": "stem:0:8",
+          "unpaired_region_key": null
+        }
+      ],
+      "regions": [
+        {
+          "closing_pair_key": "pair:2:6",
+          "five_prime_unpaired_indices": null,
+          "immediate_branch_pair_keys": [],
+          "kind": "hairpin",
+          "region_key": "region:2:6",
+          "three_prime_unpaired_indices": null,
+          "unpaired_indices": [
+            3,
+            4,
+            5
+          ],
+          "unpaired_intervals": [
+            [
+              3,
+              6
+            ]
+          ]
+        },
+        {
+          "closing_pair_key": null,
+          "five_prime_unpaired_indices": null,
+          "immediate_branch_pair_keys": [
+            "pair:0:8"
+          ],
+          "kind": "exterior",
+          "region_key": "region:exterior",
+          "three_prime_unpaired_indices": null,
+          "unpaired_indices": [],
+          "unpaired_intervals": []
+        }
+      ],
+      "schema": "rna_topology_v1",
+      "status": "valid",
+      "stems": [
+        {
+          "inner_pair": [
+            2,
+            6
+          ],
+          "outer_pair": [
+            0,
+            8
+          ],
+          "pair_keys": [
+            "pair:0:8",
+            "pair:1:7",
+            "pair:2:6"
+          ],
+          "stem_key": "stem:0:8"
+        }
+      ]
+    }
+  }
+}

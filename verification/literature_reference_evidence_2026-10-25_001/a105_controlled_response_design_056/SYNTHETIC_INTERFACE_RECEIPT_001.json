@@ -1,0 +1,310 @@
+{
+  "scope": "synthetic code-only proposal probes; no Store, episode, model or source paper",
+  "source_sha256": "03d62b7f3af9a128617591cc5353a9b9410e213d0392be33ce0a783e6255e2ff",
+  "native_helpers": {
+    "protein_condition1": {
+      "number": {
+        "selector": {
+          "witness": {
+            "source_ref": "synthetic_source_056",
+            "representation": "original",
+            "start": 235,
+            "end": 271,
+            "quote": "Protein condition 1: 12 nmol/min/mg.",
+            "artifact_ref": "artifact_03d62b7f3af9a128617591cc5353a9b9410e213d0392be33ce0a783e6255e2ff"
+          },
+          "number_start": 21,
+          "number_end": 23
+        },
+        "raw_number": "12",
+        "value": 12.0,
+        "relation": "point",
+        "approximate": false
+      },
+      "unit": {
+        "witness": {
+          "source_ref": "synthetic_source_056",
+          "representation": "original",
+          "start": 259,
+          "end": 270,
+          "quote": "nmol/min/mg",
+          "artifact_ref": "artifact_03d62b7f3af9a128617591cc5353a9b9410e213d0392be33ce0a783e6255e2ff"
+        },
+        "raw_unit": "nmol/min/mg",
+        "canonical_unit": "umol/min/mg",
+        "multiplier": 0.001,
+        "source_defined_unit": null,
+        "unavailable_reason": null
+      },
+      "canonical_value": 0.012
+    },
+    "empty_condition1": {
+      "number": {
+        "selector": {
+          "witness": {
+            "source_ref": "synthetic_source_056",
+            "representation": "original",
+            "start": 272,
+            "end": 305,
+            "quote": "Empty condition 1: 2 nmol/min/mg.",
+            "artifact_ref": "artifact_03d62b7f3af9a128617591cc5353a9b9410e213d0392be33ce0a783e6255e2ff"
+          },
+          "number_start": 19,
+          "number_end": 20
+        },
+        "raw_number": "2",
+        "value": 2.0,
+        "relation": "point",
+        "approximate": false
+      },
+      "unit": {
+        "witness": {
+          "source_ref": "synthetic_source_056",
+          "representation": "original",
+          "start": 293,
+          "end": 304,
+          "quote": "nmol/min/mg",
+          "artifact_ref": "artifact_03d62b7f3af9a128617591cc5353a9b9410e213d0392be33ce0a783e6255e2ff"
+        },
+        "raw_unit": "nmol/min/mg",
+        "canonical_unit": "umol/min/mg",
+        "multiplier": 0.001,
+        "source_defined_unit": null,
+        "unavailable_reason": null
+      },
+      "canonical_value": 0.002
+    },
+    "protein_condition0": {
+      "number": {
+        "selector": {
+          "witness": {
+            "source_ref": "synthetic_source_056",
+            "representation": "original",
+            "start": 306,
+            "end": 341,
+            "quote": "Protein condition 0: 5 nmol/min/mg.",
+            "artifact_ref": "artifact_03d62b7f3af9a128617591cc5353a9b9410e213d0392be33ce0a783e6255e2ff"
+          },
+          "number_start": 21,
+          "number_end": 22
+        },
+        "raw_number": "5",
+        "value": 5.0,
+        "relation": "point",
+        "approximate": false
+      },
+      "unit": {
+        "witness": {
+          "source_ref": "synthetic_source_056",
+          "representation": "original",
+          "start": 329,
+          "end": 340,
+          "quote": "nmol/min/mg",
+          "artifact_ref": "artifact_03d62b7f3af9a128617591cc5353a9b9410e213d0392be33ce0a783e6255e2ff"
+        },
+        "raw_unit": "nmol/min/mg",
+        "canonical_unit": "umol/min/mg",
+        "multiplier": 0.001,
+        "source_defined_unit": null,
+        "unavailable_reason": null
+      },
+      "canonical_value": 0.005
+    },
+    "empty_condition0": {
+      "number": {
+        "selector": {
+          "witness": {
+            "source_ref": "synthetic_source_056",
+            "representation": "original",
+            "start": 342,
+            "end": 375,
+            "quote": "Empty condition 0: 1 nmol/min/mg.",
+            "artifact_ref": "artifact_03d62b7f3af9a128617591cc5353a9b9410e213d0392be33ce0a783e6255e2ff"
+          },
+          "number_start": 19,
+          "number_end": 20
+        },
+        "raw_number": "1",
+        "value": 1.0,
+        "relation": "point",
+        "approximate": false
+      },
+      "unit": {
+        "witness": {
+          "source_ref": "synthetic_source_056",
+          "representation": "original",
+          "start": 363,
+          "end": 374,
+          "quote": "nmol/min/mg",
+          "artifact_ref": "artifact_03d62b7f3af9a128617591cc5353a9b9410e213d0392be33ce0a783e6255e2ff"
+        },
+        "raw_unit": "nmol/min/mg",
+        "canonical_unit": "umol/min/mg",
+        "multiplier": 0.001,
+        "source_defined_unit": null,
+        "unavailable_reason": null
+      },
+      "canonical_value": 0.001
+    }
+  },
+  "existing_four_arm_failure": {
+    "code": "closed_fields_required",
+    "field": "arms"
+  },
+  "existing_two_arm_results": [
+    {
+      "condition": "condition 1",
+      "difference": {
+        "value": 0.01,
+        "unit": "umol/min/mg",
+        "status": "populated",
+        "formula": "reference_rate-test_rate",
+        "input_rows": [
+          {
+            "source_ref": "synthetic_source_056",
+            "artifact_ref": "artifact_03d62b7f3af9a128617591cc5353a9b9410e213d0392be33ce0a783e6255e2ff",
+            "representation": "original",
+            "start": 256,
+            "end": 258
+          },
+          {
+            "source_ref": "synthetic_source_056",
+            "artifact_ref": "artifact_03d62b7f3af9a128617591cc5353a9b9410e213d0392be33ce0a783e6255e2ff",
+            "representation": "original",
+            "start": 291,
+            "end": 292
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "difference_se": {
+        "value": null,
+        "unit": "umol/min/mg",
+        "status": "unavailable",
+        "formula": "sqrt(reference_mean_se^2+test_mean_se^2)",
+        "input_rows": [
+          {
+            "source_ref": "synthetic_source_056",
+            "artifact_ref": "artifact_03d62b7f3af9a128617591cc5353a9b9410e213d0392be33ce0a783e6255e2ff",
+            "representation": "original",
+            "start": 256,
+            "end": 258
+          },
+          {
+            "source_ref": "synthetic_source_056",
+            "artifact_ref": "artifact_03d62b7f3af9a128617591cc5353a9b9410e213d0392be33ce0a783e6255e2ff",
+            "representation": "original",
+            "start": 291,
+            "end": 292
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "dependence_unknown",
+        "conditional_on": [
+          "independent_groups"
+        ],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      }
+    },
+    {
+      "condition": "condition 0",
+      "difference": {
+        "value": 0.004,
+        "unit": "umol/min/mg",
+        "status": "populated",
+        "formula": "reference_rate-test_rate",
+        "input_rows": [
+          {
+            "source_ref": "synthetic_source_056",
+            "artifact_ref": "artifact_03d62b7f3af9a128617591cc5353a9b9410e213d0392be33ce0a783e6255e2ff",
+            "representation": "original",
+            "start": 327,
+            "end": 328
+          },
+          {
+            "source_ref": "synthetic_source_056",
+            "artifact_ref": "artifact_03d62b7f3af9a128617591cc5353a9b9410e213d0392be33ce0a783e6255e2ff",
+            "representation": "original",
+            "start": 361,
+            "end": 362
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": null,
+        "conditional_on": [],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      },
+      "difference_se": {
+        "value": null,
+        "unit": "umol/min/mg",
+        "status": "unavailable",
+        "formula": "sqrt(reference_mean_se^2+test_mean_se^2)",
+        "input_rows": [
+          {
+            "source_ref": "synthetic_source_056",
+            "artifact_ref": "artifact_03d62b7f3af9a128617591cc5353a9b9410e213d0392be33ce0a783e6255e2ff",
+            "representation": "original",
+            "start": 327,
+            "end": 328
+          },
+          {
+            "source_ref": "synthetic_source_056",
+            "artifact_ref": "artifact_03d62b7f3af9a128617591cc5353a9b9410e213d0392be33ce0a783e6255e2ff",
+            "representation": "original",
+            "start": 361,
+            "end": 362
+          }
+        ],
+        "origin": "derived",
+        "unavailable_reason": "dependence_unknown",
+        "conditional_on": [
+          "independent_groups"
+        ],
+        "threshold": null,
+        "bound": "none",
+        "approximate": false
+      }
+    }
+  ],
+  "existing_assay_specific_rate_failure": {
+    "code": "incompatible_primitive_unit",
+    "field": "primitives.q.unit"
+  },
+  "existing_rate_graph_failure": {
+    "code": "unsupported_calibration_unit",
+    "detail": {
+      "field_path": "calibration.unit"
+    }
+  },
+  "proposed_research_arithmetic": {
+    "x": [
+      12.0,
+      2.0,
+      5.0,
+      1.0
+    ],
+    "coefficients": [
+      1,
+      -1,
+      -1,
+      1
+    ],
+    "unit": "nmol/min/mg_paired_reference_input",
+    "effect": 6.0,
+    "variance": 1.7,
+    "variance_with_shared_common_offset": 1.7,
+    "known_normal_model_not_selected": true,
+    "source_profile_score": null
+  },
+  "production_or_test_edits": false,
+  "controller_observations": 0
+}

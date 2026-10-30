@@ -1,0 +1,1 @@
+Primary_002 failed before episode execution because the verbatim PDF text contains a line break between “the” and “same enzyme preparation”. Version003 selects the actual whitespace-preserving matched source span; it does not fabricate a joined quotation or alter paper data. Prior script/log/state retained.

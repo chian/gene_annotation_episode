@@ -1,0 +1,1532 @@
+--- /dev/null
++++ b/gene_annotation_episode/literature_ratio_source_storage.py
+@@ -0,0 +1,816 @@
++"""Native selected printed-signal custody and saved-only typed projection.
++
++This adapter performs no episode decisions, model calls or observation accounting.
++It authenticates host records; source custody does not certify interpreted meaning.
++"""
++from __future__ import annotations
++
++from copy import deepcopy
++import hashlib
++import json
++from pathlib import Path
++from types import SimpleNamespace
++
++from .communication import plain
++from .domain import ContractError, canonical, identity, validate_schema
++from .literature_rate_storage import LiteratureRateRepository
++
++PROVIDER = 'literature.experimental.relative_signal_source'
++VERSION = 'literature_relative_signal_source_record_v3'
++COMPONENTS = ('reported_ratio', 'difference_from_reference', 'log_reported_ratio',
++    'calibrated_amount_ratio', 'amount_adjusted_effect', 'source_profile_log_ratio', 'source_signed_index')
++MEANINGS = ('subject', 'variant', 'reference', 'organism', 'genotype', 'construct_variant',
++    'construct_reference', 'preparation_variant', 'preparation_reference', 'experiment',
++    'condition', 'endpoint', 'normalization')
++FLAGS = ('selected_roster_resolved', 'point_candidate_set_complete', 'known_source_conflict')
++PAYLOAD_FIELDS = {'version', 'input_source_ref', 'input_artifact_ref', 'direct_input_source_refs',
++    'input_source_refs', 'input_view_refs', 'selection', 'extraction', 'sheet',
++    'calculation_artifact_ref', 'experimental_bindings', 'measurement_bindings'}
++
++
++def _sha(value):
++    return hashlib.sha256(value if isinstance(value, bytes) else canonical(value).encode('utf8')).hexdigest()
++
++
++def _walk(value):
++    if isinstance(value, dict):
++        yield value
++        for child in value.values():
++            yield from _walk(child)
++    elif isinstance(value, list):
++        for child in value:
++            yield from _walk(child)
++
++
++def _unique(values):
++    return list(dict.fromkeys(values))
++
++
++def _calculator_implementation_descriptor():
++    #009 binds the actual numerical semantics and their input contract, not
++    # only the thin wrapper. Saved reads never rehash future current modules.
++    return {'version': 'relative_signal_calculator_implementation_v1', 'modules': {
++        name: _sha(Path(__file__).with_name(name).read_bytes()) for name in (
++            'literature_ratio_source_inputs.py', 'literature_ratio_source_calculations.py',
++            'literature_ratio_source_validation.py')}}
++
++
++def ratio_source_population_schema():
++    from .literature_ratio_source_inputs import relative_signal_source_arguments_schema
++    return relative_signal_source_arguments_schema()
++
++
++def ratio_source_cells_schema():
++    return deepcopy(_RETURN_SCHEMA)
++
++
++class LiteratureRatioSourceRepository(LiteratureRateRepository):
++    provider = PROVIDER
++    record_version = VERSION
++    components = COMPONENTS
++    operations_table = 'literature_ratio_source_operations'
++    received_table = 'literature_ratio_source_received'
++    binding_fields = tuple(name + '_ref' for name in MEANINGS)
++
++    def __init__(self, store, run_id, *, evidence_origin='reported_source'):
++        if type(run_id) is not str or not run_id:
++            raise ValueError('explicit_literature_run_required')
++        if evidence_origin not in ('reported_source', 'synthetic_fixture'):
++            raise ContractError('relative_signal_evidence_origin_invalid')
++        self.store, self.run_id, self.evidence_origin = store, run_id, evidence_origin
++        # Existing saved state, including mode=ro connections, needs no DDL.
++        for table, columns in ((self.operations_table,
++                'run_id TEXT NOT NULL,episode_id TEXT NOT NULL,operation_key TEXT NOT NULL,'
++                'signature TEXT NOT NULL,outcome TEXT NOT NULL'),
++                (self.received_table,
++                'run_id TEXT NOT NULL,episode_id TEXT NOT NULL,operation_key TEXT NOT NULL,cells TEXT NOT NULL')):
++            if not self._has_table(table):
++                if store.db.execute('PRAGMA query_only').fetchone()[0]:
++                    raise ContractError('relative_signal_saved_state_unavailable')
++                # Opening a fresh writable repository is the explicit install path.
++                try:
++                    store.db.execute(f'CREATE TABLE {table}({columns},PRIMARY KEY(run_id,episode_id,operation_key))')
++                except Exception as error:
++                    if 'readonly' in str(error).lower():
++                        raise ContractError('relative_signal_saved_state_unavailable') from error
++                    raise
++
++    def _has_table(self, name):
++        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (name,)).fetchone() is not None
++
++    def _record(self, reference, kind=None):
++        row = self.store.get(reference)
++        if kind and row['record_type'] != kind:
++            raise ContractError('relative_signal_record_type_mismatch')
++        body = {key: value for key, value in row.items() if key not in ('id', 'record_type', 'origin')}
++        if identity(row['record_type'], {'origin': row['origin'], 'record': body}) != reference:
++            raise ContractError('relative_signal_record_identity_mismatch')
++        return row
++
++    def _artifact_metadata(self, reference):
++        row = self.store.get(reference)
++        if (set(row) != {'id', 'record_type', 'sha256', 'media_type', 'size'}
++                or row['record_type'] != 'artifact' or row['id'] != reference
++                or type(row['sha256']) is not str or len(row['sha256']) != 64
++                or any(ch not in '0123456789abcdef' for ch in row['sha256'])
++                or reference != 'artifact_' + row['sha256']
++                or type(row['size']) is not int or row['size'] < 0
++                or type(row['media_type']) is not str):
++            raise ContractError('relative_signal_artifact_identity_mismatch')
++        return row
++
++    def _bytes(self, reference):
++        self._artifact_metadata(reference)
++        data = self.store.get_artifact(reference)
++        if type(data) is not bytes or 'artifact_' + _sha(data) != reference:
++            raise ContractError('relative_signal_artifact_identity_mismatch')
++        return data
++
++    def _json(self, reference):
++        data = self._bytes(reference)
++        def pairs(values):
++            result = {}
++            for key, value in values:
++                if key in result:
++                    raise ContractError('relative_signal_duplicate_json_key')
++                result[key] = value
++            return result
++        try:
++            return json.loads(data, object_pairs_hook=pairs,
++                parse_constant=lambda _: (_ for _ in ()).throw(ValueError('nonfinite_json')))
++        except (ValueError, UnicodeError) as error:
++            raise ContractError('relative_signal_saved_json_invalid') from error
++
++    def _source(self, context, reference, *, direct=True):
++        if direct and reference not in context.received_record_refs:
++            raise ContractError('literature_source_not_received')
++        if not self.store.reference_subset([reference], plain(context.scope)):
++            raise ContractError('literature_source_outside_scope')
++        row = self._record(reference, 'source')
++        self._artifact_metadata(row['artifact_ref'])
++        page = context.assignment if context.role == 'literature_page' else context.assignment.get('page')
++        if page and direct:
++            pending, seen = [reference], set()
++            while pending:
++                current = pending.pop()
++                if current in seen:
++                    continue
++                seen.add(current)
++                ancestor = self._source(context, current, direct=False)
++                if current == page['source_ref']:
++                    break
++                pending.extend(ancestor.get('parent_source_refs', ()))
++            else:
++                raise ContractError('literature_reading_outside_assigned_source')
++        return row
++
++    def _view_records(self, view_ref):
++        view = self._record(view_ref, 'image_view')
++        display = self._record(view['source_ref'], 'source')
++        original = self._record(view['input_source_ref'], 'source')
++        self._artifact_metadata(original['artifact_ref'])
++        self._artifact_metadata(display['artifact_ref'])
++        if (view['origin'] != 'tool' or display['origin'] != 'tool'
++                or display['provider'] != 'image.view'
++                or view['representation'] != 'selected_native_image_frame_v1'
++                or original['artifact_ref'] != view['original_artifact_ref']
++                or display['artifact_ref'] != view['image_artifact_ref']
++                or display.get('text_ref') is not None
++                or display.get('parent_source_refs') != [original['id']]
++                or display.get('version') != view['software_version']):
++            raise ContractError('relative_signal_native_view_mismatch')
++        return view, display
++
++    def _dependencies(self, context, selection):
++        # Authorize the complete declared metadata closure before any byte access.
++        nodes = list(_walk(selection))
++        direct = _unique(node['source_ref'] for node in nodes if 'source_ref' in node)
++        views = _unique(node['view_ref'] for node in nodes if 'view_ref' in node)
++        for view_ref in views:
++            if view_ref not in context.received_record_refs:
++                raise ContractError('relative_signal_view_not_received')
++            if not self.store.reference_subset([view_ref], plain(context.scope)):
++                raise ContractError('literature_source_outside_scope')
++            view, _ = self._view_records(view_ref)
++            direct.extend(ref for ref in (view['input_source_ref'], view['source_ref']) if ref not in direct)
++        for reference in direct:
++            self._source(context, reference)
++        closure = list(direct)
++        for reference in closure:
++            row = self._source(context, reference, direct=False)
++            for parent in row.get('parent_source_refs', ()):
++                self._source(context, parent, direct=False)
++                if parent not in closure:
++                    closure.append(parent)
++        return direct, closure, views
++
++    def _own_view_receipt(self, context, view_ref, *, saved_receipt=None):
++        view, display = self._view_records(view_ref)
++        body = {key: value for key, value in view.items()
++                if key not in ('id', 'record_type', 'origin', 'source_ref')}
++        if display.get('request_ref') is None or self._json(display['request_ref']) != body:
++            raise ContractError('relative_signal_native_view_request_mismatch')
++        if not self._has_table('runtime_actions') or not self._has_table('tool_operations'):
++            raise ContractError('relative_signal_own_view_action_required')
++        rows = self.store.db.execute("SELECT decision_index,action,result FROM runtime_actions WHERE run_id=? AND episode_id=? "
++            "AND json_extract(action,'$.kind')='tool' AND json_extract(action,'$.tool')='image.view' "
++            "AND json_extract(result,'$.status')='completed' ORDER BY decision_index",
++            (self.run_id, context.episode_id))
++        for row in rows:
++            action, result = json.loads(row['action']), json.loads(row['result'])
++            if result.get('result', {}).get('view_ref') != view_ref:
++                continue
++            index = row['decision_index']
++            if type(index) is not int or index < 0:
++                raise ContractError('relative_signal_own_view_action_mismatch')
++            key = f'{self.run_id}:{context.episode_id}:{index}'
++            native = self.store.db.execute('SELECT * FROM tool_operations WHERE operation_key=?', (key,)).fetchone()
++            args = action.get('arguments')
++            if (set(action) != {'kind', 'tool', 'arguments'} or not isinstance(args, dict)
++                    or set(args) - {'source_ref', 'frame', 'colour_conversion'}
++                    or args.get('source_ref') != view['input_source_ref']
++                    or args.get('frame', 0) != view['frame']
++                    or args.get('colour_conversion', 'preserve') != view['colour_conversion']
++                    or native is None or native['name'] != 'image.view'
++                    or native['arguments'] != canonical(args) or native['scope'] != canonical(plain(context.scope))
++                    or canonical(result) != native['result']
++                    or result.get('operation_ref') != native['id']
++                    or native['id'] != identity('operation', {'key': key, 'name': 'image.view', 'arguments': args})
++                    or result.get('result') != {'view_ref': view_ref, 'view': view}
++                    or result.get('visual_inputs') != [view]
++                    or result.get('feedback') is not None
++                    or result.get('record_refs') != [view['source_ref'], view_ref]):
++                raise ContractError('relative_signal_own_view_action_mismatch')
++            receipt = {'run_id': self.run_id, 'episode_id': context.episode_id, 'decision_index': index,
++                'operation_ref': native['id'], 'result_sha256': _sha(result), 'view_ref': view_ref}
++            if saved_receipt is None or receipt == saved_receipt:
++                return receipt
++        raise ContractError('relative_signal_own_view_action_required')
++
++    def _binding_specs(self, extraction, source_ref):
++        """Source-qualified interpreted identities; equality of labels proves nothing."""
++        def specification(meaning, role):
++            if meaning['status'] != 'known' or not any(w['authentication'] != 'unavailable' for w in meaning['witnesses']):
++                return None
++            qualification = {'owner_source_ref': source_ref, 'role': role, 'meaning': meaning}
++            if role == 'condition':
++                return ('context', {'context_type': 'assay_condition', 'name': meaning['value'],
++                    'source_ref': source_ref,
++                    'attributes': [], 'related_refs': [identity('reference', {'origin': 'tool',
++                        'record': {'reference_type': 'literature_result', 'source_ref': source_ref,
++                        'accession': identity('ratio_source_meaning', qualification), 'label': meaning['value'],
++                        'sequence_ref': None, 'molecule': None, 'length': None, 'term_refs': [], 'context_refs': []}})]},
++                    {'reference_type': 'literature_result', 'source_ref': source_ref,
++                        'accession': identity('ratio_source_meaning', qualification), 'label': meaning['value'],
++                        'sequence_ref': None, 'molecule': None, 'length': None, 'term_refs': [], 'context_refs': []})
++            return ('reference', {'reference_type': 'literature_result', 'source_ref': source_ref,
++                'accession': identity('ratio_source_meaning', qualification), 'label': meaning['value'],
++                'sequence_ref': None, 'molecule': None, 'length': None, 'term_refs': [], 'context_refs': []})
++        entities = {name + '_ref': specification(extraction['comparison'][name], name) for name in MEANINGS}
++        measurements = []
++        for row in extraction['representations']:
++            measurements.append({'representation_id': row['representation_id'],
++                'input_measurement_ref': specification(row['physical_measurement'], 'physical_measurement'),
++                'reference_measurement_ref': specification(row['reference_measurement'], 'reference_measurement')})
++        return entities, measurements
++
++    def _bindings(self, extraction, source_ref, publish=None):
++        def bind(spec):
++            if spec is None:
++                return None
++            kind, value = spec[:2]
++            if len(spec) == 3:
++                bind(('reference', spec[2]))
++            reference = identity(kind, {'origin': 'tool', 'record': value})
++            if publish:
++                return publish(kind, value)
++            actual = self._record(reference, kind)
++            if actual['origin'] != 'tool' or {k: v for k, v in actual.items()
++                    if k not in ('id', 'record_type', 'origin')} != value:
++                raise ContractError('relative_signal_saved_binding_mismatch')
++            return reference
++        entities, measurements = self._binding_specs(extraction, source_ref)
++        return ({key: bind(value) for key, value in entities.items()},
++            [{key: value if key == 'representation_id' else bind(value) for key, value in row.items()}
++             for row in measurements])
++
++    def _entity_refs(self, bindings):
++        refs = [ref for ref in bindings.values() if ref]
++        if bindings['condition_ref']:
++            refs.extend(self._record(bindings['condition_ref'], 'context')['related_refs'])
++        return _unique(refs)
++
++    def populate(self, context, selection, operation_key):
++        from .literature_ratio_source_inputs import (validate_relative_signal_source_selection,
++            read_relative_signal_source_inputs)
++        from . import literature_ratio_source_calculations as calculations
++        if context.run_id != self.run_id:
++            raise ContractError('literature_run_mismatch')
++        if type(operation_key) is not str or not operation_key:
++            raise ContractError('operation_key_required')
++        args = validate_relative_signal_source_selection(plain(selection))
++        direct, closure, views = self._dependencies(context, args)
++        # Exact original fixture origin is part of immutable selected work.
++        signature = canonical({'arguments': args, 'scope': plain(context.scope), 'evidence_origin': self.evidence_origin,
++            'role': context.role, 'assignment': plain(context.assignment)})
++        old = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
++            (self.run_id, context.episode_id, operation_key)).fetchone()
++        if old:
++            if old['signature'] != signature:
++                raise ContractError('operation_key_reused_for_different_work')
++            outcome = json.loads(old['outcome'])
++            self.read(outcome['result']['sheet_ref'])
++            return outcome
++        receipts = {view_ref: self._own_view_receipt(context, view_ref) for view_ref in views}
++        def read_source(reference, representation):
++            source = self._source(context, reference)
++            artifact = source['artifact_ref'] if representation == 'original' else source.get('text_ref')
++            if artifact is None:
++                raise ContractError('literature_source_representation_unavailable')
++            return {'artifact_ref': artifact, 'content': self._bytes(artifact)}
++        def read_view(view_ref):
++            if view_ref not in receipts:
++                raise ContractError('relative_signal_view_not_selected')
++            view, _ = self._view_records(view_ref)
++            return {'metadata': view, 'original_bytes': self._bytes(view['original_artifact_ref']),
++                'display_bytes': self._bytes(view['image_artifact_ref']),
++                'own_action_receipt': receipts[view_ref]}
++        extraction = read_relative_signal_source_inputs(args, read_source=read_source,
++            read_view=read_view, evidence_origin=self.evidence_origin)
++        sheet = calculations.populate_relative_signal_v2(extraction)
++        root = self._source(context, args['source_ref'])
++        with self.store.transaction():
++            created = []
++            def publish(kind, value):
++                reference = identity(kind, {'origin': 'tool', 'record': value})
++                exists = self.store.db.execute('SELECT 1 FROM records WHERE id=?', (reference,)).fetchone()
++                row = self.store.put(kind, value, origin='tool', scope=plain(context.scope))
++                if exists is None:
++                    created.append(row['id'])
++                return row['id']
++            bindings, measurements = self._bindings(extraction, root['id'], publish)
++            calculation = {'version': 'relative_signal_calculation_v2', 'input_extraction_sha256': _sha(extraction),
++                'calculator_implementation_sha256': _sha(_calculator_implementation_descriptor()), 'sheet': sheet}
++            calculation_ref = self.store.artifact(canonical(calculation), 'application/json')
++            payload = {'version': VERSION, 'input_source_ref': root['id'], 'input_artifact_ref': root['artifact_ref'],
++                'direct_input_source_refs': direct, 'input_source_refs': closure, 'input_view_refs': views,
++                'selection': args, 'extraction': extraction, 'sheet': sheet,
++                'calculation_artifact_ref': calculation_ref, 'experimental_bindings': bindings,
++                'measurement_bindings': measurements}
++            artifact = self.store.artifact(canonical(payload), 'application/json')
++            request = self.store.artifact(canonical({'run_id': self.run_id, 'episode_id': context.episode_id,
++                'operation_key': operation_key, 'arguments': args}), 'application/json')
++            sheet_ref = publish('source', {'provider': PROVIDER, 'accession': None, 'uri': None,
++                'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': request, 'version': VERSION,
++                'retrieved_at': None, 'parent_source_refs': closure})
++            references = _unique([sheet_ref, *self._entity_refs(bindings),
++                *(row[key] for row in measurements for key in ('input_measurement_ref', 'reference_measurement_ref') if row[key])])
++            outcome = {'status': 'completed', 'operation_ref': identity('operation', {'run_id': self.run_id,
++                'episode_id': context.episode_id, 'key': operation_key}), 'record_refs': references,
++                'changed_record_refs': created, 'result': {'sheet_ref': sheet_ref, 'cells': sheet['cells'],
++                **{key: sheet[key] for key in FLAGS}}, 'feedback': None}
++            from .literature_ratio_source_validation import validate_relative_signal_saved
++            validate_relative_signal_saved(args, extraction, sheet, outcome)
++            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)',
++                (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
++        return deepcopy(outcome)
++
++    def read(self, sheet_ref):
++        from .literature_ratio_source_validation import validate_relative_signal_saved
++        source = self._record(sheet_ref, 'source')
++        if (source['origin'] != 'tool' or source['provider'] != PROVIDER or source.get('version') != VERSION
++                or source.get('request_ref') is None or source['text_ref'] != source['artifact_ref']
++                or any(source.get(key) is not None for key in ('accession', 'uri', 'retrieved_at'))):
++            raise ContractError('relative_signal_saved_source_mismatch')
++        request = self._json(source['request_ref'])
++        if (set(request) != {'run_id', 'episode_id', 'operation_key', 'arguments'}
++                or request['run_id'] != self.run_id
++                or any(type(request[key]) is not str or not request[key] for key in ('episode_id', 'operation_key'))):
++            raise ContractError('relative_signal_saved_request_mismatch')
++        operation = self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
++            (self.run_id, request['episode_id'], request['operation_key'])).fetchone()
++        if operation is None:
++            raise ContractError('literature_sheet_not_selected_output')
++        outcome, signature = json.loads(operation['outcome']), json.loads(operation['signature'])
++        payload = self._json(source['artifact_ref'])
++        if (set(payload) != PAYLOAD_FIELDS or payload['version'] != VERSION
++                or payload['selection'] != request['arguments']
++                or payload['input_source_ref'] != request['arguments']['source_ref']
++                or source['parent_source_refs'] != payload['input_source_refs']
++                or set(signature) != {'arguments', 'scope', 'evidence_origin', 'role', 'assignment'}
++                or signature['arguments'] != payload['selection']
++                or signature['evidence_origin'] != payload['extraction']['evidence_origin']):
++            raise ContractError('relative_signal_saved_payload_mismatch')
++        validate_relative_signal_saved(payload['selection'], payload['extraction'], payload['sheet'], outcome)
++        if (outcome['result']['sheet_ref'] != sheet_ref
++                or outcome['operation_ref'] != identity('operation', {'run_id': self.run_id,
++                    'episode_id': request['episode_id'], 'key': request['operation_key']})):
++            raise ContractError('literature_sheet_not_selected_output')
++        # Reconstruct only host custody metadata. This does not grant a receiver
++        # possession: fact_cells applies original-owner/admitted-subset rules.
++        context = SimpleNamespace(run_id=self.run_id, episode_id=request['episode_id'], role=signature['role'], assignment=signature['assignment'],
++            scope=signature['scope'], received_record_refs=payload['direct_input_source_refs'] + payload['input_view_refs'])
++        direct, closure, views = self._dependencies(context, payload['selection'])
++        if (direct != payload['direct_input_source_refs'] or closure != payload['input_source_refs']
++                or views != payload['input_view_refs']
++                or self._record(payload['input_source_ref'], 'source')['artifact_ref'] != payload['input_artifact_ref']):
++            raise ContractError('relative_signal_saved_roster_mismatch')
++        for item in payload['extraction']['sources']:
++            original = self._record(item['source_ref'], 'source')
++            artifact = original['artifact_ref'] if item['representation'] == 'original' else original.get('text_ref')
++            if artifact is not None:
++                self._artifact_metadata(artifact)
++            if (item['state'] == 'available' and (item['artifact_ref'] != artifact
++                    or artifact != 'artifact_' + item['byte_sha256'])):
++                raise ContractError('relative_signal_saved_input_identity_mismatch')
++        for item in payload['extraction']['views']:
++            actual, _ = self._view_records(item['view_ref'])
++            receipt = self._own_view_receipt(context, item['view_ref'], saved_receipt=item['own_action_receipt'])
++            if item['state'] == 'available' and (item['metadata'] != actual or receipt != item['own_action_receipt']
++                    or 'artifact_' + item['original_sha256'] != actual['original_artifact_ref']
++                    or 'artifact_' + item['display_sha256'] != actual['image_artifact_ref']):
++                raise ContractError('relative_signal_saved_view_identity_mismatch')
++        calculation = self._json(payload['calculation_artifact_ref'])
++        if (set(calculation) != {'version', 'input_extraction_sha256', 'calculator_implementation_sha256', 'sheet'}
++                or calculation['version'] != 'relative_signal_calculation_v2'
++                or calculation['input_extraction_sha256'] != _sha(payload['extraction'])
++                or calculation['sheet'] != payload['sheet']
++                or type(calculation['calculator_implementation_sha256']) is not str
++                or len(calculation['calculator_implementation_sha256']) != 64
++                or any(ch not in '0123456789abcdef' for ch in calculation['calculator_implementation_sha256'])):
++            raise ContractError('relative_signal_saved_calculation_mismatch')
++        bindings, measurements = self._bindings(payload['extraction'], payload['input_source_ref'])
++        expected_refs = _unique([sheet_ref, *self._entity_refs(bindings),
++            *(row[key] for row in measurements for key in ('input_measurement_ref', 'reference_measurement_ref') if row[key])])
++        if (bindings != payload['experimental_bindings'] or measurements != payload['measurement_bindings']
++                or expected_refs != outcome['record_refs']):
++            raise ContractError('relative_signal_saved_binding_mismatch')
++        return deepcopy(payload)
++
++    def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
++        components = self.components if components is None else components
++        if (not isinstance(components, (list, tuple)) or any(type(name) is not str or name not in self.components for name in components)
++                or len(set(components)) != len(components)):
++            raise ContractError('relative_signal_component_selection_invalid')
++        result = []
++        for reference in dict.fromkeys(sheet_refs):
++            if reference not in permitted_record_refs:
++                raise ContractError('literature_sheet_not_received')
++            saved = self.read(reference)
++            sheet, extraction = saved['sheet'], saved['extraction']
++            rows, comparison = extraction['representations'], extraction['comparison']
++            def states(field, key):
++                return _unique(row[field][key] for row in rows)
++            common = {'sheet_ref': reference, 'evidence_source_ref': saved['input_source_ref'],
++                **saved['experimental_bindings'], **{key: sheet[key] for key in FLAGS},
++                'independent_preparation_count': None, 'candidate_basis': 'selected_received_source_representations',
++                'uncertainty_kind': 'unknown', 'uncertainty_evaluation': 'numeric_uncertainty_reader_unimplemented',
++                'interpretation_kind': 'episode_source_interpretation',
++                'source_origins': _unique(row['origin'] for row in rows),
++                'representation_reading_states': _unique(row['reading_state'] for row in rows),
++                **{key: comparison[key]['value'] if comparison[key]['status'] == 'known' else comparison[key]['status']
++                   for key in ('signal_kind', 'reference_role', 'arrangement', 'signal_use')},
++                'meaning_statuses': {key: comparison[key]['status'] for key in MEANINGS},
++                'comparison_relation_states': states('comparison_relation', 'value'),
++                'signal_scale_states': _unique(row['selection']['signal_scale']['value']
++                    if row['kind'] != 'jats_percent' else 'not_applicable' for row in rows),
++                'physical_identity_states': states('physical_measurement', 'status'),
++                'reference_identity_states': states('reference_measurement', 'status'),
++                'input_measurement_refs': _unique(row['input_measurement_ref'] for row in saved['measurement_bindings'] if row['input_measurement_ref']),
++                'reference_measurement_refs': _unique(row['reference_measurement_ref'] for row in saved['measurement_bindings'] if row['reference_measurement_ref'])}
++            for name in components:
++                result.append({**deepcopy(common), 'component': name,
++                    **{key: deepcopy(value) for key, value in sheet['cells'][name].items() if key != 'formula'}})
++        validate_schema(result, ratio_source_cells_schema())
++        return result
++
++    def validate_fact_values(self, context, cells):
++        if context.run_id != self.run_id:
++            raise ContractError('literature_run_mismatch')
++        return super().validate_fact_values(context, cells)
++
++    def validate_returned_values(self, cells, *, permitted_record_refs):
++        validate_schema(cells, ratio_source_cells_schema())
++        return super().validate_returned_values(cells, permitted_record_refs=permitted_record_refs)
++
++
++__all__ = ['LiteratureRatioSourceRepository', 'ratio_source_population_schema', 'ratio_source_cells_schema']
++
++# Exact006 closed return declaration. The request has a single owner in inputs.
++_RETURN_SCHEMA = {'type': 'array',
++ 'items': {'type': 'object',
++           'properties': {'value': {'type': ['number', 'null']},
++                          'value_candidates': {'type': 'array',
++                                               'items': {'type': 'number'},
++                                               'uniqueItems': True},
++                          'reported_domains': {'type': 'array',
++                                               'items': {'type': 'object',
++                                                         'properties': {'lower': {'type': ['number',
++                                                                                           'null']},
++                                                                        'lower_infinite': {'type': 'boolean'},
++                                                                        'lower_closed': {'type': 'boolean'},
++                                                                        'upper': {'type': ['number',
++                                                                                           'null']},
++                                                                        'upper_infinite': {'type': 'boolean'},
++                                                                        'upper_closed': {'type': 'boolean'},
++                                                                        'meaning': {'const': 'reported_estimate_domain',
++                                                                                    'type': 'string'}},
++                                                         'required': ['lower',
++                                                                      'lower_infinite',
++                                                                      'lower_closed',
++                                                                      'upper',
++                                                                      'upper_infinite',
++                                                                      'upper_closed',
++                                                                      'meaning'],
++                                                         'additionalProperties': False}},
++                          'unit': {'type': ['string', 'null'],
++                                   'enum': ['fraction', 'dimensionless', None]},
++                          'status': {'type': 'string',
++                                     'enum': ['populated', 'conflicting', 'unavailable']},
++                          'origin': {'type': 'string',
++                                     'enum': ['reported',
++                                              'visual_transcription',
++                                              'derived',
++                                              'proposed',
++                                              'synthetic']},
++                          'unavailable_reason': {'type': ['string', 'null'],
++                                                 'enum': ['no_selected_representations',
++                                                          'source_dependency_unavailable',
++                                                          'unreadable_transcription',
++                                                          'ambiguous_transcription',
++                                                          'source_representation_conflict',
++                                                          'incomplete_conflicting_representations',
++                                                          'comparison_association_unresolved',
++                                                          'signal_scale_unresolved',
++                                                          'unsupported_expression',
++                                                          'negative_reported_signal_unsupported',
++                                                          'reported_limit_not_point',
++                                                          'positive_denominator_not_established',
++                                                          'zero_reported_ratio',
++                                                          'numerical_model_range',
++                                                          'jats_expression_capability_partial',
++                                                          'calibrated_amount_conversion_unimplemented',
++                                                          'functional_response_conversion_unimplemented',
++                                                          'observation_model_unimplemented',
++                                                          'different_reported_quantities',
++                                                          'signal_scales_differ',
++                                                          None]},
++                          'conditional_on': {'type': 'array',
++                                             'items': {'type': 'string',
++                                                       'enum': ['source_comparison_interpretation',
++                                                                'nominated_printed_signal_pair']},
++                                             'uniqueItems': True},
++                          'sheet_ref': {'type': 'string',
++                                        'format': 'reference',
++                                        'x-reference-namespace': 'source'},
++                          'evidence_source_ref': {'type': 'string',
++                                                  'format': 'reference',
++                                                  'x-reference-namespace': 'source'},
++                          'component': {'type': 'string',
++                                        'enum': ['reported_ratio',
++                                                 'difference_from_reference',
++                                                 'log_reported_ratio',
++                                                 'calibrated_amount_ratio',
++                                                 'amount_adjusted_effect',
++                                                 'source_profile_log_ratio',
++                                                 'source_signed_index']},
++                          'selected_roster_resolved': {'type': 'boolean'},
++                          'point_candidate_set_complete': {'type': 'boolean'},
++                          'known_source_conflict': {'type': 'boolean'},
++                          'independent_preparation_count': {'type': 'null'},
++                          'candidate_basis': {'const': 'selected_received_source_representations',
++                                              'type': 'string'},
++                          'uncertainty_kind': {'const': 'unknown', 'type': 'string'},
++                          'interpretation_kind': {'const': 'episode_source_interpretation',
++                                                  'type': 'string'},
++                          'source_origins': {'type': 'array',
++                                             'items': {'type': 'string',
++                                                       'enum': ['reported',
++                                                                'visual_transcription',
++                                                                'synthetic']},
++                                             'uniqueItems': True},
++                          'representation_reading_states': {'type': 'array',
++                                                            'items': {'type': 'string',
++                                                                      'enum': ['exact',
++                                                                               'ambiguous',
++                                                                               'unreadable',
++                                                                               'conflicting',
++                                                                               'not_applicable']},
++                                                            'uniqueItems': True},
++                          'signal_kind': {'type': 'string',
++                                          'enum': ['protein_band',
++                                                   'transcript_signal',
++                                                   'other_reported_signal',
++                                                   'unknown',
++                                                   'conflicting']},
++                          'reference_role': {'type': 'string',
++                                             'enum': ['tagged_wt_complementation',
++                                                      'endogenous_wt',
++                                                      'other_reported_reference',
++                                                      'unknown',
++                                                      'conflicting']},
++                          'arrangement': {'type': 'string',
++                                          'enum': ['single_preparation',
++                                                   'replacement',
++                                                   'coexistence',
++                                                   'not_applicable',
++                                                   'unknown',
++                                                   'conflicting']},
++                          'subject_ref': {'type': ['string', 'null'],
++                                          'format': 'reference',
++                                          'x-reference-namespace': 'reference'},
++                          'variant_ref': {'type': ['string', 'null'],
++                                          'format': 'reference',
++                                          'x-reference-namespace': 'reference'},
++                          'reference_ref': {'type': ['string', 'null'],
++                                            'format': 'reference',
++                                            'x-reference-namespace': 'reference'},
++                          'organism_ref': {'type': ['string', 'null'],
++                                           'format': 'reference',
++                                           'x-reference-namespace': 'reference'},
++                          'genotype_ref': {'type': ['string', 'null'],
++                                           'format': 'reference',
++                                           'x-reference-namespace': 'reference'},
++                          'construct_variant_ref': {'type': ['string', 'null'],
++                                                    'format': 'reference',
++                                                    'x-reference-namespace': 'reference'},
++                          'construct_reference_ref': {'type': ['string', 'null'],
++                                                      'format': 'reference',
++                                                      'x-reference-namespace': 'reference'},
++                          'preparation_variant_ref': {'type': ['string', 'null'],
++                                                      'format': 'reference',
++                                                      'x-reference-namespace': 'reference'},
++                          'preparation_reference_ref': {'type': ['string', 'null'],
++                                                        'format': 'reference',
++                                                        'x-reference-namespace': 'reference'},
++                          'experiment_ref': {'type': ['string', 'null'],
++                                             'format': 'reference',
++                                             'x-reference-namespace': 'reference'},
++                          'condition_ref': {'type': ['string', 'null'],
++                                            'format': 'reference',
++                                            'x-reference-namespace': 'context'},
++                          'endpoint_ref': {'type': ['string', 'null'],
++                                           'format': 'reference',
++                                           'x-reference-namespace': 'reference'},
++                          'normalization_ref': {'type': ['string', 'null'],
++                                                'format': 'reference',
++                                                'x-reference-namespace': 'reference'},
++                          'input_measurement_refs': {'type': 'array',
++                                                     'items': {'type': 'string',
++                                                               'format': 'reference',
++                                                               'x-reference-namespace': 'reference'},
++                                                     'uniqueItems': True},
++                          'reference_measurement_refs': {'type': 'array',
++                                                         'items': {'type': 'string',
++                                                                   'format': 'reference',
++                                                                   'x-reference-namespace': 'reference'},
++                                                         'uniqueItems': True},
++                          'comparison_relation_states': {'type': 'array',
++                                                         'items': {'type': 'string',
++                                                                   'enum': ['supported',
++                                                                            'different',
++                                                                            'unknown',
++                                                                            'conflicting']},
++                                                         'uniqueItems': True},
++                          'signal_scale_states': {'type': 'array',
++                                                  'items': {'type': 'string',
++                                                            'enum': ['supported',
++                                                                     'different',
++                                                                     'unknown',
++                                                                     'conflicting',
++                                                                     'not_applicable']},
++                                                  'uniqueItems': True},
++                          'signal_use': {'type': 'string',
++                                         'enum': ['experimental_comparability',
++                                                  'measured_endpoint',
++                                                  'other',
++                                                  'unknown',
++                                                  'conflicting']},
++                          'meaning_statuses': {'type': 'object',
++                                               'properties': {'subject': {'type': 'string',
++                                                                          'enum': ['known',
++                                                                                   'unknown',
++                                                                                   'conflicting']},
++                                                              'variant': {'type': 'string',
++                                                                          'enum': ['known',
++                                                                                   'unknown',
++                                                                                   'conflicting']},
++                                                              'reference': {'type': 'string',
++                                                                            'enum': ['known',
++                                                                                     'unknown',
++                                                                                     'conflicting']},
++                                                              'organism': {'type': 'string',
++                                                                           'enum': ['known',
++                                                                                    'unknown',
++                                                                                    'conflicting']},
++                                                              'genotype': {'type': 'string',
++                                                                           'enum': ['known',
++                                                                                    'unknown',
++                                                                                    'conflicting']},
++                                                              'construct_variant': {'type': 'string',
++                                                                                    'enum': ['known',
++                                                                                             'unknown',
++                                                                                             'conflicting']},
++                                                              'construct_reference': {'type': 'string',
++                                                                                      'enum': ['known',
++                                                                                               'unknown',
++                                                                                               'conflicting']},
++                                                              'preparation_variant': {'type': 'string',
++                                                                                      'enum': ['known',
++                                                                                               'unknown',
++                                                                                               'conflicting']},
++                                                              'preparation_reference': {'type': 'string',
++                                                                                        'enum': ['known',
++                                                                                                 'unknown',
++                                                                                                 'conflicting']},
++                                                              'experiment': {'type': 'string',
++                                                                             'enum': ['known',
++                                                                                      'unknown',
++                                                                                      'conflicting']},
++                                                              'condition': {'type': 'string',
++                                                                            'enum': ['known',
++                                                                                     'unknown',
++                                                                                     'conflicting']},
++                                                              'endpoint': {'type': 'string',
++                                                                           'enum': ['known',
++                                                                                    'unknown',
++                                                                                    'conflicting']},
++                                                              'normalization': {'type': 'string',
++                                                                                'enum': ['known',
++                                                                                         'unknown',
++                                                                                         'conflicting']}},
++                                               'required': ['subject',
++                                                            'variant',
++                                                            'reference',
++                                                            'organism',
++                                                            'genotype',
++                                                            'construct_variant',
++                                                            'construct_reference',
++                                                            'preparation_variant',
++                                                            'preparation_reference',
++                                                            'experiment',
++                                                            'condition',
++                                                            'endpoint',
++                                                            'normalization'],
++                                               'additionalProperties': False},
++                          'physical_identity_states': {'type': 'array',
++                                                       'items': {'type': 'string',
++                                                                 'enum': ['known',
++                                                                          'unknown',
++                                                                          'conflicting']},
++                                                       'uniqueItems': True},
++                          'reference_identity_states': {'type': 'array',
++                                                        'items': {'type': 'string',
++                                                                  'enum': ['known',
++                                                                           'unknown',
++                                                                           'conflicting']},
++                                                        'uniqueItems': True},
++                          'uncertainty_evaluation': {'const': 'numeric_uncertainty_reader_unimplemented',
++                                                     'type': 'string'}},
++           'required': ['value',
++                        'value_candidates',
++                        'reported_domains',
++                        'unit',
++                        'status',
++                        'origin',
++                        'unavailable_reason',
++                        'conditional_on',
++                        'sheet_ref',
++                        'evidence_source_ref',
++                        'component',
++                        'selected_roster_resolved',
++                        'point_candidate_set_complete',
++                        'known_source_conflict',
++                        'independent_preparation_count',
++                        'candidate_basis',
++                        'uncertainty_kind',
++                        'interpretation_kind',
++                        'source_origins',
++                        'representation_reading_states',
++                        'signal_kind',
++                        'reference_role',
++                        'arrangement',
++                        'subject_ref',
++                        'variant_ref',
++                        'reference_ref',
++                        'organism_ref',
++                        'genotype_ref',
++                        'construct_variant_ref',
++                        'construct_reference_ref',
++                        'preparation_variant_ref',
++                        'preparation_reference_ref',
++                        'experiment_ref',
++                        'condition_ref',
++                        'endpoint_ref',
++                        'normalization_ref',
++                        'input_measurement_refs',
++                        'reference_measurement_refs',
++                        'comparison_relation_states',
++                        'signal_scale_states',
++                        'signal_use',
++                        'meaning_statuses',
++                        'physical_identity_states',
++                        'reference_identity_states',
++                        'uncertainty_evaluation'],
++           'additionalProperties': False},
++ 'x-source': 'literature_ratio_source_cells'}
+--- /dev/null
++++ b/tests/test_literature_ratio_source_storage.py
+@@ -0,0 +1,606 @@
++"""Constructed engineering fixtures joined to actual Store/ToolRegistry and070 APIs.
++
++Inserted journal/context/receipt data do NOT establish selected LiteratureEpisode
++execution, model interpretation, genuine paper measurements or connected C1/C4.
++"""
++from copy import deepcopy
++from dataclasses import replace
++import hashlib
++from io import BytesIO
++import json
++from pathlib import Path
++
++from PIL import Image, ImageDraw
++import pytest
++
++from gene_annotation_episode.communication import form_with_facts, validate_form, plain
++from gene_annotation_episode.domain import ContractError, canonical, identity, obj
++from gene_annotation_episode.episode_bindings import BindingContext
++from gene_annotation_episode.episode_journal import Journal
++from gene_annotation_episode.literature_ratio_source_storage import (
++    LiteratureRatioSourceRepository, ratio_source_cells_schema, ratio_source_population_schema)
++from gene_annotation_episode.state import Store
++from gene_annotation_episode.tools import ToolRegistry
++
++
++def source(store, data, *, parents=(), name='synthetic_engineering_fixture'):
++    artifact = store.artifact(data)
++    return store.put('source', {'provider': name, 'accession': None, 'uri': None,
++        'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': None,
++        'version': None, 'retrieved_at': None, 'parent_source_refs': list(parents)}, origin='caller')['id']
++
++
++def native_case(path, *, known=False, frame=1, conversion='preserve'):
++    store = Store(path)
++    store.create_problem(raw_sequence='MKWAA', molecule='protein')
++    text = b'Synthetic enzyme. Variant V. Reference WT. Engineering organism. Genotype D. Construct V. Construct WT. Prep V. Prep WT. Experiment E. Condition C. Protein signal. WT scale.'
++    root = source(store, text)
++    first = Image.new('RGB', (240, 100), 'white')
++    second = Image.new('RGB', (240, 100), 'white')
++    draw = ImageDraw.Draw(second); draw.text((10, 40), '0.64', fill='black'); draw.text((110, 40), '1.00', fill='black')
++    if conversion == 'rgb':
++        first, second = first.convert('CMYK'), second.convert('CMYK')
++    buffer = BytesIO(); first.save(buffer, format='TIFF', save_all=True, append_images=[second])
++    image = source(store, buffer.getvalue(), parents=[root])
++    scope = store.validate_scope()
++    args = {'source_ref': image, 'frame': frame, 'colour_conversion': conversion}
++    native = ToolRegistry(store).execute('image.view', args, scope=scope, operation_key='fixture-run:fixture-child:4')
++    assert native['status'] == 'completed', native
++    view = native['result']['view']
++    journal = Journal(store, 'fixture-run')
++    journal.save('runtime_actions', {'episode_id': 'fixture-child', 'decision_index': 4,
++        'action': canonical({'kind': 'tool', 'tool': 'image.view', 'arguments': args}),
++        'result': canonical(native), 'credit': None, 'timing': None})
++    # A later own action is allowed: no mandatory immediately previous image view.
++    journal.save('runtime_actions', {'episode_id': 'fixture-child', 'decision_index': 9,
++        'action': canonical({'kind': 'tool', 'tool': 'state.query', 'arguments': {'refs': [root]}}),
++        'result': canonical({'status': 'completed', 'record_refs': [root]}), 'credit': None, 'timing': None})
++    received = (root, image, view['id'], view['source_ref'])
++    context = BindingContext('fixture-run', 'fixture-child', 'literature_page',
++        (('literature_page', 'synthetic'),), scope, {'source_ref': root}, {}, received)
++    meaning_names = ('subject', 'variant', 'reference', 'organism', 'genotype', 'construct_variant',
++        'construct_reference', 'preparation_variant', 'preparation_reference', 'experiment', 'condition',
++        'endpoint', 'normalization', 'signal_kind', 'reference_role', 'arrangement', 'signal_use')
++    comparison = {name: {'status': 'unknown', 'value': None, 'witnesses': []} for name in meaning_names}
++    numerator = {'kind': 'image', 'view_ref': view['id'], 'region': [10, 40, 80, 65], 'quote': '0.64'}
++    denominator = {'kind': 'image', 'view_ref': view['id'], 'region': [110, 40, 180, 65], 'quote': '1.00'}
++    if known:
++        labels = ['Synthetic enzyme', 'V', 'WT', 'Engineering organism', 'D', 'Construct V', 'Construct WT',
++            'Prep V', 'Prep WT', 'Experiment E', 'Condition C', 'Protein signal', 'WT scale']
++        for name, label in zip(meaning_names, labels):
++            start = text.index(label.encode())
++            comparison[name] = {'status': 'known', 'value': label, 'witnesses': [{
++                'kind': 'text', 'source_ref': root, 'representation': 'original',
++                'start': start, 'end': start + len(label), 'quote': label}]}
++        for name, value in [('signal_kind', 'protein_band'), ('reference_role', 'tagged_wt_complementation'),
++                ('arrangement', 'replacement'), ('signal_use', 'experimental_comparability')]:
++            comparison[name] = {'status': 'known', 'value': value, 'witnesses': [deepcopy(numerator)]}
++    selection = {'version': 'relative_signal_source_selection_v2', 'source_ref': root,
++        'comparison': comparison, 'representations': [{
++            'representation_id': 'printed-pair', 'kind': 'visual_signal_pair',
++            'selection': {'reading_state': 'exact', 'candidates': [{'numerator': numerator, 'denominator': denominator}],
++                'fragments': [], 'signal_scale': {'value': 'supported', 'witnesses': [deepcopy(numerator)]}},
++            'comparison_relation': {'value': 'supported', 'witnesses': [deepcopy(numerator)]},
++            'physical_measurement': {'status': 'unknown', 'value': None, 'witnesses': []},
++            'reference_measurement': {'status': 'unknown', 'value': None, 'witnesses': []}}]}
++    return store, context, selection, native
++
++
++def repository(store, context):
++    return LiteratureRatioSourceRepository(store, context.run_id, evidence_origin='synthetic_fixture')
++
++
++def owned(context, outcome):
++    return replace(context, received_record_refs=(*context.received_record_refs, *outcome['record_refs']))
++
++
++def test_joined_native_sheet_original_meanings_and_exact_typed_schema(tmp_path):
++    store, context, selection, native = native_case(tmp_path, known=True)
++    try:
++        repo = repository(store, context)
++        outcome = repo.populate(context, selection, 'selected')
++        sheet_ref = outcome['result']['sheet_ref']
++        saved = repo.read(sheet_ref)
++        assert saved['extraction']['evidence_origin'] == 'synthetic_fixture'
++        assert saved['sheet']['cells']['reported_ratio']['value'] == .64
++        assert saved['sheet']['cells']['difference_from_reference']['value'] == -.36
++        assert saved['sheet']['cells']['log_reported_ratio']['value'] == pytest.approx(-.4462871026284195)
++        rows = repo.fact_cells(owned(context, outcome), [sheet_ref], components=['reported_ratio', 'calibrated_amount_ratio'])
++        assert rows[0]['source_origins'] == ['synthetic']
++        assert rows[0]['signal_use'] == 'experimental_comparability'
++        assert rows[0]['physical_identity_states'] == ['unknown']
++        assert rows[0]['input_measurement_refs'] == []
++        assert store.get(rows[0]['subject_ref'])['label'] == 'Synthetic enzyme'
++        assert rows[0]['variant_ref'] != rows[0]['reference_ref']
++        assert store.get(rows[0]['condition_ref'])['record_type'] == 'context'
++        assert rows[1]['value'] is None and rows[1]['unavailable_reason'] == 'calibrated_amount_conversion_unimplemented'
++        schema = obj({'caller_named_components': ratio_source_cells_schema()})
++        form = form_with_facts({}, schema, {'literature_ratio_source_cells': rows})
++        validate_form(form, schema, lambda ref, namespace: ref in (*outcome['record_refs'], *context.received_record_refs)
++            and store.get(ref)['record_type'] == namespace)
++        assert saved['extraction']['views'][0]['own_action_receipt']['result_sha256'] == hashlib.sha256(canonical(native).encode()).hexdigest()
++        assert len(saved['input_view_refs']) == 1
++        assert set(saved['direct_input_source_refs']) == set(context.received_record_refs) - {native['result']['view_ref']}
++        assert not store.list('observation') and store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 0
++    finally:
++        store.close()
++
++
++@pytest.mark.parametrize('conversion', ['preserve', 'rgb'])
++def test_actual_multiframe_native_publication_and_conversion(tmp_path, conversion):
++    store, context, selection, native = native_case(tmp_path, conversion=conversion)
++    try:
++        result = repository(store, context).populate(context, selection, 'native-frame')
++        payload = repository(store, context).read(result['result']['sheet_ref'])
++        metadata = payload['extraction']['views'][0]['metadata']
++        assert metadata['native_format'] == 'TIFF' and metadata['frame'] == 1 and metadata['frame_count'] == 2
++        assert metadata['colour_conversion'] == conversion
++        assert native['result']['view'] == metadata
++    finally:
++        store.close()
++
++
++@pytest.mark.parametrize('missing', ['view', 'original', 'display', 'root'])
++def test_direct_custody_is_not_ancestry_possession_before_any_byte_access(tmp_path, monkeypatch, missing):
++    store, context, selection, native = native_case(tmp_path)
++    try:
++        view = native['result']['view']
++        ref = {'view': view['id'], 'original': view['input_source_ref'], 'display': view['source_ref'],
++            'root': selection['source_ref']}[missing]
++        context = replace(context, received_record_refs=tuple(r for r in context.received_record_refs if r != ref))
++        monkeypatch.setattr(store, 'get_artifact', lambda *_: pytest.fail('unauthorized byte access'))
++        with pytest.raises(ContractError, match='not_received'):
++            repository(store, context).populate(context, selection, 'no-custody')
++    finally:
++        store.close()
++
++
++@pytest.mark.parametrize('mismatch', ['other_episode', 'no_action', 'wrong_arguments', 'wrong_result', 'wrong_tool', 'wrong_scope', 'wrong_frame', 'wrong_conversion'])
++def test_own_completed_action_must_match_actual_toolregistry_result(tmp_path, mismatch):
++    store, context, selection, native = native_case(tmp_path)
++    try:
++        if mismatch == 'other_episode':
++            context = replace(context, episode_id='other')
++        elif mismatch == 'no_action':
++            store.db.execute('DELETE FROM runtime_actions WHERE decision_index=4')
++        elif mismatch in ('wrong_arguments', 'wrong_frame', 'wrong_conversion'):
++            row = store.db.execute('SELECT action FROM runtime_actions WHERE decision_index=4').fetchone()
++            action = json.loads(row[0]); action['arguments'][{'wrong_arguments': 'source_ref', 'wrong_frame': 'frame', 'wrong_conversion': 'colour_conversion'}[mismatch]] = {
++                'wrong_arguments': selection['source_ref'], 'wrong_frame': 0, 'wrong_conversion': 'rgb'}[mismatch]
++            store.db.execute('UPDATE runtime_actions SET action=? WHERE decision_index=4', (canonical(action),))
++        elif mismatch == 'wrong_result':
++            result = deepcopy(native); result['visual_inputs'] = []
++            store.db.execute('UPDATE runtime_actions SET result=? WHERE decision_index=4', (canonical(result),))
++        elif mismatch == 'wrong_tool':
++            store.db.execute("UPDATE tool_operations SET name='state.query'")
++        elif mismatch == 'wrong_scope':
++            store.db.execute("UPDATE tool_operations SET scope='null'")
++        with pytest.raises(ContractError, match='own_view_action'):
++            repository(store, context).populate(context, selection, 'bad-action')
++        assert store.db.execute('SELECT count(*) FROM literature_ratio_source_operations').fetchone()[0] == 0
++    finally:
++        store.close()
++
++
++def test_scope_and_page_ancestry_reject_unrelated_sources(tmp_path, monkeypatch):
++    store, context, selection, _ = native_case(tmp_path)
++    try:
++        unrelated = source(store, b'Unrelated synthetic material')
++        context = replace(context, assignment={'source_ref': unrelated})
++        monkeypatch.setattr(store, 'get_artifact', lambda *_: pytest.fail('unauthorized byte access'))
++        with pytest.raises(ContractError, match='outside_assigned_source'):
++            repository(store, context).populate(context, selection, 'wrong-page')
++        context = replace(context, assignment={}, scope={'subject_refs': []})
++        with pytest.raises(ContractError):
++            repository(store, context).populate(context, selection, 'wrong-scope')
++    finally:
++        store.close()
++
++
++def test_metadata_only_replay_key_conflicts_origin_and_saved_output(tmp_path, monkeypatch):
++    store, context, selection, _ = native_case(tmp_path)
++    try:
++        repo = repository(store, context)
++        outcome = repo.populate(context, selection, 'stable')
++        original = repo.read(outcome['result']['sheet_ref'])
++        reads = []
++        get = store.get_artifact
++        banned = {store.get(ref)['artifact_ref'] for ref in original['input_source_refs']}
++        def saved_only(reference):
++            assert reference not in banned
++            reads.append(reference)
++            return get(reference)
++        monkeypatch.setattr(store, 'get_artifact', saved_only)
++        import gene_annotation_episode.literature_ratio_source_inputs as inputs
++        import gene_annotation_episode.literature_ratio_source_calculations as calc
++        monkeypatch.setattr(inputs, 'read_relative_signal_source_inputs', lambda *_a, **_k: pytest.fail('reader replay'))
++        monkeypatch.setattr(calc, 'populate_relative_signal_v2', lambda *_a, **_k: pytest.fail('calculator replay'))
++        before = store.db.total_changes
++        assert repo.populate(context, selection, 'stable') == outcome
++        assert store.db.total_changes == before and reads
++        wrong = deepcopy(selection); wrong['representations'][0]['representation_id'] = 'changed'
++        with pytest.raises(ContractError, match='different_work'):
++            repo.populate(context, wrong, 'stable')
++        with pytest.raises(ContractError, match='different_work'):
++            LiteratureRatioSourceRepository(store, context.run_id).populate(context, selection, 'stable')
++    finally:
++        store.close()
++
++
++def test_atomic_rollback_preserves_no_selected_output_or_entities(tmp_path, monkeypatch):
++    store, context, selection, _ = native_case(tmp_path, known=True)
++    try:
++        repo = repository(store, context)
++        before = list(store.db.execute('SELECT id FROM records ORDER BY id'))
++        artifacts = list(store.db.execute('SELECT id FROM artifacts ORDER BY id'))
++        put = store.put
++        def fail(kind, value, **kwargs):
++            if kind == 'source' and value.get('provider') == repo.provider:
++                raise ContractError('injected_atomic_failure')
++            return put(kind, value, **kwargs)
++        monkeypatch.setattr(store, 'put', fail)
++        with pytest.raises(ContractError, match='injected_atomic_failure'):
++            repo.populate(context, selection, 'fails')
++        assert list(store.db.execute('SELECT id FROM records ORDER BY id')) == before
++        assert list(store.db.execute('SELECT id FROM artifacts ORDER BY id')) == artifacts
++        assert store.db.execute('SELECT count(*) FROM literature_ratio_source_operations').fetchone()[0] == 0
++    finally:
++        store.close()
++
++
++@pytest.mark.parametrize('mode', ['unknown_association', 'different_association', 'unknown_scale', 'different_scale', 'nd', 'zero', 'censor', 'ambiguous', 'unreadable', 'linked_conflict'])
++def test_authentic_partial_conflicting_numerical_results_are_not_empty_success(tmp_path, mode):
++    store, context, selection, _ = native_case(tmp_path)
++    try:
++        row = selection['representations'][0]
++        if mode.endswith('association'):
++            row['comparison_relation']['value'] = mode.split('_')[0]
++        elif mode.endswith('scale'):
++            row['selection']['signal_scale']['value'] = mode.split('_')[0]
++        elif mode in ('nd', 'zero', 'censor'):
++            row['selection']['candidates'][0]['numerator']['quote'] = {'nd': 'ND', 'zero': '0', 'censor': '<0.64'}[mode]
++        elif mode in ('ambiguous', 'linked_conflict'):
++            if mode == 'linked_conflict':
++                other = deepcopy(row); other['representation_id'] = 'contradicting-printed-pair'
++                other['selection']['candidates'][0]['numerator']['region'] = [10, 10, 80, 30]
++                other['selection']['candidates'][0]['numerator']['quote'] = '1.12'
++                selection['representations'].append(other)
++            else:
++                row['selection']['reading_state'] = 'ambiguous'
++                other = deepcopy(row['selection']['candidates'][0]); other['numerator']['quote'] = '0.84'
++                row['selection']['candidates'].append(other)
++        elif mode == 'unreadable':
++            row['selection']['reading_state'] = 'unreadable'; row['selection']['candidates'] = []
++            row['selection']['fragments'] = [{'view_ref': context.received_record_refs[2], 'region': [10, 40, 80, 65], 'raw_fragment': '0.?'}]
++        repo = repository(store, context); outcome = repo.populate(context, selection, 'partial')
++        saved = repo.read(outcome['result']['sheet_ref']); cells = saved['sheet']['cells']
++        assert len(cells) == 7
++        if mode == 'zero':
++            assert cells['reported_ratio']['value'] == 0 and cells['log_reported_ratio']['value'] is None
++        else:
++            assert cells['reported_ratio']['value'] is None
++        if mode == 'linked_conflict':
++            assert saved['sheet']['known_source_conflict']
++            assert cells['reported_ratio']['value_candidates'] == [.64, 1.12]
++        if mode == 'censor':
++            assert cells['reported_ratio']['reported_domains']
++        assert not store.list('observation')
++    finally:
++        store.close()
++
++
++def test_original_owner_inherited_subset_empty_and_unchanged_delivery(tmp_path):
++    store, context, selection, _ = native_case(tmp_path)
++    try:
++        repo = repository(store, context); outcome = repo.populate(context, selection, 'owned')
++        owner = owned(context, outcome); sheet = outcome['result']['sheet_ref']
++        all_cells = repo.fact_cells(owner, [sheet], components=list(repo.components))
++        parent = replace(owner, episode_id='fixture-parent', role='literature', path=(('literature', 'synthetic-parent'),), assignment={})
++        # Source/sheet possession alone does not authorize private child cells.
++        assert repo.fact_cells(parent, [sheet], components=list(repo.components)) == []
++        repo.receive_cells(parent, all_cells[:1], 'manual-engineering-fixture-receipt')
++        before = store.db.total_changes
++        repo.receive_cells(parent, all_cells[:1], 'manual-engineering-fixture-receipt')
++        assert store.db.total_changes == before
++        assert repo.fact_cells(parent, [sheet], components=list(repo.components)) == all_cells[:1]
++        assert repo.fact_cells(parent, [sheet], components=[]) == []
++        repo.validate_fact_values(parent, all_cells[:1])
++        with pytest.raises(ContractError, match='cell_not_received'):
++            repo.validate_fact_values(parent, all_cells[1:2])
++        with pytest.raises(ContractError, match='component_selection_invalid'):
++            repo.fact_cells(owner, [sheet], components=['not-a-component'])
++        bad = deepcopy(all_cells[:1]); bad[0]['value'] = .9
++        with pytest.raises(ContractError, match='differs_from_saved'):
++            repo.receive_cells(parent, bad, 'forged')
++        assert repo.received_cells(parent) == all_cells[:1]
++    finally:
++        store.close()
++
++
++def test_request_and_return_schema_exact_detached_and_no_model_origin():
++    directory = Path(__file__).resolve().parents[1] / 'verification/literature_reference_evidence_2026-10-25_001/visual_signal_parent_review_067/text_locator_declarations_008'
++    assert ratio_source_population_schema() == json.loads((directory / 'REQUEST_SCHEMA_008.json').read_text())
++    assert ratio_source_cells_schema() == json.loads((directory / 'RETURN_SCHEMA_008.json').read_text())
++    request = ratio_source_population_schema(); request['properties'].clear()
++    returned = ratio_source_cells_schema(); returned['items'].clear()
++    assert 'source_ref' in ratio_source_population_schema()['properties']
++    assert 'origin' in ratio_source_cells_schema()['items']['properties']
++    assert 'evidence_origin' not in ratio_source_population_schema()['properties']
++
++
++def test_authorized_availability_partial_survives_saved_read_without_repair(tmp_path, monkeypatch):
++    import errno
++    store, context, selection, native = native_case(tmp_path)
++    try:
++        repo = repository(store, context)
++        unavailable = native['result']['view']['original_artifact_ref']
++        get = store.get_artifact
++        def missing(ref):
++            if ref == unavailable:
++                raise FileNotFoundError(errno.ENOENT, 'synthetic missing native bytes')
++            return get(ref)
++        monkeypatch.setattr(store, 'get_artifact', missing)
++        outcome = repo.populate(context, selection, 'missing-native')
++        saved = repo.read(outcome['result']['sheet_ref'])
++        assert saved['extraction']['views'][0]['state'] == 'unavailable'
++        assert saved['sheet']['cells']['reported_ratio']['value'] is None
++        assert saved['extraction']['views'][0]['diagnostics'][0]['code'] == 'source_dependency_unavailable'
++        assert saved['sheet']['cells']['reported_ratio']['unavailable_reason'] == 'comparison_association_unresolved'
++        monkeypatch.setattr(store, 'get_artifact', get)
++        assert repo.populate(context, selection, 'missing-native') == outcome
++        assert repo.read(outcome['result']['sheet_ref']) == saved
++    finally:
++        store.close()
++
++
++@pytest.mark.parametrize('fault', ['payload_value', 'payload_origin', 'payload_reason', 'payload_domain', 'owner', 'reference', 'roster', 'source_identity', 'operation_ref', 'request_owner', 'request_selection', 'calculation'])
++def test_saved_valid_shape_forgery_is_rejected(tmp_path, fault):
++    store, context, selection, _ = native_case(tmp_path, known=True)
++    try:
++        repo = repository(store, context); outcome = repo.populate(context, selection, 'original')
++        reference = outcome['result']['sheet_ref']; row = store.get(reference)
++        if fault == 'source_identity':
++            row['provider'] = 'forged.provider'
++            store.db.execute('UPDATE records SET data=? WHERE id=?', (canonical(row), reference))
++        elif fault == 'operation_ref':
++            outcome['operation_ref'] = identity('operation', {'forged': True})
++            store.db.execute('UPDATE literature_ratio_source_operations SET outcome=?', (canonical(outcome),))
++        elif fault.startswith('request_'):
++            request = json.loads(store.get_artifact(row['request_ref']))
++            if fault == 'request_owner': request['episode_id'] = 'different-owner'
++            else: request['arguments']['representations'][0]['representation_id'] = 'different-request'
++            row['request_ref'] = store.artifact(canonical(request), 'application/json')
++            store.db.execute('UPDATE records SET data=? WHERE id=?', (canonical(row), reference))
++        else:
++            payload = repo.read(reference)
++            if fault.startswith('payload_'):
++                cell = payload['sheet']['cells']['reported_ratio']
++                if fault == 'payload_value': cell['value'] = .9
++                if fault == 'payload_origin': cell['origin'] = 'reported'
++                if fault == 'payload_reason': cell['unavailable_reason'] = 'reported_limit_not_point'
++                if fault == 'payload_domain': cell['reported_domains'][0]['upper'] = .9
++            elif fault == 'owner': payload['experimental_bindings']['subject_ref'] = payload['experimental_bindings']['variant_ref']
++            elif fault == 'reference': payload['measurement_bindings'][0]['reference_measurement_ref'] = payload['experimental_bindings']['reference_ref']
++            elif fault == 'roster': payload['direct_input_source_refs'].reverse()
++            elif fault == 'calculation':
++                calc = json.loads(store.get_artifact(payload['calculation_artifact_ref']))
++                calc['input_extraction_sha256'] = 'a' * 64
++                payload['calculation_artifact_ref'] = store.artifact(canonical(calc), 'application/json')
++            # Create a correctly content-addressed but forged output and alter
++            # the fixture's selected-output pointer as well. Deep association
++            # checks must reject it, rather than only spotting an old record ID.
++            body = {key: value for key, value in row.items() if key not in ('id', 'record_type', 'origin')}
++            body['artifact_ref'] = store.artifact(canonical(payload), 'application/json')
++            body['text_ref'] = body['artifact_ref']
++            forged = store.put('source', body, origin='tool', scope=plain(context.scope))['id']
++            outcome['record_refs'] = [forged if ref == reference else ref for ref in outcome['record_refs']]
++            outcome['changed_record_refs'] = [forged if ref == reference else ref for ref in outcome['changed_record_refs']]
++            outcome['result']['sheet_ref'] = forged
++            outcome['result']['cells'] = payload['sheet']['cells']
++            store.db.execute('UPDATE literature_ratio_source_operations SET outcome=?', (canonical(outcome),))
++            reference = forged
++        with pytest.raises((ContractError, ValueError)):
++            repo.read(reference)
++    finally:
++        store.close()
++
++
++def test_constructed_runtime_receipt_schema_digest_and_child_contract_relationships(tmp_path):
++    """Inserted form records are explicit engineering fixtures, not connected C4."""
++    store, context, selection, _ = native_case(tmp_path)
++    try:
++        repo = repository(store, context); outcome = repo.populate(context, selection, 'original')
++        reference = outcome['result']['sheet_ref']; owner = owned(context, outcome)
++        cells = repo.fact_cells(owner, [reference], components=['reported_ratio'])
++        parent = replace(owner, episode_id='fixture-parent', role='literature', path=(('literature', 'synthetic-parent'),), assignment={})
++        schema = obj({'requested_only': ratio_source_cells_schema()})
++        contract = {'decision': 'Return exactly requested engineering components', 'measurements': {'schema': schema}}
++        journal = Journal(store, context.run_id)
++        journal.save('runtime_episodes', {'episode_id': context.episode_id, 'path': '[]',
++            'request': canonical({'report_contract': contract}), 'initial_credit': 0, 'state': 'closed',
++            'completion': None, 'archive': None})
++        journal.save('runtime_report_attempts', {'parent_episode_id': parent.episode_id, 'decision_index': 12,
++            'delivery_ref': 'engineering-delivery', 'child_episode_id': context.episode_id,
++            'contract': canonical(contract), 'form': canonical({'requested_only': cells}), 'failure': None,
++            'timing_receipts': None})
++        key = 'fixture-run:fixture-parent:12:typed_form'
++        repo.receive_cells(parent, cells, key)
++        assert repo.received_cells(parent) == cells
++        before = store.db.total_changes
++        repo.receive_cells(parent, cells, key)
++        assert store.db.total_changes == before
++        with pytest.raises(ContractError, match='delivery_binding_mismatch'):
++            repo.receive_cells(parent, [], key)
++        store.db.execute("UPDATE literature_ratio_source_delivery_bindings SET cells_digest='forged'")
++        with pytest.raises(ContractError, match='delivery_binding_mismatch'):
++            repo.received_cells(parent)
++    finally:
++        store.close()
++
++
++def test_provenance_ancestor_is_separate_from_direct_scientific_possession(tmp_path, monkeypatch):
++    store, context, selection, native = native_case(tmp_path)
++    try:
++        ancestor = selection['source_ref']; image = native['result']['view']['input_source_ref']
++        selection['source_ref'] = image
++        context = replace(context, received_record_refs=tuple(ref for ref in context.received_record_refs if ref != ancestor))
++        repo = repository(store, context); outcome = repo.populate(context, selection, 'descendant-only')
++        saved = repo.read(outcome['result']['sheet_ref'])
++        assert ancestor in saved['input_source_refs']
++        assert ancestor not in saved['direct_input_source_refs']
++        assert saved['extraction']['sources'] == []
++        selection['comparison']['subject'] = {'status': 'known', 'value': 'Synthetic enzyme', 'witnesses': [{
++            'kind': 'text', 'source_ref': ancestor, 'representation': 'original',
++            'start': 0, 'end': 16, 'quote': 'Synthetic enzyme'}]}
++        monkeypatch.setattr(store, 'get_artifact', lambda *_: pytest.fail('ancestor bytes not possessed'))
++        with pytest.raises(ContractError, match='not_received'):
++            repo.populate(context, selection, 'unreceived-witness')
++    finally:
++        store.close()
++
++
++def test_source_qualified_measurement_identity_is_not_equal_numeric_identity(tmp_path):
++    store, context, selection, _ = native_case(tmp_path)
++    try:
++        row = selection['representations'][0]
++        second = deepcopy(row); second['representation_id'] = 'same-value-different-locator'
++        second['selection']['candidates'][0]['numerator']['region'] = [10, 10, 80, 30]
++        for current in (row, second):
++            candidate = current['selection']['candidates'][0]
++            current['physical_measurement'] = {'status': 'known', 'value': 'source measurement',
++                'witnesses': [deepcopy(candidate['numerator'])]}
++            current['reference_measurement'] = {'status': 'known', 'value': 'shared reference',
++                'witnesses': [deepcopy(candidate['denominator'])]}
++        selection['representations'].append(second)
++        repo = repository(store, context); outcome = repo.populate(context, selection, 'physical-identities')
++        saved = repo.read(outcome['result']['sheet_ref']); measurements = saved['measurement_bindings']
++        assert measurements[0]['input_measurement_ref'] != measurements[1]['input_measurement_ref']
++        assert measurements[0]['reference_measurement_ref'] == measurements[1]['reference_measurement_ref']
++        rows = repo.fact_cells(owned(context, outcome), [outcome['result']['sheet_ref']], components=['reported_ratio'])
++        assert len(rows[0]['input_measurement_refs']) == 2 and len(rows[0]['reference_measurement_refs']) == 1
++        assert rows[0]['independent_preparation_count'] is None
++        assert rows[0]['value_candidates'] == [.64]
++    finally:
++        store.close()
++
++
++def test_empty_subset_receipt_is_explicit_and_crossrun_context_rejects(tmp_path):
++    store, context, selection, _ = native_case(tmp_path)
++    try:
++        repo = repository(store, context)
++        repo.receive_cells(context, [], 'empty-engineering-receipt')
++        assert repo.received_cells(context) == []
++        assert store.db.execute('SELECT cells FROM literature_ratio_source_received').fetchone()[0] == '[]'
++        with pytest.raises(ContractError, match='run_mismatch'):
++            repo.validate_fact_values(replace(context, run_id='different-run'), [])
++    finally:
++        store.close()
++
++
++@pytest.mark.parametrize('representation', ['original', 'text'])
++def test_truthful_unicode_generic_text_locator_joins_native_v3(tmp_path, representation):
++    store, context, selection, _ = native_case(tmp_path)
++    try:
++        raw = '<html><body>Engineering β enzyme</body></html>'.encode()
++        projected = 'Engineering β enzyme'.encode()
++        witness_source = store.put('source', {'provider': 'synthetic_engineering_html', 'accession': None,
++            'uri': None, 'artifact_ref': store.artifact(raw), 'text_ref': store.artifact(projected),
++            'request_ref': None, 'version': None, 'retrieved_at': None,
++            'parent_source_refs': [selection['source_ref']]}, origin='caller')['id']
++        data = raw if representation == 'original' else projected
++        quote = 'β enzyme'; start = data.index(quote.encode())
++        selection['comparison']['subject'] = {'status': 'known', 'value': quote, 'witnesses': [{
++            'kind': 'text', 'source_ref': witness_source, 'representation': representation,
++            'start': start, 'end': start + len(quote.encode()), 'quote': quote}]}
++        context = replace(context, received_record_refs=(*context.received_record_refs, witness_source))
++        repo = repository(store, context); outcome = repo.populate(context, selection, 'generic-span')
++        saved = repo.read(outcome['result']['sheet_ref'])
++        assert saved['version'] == 'literature_relative_signal_source_record_v3'
++        assert saved['extraction']['version'] == 'relative_signal_source_extraction_v3'
++        witness = saved['extraction']['comparison']['subject']['witnesses'][0]
++        actual_source = store.get(witness_source)
++        assert witness['authentication'] == 'exact_utf8_span'
++        assert witness['locator'] == {'kind': 'text_span', 'source_ref': witness_source,
++            'artifact_ref': actual_source['artifact_ref' if representation == 'original' else 'text_ref'],
++            'representation': representation, 'start': start, 'end': start + len(quote.encode()), 'quote': quote}
++        assert len(quote) != len(quote.encode())
++        assert not {'section_id', 'paragraph_index', 'paragraph_text'} & witness['locator'].keys()
++    finally:
++        store.close()
++
++
++def test_actual_jats_paragraph_locator_remains_distinct_from_generic_span(tmp_path):
++    store, context, selection, _ = native_case(tmp_path)
++    try:
++        xml = b'<article><body><sec id="s1"><p>SyntheticProtein was expressed at 64% (V) of WT levels.</p></sec></body></article>'
++        article = source(store, xml, parents=[selection['source_ref']], name='synthetic_engineering_jats')
++        row = deepcopy(selection['representations'][0])
++        row.update(representation_id='actual-jats-fixture-paragraph', kind='jats_percent', selection={
++            'source_ref': article, 'section_id': 's1', 'paragraph_index': 0,
++            'expected_subject': 'SyntheticProtein', 'variant': 'V', 'reference_literal': 'WT levels'})
++        selection['representations'].append(row)
++        context = replace(context, received_record_refs=(*context.received_record_refs, article))
++        repo = repository(store, context); outcome = repo.populate(context, selection, 'mixed-jats')
++        saved = repo.read(outcome['result']['sheet_ref'])
++        assert saved['sheet']['cells']['reported_ratio']['value'] == .64
++        locator = saved['extraction']['representations'][1]['readings'][0]['numerator']['locator']
++        assert locator['kind'] == 'jats' and locator['section_id'] == 's1' and locator['paragraph_index'] == 0
++        assert locator['source_ref'] == article
++        assert locator['paragraph_text'] == 'SyntheticProtein was expressed at 64% (V) of WT levels.'
++    finally:
++        store.close()
++
++
++def test_actual_artifact_id_must_match_source_bytes_before_population(tmp_path):
++    store, context, selection, _ = native_case(tmp_path, known=True)
++    try:
++        repo = repository(store, context)
++        original = store.get(selection['source_ref'])['artifact_ref']
++        original_bytes = store.get_artifact(original)
++        replacement = store.artifact(original_bytes + b' Synthetic corruption preserving selected quoted spans.')
++        replacement_row = store.get(replacement)
++        store.db.execute('UPDATE artifacts SET sha256=?,size=? WHERE id=?',
++            (replacement_row['sha256'], replacement_row['size'], original))
++        with pytest.raises(ContractError, match='artifact_identity_mismatch'):
++            repo.populate(context, selection, 'corrupt-input-bytes')
++        assert store.db.execute('SELECT count(*) FROM literature_ratio_source_operations').fetchone()[0] == 0
++        assert not store.list('observation')
++    finally:
++        store.close()
++
++
++def test_saved_read_checks_original_artifact_metadata_without_source_bytes(tmp_path, monkeypatch):
++    store, context, selection, _ = native_case(tmp_path, known=True)
++    try:
++        repo = repository(store, context); outcome = repo.populate(context, selection, 'saved-before-corruption')
++        original = store.get(selection['source_ref'])['artifact_ref']
++        store.db.execute('UPDATE artifacts SET sha256=? WHERE id=?', ('a' * 64, original))
++        get = store.get_artifact
++        def no_scientific_bytes(reference):
++            assert reference != original
++            return get(reference)
++        monkeypatch.setattr(store, 'get_artifact', no_scientific_bytes)
++        with pytest.raises(ContractError, match='artifact_identity_mismatch'):
++            repo.read(outcome['result']['sheet_ref'])
++    finally:
++        store.close()
++
++
++def test_calculation_identity_binds_all_three_actual_pure_modules_and_saved_history(tmp_path, monkeypatch):
++    from gene_annotation_episode import literature_ratio_source_storage as storage
++    store, context, selection, _ = native_case(tmp_path)
++    try:
++        repo = repository(store, context); outcome = repo.populate(context, selection, 'implementation-bound')
++        saved = repo.read(outcome['result']['sheet_ref'])
++        actual = json.loads(store.get_artifact(saved['calculation_artifact_ref']))
++        modules = ('literature_ratio_source_inputs.py', 'literature_ratio_source_calculations.py',
++            'literature_ratio_source_validation.py')
++        descriptor = {'version': 'relative_signal_calculator_implementation_v1', 'modules': {
++            name: hashlib.sha256(Path(storage.__file__).with_name(name).read_bytes()).hexdigest() for name in modules}}
++        assert actual['calculator_implementation_sha256'] == hashlib.sha256(canonical(descriptor).encode()).hexdigest()
++        assert actual['calculator_implementation_sha256'] != descriptor['modules']['literature_ratio_source_calculations.py']
++        monkeypatch.setattr(storage, '_calculator_implementation_descriptor', lambda: pytest.fail('historical current-code rehash'))
++        assert repo.read(outcome['result']['sheet_ref']) == saved
++        assert repo.populate(context, selection, 'implementation-bound') == outcome
++    finally:
++        store.close()
+--- /dev/null
++++ b/tests/test_literature_ratio_source_readonly.py
+@@ -0,0 +1,101 @@
++"""Fresh source-free read-only projection of explicitly constructed fixture receipts."""
++from dataclasses import replace
++import json
++import os
++from pathlib import Path
++import subprocess
++import sys
++
++from test_literature_ratio_source_storage import native_case, owned, repository
++
++
++def test_first_projection_in_fresh_readonly_process_never_reads_source_or_mutates(tmp_path):
++    directory = tmp_path / 'store'
++    store, context, selection, _ = native_case(directory, known=True)
++    repo = repository(store, context); outcome = repo.populate(context, selection, 'selected')
++    reference = outcome['result']['sheet_ref']; saved = repo.read(reference)
++    owner = owned(context, outcome)
++    cells = repo.fact_cells(owner, [reference], components=['reported_ratio'])
++    parent = replace(owner, episode_id='fixture-parent', role='literature', path=(('literature', 'synthetic-parent'),), assignment={})
++    repo.receive_cells(parent, cells, 'manual-engineering-fixture-receipt')
++    observations = [list(row) for row in store.db.execute('SELECT * FROM runtime_observations ORDER BY episode_id,unit_index')]
++    # No whole database copy: original fixture store is opened via actual mode=ro.
++    fixture = {'run_id': context.run_id, 'episode_id': parent.episode_id, 'scope': dict(context.scope),
++        'received': list(parent.received_record_refs), 'sheet_ref': reference, 'cells': cells,
++        'banned_artifacts': list({store.get(ref)['artifact_ref'] for ref in saved['input_source_refs']}
++            | {value for item in saved['extraction']['views'] for key, value in item['metadata'].items()
++               if key in ('original_artifact_ref', 'image_artifact_ref')}),
++        'observations': observations, 'selection': selection}
++    path = tmp_path / 'engineering-fixture.json'; path.write_text(json.dumps(fixture))
++    store.close()
++    script = r'''
++import json, sqlite3, sys
++from pathlib import Path
++from types import SimpleNamespace
++from PIL import Image
++from gene_annotation_episode.state import Store
++from gene_annotation_episode.literature_ratio_source_storage import LiteratureRatioSourceRepository
++from gene_annotation_episode import literature_ratio_source_inputs as inputs
++from gene_annotation_episode import literature_ratio_source_calculations as calculations
++fixture=json.loads(Path(sys.argv[2]).read_text())
++def forbidden(*args,**kwargs):raise AssertionError('forbidden reacquisition, decoder, calculation or mutation')
++store=Store.__new__(Store);store.path=Path(sys.argv[1]);store._savepoint=0
++store.db=sqlite3.connect(f'file:{store.path / "state.sqlite3"}?mode=ro',uri=True)
++store.db.row_factory=sqlite3.Row
++store.db.execute('PRAGMA query_only=ON')
++store.db.create_function('library_scope_record',2,store._scope_filter_record)
++original_get=store.get_artifact
++reads=[]
++def saved_only(reference):
++ if reference in fixture['banned_artifacts']:raise AssertionError('original scientific bytes read')
++ reads.append(reference);return original_get(reference)
++store.get_artifact=saved_only
++for name in ('artifact','put','transaction','register_material','parse_material'):setattr(store,name,forbidden)
++inputs.read_relative_signal_source_inputs=forbidden
++calculations.populate_relative_signal_v2=forbidden
++Image.open=forbidden
++repo=LiteratureRatioSourceRepository(store,fixture['run_id'])
++repo.receive_cells=forbidden
++context=SimpleNamespace(run_id=fixture['run_id'],episode_id=fixture['episode_id'],role='literature',
++ assignment={},scope=fixture['scope'],received_record_refs=fixture['received'])
++assert store.db.total_changes==0
++# First saved projection; no prior read warms or repairs a receipt.
++actual=repo.fact_cells(context,[fixture['sheet_ref']],components=['reported_ratio'])
++assert actual==fixture['cells']
++assert repo.fact_cells(context,[fixture['sheet_ref']],components=['difference_from_reference'])==[]
++repo.validate_fact_values(context,actual)
++assert repo.received_cells(context)==actual
++assert store.db.total_changes==0
++observed=[list(row) for row in store.db.execute('SELECT * FROM runtime_observations ORDER BY episode_id,unit_index')]
++assert observed==fixture['observations']
++assert reads
++print(json.dumps({'evidence_class':'constructed engineering receipt; not connected C4','mode':'ro',
++ 'query_only':store.db.execute('PRAGMA query_only').fetchone()[0], 'total_changes':store.db.total_changes,
++ 'first_projection':actual,'source_bytes_read':False,'decoder_or_population_called':False,
++ 'observation_rows':observed,'saved_artifact_reads':len(reads),'storage_import':__import__('gene_annotation_episode.literature_ratio_source_storage',fromlist=['']).__file__}))
++store.close()
++'''
++    result = subprocess.run([sys.executable, '-c', script, str(directory), str(path)],
++        text=True, capture_output=True, env={**os.environ, 'PYTHONPATH': str(Path(__file__).resolve().parents[1])})
++    assert result.returncode == 0, result.stdout + result.stderr
++    proof = json.loads(result.stdout)
++    assert proof['total_changes'] == 0 and proof['query_only'] == 1
++    assert proof['first_projection'] == cells and proof['observation_rows'] == []
++
++
++def test_readonly_constructor_missing_required_state_fails_without_ddl(tmp_path):
++    import sqlite3
++    from types import SimpleNamespace
++    import pytest
++    from gene_annotation_episode.domain import ContractError
++    from gene_annotation_episode.literature_ratio_source_storage import LiteratureRatioSourceRepository
++    path = tmp_path / 'empty.sqlite3'
++    sqlite3.connect(path).close()
++    db = sqlite3.connect(f'file:{path}?mode=ro', uri=True); db.execute('PRAGMA query_only=ON')
++    try:
++        with pytest.raises(ContractError, match='saved_state_unavailable'):
++            LiteratureRatioSourceRepository(SimpleNamespace(db=db), 'fixture-run')
++        assert db.total_changes == 0
++        assert list(db.execute('SELECT name FROM sqlite_master')) == []
++    finally:
++        db.close()

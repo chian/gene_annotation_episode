@@ -1,0 +1,69 @@
+E
+==================================== ERRORS ====================================
+_ ERROR at setup of test_exact_single_saved_assignment_was_received_before_commission _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_one_...ers_rna_one_structure_workflow_2026-10-27_385/check001/temporary/pytest'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def one_case(tmp_path_factory):
+        with pytest.MonkeyPatch.context() as patch:
+>           case = F.workflow_case(tmp_path_factory.mktemp('one-structure'), patch)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_rna_one_structure_workflow.py:50: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+source_snapshot/verification/tool_graders_rna_one_structure_workflow_2026-10-27_385/helpers.py:157: in workflow_case
+    case = original360.workflow_case(directory, prediction=False, energy=False, saved=True,
+source_snapshot/tests/test_native_rna_structure_results_integration.py:318: in workflow_case
+    record = asyncio.run(execute())
+             ^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+source_snapshot/tests/test_native_rna_structure_results_integration.py:315: in execute
+    record = await root.run_async(flow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:1354: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/gene_annotation_episode/runtime.py:946: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+source_snapshot/verification/tool_graders_rna_one_structure_workflow_2026-10-27_385/helpers.py:135: in complete
+    answer = await scripted.complete(episode_id, role, instructions, current, schema)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_native_rna_structure_results_integration.workflow_case.<locals>.Choices object at 0x7caccafc5910>
+episode_id = 'episode_c223e4c8869ef744617832af5bb12630296f12ff73664636f74e9d42e55be0d6'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t... scientific evidence. Inventory and fresh observations remain separate. No instruction read or selection is mandatory.'
+current = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...s_aligned_execution_contexts_v1', 'kind': 'caller_injected', 'template_relationship': 'not_inferred'}, ...}, ...}, ...}
+schema = {'type': 'object', 'properties': {'selection': {'anyOf': [{'type': 'object', 'properties': {'kind': {...}, 'commit': {...uired': [], 'additionalProperties': False}}, 'required': ['selection', 'report_update'], 'additionalProperties': False}
+
+    async def complete(self, episode_id, role, instructions, current, schema):
+        self.calls.append({'episode_id': episode_id, 'role': role, 'instructions': instructions,
+            'context': deepcopy(current), 'schema': plain(schema)})
+        (tmp_path / f'decision-{len(self.calls) - 1}.json').write_text(json.dumps(self.calls[-1], indent=2) + '\n')
+>       assert not current.get('feedback'), current.get('feedback')
+E       AssertionError: {'category': 'action_contract', 'detail': 'report.requested_structure: RNA fact schema must match its registered source', 'status': 'invalid'}
+E       assert not {'category': 'action_contract', 'detail': 'report.requested_structure: RNA fact schema must match its registered source', 'status': 'invalid'}
+E        +  where {'category': 'action_contract', 'detail': 'report.requested_structure: RNA fact schema must match its registered source', 'status': 'invalid'} = <built-in method get of dict object at 0x7caccac02400>('feedback')
+E        +    where <built-in method get of dict object at 0x7caccac02400> = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from...s_aligned_execution_contexts_v1', 'kind': 'caller_injected', 'template_relationship': 'not_inferred'}, ...}, ...}, ...}.get
+
+source_snapshot/tests/test_native_rna_structure_results_integration.py:209: AssertionError
+=========================== short test summary info ============================
+ERROR source_snapshot/tests/test_rna_one_structure_workflow.py::test_exact_single_saved_assignment_was_received_before_commission
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 error in 12.04s

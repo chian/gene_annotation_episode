@@ -1,0 +1,41 @@
+{
+  "status": "targeted_tests_terminal",
+  "runs": [
+    {
+      "command": "python3 -m pytest -q tests/test_literature_endpoint_signal_components_241.py",
+      "exit_code": 1,
+      "passed": 20,
+      "failed": 15,
+      "pytest_seconds": 1.58,
+      "cause": "PNG getexif before verify invalidated Pillow verification position; synthetic image dependencies unavailable. Corrected by verify/reopen then EXIF as in existing reader."
+    },
+    {
+      "command": "python3 -m pytest -q tests/test_literature_endpoint_signal_components_241.py --tb=short",
+      "exit_code": 0,
+      "passed": 35,
+      "failed": 0,
+      "pytest_seconds": 2.25
+    },
+    {
+      "command": "python3 -m pytest -q tests/test_literature_endpoint_signal_components_241.py --tb=short",
+      "exit_code": 0,
+      "passed": 43,
+      "failed": 0,
+      "pytest_seconds": 2.65,
+      "scope_change": "Added specific malformed-covariance, same-owner, missing-ink and detached owner/context tests; strengthened ownership validation."
+    }
+  ],
+  "unique_current_tests": 43,
+  "not_additive_test_count": true,
+  "owned_sessions_reaped": [
+    96127,
+    21451,
+    71873
+  ],
+  "not_demonstrated": [
+    "selected_LiteratureEpisodes_delivery",
+    "configured_model_literature_execution",
+    "full_A105_adequacy",
+    "final_credit"
+  ]
+}

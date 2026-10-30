@@ -1,0 +1,4219 @@
+{
+  "context": {
+    "available_report_facts": {
+      "changed_annotation_refs": {
+        "meaning": "Actual changed annotation revision references from completed work, filtered by semantic record type.",
+        "type": "reference_array"
+      },
+      "changed_assessment_refs": {
+        "meaning": "Actual changed assessment revision references from completed work, filtered by semantic record type.",
+        "type": "reference_array"
+      },
+      "changed_interpretation_account_refs": {
+        "meaning": "Actual changed episode-owned coherent interpretation accounts; these are not parent annotation revisions.",
+        "type": "reference_array"
+      },
+      "changed_record_refs": {
+        "meaning": "New or revised semantic records explicitly identified as changed by recorded work.",
+        "type": "reference_array"
+      },
+      "committed_record_refs": {
+        "meaning": "Semantic records returned by completed own work and completed child investigations.",
+        "type": "reference_array"
+      },
+      "credit": {
+        "meaning": "Projected credit at child completion for its fixed assigned scope; redelivery preserves that snapshot.",
+        "type": "number"
+      },
+      "episode_yield": {
+        "meaning": "Recorded closing local numerical forecast and continuation decision, in the child's configured controller units. It is not task credit, a job ETA, a parent instruction or goal completion. Null when the controller does not expose the supported typed numerical state. Normal status is 0; -1 means insufficient observations and -2 means unidentifiable, not negative predicted gain.",
+        "report_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "completed_actions": {
+              "description": "Completed own actions at this child's level; an investigation commissioned by it counts once.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "continuation_cost": {
+              "description": "The actual child's decision threshold in its configured controller units.",
+              "minimum": 0,
+              "type": "number"
+            },
+            "expected_next_gain": {
+              "additionalProperties": false,
+              "properties": {
+                "alpha": {
+                  "description": "Original band parameter: -1 unavailable; 0 exact; otherwise the configured tail parameter.",
+                  "type": "number"
+                },
+                "lower": {
+                  "description": "The original band's lower coordinate; read status_code before interpreting it.",
+                  "type": "number"
+                },
+                "status_code": {
+                  "description": "0 normal; -1 insufficient observations; -2 unidentifiable. Coded coordinates are not negative forecasts.",
+                  "enum": [
+                    0,
+                    -1,
+                    -2
+                  ],
+                  "type": "integer"
+                },
+                "uncertainty_code": {
+                  "description": "-1 unavailable; 0 exact; 1 Chebyshev; 2 Laplace approximation. The code does not establish calibrated coverage.",
+                  "enum": [
+                    -1,
+                    0,
+                    1,
+                    2
+                  ],
+                  "type": "integer"
+                },
+                "upper": {
+                  "description": "The original band's upper coordinate; read status_code before interpreting it.",
+                  "type": "number"
+                },
+                "value": {
+                  "description": "The original band point in this child's configured controller units.",
+                  "type": "number"
+                }
+              },
+              "required": [
+                "value",
+                "lower",
+                "upper",
+                "status_code",
+                "uncertainty_code",
+                "alpha"
+              ],
+              "type": "object"
+            },
+            "stop_requested": {
+              "description": "The child's controller decision, not a parent instruction, job cancellation or scientific completion.",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "completed_actions",
+            "expected_next_gain",
+            "continuation_cost",
+            "stop_requested"
+          ],
+          "type": [
+            "object",
+            "null"
+          ],
+          "x-source": "episode_yield"
+        },
+        "type": [
+          "object",
+          "null"
+        ]
+      },
+      "execution_infernal_alignment_column_rows": {
+        "meaning": "Requested native Infernal quantities with their original sequence/model associations. Search spans are not aligned-residue coverage. Alignment gaps are not automatically deletions. Column and pair denominators retain the explicitly selected population. Unbound rows retain measurements without inventing an annotation target. No annotation score.",
+        "report_schema": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "column_index": {
+                "minimum": 0,
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "measurements": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": {
+                      "enum": [
+                        "row_count",
+                        "occupancy_numerator",
+                        "occupancy_denominator",
+                        "occupancy",
+                        "missing_rows",
+                        "nonresidue_rows",
+                        "unavailable_rows"
+                      ],
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "value"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "model_name": {
+                "format": "identifier",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "native_infernal_model_name"
+              },
+              "observation_ref": {
+                "format": "reference",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "execution_result"
+              },
+              "origin": {
+                "enum": [
+                  "newly_aligned",
+                  "inherited",
+                  "unknown",
+                  null
+                ],
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "pair_columns": {
+                "items": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "maxItems": 2,
+                "minItems": 2,
+                "type": [
+                  "array",
+                  "null"
+                ]
+              },
+              "population": {
+                "enum": [
+                  "all",
+                  "newly_aligned",
+                  "inherited",
+                  "reported",
+                  "included",
+                  null
+                ],
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "record_key": {
+                "format": "identifier",
+                "type": "string",
+                "x-reference-namespace": "native_infernal_row"
+              },
+              "reference_refs": {
+                "items": {
+                  "format": "reference",
+                  "type": "string",
+                  "x-reference-namespace": "execution_result"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "sequence_name": {
+                "format": "identifier",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "native_infernal_sequence_name"
+              },
+              "source_ref": {
+                "format": "reference",
+                "type": "string",
+                "x-reference-namespace": "execution_result"
+              },
+              "status": {
+                "enum": [
+                  "published",
+                  "unbound",
+                  "invalid"
+                ],
+                "type": "string"
+              },
+              "strand": {
+                "enum": [
+                  "plus",
+                  "minus",
+                  null
+                ],
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "subject_ref": {
+                "format": "reference",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "subject"
+              },
+              "unavailable": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": {
+                      "enum": [
+                        "row_count",
+                        "occupancy_numerator",
+                        "occupancy_denominator",
+                        "occupancy",
+                        "missing_rows",
+                        "nonresidue_rows",
+                        "unavailable_rows"
+                      ],
+                      "type": "string"
+                    },
+                    "reason": {
+                      "enum": [
+                        "missing_input",
+                        "incompatible_input",
+                        "invalid_native_row",
+                        "not_measured"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "reason"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "record_key",
+              "source_ref",
+              "observation_ref",
+              "subject_ref",
+              "reference_refs",
+              "sequence_name",
+              "model_name",
+              "strand",
+              "origin",
+              "population",
+              "column_index",
+              "pair_columns",
+              "status",
+              "measurements",
+              "unavailable"
+            ],
+            "type": "object"
+          },
+          "type": "array",
+          "x-source": "execution_infernal_alignment_column_rows"
+        },
+        "type": "array"
+      },
+      "execution_infernal_alignment_pair_rows": {
+        "meaning": "Requested native Infernal quantities with their original sequence/model associations. Search spans are not aligned-residue coverage. Alignment gaps are not automatically deletions. Column and pair denominators retain the explicitly selected population. Unbound rows retain measurements without inventing an annotation target. No annotation score.",
+        "report_schema": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "column_index": {
+                "minimum": 0,
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "measurements": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": {
+                      "enum": [
+                        "row_count",
+                        "observed_two_nucleotide_pairs",
+                        "canonical_pairs",
+                        "noncanonical_pairs",
+                        "unambiguous_pair_denominator",
+                        "canonical_pair_fraction",
+                        "excluded_gap_rows",
+                        "excluded_missing_rows",
+                        "excluded_ambiguous_rows",
+                        "excluded_nonresidue_rows",
+                        "excluded_unavailable_rows"
+                      ],
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "value"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "model_name": {
+                "format": "identifier",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "native_infernal_model_name"
+              },
+              "observation_ref": {
+                "format": "reference",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "execution_result"
+              },
+              "origin": {
+                "enum": [
+                  "newly_aligned",
+                  "inherited",
+                  "unknown",
+                  null
+                ],
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "pair_columns": {
+                "items": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "maxItems": 2,
+                "minItems": 2,
+                "type": [
+                  "array",
+                  "null"
+                ]
+              },
+              "population": {
+                "enum": [
+                  "all",
+                  "newly_aligned",
+                  "inherited",
+                  "reported",
+                  "included",
+                  null
+                ],
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "record_key": {
+                "format": "identifier",
+                "type": "string",
+                "x-reference-namespace": "native_infernal_row"
+              },
+              "reference_refs": {
+                "items": {
+                  "format": "reference",
+                  "type": "string",
+                  "x-reference-namespace": "execution_result"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "sequence_name": {
+                "format": "identifier",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "native_infernal_sequence_name"
+              },
+              "source_ref": {
+                "format": "reference",
+                "type": "string",
+                "x-reference-namespace": "execution_result"
+              },
+              "status": {
+                "enum": [
+                  "published",
+                  "unbound",
+                  "invalid"
+                ],
+                "type": "string"
+              },
+              "strand": {
+                "enum": [
+                  "plus",
+                  "minus",
+                  null
+                ],
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "subject_ref": {
+                "format": "reference",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "subject"
+              },
+              "unavailable": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": {
+                      "enum": [
+                        "row_count",
+                        "observed_two_nucleotide_pairs",
+                        "canonical_pairs",
+                        "noncanonical_pairs",
+                        "unambiguous_pair_denominator",
+                        "canonical_pair_fraction",
+                        "excluded_gap_rows",
+                        "excluded_missing_rows",
+                        "excluded_ambiguous_rows",
+                        "excluded_nonresidue_rows",
+                        "excluded_unavailable_rows"
+                      ],
+                      "type": "string"
+                    },
+                    "reason": {
+                      "enum": [
+                        "missing_input",
+                        "incompatible_input",
+                        "invalid_native_row",
+                        "not_measured"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "reason"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "record_key",
+              "source_ref",
+              "observation_ref",
+              "subject_ref",
+              "reference_refs",
+              "sequence_name",
+              "model_name",
+              "strand",
+              "origin",
+              "population",
+              "column_index",
+              "pair_columns",
+              "status",
+              "measurements",
+              "unavailable"
+            ],
+            "type": "object"
+          },
+          "type": "array",
+          "x-source": "execution_infernal_alignment_pair_rows"
+        },
+        "type": "array"
+      },
+      "execution_infernal_alignment_sequence_rows": {
+        "meaning": "Requested native Infernal quantities with their original sequence/model associations. Search spans are not aligned-residue coverage. Alignment gaps are not automatically deletions. Column and pair denominators retain the explicitly selected population. Unbound rows retain measurements without inventing an annotation target. No annotation score.",
+        "report_schema": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "column_index": {
+                "minimum": 0,
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "measurements": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": {
+                      "enum": [
+                        "native_bit_score",
+                        "native_avg_pp",
+                        "original_length",
+                        "model_length",
+                        "retained_nucleotides",
+                        "model_match_nucleotides",
+                        "model_gap_positions",
+                        "missing_model_positions",
+                        "nonresidue_model_positions",
+                        "retained_insert_nucleotides",
+                        "retained_local_end_nucleotides",
+                        "deleted_model_positions",
+                        "local_end_skipped_model_positions",
+                        "total_insert_nucleotides",
+                        "total_local_end_nucleotides",
+                        "omitted_nucleotides",
+                        "model_occupancy",
+                        "sequence_matched_coverage",
+                        "posterior_available_count",
+                        "posterior_unavailable_count",
+                        "posterior_lower_mean",
+                        "posterior_upper_mean"
+                      ],
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "value"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "model_name": {
+                "format": "identifier",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "native_infernal_model_name"
+              },
+              "observation_ref": {
+                "format": "reference",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "execution_result"
+              },
+              "origin": {
+                "enum": [
+                  "newly_aligned",
+                  "inherited",
+                  "unknown",
+                  null
+                ],
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "pair_columns": {
+                "items": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "maxItems": 2,
+                "minItems": 2,
+                "type": [
+                  "array",
+                  "null"
+                ]
+              },
+              "population": {
+                "enum": [
+                  "all",
+                  "newly_aligned",
+                  "inherited",
+                  "reported",
+                  "included",
+                  null
+                ],
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "record_key": {
+                "format": "identifier",
+                "type": "string",
+                "x-reference-namespace": "native_infernal_row"
+              },
+              "reference_refs": {
+                "items": {
+                  "format": "reference",
+                  "type": "string",
+                  "x-reference-namespace": "execution_result"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "sequence_name": {
+                "format": "identifier",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "native_infernal_sequence_name"
+              },
+              "source_ref": {
+                "format": "reference",
+                "type": "string",
+                "x-reference-namespace": "execution_result"
+              },
+              "status": {
+                "enum": [
+                  "published",
+                  "unbound",
+                  "invalid"
+                ],
+                "type": "string"
+              },
+              "strand": {
+                "enum": [
+                  "plus",
+                  "minus",
+                  null
+                ],
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "subject_ref": {
+                "format": "reference",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "subject"
+              },
+              "unavailable": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": {
+                      "enum": [
+                        "native_bit_score",
+                        "native_avg_pp",
+                        "original_length",
+                        "model_length",
+                        "retained_nucleotides",
+                        "model_match_nucleotides",
+                        "model_gap_positions",
+                        "missing_model_positions",
+                        "nonresidue_model_positions",
+                        "retained_insert_nucleotides",
+                        "retained_local_end_nucleotides",
+                        "deleted_model_positions",
+                        "local_end_skipped_model_positions",
+                        "total_insert_nucleotides",
+                        "total_local_end_nucleotides",
+                        "omitted_nucleotides",
+                        "model_occupancy",
+                        "sequence_matched_coverage",
+                        "posterior_available_count",
+                        "posterior_unavailable_count",
+                        "posterior_lower_mean",
+                        "posterior_upper_mean"
+                      ],
+                      "type": "string"
+                    },
+                    "reason": {
+                      "enum": [
+                        "missing_input",
+                        "incompatible_input",
+                        "invalid_native_row",
+                        "not_measured"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "reason"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "record_key",
+              "source_ref",
+              "observation_ref",
+              "subject_ref",
+              "reference_refs",
+              "sequence_name",
+              "model_name",
+              "strand",
+              "origin",
+              "population",
+              "column_index",
+              "pair_columns",
+              "status",
+              "measurements",
+              "unavailable"
+            ],
+            "type": "object"
+          },
+          "type": "array",
+          "x-source": "execution_infernal_alignment_sequence_rows"
+        },
+        "type": "array"
+      },
+      "execution_infernal_result_refs": {
+        "meaning": "Infernal source, observation and model references actually returned through this episode boundary. These references alone do not deliver unrequested numerical rows.",
+        "report_schema": {
+          "items": {
+            "format": "reference",
+            "type": "string",
+            "x-reference-namespace": "execution_result"
+          },
+          "type": "array",
+          "uniqueItems": true,
+          "x-source": "execution_infernal_result_refs"
+        },
+        "type": "array"
+      },
+      "execution_infernal_search_hit_rows": {
+        "meaning": "Requested native Infernal quantities with their original sequence/model associations. Search spans are not aligned-residue coverage. Alignment gaps are not automatically deletions. Column and pair denominators retain the explicitly selected population. Unbound rows retain measurements without inventing an annotation target. No annotation score.",
+        "report_schema": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "column_index": {
+                "minimum": 0,
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "measurements": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": {
+                      "enum": [
+                        "bitscore",
+                        "evalue",
+                        "bias_bits",
+                        "gc_fraction",
+                        "model_span_length",
+                        "model_span_fraction",
+                        "sequence_span_length",
+                        "sequence_span_fraction",
+                        "consensus_length",
+                        "sequence_length"
+                      ],
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "value"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "model_name": {
+                "format": "identifier",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "native_infernal_model_name"
+              },
+              "observation_ref": {
+                "format": "reference",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "execution_result"
+              },
+              "origin": {
+                "enum": [
+                  "newly_aligned",
+                  "inherited",
+                  "unknown",
+                  null
+                ],
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "pair_columns": {
+                "items": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "maxItems": 2,
+                "minItems": 2,
+                "type": [
+                  "array",
+                  "null"
+                ]
+              },
+              "population": {
+                "enum": [
+                  "all",
+                  "newly_aligned",
+                  "inherited",
+                  "reported",
+                  "included",
+                  null
+                ],
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "record_key": {
+                "format": "identifier",
+                "type": "string",
+                "x-reference-namespace": "native_infernal_row"
+              },
+              "reference_refs": {
+                "items": {
+                  "format": "reference",
+                  "type": "string",
+                  "x-reference-namespace": "execution_result"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "sequence_name": {
+                "format": "identifier",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "native_infernal_sequence_name"
+              },
+              "source_ref": {
+                "format": "reference",
+                "type": "string",
+                "x-reference-namespace": "execution_result"
+              },
+              "status": {
+                "enum": [
+                  "published",
+                  "unbound",
+                  "invalid"
+                ],
+                "type": "string"
+              },
+              "strand": {
+                "enum": [
+                  "plus",
+                  "minus",
+                  null
+                ],
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "subject_ref": {
+                "format": "reference",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "subject"
+              },
+              "unavailable": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": {
+                      "enum": [
+                        "bitscore",
+                        "evalue",
+                        "bias_bits",
+                        "gc_fraction",
+                        "model_span_length",
+                        "model_span_fraction",
+                        "sequence_span_length",
+                        "sequence_span_fraction",
+                        "consensus_length",
+                        "sequence_length"
+                      ],
+                      "type": "string"
+                    },
+                    "reason": {
+                      "enum": [
+                        "missing_input",
+                        "incompatible_input",
+                        "invalid_native_row",
+                        "not_measured"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "reason"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "record_key",
+              "source_ref",
+              "observation_ref",
+              "subject_ref",
+              "reference_refs",
+              "sequence_name",
+              "model_name",
+              "strand",
+              "origin",
+              "population",
+              "column_index",
+              "pair_columns",
+              "status",
+              "measurements",
+              "unavailable"
+            ],
+            "type": "object"
+          },
+          "type": "array",
+          "x-source": "execution_infernal_search_hit_rows"
+        },
+        "type": "array"
+      },
+      "execution_infernal_search_sequence_rows": {
+        "meaning": "Requested native Infernal quantities with their original sequence/model associations. Search spans are not aligned-residue coverage. Alignment gaps are not automatically deletions. Column and pair denominators retain the explicitly selected population. Unbound rows retain measurements without inventing an annotation target. No annotation score.",
+        "report_schema": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "column_index": {
+                "minimum": 0,
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "measurements": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": {
+                      "enum": [
+                        "hit_count",
+                        "union_numerator",
+                        "union_denominator",
+                        "union_span_fraction",
+                        "unselected_hit_count",
+                        "unknown_selection_count",
+                        "invalid_geometry_count"
+                      ],
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "value"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "model_name": {
+                "format": "identifier",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "native_infernal_model_name"
+              },
+              "observation_ref": {
+                "format": "reference",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "execution_result"
+              },
+              "origin": {
+                "enum": [
+                  "newly_aligned",
+                  "inherited",
+                  "unknown",
+                  null
+                ],
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "pair_columns": {
+                "items": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "maxItems": 2,
+                "minItems": 2,
+                "type": [
+                  "array",
+                  "null"
+                ]
+              },
+              "population": {
+                "enum": [
+                  "all",
+                  "newly_aligned",
+                  "inherited",
+                  "reported",
+                  "included",
+                  null
+                ],
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "record_key": {
+                "format": "identifier",
+                "type": "string",
+                "x-reference-namespace": "native_infernal_row"
+              },
+              "reference_refs": {
+                "items": {
+                  "format": "reference",
+                  "type": "string",
+                  "x-reference-namespace": "execution_result"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "sequence_name": {
+                "format": "identifier",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "native_infernal_sequence_name"
+              },
+              "source_ref": {
+                "format": "reference",
+                "type": "string",
+                "x-reference-namespace": "execution_result"
+              },
+              "status": {
+                "enum": [
+                  "published",
+                  "unbound",
+                  "invalid"
+                ],
+                "type": "string"
+              },
+              "strand": {
+                "enum": [
+                  "plus",
+                  "minus",
+                  null
+                ],
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "subject_ref": {
+                "format": "reference",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "subject"
+              },
+              "unavailable": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": {
+                      "enum": [
+                        "hit_count",
+                        "union_numerator",
+                        "union_denominator",
+                        "union_span_fraction",
+                        "unselected_hit_count",
+                        "unknown_selection_count",
+                        "invalid_geometry_count"
+                      ],
+                      "type": "string"
+                    },
+                    "reason": {
+                      "enum": [
+                        "missing_input",
+                        "incompatible_input",
+                        "invalid_native_row",
+                        "not_measured"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "reason"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "record_key",
+              "source_ref",
+              "observation_ref",
+              "subject_ref",
+              "reference_refs",
+              "sequence_name",
+              "model_name",
+              "strand",
+              "origin",
+              "population",
+              "column_index",
+              "pair_columns",
+              "status",
+              "measurements",
+              "unavailable"
+            ],
+            "type": "object"
+          },
+          "type": "array",
+          "x-source": "execution_infernal_search_sequence_rows"
+        },
+        "type": "array"
+      },
+      "interpretation_basis_refs": {
+        "meaning": "Semantic references visible to the last admitted report interpretation response and available at this report boundary, including source-window custody and admitted typed forms. A visible handle does not establish that its full record or source body was read.",
+        "type": "reference_array"
+      },
+      "last_outcome_refs": {
+        "meaning": "Semantic records returned by the last completed own ordinary action.",
+        "type": "reference_array"
+      },
+      "observations_after_report_basis": {
+        "meaning": "Last ordinary-action observations not supplied to that interpretation response.",
+        "type": "reference_array"
+      },
+      "pending_handles": {
+        "meaning": "Original selected child executions still pending when this episode closed. These handles survive parent closure; closure does not cancel them or establish scientific completion.",
+        "report_schema": {
+          "items": {
+            "format": "reference",
+            "type": "string",
+            "x-reference-namespace": "execution_handle"
+          },
+          "type": "array",
+          "uniqueItems": true,
+          "x-source": "pending_handles"
+        },
+        "type": "array"
+      },
+      "scientific_process_results": {
+        "meaning": "Recorded original process selection, explicit revision origin and existing closing local credit/yield for each invocation actually returned through requested forms. Initial and closing credit retain that episode's own units and binding; forwarding these facts creates no new score, credit or completed action.",
+        "report_schema": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "completed_actions": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "credit": {
+                "type": "number"
+              },
+              "credit_binding_ref": {
+                "format": "reference",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "scientific_credit_binding"
+              },
+              "credit_kind": {
+                "enum": [
+                  "scientific",
+                  "monitoring",
+                  "operational",
+                  null
+                ],
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "episode_yield": {
+                "additionalProperties": false,
+                "properties": {
+                  "completed_actions": {
+                    "description": "Completed own actions at this child's level; an investigation commissioned by it counts once.",
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "continuation_cost": {
+                    "description": "The actual child's decision threshold in its configured controller units.",
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "expected_next_gain": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "alpha": {
+                        "description": "Original band parameter: -1 unavailable; 0 exact; otherwise the configured tail parameter.",
+                        "type": "number"
+                      },
+                      "lower": {
+                        "description": "The original band's lower coordinate; read status_code before interpreting it.",
+                        "type": "number"
+                      },
+                      "status_code": {
+                        "description": "0 normal; -1 insufficient observations; -2 unidentifiable. Coded coordinates are not negative forecasts.",
+                        "enum": [
+                          0,
+                          -1,
+                          -2
+                        ],
+                        "type": "integer"
+                      },
+                      "uncertainty_code": {
+                        "description": "-1 unavailable; 0 exact; 1 Chebyshev; 2 Laplace approximation. The code does not establish calibrated coverage.",
+                        "enum": [
+                          -1,
+                          0,
+                          1,
+                          2
+                        ],
+                        "type": "integer"
+                      },
+                      "upper": {
+                        "description": "The original band's upper coordinate; read status_code before interpreting it.",
+                        "type": "number"
+                      },
+                      "value": {
+                        "description": "The original band point in this child's configured controller units.",
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "lower",
+                      "upper",
+                      "status_code",
+                      "uncertainty_code",
+                      "alpha"
+                    ],
+                    "type": "object"
+                  },
+                  "stop_requested": {
+                    "description": "The child's controller decision, not a parent instruction, job cancellation or scientific completion.",
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "completed_actions",
+                  "expected_next_gain",
+                  "continuation_cost",
+                  "stop_requested"
+                ],
+                "type": [
+                  "object",
+                  "null"
+                ]
+              },
+              "initial_credit": {
+                "type": "number"
+              },
+              "invocation_ref": {
+                "format": "reference",
+                "type": "string",
+                "x-reference-namespace": "scientific_invocation"
+              },
+              "origin_kind": {
+                "enum": [
+                  "ordinary_child",
+                  "approach_revision"
+                ],
+                "type": "string"
+              },
+              "parent_invocation_ref": {
+                "format": "reference",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "scientific_invocation"
+              },
+              "preparation_operation_ref": {
+                "format": "reference",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "scientific_preparation"
+              },
+              "selection": {
+                "additionalProperties": false,
+                "properties": {
+                  "child_tool_info": {
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "name": {
+                          "enum": [
+                            "api.blast.fetch",
+                            "api.blast.prepare",
+                            "api.blast.status",
+                            "api.blast.submit",
+                            "api.bvbrc.data.query",
+                            "api.bvbrc.data.result",
+                            "api.bvbrc.minhash.fasta",
+                            "api.bvbrc.minhash.genome",
+                            "api.bvbrc.minhash.result",
+                            "api.bvbrc.query",
+                            "api.bvbrc.result",
+                            "api.hmmer.check_handoff",
+                            "api.hmmer.databases",
+                            "api.hmmer.prepare",
+                            "api.hmmer.result",
+                            "api.hmmer.status",
+                            "api.hmmer.submit",
+                            "api.uniprot.collect",
+                            "api.uniprot.record",
+                            "api.uniprot.search",
+                            "execution.capabilities",
+                            "execution.results.collect",
+                            "execution.results.read",
+                            "execution.results.status",
+                            "genes.predict",
+                            "homology.check_handoff",
+                            "homology.configure",
+                            "homology.coverage",
+                            "homology.environment",
+                            "homology.errors",
+                            "homology.extract",
+                            "homology.resume_start",
+                            "homology.sample",
+                            "homology.stage",
+                            "homology.submit",
+                            "image.view",
+                            "library.members",
+                            "library.read",
+                            "library.select",
+                            "material.annotations",
+                            "material.errors",
+                            "material.from_source",
+                            "material.header",
+                            "material.member",
+                            "material.members",
+                            "material.parse",
+                            "material.read",
+                            "native.cmsearch",
+                            "practical.command.run",
+                            "practical.context.set",
+                            "practical.directory.create",
+                            "practical.file.read",
+                            "practical.file.write",
+                            "practical.inspect",
+                            "practical.inventory.refresh",
+                            "practical.job.collect",
+                            "practical.job.start",
+                            "practical.job.status",
+                            "progress.log",
+                            "progress.observe",
+                            "progress.read",
+                            "public.blast.collect",
+                            "public.blast.search",
+                            "public.chebi.compound",
+                            "public.chebi.search",
+                            "public.literature.read",
+                            "public.literature.search",
+                            "public.ncbi.search",
+                            "public.ncbi.sequence",
+                            "public.pmc.asset",
+                            "public.pmc.files",
+                            "public.pmc.versions",
+                            "public.rfam.collect",
+                            "public.rfam.model",
+                            "public.rfam.search",
+                            "public.rhea.reaction",
+                            "public.rhea.search",
+                            "public.search.jobs",
+                            "public.taxonomy",
+                            "public.uniprot.record",
+                            "public.uniprot.search",
+                            "reads.align",
+                            "reads.inspect",
+                            "reads.map",
+                            "reference.neighborhood",
+                            "result.blast.hsp",
+                            "rna.cmsearch",
+                            "sequence.align",
+                            "sequence.inspect",
+                            "sequence.sites",
+                            "sequence.translate",
+                            "sequence.view",
+                            "source.archive.extract",
+                            "source.archive.members",
+                            "source.pdf.info",
+                            "source.pdf.page",
+                            "source.pdf.text",
+                            "source.read",
+                            "source.xlsx.rows",
+                            "source.xlsx.sheets",
+                            "state.query",
+                            "translation.codes"
+                          ],
+                          "type": "string"
+                        },
+                        "resources": {
+                          "enum": [
+                            "api",
+                            "hpc",
+                            "local",
+                            null
+                          ],
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "resources"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                  },
+                  "evidence_axis": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "entry_sha256": {
+                        "format": "identifier",
+                        "type": "string",
+                        "x-reference-namespace": "scientific_option_digest"
+                      },
+                      "library_id": {
+                        "format": "identifier",
+                        "type": "string",
+                        "x-reference-namespace": "scientific_process_library"
+                      },
+                      "option_id": {
+                        "enum": [
+                          "A101",
+                          "A102",
+                          "A103",
+                          "A104",
+                          "A105",
+                          "A106",
+                          "A107",
+                          "A108",
+                          "A110",
+                          "A111"
+                        ],
+                        "type": "string"
+                      },
+                      "slot": {
+                        "enum": [
+                          "evidence_axis"
+                        ],
+                        "type": "string"
+                      },
+                      "version": {
+                        "const": "scientific_process_option_ref_v1",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "version",
+                      "library_id",
+                      "slot",
+                      "option_id",
+                      "entry_sha256"
+                    ],
+                    "type": "object"
+                  },
+                  "source_version": {
+                    "enum": [
+                      "scientific_process_selection_v2",
+                      "scientific_process_selection_v3"
+                    ],
+                    "type": "string"
+                  },
+                  "thought_pattern": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "entry_sha256": {
+                        "format": "identifier",
+                        "type": "string",
+                        "x-reference-namespace": "scientific_option_digest"
+                      },
+                      "library_id": {
+                        "format": "identifier",
+                        "type": "string",
+                        "x-reference-namespace": "scientific_process_library"
+                      },
+                      "option_id": {
+                        "enum": [
+                          "P01",
+                          "P02",
+                          "P03",
+                          "P04",
+                          "P05",
+                          "P06",
+                          "P07",
+                          "P08",
+                          "P09",
+                          "P10",
+                          "P11",
+                          "P12",
+                          "P13",
+                          "P14",
+                          "P15",
+                          "P16",
+                          "P17",
+                          "P18",
+                          "P19"
+                        ],
+                        "type": "string"
+                      },
+                      "slot": {
+                        "enum": [
+                          "thought_pattern"
+                        ],
+                        "type": "string"
+                      },
+                      "version": {
+                        "const": "scientific_process_option_ref_v1",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "version",
+                      "library_id",
+                      "slot",
+                      "option_id",
+                      "entry_sha256"
+                    ],
+                    "type": "object"
+                  },
+                  "version": {
+                    "const": "scientific_process_selection_report_v1",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "version",
+                  "source_version",
+                  "evidence_axis",
+                  "thought_pattern",
+                  "child_tool_info"
+                ],
+                "type": "object"
+              },
+              "version": {
+                "const": "scientific_process_result_v2",
+                "type": "string"
+              }
+            },
+            "required": [
+              "version",
+              "invocation_ref",
+              "parent_invocation_ref",
+              "origin_kind",
+              "preparation_operation_ref",
+              "selection",
+              "initial_credit",
+              "credit",
+              "credit_kind",
+              "credit_binding_ref",
+              "completed_actions",
+              "episode_yield"
+            ],
+            "type": "object"
+          },
+          "type": "array",
+          "x-source": "scientific_process_results"
+        },
+        "type": "array"
+      },
+      "subject_refs": {
+        "meaning": "Original input subjects assigned by the parent.",
+        "type": "reference_array"
+      }
+    },
+    "child_options": "| Child | Construction | Required assignment fields | Return facts |\n| --- | --- | --- | --- |\n| scientific_process | available | selection, evidence_refs, constraints, context | episode_yield, pending_handles, scientific_process_results, execution_infernal_search_hit_rows, execution_infernal_search_sequence_rows, execution_infernal_alignment_sequence_rows, execution_infernal_alignment_column_rows, execution_infernal_alignment_pair_rows, execution_infernal_result_refs |\n| launch | available | version, requests, immutable_input_versions, constraints | episode_yield, pending_handles, execution_hmmer_domain_rows, execution_nhmmer_locus_rows, execution_hmmalign_sequence_rows, execution_infernal_search_hit_rows, execution_infernal_search_sequence_rows, execution_infernal_alignment_sequence_rows, execution_infernal_alignment_column_rows, execution_infernal_alignment_pair_rows, execution_infernal_result_refs, execution_bvbrc_pages, execution_bvbrc_counts, execution_bvbrc_facets, execution_bvbrc_numeric_rows, execution_bvbrc_feature_sequence_rows, execution_bvbrc_expression_rows, execution_handoff_refs, execution_result_refs, execution_completed, execution_result_origin, execution_blast_hsps |\n| results | available | version, handoff_ref, selector | episode_yield, pending_handles, execution_hmmer_domain_rows, execution_nhmmer_locus_rows, execution_hmmalign_sequence_rows, execution_infernal_search_hit_rows, execution_infernal_search_sequence_rows, execution_infernal_alignment_sequence_rows, execution_infernal_alignment_column_rows, execution_infernal_alignment_pair_rows, execution_infernal_result_refs, execution_bvbrc_pages, execution_bvbrc_counts, execution_bvbrc_facets, execution_bvbrc_numeric_rows, execution_bvbrc_feature_sequence_rows, execution_bvbrc_expression_rows, execution_handoff_refs, execution_result_refs, execution_completed, execution_result_origin, execution_blast_hsps |",
+    "child_reports": [
+      {
+        "completed": true,
+        "references": [
+          "source_d5c6bfcf0a8254c59aca0c27"
+        ]
+      },
+      {
+        "completed": true,
+        "rows": [
+          {
+            "column_index": null,
+            "measurements": [
+              {
+                "name": "bitscore",
+                "value": 71.4
+              }
+            ],
+            "model_name": "tRNA5",
+            "observation_ref": "observation_2746f9cb4d3a80a967c38475",
+            "origin": null,
+            "pair_columns": null,
+            "population": null,
+            "record_key": "[\"artifact_e0d182f2571b4417f5b1a581e5343fc1950665ab26f93626b28480758b7cd877\",0,3]",
+            "reference_refs": [
+              "reference_494e325bba28a7a22594951b"
+            ],
+            "sequence_name": "mrum-tRNA.1",
+            "source_ref": "source_c600f62e8eceae1f365cdbf3",
+            "status": "published",
+            "strand": "plus",
+            "subject_ref": "input_28044e5447792f87c5c70728",
+            "unavailable": []
+          }
+        ]
+      },
+      {
+        "completed": true,
+        "rows": [
+          {
+            "column_index": null,
+            "measurements": [
+              {
+                "name": "evalue",
+                "value": 3.6e-22
+              }
+            ],
+            "model_name": "tRNA5",
+            "observation_ref": "observation_2746f9cb4d3a80a967c38475",
+            "origin": null,
+            "pair_columns": null,
+            "population": null,
+            "record_key": "[\"artifact_e0d182f2571b4417f5b1a581e5343fc1950665ab26f93626b28480758b7cd877\",0,3]",
+            "reference_refs": [
+              "reference_494e325bba28a7a22594951b"
+            ],
+            "sequence_name": "mrum-tRNA.1",
+            "source_ref": "source_c600f62e8eceae1f365cdbf3",
+            "status": "published",
+            "strand": "plus",
+            "subject_ref": "input_28044e5447792f87c5c70728",
+            "unavailable": []
+          }
+        ]
+      }
+    ],
+    "controller": {
+      "current_credit": 0.0,
+      "decision": {
+        "continuation_cost": 0.0,
+        "decision_basis": "current_estimator_marginal_credit_upper_bound",
+        "projected_gain": {
+          "alpha": 0.0,
+          "lower": 1.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 1.0,
+          "value": 1.0
+        },
+        "stop": false
+      },
+      "epoch": "(('annotation', 'root'), ('scientific_process', 'child_0'))",
+      "estimate": {
+        "diagnostics": {
+          "fixture": "explicit_scientific_verification_horizon"
+        },
+        "expected_next_gain": {
+          "alpha": 0.0,
+          "lower": 1.0,
+          "status_code": 0,
+          "uncertainty_code": 0,
+          "upper": 1.0,
+          "value": 1.0
+        },
+        "parameters": {
+          "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+          "subsample_size": 50,
+          "uncertainty_alpha": 0.05,
+          "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+          "window_size": 100
+        },
+        "provenance": {
+          "function": "test_native_infernal_results_integration.run_case.<locals>.controller.<locals>.estimate",
+          "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+          "kind": "caller_injected",
+          "template_relationship": "not_inferred"
+        },
+        "turns": 3
+      },
+      "initial_credit": 0.0,
+      "scores": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "controller_binding": {
+      "factory": "test_native_infernal_results_integration.run_case.<locals>.controller",
+      "kind": "custom"
+    },
+    "credit_binding": {
+      "kind": "custom",
+      "meaning": "Caller-injected projector; no default scientific policy or denominator is inferred.",
+      "projector": "test_native_infernal_results_integration.run_case.<locals>.received_observations"
+    },
+    "current_credit": 0.0,
+    "current_evidence_vector": null,
+    "current_report_basis_refs": [
+      "input_145648a388c88aea77d1e58c",
+      "input_28044e5447792f87c5c70728",
+      "input_492ba89fa921b0c86265fd4c",
+      "input_59f6f0ed36f36e37915e366b",
+      "input_71928cb66cd1ee9e9ccb98fd",
+      "input_a5e461e2102d0b63a4c58c86",
+      "input_b8973105fd1e88139fadaef1",
+      "input_c36a5cfe75911ae7b5036c1e",
+      "input_e3d4e614daaa3fa65aaba766",
+      "input_f64d952f71037451fcc616de",
+      "artifact_b90cb9241ba31d17a17b345347969515d5845d0e9b389e745884c3abf7d76cac",
+      "material_c09ace2575a8d42582747f04",
+      "source_b8820f79cccd63a6a8f2d9d6",
+      "artifact_5e232defeeafb0443b4929c8baaeeb8500fdd307b6965eff1fb54bdefe37d211",
+      "artifact_b13c3f24f9a1592dcacfabb99be02b73d8c4a4dbed4bdae52dfebd76d98ec568",
+      "artifact_aae94713118d0c425dd133ec2198063bce3fb1871097e5ac7523ca5400d5270a",
+      "artifact_4cb971ab40ee61774c8347402c74a4fac1bc3923db7f9bfc101de468d0fc275f",
+      "artifact_3bd4309fa01ca3349c1b315032f6ebca6ef323b3a9b38f68df1d7d40091b46df",
+      "artifact_7edbd4708ab46c231de6e422938d581054dbd7b07a4e86c839e1f8957f5106a7",
+      "artifact_1616c90a76b889bf134b476c47a147b1dec637df16792cdc48414451a513c551",
+      "artifact_fc4a5d7785d87bf21e40d6aa1dc6d3f6e1b813348f99b311abc82a2e6c9fae5e",
+      "artifact_cd0c974db00e0530aa9db1dc9369e609b195ceeb47643178318c3836201b1089",
+      "artifact_296cc0bc00a08505d76ad15bbeb3032948051c3b85b10511a46c3771f91a527a",
+      "source_c600f62e8eceae1f365cdbf3",
+      "artifact_3b1e25acaf2e39a211be822243a0d5636fe145f577ce7ff451d5db94a14bfe8b",
+      "artifact_458183dae273c27cc934236c4ffd1f70f24681028751ad198e7b8a4430ce7c91",
+      "artifact_51d4981abe17ed83f20e45a427939d0fbb20021da7a1ba4ab43a749053c0bbce",
+      "artifact_68ab1e95dbf0c32bda541529bdd4bb3ba05ecc4d55c9551ae30bf5683d80b4fa",
+      "artifact_69de11fd1a8dc197a306780a53b9417427f83b66002d1c3bb53b42021ce294fd",
+      "artifact_c73f7bd41a54d993cded1114995e3d3937c70402497fd660be899ad8af09a87b",
+      "artifact_e0d182f2571b4417f5b1a581e5343fc1950665ab26f93626b28480758b7cd877",
+      "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_d5c6bfcf0a8254c59aca0c27",
+      "artifact_33557b12231e13d92cc287163cd27b5367bfb0e10c679a46070f6e779adecd52",
+      "artifact_b9a8db24c8e0abb4102e9bddbe593a8203e154aa84c430f2ad2ad42559e3ad82",
+      "reference_494e325bba28a7a22594951b",
+      "observation_2746f9cb4d3a80a967c38475"
+    ],
+    "current_report_update": {},
+    "execution_initial_information": {},
+    "execution_resource_capabilities": [
+      {
+        "availability": "unknown",
+        "inventory_snapshot": null,
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "resource_id": "here",
+        "resource_kind": "local",
+        "tool_names": [
+          "practical.inspect",
+          "practical.inventory.refresh",
+          "practical.context.set",
+          "practical.directory.create",
+          "practical.file.write",
+          "practical.file.read",
+          "practical.command.run",
+          "practical.job.start",
+          "practical.job.status",
+          "practical.job.collect"
+        ],
+        "workspace": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_episode_2026-10-26_226/run_004_full/temporary/pytest/test_same_native_row_source_an0/workspace"
+      }
+    ],
+    "feedback": null,
+    "goal": {
+      "goal_id": "goal_ad2da3f66c860f1b4ffcaaa3",
+      "objective": "Measure covariance-model correspondence for the supplied nucleotide sequences.",
+      "parent_goal_id": "goal_627e3e4da19a394cd9e13ab3",
+      "result_contract": {
+        "additionalProperties": false,
+        "properties": {
+          "search_hit": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "column_index": {
+                  "minimum": 0,
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "measurements": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "name": {
+                        "enum": [
+                          "bitscore",
+                          "evalue",
+                          "bias_bits",
+                          "gc_fraction",
+                          "model_span_length",
+                          "model_span_fraction",
+                          "sequence_span_length",
+                          "sequence_span_fraction",
+                          "consensus_length",
+                          "sequence_length"
+                        ],
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "value"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "model_name": {
+                  "format": "identifier",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "x-reference-namespace": "native_infernal_model_name"
+                },
+                "observation_ref": {
+                  "format": "reference",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "x-reference-namespace": "execution_result"
+                },
+                "origin": {
+                  "enum": [
+                    "newly_aligned",
+                    "inherited",
+                    "unknown",
+                    null
+                  ],
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pair_columns": {
+                  "items": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "maxItems": 2,
+                  "minItems": 2,
+                  "type": [
+                    "array",
+                    "null"
+                  ]
+                },
+                "population": {
+                  "enum": [
+                    "all",
+                    "newly_aligned",
+                    "inherited",
+                    "reported",
+                    "included",
+                    null
+                  ],
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "record_key": {
+                  "format": "identifier",
+                  "type": "string",
+                  "x-reference-namespace": "native_infernal_row"
+                },
+                "reference_refs": {
+                  "items": {
+                    "format": "reference",
+                    "type": "string",
+                    "x-reference-namespace": "execution_result"
+                  },
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "sequence_name": {
+                  "format": "identifier",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "x-reference-namespace": "native_infernal_sequence_name"
+                },
+                "source_ref": {
+                  "format": "reference",
+                  "type": "string",
+                  "x-reference-namespace": "execution_result"
+                },
+                "status": {
+                  "enum": [
+                    "published",
+                    "unbound",
+                    "invalid"
+                  ],
+                  "type": "string"
+                },
+                "strand": {
+                  "enum": [
+                    "plus",
+                    "minus",
+                    null
+                  ],
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "subject_ref": {
+                  "format": "reference",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "x-reference-namespace": "subject"
+                },
+                "unavailable": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "name": {
+                        "enum": [
+                          "bitscore",
+                          "evalue",
+                          "bias_bits",
+                          "gc_fraction",
+                          "model_span_length",
+                          "model_span_fraction",
+                          "sequence_span_length",
+                          "sequence_span_fraction",
+                          "consensus_length",
+                          "sequence_length"
+                        ],
+                        "type": "string"
+                      },
+                      "reason": {
+                        "enum": [
+                          "missing_input",
+                          "incompatible_input",
+                          "invalid_native_row",
+                          "not_measured"
+                        ],
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "reason"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [
+                "record_key",
+                "source_ref",
+                "observation_ref",
+                "subject_ref",
+                "reference_refs",
+                "sequence_name",
+                "model_name",
+                "strand",
+                "origin",
+                "population",
+                "column_index",
+                "pair_columns",
+                "status",
+                "measurements",
+                "unavailable"
+              ],
+              "type": "object"
+            },
+            "type": "array",
+            "x-source": "execution_infernal_search_hit_rows"
+          }
+        },
+        "required": [
+          "search_hit"
+        ],
+        "type": "object"
+      },
+      "task_context": {
+        "root_objective": "Measure covariance-model correspondence in the supplied sequences.",
+        "root_result_contract": {
+          "role": "annotation"
+        }
+      }
+    },
+    "investigation_progress": {},
+    "job_episode_options": null,
+    "last_local_outcome": null,
+    "launch_instruction_library": {
+      "content_role": "launch_instructions_not_inventory_or_scientific_evidence",
+      "discovery_tool": "launch.instructions.search",
+      "entry_count": 7,
+      "library_id": "launch_instructions_65d941000ba1e0b4be93649e46b5c9ae61722aa1d41f394511a201eaecc20ae7",
+      "version": "launch_instruction_library_v1"
+    },
+    "pending_work": {
+      "captured_at": "2026-10-26T02:19:02.419341+00:00",
+      "items": [],
+      "version": "pending_work_v1"
+    },
+    "received_bvbrc_values": [],
+    "report_deliveries": [
+      {
+        "delivery_ref": "delivery_265432197f45ea4129ca53e1",
+        "status": "delivered"
+      },
+      {
+        "delivery_ref": "delivery_6c226d30159e63e465b301c4",
+        "status": "delivered"
+      },
+      {
+        "delivery_ref": "delivery_59ddf2142129598e5c3497c0",
+        "status": "delivered"
+      }
+    ],
+    "report_lifecycle": "Interpretations are the last actual reasoning basis; later tool outcomes are facts, not a new judgment.",
+    "requested_form": {
+      "additionalProperties": false,
+      "properties": {
+        "search_hit": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "column_index": {
+                "minimum": 0,
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "measurements": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": {
+                      "enum": [
+                        "bitscore",
+                        "evalue",
+                        "bias_bits",
+                        "gc_fraction",
+                        "model_span_length",
+                        "model_span_fraction",
+                        "sequence_span_length",
+                        "sequence_span_fraction",
+                        "consensus_length",
+                        "sequence_length"
+                      ],
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "value"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "model_name": {
+                "format": "identifier",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "native_infernal_model_name"
+              },
+              "observation_ref": {
+                "format": "reference",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "execution_result"
+              },
+              "origin": {
+                "enum": [
+                  "newly_aligned",
+                  "inherited",
+                  "unknown",
+                  null
+                ],
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "pair_columns": {
+                "items": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "maxItems": 2,
+                "minItems": 2,
+                "type": [
+                  "array",
+                  "null"
+                ]
+              },
+              "population": {
+                "enum": [
+                  "all",
+                  "newly_aligned",
+                  "inherited",
+                  "reported",
+                  "included",
+                  null
+                ],
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "record_key": {
+                "format": "identifier",
+                "type": "string",
+                "x-reference-namespace": "native_infernal_row"
+              },
+              "reference_refs": {
+                "items": {
+                  "format": "reference",
+                  "type": "string",
+                  "x-reference-namespace": "execution_result"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "sequence_name": {
+                "format": "identifier",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "native_infernal_sequence_name"
+              },
+              "source_ref": {
+                "format": "reference",
+                "type": "string",
+                "x-reference-namespace": "execution_result"
+              },
+              "status": {
+                "enum": [
+                  "published",
+                  "unbound",
+                  "invalid"
+                ],
+                "type": "string"
+              },
+              "strand": {
+                "enum": [
+                  "plus",
+                  "minus",
+                  null
+                ],
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "subject_ref": {
+                "format": "reference",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "x-reference-namespace": "subject"
+              },
+              "unavailable": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": {
+                      "enum": [
+                        "bitscore",
+                        "evalue",
+                        "bias_bits",
+                        "gc_fraction",
+                        "model_span_length",
+                        "model_span_fraction",
+                        "sequence_span_length",
+                        "sequence_span_fraction",
+                        "consensus_length",
+                        "sequence_length"
+                      ],
+                      "type": "string"
+                    },
+                    "reason": {
+                      "enum": [
+                        "missing_input",
+                        "incompatible_input",
+                        "invalid_native_row",
+                        "not_measured"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "reason"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "record_key",
+              "source_ref",
+              "observation_ref",
+              "subject_ref",
+              "reference_refs",
+              "sequence_name",
+              "model_name",
+              "strand",
+              "origin",
+              "population",
+              "column_index",
+              "pair_columns",
+              "status",
+              "measurements",
+              "unavailable"
+            ],
+            "type": "object"
+          },
+          "type": "array",
+          "x-source": "execution_infernal_search_hit_rows"
+        }
+      },
+      "required": [
+        "search_hit"
+      ],
+      "type": "object"
+    },
+    "requested_report_purpose": "Return exactly the requested native numerical measurements and associations.",
+    "restored_episode_history": {
+      "entries": [
+        {
+          "credit": 0.0,
+          "decision_index": 0,
+          "kind": "episode_child",
+          "status": "completed",
+          "tool": null
+        },
+        {
+          "credit": 0.0,
+          "decision_index": 1,
+          "kind": "episode_child",
+          "status": "completed",
+          "tool": null
+        },
+        {
+          "credit": 0.0,
+          "decision_index": 2,
+          "kind": "episode_child",
+          "status": "completed",
+          "tool": null
+        }
+      ],
+      "exact_read_tool": "episode.history",
+      "omitted_prior_decisions": 0,
+      "preview_size": 24,
+      "total_prior_decisions": 3
+    },
+    "scientific_child_credit_binding": {
+      "kind": "custom",
+      "meaning": "Caller-injected projector; no default scientific policy or denominator is inferred.",
+      "projector": "test_native_infernal_results_integration.run_case.<locals>.received_observations"
+    },
+    "scientific_process": {
+      "assignment": {
+        "constraints": {
+          "allocation": {
+            "memory_bytes": 21474836480,
+            "scratch_bytes": 4294967296,
+            "wall_seconds": null
+          },
+          "no_external_acquisition": true
+        },
+        "context": {
+          "candidate_function_required": false,
+          "molecule": "rna",
+          "supplied_sequence_records": [
+            "mrum-tRNA.1",
+            "mrum-tRNA.2",
+            "mrum-tRNA.3",
+            "mrum-tRNA.4",
+            "mrum-tRNA.5",
+            "mrum-tRNA.6",
+            "mrum-tRNA.7",
+            "mrum-tRNA.8",
+            "mrum-tRNA.9",
+            "mrum-tRNA.10"
+          ]
+        },
+        "evidence_refs": [
+          "input_145648a388c88aea77d1e58c",
+          "input_28044e5447792f87c5c70728",
+          "input_492ba89fa921b0c86265fd4c",
+          "input_59f6f0ed36f36e37915e366b",
+          "input_71928cb66cd1ee9e9ccb98fd",
+          "input_a5e461e2102d0b63a4c58c86",
+          "input_b8973105fd1e88139fadaef1",
+          "input_c36a5cfe75911ae7b5036c1e",
+          "input_e3d4e614daaa3fa65aaba766",
+          "input_f64d952f71037451fcc616de"
+        ],
+        "selection": {
+          "child_tool_info": [
+            {
+              "name": "native.cmsearch",
+              "resources": "local"
+            }
+          ],
+          "evidence_axis": {
+            "entry_sha256": "5a2715ba962566177b4dd193306b8f679654d1e9a92982d068171f90b2ec030e",
+            "library_id": "14979461e17dbf9ac3fadeb060144150f485a013dcf1f5fd2be5cb20dd0a841a",
+            "option_id": "A101",
+            "slot": "evidence_axis",
+            "version": "scientific_process_option_ref_v1"
+          },
+          "thought_pattern": {
+            "entry_sha256": "f606127c4b69f07eff5cbfd5282ce623df2d667df4bee7dfa48ef3544c4ea732",
+            "library_id": "14979461e17dbf9ac3fadeb060144150f485a013dcf1f5fd2be5cb20dd0a841a",
+            "option_id": "P01",
+            "slot": "thought_pattern",
+            "version": "scientific_process_option_ref_v1"
+          },
+          "version": "scientific_process_selection_v3"
+        }
+      },
+      "child_tool_info": [
+        {
+          "description": "Search supplied RNA covariance models against supplied nucleotide sequences.",
+          "instructions": "Supply models, sequences. Retain stdout, stderr, tblout. Optional outputs: included_msa. The native query is the model and the native target is the physical sequence. Retain every reported hit, including reporting-only hits, bit score, E-value, bias, GC, strand, truncation and separate model/sequence coordinates. Formats 1 and 3 differ in whether model and sequence lengths are reported. Preserve the full native output and any selected included-hit alignment; absence of a reported hit is conditional on the actual search settings and input population. Use exact supplied input identities, formats and native options. Unknown lengths, input-record associations and search-population quantities remain unknown. Commission the selected job through launch and its configured local-compute child. The child owns preparation and selects practical.job.start. Monitoring observes that original attempt; results acquisition retains the complete original artifacts and invokes the separate deterministic parser and calculator. Recalculate a saved sheet without rerunning the native program. Request only the numerical components and associations needed by the receiving episode. Native significance and model-alignment quantities are not probabilities of correct gene annotation. This information grants no direct native execution operation to the scientific episode.",
+          "name": "native.cmsearch",
+          "resources": "local"
+        }
+      ],
+      "evidence_axis": {
+        "id": "A101",
+        "instruction_status": "published_investigation_instructions",
+        "investigation_instructions": "Determine what functions the supplied gene or protein may perform by comparing its sequence with relevant homologs and family profiles. Start from the supplied sequence, selected file record or region, or snippets. No candidate annotation or searchable public name is required. Preserve the selected material and its boundaries; do not infer a complete sequence from snippets or choose an arbitrary record from a multi-record file.\n\nUse the comparisons to identify plausible families and distinguish their functions. Examine what was experimentally characterized in relevant homologs, including close relatives with different functions, and map the features bearing on those differences to the supplied target. Retain the identity of the experimentally studied subject separately from the sequence or profile used in a search. A database description or inherited family label is not experimental characterization.\n\nRetain actual alignment or profile scores, bit scores, E-values, identity, matched spans and coverage when available, with the method, search space, score units, denominators and reported uncertainty or bounds. Keep query and comparator coverage distinct, and distinguish a matched domain from the whole protein. Compare numbers only where their methods and scales permit the comparison; a sequence score is not a probability of a particular function.\n\nExamine catalytic and recognition residues, missing or additional domains, and substitutions or insertions that distinguish possible activities. High overall identity can coexist with different substrate specificity; a short match or conserved cofactor-binding region can support only a broader conclusion. Preserve negative results, function-changing differences and unresolved regions. Revise the possible functions as the comparisons become informative, keeping family membership, exact reaction, substrate specificity and physiological role distinct.",
+        "name": "Sequence homology"
+      },
+      "initial_selection_sha256": "d48f0611aafc423d271bd1e567a98a9245bf8a39d2c7f2cac45bae081f5ad856",
+      "permitted_children": [
+        "scientific_process",
+        "launch",
+        "results"
+      ],
+      "selection": {
+        "child_tool_info": [
+          {
+            "name": "native.cmsearch",
+            "resources": "local"
+          }
+        ],
+        "evidence_axis": {
+          "entry_sha256": "5a2715ba962566177b4dd193306b8f679654d1e9a92982d068171f90b2ec030e",
+          "library_id": "14979461e17dbf9ac3fadeb060144150f485a013dcf1f5fd2be5cb20dd0a841a",
+          "option_id": "A101",
+          "slot": "evidence_axis",
+          "version": "scientific_process_option_ref_v1"
+        },
+        "thought_pattern": {
+          "entry_sha256": "f606127c4b69f07eff5cbfd5282ce623df2d667df4bee7dfa48ef3544c4ea732",
+          "library_id": "14979461e17dbf9ac3fadeb060144150f485a013dcf1f5fd2be5cb20dd0a841a",
+          "option_id": "P01",
+          "slot": "thought_pattern",
+          "version": "scientific_process_option_ref_v1"
+        },
+        "version": "scientific_process_selection_v3"
+      },
+      "thought_pattern": {
+        "boundary": "Choose a comparator for transfer of a disputed biological property. P02 instead tests an explicit feature-to-function implication against discordant cases. A better sequence score, fold match or neighborhood is a tool result, not the transfer conclusion.",
+        "decision_guidance": [
+          "Prefer references that separate plausible alternatives, not simply the most familiar name or highest global score. Alignments, structures and context searches are ways to inspect a chosen relationship.",
+          "When a comparison is weak, consider a biologically better reference before treating it as evidence against all relationship.",
+          "Keep catalytic compatibility, target recognition and native role as separate transfer claims; absent catalytic machinery can overturn an inherited chemistry."
+        ],
+        "description": "Use similarity to a characterized system to form bounded explanations. Choose which sequence, local structural machinery, domain architecture, genomic context or organismal circumstance makes the reference informative for the disputed property; revise misleading comparators.",
+        "id": "P01",
+        "live_alternatives": [
+          "A relevant shared relationship supports transfer of the disputed property.",
+          "Only a partial core is shared; recognition, partners or role differ.",
+          "The comparator or short match is uninformative for this question."
+        ],
+        "name": "Choose a relevant analogue and bound what transfers",
+        "outcome_contingencies": [
+          {
+            "if_observed": "Relevant machinery corresponds but specificity differs",
+            "then_consider": "Retain the supported relationship and investigate the differing recognition or contextual features."
+          },
+          {
+            "if_observed": "Expected catalytic machinery is incompatible",
+            "then_consider": "Reopen chemistry and preserve only the relationship actually supported."
+          },
+          {
+            "if_observed": "No informative correspondence is found",
+            "then_consider": "Keep function unresolved; absence of an informative match is not absence of function."
+          }
+        ],
+        "use_when": "A nearest hit, fold, motif or similar biological context suggests an annotation, but exact chemistry, recognition or role remains open."
+      }
+    },
+    "scope": {
+      "subject_refs": [
+        "input_145648a388c88aea77d1e58c",
+        "input_28044e5447792f87c5c70728",
+        "input_492ba89fa921b0c86265fd4c",
+        "input_59f6f0ed36f36e37915e366b",
+        "input_71928cb66cd1ee9e9ccb98fd",
+        "input_a5e461e2102d0b63a4c58c86",
+        "input_b8973105fd1e88139fadaef1",
+        "input_c36a5cfe75911ae7b5036c1e",
+        "input_e3d4e614daaa3fa65aaba766",
+        "input_f64d952f71037451fcc616de"
+      ]
+    },
+    "time_accounting": {
+      "credit_or_controller_effect": "none",
+      "decision_calls": {
+        "latest": {
+          "decision_index": 2,
+          "timing": {
+            "clock": "monotonic",
+            "includes_child_wait": true,
+            "interval_count": 1,
+            "is_compute_consumption": false,
+            "live_interval_elapsed_seconds": null,
+            "measured_elapsed_seconds": 0.042781357,
+            "state": "returned",
+            "time_unit": "seconds",
+            "unmeasured_ended_intervals": 0,
+            "version": "measured_episode_execution_intervals_v1"
+          }
+        },
+        "measured_elapsed_seconds": 0.196275844,
+        "records": 3,
+        "records_with_timing": 3,
+        "records_without_timing": 0,
+        "unmeasured_ended_intervals": 0
+      },
+      "includes_child_wait": true,
+      "selected_work": {
+        "latest": {
+          "decision_index": 2,
+          "timing": {
+            "clock": "monotonic",
+            "includes_child_wait": true,
+            "interval_count": 1,
+            "is_compute_consumption": false,
+            "live_interval_elapsed_seconds": null,
+            "measured_elapsed_seconds": 5.046602291,
+            "state": "returned",
+            "time_unit": "seconds",
+            "unmeasured_ended_intervals": 0,
+            "version": "measured_episode_execution_intervals_v1"
+          }
+        },
+        "measured_elapsed_seconds": 14.758865361,
+        "records": 3,
+        "records_with_timing": 3,
+        "records_without_timing": 0,
+        "unmeasured_ended_intervals": 0
+      },
+      "sum_across_episode_levels_is_compute_consumption": false,
+      "time_unit": "seconds",
+      "version": "measured_episode_execution_intervals_v1"
+    },
+    "tool_knowledge": {
+      "content_role": "tool_and_resource_instructions_not_scientific_evidence",
+      "discovery_tool": "knowledge.search",
+      "entry_count": 9,
+      "library_id": "tool_knowledge_43f283fc905b07e8c100dbb3a8d9f799ea2ff589bd6e81a69945f5ed137fba90",
+      "version": "tool_knowledge_v1"
+    },
+    "tools": [
+      {
+        "description": "Prepare a different thought pattern and/or selected actual tools for a new child investigating the same evidence axis. Return its selection for a separately selected episode_child commission with the child's job, scope, constraints and typed return form. Copy result.selection and revision_origin into that assignment. Changes no current process, starts no child and records no biological observation. Select the actual tool/resource choices returned by process.tools for the desired investigation.",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "child_tool_info": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "resources": {
+                    "enum": [
+                      "api",
+                      "local",
+                      "hpc"
+                    ]
+                  }
+                },
+                "required": [
+                  "name",
+                  "resources"
+                ],
+                "type": "object"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "thought_pattern": {
+              "additionalProperties": false,
+              "properties": {
+                "entry_sha256": {
+                  "pattern": "^[a-f0-9]{64}$",
+                  "type": "string"
+                },
+                "library_id": {
+                  "pattern": "^[a-f0-9]{64}$",
+                  "type": "string"
+                },
+                "option_id": {
+                  "pattern": "^P[0-9]+$",
+                  "type": "string"
+                },
+                "slot": {
+                  "const": "thought_pattern"
+                },
+                "version": {
+                  "const": "scientific_process_option_ref_v1"
+                }
+              },
+              "required": [
+                "version",
+                "library_id",
+                "slot",
+                "option_id",
+                "entry_sha256"
+              ],
+              "type": "object"
+            }
+          },
+          "required": [
+            "thought_pattern",
+            "child_tool_info"
+          ],
+          "type": "object"
+        },
+        "name": "process.revise"
+      },
+      {
+        "description": "Search/page the run-frozen tool-instruction index. All whitespace-separated query terms must occur in entry metadata, case-insensitively; this is literal discovery, not a scientific suitability verdict. Empty query lists entries. No manual bodies are loaded.",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "limit": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "offset": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "query": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "query",
+            "offset",
+            "limit"
+          ],
+          "type": "object"
+        },
+        "name": "knowledge.search"
+      },
+      {
+        "description": "Read one instruction entry's section index, tool names and provenance without loading manual bodies. A listed tool is not necessarily enabled for this episode.",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "entry_id": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "entry_id"
+          ],
+          "type": "object"
+        },
+        "name": "knowledge.entry"
+      },
+      {
+        "description": "Read a selected instruction section by zero-based line offset and line count. Follow next_query for more. Returns run library identity and exact section digest; instructions are not scientific source evidence.",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "entry_id": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "limit": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "offset": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "section_id": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "entry_id",
+            "section_id",
+            "offset",
+            "limit"
+          ],
+          "type": "object"
+        },
+        "name": "knowledge.read"
+      },
+      {
+        "description": "Search/page the separate run-frozen launch instruction metadata. Empty query browses entries. resource_kind is an optional exact metadata filter; neither matches nor manuals establish resource availability.",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "limit": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "offset": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "query": {
+              "type": "string"
+            },
+            "resource_kind": {
+              "enum": [
+                "api",
+                "local",
+                "hpc",
+                null
+              ],
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "query",
+            "offset",
+            "limit"
+          ],
+          "type": "object"
+        },
+        "name": "launch.instructions.search"
+      },
+      {
+        "description": "Read one launch instruction entry index, sources and section hashes without loading section text. Listed operations still require an actual binding.",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "entry_id": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "entry_id"
+          ],
+          "type": "object"
+        },
+        "name": "launch.instructions.entry"
+      },
+      {
+        "description": "Read exact zero-based line windows from a selected launch instruction section. Returns its digest and next_query; reading performs no setup or execution.",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "entry_id": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "limit": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "offset": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "section_id": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "entry_id",
+            "section_id",
+            "offset",
+            "limit"
+          ],
+          "type": "object"
+        },
+        "name": "launch.instructions.read"
+      },
+      {
+        "description": "Pin explicitly selected sections from one or multiple entries in this run-frozen launch library. Pass the returned selection as the child assignment launch_instructions. Does not choose or launch a resource.",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "sections": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "entry_id": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "section_id": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "entry_id",
+                  "section_id"
+                ],
+                "type": "object"
+              },
+              "minItems": 1,
+              "type": "array"
+            }
+          },
+          "required": [
+            "sections"
+          ],
+          "type": "object"
+        },
+        "name": "launch.instructions.select"
+      },
+      {
+        "description": "Search/page frozen evidence-axis and thought-pattern options. process.entry supplies investigation guidance about the evidence and measurements to examine. Discovery selects no work and grants no capabilities.",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "limit": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "offset": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "query": {
+              "type": "string"
+            },
+            "slot": {
+              "enum": [
+                "evidence_axis",
+                "thought_pattern",
+                null
+              ]
+            }
+          },
+          "required": [
+            "slot",
+            "query",
+            "offset",
+            "limit"
+          ],
+          "type": "object"
+        },
+        "name": "process.search"
+      },
+      {
+        "description": "Read investigation guidance for an evidence axis or the selected thought-pattern instructions by A/P option ID. Evidence-axis lookups describe measurements and their limits; scoring sheets, grading recipes and reader bindings are separate. The parent retains its return form.",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "option_id": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "option_id"
+          ],
+          "type": "object"
+        },
+        "name": "process.entry"
+      },
+      {
+        "description": "Page the instruction provenance supporting a fully pinned option. Case evidence and E identifiers are library provenance, not new scientific observations.",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "limit": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "offset": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "option_ref": {
+              "additionalProperties": false,
+              "properties": {
+                "entry_sha256": {
+                  "pattern": "^[a-f0-9]{64}$",
+                  "type": "string"
+                },
+                "library_id": {
+                  "pattern": "^[a-f0-9]{64}$",
+                  "type": "string"
+                },
+                "option_id": {
+                  "pattern": "^[AP][0-9]+$",
+                  "type": "string"
+                },
+                "slot": {
+                  "enum": [
+                    "evidence_axis",
+                    "thought_pattern",
+                    "annotation_distinction"
+                  ]
+                },
+                "version": {
+                  "const": "scientific_process_option_ref_v1"
+                }
+              },
+              "required": [
+                "version",
+                "library_id",
+                "slot",
+                "option_id",
+                "entry_sha256"
+              ],
+              "type": "object"
+            }
+          },
+          "required": [
+            "option_ref",
+            "offset",
+            "limit"
+          ],
+          "type": "object"
+        },
+        "name": "process.sources"
+      },
+      {
+        "description": "Retrieve actual operation information for the desired child investigation. Parent rows contain name, description and one API/local/HPC resource kind. Select by name plus resources; the host supplies matching frozen instructions and the actual invocation contract to the child. Never compose descriptions or instructions. This retrieval performs no scientific work or child launch.",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "investigation": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "investigation"
+          ],
+          "type": "object"
+        },
+        "name": "process.tools"
+      },
+      {
+        "description": "Inspect the supported estimate for a proposed wait using your received progress, original duration snapshots and completed own-action history. Unknown event probabilities and gains remain unknown. This tool selects no wait, timer, resource or work.",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "condition": {
+              "additionalProperties": false,
+              "properties": {
+                "events": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "after_cursor": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "event": {
+                        "enum": [
+                          "returned",
+                          "state_changed",
+                          "progress_committed"
+                        ],
+                        "type": "string"
+                      },
+                      "handle": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "handle",
+                      "event",
+                      "after_cursor"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "reconsider_at": {
+                  "format": "date-time",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "version": {
+                  "const": "event_condition_v1",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "version",
+                "events",
+                "reconsider_at"
+              ],
+              "type": "object"
+            }
+          },
+          "required": [
+            "condition"
+          ],
+          "type": "object"
+        },
+        "name": "episode.estimate_wait"
+      },
+      {
+        "description": "Read only this Episode's prior decisions: metadata index, exact selected actions/outcomes and admitted direct-child forms, or a bounded publication-ID page from one prior own action. Failed outcomes remain failed. This ordinary read never executes old work or reads child-private conversations.",
+        "input_schema": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "decision_indices": {
+                  "items": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                "limit": {
+                  "description": "Requested page size; defaults to max(1, restoration preview_size), so disabling automatic previews still permits an ordinary page to advance. Omit when selecting decision_indices.",
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "offset": {
+                  "description": "Position in this Episode's ordered prior-decision page; omit when selecting decision_indices.",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "view": {
+                  "enum": [
+                    "index",
+                    "records"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "view"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "decision_index": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "limit": {
+                  "description": "Requested publication-ID page size; defaults to max(1, restoration preview_size).",
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "offset": {
+                  "description": "Position in the actual saved publication-ID array for this one prior own action.",
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "view": {
+                  "const": "publications",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "view",
+                "decision_index"
+              ],
+              "type": "object"
+            }
+          ]
+        },
+        "name": "episode.history"
+      }
+    ],
+    "visible_record_refs": [
+      "input_145648a388c88aea77d1e58c",
+      "input_28044e5447792f87c5c70728",
+      "input_492ba89fa921b0c86265fd4c",
+      "input_59f6f0ed36f36e37915e366b",
+      "input_71928cb66cd1ee9e9ccb98fd",
+      "input_a5e461e2102d0b63a4c58c86",
+      "input_b8973105fd1e88139fadaef1",
+      "input_c36a5cfe75911ae7b5036c1e",
+      "input_e3d4e614daaa3fa65aaba766",
+      "input_f64d952f71037451fcc616de",
+      "artifact_b90cb9241ba31d17a17b345347969515d5845d0e9b389e745884c3abf7d76cac",
+      "material_c09ace2575a8d42582747f04",
+      "source_b8820f79cccd63a6a8f2d9d6",
+      "artifact_5e232defeeafb0443b4929c8baaeeb8500fdd307b6965eff1fb54bdefe37d211",
+      "artifact_b13c3f24f9a1592dcacfabb99be02b73d8c4a4dbed4bdae52dfebd76d98ec568",
+      "artifact_aae94713118d0c425dd133ec2198063bce3fb1871097e5ac7523ca5400d5270a",
+      "artifact_4cb971ab40ee61774c8347402c74a4fac1bc3923db7f9bfc101de468d0fc275f",
+      "artifact_3bd4309fa01ca3349c1b315032f6ebca6ef323b3a9b38f68df1d7d40091b46df",
+      "artifact_7edbd4708ab46c231de6e422938d581054dbd7b07a4e86c839e1f8957f5106a7",
+      "artifact_1616c90a76b889bf134b476c47a147b1dec637df16792cdc48414451a513c551",
+      "artifact_fc4a5d7785d87bf21e40d6aa1dc6d3f6e1b813348f99b311abc82a2e6c9fae5e",
+      "artifact_cd0c974db00e0530aa9db1dc9369e609b195ceeb47643178318c3836201b1089",
+      "artifact_296cc0bc00a08505d76ad15bbeb3032948051c3b85b10511a46c3771f91a527a",
+      "source_c600f62e8eceae1f365cdbf3",
+      "artifact_3b1e25acaf2e39a211be822243a0d5636fe145f577ce7ff451d5db94a14bfe8b",
+      "artifact_458183dae273c27cc934236c4ffd1f70f24681028751ad198e7b8a4430ce7c91",
+      "artifact_51d4981abe17ed83f20e45a427939d0fbb20021da7a1ba4ab43a749053c0bbce",
+      "artifact_68ab1e95dbf0c32bda541529bdd4bb3ba05ecc4d55c9551ae30bf5683d80b4fa",
+      "artifact_69de11fd1a8dc197a306780a53b9417427f83b66002d1c3bb53b42021ce294fd",
+      "artifact_c73f7bd41a54d993cded1114995e3d3937c70402497fd660be899ad8af09a87b",
+      "artifact_e0d182f2571b4417f5b1a581e5343fc1950665ab26f93626b28480758b7cd877",
+      "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_d5c6bfcf0a8254c59aca0c27",
+      "artifact_33557b12231e13d92cc287163cd27b5367bfb0e10c679a46070f6e779adecd52",
+      "artifact_b9a8db24c8e0abb4102e9bddbe593a8203e154aa84c430f2ad2ad42559e3ad82",
+      "reference_494e325bba28a7a22594951b",
+      "observation_2746f9cb4d3a80a967c38475"
+    ],
+    "visual_evidence": [],
+    "waiting_support": {
+      "duration_expectations": [],
+      "local_return_history": {
+        "credit_binding": {
+          "kind": "custom",
+          "meaning": "Caller-injected projector; no default scientific policy or denominator is inferred.",
+          "projector": "test_native_infernal_results_integration.run_case.<locals>.received_observations"
+        },
+        "credit_kind": "scientific",
+        "episode_id": "episode_c763325329454ea80f6fb4a44c5a9b1cb9e9c3688cbedfba6c8da3c3f4942822",
+        "run_id": "native-infernal-episode-226",
+        "samples": [],
+        "unavailable_reasons": [
+          "return_admissions_unavailable"
+        ],
+        "version": "local_parent_return_history_v1"
+      },
+      "own_completed_action_history": [
+        {
+          "controller_input": {
+            "credit": 0.0,
+            "estimation_action_index": 0
+          },
+          "controller_step": {
+            "credit": 0.0,
+            "decision": {
+              "continuation_cost": 0.0,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": 0.0,
+                "lower": 1.0,
+                "status_code": 0,
+                "uncertainty_code": 0,
+                "upper": 1.0,
+                "value": 1.0
+              },
+              "stop": false
+            },
+            "estimate": {
+              "diagnostics": {
+                "fixture": "explicit_scientific_verification_horizon"
+              },
+              "expected_next_gain": {
+                "alpha": 0.0,
+                "lower": 1.0,
+                "status_code": 0,
+                "uncertainty_code": 0,
+                "upper": 1.0,
+                "value": 1.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 50,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 100
+              },
+              "provenance": {
+                "function": "test_native_infernal_results_integration.run_case.<locals>.controller.<locals>.estimate",
+                "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+                "kind": "caller_injected",
+                "template_relationship": "not_inferred"
+              },
+              "turns": 1
+            },
+            "is_root": false,
+            "marginal_credit": 0.0,
+            "requests_transition": false,
+            "stop": false,
+            "unit_label": "child_0"
+          },
+          "decision_index": 0,
+          "episode_id": "episode_c763325329454ea80f6fb4a44c5a9b1cb9e9c3688cbedfba6c8da3c3f4942822",
+          "label": "child_0",
+          "unit_index": 0,
+          "unit_ref": {
+            "episode_id": "episode_c763325329454ea80f6fb4a44c5a9b1cb9e9c3688cbedfba6c8da3c3f4942822",
+            "unit_id": "unit_ff491b035c8b8de5a16c1777083be2fa0b3cdf47c8157e8f07020da89916111c",
+            "unit_index": 0
+          }
+        },
+        {
+          "controller_input": {
+            "credit": 0.0,
+            "estimation_action_index": 1
+          },
+          "controller_step": {
+            "credit": 0.0,
+            "decision": {
+              "continuation_cost": 0.0,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": 0.0,
+                "lower": 1.0,
+                "status_code": 0,
+                "uncertainty_code": 0,
+                "upper": 1.0,
+                "value": 1.0
+              },
+              "stop": false
+            },
+            "estimate": {
+              "diagnostics": {
+                "fixture": "explicit_scientific_verification_horizon"
+              },
+              "expected_next_gain": {
+                "alpha": 0.0,
+                "lower": 1.0,
+                "status_code": 0,
+                "uncertainty_code": 0,
+                "upper": 1.0,
+                "value": 1.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 50,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 100
+              },
+              "provenance": {
+                "function": "test_native_infernal_results_integration.run_case.<locals>.controller.<locals>.estimate",
+                "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+                "kind": "caller_injected",
+                "template_relationship": "not_inferred"
+              },
+              "turns": 2
+            },
+            "is_root": false,
+            "marginal_credit": 0.0,
+            "requests_transition": false,
+            "stop": false,
+            "unit_label": "child_1"
+          },
+          "decision_index": 1,
+          "episode_id": "episode_c763325329454ea80f6fb4a44c5a9b1cb9e9c3688cbedfba6c8da3c3f4942822",
+          "label": "child_1",
+          "unit_index": 1,
+          "unit_ref": {
+            "episode_id": "episode_c763325329454ea80f6fb4a44c5a9b1cb9e9c3688cbedfba6c8da3c3f4942822",
+            "unit_id": "unit_b02e1b4e6a055301af87a801e0667f854f707e35c7fb935889ff8c38bc6d6519",
+            "unit_index": 1
+          }
+        },
+        {
+          "controller_input": {
+            "credit": 0.0,
+            "estimation_action_index": 2
+          },
+          "controller_step": {
+            "credit": 0.0,
+            "decision": {
+              "continuation_cost": 0.0,
+              "decision_basis": "current_estimator_marginal_credit_upper_bound",
+              "projected_gain": {
+                "alpha": 0.0,
+                "lower": 1.0,
+                "status_code": 0,
+                "uncertainty_code": 0,
+                "upper": 1.0,
+                "value": 1.0
+              },
+              "stop": false
+            },
+            "estimate": {
+              "diagnostics": {
+                "fixture": "explicit_scientific_verification_horizon"
+              },
+              "expected_next_gain": {
+                "alpha": 0.0,
+                "lower": 1.0,
+                "status_code": 0,
+                "uncertainty_code": 0,
+                "upper": 1.0,
+                "value": 1.0
+              },
+              "parameters": {
+                "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+                "subsample_size": 50,
+                "uncertainty_alpha": 0.05,
+                "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+                "window_size": 100
+              },
+              "provenance": {
+                "function": "test_native_infernal_results_integration.run_case.<locals>.controller.<locals>.estimate",
+                "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+                "kind": "caller_injected",
+                "template_relationship": "not_inferred"
+              },
+              "turns": 3
+            },
+            "is_root": false,
+            "marginal_credit": 0.0,
+            "requests_transition": false,
+            "stop": false,
+            "unit_label": "child_2"
+          },
+          "decision_index": 2,
+          "episode_id": "episode_c763325329454ea80f6fb4a44c5a9b1cb9e9c3688cbedfba6c8da3c3f4942822",
+          "label": "child_2",
+          "unit_index": 2,
+          "unit_ref": {
+            "episode_id": "episode_c763325329454ea80f6fb4a44c5a9b1cb9e9c3688cbedfba6c8da3c3f4942822",
+            "unit_id": "unit_74ff0f6297a2f37c0a2234a63e78b7f6c93a6e43a957c2daba59cae6f122e448",
+            "unit_index": 2
+          }
+        }
+      ],
+      "progress_records": [],
+      "version": "wait_inputs_v2"
+    },
+    "working_state": {
+      "annotations": [],
+      "assessments": [],
+      "collections": [],
+      "contexts": [],
+      "features": [],
+      "hypotheses": [],
+      "interpretation_accounts": [],
+      "material_links": [],
+      "materials": [
+        {
+          "context_source_refs": [],
+          "id": "material_c09ace2575a8d42582747f04",
+          "library_ref": null,
+          "molecule": "rna",
+          "name": "input",
+          "origin": "caller",
+          "quality_encoding": "unspecified",
+          "record_type": "material",
+          "requested_format": "fasta",
+          "role": "unspecified",
+          "sample_ref": null,
+          "source_ref": "source_b8820f79cccd63a6a8f2d9d6",
+          "use": "target"
+        }
+      ],
+      "observations": [
+        {
+          "anchor": null,
+          "dependencies": [
+            "source_c600f62e8eceae1f365cdbf3",
+            "input_28044e5447792f87c5c70728",
+            "reference_494e325bba28a7a22594951b"
+          ],
+          "id": "observation_2746f9cb4d3a80a967c38475",
+          "kind": "profile_match",
+          "measurements": [
+            {
+              "name": "bitscore",
+              "value": {
+                "type": "number",
+                "unit_ref": null,
+                "value": 71.4
+              }
+            },
+            {
+              "name": "evalue",
+              "value": {
+                "type": "number",
+                "unit_ref": null,
+                "value": 3.6e-22
+              }
+            },
+            {
+              "name": "bias_bits",
+              "value": {
+                "type": "number",
+                "unit_ref": null,
+                "value": 0.0
+              }
+            },
+            {
+              "name": "gc_fraction",
+              "value": {
+                "type": "number",
+                "unit_ref": null,
+                "value": 0.5
+              }
+            },
+            {
+              "name": "model_span_length",
+              "value": {
+                "type": "number",
+                "unit_ref": null,
+                "value": 72
+              }
+            },
+            {
+              "name": "model_span_fraction",
+              "value": {
+                "type": "number",
+                "unit_ref": null,
+                "value": 1.0
+              }
+            },
+            {
+              "name": "sequence_span_length",
+              "value": {
+                "type": "number",
+                "unit_ref": null,
+                "value": 72
+              }
+            },
+            {
+              "name": "sequence_span_fraction",
+              "value": {
+                "type": "number",
+                "unit_ref": null,
+                "value": 1.0
+              }
+            },
+            {
+              "name": "consensus_length",
+              "value": {
+                "type": "number",
+                "unit_ref": null,
+                "value": 72
+              }
+            },
+            {
+              "name": "sequence_length",
+              "value": {
+                "type": "number",
+                "unit_ref": null,
+                "value": 72
+              }
+            }
+          ],
+          "native_infernal": {
+            "bundle_artifact_ref": "artifact_3b1e25acaf2e39a211be822243a0d5636fe145f577ce7ff451d5db94a14bfe8b",
+            "family": "search_hit",
+            "program": "cmsearch",
+            "record_key": "[\"artifact_e0d182f2571b4417f5b1a581e5343fc1950665ab26f93626b28480758b7cd877\",0,3]",
+            "version": "native_infernal_observation_v1"
+          },
+          "operand_intervals": [
+            {
+              "end": 72,
+              "model_unit": "nt",
+              "role": "query",
+              "start": 0,
+              "subject_ref": "input_28044e5447792f87c5c70728",
+              "unit": "nt"
+            }
+          ],
+          "origin": "tool",
+          "record_type": "observation",
+          "source_ref": "source_c600f62e8eceae1f365cdbf3",
+          "source_subject_refs": [
+            "reference_494e325bba28a7a22594951b"
+          ],
+          "subject_refs": [
+            "input_28044e5447792f87c5c70728"
+          ]
+        }
+      ],
+      "pages": {
+        "annotations": {
+          "current_only": false,
+          "limit": 24,
+          "next_offset": null,
+          "next_query": null,
+          "offset": 0,
+          "total": 0
+        },
+        "assessments": {
+          "current_only": false,
+          "limit": 24,
+          "next_offset": null,
+          "next_query": null,
+          "offset": 0,
+          "total": 0
+        },
+        "collections": {
+          "current_only": false,
+          "limit": 24,
+          "next_offset": null,
+          "next_query": null,
+          "offset": 0,
+          "total": 0
+        },
+        "contexts": {
+          "current_only": false,
+          "limit": 24,
+          "next_offset": null,
+          "next_query": null,
+          "offset": 0,
+          "total": 0
+        },
+        "features": {
+          "current_only": false,
+          "limit": 24,
+          "next_offset": null,
+          "next_query": null,
+          "offset": 0,
+          "total": 0
+        },
+        "hypotheses": {
+          "current_only": false,
+          "limit": 24,
+          "next_offset": null,
+          "next_query": null,
+          "offset": 0,
+          "total": 0
+        },
+        "interpretation_accounts": {
+          "current_only": false,
+          "limit": 24,
+          "next_offset": null,
+          "next_query": null,
+          "offset": 0,
+          "total": 0
+        },
+        "material_links": {
+          "current_only": false,
+          "limit": 24,
+          "next_offset": null,
+          "next_query": null,
+          "offset": 0,
+          "total": 0
+        },
+        "materials": {
+          "current_only": false,
+          "limit": 24,
+          "next_offset": null,
+          "next_query": null,
+          "offset": 0,
+          "total": 1
+        },
+        "observations": {
+          "current_only": false,
+          "limit": 24,
+          "next_offset": null,
+          "next_query": null,
+          "offset": 0,
+          "total": 1
+        },
+        "parse_attempts": {
+          "current_only": false,
+          "limit": 24,
+          "next_offset": null,
+          "next_query": null,
+          "offset": 0,
+          "total": 0
+        },
+        "products": {
+          "current_only": false,
+          "limit": 24,
+          "next_offset": null,
+          "next_query": null,
+          "offset": 0,
+          "total": 0
+        },
+        "references": {
+          "current_only": false,
+          "limit": 24,
+          "next_offset": null,
+          "next_query": null,
+          "offset": 0,
+          "total": 1
+        },
+        "sources": {
+          "current_only": false,
+          "limit": 24,
+          "next_offset": null,
+          "next_query": null,
+          "offset": 0,
+          "total": 3
+        },
+        "terms": {
+          "current_only": false,
+          "limit": 24,
+          "next_offset": null,
+          "next_query": null,
+          "offset": 0,
+          "total": 0
+        }
+      },
+      "parse_attempts": [],
+      "problem_ref": "problem_d97b7a91c54b987f69200490",
+      "products": [],
+      "read_library_access": [],
+      "received_revision_status": [],
+      "record_view": "received_immutable_versions",
+      "references": [
+        {
+          "accession": "tRNA5",
+          "context_refs": [],
+          "id": "reference_494e325bba28a7a22594951b",
+          "label": "tRNA5",
+          "length": null,
+          "molecule": null,
+          "origin": "tool",
+          "record_type": "reference",
+          "reference_type": "family",
+          "sequence_ref": null,
+          "source_ref": "source_c600f62e8eceae1f365cdbf3",
+          "term_refs": []
+        }
+      ],
+      "scope": {
+        "subject_refs": [
+          "input_145648a388c88aea77d1e58c",
+          "input_28044e5447792f87c5c70728",
+          "input_492ba89fa921b0c86265fd4c",
+          "input_59f6f0ed36f36e37915e366b",
+          "input_71928cb66cd1ee9e9ccb98fd",
+          "input_a5e461e2102d0b63a4c58c86",
+          "input_b8973105fd1e88139fadaef1",
+          "input_c36a5cfe75911ae7b5036c1e",
+          "input_e3d4e614daaa3fa65aaba766",
+          "input_f64d952f71037451fcc616de"
+        ]
+      },
+      "sources": [
+        {
+          "accession": null,
+          "artifact_ref": "artifact_296cc0bc00a08505d76ad15bbeb3032948051c3b85b10511a46c3771f91a527a",
+          "id": "source_b8820f79cccd63a6a8f2d9d6",
+          "origin": "caller",
+          "provider": "caller",
+          "record_type": "source",
+          "request_ref": null,
+          "retrieved_at": null,
+          "text_ref": "artifact_296cc0bc00a08505d76ad15bbeb3032948051c3b85b10511a46c3771f91a527a",
+          "uri": "file:///home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_episode_2026-10-26_226/run_004_full/temporary/pytest/test_same_native_row_source_an0/supplied-biological-subjects.fa",
+          "version": null
+        },
+        {
+          "accession": "native_infernal_352d46bd455eb807205d00e14ff0385253ce07a4be1449ba044b106ba1dc703d",
+          "artifact_ref": "artifact_3b1e25acaf2e39a211be822243a0d5636fe145f577ce7ff451d5db94a14bfe8b",
+          "auxiliary_artifact_refs": [
+            "artifact_458183dae273c27cc934236c4ffd1f70f24681028751ad198e7b8a4430ce7c91",
+            "artifact_51d4981abe17ed83f20e45a427939d0fbb20021da7a1ba4ab43a749053c0bbce",
+            "artifact_68ab1e95dbf0c32bda541529bdd4bb3ba05ecc4d55c9551ae30bf5683d80b4fa",
+            "artifact_69de11fd1a8dc197a306780a53b9417427f83b66002d1c3bb53b42021ce294fd",
+            "artifact_c73f7bd41a54d993cded1114995e3d3937c70402497fd660be899ad8af09a87b",
+            "artifact_e0d182f2571b4417f5b1a581e5343fc1950665ab26f93626b28480758b7cd877",
+            "artifact_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          ],
+          "id": "source_c600f62e8eceae1f365cdbf3",
+          "origin": "tool",
+          "provider": "episode.execution_result",
+          "record_type": "source",
+          "request_ref": null,
+          "retrieved_at": "2026-10-26T02:18:47.033169+00:00",
+          "text_ref": null,
+          "uri": null,
+          "version": "native_infernal_bundle_v1"
+        },
+        {
+          "accession": "practical_receipt_c22cb0797626e218d5943c0b5406482706575ebc3c6f62d8c3f0692bafb27865",
+          "artifact_ref": "artifact_33557b12231e13d92cc287163cd27b5367bfb0e10c679a46070f6e779adecd52",
+          "id": "source_d5c6bfcf0a8254c59aca0c27",
+          "origin": "tool",
+          "provider": "episode.practical_receipt",
+          "record_type": "source",
+          "request_ref": "artifact_b9a8db24c8e0abb4102e9bddbe593a8203e154aa84c430f2ad2ad42559e3ad82",
+          "retrieved_at": "2026-10-26T02:18:46.599621+00:00",
+          "text_ref": "artifact_33557b12231e13d92cc287163cd27b5367bfb0e10c679a46070f6e779adecd52",
+          "uri": null,
+          "version": "practical_receipt_information_v1"
+        }
+      ],
+      "subjects": [
+        {
+          "context_source_refs": [],
+          "description_preview": {
+            "characters": 0,
+            "complete": true,
+            "text": "",
+            "utf8_bytes": 0
+          },
+          "header": {
+            "read_with": {
+              "limit": 12000,
+              "member_ref": "member_a9fffaae08281eb1f2c31889",
+              "offset": 0
+            },
+            "representation": "parser_returned_title",
+            "utf8_bytes": 11
+          },
+          "id": "input_145648a388c88aea77d1e58c",
+          "input_issues": [],
+          "length": 75,
+          "metadata_preview_characters": 256,
+          "molecule": "rna",
+          "name_preview": {
+            "characters": 11,
+            "complete": true,
+            "text": "mrum-tRNA.4",
+            "utf8_bytes": 11
+          },
+          "origin": "caller",
+          "record_type": "input",
+          "role": "unspecified",
+          "sample_ref": null,
+          "sequence_ref": "artifact_b90cb9241ba31d17a17b345347969515d5845d0e9b389e745884c3abf7d76cac",
+          "source_record": {
+            "identifier_preview": {
+              "characters": 11,
+              "complete": true,
+              "text": "mrum-tRNA.4",
+              "utf8_bytes": 11
+            },
+            "material_ref": "material_c09ace2575a8d42582747f04",
+            "member_ref": "member_a9fffaae08281eb1f2c31889",
+            "occurrence": 0,
+            "ordinal": 3
+          },
+          "source_ref": "source_b8820f79cccd63a6a8f2d9d6",
+          "unit": "nt"
+        },
+        {
+          "context_source_refs": [],
+          "description_preview": {
+            "characters": 0,
+            "complete": true,
+            "text": "",
+            "utf8_bytes": 0
+          },
+          "header": {
+            "read_with": {
+              "limit": 12000,
+              "member_ref": "member_078027bc09b20a3b7057c725",
+              "offset": 0
+            },
+            "representation": "parser_returned_title",
+            "utf8_bytes": 11
+          },
+          "id": "input_28044e5447792f87c5c70728",
+          "input_issues": [],
+          "length": 72,
+          "metadata_preview_characters": 256,
+          "molecule": "rna",
+          "name_preview": {
+            "characters": 11,
+            "complete": true,
+            "text": "mrum-tRNA.1",
+            "utf8_bytes": 11
+          },
+          "origin": "caller",
+          "record_type": "input",
+          "role": "unspecified",
+          "sample_ref": null,
+          "sequence_ref": "artifact_5e232defeeafb0443b4929c8baaeeb8500fdd307b6965eff1fb54bdefe37d211",
+          "source_record": {
+            "identifier_preview": {
+              "characters": 11,
+              "complete": true,
+              "text": "mrum-tRNA.1",
+              "utf8_bytes": 11
+            },
+            "material_ref": "material_c09ace2575a8d42582747f04",
+            "member_ref": "member_078027bc09b20a3b7057c725",
+            "occurrence": 0,
+            "ordinal": 0
+          },
+          "source_ref": "source_b8820f79cccd63a6a8f2d9d6",
+          "unit": "nt"
+        },
+        {
+          "context_source_refs": [],
+          "description_preview": {
+            "characters": 0,
+            "complete": true,
+            "text": "",
+            "utf8_bytes": 0
+          },
+          "header": {
+            "read_with": {
+              "limit": 12000,
+              "member_ref": "member_6a459a087b0498154cfd0a5b",
+              "offset": 0
+            },
+            "representation": "parser_returned_title",
+            "utf8_bytes": 11
+          },
+          "id": "input_492ba89fa921b0c86265fd4c",
+          "input_issues": [],
+          "length": 110,
+          "metadata_preview_characters": 256,
+          "molecule": "rna",
+          "name_preview": {
+            "characters": 11,
+            "complete": true,
+            "text": "mrum-tRNA.9",
+            "utf8_bytes": 11
+          },
+          "origin": "caller",
+          "record_type": "input",
+          "role": "unspecified",
+          "sample_ref": null,
+          "sequence_ref": "artifact_b13c3f24f9a1592dcacfabb99be02b73d8c4a4dbed4bdae52dfebd76d98ec568",
+          "source_record": {
+            "identifier_preview": {
+              "characters": 11,
+              "complete": true,
+              "text": "mrum-tRNA.9",
+              "utf8_bytes": 11
+            },
+            "material_ref": "material_c09ace2575a8d42582747f04",
+            "member_ref": "member_6a459a087b0498154cfd0a5b",
+            "occurrence": 0,
+            "ordinal": 8
+          },
+          "source_ref": "source_b8820f79cccd63a6a8f2d9d6",
+          "unit": "nt"
+        },
+        {
+          "context_source_refs": [],
+          "description_preview": {
+            "characters": 0,
+            "complete": true,
+            "text": "",
+            "utf8_bytes": 0
+          },
+          "header": {
+            "read_with": {
+              "limit": 12000,
+              "member_ref": "member_aa0c41c284f04e7c12881a1e",
+              "offset": 0
+            },
+            "representation": "parser_returned_title",
+            "utf8_bytes": 11
+          },
+          "id": "input_59f6f0ed36f36e37915e366b",
+          "input_issues": [],
+          "length": 74,
+          "metadata_preview_characters": 256,
+          "molecule": "rna",
+          "name_preview": {
+            "characters": 11,
+            "complete": true,
+            "text": "mrum-tRNA.8",
+            "utf8_bytes": 11
+          },
+          "origin": "caller",
+          "record_type": "input",
+          "role": "unspecified",
+          "sample_ref": null,
+          "sequence_ref": "artifact_aae94713118d0c425dd133ec2198063bce3fb1871097e5ac7523ca5400d5270a",
+          "source_record": {
+            "identifier_preview": {
+              "characters": 11,
+              "complete": true,
+              "text": "mrum-tRNA.8",
+              "utf8_bytes": 11
+            },
+            "material_ref": "material_c09ace2575a8d42582747f04",
+            "member_ref": "member_aa0c41c284f04e7c12881a1e",
+            "occurrence": 0,
+            "ordinal": 7
+          },
+          "source_ref": "source_b8820f79cccd63a6a8f2d9d6",
+          "unit": "nt"
+        },
+        {
+          "context_source_refs": [],
+          "description_preview": {
+            "characters": 0,
+            "complete": true,
+            "text": "",
+            "utf8_bytes": 0
+          },
+          "header": {
+            "read_with": {
+              "limit": 12000,
+              "member_ref": "member_6ba5f897deb823dc0d59c842",
+              "offset": 0
+            },
+            "representation": "parser_returned_title",
+            "utf8_bytes": 12
+          },
+          "id": "input_71928cb66cd1ee9e9ccb98fd",
+          "input_issues": [],
+          "length": 72,
+          "metadata_preview_characters": 256,
+          "molecule": "rna",
+          "name_preview": {
+            "characters": 12,
+            "complete": true,
+            "text": "mrum-tRNA.10",
+            "utf8_bytes": 12
+          },
+          "origin": "caller",
+          "record_type": "input",
+          "role": "unspecified",
+          "sample_ref": null,
+          "sequence_ref": "artifact_4cb971ab40ee61774c8347402c74a4fac1bc3923db7f9bfc101de468d0fc275f",
+          "source_record": {
+            "identifier_preview": {
+              "characters": 12,
+              "complete": true,
+              "text": "mrum-tRNA.10",
+              "utf8_bytes": 12
+            },
+            "material_ref": "material_c09ace2575a8d42582747f04",
+            "member_ref": "member_6ba5f897deb823dc0d59c842",
+            "occurrence": 0,
+            "ordinal": 9
+          },
+          "source_ref": "source_b8820f79cccd63a6a8f2d9d6",
+          "unit": "nt"
+        },
+        {
+          "context_source_refs": [],
+          "description_preview": {
+            "characters": 0,
+            "complete": true,
+            "text": "",
+            "utf8_bytes": 0
+          },
+          "header": {
+            "read_with": {
+              "limit": 12000,
+              "member_ref": "member_0b3fceed85762d283910422a",
+              "offset": 0
+            },
+            "representation": "parser_returned_title",
+            "utf8_bytes": 11
+          },
+          "id": "input_a5e461e2102d0b63a4c58c86",
+          "input_issues": [],
+          "length": 73,
+          "metadata_preview_characters": 256,
+          "molecule": "rna",
+          "name_preview": {
+            "characters": 11,
+            "complete": true,
+            "text": "mrum-tRNA.2",
+            "utf8_bytes": 11
+          },
+          "origin": "caller",
+          "record_type": "input",
+          "role": "unspecified",
+          "sample_ref": null,
+          "sequence_ref": "artifact_3bd4309fa01ca3349c1b315032f6ebca6ef323b3a9b38f68df1d7d40091b46df",
+          "source_record": {
+            "identifier_preview": {
+              "characters": 11,
+              "complete": true,
+              "text": "mrum-tRNA.2",
+              "utf8_bytes": 11
+            },
+            "material_ref": "material_c09ace2575a8d42582747f04",
+            "member_ref": "member_0b3fceed85762d283910422a",
+            "occurrence": 0,
+            "ordinal": 1
+          },
+          "source_ref": "source_b8820f79cccd63a6a8f2d9d6",
+          "unit": "nt"
+        },
+        {
+          "context_source_refs": [],
+          "description_preview": {
+            "characters": 0,
+            "complete": true,
+            "text": "",
+            "utf8_bytes": 0
+          },
+          "header": {
+            "read_with": {
+              "limit": 12000,
+              "member_ref": "member_a041eca80c24f09b1fda310e",
+              "offset": 0
+            },
+            "representation": "parser_returned_title",
+            "utf8_bytes": 11
+          },
+          "id": "input_b8973105fd1e88139fadaef1",
+          "input_issues": [],
+          "length": 73,
+          "metadata_preview_characters": 256,
+          "molecule": "rna",
+          "name_preview": {
+            "characters": 11,
+            "complete": true,
+            "text": "mrum-tRNA.6",
+            "utf8_bytes": 11
+          },
+          "origin": "caller",
+          "record_type": "input",
+          "role": "unspecified",
+          "sample_ref": null,
+          "sequence_ref": "artifact_7edbd4708ab46c231de6e422938d581054dbd7b07a4e86c839e1f8957f5106a7",
+          "source_record": {
+            "identifier_preview": {
+              "characters": 11,
+              "complete": true,
+              "text": "mrum-tRNA.6",
+              "utf8_bytes": 11
+            },
+            "material_ref": "material_c09ace2575a8d42582747f04",
+            "member_ref": "member_a041eca80c24f09b1fda310e",
+            "occurrence": 0,
+            "ordinal": 5
+          },
+          "source_ref": "source_b8820f79cccd63a6a8f2d9d6",
+          "unit": "nt"
+        },
+        {
+          "context_source_refs": [],
+          "description_preview": {
+            "characters": 0,
+            "complete": true,
+            "text": "",
+            "utf8_bytes": 0
+          },
+          "header": {
+            "read_with": {
+              "limit": 12000,
+              "member_ref": "member_c389b2a0ef46950b5d19164e",
+              "offset": 0
+            },
+            "representation": "parser_returned_title",
+            "utf8_bytes": 11
+          },
+          "id": "input_c36a5cfe75911ae7b5036c1e",
+          "input_issues": [],
+          "length": 75,
+          "metadata_preview_characters": 256,
+          "molecule": "rna",
+          "name_preview": {
+            "characters": 11,
+            "complete": true,
+            "text": "mrum-tRNA.7",
+            "utf8_bytes": 11
+          },
+          "origin": "caller",
+          "record_type": "input",
+          "role": "unspecified",
+          "sample_ref": null,
+          "sequence_ref": "artifact_1616c90a76b889bf134b476c47a147b1dec637df16792cdc48414451a513c551",
+          "source_record": {
+            "identifier_preview": {
+              "characters": 11,
+              "complete": true,
+              "text": "mrum-tRNA.7",
+              "utf8_bytes": 11
+            },
+            "material_ref": "material_c09ace2575a8d42582747f04",
+            "member_ref": "member_c389b2a0ef46950b5d19164e",
+            "occurrence": 0,
+            "ordinal": 6
+          },
+          "source_ref": "source_b8820f79cccd63a6a8f2d9d6",
+          "unit": "nt"
+        },
+        {
+          "context_source_refs": [],
+          "description_preview": {
+            "characters": 0,
+            "complete": true,
+            "text": "",
+            "utf8_bytes": 0
+          },
+          "header": {
+            "read_with": {
+              "limit": 12000,
+              "member_ref": "member_b8d245accb4f189d5ef87c86",
+              "offset": 0
+            },
+            "representation": "parser_returned_title",
+            "utf8_bytes": 11
+          },
+          "id": "input_e3d4e614daaa3fa65aaba766",
+          "input_issues": [],
+          "length": 74,
+          "metadata_preview_characters": 256,
+          "molecule": "rna",
+          "name_preview": {
+            "characters": 11,
+            "complete": true,
+            "text": "mrum-tRNA.3",
+            "utf8_bytes": 11
+          },
+          "origin": "caller",
+          "record_type": "input",
+          "role": "unspecified",
+          "sample_ref": null,
+          "sequence_ref": "artifact_fc4a5d7785d87bf21e40d6aa1dc6d3f6e1b813348f99b311abc82a2e6c9fae5e",
+          "source_record": {
+            "identifier_preview": {
+              "characters": 11,
+              "complete": true,
+              "text": "mrum-tRNA.3",
+              "utf8_bytes": 11
+            },
+            "material_ref": "material_c09ace2575a8d42582747f04",
+            "member_ref": "member_b8d245accb4f189d5ef87c86",
+            "occurrence": 0,
+            "ordinal": 2
+          },
+          "source_ref": "source_b8820f79cccd63a6a8f2d9d6",
+          "unit": "nt"
+        },
+        {
+          "context_source_refs": [],
+          "description_preview": {
+            "characters": 0,
+            "complete": true,
+            "text": "",
+            "utf8_bytes": 0
+          },
+          "header": {
+            "read_with": {
+              "limit": 12000,
+              "member_ref": "member_44556e5708f951f16de40ca7",
+              "offset": 0
+            },
+            "representation": "parser_returned_title",
+            "utf8_bytes": 11
+          },
+          "id": "input_f64d952f71037451fcc616de",
+          "input_issues": [],
+          "length": 74,
+          "metadata_preview_characters": 256,
+          "molecule": "rna",
+          "name_preview": {
+            "characters": 11,
+            "complete": true,
+            "text": "mrum-tRNA.5",
+            "utf8_bytes": 11
+          },
+          "origin": "caller",
+          "record_type": "input",
+          "role": "unspecified",
+          "sample_ref": null,
+          "sequence_ref": "artifact_cd0c974db00e0530aa9db1dc9369e609b195ceeb47643178318c3836201b1089",
+          "source_record": {
+            "identifier_preview": {
+              "characters": 11,
+              "complete": true,
+              "text": "mrum-tRNA.5",
+              "utf8_bytes": 11
+            },
+            "material_ref": "material_c09ace2575a8d42582747f04",
+            "member_ref": "member_44556e5708f951f16de40ca7",
+            "occurrence": 0,
+            "ordinal": 4
+          },
+          "source_ref": "source_b8820f79cccd63a6a8f2d9d6",
+          "unit": "nt"
+        }
+      ],
+      "supplied_context_source_refs": [],
+      "target_binding": "sequence_targets",
+      "terms": []
+    }
+  },
+  "episode_id": "episode_c763325329454ea80f6fb4a44c5a9b1cb9e9c3688cbedfba6c8da3c3f4942822",
+  "instructions": "Determine what the supplied target does within the parent's assigned question, scope and constraints. Start with the supplied sequence, selected file contents or snippets, preserving their boundaries, completeness and known context. No initial candidate annotation or publicly searchable name is required. Possible functions can emerge from the evidence and be compared or revised. Apply the complete selected investigation instructions and thought-pattern guidance on every decision. Use actual outcomes and received child results to choose and revise your approach. Selected instructions describe how to investigate; they are not evidence about this target. Preserve the measured subject, conditions, controls, native measurements, uncertainty and limits of inference when interpreting evidence. Missing information remains unknown.\n\nChoose an available tool action, commit a scientific interpretation through the reasoning action, commission a scoped child with its own typed return form, or wait for selected pending work when that informs the investigation. Use only the selected actual tools and their supplied resource instructions; choose callable operands through the declared response contract. Preserve the parent's exact requested result meanings and allowed values. Recorded facts come from actual records. Keep inherited information distinct from new findings and completed work distinct from attempts. Return valid partial findings and specific failures through the requested form.\n\nKeep the assigned evidence axis, thought pattern and selected tools for this episode. process.revise prepares a different thought pattern and/or tool selection for a new child; it does not change this episode or start that child. To commission that alternative, copy its selection and revision_origin into a separately selected child assignment with the child's job, scope, constraints and typed return. Children own their iterative choices. The configured controller owns continuation. Waiting and unchanged observations do not manufacture progress. Tool-specific and resource instructions are available through knowledge.search, knowledge.entry and knowledge.read. The tool_knowledge context identifies the run-frozen library. Retrieve sections when useful; these instructions do not select work, supply scientific evidence or add execution capabilities. Use the actual tool schemas and caller-owned configuration for execution. Knowledge reads use line coordinates, not scientific source-byte anchors. No manual read is mandatory. Launch software/resource instructions have their own run-frozen library: launch.instructions.search, launch.instructions.entry, launch.instructions.read and launch.instructions.select. The launch_instruction_library context gives its identity. Select any relevant sections from one or several entries; pass the returned selection as launch_instructions in the child assignment. selected_launch_instructions contains exact sections already selected for this assignment. Instructions describe ways to work; they do not select resources, enable tools, override caller constraints, establish current availability or supply scientific evidence. Inventory and fresh observations remain separate. No instruction read or selection is mandatory.",
+  "role": "REASONING"
+}

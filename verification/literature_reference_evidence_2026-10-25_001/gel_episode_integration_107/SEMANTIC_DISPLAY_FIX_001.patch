@@ -1,0 +1,110 @@
+--- literature_episodes.py (initial integration)
++++ literature_episodes.py (semantic display fix)
+@@ -558,5 +558,5 @@
+             result["literature_controlled_response_return_bindings"] = self._controlled_response_bindings(context)
+         if self.gel_population:
+-            result["literature_gel_return_bindings"] = self._gel_bindings(context)
++            result.update(self._gel_display_context(context))
+         return result
+ 
+@@ -587,5 +587,5 @@
+         if self.gel_population:
+             result["literature_gel_work"] = {"version": "literature_gel_task_v1"}
+-            result["literature_gel_return_bindings"] = self._gel_bindings(context)
++            result.update(self._gel_display_context(context))
+         return result
+ 
+@@ -799,4 +799,20 @@
+             unique[key] = row
+         return repository.semantic_bindings(list(unique.values()))
++
++    def _gel_display_context(self, context):
++        """Actual possessed meaning records, outside generic working-state pagination."""
++        bindings = self._gel_bindings(context)
++        records = {}
++        for entries in bindings.values():
++            for reference, binding in entries.items():
++                if binding["category"] != "scientific_meaning":
++                    continue
++                if binding["record_ref"] != reference or reference not in context.received_record_refs:
++                    raise ContractError("gel_semantic_display_record_not_received")
++                record = self._require(reference, context.scope, "reference")
++                if record.get("id") != reference or record.get("record_type") != "reference":
++                    raise ContractError("gel_semantic_display_record_mismatch")
++                records[reference] = record
++        return {"literature_gel_return_bindings": bindings, "literature_gel_return_records": records}
+ 
+     def _rate_fact_sources(self):
+--- literature_experimental_prompt.py (initial integration)
++++ literature_experimental_prompt.py (semantic display fix)
+@@ -76,5 +76,5 @@
+     "report_contract_declaration", "contract_information_profile",
+     "requested_controlled_response_component_keys", "literature_controlled_response_return_bindings",
+-    "requested_gel_component_keys", "literature_gel_return_bindings",
++    "requested_gel_component_keys", "literature_gel_return_bindings", "literature_gel_return_records",
+ })
+ 
+@@ -332,5 +332,5 @@
+ 
+ def _source_result(parts, value, title, *, controlled_records=None, controlled_bindings=None,
+-        controlled_assignment=None, gel_bindings=None, gel_assignment=None):
++        controlled_assignment=None, gel_bindings=None, gel_assignment=None, gel_records=None):
+     if not isinstance(value, Mapping):
+         _section(parts, title, _values(value))
+@@ -363,5 +363,5 @@
+         _section(parts, title, _values(_pick(value, ("status", "selected_tool", "feedback"))))
+         gel_own(parts, {"cells": rows, "component_keys": []}, section=_section, table=_table, values=_values,
+-            records=controlled_records, bindings=gel_bindings)
++            records=gel_records, bindings=gel_bindings)
+         return
+     metadata = _pick(value, ("status", "selected_tool", "record_refs", "changed_record_refs", "feedback"))
+@@ -687,5 +687,5 @@
+ 
+ 
+-def _received_returns(parts, reports, *, records=None, ratio_source_meanings=None, controlled_bindings=None, gel_bindings=None):
++def _received_returns(parts, reports, *, records=None, ratio_source_meanings=None, controlled_bindings=None, gel_bindings=None, gel_records=None):
+     """Show received scientific definitions once alongside requested cells."""
+     ordinary, grouped, reactions, contexts, figures, partners, amounts, optical, kinetic, interaction = [], {}, {}, {}, {}, {}, {}, {}, {}, {}
+@@ -845,5 +845,5 @@
+             bindings=controlled_bindings)
+     for rows in gel.values():
+-        gel_received(parts, rows, records or {}, section=_section, table=_table, values=_values,
++        gel_received(parts, rows, gel_records or records or {}, section=_section, table=_table, values=_values,
+             bindings=gel_bindings)
+ 
+@@ -877,4 +877,5 @@
+     controlled_bindings = state.get("literature_controlled_response_return_bindings")
+     gel_bindings = state.get("literature_gel_return_bindings")
++    gel_records = {**controlled_records, **state.get("literature_gel_return_records", {})}
+     if selected:
+         _section(parts, "Relevant received experimental facts", _values(selected))
+@@ -894,5 +895,5 @@
+             _source_result(parts, outcome, "Last selected action outcome", controlled_records=controlled_records,
+                 controlled_bindings=controlled_bindings, controlled_assignment=state.get("literature_assignment"),
+-                gel_bindings=gel_bindings, gel_assignment=state.get("literature_assignment"))
++                gel_bindings=gel_bindings, gel_assignment=state.get("literature_assignment"), gel_records=gel_records)
+     if state.get("feedback") is not None and state["feedback"] != (outcome or {}).get("feedback"):
+         _section(parts, "Actionable feedback", _values(state["feedback"]))
+@@ -905,5 +906,5 @@
+         _received_returns(parts, state["child_reports"], records=records,
+             ratio_source_meanings=state.get("literature_ratio_source_return_meanings"),
+-            controlled_bindings=controlled_bindings, gel_bindings=gel_bindings)
++            controlled_bindings=controlled_bindings, gel_bindings=gel_bindings, gel_records=gel_records)
+     pending = state.get("pending_work", {})
+     if pending.get("items"):
+@@ -914,5 +915,5 @@
+         _source_result(parts, result, "Requested information; continue this decision", controlled_records=controlled_records,
+             controlled_bindings=controlled_bindings, controlled_assignment=state.get("literature_assignment"),
+-                gel_bindings=gel_bindings, gel_assignment=state.get("literature_assignment"))
++                gel_bindings=gel_bindings, gel_assignment=state.get("literature_assignment"), gel_records=gel_records)
+     return "\n".join(parts)
+ 
+--- literature_reference_parent_prompt.py (initial integration)
++++ literature_reference_parent_prompt.py (semantic display fix)
+@@ -132,5 +132,5 @@
+         "feedback", "current_report_update", "child_reports", "pending_work", "current_report_basis_refs",
+         "literature_ratio_source_return_meanings", "literature_controlled_response_return_bindings",
+-        "literature_gel_return_bindings")
++        "literature_gel_return_bindings", "literature_gel_return_records")
+     steering_state = {name: state[name] for name in steering_fields if name in state}
+     if state.get('contract_information_profile') == CONTRACT_INFORMATION_PROFILE:

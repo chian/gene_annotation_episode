@@ -1,0 +1,11 @@
+"""Selected A105 parent arithmetic using the user's explicit combination rules."""
+
+A105_AGGREGATION_TASK = """Combine the retained A105 experiment assessments for the selected reference functional assertion. Keep one populated assessment per actual experiment and retain its identity, source measurements, qualifications and revisions. A second delivery or revised assessment of that experiment is not another experiment.
+
+Use these exact across-experiment rules: reliability SUM; validity SUM; relevance MAXIMUM; attribution MAXIMUM; overall experimental score SUM. Each operation uses all selected experiment values for that metric. Maximum means the ordinary largest value: max(1, 2, 5, 4) = 5. Overall sums the experiment overall scores; it is not a newly invented sum or product of the four aggregate dimensions. Do not average, normalize, clamp, apply weights, discount for shared weaknesses or require orthogonality. Retain dependence information for later refinement without changing these explicitly approximate arithmetic rules.
+
+Bind each requested metric to its actual possessed numerical component using experiment identity, saved sheet and component. Preserve that component's formula, units, scientific meaning and qualifications; aggregation does not manufacture a missing score or turn a diagnostic into a probability. Choose the intended current assessment when an experiment has several saved assessments. Use the same reference assertion and declare any comparison interpretation explicitly. Include the experiments being assessed, retaining missing components as missing rather than dropping their experiment or inserting zero. A partial aggregate over available values must be labeled partial and must not replace an unavailable complete aggregate.
+
+Select literature.a105.aggregate within this existing literature investigation when combination is the needed next action. Return requested saved aggregate components and experiment assessments through the parent's ordinary typed form. This combines experimental reference evidence within A105; it does not calculate target correspondence, combine evidence axes or assign final annotation credit."""
+
+__all__ = ['A105_AGGREGATION_TASK']

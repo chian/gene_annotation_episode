@@ -1,0 +1,102 @@
+{
+  "attempt_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/b5e68e7c66b0c6d58eae74fcc3ecce32b6d0c4291a3b17d0313e8e0d1f42fe48/2608d8b1ac6f90eb8c5d2a53257df4b41e6806c754b821fc9ab63fd4119b1c51/blast-utility-attempt",
+  "identity": {
+    "attempt_id": "2608d8b1ac6f90eb8c5d2a53257df4b41e6806c754b821fc9ab63fd4119b1c51",
+    "episode_id": "episode_59f5cf2a6cc8d79ca1dbc6c943e8ea0f1b44cd682ead0622c3a1bfbcf26585e4",
+    "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/workspace/.episode-operations/b5e68e7c66b0c6d58eae74fcc3ecce32b6d0c4291a3b17d0313e8e0d1f42fe48/2608d8b1ac6f90eb8c5d2a53257df4b41e6806c754b821fc9ab63fd4119b1c51/native.json",
+    "operation_key": "preparation-workflow654:episode_59f5cf2a6cc8d79ca1dbc6c943e8ea0f1b44cd682ead0622c3a1bfbcf26585e4:0",
+    "requested_job_sha256": "00e187264a8ce0ffd95f225834dacef2c6ab7131bc43d06dd283b74023b8196c",
+    "resource_id": "here",
+    "run_id": "preparation-workflow654"
+  },
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "requested_job": {
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdb_aliastool",
+      "-gi_file_in",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/retained_native/cases/gi/gi.txt",
+      "-gi_file_out",
+      "result/ids.bgl"
+    ],
+    "environment": {
+      "BLAST_USAGE_REPORT": "false",
+      "NCBI_DONT_USE_NCBIRC": "1"
+    },
+    "native_blast_utility": {
+      "databases": [],
+      "environment": {
+        "BLAST_USAGE_REPORT": "false",
+        "NCBI_DONT_USE_NCBIRC": "1"
+      },
+      "inputs": [
+        {
+          "artifact_ref": null,
+          "format": "text",
+          "input_key": "ids",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/temporary/pytest/preparation-workflow6540/supplied/retained_native/cases/gi/gi.txt",
+          "role": "identifier_list",
+          "sha256": "ef5af664eedc538978845cee991d98103e00bff5236b346b326b757f763ad2af",
+          "size_bytes": 30
+        }
+      ],
+      "materializations": {
+        "database_copies": [],
+        "list_files": []
+      },
+      "operation": {
+        "database_key": null,
+        "input_occurrence_ids": [
+          "ids"
+        ],
+        "mode": "convert_gi_list",
+        "molecule": "unknown",
+        "parameters": {
+          "input_occurrence_id": "ids",
+          "output_path": "result/ids.bgl"
+        },
+        "program": "blastdb_aliastool",
+        "version": "blast_utility_operation_v2"
+      },
+      "outputs": [
+        {
+          "database_key": null,
+          "format": "text",
+          "output_key": "stdout",
+          "path_kind": "file",
+          "population": "file",
+          "relative_path": "logs/native.stdout",
+          "role": "stdout"
+        },
+        {
+          "database_key": null,
+          "format": "text",
+          "output_key": "stderr",
+          "path_kind": "file",
+          "population": "file",
+          "relative_path": "logs/native.stderr",
+          "role": "stderr"
+        },
+        {
+          "database_key": null,
+          "format": "gi_list_binary",
+          "output_key": "list",
+          "path_kind": "file",
+          "population": "file",
+          "relative_path": "result/ids.bgl",
+          "role": "identifier_list"
+        }
+      ],
+      "software": {
+        "engine_version": "2.17.0+",
+        "executable": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check113b_workflow654/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdb_aliastool",
+        "sha256": "71c9fa9760f4215b714e762a230486e7ae739c8a363396dd00a4bbb0329f2524"
+      },
+      "version": "native_blast_utility_job_v2"
+    }
+  },
+  "version": "native_blast_utility_run_plan_v1"
+}

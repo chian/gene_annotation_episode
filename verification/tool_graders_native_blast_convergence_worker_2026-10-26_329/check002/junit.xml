@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="6" skipped="0" tests="47" time="62.529" timestamp="2026-10-26T15:26:18.766103-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_native_blast_database_result_worker" name="test_psi_dispatch_once_nested_full_selected_and_native_axes" time="0.027" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_standalone_profile_dispatch_and_model_coverage[rpsblast]" time="0.015" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_standalone_profile_dispatch_and_model_coverage[rpstblastn]" time="0.016" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_pssm_all_cells_position_statistics_and_independent_arrays" time="0.039" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_iteration_query_convergence_and_explicit_set_comparison" time="0.132" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_vdb_distinct_reads_groups_samples_and_preserved_codon_maps" time="0.061" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_invalid_original_hsp_slots_and_sibling_scores_retained" time="0.025" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_pure_calculation_count_and_row_ports_have_no_io" time="0.022" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_identity_exact_canonical_recipe_path_invariance_and_model_changes" time="1.363" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet[psiblast]" time="2.594"><failure message="AssertionError: assert {'calculation...w_index', ...} == {'calculation...ergence', ...}&#10;  &#10;  Extra items in the right set:&#10;  'native_convergence'&#10;  Use -v to get more diff">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a0')
+program = 'psiblast'
+
+    @pytest.mark.parametrize("program", views._PROGRAMS)
+    def test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet(tmp_path, program):
+        request = request_fixture(tmp_path, program)
+        manifest = run_request(tmp_path, request, cli=True)
+        output = Path(request["output_directory"])
+        assert manifest["status"] in ("complete", "partial")
+        expected_roles = worker._ARTIFACT_ROLES_V2 if program in ("psiblast", "deltablast") else worker._ARTIFACT_ROLES
+&gt;       assert {r["role"] for r in manifest["artifacts"]} == set(expected_roles)
+E       AssertionError: assert {'calculation...w_index', ...} == {'calculation...ergence', ...}
+E         
+E         Extra items in the right set:
+E         'native_convergence'
+E         Use -v to get more diff
+
+../../../tests/test_native_blast_database_result_worker.py:299: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_database_result_worker" name="test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet[deltablast]" time="2.980"><failure message="AssertionError: assert {'calculation...w_index', ...} == {'calculation...ergence', ...}&#10;  &#10;  Extra items in the right set:&#10;  'native_convergence'&#10;  Use -v to get more diff">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a1')
+program = 'deltablast'
+
+    @pytest.mark.parametrize("program", views._PROGRAMS)
+    def test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet(tmp_path, program):
+        request = request_fixture(tmp_path, program)
+        manifest = run_request(tmp_path, request, cli=True)
+        output = Path(request["output_directory"])
+        assert manifest["status"] in ("complete", "partial")
+        expected_roles = worker._ARTIFACT_ROLES_V2 if program in ("psiblast", "deltablast") else worker._ARTIFACT_ROLES
+&gt;       assert {r["role"] for r in manifest["artifacts"]} == set(expected_roles)
+E       AssertionError: assert {'calculation...w_index', ...} == {'calculation...ergence', ...}
+E         
+E         Extra items in the right set:
+E         'native_convergence'
+E         Use -v to get more diff
+
+../../../tests/test_native_blast_database_result_worker.py:299: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_database_result_worker" name="test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet[rpsblast]" time="1.438"><failure message="AssertionError: /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a2/generation1&#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['/home/chia/repos/gene_annotation_episode/.venv/bin/python', '-B', '-m', 'gene_annotation_episo...-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a2/request.json'], returncode=1, stdout=b'', stderr=b'').returncode">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a2')
+program = 'rpsblast'
+
+    @pytest.mark.parametrize("program", views._PROGRAMS)
+    def test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet(tmp_path, program):
+        request = request_fixture(tmp_path, program)
+&gt;       manifest = run_request(tmp_path, request, cli=True)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_result_worker.py:295: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a2')
+request = {'version': 'native_blast_database_result_worker_request_v1', 'calculation_id': '606a3dc195b25583d1f26cf79304deb33fa6c...NG': 'explicit', 'SYNTHETIC_BEHAVIOR': 'complete', ...}, ...}, 'bundle_artifact_ref': 'artifact:synthetic-bundle', ...}
+name = 'request.json', cli = True
+
+    def run_request(tmp_path, request, name="request.json", *, cli=False):
+        path = tmp_path / name; path.write_bytes(worker._json_bytes(request))
+        if cli:
+            env = dict(os.environ, PYTHONPATH=str(Path(__file__).resolve().parents[1]), PYTHONDONTWRITEBYTECODE="1")
+            result = subprocess.run([sys.executable, "-B", "-m", "gene_annotation_episode.native_blast_database_result_worker", str(path)],
+                cwd=tmp_path, env=env, capture_output=True, check=False)
+            (tmp_path / (name + ".stdout")).write_bytes(result.stdout)
+            (tmp_path / (name + ".stderr")).write_bytes(result.stderr)
+&gt;           assert result.returncode == 0, result.stderr.decode() + str(request["output_directory"])
+E           AssertionError: /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a2/generation1
+E           assert 1 == 0
+E            +  where 1 = CompletedProcess(args=['/home/chia/repos/gene_annotation_episode/.venv/bin/python', '-B', '-m', 'gene_annotation_episo...-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a2/request.json'], returncode=1, stdout=b'', stderr=b'').returncode
+
+../../../tests/test_native_blast_database_result_worker.py:266: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_database_result_worker" name="test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet[rpstblastn]" time="1.280"><failure message="AssertionError: /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a3/generation1&#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['/home/chia/repos/gene_annotation_episode/.venv/bin/python', '-B', '-m', 'gene_annotation_episo...-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a3/request.json'], returncode=1, stdout=b'', stderr=b'').returncode">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a3')
+program = 'rpstblastn'
+
+    @pytest.mark.parametrize("program", views._PROGRAMS)
+    def test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet(tmp_path, program):
+        request = request_fixture(tmp_path, program)
+&gt;       manifest = run_request(tmp_path, request, cli=True)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_result_worker.py:295: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a3')
+request = {'version': 'native_blast_database_result_worker_request_v1', 'calculation_id': '2bfafc99c4c7b442a021c9cfbd5984ea5aa39...NG': 'explicit', 'SYNTHETIC_BEHAVIOR': 'complete', ...}, ...}, 'bundle_artifact_ref': 'artifact:synthetic-bundle', ...}
+name = 'request.json', cli = True
+
+    def run_request(tmp_path, request, name="request.json", *, cli=False):
+        path = tmp_path / name; path.write_bytes(worker._json_bytes(request))
+        if cli:
+            env = dict(os.environ, PYTHONPATH=str(Path(__file__).resolve().parents[1]), PYTHONDONTWRITEBYTECODE="1")
+            result = subprocess.run([sys.executable, "-B", "-m", "gene_annotation_episode.native_blast_database_result_worker", str(path)],
+                cwd=tmp_path, env=env, capture_output=True, check=False)
+            (tmp_path / (name + ".stdout")).write_bytes(result.stdout)
+            (tmp_path / (name + ".stderr")).write_bytes(result.stderr)
+&gt;           assert result.returncode == 0, result.stderr.decode() + str(request["output_directory"])
+E           AssertionError: /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a3/generation1
+E           assert 1 == 0
+E            +  where 1 = CompletedProcess(args=['/home/chia/repos/gene_annotation_episode/.venv/bin/python', '-B', '-m', 'gene_annotation_episo...-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a3/request.json'], returncode=1, stdout=b'', stderr=b'').returncode
+
+../../../tests/test_native_blast_database_result_worker.py:266: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_database_result_worker" name="test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet[blastn_vdb]" time="1.416"><failure message="AssertionError: /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a4/generation1&#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['/home/chia/repos/gene_annotation_episode/.venv/bin/python', '-B', '-m', 'gene_annotation_episo...-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a4/request.json'], returncode=1, stdout=b'', stderr=b'').returncode">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a4')
+program = 'blastn_vdb'
+
+    @pytest.mark.parametrize("program", views._PROGRAMS)
+    def test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet(tmp_path, program):
+        request = request_fixture(tmp_path, program)
+&gt;       manifest = run_request(tmp_path, request, cli=True)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_result_worker.py:295: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a4')
+request = {'version': 'native_blast_database_result_worker_request_v1', 'calculation_id': 'b2e274405d092dfb210f67d0c87dfd6ce51e5...NG': 'explicit', 'SYNTHETIC_BEHAVIOR': 'complete', ...}, ...}, 'bundle_artifact_ref': 'artifact:synthetic-bundle', ...}
+name = 'request.json', cli = True
+
+    def run_request(tmp_path, request, name="request.json", *, cli=False):
+        path = tmp_path / name; path.write_bytes(worker._json_bytes(request))
+        if cli:
+            env = dict(os.environ, PYTHONPATH=str(Path(__file__).resolve().parents[1]), PYTHONDONTWRITEBYTECODE="1")
+            result = subprocess.run([sys.executable, "-B", "-m", "gene_annotation_episode.native_blast_database_result_worker", str(path)],
+                cwd=tmp_path, env=env, capture_output=True, check=False)
+            (tmp_path / (name + ".stdout")).write_bytes(result.stdout)
+            (tmp_path / (name + ".stderr")).write_bytes(result.stderr)
+&gt;           assert result.returncode == 0, result.stderr.decode() + str(request["output_directory"])
+E           AssertionError: /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a4/generation1
+E           assert 1 == 0
+E            +  where 1 = CompletedProcess(args=['/home/chia/repos/gene_annotation_episode/.venv/bin/python', '-B', '-m', 'gene_annotation_episo...-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a4/request.json'], returncode=1, stdout=b'', stderr=b'').returncode
+
+../../../tests/test_native_blast_database_result_worker.py:266: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_database_result_worker" name="test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet[tblastn_vdb]" time="1.560"><failure message="AssertionError: /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a5/generation1&#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['/home/chia/repos/gene_annotation_episode/.venv/bin/python', '-B', '-m', 'gene_annotation_episo...-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a5/request.json'], returncode=1, stdout=b'', stderr=b'').returncode">tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a5')
+program = 'tblastn_vdb'
+
+    @pytest.mark.parametrize("program", views._PROGRAMS)
+    def test_actual_worker_cli_seals_all_artifacts_exact_byte_index_and_v2_sheet(tmp_path, program):
+        request = request_fixture(tmp_path, program)
+&gt;       manifest = run_request(tmp_path, request, cli=True)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_native_blast_database_result_worker.py:295: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a5')
+request = {'version': 'native_blast_database_result_worker_request_v1', 'calculation_id': '2d12f1683569eb0af0211984f53584903504d...NG': 'explicit', 'SYNTHETIC_BEHAVIOR': 'complete', ...}, ...}, 'bundle_artifact_ref': 'artifact:synthetic-bundle', ...}
+name = 'request.json', cli = True
+
+    def run_request(tmp_path, request, name="request.json", *, cli=False):
+        path = tmp_path / name; path.write_bytes(worker._json_bytes(request))
+        if cli:
+            env = dict(os.environ, PYTHONPATH=str(Path(__file__).resolve().parents[1]), PYTHONDONTWRITEBYTECODE="1")
+            result = subprocess.run([sys.executable, "-B", "-m", "gene_annotation_episode.native_blast_database_result_worker", str(path)],
+                cwd=tmp_path, env=env, capture_output=True, check=False)
+            (tmp_path / (name + ".stdout")).write_bytes(result.stdout)
+            (tmp_path / (name + ".stderr")).write_bytes(result.stderr)
+&gt;           assert result.returncode == 0, result.stderr.decode() + str(request["output_directory"])
+E           AssertionError: /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a5/generation1
+E           assert 1 == 0
+E            +  where 1 = CompletedProcess(args=['/home/chia/repos/gene_annotation_episode/.venv/bin/python', '-B', '-m', 'gene_annotation_episo...-26_329/check002/temporary/pytest/test_actual_worker_cli_seals_a5/request.json'], returncode=1, stdout=b'', stderr=b'').returncode
+
+../../../tests/test_native_blast_database_result_worker.py:266: AssertionError</failure></testcase><testcase classname="tests.test_native_blast_database_result_worker" name="test_reuse_saved_sheets_without_prepare_populate_or_collection" time="3.433" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_exact_function_census_taxonomy_and_quality_components" time="0.095" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_public_raw_count_population_exact_parity_with_311[arguments0]" time="0.005" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_public_raw_count_population_exact_parity_with_311[arguments1]" time="0.046" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_public_raw_count_population_exact_parity_with_311[arguments2]" time="0.003" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_public_raw_count_population_exact_parity_with_311[arguments3]" time="0.003" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_public_raw_count_population_exact_parity_with_311[arguments4]" time="0.048" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_malformed_json_count_parity_and_unqualified_projection_preserves_raw" time="0.001" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_profile_overlap_conflicting_model_length_and_reverse_coordinates" time="0.037" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_vdb_taxonomy_population_quality_literal_counts_and_filter_conflict" time="0.118" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_delta_uses311_once_and_standalone_vdb_pssm_calculates_unique_input" time="0.080" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_reuse_rejects_changed_bytes_or_input_identity_without_fallback[bytes]" time="2.873" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_reuse_rejects_changed_bytes_or_input_identity_without_fallback[metadata]" time="2.078" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_reuse_rejects_changed_bytes_or_input_identity_without_fallback[manifest]" time="1.892" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_worker_records_exact_exception_and_preserves_sealed_input_artifacts[error0]" time="2.710" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_worker_records_exact_exception_and_preserves_sealed_input_artifacts[error1]" time="1.780" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_thrown_calculator_error_propagates_without_partial_success[iteration]" time="0.004" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_thrown_calculator_error_propagates_without_partial_success[profile]" time="0.003" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_thrown_calculator_error_propagates_without_partial_success[vdb]" time="0.003" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_thrown_calculator_error_propagates_without_partial_success[pssm]" time="0.005" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_nested_calculator_error_is_failed_manifest_with_exact_diagnostics" time="1.546" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_conflicting_pssm_artifact_identity_cannot_select_first_sheet" time="0.006" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_original_worker_generation_cannot_be_overwritten_and_invalid_model_is_rejected" time="3.488" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_changed_calculator_bytes_reuse_old_interpretation_without_parsers" time="4.217" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_retained_native_pssm_full_matrix_values_are_not_compacted" time="7.837" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_distinct_metadata_tuples_share_captured_bytes_without_overwrite" time="3.979" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_malformed_metadata_bytes_preserve_native_sibling_measurements[{&quot;schema&quot;:&quot;one&quot;,&quot;schema&quot;:&quot;two&quot;}]" time="3.121" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_malformed_metadata_bytes_preserve_native_sibling_measurements[{&quot;value&quot;:NaN}]" time="1.977" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_malformed_metadata_bytes_preserve_native_sibling_measurements[not JSON\x00\xff]" time="1.160" /><testcase classname="tests.test_native_blast_database_result_worker" name="test_missing_nonreport_capture_keeps_valid_report_and_full_failure" time="1.482" /><testcase classname="tests.test_native_blast_result_review" name="test_failure_addresses_are_constrained_locations_not_existing_reference_assertions" time="0.034" /><testcase classname="tests.test_native_blast_result_review" name="test_actual_worker_missing_artifact_diagnostics_are_hash_seed_independent" time="4.347" /></testsuite></testsuites>

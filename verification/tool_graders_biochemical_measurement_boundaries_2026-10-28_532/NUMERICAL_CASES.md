@@ -1,0 +1,26 @@
+# Constructed numerical verification cases
+
+All values below are constructed analytical examples for future tests. None is an observed experiment, native output, fit executed in packet 532, or new verification receipt. Native source behavior is described separately in BOUNDARY_CONTRACT.md. No invented confidence score is included.
+
+| ID | Inputs and exact mathematical target | Expected result / meaning |
+| --- | --- | --- |
+| CD-01 | Protein wavelengths `[190,192,195,197,218]` nm, signals `[1,2,3,-1,-2]` mdeg; inclusive native windows | Positive 190–195 count=3 of 3 sampled points; negative 215–220 count=1 of 1; negative 195–200 count=1 of 2. These are point counts, not α/β/coil fractions. |
+| CD-02 | Temperature `[20,40,60,80]` °C and signal `[0,2,8,10]` in one declared unit | Range positions `[0,0.2,0.8,1]`; nearest-half tie at indices 1,2; legacy first-occurrence rule selects 40 °C. This is a sampled signal midpoint, not a fitted Tm. |
+| CD-03 | Signal `[5,5,5]` at any three temperatures | Range=0; normalized positions and midpoint unavailable with `flat_signal`; raw measurements retained. |
+| CD-04 | Corrected signal −20 mdeg, path 0.1 cm, explicitly supplied residue concentration 0.001 M | Mean-residue ellipticity `−20/(10*0.1*0.001)=−20000` deg·cm²·dmol-residue^-1. Removing concentration makes only normalized ellipticity unavailable. |
+| LIN-01 | Selected time `[0,1,2]` s, fluorescence `[10,14,18]` FU | Shared affine slope=4 FU/s; intercept=10 FU; SSE=0; N=3. The mathematical residual is zero; experimental uncertainty is not inferred zero. |
+| PRO-01 | Sample slope 4 FU/s, matched blank slope 1 FU/s, actual selected calibration `F=10+2*P_uM` | Net slope=3 FU/s; product rate=1.5 µM/s. Without slope calibration, 3 FU/s survives and µM/s is unavailable. |
+| PRO-02 | Constructed noiseless MM rates: S `[1,2,4]` µM; v `[2,3,4]` µM/s | Exact equation is Vmax=6 µM/s, Km=2 µM; SSE=0. With active enzyme 0.5 µM: kcat=12 s^-1, efficiency=6 µM^-1·s^-1. A future numerical solver should match within its declared tolerance. |
+| PRO-03 | Same Vmax=6 and Km=2; enzyme=0.5 held exact. Covariance order `[Vmax,Km]`: `[[0.36,0.06],[0.06,0.04]]` in corresponding product units | Efficiency gradient `[1,-3]`; variance `0.36+9*0.04−6*0.06=0.36`, standard uncertainty=0.6. Diagonal-only variance would be 0.72 and is not the full answer. |
+| PRO-04 | S `[1,1,1]` and three rates | Preserve slopes; the existing MM owner reports insufficient distinct concentrations, not fitted Km=0. Missing curve rows must not be initialized as observed zeros. |
+| ITC-01 | One-site totals P=2 µM, L=3 µM, Kd=2 µM, n=1 | Bound concentration `(7−sqrt(49−24))/2=1` µM. Source free-ligand approximation gives `2*3/(2+3)=1.2` µM; values must not be conflated. |
+| ITC-02 | Bound concentration 1 µM, effective cell volume 1 mL=0.001 L, ΔH=−20000 J/mol, no preceding complex | Bound amount=1 nmol; first binding heat=−20 µJ. Passing mL numerically as L creates a factor-1000 error and must fail unit validation. |
+| ITC-03 | Constructed parameter Kd=1 M and explicit standard concentration=1 M; T=300 K, ΔH=−6000 J/mol | Ka=1 M^-1; ΔG=0 J/mol; ΔS=−20 J/(mol·K). Kd≤0 or T≤0 is invalid. This is an algebra check, not a realistic assay claim. |
+| ITC-04 | Discrete replacement mode explicitly selected; retained fraction=0.9; previous P=10 µM/L=0; syringe ligand=100 µM | New P=9 µM, L=10 µM. Leaving the displacement mode unspecified makes these derived totals unavailable; no 1.4-mL or concentration default is inserted. |
+| AS-01 | Selected peak times `[0,1,2]` min; raw signal `[2,6,2]` counts/s; explicit baseline=2 counts/s | Trapezoidal baseline-corrected area=4 (counts/s)·min=240 counts. Native raw midpoint height=6 counts/s is a different response and cannot use the area calibration. |
+| AS-02 | Actual selected affine calibration standard pairs concentration `[0,1,2]` µg/L → area `[10,30,50]` response-units; sample area=70 | a=10 response-units; b=20 response-units/(µg/L); solution concentration=3 µg/L. Explicit dilution factor=5 gives original concentration=15 µg/L. Sample lies outside the 0–2 calibration interval and must retain that qualification. |
+| AS-03 | Supplied reference retention 2.8 min, observed peak 2.9 min, selected tolerance 0.2 min | Difference=0.1 min within selected reference tolerance. Same peak assigned to two unresolved species references remains ambiguous; do not duplicate it into two concentrations. |
+| AS-04 | Source-declared LOD=0.1 and LOQ=0.3 µg/L, selected estimated concentration=0.2 µg/L | Above LOD and below LOQ are distinct flags. No fully quantified point is asserted; raw response/estimate/limits remain inspectable. Missing limits are unknown, not zero. |
+| AS-05 | Selected quantified species `[2,3]` µg/L and independent matching total As=10 µg/L | Selected-species sum=5 µg/L; mass-balance ratio=0.5 for this exact two-species population. A third missing/censored selected species prevents calling 5 an exact total of all selected species. |
+
+Every case must eventually be tested through parsed retained inputs and the requested typed return, with sheet–publication equality. Source-generated rounded summaries alone cannot satisfy saved recalculation. Actual supplied measurements, native execution receipts and selected-resource verification remain distinct required evidence.

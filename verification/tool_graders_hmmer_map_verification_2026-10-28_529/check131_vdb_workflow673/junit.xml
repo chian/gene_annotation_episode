@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="2457.325" timestamp="2026-10-28T23:52:35.263987-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_blast_vdb_workflow_673" name="test_selected_native_workflow" time="2455.208"><failure message="AssertionError: assert ('returned' == 'completed'&#10;  &#10;  - completed&#10;  + returned)">source_snapshot/tests/test_blast_vdb_workflow_673.py:612: in test_selected_native_workflow
+    verify_case(case)
+source_snapshot/tests/test_blast_vdb_workflow_673.py:496: in verify_case
+    assert case.monitor_return["latest_state"] == "completed" and case.monitor_return["result_available"]
+E   AssertionError: assert ('returned' == 'completed'
+E     
+E     - completed
+E     + returned)</failure></testcase></testsuite></testsuites>

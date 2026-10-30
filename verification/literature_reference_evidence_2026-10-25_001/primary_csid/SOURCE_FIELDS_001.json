@@ -1,0 +1,137 @@
+{
+  "version": "primary_csid_source_fields_research_v1",
+  "status": "source-specific proposed handoff; not installed production contract",
+  "measurements": [
+    {
+      "source_ref": "doi:10.1038/s41467-018-07563-6",
+      "artifact_ref": "PMC6265302_original.xml",
+      "artifact_sha256": "918d148cfc54a638bd9e36d42ebe5c6cf8b72332a3c674ed320d2f86d63a1558",
+      "selector": "//sec[@id='Sec3']/p[1]",
+      "original_paragraph": "Sec3_p01_original_plaintext.txt",
+      "origin": "reported",
+      "assayed_subject": "CsiD preparation reported by source; N-terminal His-tagged protein",
+      "endpoint": "Clark-electrode oxygen consumption",
+      "uncertainty_kind": "unspecified",
+      "count": null,
+      "sampling_basis": "unspecified",
+      "field": "native_specific_oxygen_activity",
+      "value": 53,
+      "unit": "umol/min/mg",
+      "reported_plus_minus_magnitude": 3,
+      "quantity_role": "specific activity",
+      "varied_ligand": null,
+      "normalization": "protein mass",
+      "bound": "none",
+      "error_variance": null,
+      "missing": [
+        "error_statistic_definition",
+        "independent_count",
+        "sampling_basis",
+        "joint_fit_covariance"
+      ],
+      "applicability_note": "Source preparation endpoint, not target transfer or isolated chemical product rate."
+    },
+    {
+      "source_ref": "doi:10.1038/s41467-018-07563-6",
+      "artifact_ref": "PMC6265302_original.xml",
+      "artifact_sha256": "918d148cfc54a638bd9e36d42ebe5c6cf8b72332a3c674ed320d2f86d63a1558",
+      "selector": "//sec[@id='Sec3']/p[1]",
+      "original_paragraph": "Sec3_p01_original_plaintext.txt",
+      "origin": "reported",
+      "assayed_subject": "CsiD preparation reported by source; N-terminal His-tagged protein",
+      "endpoint": "Clark-electrode oxygen consumption",
+      "uncertainty_kind": "unspecified",
+      "count": null,
+      "sampling_basis": "unspecified",
+      "field": "Km_glutarate",
+      "value": 650,
+      "unit": "uM",
+      "reported_plus_minus_magnitude": 20,
+      "quantity_role": "apparent Michaelis constant",
+      "varied_ligand": "glutarate",
+      "normalization": "kinetic response model parameter",
+      "bound": "none",
+      "error_variance": null,
+      "missing": [
+        "error_statistic_definition",
+        "independent_count",
+        "sampling_basis",
+        "joint_fit_covariance"
+      ],
+      "applicability_note": "Source preparation endpoint, not target transfer or isolated chemical product rate."
+    },
+    {
+      "source_ref": "doi:10.1038/s41467-018-07563-6",
+      "artifact_ref": "PMC6265302_original.xml",
+      "artifact_sha256": "918d148cfc54a638bd9e36d42ebe5c6cf8b72332a3c674ed320d2f86d63a1558",
+      "selector": "//sec[@id='Sec3']/p[1]",
+      "original_paragraph": "Sec3_p01_original_plaintext.txt",
+      "origin": "reported",
+      "assayed_subject": "CsiD preparation reported by source; N-terminal His-tagged protein",
+      "endpoint": "Clark-electrode oxygen consumption",
+      "uncertainty_kind": "unspecified",
+      "count": null,
+      "sampling_basis": "unspecified",
+      "field": "Km_alphaKG",
+      "value": 100,
+      "unit": "uM",
+      "reported_plus_minus_magnitude": 7,
+      "quantity_role": "Michaelis constant",
+      "varied_ligand": "alpha-ketoglutarate",
+      "normalization": "kinetic response model parameter",
+      "bound": "none",
+      "error_variance": null,
+      "missing": [
+        "error_statistic_definition",
+        "independent_count",
+        "sampling_basis",
+        "joint_fit_covariance"
+      ],
+      "applicability_note": "Source preparation endpoint, not target transfer or isolated chemical product rate."
+    }
+  ],
+  "source_conditions": {
+    "source_selector": "//sec[@id='Sec15']",
+    "temperature_C": 30,
+    "CsiD_nM": 180,
+    "MOPS_mM": 100,
+    "NaCl_mM": 70,
+    "KCl_mM": 20,
+    "pH": 7.2,
+    "ascorbate_uM": 400,
+    "Fe_ammonium_sulfate_uM": 4,
+    "Km_glutarate_alphaKG_fixed_mM": 1,
+    "Km_alphaKG_glutarate_fixed_mM": 5
+  },
+  "unavailable_components": {
+    "corrected_molecule_specific_activity": "No identified common blank/attribution/recovery correction and uncertainty model in inspected source. Whether reported specific activity is already corrected remains unspecified.",
+    "source_profile_log_ratio": "Reported plus/minus kind and independent sampling/variance inputs not established.",
+    "source_bounded_evidence_index": "Dependent source likelihood unavailable.",
+    "rate_contrast": "No native two-arm rate table in original JATS; one reported specific activity cannot fill two arms.",
+    "target_transfer": "Excluded by current goal.",
+    "annotation_credit": "Deferred to later work."
+  },
+  "supplement_fig5": {
+    "source_artifact": "41467_2018_7563_MOESM1_ESM.pdf",
+    "anchor": "Supplementary Figure 5 caption",
+    "control": "no inhibitor; not no enzyme",
+    "replicates": "triplicate measurements except D2HG n=2; independent preparation basis not established",
+    "uncertainty_kind": "sd",
+    "L2HG_CsiD_Ki": {
+      "value": 10,
+      "unit": "mM",
+      "relation": "gt",
+      "origin": "reported estimate",
+      "point_measurement": false
+    },
+    "bar_values": "not digitized by this worker"
+  },
+  "do_not_infer": [
+    "No zero blank from omitted blank.",
+    "No known variance from untyped plus/minus.",
+    "No kinetic error model from intracellular-metabolite Figure 2d legend.",
+    "No molecular product-formation rate from oxygen consumption alone.",
+    "No mass accuracy from Table 2 reference m/z without observed counterpart.",
+    "No exact-zero rate or infinite selectivity from unquantified nonconversion."
+  ]
+}

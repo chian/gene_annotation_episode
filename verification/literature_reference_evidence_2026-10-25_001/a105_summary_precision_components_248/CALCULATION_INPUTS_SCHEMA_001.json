@@ -1,0 +1,827 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "a105_kinetic_summary_precision_inputs_v1"
+    },
+    "source_kind": {
+      "enum": [
+        "primary_source",
+        "synthetic_fixture"
+      ]
+    },
+    "parameter_kind": {
+      "enum": [
+        "Km",
+        "kcat",
+        "catalytic_efficiency",
+        "unknown",
+        "conflicting"
+      ]
+    },
+    "source_origin": {
+      "enum": [
+        "reported",
+        "synthetic"
+      ]
+    },
+    "source_parameter_status": {
+      "enum": [
+        "point",
+        "censored",
+        "missing",
+        "conflicting"
+      ]
+    },
+    "source_parameter_reason": {
+      "anyOf": [
+        {
+          "enum": [
+            "source_measurement_unreported",
+            "source_kinetic_unit_unreported",
+            "unsupported_source_kinetic_unit",
+            "source_operand_qualification_unknown",
+            "source_operand_qualification_conflicting",
+            "source_numeric_range"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "parameter_approximate": {
+      "type": "boolean"
+    },
+    "parameter_native_exact": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "numerator": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)$"
+            },
+            "denominator": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$"
+            }
+          },
+          "required": [
+            "numerator",
+            "denominator"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "sd_native_exact": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "numerator": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)$"
+            },
+            "denominator": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$"
+            }
+          },
+          "required": [
+            "numerator",
+            "denominator"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "canonical_scale_exact": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "numerator": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)$"
+            },
+            "denominator": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$"
+            }
+          },
+          "required": [
+            "numerator",
+            "denominator"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "canonical_unit": {
+      "anyOf": [
+        {
+          "enum": [
+            "uM",
+            "per_min",
+            "uM^-1min^-1"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "uncertainty_statistic": {
+      "enum": [
+        "sd",
+        "sem",
+        "ci",
+        "unspecified",
+        "unreported"
+      ]
+    },
+    "uncertainty_reason": {
+      "anyOf": [
+        {
+          "enum": [
+            "source_uncertainty_unit_unavailable",
+            "source_numeric_range"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "source_count": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "selector": {
+              "type": "object",
+              "properties": {
+                "witness": {
+                  "type": "object",
+                  "properties": {
+                    "source_ref": {
+                      "type": "string",
+                      "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                      "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                    },
+                    "representation": {
+                      "enum": [
+                        "original",
+                        "text"
+                      ]
+                    },
+                    "start": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "end": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "quote": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "artifact_ref": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "representation",
+                    "start",
+                    "end",
+                    "quote",
+                    "artifact_ref"
+                  ],
+                  "additionalProperties": false
+                },
+                "number_start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "number_end": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "witness",
+                "number_start",
+                "number_end"
+              ],
+              "additionalProperties": false
+            },
+            "raw_number": {
+              "type": "string",
+              "minLength": 1
+            },
+            "value": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "notation": {
+              "enum": [
+                "decimal_digits",
+                "english_cardinal",
+                "unsupported"
+              ]
+            },
+            "relation": {
+              "enum": [
+                "point",
+                "lt",
+                "le",
+                "gt",
+                "ge",
+                "unresolved"
+              ]
+            },
+            "approximate": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "status": {
+              "enum": [
+                "exact",
+                "qualified",
+                "range_or_alternatives",
+                "unsupported",
+                "not_positive"
+              ]
+            },
+            "unavailable_reason": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "exact_count_qualified",
+                    "count_range_or_alternatives",
+                    "unsupported_count_literal",
+                    "positive_count_required"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "selector",
+            "raw_number",
+            "value",
+            "notation",
+            "relation",
+            "approximate",
+            "status",
+            "unavailable_reason"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "source_statistical_count": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "selector": {
+              "type": "object",
+              "properties": {
+                "witness": {
+                  "type": "object",
+                  "properties": {
+                    "source_ref": {
+                      "type": "string",
+                      "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                      "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                    },
+                    "representation": {
+                      "enum": [
+                        "original",
+                        "text"
+                      ]
+                    },
+                    "start": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "end": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "quote": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "artifact_ref": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "source_ref",
+                    "representation",
+                    "start",
+                    "end",
+                    "quote",
+                    "artifact_ref"
+                  ],
+                  "additionalProperties": false
+                },
+                "number_start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "number_end": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "witness",
+                "number_start",
+                "number_end"
+              ],
+              "additionalProperties": false
+            },
+            "raw_number": {
+              "type": "string",
+              "minLength": 1
+            },
+            "value": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "notation": {
+              "enum": [
+                "decimal_digits",
+                "english_cardinal",
+                "unsupported"
+              ]
+            },
+            "relation": {
+              "enum": [
+                "point",
+                "lt",
+                "le",
+                "gt",
+                "ge",
+                "unresolved"
+              ]
+            },
+            "approximate": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "status": {
+              "enum": [
+                "exact",
+                "qualified",
+                "range_or_alternatives",
+                "unsupported",
+                "not_positive"
+              ]
+            },
+            "unavailable_reason": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "exact_count_qualified",
+                    "count_range_or_alternatives",
+                    "unsupported_count_literal",
+                    "positive_count_required"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "selector",
+            "raw_number",
+            "value",
+            "notation",
+            "relation",
+            "approximate",
+            "status",
+            "unavailable_reason"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "source_count_meaning": {
+      "enum": [
+        "physical_preparation_count",
+        "statistical_estimator_count",
+        "both_same_count",
+        "technical_measurement_count",
+        "unknown",
+        "conflicting"
+      ]
+    },
+    "repetition_basis": {
+      "enum": [
+        "biological_preparations",
+        "technical_measurements",
+        "unspecified"
+      ]
+    },
+    "estimate_basis": {
+      "enum": [
+        "fit_to_averaged_curve",
+        "between_fitted_parameters",
+        "unknown"
+      ]
+    },
+    "assessments": {
+      "type": "object",
+      "properties": {
+        "row_footnote_applicability": {
+          "enum": [
+            "source_supported",
+            "source_contradicted",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "statistical_count_matches_sd": {
+          "enum": [
+            "source_supported",
+            "source_contradicted",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "one_estimate_per_preparation": {
+          "enum": [
+            "source_supported",
+            "source_contradicted",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "equal_weight_arithmetic_mean": {
+          "enum": [
+            "source_supported",
+            "source_contradicted",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "sample_sd_n_minus_one": {
+          "enum": [
+            "source_supported",
+            "source_contradicted",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "iid_common_mean_finite_variance": {
+          "enum": [
+            "source_supported",
+            "source_contradicted",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "normal_sampling_units": {
+          "enum": [
+            "source_supported",
+            "source_contradicted",
+            "unknown",
+            "conflicting"
+          ]
+        }
+      },
+      "required": [
+        "row_footnote_applicability",
+        "statistical_count_matches_sd",
+        "one_estimate_per_preparation",
+        "equal_weight_arithmetic_mean",
+        "sample_sd_n_minus_one",
+        "iid_common_mean_finite_variance",
+        "normal_sampling_units"
+      ],
+      "additionalProperties": false
+    },
+    "scenario": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "version": {
+              "const": "a105_summary_precision_scenario_v1"
+            },
+            "count_rule": {
+              "enum": [
+                "source_statistical_count",
+                "one_per_physical_preparation"
+              ]
+            },
+            "stipulated_assumptions": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "one_estimate_per_preparation",
+                  "equal_weight_arithmetic_mean",
+                  "sample_sd_n_minus_one",
+                  "iid_common_mean_finite_variance",
+                  "normal_sampling_units"
+                ]
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "version",
+            "count_rule",
+            "stipulated_assumptions"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "interval_request": {
+      "enum": [
+        "none",
+        "student_t_95"
+      ]
+    },
+    "dependencies": {
+      "type": "object",
+      "properties": {
+        "parameter_source": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "source_ref": {
+                  "type": "string",
+                  "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                  "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                },
+                "artifact_ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "representation": {
+                  "enum": [
+                    "original",
+                    "text"
+                  ]
+                },
+                "start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "source_ref",
+                "artifact_ref",
+                "representation",
+                "start",
+                "end"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "spread_source": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "source_ref": {
+                  "type": "string",
+                  "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                  "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                },
+                "artifact_ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "representation": {
+                  "enum": [
+                    "original",
+                    "text"
+                  ]
+                },
+                "start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "source_ref",
+                "artifact_ref",
+                "representation",
+                "start",
+                "end"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "count_source": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "source_ref": {
+                  "type": "string",
+                  "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                  "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                },
+                "artifact_ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "representation": {
+                  "enum": [
+                    "original",
+                    "text"
+                  ]
+                },
+                "start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "source_ref",
+                "artifact_ref",
+                "representation",
+                "start",
+                "end"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "statistical_count_source": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "source_ref": {
+                  "type": "string",
+                  "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                  "description": "An existing persistent record ID. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."
+                },
+                "artifact_ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "representation": {
+                  "enum": [
+                    "original",
+                    "text"
+                  ]
+                },
+                "start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "source_ref",
+                "artifact_ref",
+                "representation",
+                "start",
+                "end"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "physical_measurement_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "parameter_source",
+        "spread_source",
+        "count_source",
+        "statistical_count_source",
+        "physical_measurement_id"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "version",
+    "source_kind",
+    "parameter_kind",
+    "source_origin",
+    "source_parameter_status",
+    "source_parameter_reason",
+    "parameter_approximate",
+    "parameter_native_exact",
+    "sd_native_exact",
+    "canonical_scale_exact",
+    "canonical_unit",
+    "uncertainty_statistic",
+    "uncertainty_reason",
+    "source_count",
+    "source_statistical_count",
+    "source_count_meaning",
+    "repetition_basis",
+    "estimate_basis",
+    "assessments",
+    "scenario",
+    "interval_request",
+    "dependencies"
+  ],
+  "additionalProperties": false
+}

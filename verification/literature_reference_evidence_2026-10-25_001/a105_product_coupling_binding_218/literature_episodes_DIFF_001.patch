@@ -1,0 +1,175 @@
+--- before/gene_annotation_episode/literature_episodes.py
++++ after/gene_annotation_episode/literature_episodes.py
+@@ -82,6 +82,10 @@
+     result.append({"name": "literature.calibration.recovery.populate",
+         "description": "Populate requested source-bound recovery-control components from exact original numerical/unit spans. Preserve measured/expected roles, reporter-standard versus enzyme-activity-spike meaning, matrix, endpoint, blank treatment, actual SD/SEM meaning and original measurement reuse. Calculate recovery, signed bias and reported-versus-displayed discrepancy deterministically. Unknown inputs preserve partials. This control does not establish product identity, independent verification or applicability to another measurement; no target correction or annotation credit is supplied.",
+         "input_schema": calibration_recovery_population_schema()})
++    from .literature_product_coupling_inputs import product_coupling_population_schema
++    result.append({"name": "literature.product_coupling.populate",
++        "description": "Populate requested A105 source product/cofactor components from exact received number/unit spans and witnessed endpoint, pairing and reaction-account meanings. Keep native product/cofactor/reported-percent quantities separate, descriptive product-per-cofactor ratio distinct from a supported physical productive fraction, and molecule-specific attribution unresolved when unknown. No default or fitted stoichiometry, nondetection-as-zero ratio, invented covariance, independent reconstruction, target transfer or annotation credit. Uncertainty requires the explicitly owned joint covariance of selected rate estimates; requested derived returns contain no unrequested native operands or matrix.",
++        "input_schema": product_coupling_population_schema()})
+     from .literature_measurement_validation_inputs import measurement_validation_population_schema
+     result.append({"name": "literature.measurement_validation.populate",
+         "description": "Populate requested source precision and control-separation components from exact CV/Z-prime number, label, unit and source-meaning witnesses, optionally using only actually possessed recovery/bias rows. Preserve each within/between population separately, unknown denominator relationships, conditional arithmetic, original measurement reuse and proposed-versus-reported meanings. Native statistics need no prior framework sheet. These components are not product identity, independent verification, a function probability, target transfer or final annotation credit.",
+@@ -361,6 +365,9 @@
+                          "literature_measurement_validation_inputs.py", "literature_measurement_validation_calculations.py",
+                          "literature_measurement_validation_prompt.py", "literature_measurement_validation_storage.py",
+                          "literature_measurement_validation_render.py",
++                         "literature_product_coupling_inputs.py", "literature_product_coupling_calculations.py",
++                         "literature_product_coupling_prompt.py", "literature_product_coupling_storage.py",
++                         "literature_product_coupling_render.py",
+                          "literature_rate_replicate_inputs.py", "literature_rate_replicate_calculations.py",
+                          "literature_rate_replicate_storage.py", "literature_rate_replicate_prompt.py",
+                          "episode_services.py",
+@@ -528,6 +535,9 @@
+             from .literature_calibration_recovery_storage import COMPONENTS as RECOVERY_COMPONENTS
+             schema["properties"]["requested_calibration_recovery_components"] = {
+                 "type": "array", "uniqueItems": True, "items": {"enum": list(RECOVERY_COMPONENTS)}}
++            from .literature_product_coupling_storage import COMPONENTS as COUPLING_COMPONENTS, REQUESTED as COUPLING_REQUESTED
++            schema["properties"][COUPLING_REQUESTED] = {
++                "type": "array", "uniqueItems": True, "items": {"enum": list(COUPLING_COMPONENTS)}}
+             from .literature_measurement_validation_storage import COMPONENTS as VALIDATION_COMPONENTS, REQUESTED
+             schema["properties"][REQUESTED] = {
+                 "type": "array", "uniqueItems": True, "items": {"enum": list(VALIDATION_COMPONENTS)}}
+@@ -789,6 +799,8 @@
+         if self.gel_population:
+             result.update(self._gel_display_context(context))
+         if self.rate_population:
++            if self._product_coupling_repository().has_work(context):
++                result["literature_product_coupling_work"] = {"version": "literature_product_coupling_task_v1"}
+             if self._measurement_validation_repository().has_work(context):
+                 result["literature_measurement_validation_work"] = {"version": "literature_measurement_validation_task_v1"}
+             result.update(self._native_rate_display_context(context))
+@@ -815,6 +827,8 @@
+                 "version": "literature_experimental_task_v1", "aspect": "source_experimental_evidence"}
+             if assignment.get("requested_calibration_recovery_components"):
+                 result["literature_calibration_recovery_work"] = {"version": "literature_calibration_recovery_task_v1"}
++            if assignment.get("requested_product_coupling_components") or self._product_coupling_repository().has_work(context):
++                result["literature_product_coupling_work"] = {"version": "literature_product_coupling_task_v1"}
+             if assignment.get("requested_measurement_validation_components") or self._measurement_validation_repository().has_work(context):
+                 result["literature_measurement_validation_work"] = {"version": "literature_measurement_validation_task_v1"}
+         if self.compiled_assay_population and (assignment.get("requested_compiled_assay_components") or assignment.get("requested_compiled_assay_components_v2") or self._compiled_assay_repository().has_work(context)):
+@@ -918,7 +932,7 @@
+                     and "sheet_key" in assignment["selection"]):
+                 if arguments["sheet_key"] != assignment["selection"]["sheet_key"]:
+                     raise ContractError("literature_table_sheet_mismatch")
+-            if tool_name in {"literature.measurement_validation.populate", "literature.ion_discrimination.populate", "literature.channel.populate", "literature.assay.components.populate", "literature.calibration.recovery.populate", "literature.rate.observations.populate", "literature.rate.replicates.populate", "literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
++            if tool_name in {"literature.product_coupling.populate", "literature.measurement_validation.populate", "literature.ion_discrimination.populate", "literature.channel.populate", "literature.assay.components.populate", "literature.calibration.recovery.populate", "literature.rate.observations.populate", "literature.rate.replicates.populate", "literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
+                 def sources(value):
+                     if isinstance(value, dict):
+                         for key, child in value.items():
+@@ -949,10 +963,11 @@
+                 "record_refs": [], "changed_record_refs": [], "result": None,
+                 "feedback": {"category": "arguments_or_reference", "code": str(error),
+                     **({"detail": error.detail} if error.detail else {})}}
+-        if tool_name in {"literature.measurement_validation.populate", "literature.ion_discrimination.populate", "literature.channel.populate", "literature.assay.components.populate", "literature.calibration.recovery.populate", "literature.rate.observations.populate", "literature.rate.replicates.populate", "literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
++        if tool_name in {"literature.product_coupling.populate", "literature.measurement_validation.populate", "literature.ion_discrimination.populate", "literature.channel.populate", "literature.assay.components.populate", "literature.calibration.recovery.populate", "literature.rate.observations.populate", "literature.rate.replicates.populate", "literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
+             from .literature_experimental_contracts import ExperimentalContractError
+             try:
+-                repo = {"literature.measurement_validation.populate": self._measurement_validation_repository,
++                repo = {"literature.product_coupling.populate": self._product_coupling_repository,
++                        "literature.measurement_validation.populate": self._measurement_validation_repository,
+                         "literature.ion_discrimination.populate": self._ion_discrimination_repository,
+                         "literature.channel.populate": self._channel_repository,
+                         "literature.assay.components.populate": self._compiled_assay_repository,
+@@ -1029,6 +1044,14 @@
+     def _compiled_assay_v2_repository(self):
+         return self._compiled_assay_repository().v2_projection()
+ 
++    def _product_coupling_repository(self):
++        """Lazy selected product/cofactor adapter; discovery creates no state."""
++        from .literature_product_coupling_storage import LiteratureProductCouplingRepository
++        if not hasattr(self, "_product_coupling_repo"):
++            self._product_coupling_repo = LiteratureProductCouplingRepository(
++                self.services.workflow.store, self.services.workflow.run_id)
++        return self._product_coupling_repo
++
+     def _measurement_validation_repository(self):
+         """Lazy selected precision/control adapter; discovery creates no state."""
+         from .literature_measurement_validation_storage import LiteratureMeasurementValidationRepository
+@@ -1289,6 +1312,7 @@
+         return {"literature_rate_source_meaning_display": {"cells": list(unique.values()), "records": records}}
+ 
+     def _rate_fact_sources(self):
++        from .literature_product_coupling_storage import product_coupling_cells_schema
+         from .literature_measurement_validation_storage import measurement_validation_cells_schema
+         from .literature_calibration_recovery_storage import calibration_recovery_cells_schema
+         from .literature_rate_observation_storage import rate_observation_cells_schema
+@@ -1316,7 +1340,10 @@
+         from .literature_kinetic_model_storage import kinetic_model_cells_schema
+         from .literature_binding_interaction_model_storage import binding_interaction_model_cells_schema
+         from .literature_binding_interaction_storage import binding_interaction_cells_schema
+-        result = {"literature_measurement_validation_cells": {"type": "array", "meaning":
++        result = {"literature_product_coupling_cells": {"type": "array", "meaning":
++            "Exactly requested saved product/cofactor numerical components with actual molecule, construct, preparation, endpoint and experimental relationships. Native reports, descriptive product-per-cofactor ratio, conditional physical fraction and original author-reported coupling remain distinct. Preserve reaction-account direction/status/model identity, shared measurements and dependent reconstruction; requested uncertainty carries source/owner/basis/origin/status provenance without raw covariance. No unrequested native operands, molecular attribution, independent replication, function probability, target transfer or annotation credit is inferred.",
++            "report_schema": product_coupling_cells_schema()},
++            "literature_measurement_validation_cells": {"type": "array", "meaning":
+             "Exactly requested saved precision/control numerical sections, retaining every selected physical measurement and its actual alternative within/between basis. Reported statistics, deterministic re-expressions and supported versus conditional plug-in error components remain distinct, with analyte/matrix/endpoint/repetition, population and denominator meanings, original dependencies and shared contribution identities. A component request returns all its retained measurement instances in original order. No independent replication, product identity, function probability, target transfer or annotation credit is inferred.",
+             "report_schema": measurement_validation_cells_schema()},
+             "literature_calibration_recovery_cells": {"type": "array", "meaning":
+@@ -1462,6 +1489,7 @@
+         return result
+ 
+     def _population_routes(self):
++        from .literature_product_coupling_storage import PROVIDER as COUPLING_PROVIDER, NAMESPACE as COUPLING_NAMESPACE, REQUESTED as COUPLING_REQUESTED
+         from .literature_measurement_validation_storage import PROVIDER as VALIDATION_PROVIDER, NAMESPACE as VALIDATION_NAMESPACE, REQUESTED as VALIDATION_REQUESTED
+         from .literature_calibration_recovery_storage import PROVIDER as RECOVERY_PROVIDER
+         from .literature_rate_observation_storage import PROVIDER as OBSERVATION_PROVIDER
+@@ -1489,7 +1517,9 @@
+         from .literature_kinetic_model_storage import COMPONENTS as KINETIC_MODEL_COMPONENTS, PROVIDER as KINETIC_MODEL_PROVIDER
+         from .literature_binding_interaction_storage import COMPONENTS as INTERACTION_COMPONENTS, PROVIDER as INTERACTION_PROVIDER
+         from .literature_binding_interaction_model_storage import COMPONENTS as INTERACTION_MODEL_COMPONENTS, PROVIDER as INTERACTION_MODEL_PROVIDER
+-        result = ((VALIDATION_NAMESPACE, VALIDATION_REQUESTED, VALIDATION_PROVIDER,
++        result = ((COUPLING_NAMESPACE, COUPLING_REQUESTED, COUPLING_PROVIDER,
++                 (), self._product_coupling_repository),
++                (VALIDATION_NAMESPACE, VALIDATION_REQUESTED, VALIDATION_PROVIDER,
+                  (), self._measurement_validation_repository),
+                 ("literature_calibration_recovery_cells", "requested_calibration_recovery_components", RECOVERY_PROVIDER,
+                  (), self.services.literature_calibration_recovery_repository),
+@@ -1714,6 +1744,10 @@
+             if cells:
+                 repository().receive_cells(context, cells, operation_key)
+         references = []
++        from .literature_product_coupling_storage import NAMESPACE as COUPLING_NAMESPACE
++        coupling_cells = [row for name, node in schema.get("properties", {}).items()
++            if node.get("x-source") == COUPLING_NAMESPACE for row in form[name]]
++        references.extend(self._product_coupling_repository().cell_record_refs(coupling_cells))
+         from .literature_measurement_validation_storage import NAMESPACE as VALIDATION_NAMESPACE
+         validation_cells = [row for name, node in schema.get("properties", {}).items()
+             if node.get("x-source") == VALIDATION_NAMESPACE for row in form[name]]
+@@ -1801,7 +1835,7 @@
+                     continue
+                 rows = form[name]
+                 permitted = set(context.received_record_refs)
+-                stale_channel_receipt = (namespace in {"literature_measurement_validation_cells", "literature_channel_cells", "literature_ion_discrimination_cells"}
++                stale_channel_receipt = (namespace in {"literature_product_coupling_cells", "literature_measurement_validation_cells", "literature_channel_cells", "literature_ion_discrimination_cells"}
+                     and bool(set(repository().selected_sheet_refs(context)) - permitted))
+                 if any(row["sheet_ref"] not in permitted for row in rows) or stale_channel_receipt:
+                     # Refresh only the exact child's later durable receipts.
+@@ -1830,7 +1864,7 @@
+                     repository().validate_fact_values(replace(context,
+                         received_record_refs=tuple(permitted)), rows)
+                     requested = context.assignment.get(requested_field,
+-                        [] if namespace in {"literature_measurement_validation_cells", "literature_calibration_recovery_cells", "literature_rate_observation_cells", "literature_rate_replicate_cells", "literature_completion_time_cells", "literature_product_partition_cells", "literature_active_site_cells", "literature_compiled_assay_cells", "literature_compiled_assay_v2_cells", "literature_channel_cells", "literature_ion_discrimination_cells"} else None)
++                        [] if namespace in {"literature_product_coupling_cells", "literature_measurement_validation_cells", "literature_calibration_recovery_cells", "literature_rate_observation_cells", "literature_rate_replicate_cells", "literature_completion_time_cells", "literature_product_partition_cells", "literature_active_site_cells", "literature_compiled_assay_cells", "literature_compiled_assay_v2_cells", "literature_channel_cells", "literature_ion_discrimination_cells"} else None)
+                     if requested is not None and any(row["component"] not in requested for row in rows):
+                         raise ContractError("unrequested_literature_rate_component")
+                     if namespace == "literature_rate_replicate_cells" and rows:
+@@ -1844,7 +1878,7 @@
+                             components=requested or [])
+                         if canonical(rows) != canonical(expected):
+                             raise ContractError("literature_rate_replicate_requested_subset_mismatch")
+-                    if namespace in {"literature_measurement_validation_cells", "literature_rate_observation_cells", "literature_calibration_recovery_cells", "literature_compiled_assay_cells", "literature_compiled_assay_v2_cells", "literature_channel_cells", "literature_ion_discrimination_cells"}:
++                    if namespace in {"literature_product_coupling_cells", "literature_measurement_validation_cells", "literature_rate_observation_cells", "literature_calibration_recovery_cells", "literature_compiled_assay_cells", "literature_compiled_assay_v2_cells", "literature_channel_cells", "literature_ion_discrimination_cells"}:
+                         from .domain import canonical
+                         owned = repository().available_sheet_refs(replace(context,
+                             received_record_refs=tuple(permitted)))
+@@ -1852,7 +1886,7 @@
+                         expected = repository().fact_cells(replace(context,
+                             received_record_refs=tuple(permitted)), selected, components=requested or [])
+                         if canonical(rows) != canonical(expected):
+-                            raise ContractError("literature_measurement_validation_requested_subset_mismatch" if namespace == "literature_measurement_validation_cells" else "literature_ion_discrimination_requested_subset_mismatch" if namespace == "literature_ion_discrimination_cells" else "literature_channel_requested_subset_mismatch" if namespace == "literature_channel_cells" else "literature_compiled_assay_requested_subset_mismatch" if namespace in {"literature_compiled_assay_cells", "literature_compiled_assay_v2_cells"} else "literature_calibration_recovery_requested_subset_mismatch" if namespace == "literature_calibration_recovery_cells" else "literature_rate_observation_requested_subset_mismatch")
++                            raise ContractError("literature_product_coupling_requested_subset_mismatch" if namespace == "literature_product_coupling_cells" else "literature_measurement_validation_requested_subset_mismatch" if namespace == "literature_measurement_validation_cells" else "literature_ion_discrimination_requested_subset_mismatch" if namespace == "literature_ion_discrimination_cells" else "literature_channel_requested_subset_mismatch" if namespace == "literature_channel_cells" else "literature_compiled_assay_requested_subset_mismatch" if namespace in {"literature_compiled_assay_cells", "literature_compiled_assay_v2_cells"} else "literature_calibration_recovery_requested_subset_mismatch" if namespace == "literature_calibration_recovery_cells" else "literature_rate_observation_requested_subset_mismatch")
+                 except ContractError as error:
+                     raise ReportBoundaryError(str(error), code=str(error), field=name) from error
+         native_adapter = (self.services.literature_context_repository().native_observations()

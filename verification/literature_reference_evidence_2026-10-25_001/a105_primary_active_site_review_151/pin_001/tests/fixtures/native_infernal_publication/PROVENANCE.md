@@ -1,0 +1,2 @@
+Byte-for-byte retained workload 222 native attempts, copied via workload 224 fixtures. Original manifests retain original requests and paths. No native execution was repeated for workload 225. NATIVE_SHA256.json records complete copied file hashes. Tests add explicitly synthetic Store bindings, requests and negative cases to temporary copies only.
+local_end_matchonly retains workload 220 native outputs/metadata plus original Cobalamin.c.cm bytes; test composition is a synthetic custody envelope around those already executed native files, not a new producer execution.

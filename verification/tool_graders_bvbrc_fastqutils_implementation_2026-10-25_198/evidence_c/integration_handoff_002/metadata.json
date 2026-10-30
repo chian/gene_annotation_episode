@@ -1,0 +1,548 @@
+{
+  "schema_version": "fastqutils_metadata_v2",
+  "analysis_id": "testC198",
+  "task_ref": "source_original_submission",
+  "original_task": {
+    "resource_id": "bvbrc_api",
+    "task_id": "synthetic_task195",
+    "required_application_id": "FastqUtils",
+    "native_application_id": "FastqUtils",
+    "submitted_parameters": {
+      "paired_end_libs": [
+        {
+          "read1": "/fixture/input_R1.fastq",
+          "read2": "/fixture/input_R2.fastq",
+          "platform": "illumina"
+        }
+      ],
+      "single_end_libs": [],
+      "srr_libs": [],
+      "recipe": [
+        "TRIM",
+        "PAIRED_FILTER",
+        "FASTQC",
+        "ALIGN",
+        "SCRUB_HUMAN",
+        "SCRUB_HUMAN"
+      ],
+      "reference_genome_id": "synthetic_reference195",
+      "output_path": "/fixture/output",
+      "output_file": "fixture"
+    },
+    "submitted_start_parameters": {},
+    "scheduler_returned_parameters": null,
+    "effective_parameters": null,
+    "submission_receipt_ref": "source_original_submission",
+    "submission_operation_key": "synthetic:submission195",
+    "submission_source_ref": "source_original_native_request195"
+  },
+  "libraries": [
+    {
+      "id": "bvbrc_fastqutils_library:testC198/%2Ftasks%2Fsource_original_submission%2Finputs%2Fpaired_end_libs%2F0",
+      "task_ref": "source_original_submission",
+      "input_pointer": "/paired_end_libs/0",
+      "submitted_value": {
+        "read1": "/fixture/input_R1.fastq",
+        "read2": "/fixture/input_R2.fastq",
+        "platform": "illumina"
+      },
+      "sample_ref": null,
+      "condition_ref": null,
+      "replicate_ref": null,
+      "platform": "illumina",
+      "evidence_refs": [
+        "source_original_native_request195"
+      ],
+      "metadata_ids": []
+    }
+  ],
+  "stages": [
+    {
+      "id": "bvbrc_fastqutils_stage:testC198/%2Ftasks%2Fsource_original_submission%2Frecipe%2F0",
+      "task_ref": "source_original_submission",
+      "recipe_ordinal": 0,
+      "requested_token": "TRIM",
+      "mode": "TRIM",
+      "observed_state": "unknown",
+      "input_population_refs": [],
+      "output_population_refs": [],
+      "evidence_refs": [
+        "source_original_native_request195"
+      ],
+      "request_pointer": "/submitted_parameters/recipe/0",
+      "requested_reference_genome_id": "synthetic_reference195"
+    },
+    {
+      "id": "bvbrc_fastqutils_stage:testC198/%2Ftasks%2Fsource_original_submission%2Frecipe%2F1",
+      "task_ref": "source_original_submission",
+      "recipe_ordinal": 1,
+      "requested_token": "PAIRED_FILTER",
+      "mode": "PAIRED_FILTER",
+      "observed_state": "unknown",
+      "input_population_refs": [],
+      "output_population_refs": [],
+      "evidence_refs": [
+        "source_original_native_request195"
+      ],
+      "request_pointer": "/submitted_parameters/recipe/1",
+      "requested_reference_genome_id": "synthetic_reference195"
+    },
+    {
+      "id": "bvbrc_fastqutils_stage:testC198/%2Ftasks%2Fsource_original_submission%2Frecipe%2F2",
+      "task_ref": "source_original_submission",
+      "recipe_ordinal": 2,
+      "requested_token": "FASTQC",
+      "mode": "FASTQC",
+      "observed_state": "unknown",
+      "input_population_refs": [],
+      "output_population_refs": [],
+      "evidence_refs": [
+        "source_original_native_request195"
+      ],
+      "request_pointer": "/submitted_parameters/recipe/2",
+      "requested_reference_genome_id": "synthetic_reference195"
+    },
+    {
+      "id": "bvbrc_fastqutils_stage:testC198/%2Ftasks%2Fsource_original_submission%2Frecipe%2F3",
+      "task_ref": "source_original_submission",
+      "recipe_ordinal": 3,
+      "requested_token": "ALIGN",
+      "mode": "ALIGN",
+      "observed_state": "unknown",
+      "input_population_refs": [],
+      "output_population_refs": [],
+      "evidence_refs": [
+        "source_original_native_request195"
+      ],
+      "request_pointer": "/submitted_parameters/recipe/3",
+      "requested_reference_genome_id": "synthetic_reference195"
+    },
+    {
+      "id": "bvbrc_fastqutils_stage:testC198/%2Ftasks%2Fsource_original_submission%2Frecipe%2F4",
+      "task_ref": "source_original_submission",
+      "recipe_ordinal": 4,
+      "requested_token": "SCRUB_HUMAN",
+      "mode": "SCRUB_HUMAN",
+      "observed_state": "unknown",
+      "input_population_refs": [],
+      "output_population_refs": [],
+      "evidence_refs": [
+        "source_original_native_request195"
+      ],
+      "request_pointer": "/submitted_parameters/recipe/4",
+      "requested_reference_genome_id": "synthetic_reference195"
+    },
+    {
+      "id": "bvbrc_fastqutils_stage:testC198/%2Ftasks%2Fsource_original_submission%2Frecipe%2F5",
+      "task_ref": "source_original_submission",
+      "recipe_ordinal": 5,
+      "requested_token": "SCRUB_HUMAN",
+      "mode": "SCRUB_HUMAN",
+      "observed_state": "unknown",
+      "input_population_refs": [],
+      "output_population_refs": [],
+      "evidence_refs": [
+        "source_original_native_request195"
+      ],
+      "request_pointer": "/submitted_parameters/recipe/5",
+      "requested_reference_genome_id": "synthetic_reference195"
+    }
+  ],
+  "associations": [
+    {
+      "id": "bvbrc_fastqutils_association:testC198/%2Fmetadata%2Fassert_hostile",
+      "task_ref": "source_original_submission",
+      "library_ref": "bvbrc_fastqutils_library:testC198/%2Ftasks%2Fsource_original_submission%2Finputs%2Fpaired_end_libs%2F0",
+      "stage_ref": "bvbrc_fastqutils_stage:testC198/%2Ftasks%2Fsource_original_submission%2Frecipe%2F4",
+      "mate": "combined",
+      "branch": "clean",
+      "artifact_refs": [
+        "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798"
+      ],
+      "evidence_refs": [
+        "source_declarations"
+      ],
+      "state": "unresolved",
+      "basis": "explicit_assertion",
+      "metadata_ids": [
+        "assert_hostile"
+      ],
+      "document_ids": [
+        "hostile"
+      ]
+    }
+  ],
+  "populations": [
+    {
+      "id": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+      "association_ref": null,
+      "kind": "fastq_reads",
+      "scope": "complete",
+      "representation": "emitted_bytes",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da"
+      ],
+      "member_record_refs": [
+        "bvbrc_fastqutils_sequence:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F0",
+        "bvbrc_fastqutils_sequence:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F1"
+      ],
+      "parent_population_refs": [],
+      "disjoint_from_refs": [],
+      "pair_key_rule": null,
+      "quality_encoding": "phred33",
+      "encoding_evidence_refs": [
+        "source_declarations"
+      ],
+      "document_ids": [
+        "reads"
+      ],
+      "population_key": "fastq_reads",
+      "population_ordinal": 0,
+      "section_key": "fastq_summary",
+      "section_ordinal": 0,
+      "encoding_basis": {
+        "basis": "explicit_source_bound_declaration",
+        "encoding": "phred33",
+        "metadata_id": "encoding_reads",
+        "evidence": {
+          "content": {
+            "source_ref": "source_declarations",
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "artifact_declarations",
+            "sha256": "791c277c58e040f26b68b730d258ae1d1f2f9f1d86a3b1a711d91319491a8f70",
+            "byte_count": 334
+          },
+          "pointer": "/declarations/0"
+        },
+        "declaration": {
+          "version": "fastqutils_encoding_declaration_v1",
+          "document_id": "reads",
+          "encoding": "phred33",
+          "basis": "explicit_assumption"
+        },
+        "native_locator": null
+      }
+    },
+    {
+      "id": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0",
+      "association_ref": null,
+      "kind": "fastq_bases",
+      "scope": "complete",
+      "representation": "emitted_bytes",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da"
+      ],
+      "member_record_refs": [
+        "bvbrc_fastqutils_sequence:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F0",
+        "bvbrc_fastqutils_sequence:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F1"
+      ],
+      "parent_population_refs": [],
+      "disjoint_from_refs": [],
+      "pair_key_rule": null,
+      "quality_encoding": "phred33",
+      "encoding_evidence_refs": [
+        "source_declarations"
+      ],
+      "document_ids": [
+        "reads"
+      ],
+      "population_key": "fastq_bases",
+      "population_ordinal": 0,
+      "section_key": "fastq_summary",
+      "section_ordinal": 0,
+      "encoding_basis": {
+        "basis": "explicit_source_bound_declaration",
+        "encoding": "phred33",
+        "metadata_id": "encoding_reads",
+        "evidence": {
+          "content": {
+            "source_ref": "source_declarations",
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "artifact_declarations",
+            "sha256": "791c277c58e040f26b68b730d258ae1d1f2f9f1d86a3b1a711d91319491a8f70",
+            "byte_count": 334
+          },
+          "pointer": "/declarations/0"
+        },
+        "declaration": {
+          "version": "fastqutils_encoding_declaration_v1",
+          "document_id": "reads",
+          "encoding": "phred33",
+          "basis": "explicit_assumption"
+        },
+        "native_locator": null
+      }
+    },
+    {
+      "id": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0",
+      "association_ref": null,
+      "kind": "fastq_bases",
+      "scope": "complete",
+      "representation": "emitted_bytes",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da"
+      ],
+      "member_record_refs": [
+        "bvbrc_fastqutils_sequence:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F0",
+        "bvbrc_fastqutils_sequence:testC198/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fsequences%2F1"
+      ],
+      "parent_population_refs": [],
+      "disjoint_from_refs": [],
+      "pair_key_rule": null,
+      "quality_encoding": "phred33",
+      "encoding_evidence_refs": [
+        "source_declarations"
+      ],
+      "document_ids": [
+        "reads"
+      ],
+      "population_key": "fastq_quality_characters",
+      "population_ordinal": 0,
+      "section_key": "fastq_summary",
+      "section_ordinal": 0,
+      "encoding_basis": {
+        "basis": "explicit_source_bound_declaration",
+        "encoding": "phred33",
+        "metadata_id": "encoding_reads",
+        "evidence": {
+          "content": {
+            "source_ref": "source_declarations",
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "artifact_declarations",
+            "sha256": "791c277c58e040f26b68b730d258ae1d1f2f9f1d86a3b1a711d91319491a8f70",
+            "byte_count": 334
+          },
+          "pointer": "/declarations/0"
+        },
+        "declaration": {
+          "version": "fastqutils_encoding_declaration_v1",
+          "document_id": "reads",
+          "encoding": "phred33",
+          "basis": "explicit_assumption"
+        },
+        "native_locator": null
+      }
+    },
+    {
+      "id": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+      "association_ref": null,
+      "kind": "native_report_population",
+      "scope": "complete",
+      "representation": "native_report",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798"
+      ],
+      "member_record_refs": [],
+      "parent_population_refs": [],
+      "disjoint_from_refs": [],
+      "pair_key_rule": null,
+      "quality_encoding": "unknown",
+      "encoding_evidence_refs": [],
+      "document_ids": [
+        "hostile"
+      ],
+      "population_key": "hostile_in",
+      "population_ordinal": 0,
+      "section_key": "hostile_report",
+      "section_ordinal": 0,
+      "encoding_basis": {
+        "basis": "unknown",
+        "encoding": "unknown",
+        "metadata_id": null,
+        "evidence": null,
+        "declaration": null,
+        "native_locator": null
+      }
+    },
+    {
+      "id": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_out%2F0",
+      "association_ref": null,
+      "kind": "native_report_population",
+      "scope": "complete",
+      "representation": "native_report",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798"
+      ],
+      "member_record_refs": [],
+      "parent_population_refs": [],
+      "disjoint_from_refs": [],
+      "pair_key_rule": null,
+      "quality_encoding": "unknown",
+      "encoding_evidence_refs": [],
+      "document_ids": [
+        "hostile"
+      ],
+      "population_key": "hostile_out",
+      "population_ordinal": 0,
+      "section_key": "hostile_report",
+      "section_ordinal": 0,
+      "encoding_basis": {
+        "basis": "unknown",
+        "encoding": "unknown",
+        "metadata_id": null,
+        "evidence": null,
+        "declaration": null,
+        "native_locator": null
+      }
+    },
+    {
+      "id": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_removed%2F0",
+      "association_ref": null,
+      "kind": "native_report_population",
+      "scope": "complete",
+      "representation": "native_report",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798"
+      ],
+      "member_record_refs": [],
+      "parent_population_refs": [],
+      "disjoint_from_refs": [],
+      "pair_key_rule": null,
+      "quality_encoding": "unknown",
+      "encoding_evidence_refs": [],
+      "document_ids": [
+        "hostile"
+      ],
+      "population_key": "hostile_removed",
+      "population_ordinal": 0,
+      "section_key": "hostile_report",
+      "section_ordinal": 0,
+      "encoding_basis": {
+        "basis": "unknown",
+        "encoding": "unknown",
+        "metadata_id": null,
+        "evidence": null,
+        "declaration": null,
+        "native_locator": null
+      }
+    },
+    {
+      "id": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41%2Fpopulations%2Ffastqc_module%2F0",
+      "association_ref": null,
+      "kind": "native_qc_population",
+      "scope": "complete",
+      "representation": "native_report",
+      "member_artifact_refs": [
+        "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fqc%2Fsha256%2Ff7997cc3af38a0aeb8f56bc6ca17995a7bde6b5359f9cc64f686ac6286c2ef41"
+      ],
+      "member_record_refs": [],
+      "parent_population_refs": [],
+      "disjoint_from_refs": [],
+      "pair_key_rule": null,
+      "quality_encoding": "unknown",
+      "encoding_evidence_refs": [],
+      "document_ids": [
+        "qc"
+      ],
+      "population_key": "fastqc_module",
+      "population_ordinal": 0,
+      "section_key": "fastqc_basic_statistics",
+      "section_ordinal": 0,
+      "encoding_basis": {
+        "basis": "unknown",
+        "encoding": "unknown",
+        "metadata_id": null,
+        "evidence": null,
+        "declaration": null,
+        "native_locator": null
+      }
+    }
+  ],
+  "measurements": [],
+  "supplied_metadata": [
+    {
+      "metadata_id": "encoding_reads",
+      "kind": "encoding_declaration",
+      "evidence": {
+        "content": {
+          "source_ref": "source_declarations",
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_declarations",
+          "sha256": "791c277c58e040f26b68b730d258ae1d1f2f9f1d86a3b1a711d91319491a8f70",
+          "byte_count": 334
+        },
+        "pointer": "/declarations/0"
+      },
+      "value": {
+        "version": "fastqutils_encoding_declaration_v1",
+        "document_id": "reads",
+        "encoding": "phred33",
+        "basis": "explicit_assumption"
+      }
+    },
+    {
+      "metadata_id": "assert_hostile",
+      "kind": "association_assertion",
+      "evidence": {
+        "content": {
+          "source_ref": "source_declarations",
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "artifact_declarations",
+          "sha256": "791c277c58e040f26b68b730d258ae1d1f2f9f1d86a3b1a711d91319491a8f70",
+          "byte_count": 334
+        },
+        "pointer": "/declarations/1"
+      },
+      "value": {
+        "version": "fastqutils_association_assertion_v1",
+        "document_id": "hostile",
+        "input_pointer": "/paired_end_libs/0",
+        "recipe_ordinal": 4,
+        "mate": "combined",
+        "branch": "clean",
+        "basis": "explicit_assertion"
+      }
+    }
+  ],
+  "native_lineage": [
+    {
+      "id": "bvbrc_fastqutils_lineage:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flineage%2F0",
+      "kind": "native_report_before_after",
+      "before_population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+      "after_population_ref": "bvbrc_fastqutils_population:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_out%2F0",
+      "document_ids": [
+        "hostile"
+      ],
+      "source_refs": [
+        "source_hostile"
+      ],
+      "locators": [
+        {
+          "member": null,
+          "block": "hostile_report",
+          "block_ordinal": 0,
+          "row_ordinal": 0,
+          "field": "reads_in",
+          "byte_start": 1,
+          "byte_end": 633
+        },
+        {
+          "member": null,
+          "block": "hostile_report",
+          "block_ordinal": 0,
+          "row_ordinal": 0,
+          "field": "reads_out",
+          "byte_start": 1,
+          "byte_end": 633
+        }
+      ],
+      "scope": "artifact_local",
+      "task_stage_ref": null
+    }
+  ],
+  "requirements": [
+    {
+      "id": "bvbrc_fastqutils_requirement:testC198/%2Fdocuments%2Fhostile%2Fstage_execution_unknown",
+      "code": "stage_execution_unknown",
+      "affected_refs": [
+        "bvbrc_fastqutils_artifact:testC198/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798"
+      ],
+      "required_data": "native_execution_evidence",
+      "state": "unresolved",
+      "source_refs": [
+        "source_hostile"
+      ]
+    }
+  ],
+  "diagnostics": []
+}

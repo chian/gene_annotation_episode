@@ -1,0 +1,109 @@
+{
+  "document": null,
+  "operands": {
+    "inputs": {
+      "schema_version": "mauve_xmfa_source_inputs_v1",
+      "invocation": {
+        "mode": "single_file_entries",
+        "ordered_file_ids": [
+          "f"
+        ],
+        "evidence": [
+          {
+            "content": {
+              "source_ref": "source:source.fa",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "source.fa",
+              "sha256": "b098d5323358d9fd3d30c6866fa5e264a4a181baafdc0833cc094f618de106ef",
+              "byte_count": 17
+            },
+            "pointer": ""
+          }
+        ]
+      },
+      "files": [
+        {
+          "file_id": "f",
+          "native_path_token": "source.fa",
+          "artifact": {
+            "raw_artifact_ref": "source.fa",
+            "source_ref": "source:source.fa",
+            "sha256": "c55bf5ce4e2be9a5037543c6cb3149758aa319b5517d180c1ee50e4c178fcba6"
+          },
+          "format": "raw",
+          "record_completeness": "complete",
+          "path_binding_evidence": [
+            {
+              "content": {
+                "source_ref": "source:source.fa",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "source.fa",
+                "sha256": "b098d5323358d9fd3d30c6866fa5e264a4a181baafdc0833cc094f618de106ef",
+                "byte_count": 17
+              },
+              "pointer": ""
+            }
+          ],
+          "records": [
+            {
+              "record_id": "raw",
+              "entry_1based": 1,
+              "header": null,
+              "sequence": "ACGT",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "source.fa",
+                  "source_ref": "source:source.fa",
+                  "sha256": "c55bf5ce4e2be9a5037543c6cb3149758aa319b5517d180c1ee50e4c178fcba6"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 5,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 1,
+                "xml_path": null
+              }
+            }
+          ]
+        }
+      ],
+      "original_maps": []
+    },
+    "source_readers": [
+      {
+        "file_id": "f",
+        "reader": "raw_dna_for_xmfa_v1",
+        "encoding": "ascii"
+      }
+    ],
+    "artifact_bytes": {
+      "source.fa": "QUMgR1Q="
+    },
+    "content_bindings": [
+      {
+        "source_ref": "source:source.fa",
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "source.fa",
+        "sha256": "c55bf5ce4e2be9a5037543c6cb3149758aa319b5517d180c1ee50e4c178fcba6",
+        "byte_count": 5
+      }
+    ],
+    "associations": {
+      "original_members": [],
+      "inline_inputs": [],
+      "row_members": [],
+      "transformations": [],
+      "correspondences": [],
+      "feature_genomes": [],
+      "source_records": [],
+      "functions": [],
+      "function_equivalences": [],
+      "taxonomy": [],
+      "member_entities": [],
+      "dependence_groups": [],
+      "requirements": [],
+      "diagnostics": []
+    }
+  },
+  "artifact_bytes_encoding": "base64",
+  "provenance": "synthetic_invalid_raw_bytes"
+}

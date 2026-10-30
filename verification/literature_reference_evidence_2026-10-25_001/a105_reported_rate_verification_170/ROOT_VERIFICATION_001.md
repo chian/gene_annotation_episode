@@ -1,0 +1,17 @@
+# Final reported-entry path: independent root verification
+
+Root read the complete four owned reader/calculator/storage/prompt modules and inspected the changed selected-operation, scoped source, typed-admission and prompt-rendering paths. All nine files in the agent's final owned manifest matched root's independent frozen copy. Root retained 2,320 runtime/support/fixture files; every one remained unchanged during verification. All 249 imported project/test modules came from that frozen copy.
+
+The independent joined invocation passed **126 tests, zero failures/errors/skips**, in 154.26 seconds wall time. This is one retained invocation, not a sum of the agent's overlapping selections. Raw output and JUnit evidence are ROOT_JOINED_001.log and ROOT_JOINED_001.xml. ROOT_RESULT_001.json records selection, elapsed time, imports and pin checks.
+
+Coverage includes final XLSX source-entry extraction, distinct versus duplicate representations, unresolved association of reused labels on different rows, unknown grouping and physical conversion, unavailable full-set results with retained point partials, signed values and positive-mean CV prerequisite, source-label/layout binding, actual received and scoped custody, exact requested subsets, shared reference preservation, recurring child TASK distinct from parent TASK, and source-free cold reconstruction.
+
+The source-only controlled shared-loop example has zero annotation targets, one selected XLSX population operation, three runtime observations, and the parent's nonempty original-source reasoning anchor. Its exact original typed rows were reconstructed using a newly composed factory with source artifacts, workbook reader and calculators disabled beforehand. The writer checkpoint was (0,0,0); WAL was absent/empty before immutable read-only opening; query_only was enabled. Reconstruction made zero database changes and preserved all retained state bytes.
+
+This verifies selected execution, typed delivery and persistence for this bounded operation. It does not establish independent biological preparations, assay error rate, chemical product identity, quantitative attribution, full functional specificity, common whole-A105 compilation, actual model-backed choices or scientific adequacy. Alternative reader paths do not count as additional assay-specific graders. Source-native U/mg arithmetic remains conditional on the reporting convention; no missing physical definition was invented.
+
+The new calibration169 workload was excluded from this frozen run because it is unintegrated and still being implemented. Root's calibration167 scientific section review and exact arithmetic oracle are separately retained in a105_calibration_review_168. The synthetic within-activity section-compilation example there is explicitly synthetic and not an original-paper measurement.
+
+The configured006 poll independently verified the exact current child process alive, with actions173, observations139 and model-call count175. The current child has no return. No actual model/provider conversation, request, response or private log content was inspected; no restart or run modification occurred. Public counters show advancement, not scientific adequacy.
+
+The full goal remains active. No new A106 work, W05 changes or goal/amendment edits were made. POST_PACKET_RESET_001.json records the complete precautionary root authority/contract reread after the source-bound test review. PROGRESS_170_001.json preserves prior unfinished work by explicit inheritance and adds these increments.

@@ -1,0 +1,11 @@
+# Independent frozen caller verification002
+
+This additive orchestration correction preserves scope001, SHA2563b9aa1ec9ecfc38de907393613c4c8c7e5ea621971e42e13fa2a7a122228d638. The eight caller-reconstruction nodes do not import the custody component. Waiting for custody's active source edits is therefore a physical shared-checkout constraint rather than a logical caller dependency.
+
+Root created /tmp/gene-annotation-api-caller-20261022-006p-001 containing the exact348 frozen005 runtime/test files,319 assets and eight normative inputs, plus only P's final caller module/test and R's initial new reconstruction test. C's unfrozen source and joined test are absent. The complete135-file source pin and216 tests are recorded in its FROZEN_INPUTS001.json. All copied bytes were verified before and after copying. Its caller module is4474422fa09ac5247b1957e7d1bce4a57ac811f39f1cc9356666a7c4d4ea276f and reconstruction test5dc046f9ab18ef576e61ec20b67a35cd94752416447f3670085e13b722d1c7bc.
+
+R may now run the exact previously adopted eight reconstruction nodes from this separate frozen checkout, using explicit cwd/PYTHONPATH, unique never-reused basetemp, exact source/test/static guards, and immediate raw-fixture preservation. All test behavior, actual controller, typed return/admission, no-work and claim limitations from scope001 remain unchanged. C completion is not required for this invocation because C does not participate in this source identity or its consumers.
+
+Do not edit this frozen copy to repair a failure. Preserve the first invocation and original source/test/fixture bytes; make any necessary correction only in R's already owned NEW006 test file, then have root create a new independently identified frozen verification copy. Production ownership remains unchanged. No existing006 or other task's files are editable by R.
+
+This proves only the caller/worker behavior at the separate declared135-file pin. It is not a final combined006 pin, custody proof or scientific demonstration. The joined custody-to-caller test and a final combined-source worker check still wait for both runtime modules to freeze. No old scientific database, real model, public service, native computation, actual custody or scientific launch is authorized here.

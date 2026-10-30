@@ -1,0 +1,2286 @@
+--- pin024/gene_annotation_episode/literature_amount_inputs.py
++++ current027/gene_annotation_episode/literature_amount_inputs.py
+@@ -0,0 +1,574 @@
++"""Closed source selections and numerical input contracts for A105 amounts.
++
++Scientific numbers in selected-operation arguments are source selectors only.
++The source reader verifies byte custody and numerical syntax. Numerical
++validation owns neither the truth of supplied experimental interpretations nor
++experimental attribution. No acquisition, model call or state mutation occurs.
++"""
++from __future__ import annotations
++
++from copy import deepcopy
++from fractions import Fraction
++import html
++import math
++import re
++
++import numpy as np
++
++from .domain import REF, obj, identity, validate_schema
++from .literature_assay_inputs import _Sources, _witness_schema, _nullable, _json_source
++from .literature_experimental_contracts import ExperimentalContractError
++
++
++VERSION = "a105_amount_inputs_v1"
++ROLES = ("numerator", "denominator")
++SOURCE_KINDS = ("primary_source", "retained_extraction", "synthetic_fixture")
++COMPARISON_KINDS = ("stock_target_mass_estimate_over_total_mass_estimate",
++                    "between_arm_nominal_molar_amount", "unknown", "conflicting")
++AMOUNT_ROLES = ("target_mass_estimate", "total_protein_mass_estimate",
++                "nominal_molecule_amount", "unknown", "conflicting")
++AMOUNT_KINDS = ("measured", "estimated", "nominal", "unknown", "conflicting")
++QUALIFICATIONS = ("reported_point", "source_qualified_approximate", "unknown", "conflicting")
++RELATIONSHIPS = ("supported", "unknown", "conflicting")
++STOCK_RELATIONSHIPS = ("same", "different", "not_applicable", "unknown", "conflicting")
++LITERAL_FIELDS = ("subject", "construct", "preparation", "stock", "method",
++                  "reported_basis", "condition", "measurement_identity")
++UNITS = ("mg/ml", "uM")
++QUANTITY_FIELDS = ("value", "unit", "status", "bound", "approximate", "qualification",
++                   "amount_role", "amount_kind", "basis_status", "measurement_key",
++                   "physical_observation_key", "origin", "unavailable_reason")
++CALCULATION_FIELDS = ("quantities", "comparison_kind", "pair_relationship",
++                      "stock_relationship", "covariance", "covariance_origin", "variance_status")
++LEXICAL_DEPENDENCY = {"module": "gene_annotation_episode.literature_rate_native_inputs",
++    "sha256_at_release": "264328313d32a8ed0315eb4a80388be775a8c7c2b51ad25041aad071a295dc67",
++    "interface": "_number(selection,sources,role='rate'); _field_contexts"}
++UNCERTAINTY_KINDS = ("sd", "sem", "ci", "untyped", "unreported", "unknown", "conflicting")
++INPUT_REASONS = ("source_amount_unit_unreported", "unsupported_source_amount_unit")
++_QUANTITY_RECORD_FIELDS = ("meanings", "number", "unit", "amount_role", "amount_kind",
++    "qualification", "basis_status", "reported_uncertainty", "measurement_key",
++    "physical_observation_key", "owner_key", "value", "status", "bound", "approximate", "origin", "source_origin", "unavailable_reason")
++_EXTRACTION_FIELDS = ("version", "source_ref", "source_kind", "experiment", "intended_change",
++    "comparison_kind", "pair_relationship", "stock_relationship", "quantities",
++    "covariance_source", "calculation_inputs", "source_refs", "lexical_dependency")
++_COVARIANCE_FIELDS = ("version", "quantity_order", "quantity_measurement_keys",
++    "quantity_physical_observation_keys", "quantity_owner_keys", "quantity_units",
++    "covariance", "origin", "variance_status")
++
++
++def _fail(code, field):
++    raise ExperimentalContractError(code, field)
++
++
++def _keys(value, names, field):
++    if not isinstance(value, dict) or set(value) != set(names):
++        _fail("closed_fields_required", field)
++
++
++def _finite(value, field, *, nullable=False):
++    if nullable and value is None:
++        return
++    try:
++        valid = type(value) in (int, float) and math.isfinite(value)
++    except OverflowError:
++        valid = False
++    if not valid:
++        _fail("finite_number_required", field)
++
++
++def amount_arguments_schema():
++    """Selected source meanings; every property is required, unknowns explicit.
++
++    ``qualification`` describes source reporting, never measurement exactness.
++    A point selection cannot override lexical censoring or approximation.
++    The separate reader verifies the selected bytes and retains interpretations.
++    """
++    witness = _witness_schema()
++    number = obj({"witness": deepcopy(witness),
++        "number_start": {"type": "integer", "minimum": 0},
++        "number_end": {"type": "integer", "minimum": 1}})
++
++    def meaning(values):
++        return obj({"value": {"enum": list(values)},
++            "witnesses": {"type": "array", "items": deepcopy(witness)}})
++
++    uncertainty = obj({"kind": meaning(UNCERTAINTY_KINDS),
++        "statement": _nullable(deepcopy(witness))})
++    quantity = obj({**{name: _nullable(deepcopy(witness)) for name in LITERAL_FIELDS},
++        "measurement": _nullable(obj({"number": number, "unit": _nullable(deepcopy(witness))})),
++        "amount_role": meaning(AMOUNT_ROLES), "amount_kind": meaning(AMOUNT_KINDS),
++        "qualification": meaning(QUALIFICATIONS), "basis_status": meaning(RELATIONSHIPS),
++        "reported_uncertainty": uncertainty})
++    return obj({"source_ref": deepcopy(REF), "source_kind": {"enum": list(SOURCE_KINDS)},
++        "experiment": _nullable(deepcopy(witness)),
++        "comparison_kind": meaning(COMPARISON_KINDS), "pair_relationship": meaning(RELATIONSHIPS),
++        "stock_relationship": meaning(STOCK_RELATIONSHIPS),
++        "intended_change": _nullable(deepcopy(witness)),
++        "quantities": obj({name: _nullable(deepcopy(quantity)) for name in ROLES}),
++        "covariance_source_ref": _nullable(deepcopy(REF))})
++
++
++def validate_amount_calculation_inputs(inputs):
++    """Validate already source-owned operands and full ordered covariance.
++
++    The separate source reader must establish scientific roles, basis, pairing and
++    covariance ownership before this finite numerical boundary is called.
++    Negative noisy/estimated source quantities remain permissible. Unknown
++    covariance is never converted into an independent-observation model.
++    """
++    _keys(inputs, CALCULATION_FIELDS, "inputs")
++    _keys(inputs["quantities"], ROLES, "quantities")
++    choices = {"comparison_kind": COMPARISON_KINDS, "pair_relationship": RELATIONSHIPS,
++        "stock_relationship": STOCK_RELATIONSHIPS, "variance_status": ("known", "estimated", "unknown"),
++        "covariance_origin": (None, "reported", "derived", "synthetic")}
++    for field, allowed in choices.items():
++        if inputs[field] not in allowed:
++            _fail("unsupported_amount_interpretation", field)
++    quantities = inputs["quantities"]
++    for role in ROLES:
++        row = quantities[role]
++        if row is None:
++            continue
++        _keys(row, QUANTITY_FIELDS, "quantities." + role)
++        _finite(row["value"], role + ".value", nullable=True)
++        fields = {"unit": (None, *UNITS), "status": ("observed", "censored", "unavailable", "conflicting"),
++            "bound": ("none", "lt", "le", "gt", "ge"), "qualification": QUALIFICATIONS,
++            "amount_role": AMOUNT_ROLES, "amount_kind": AMOUNT_KINDS, "basis_status": RELATIONSHIPS,
++            "origin": ("reported", "derived", "synthetic")}
++        for field, allowed in fields.items():
++            if row[field] not in allowed:
++                _fail("unsupported_amount_interpretation", role + "." + field)
++        if type(row["approximate"]) is not bool:
++            _fail("boolean_required", role + ".approximate")
++        if row["qualification"] == "source_qualified_approximate" and not row["approximate"]:
++            _fail("source_approximation_not_retained", role + ".approximate")
++        # reported_point does not imply absence of a lexical approximation.
++        if (row["status"] in ("observed", "censored")) != (row["value"] is not None):
++            _fail("amount_status_value_mismatch", role)
++        if ((row["status"] == "observed" and row["bound"] != "none")
++                or (row["status"] == "censored" and row["bound"] == "none")
++                or (row["status"] == "conflicting" and row["bound"] != "none")):
++            _fail("amount_censor_status_mismatch", role)
++        if row["value"] is not None and row["unit"] is None:
++            _fail("converted_amount_unit_required", role + ".unit")
++        for field in ("measurement_key", "physical_observation_key"):
++            if row[field] is not None and (not isinstance(row[field], str) or not row[field]):
++                _fail("measurement_owner_key_required", role + "." + field)
++        if row["value"] is not None and row["measurement_key"] is None:
++            _fail("measurement_owner_key_required", role + ".measurement_key")
++        if row["unavailable_reason"] not in (None, *INPUT_REASONS):
++            _fail("unsupported_amount_unavailable_reason", role + ".unavailable_reason")
++        if row["unavailable_reason"] is not None and row["status"] != "unavailable":
++            _fail("amount_unavailable_reason_status_mismatch", role)
++
++    matrix = inputs["covariance"]
++    if matrix is None:
++        if inputs["covariance_origin"] is not None or inputs["variance_status"] != "unknown":
++            _fail("covariance_status_without_matrix", "covariance")
++        return deepcopy(inputs)
++    if inputs["covariance_origin"] is None or inputs["variance_status"] == "unknown":
++        _fail("covariance_meaning_required", "covariance")
++    if any(quantities[role] is None or quantities[role]["value"] is None for role in ROLES):
++        _fail("complete_covariance_owners_required", "covariance")
++    if (not isinstance(matrix, list) or len(matrix) != 2
++            or any(not isinstance(row, list) or len(row) != 2 for row in matrix)):
++        _fail("two_by_two_covariance_required", "covariance")
++    for i, row in enumerate(matrix):
++        for j, value in enumerate(row):
++            _finite(value, f"covariance[{i}][{j}]")
++    array = np.asarray(matrix, dtype=float)
++    if not np.array_equal(array, array.T):
++        _fail("symmetric_covariance_required", "covariance")
++    if np.any(np.diag(array) < 0):
++        _fail("positive_semidefinite_covariance_required", "covariance")
++    scale = float(np.max(np.abs(array)))
++    try:
++        eigenvalues = np.linalg.eigvalsh(array / scale) if scale else np.zeros(2)
++    except np.linalg.LinAlgError:
++        _fail("covariance_eigendecomposition_failed", "covariance")
++    if not np.all(np.isfinite(eigenvalues)) or float(np.min(eigenvalues)) < -128 * np.finfo(float).eps:
++        _fail("positive_semidefinite_covariance_required", "covariance")
++    first, second = (quantities[role] for role in ROLES)
++    same_token = first["measurement_key"] == second["measurement_key"]
++    same_physical = (first["physical_observation_key"] is not None
++        and first["physical_observation_key"] == second["physical_observation_key"])
++    if same_token or same_physical:
++        if (first["unit"] != second["unit"] or first["value"] != second["value"]
++                or not np.array_equal(array[0], array[1])
++                or not np.array_equal(array[:, 0], array[:, 1])):
++            _fail("shared_measurement_covariance_mismatch", "covariance")
++    return deepcopy(inputs)
++
++
++def _interpret(value, allowed, sources, field):
++    _keys(value, ("value", "witnesses"), field)
++    if value["value"] not in allowed or not isinstance(value["witnesses"], list):
++        _fail("unsupported_amount_interpretation", field)
++    witnesses = [sources.witness(w, field + ".witnesses") for w in value["witnesses"]]
++    distinct = {(w["source_ref"], w["artifact_ref"], w["start"], w["end"]) for w in witnesses}
++    required = 2 if value["value"] == "conflicting" else 0 if value["value"] in ("unknown", "unreported") else 1
++    if len(distinct) < required:
++        _fail("interpretation_witness_required", field)
++    return {"value": value["value"], "witnesses": witnesses}
++
++
++def _amount_number(selection, sources):
++    """Reuse released lexical guards only; no rate units or rate publication.
++
++    The legacy keyword ``rate`` selects signed scalar bounds/approximation and
++    uncertainty-as-point guards. It does not assign this quantity a rate role.
++    Mass/molar units and all experimental meanings remain this module's work.
++    """
++    from .literature_rate_native_inputs import _number
++    return _number(selection, sources, role="rate")
++
++
++def _plain_amount_unit(raw):
++    text = re.sub(r"</?[A-Za-z_][^<>]*>", "", raw)
++    text = re.sub(r"\s+", "", html.unescape(text)).replace("µ", "u").replace("μ", "u")
++    text = text.translate(str.maketrans({"−": "-", "⁻": "-", "¹": "1"})).replace("^", "")
++    values = {"mg/ml": ("mg/ml", Fraction(1)), "mg/mL": ("mg/ml", Fraction(1)),
++        "g/L": ("mg/ml", Fraction(1)), "ug/ml": ("mg/ml", Fraction(1, 1000)),
++        "ug/mL": ("mg/ml", Fraction(1, 1000)), "mg/L": ("mg/ml", Fraction(1, 1000)),
++        "g/ml": ("mg/ml", Fraction(1000)), "g/mL": ("mg/ml", Fraction(1000)),
++        "uM": ("uM", Fraction(1)), "nM": ("uM", Fraction(1, 1000)),
++        "mM": ("uM", Fraction(1000)), "M": ("uM", Fraction(1000000))}
++    for mass in ("mg", "ug", "g"):
++        for volume in ("ml", "mL", "L"):
++            key = mass + "/" + volume
++            if key in values:
++                values[mass + volume + "-1"] = values[key]
++    return values.get(text)
++
++
++def _float_exact(value, field):
++    try:
++        result = float(value)
++    except (ValueError, OverflowError):
++        _fail("numerical_model_range", field)
++    if not math.isfinite(result) or result == 0 and value != 0:
++        _fail("numerical_model_range", field)
++    return result
++
++
++def _amount_unit(selection, sources):
++    if selection is None:
++        return None
++    from .literature_rate_native_inputs import _field_contexts
++    from .literature_partner_source_fields import _unit_continuation
++    witness = sources.witness(selection, "amount.unit")
++    before, after = _field_contexts(sources, witness, 0, len(witness["quote"]))
++    if ((before[-1:] and (before[-1:].isalpha() or before[-1:] in "_µμ/^⁻¹"))
++            or _unit_continuation(after) or _amount_per_continuation(after)):
++        _fail("partial_source_amount_unit", "amount.unit")
++    parsed = _plain_amount_unit(witness["quote"])
++    return {"witness": witness, "raw_unit": witness["quote"],
++        "canonical_unit": parsed[0] if parsed else None,
++        "multiplier": _float_exact(parsed[1], "amount.unit") if parsed else None,
++        "unavailable_reason": None if parsed else "unsupported_source_amount_unit"}
++
++
++def _amount_per_continuation(suffix):
++    # 'mg/ml per Bradford analysis' names a measurement method, not a further
++    # physical denominator. A physical per-unit continuation must stay attached.
++    return bool(re.match(r"\s+per\s+(?:[npkmuµμ]?g|[npkmuµμ]?mol|[npkmuµμ]?L|ml|mL|min|s|h)(?![A-Za-z_µμ])", suffix))
++
++
++def _explicit_unit_consistency(number, unit, sources):
++    if number is None or unit is None or unit["canonical_unit"] is None:
++        return
++    from .literature_rate_native_inputs import _field_contexts
++    from .literature_partner_source_fields import _unit_continuation
++    selector = number["selector"]
++    _, suffix = _field_contexts(sources, selector["witness"], selector["number_start"], selector["number_end"])
++    # Only an actually adjacent printed quantity is checked here. A separately
++    # selected shared header remains an explicit source interpretation.
++    match = re.match(r"\s*((?:[muµμ]?g\s*/\s*(?:ml|mL|L))|(?:[nmuµμ]?M)|(?:[muµμ]?g\s*(?:ml|mL|L)\s*\^?[-−⁻][1¹]))", suffix)
++    if match is None:
++        if re.match(r"\s*(?:%|percent\b|(?:[npkmuµμ]?mol|[npkmuµμ]?g|[npkmuµμ]?M|U|[npkmuµμ]?L)\b)", suffix):
++            _fail("unsupported_explicit_amount_unit", "amount.number")
++        return
++    if _unit_continuation(suffix[match.end():]) or _amount_per_continuation(suffix[match.end():]):
++        _fail("partial_source_amount_unit", "amount.number")
++    if _plain_amount_unit(match.group(1)) != _plain_amount_unit(unit["raw_unit"]):
++        _fail("source_amount_unit_mismatch", "amount.number")
++
++
++def _measurement_key(number):
++    if number is None:
++        return None
++    selection, witness = number["selector"], number["selector"]["witness"]
++    return identity("literature_amount_measurement", {
++        "source_ref": witness["source_ref"], "artifact_ref": witness["artifact_ref"],
++        "start": witness["start"] + len(witness["quote"][:selection["number_start"]].encode()),
++        "end": witness["start"] + len(witness["quote"][:selection["number_end"]].encode())})
++
++
++def _physical_key(witness):
++    return None if witness is None else identity("literature_amount_observation", {
++        name: witness[name] for name in ("source_ref", "artifact_ref", "start", "end")})
++
++
++def _owner_key(row):
++    return None if row["number"] is None else identity("literature_amount_owner", {
++        "measurement_key": row["measurement_key"], "meanings": row["meanings"],
++        "amount_role": row["amount_role"], "amount_kind": row["amount_kind"], "basis_status": row["basis_status"]})
++
++
++def _converted_amount(number, unit):
++    if number is None or unit is None or unit["canonical_unit"] is None:
++        return None
++    return _float_exact(Fraction(number["raw_number"].replace("−", "-")) *
++        _plain_amount_unit(unit["raw_unit"])[1], "amount.value")
++
++
++def _calculation_quantity(row):
++    if row is None:
++        return None
++    return {"value": row["value"], "unit": row["unit"]["canonical_unit"] if row["unit"] else None,
++        **{field: row[field] for field in ("status", "bound", "approximate", "measurement_key",
++            "physical_observation_key", "origin", "unavailable_reason")},
++        **{field: row[field]["value"] for field in ("qualification", "amount_role", "amount_kind", "basis_status")}}
++
++
++def _read_covariance(reference, quantities, sources):
++    if reference is None:
++        return None, None
++    if any(row is None or row["value"] is None for row in quantities.values()):
++        _fail("complete_covariance_owners_required", "covariance_source_ref")
++    source = sources.source(reference, "original")
++    data = _json_source(source["content"], "covariance_source_ref")
++    converted = _covariance_values(data, quantities)
++    return {"source_ref": reference, "artifact_ref": source["artifact_ref"], "data": data}, converted
++
++
++def _covariance_values(data, quantities):
++    _keys(data, _COVARIANCE_FIELDS, "covariance_source")
++    expected = {"version": "a105_amount_covariance_v1", "quantity_order": list(ROLES),
++        "quantity_measurement_keys": [quantities[role]["measurement_key"] for role in ROLES],
++        "quantity_physical_observation_keys": [quantities[role]["physical_observation_key"] for role in ROLES],
++        "quantity_owner_keys": [quantities[role]["owner_key"] for role in ROLES],
++        "quantity_units": [quantities[role]["unit"]["raw_unit"] for role in ROLES]}
++    for field, value in expected.items():
++        if data[field] != value:
++            _fail("amount_covariance_owner_or_unit_mismatch", "covariance_source." + field)
++    matrix = data["covariance"]
++    if (not isinstance(matrix, list) or len(matrix) != 2
++            or any(not isinstance(row, list) or len(row) != 2 for row in matrix)):
++        _fail("two_by_two_covariance_required", "covariance_source.covariance")
++    scales = [_plain_amount_unit(quantities[role]["unit"]["raw_unit"])[1] for role in ROLES]
++    converted = []
++    for i, row in enumerate(matrix):
++        converted_row = []
++        for j, value in enumerate(row):
++            _finite(value, f"covariance_source.covariance[{i}][{j}]")
++            converted_row.append(_float_exact(Fraction(str(value)) * scales[i] * scales[j], "covariance_source.covariance"))
++        converted.append(converted_row)
++    return converted
++
++
++def read_amount_inputs(arguments, *, read_source):
++    """Read source-bound amounts and meanings; never infer purity or activity.
++
++    Source quotes verify custody, not interpretation. A model selects meanings
++    and exact spans; every scientific number is parsed from actual source bytes.
++    A supported relationship can identify an unnamed stock or preparation.
++    """
++    validate_schema(arguments, amount_arguments_schema())
++    sources = _Sources(read_source)
++    sources.source(arguments["source_ref"], "original")
++    witness = lambda value, field: None if value is None else sources.witness(value, field)
++    result = {"version": VERSION, "source_ref": arguments["source_ref"], "source_kind": arguments["source_kind"],
++        "experiment": witness(arguments["experiment"], "experiment"),
++        "intended_change": witness(arguments["intended_change"], "intended_change"),
++        **{field: _interpret(arguments[field], allowed, sources, field) for field, allowed in (
++            ("comparison_kind", COMPARISON_KINDS), ("pair_relationship", RELATIONSHIPS),
++            ("stock_relationship", STOCK_RELATIONSHIPS))}, "quantities": {}}
++    for role in ROLES:
++        selected = arguments["quantities"][role]
++        if selected is None:
++            result["quantities"][role] = None
++            continue
++        row = {"meanings": {name: witness(selected[name], role + "." + name) for name in LITERAL_FIELDS},
++            **{field: _interpret(selected[field], allowed, sources, role + "." + field)
++                for field, allowed in (("amount_role", AMOUNT_ROLES), ("amount_kind", AMOUNT_KINDS),
++                    ("qualification", QUALIFICATIONS), ("basis_status", RELATIONSHIPS))}}
++        measurement = selected["measurement"]
++        number = _amount_number(measurement["number"], sources) if measurement else None
++        unit = _amount_unit(measurement["unit"], sources) if measurement else None
++        _explicit_unit_consistency(number, unit, sources)
++        value = _converted_amount(number, unit)
++        status = "unavailable" if value is None else "observed" if number["relation"] == "point" else "censored"
++        uncertainty = selected["reported_uncertainty"]
++        interpreted = _interpret(uncertainty["kind"], UNCERTAINTY_KINDS, sources, role + ".reported_uncertainty.kind")
++        statement = witness(uncertainty["statement"], role + ".reported_uncertainty.statement")
++        if interpreted["value"] not in ("unknown", "unreported") and statement is None:
++            _fail("uncertainty_statement_required", role + ".reported_uncertainty.statement")
++        row.update(number=number, unit=unit, value=value, status=status,
++            unavailable_reason=("source_amount_unit_unreported" if number and unit is None else
++                unit["unavailable_reason"] if number and unit else None),
++            bound=number["relation"] if number and number["relation"] != "point" else "none",
++            approximate=bool(number and number["approximate"] or row["qualification"]["value"] == "source_qualified_approximate"),
++            source_origin="synthetic" if arguments["source_kind"] == "synthetic_fixture" else "reported",
++            origin=("derived" if value is not None and unit["multiplier"] != 1 else
++                "synthetic" if arguments["source_kind"] == "synthetic_fixture" else "reported"),
++            measurement_key=_measurement_key(number),
++            physical_observation_key=_physical_key(row["meanings"]["measurement_identity"]),
++            reported_uncertainty={"kind": interpreted, "statement": statement})
++        row["owner_key"] = _owner_key(row)
++        result["quantities"][role] = row
++    cov_source, cov = _read_covariance(arguments["covariance_source_ref"], result["quantities"], sources)
++    result["covariance_source"] = cov_source
++    result["calculation_inputs"] = {"quantities": {role: _calculation_quantity(result["quantities"][role]) for role in ROLES},
++        **{field: result[field]["value"] for field in ("comparison_kind", "pair_relationship", "stock_relationship")},
++        "covariance": cov, "covariance_origin": cov_source["data"]["origin"] if cov_source else None,
++        "variance_status": cov_source["data"]["variance_status"] if cov_source else "unknown"}
++    validate_amount_calculation_inputs(result["calculation_inputs"])
++    result.update(source_refs=list(sources.references), lexical_dependency=deepcopy(LEXICAL_DEPENDENCY))
++    return result
++
++
++def _saved_interpretation(value, allowed, field):
++    from .literature_rate_native_inputs import _saved_witness
++    _keys(value, ("value", "witnesses"), field)
++    if value["value"] not in allowed or not isinstance(value["witnesses"], list):
++        _fail("unsupported_amount_interpretation", field)
++    for witness in value["witnesses"]:
++        _saved_witness(witness, field)
++    distinct = {(w["source_ref"], w["artifact_ref"], w["start"], w["end"]) for w in value["witnesses"]}
++    required = 2 if value["value"] == "conflicting" else 0 if value["value"] in ("unknown", "unreported") else 1
++    if len(distinct) < required:
++        _fail("interpretation_witness_required", field)
++
++
++def validate_amount_extraction(extraction):
++    """Validate saved associations without scientific-source IO or cell fitting."""
++    from .literature_rate_native_inputs import _saved_witness, _saved_number
++    _keys(extraction, _EXTRACTION_FIELDS, "extraction")
++    if extraction["version"] != VERSION or extraction["source_kind"] not in SOURCE_KINDS:
++        _fail("amount_extraction_version_or_origin_mismatch", "extraction")
++    if extraction["lexical_dependency"] != LEXICAL_DEPENDENCY:
++        _fail("amount_lexical_dependency_mismatch", "lexical_dependency")
++    for field in ("experiment", "intended_change"):
++        if extraction[field] is not None:
++            _saved_witness(extraction[field], field)
++    for field, allowed in (("comparison_kind", COMPARISON_KINDS), ("pair_relationship", RELATIONSHIPS),
++            ("stock_relationship", STOCK_RELATIONSHIPS)):
++        _saved_interpretation(extraction[field], allowed, field)
++    _keys(extraction["quantities"], ROLES, "quantities")
++    for role in ROLES:
++        row = extraction["quantities"][role]
++        if row is None:
++            continue
++        _keys(row, _QUANTITY_RECORD_FIELDS, role)
++        _keys(row["meanings"], LITERAL_FIELDS, role + ".meanings")
++        for field, witness in row["meanings"].items():
++            if witness is not None:
++                _saved_witness(witness, role + ".meanings." + field)
++        for field, allowed in (("amount_role", AMOUNT_ROLES), ("amount_kind", AMOUNT_KINDS),
++                ("qualification", QUALIFICATIONS), ("basis_status", RELATIONSHIPS)):
++            _saved_interpretation(row[field], allowed, role + "." + field)
++        number, unit = row["number"], row["unit"]
++        if number is not None:
++            _saved_number(number, role + ".number")
++        if unit is not None:
++            _keys(unit, ("witness", "raw_unit", "canonical_unit", "multiplier", "unavailable_reason"), role + ".unit")
++            _saved_witness(unit["witness"], role + ".unit")
++            parsed = _plain_amount_unit(unit["raw_unit"])
++            if (unit["raw_unit"] != unit["witness"]["quote"] or
++                    (unit["canonical_unit"], unit["multiplier"], unit["unavailable_reason"]) != (
++                        parsed[0] if parsed else None, float(parsed[1]) if parsed else None,
++                        None if parsed else "unsupported_source_amount_unit")):
++                _fail("amount_saved_unit_mismatch", role)
++        value = _converted_amount(number, unit)
++        expected = {"measurement_key": _measurement_key(number),
++            "physical_observation_key": _physical_key(row["meanings"]["measurement_identity"]),
++            "owner_key": _owner_key(row), "value": value,
++            "status": "unavailable" if value is None else "observed" if number["relation"] == "point" else "censored",
++            "bound": number["relation"] if number and number["relation"] != "point" else "none",
++            "approximate": bool(number and number["approximate"] or row["qualification"]["value"] == "source_qualified_approximate"),
++            "source_origin": "synthetic" if extraction["source_kind"] == "synthetic_fixture" else "reported",
++            "origin": ("derived" if value is not None and unit["multiplier"] != 1 else
++                "synthetic" if extraction["source_kind"] == "synthetic_fixture" else "reported"),
++            "unavailable_reason": ("source_amount_unit_unreported" if number and unit is None else
++                unit["unavailable_reason"] if number and unit else None)}
++        if any(row[field] != value for field, value in expected.items()) or type(row["approximate"]) is not bool:
++            _fail("amount_saved_quantity_mismatch", role)
++        uncertainty = row["reported_uncertainty"]
++        _keys(uncertainty, ("kind", "statement"), role + ".reported_uncertainty")
++        _saved_interpretation(uncertainty["kind"], UNCERTAINTY_KINDS, role + ".reported_uncertainty.kind")
++        if uncertainty["statement"] is not None:
++            _saved_witness(uncertainty["statement"], role + ".reported_uncertainty.statement")
++        elif uncertainty["kind"]["value"] not in ("unreported", "unknown"):
++            _fail("uncertainty_statement_required", role + ".reported_uncertainty.statement")
++    covariance = extraction["covariance_source"]
++    if covariance is not None:
++        _keys(covariance, ("source_ref", "artifact_ref", "data"), "covariance_source")
++        if any(not isinstance(covariance[field], str) or not covariance[field] for field in ("source_ref", "artifact_ref")):
++            _fail("amount_covariance_source_identity_required", "covariance_source")
++        if any(row is None or row["value"] is None for row in extraction["quantities"].values()):
++            _fail("complete_covariance_owners_required", "covariance_source")
++    calculation = {"quantities": {role: _calculation_quantity(extraction["quantities"][role]) for role in ROLES},
++        **{field: extraction[field]["value"] for field in ("comparison_kind", "pair_relationship", "stock_relationship")},
++        "covariance": _covariance_values(covariance["data"], extraction["quantities"]) if covariance else None,
++        "covariance_origin": covariance["data"]["origin"] if covariance else None,
++        "variance_status": covariance["data"]["variance_status"] if covariance else "unknown"}
++    validate_amount_calculation_inputs(calculation)
++    if extraction["calculation_inputs"] != calculation:
++        _fail("amount_saved_calculation_input_mismatch", "calculation_inputs")
++    refs = extraction["source_refs"]
++    if (not isinstance(refs, list) or len(refs) != len(set(refs))
++            or any(not isinstance(ref, str) or not ref for ref in refs)):
++        _fail("amount_source_roster_invalid", "source_refs")
++    return deepcopy(extraction)
++
++
++def amount_selection_from_extraction(extraction):
++    """Recover only the original selected arguments from saved enriched facts."""
++    def witness(value):
++        return None if value is None else {name: value[name] for name in ("source_ref", "representation", "start", "end", "quote")}
++    def meaning(value):
++        return {"value": value["value"], "witnesses": [witness(w) for w in value["witnesses"]]}
++    quantities = {}
++    for role, row in extraction["quantities"].items():
++        if row is None:
++            quantities[role] = None
++            continue
++        number = row["number"]
++        quantities[role] = {**{name: witness(row["meanings"][name]) for name in LITERAL_FIELDS},
++            "measurement": None if number is None else {
++                "number": {**number["selector"], "witness": witness(number["selector"]["witness"])},
++                "unit": witness(row["unit"]["witness"]) if row["unit"] else None},
++            **{name: meaning(row[name]) for name in ("amount_role", "amount_kind", "qualification", "basis_status")},
++            "reported_uncertainty": {"kind": meaning(row["reported_uncertainty"]["kind"]),
++                "statement": witness(row["reported_uncertainty"]["statement"])}}
++    return {"source_ref": extraction["source_ref"], "source_kind": extraction["source_kind"],
++        "experiment": witness(extraction["experiment"]), "intended_change": witness(extraction["intended_change"]),
++        **{name: meaning(extraction[name]) for name in ("comparison_kind", "pair_relationship", "stock_relationship")},
++        "quantities": quantities, "covariance_source_ref": extraction["covariance_source"]["source_ref"] if extraction["covariance_source"] else None}
++
++
++def validate_amount_selection(arguments, extraction):
++    """Check selection/source roster without rereading scientific bytes."""
++    validate_schema(arguments, amount_arguments_schema())
++    if arguments != amount_selection_from_extraction(extraction):
++        _fail("amount_saved_selection_mismatch", "selection")
++    def references(value):
++        if isinstance(value, dict):
++            for key, child in value.items():
++                if key in ("source_ref", "covariance_source_ref") and isinstance(child, str):
++                    yield child
++                else:
++                    yield from references(child)
++        elif isinstance(value, list):
++            for child in value:
++                yield from references(child)
++    if set(extraction["source_refs"]) != set(references(arguments)):
++        _fail("amount_source_roster_invalid", "source_refs")
++
++
++__all__ = ["VERSION", "ROLES", "SOURCE_KINDS", "COMPARISON_KINDS", "AMOUNT_ROLES",
++    "AMOUNT_KINDS", "QUALIFICATIONS", "RELATIONSHIPS", "STOCK_RELATIONSHIPS", "LITERAL_FIELDS",
++    "UNITS", "QUANTITY_FIELDS", "CALCULATION_FIELDS", "amount_arguments_schema",
++    "validate_amount_calculation_inputs", "read_amount_inputs", "validate_amount_extraction",
++    "validate_amount_selection", "amount_selection_from_extraction", "LEXICAL_DEPENDENCY", "INPUT_REASONS",
++    "UNCERTAINTY_KINDS"]
+--- pin024/gene_annotation_episode/literature_amount_calculations.py
++++ current027/gene_annotation_episode/literature_amount_calculations.py
+@@ -0,0 +1,200 @@
++"""Finite A105 amount comparisons, separate from activity and final credit.
++
++Source interpretation, custody and unit conversion precede this boundary. Ratios
++of target/total estimates are not automatically validated purity; nominal between-arm amounts
++are not active concentrations or a response model. No saved rate is changed.
++"""
++from __future__ import annotations
++
++import math
++
++from .literature_amount_inputs import ROLES, validate_amount_calculation_inputs
++
++
++VERSION = "a105_amount_components_v1"
++COMPONENTS = ("numerator_amount", "denominator_amount", "amount_difference", "amount_ratio",
++    "reciprocal_amount_ratio", "conditional_mass_denominator_factor", "amount_difference_variance",
++    "amount_difference_standard_uncertainty", "amount_ratio_variance", "amount_ratio_standard_uncertainty",
++    "reciprocal_amount_ratio_variance", "reciprocal_amount_ratio_standard_uncertainty")
++REASONS = ("source_measurement_unavailable", "censored_measurement", "conflicting_measurement",
++    "source_amount_unit_unreported", "unsupported_source_amount_unit",
++    "amount_qualification_unknown", "amount_qualification_conflicting", "comparison_kind_unknown",
++    "comparison_kind_conflicting", "pair_relationship_unknown", "pair_relationship_conflicting",
++    "amount_basis_unknown", "amount_basis_conflicting", "amount_role_mismatch", "amount_kind_unresolved",
++    "stock_relationship_unknown", "stock_relationship_conflicting", "different_stocks",
++    "incompatible_amount_dimensions", "reused_source_observation", "zero_denominator_amount",
++    "zero_numerator_amount", "mass_factor_not_applicable", "positive_mass_estimates_required",
++    "amount_covariance_unreported", "numerical_model_range", "invalid_propagated_variance")
++
++
++def _cell(value, unit, formula, *, reason=None, approximate=False, origin="derived", conditional=()):
++    if value is not None and not math.isfinite(value):
++        value, reason = None, "numerical_model_range"
++    return {"value": value, "unit": unit, "status": "populated" if value is not None else "unavailable",
++        "formula": formula, "origin": origin, "unavailable_reason": reason,
++        "approximate": approximate, "conditional_on": list(conditional)}
++
++
++def _individual_reason(row):
++    if row is None:
++        return "source_measurement_unavailable"
++    if row["unavailable_reason"]:
++        return row["unavailable_reason"]
++    return {"observed": None, "unavailable": "source_measurement_unavailable",
++        "censored": "censored_measurement", "conflicting": "conflicting_measurement"}[row["status"]]
++
++
++def _pair_reason(inputs, individual_reasons):
++    if any(individual_reasons.values()):
++        return next(reason for reason in individual_reasons.values() if reason)
++    quantities = inputs["quantities"]
++    for row in quantities.values():
++        if row["qualification"] in ("unknown", "conflicting"):
++            return "amount_qualification_" + row["qualification"]
++    for field in ("comparison_kind", "pair_relationship"):
++        if inputs[field] in ("unknown", "conflicting"):
++            return field + "_" + inputs[field]
++    for row in quantities.values():
++        if row["basis_status"] != "supported":
++            return "amount_basis_" + row["basis_status"]
++    n, d = (quantities[role] for role in ROLES)
++    if n["unit"] != d["unit"]:
++        return "incompatible_amount_dimensions"
++    same_token = n["measurement_key"] == d["measurement_key"]
++    same_physical = n["physical_observation_key"] is not None and n["physical_observation_key"] == d["physical_observation_key"]
++    if same_token or same_physical:
++        return "reused_source_observation"
++    stock = inputs["comparison_kind"] == "stock_target_mass_estimate_over_total_mass_estimate"
++    if stock:
++        if n["unit"] != "mg/ml":
++            return "incompatible_amount_dimensions"
++        if (n["amount_role"], d["amount_role"]) != ("target_mass_estimate", "total_protein_mass_estimate"):
++            return "amount_role_mismatch"
++        if any(row["amount_kind"] not in ("measured", "estimated") for row in (n, d)):
++            return "amount_kind_unresolved"
++        relation = inputs["stock_relationship"]
++        if relation != "same":
++            return ("different_stocks" if relation in ("different", "not_applicable") else
++                    "stock_relationship_" + relation)
++    else:
++        if n["unit"] != "uM":
++            return "incompatible_amount_dimensions"
++        if any(row["amount_role"] != "nominal_molecule_amount" for row in (n, d)):
++            return "amount_role_mismatch"
++        if any(row["amount_kind"] != "nominal" for row in (n, d)):
++            return "amount_kind_unresolved"
++    return None
++
++
++def _divide(first, second, prior_reason, zero_reason):
++    reason = prior_reason or (zero_reason if second == 0 else None)
++    if reason:
++        return None, reason
++    try:
++        value = first / second
++        if not math.isfinite(value) or value == 0 and first != 0:
++            return None, "numerical_model_range"
++        return value, None
++    except ArithmeticError:
++        return None, "numerical_model_range"
++
++
++def _propagated(matrix, gradient):
++    try:
++        value = math.fsum(gradient[i] * matrix[i][j] * gradient[j]
++                         for i in range(2) for j in range(2))
++        if not math.isfinite(value):
++            return None, "numerical_model_range"
++        if value < 0:
++            return None, "invalid_propagated_variance"
++        return value, None
++    except (ArithmeticError, ValueError):
++        return None, "numerical_model_range"
++
++
++def populate_amount_components(inputs):
++    """Populate twelve numerical components from explicitly related quantities.
++
++    ``amount_ratio`` is numerator/denominator; signed difference is numerator
++    minus denominator. The mass-denominator factor is the reciprocal alias for
++    the supported same-stock target/total mass-estimate relationship, with
++    strictly positive mass estimates. It is not applied to a rate here.
++
++    Full covariance is already converted to canonical quantity units and owned
++    by these ordered measurements. Difference propagation is linear. Nonlinear
++    ratio propagation is first order and does not assert normality, confidence
++    bounds or known variance when the supplied variance is estimated.
++    """
++    inputs = validate_amount_calculation_inputs(inputs)
++    quantities = inputs["quantities"]
++    reasons = {role: _individual_reason(quantities[role]) for role in ROLES}
++    paired_reason = _pair_reason(inputs, reasons)
++    rows = [quantities[role] for role in ROLES]
++    n, d = (row["value"] if row else None for row in rows)
++    unit = rows[0]["unit"] if rows[0] and rows[1] and rows[0]["unit"] == rows[1]["unit"] else None
++    approximate = any(row and row["approximate"] for row in rows)
++    conditions = ("source_role_and_pair_interpretations",)
++    cells = {}
++    for role, row in zip(ROLES, rows):
++        cells[role + "_amount"] = _cell(None if reasons[role] else row["value"], row["unit"] if row else None,
++            "source_" + role + "_amount", reason=reasons[role], approximate=bool(row and row["approximate"]),
++            origin=row["origin"] if row else "derived")
++        # Thresholds are retained without masquerading as point amounts.
++        cells[role + "_amount"].update(threshold=row["value"] if row and row["status"] == "censored" else None,
++            bound=row["bound"] if row else "none", qualification=row["qualification"] if row else "unknown")
++    difference = n - d if paired_reason is None else None
++    cells["amount_difference"] = _cell(difference, unit, "numerator-denominator", reason=paired_reason,
++        approximate=approximate, conditional=conditions)
++    ratio, ratio_reason = _divide(n, d, paired_reason, "zero_denominator_amount")
++    reciprocal, reciprocal_reason = _divide(d, n, paired_reason, "zero_numerator_amount")
++    cells["amount_ratio"] = _cell(ratio, "dimensionless", "numerator/denominator", reason=ratio_reason,
++        approximate=approximate, conditional=conditions)
++    cells["reciprocal_amount_ratio"] = _cell(reciprocal, "dimensionless", "denominator/numerator",
++        reason=reciprocal_reason, approximate=approximate, conditional=conditions)
++    factor_reason = ("mass_factor_not_applicable" if inputs["comparison_kind"] !=
++        "stock_target_mass_estimate_over_total_mass_estimate" else reciprocal_reason)
++    if factor_reason is None and (n <= 0 or d <= 0):
++        factor_reason = "positive_mass_estimates_required"
++    cells["conditional_mass_denominator_factor"] = _cell(None if factor_reason else reciprocal,
++        "dimensionless", "reciprocal_amount_ratio_same_stock_mass_basis_alias", reason=factor_reason,
++        approximate=approximate, conditional=(*conditions,
++            "same_stock_rate_with_total_mass_denominator_required_before_application"))
++
++    for name, value, reason, gradient_fn in (
++        ("amount_difference", difference, paired_reason, lambda: (1., -1.)),
++        ("amount_ratio", ratio, ratio_reason, lambda: (1 / d, -ratio / d)),
++        ("reciprocal_amount_ratio", reciprocal, reciprocal_reason, lambda: (-reciprocal / n, 1 / n)),
++    ):
++        variance = None
++        if reason is None and (value is None or not math.isfinite(value)):
++            reason = "numerical_model_range"
++        if reason is None and inputs["covariance"] is None:
++            reason = "amount_covariance_unreported"
++        if reason is None:
++            try:
++                variance, reason = _propagated(inputs["covariance"], gradient_fn())
++            except ArithmeticError:
++                reason = "numerical_model_range"
++        nonlinear = name != "amount_difference"
++        uncertainty_conditions = (*conditions, "first_order_covariance_propagation" if nonlinear else "linear_covariance_propagation")
++        variance_unit = (f"({unit})^2" if unit else None) if not nonlinear else "dimensionless"
++        error_unit = unit if not nonlinear else "dimensionless"
++        cells[name + "_variance"] = _cell(variance, variance_unit, "J_" + name + "*covariance*J_transpose",
++            reason=reason, approximate=approximate, conditional=uncertainty_conditions)
++        cells[name + "_standard_uncertainty"] = _cell(math.sqrt(variance) if variance is not None else None,
++            error_unit, "sqrt(" + name + "_variance)", reason=reason,
++            approximate=approximate, conditional=uncertainty_conditions)
++    return {"version": VERSION, "axis": "A105", "evaluation_scope": "source_amount_comparison",
++        "inputs": inputs, "cells": cells, "comparison_kind": inputs["comparison_kind"],
++        "variance_status": inputs["variance_status"], "covariance_origin": inputs["covariance_origin"],
++        "mass_factor_alias_of": "reciprocal_amount_ratio", "mass_factor_applied_to_rate": False,
++        "independent_preparation_count": None, "annotation_credit": None,
++        "interpretation_limits": ["target_and_total_protein_are_different_measurands",
++            "mass_fraction_estimate_is_not_automatically_validated_purity_or_active_fraction",
++            "nominal_amount_ratio_is_not_amount_response_correction",
++            "difference_of_target_and_total_estimates_is_not_contaminant_concentration",
++            "source_amounts_do_not_establish_effect_isolation",
++            "arithmetic_aliases_are_not_independent_evidence"]}
++
++
++__all__ = ["VERSION", "COMPONENTS", "REASONS", "populate_amount_components"]
+--- pin024/gene_annotation_episode/literature_amount_prompt.py
++++ current027/gene_annotation_episode/literature_amount_prompt.py
+@@ -0,0 +1,15 @@
++"""Amount-specific recurring investigation instructions, separate from cells."""
++
++AMOUNT_TASK = """Determine which reported molecular amounts describe the preparations or arms relevant to the assigned experiment. Identify the actual molecule, construct, preparation or stock, measurement method, reported amount basis and condition for each quantity before nominating numerical and unit spans. Preserve unknown meanings rather than completing them from a nearby protein name. A public searchable name is not required: source-backed experimental relationships can identify the relevant preparations. Distinguish mass concentration from molar concentration, estimated target protein from total protein, and nominal recipe amount from measured active concentration.
++
++For estimates of target and total protein in one stock, identify which estimate belongs in the numerator and which in the denominator, and retain the methods and source passages establishing that they describe the same stock. Target protein and total protein are deliberately different measurands; their difference is not automatically measurement-method disagreement or error. Their ratio is a target/total protein mass-fraction estimate under those methods and the same-stock relationship. It can inform protein-mass purity when the measurands and calibration support that interpretation; it is never automatically validated purity, active fraction, contaminant activity or reliability. Their comparison can also describe a conditional change of mass denominator. Estimates can yield a target/total ratio above one. Preserve potentially inconsistent estimates and their limitations without clamping them. Preserve negative or noisy reported estimates too, without treating a nonpositive mass ratio as a usable physical denominator conversion.
++
++For nominal molar amounts in different experimental arms, identify both actual molecules and preparations, the experiment connecting those arms and the deliberately changed variable. Their amount difference can qualify how comparable the arms are outside that intended change. It does not establish an amount-response correction, equal active sites or isolation of the measured effect. Replacement across vessels does not establish the purity of either preparation. Keep experimental comparability separate from effect isolation.
++
++Nominate exact original number and unit spans; deterministic operations parse, validate, convert supported units and perform arithmetic. Preserve inequalities and approximation, including prose that qualifies an estimate without sitting immediately next to its number. Reported point means a point-form source report, not an exact physical measurement. A reported-point selection cannot override a lexical limit or approximation; unresolved qualification stays unknown. Do not infer a molecular weight, reaction volume, source denominator or stock relationship from matching units. A missing comparison relationship does not erase an individually reported value.
++
++Preserve reported uncertainty and physical observation identity. An approximate estimate is not a standard error, and SD, SEM, confidence intervals and untyped spreads retain their own meanings. Repeated representations and shared observations are not independent measurements. Supply a retained covariance source only when its actual quantities, units and ordered owners apply; missing covariance stays unknown. Do not compose numerical covariance or assume zero dependence to complete a requested cell. Estimated variance is not known variance.
++
++Before any later use of a mass-denominator factor, establish that the saved rate uses this actual stock and total protein mass as its denominator. An already target-normalized rate must not receive the conversion again. The present amount operation retains this conditional relationship without inventing a rate or an activity correction. Return only the parent's requested typed information, with these scientific qualifications. Target correspondence and combined annotation credit remain separate work."""
++
++__all__ = ["AMOUNT_TASK"]
+--- pin024/gene_annotation_episode/literature_amount_storage.py
++++ current027/gene_annotation_episode/literature_amount_storage.py
+@@ -0,0 +1,277 @@
++"""Selected source-amount persistence and exact typed subsets; no credit policy."""
++from __future__ import annotations
++
++import json
++
++from .communication import plain
++from .domain import ContractError, canonical, identity, obj
++from .literature_amount_inputs import (
++    ROLES, LITERAL_FIELDS, COMPARISON_KINDS, AMOUNT_ROLES, AMOUNT_KINDS, QUALIFICATIONS,
++    RELATIONSHIPS, STOCK_RELATIONSHIPS, UNCERTAINTY_KINDS, read_amount_inputs,
++    validate_amount_extraction, validate_amount_selection,
++)
++from .literature_amount_calculations import COMPONENTS, REASONS, populate_amount_components
++from .literature_rate_storage import LiteratureRateRepository
++
++
++PROVIDER = "literature.a105.amount_population"
++VERSION = "literature_amount_population_record_v1"
++RETURN_UNITS = {"(mg/ml)^2": "mg2/ml2", "(uM)^2": "uM2"}
++CONDITIONS = ("source_role_and_pair_interpretations", "linear_covariance_propagation",
++    "first_order_covariance_propagation", "same_stock_rate_with_total_mass_denominator_required_before_application")
++_QUANTITY_REF_FIELDS = ("subject_ref", "construct_ref", "preparation_ref", "stock_ref", "method_ref",
++    "reported_basis_ref", "condition_ref", "measurement_ref", "physical_observation_ref", "reported_uncertainty_ref")
++
++
++def _bindings(extraction, publish):
++    """Publish/validate exactly the same immutable source assertion records."""
++    def reference(witness, kind, *, number=None):
++        if witness is None:
++            return None
++        anchor = {key: witness[key] for key in ("source_ref", "artifact_ref", "start", "end", "quote")}
++        if number is not None:
++            selection = number["selector"]
++            anchor.update(start=witness["start"] + len(witness["quote"][:selection["number_start"]].encode()),
++                end=witness["start"] + len(witness["quote"][:selection["number_end"]].encode()), quote=number["raw_number"])
++        return publish("reference", {"reference_type": "literature_result", "source_ref": witness["source_ref"],
++            "accession": identity("amount_" + kind, witness if number is None else {"witness": witness, "number": number}),
++            "label": witness["quote"] if number is None else number["raw_number"],
++            "sequence_ref": None, "molecule": None, "length": None, "term_refs": [], "context_refs": [], "anchor": anchor})
++    quantity_bindings = {}
++    for role in ROLES:
++        row = extraction["quantities"][role]
++        meanings = row["meanings"] if row else {}
++        bindings = {name + "_ref": reference(meanings.get(name), name)
++            for name in ("subject", "construct", "preparation", "stock", "method", "reported_basis")}
++        condition = meanings.get("condition")
++        bindings["condition_ref"] = (publish("context", {"context_type": "assay_condition",
++            "name": condition["quote"], "source_ref": condition["source_ref"], "attributes": [],
++            "related_refs": list(dict.fromkeys(ref for ref in bindings.values() if ref))}) if condition else None)
++        number = row["number"] if row else None
++        bindings["measurement_ref"] = reference(number["selector"]["witness"], "measurement", number=number) if number else None
++        bindings["physical_observation_ref"] = reference(meanings.get("measurement_identity"), "physical_observation")
++        bindings["reported_uncertainty_ref"] = reference(row["reported_uncertainty"]["statement"], "reported_uncertainty") if row else None
++        bindings.update({field: row[field]["value"] if row else "unknown"
++            for field in ("amount_role", "amount_kind", "basis_status", "qualification")},
++            approximate=row["approximate"] if row else False,
++            reported_uncertainty_kind=row["reported_uncertainty"]["kind"]["value"] if row else "unknown")
++        quantity_bindings[role] = bindings
++    experimental = {"experiment_ref": reference(extraction["experiment"], "experiment"),
++        "intended_change_ref": reference(extraction["intended_change"], "intended_change"),
++        "covariance_source_ref": extraction["covariance_source"]["source_ref"] if extraction["covariance_source"] else None}
++    return quantity_bindings, experimental
++
++
++class LiteratureAmountRepository(LiteratureRateRepository):
++    provider = PROVIDER
++    components = COMPONENTS
++    record_version = VERSION
++    operations_table = "literature_amount_operations"
++    received_table = "literature_amount_received"
++    binding_fields = ()
++
++    def populate(self, context, arguments, operation_key):
++        if context.run_id != self.run_id:
++            raise ContractError("literature_run_mismatch")
++        if not isinstance(operation_key, str) or not operation_key:
++            raise ContractError("operation_key_required")
++        args = plain(arguments)
++        signature = canonical({"arguments": args, "scope": plain(context.scope),
++            "run_id": self.run_id, "episode_id": context.episode_id})
++        old = self.store.db.execute(f"SELECT signature,outcome FROM {self.operations_table} "
++            "WHERE run_id=? AND episode_id=? AND operation_key=?", (self.run_id, context.episode_id, operation_key)).fetchone()
++        if old is not None:
++            if old["signature"] != signature:
++                raise ContractError("operation_key_reused_for_different_work")
++            outcome = json.loads(old["outcome"])
++            saved = self.read(outcome["result"]["sheet_ref"])
++            for reference in saved["direct_input_source_refs"]:
++                self._native_source(context, reference)
++            for reference in saved["input_source_refs"]:
++                self._native_provenance(context.scope, reference)
++            return outcome
++
++        def read_source(reference, representation):
++            source = self._native_source(context, reference)
++            artifact = source["artifact_ref"] if representation == "original" else source.get("text_ref")
++            if artifact is None:
++                raise ContractError("literature_source_representation_unavailable")
++            return {"artifact_ref": artifact, "content": self.store.get_artifact(artifact)}
++
++        extraction = read_amount_inputs(args, read_source=read_source)
++        sheet = populate_amount_components(extraction["calculation_inputs"])
++        direct = list(extraction["source_refs"])
++        parents, seen = list(direct), set(direct)
++        for reference in parents:
++            source = self._native_provenance(context.scope, reference)
++            for ancestor in source.get("parent_source_refs", ()):
++                self._native_provenance(context.scope, ancestor)
++                if ancestor not in seen:
++                    seen.add(ancestor)
++                    parents.append(ancestor)
++        source = self._native_source(context, args["source_ref"])
++        payload = {"version": VERSION, "input_source_ref": args["source_ref"],
++            "input_artifact_ref": source["artifact_ref"], "direct_input_source_refs": direct,
++            "input_source_refs": parents, "selection": args, "extraction": extraction, "sheet": sheet}
++        with self.store.transaction():
++            created = []
++            def publish(kind, value):
++                key = identity(kind, {"origin": "tool", "record": value})
++                exists = self.store.db.execute("SELECT 1 FROM records WHERE id=?", (key,)).fetchone()
++                row = self.store.put(kind, value, origin="tool", scope=plain(context.scope))
++                if exists is None:
++                    created.append(row["id"])
++                return row["id"]
++            quantities, experimental = _bindings(extraction, publish)
++            payload.update(quantity_bindings=quantities, experimental_bindings=experimental)
++            artifact = self.store.artifact(canonical(payload), "application/json")
++            request = self.store.artifact(canonical({"run_id": self.run_id, "episode_id": context.episode_id,
++                "operation_key": operation_key, "arguments": args}), "application/json")
++            sheet_ref = publish("source", {"provider": self.provider, "accession": None, "uri": None,
++                "artifact_ref": artifact, "text_ref": artifact, "request_ref": request, "version": VERSION,
++                "retrieved_at": None, "parent_source_refs": parents})
++            refs = [sheet_ref, *dict.fromkeys(ref for bindings in quantities.values()
++                for field, ref in bindings.items() if field in _QUANTITY_REF_FIELDS and ref),
++                *[ref for ref in experimental.values() if ref]]
++            outcome = {"status": "completed", "operation_ref": identity("operation", {
++                "run_id": self.run_id, "episode_id": context.episode_id, "key": operation_key}),
++                "record_refs": list(dict.fromkeys(refs)), "changed_record_refs": created,
++                "result": {"sheet_ref": sheet_ref, "cells": sheet["cells"],
++                    "comparison_kind": extraction["comparison_kind"]["value"],
++                    "pair_relationship": extraction["pair_relationship"]["value"],
++                    "stock_relationship": extraction["stock_relationship"]["value"],
++                    "quantity_metadata": quantities,
++                    "variance_status": sheet["variance_status"], "covariance_origin": sheet["covariance_origin"],
++                    "mass_factor_applied_to_rate": False}, "feedback": None}
++            self.store.db.execute(f"INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)",
++                (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
++        return outcome
++
++    def read(self, sheet_ref):
++        source = self.store.get(sheet_ref)
++        if (source["record_type"] != "source" or source.get("provider") != PROVIDER
++                or source.get("version") != VERSION or source.get("origin") != "tool" or source.get("request_ref") is None):
++            raise ContractError("literature_amount_sheet_required")
++        request = json.loads(self.store.get_artifact(source["request_ref"]))
++        if request.get("run_id") != self.run_id:
++            raise ContractError("literature_amount_sheet_run_mismatch")
++        row = self.store.db.execute(f"SELECT outcome FROM {self.operations_table} WHERE "
++            "run_id=? AND episode_id=? AND operation_key=?", (self.run_id, request.get("episode_id"), request.get("operation_key"))).fetchone()
++        outcome = json.loads(row["outcome"]) if row else None
++        if outcome is None or outcome.get("result", {}).get("sheet_ref") != sheet_ref:
++            raise ContractError("literature_sheet_not_selected_output")
++        saved = json.loads(self.store.get_artifact(source["artifact_ref"]))
++        if (set(saved) != {"version", "input_source_ref", "input_artifact_ref", "direct_input_source_refs",
++                "input_source_refs", "selection", "extraction", "sheet", "quantity_bindings", "experimental_bindings"}
++                or saved["version"] != VERSION or saved["selection"] != request.get("arguments")
++                or saved["input_source_ref"] != saved["selection"].get("source_ref")
++                or source.get("parent_source_refs") != saved["input_source_refs"]
++                or outcome["result"].get("cells") != saved["sheet"]["cells"]
++                or saved["sheet"]["inputs"] != saved["extraction"]["calculation_inputs"]):
++            raise ContractError("literature_amount_saved_mismatch")
++        extraction = validate_amount_extraction(saved["extraction"])
++        validate_amount_selection(saved["selection"], extraction)
++        if extraction["source_refs"] != saved["direct_input_source_refs"]:
++            raise ContractError("literature_amount_saved_mismatch")
++        root = self.store.get(saved["input_source_ref"])
++        if root["artifact_ref"] != saved["input_artifact_ref"]:
++            raise ContractError("literature_amount_source_mismatch")
++        def witnesses(value):
++            if isinstance(value, dict):
++                if set(value) == {"source_ref", "representation", "artifact_ref", "start", "end", "quote"}:
++                    yield value
++                else:
++                    for child in value.values():
++                        yield from witnesses(child)
++            elif isinstance(value, list):
++                for child in value:
++                    yield from witnesses(child)
++        for witness in witnesses(extraction):
++            row = self.store.get(witness["source_ref"])
++            actual = row["artifact_ref"] if witness["representation"] == "original" else row.get("text_ref")
++            if actual != witness["artifact_ref"] or witness["source_ref"] not in saved["direct_input_source_refs"]:
++                raise ContractError("literature_amount_source_mismatch")
++        covariance = extraction["covariance_source"]
++        if covariance is not None and self.store.get(covariance["source_ref"])["artifact_ref"] != covariance["artifact_ref"]:
++            raise ContractError("literature_amount_source_mismatch")
++        def expected(kind, value):
++            reference = identity(kind, {"origin": "tool", "record": value})
++            actual = self.store.get(reference)
++            if actual.get("record_type") != kind or actual.get("origin") != "tool" or any(actual.get(key) != child for key, child in value.items()):
++                raise ContractError("literature_amount_binding_mismatch")
++            return reference
++        quantities, experimental = _bindings(extraction, expected)
++        if quantities != saved["quantity_bindings"] or experimental != saved["experimental_bindings"]:
++            raise ContractError("literature_amount_binding_mismatch")
++        return saved
++
++    def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
++        selected = self.components if components is None else components
++        if (not isinstance(selected, (tuple, list)) or len(selected) != len(set(selected))
++                or any(name not in self.components for name in selected)):
++            raise ContractError("literature_amount_component_selection_invalid")
++        result = []
++        for reference in dict.fromkeys(sheet_refs):
++            if reference not in permitted_record_refs:
++                raise ContractError("literature_sheet_not_received")
++            saved = self.read(reference)
++            extraction = saved["extraction"]
++            for component in selected:
++                cell = saved["sheet"]["cells"][component]
++                roles = ("numerator",) if component == "numerator_amount" else ("denominator",) if component == "denominator_amount" else ROLES
++                result.append({"sheet_ref": reference, "evidence_source_ref": saved["input_source_ref"],
++                    **saved["experimental_bindings"], "component": component,
++                    **{field: cell[field] for field in ("value", "unit", "status", "origin", "unavailable_reason", "conditional_on", "approximate")},
++                    "threshold": cell.get("threshold"), "bound": cell.get("bound", "none"),
++                    "evaluation_scope": "source_amount_comparison",
++                    **{field: extraction[field]["value"] for field in ("comparison_kind", "pair_relationship", "stock_relationship")},
++                    "variance_status": saved["sheet"]["variance_status"], "covariance_origin": saved["sheet"]["covariance_origin"],
++                    **{role: saved["quantity_bindings"][role] for role in ROLES},
++                    "input_measurement_refs": list(dict.fromkeys(saved["quantity_bindings"][role]["measurement_ref"]
++                        for role in roles if saved["quantity_bindings"][role]["measurement_ref"])),
++                    "mass_factor_applied_to_rate": False})
++                result[-1]["unit"] = RETURN_UNITS.get(cell["unit"], cell["unit"])
++        return result
++
++
++def amount_cells_schema():
++    def reference(namespace, nullable=True):
++        return {"type": ["string", "null"] if nullable else "string", "format": "reference", "x-reference-namespace": namespace}
++    quantity = obj({**{name: reference("context" if name == "condition_ref" else "reference") for name in _QUANTITY_REF_FIELDS},
++        "amount_role": {"enum": list(AMOUNT_ROLES)}, "amount_kind": {"enum": list(AMOUNT_KINDS)},
++        "basis_status": {"enum": list(RELATIONSHIPS)}, "qualification": {"enum": list(QUALIFICATIONS)},
++        "approximate": {"type": "boolean"}, "reported_uncertainty_kind": {"enum": list(UNCERTAINTY_KINDS)}})
++    schema = {"type": "array", "items": obj({"sheet_ref": reference("source", False),
++        "evidence_source_ref": reference("source", False), "experiment_ref": reference("reference"),
++        "intended_change_ref": reference("reference"), "covariance_source_ref": reference("source"),
++        "component": {"enum": list(COMPONENTS)}, "value": {"type": ["number", "null"]},
++        "threshold": {"type": ["number", "null"]}, "bound": {"enum": ["none", "lt", "le", "gt", "ge"]},
++        "unit": {"enum": ["mg/ml", "uM", "mg2/ml2", "uM2", "dimensionless", None]},
++        "status": {"enum": ["populated", "unavailable"]}, "origin": {"enum": ["reported", "derived", "synthetic"]},
++        "unavailable_reason": {"enum": [*REASONS, None]},
++        "conditional_on": {"type": "array", "uniqueItems": True, "items": {"enum": list(CONDITIONS)}},
++        "approximate": {"type": "boolean"}, "evaluation_scope": {"const": "source_amount_comparison"},
++        "comparison_kind": {"enum": list(COMPARISON_KINDS)}, "pair_relationship": {"enum": list(RELATIONSHIPS)},
++        "stock_relationship": {"enum": list(STOCK_RELATIONSHIPS)}, "variance_status": {"enum": ["known", "estimated", "unknown"]},
++        "covariance_origin": {"enum": ["reported", "derived", "synthetic", None]},
++        "numerator": quantity, "denominator": json.loads(json.dumps(quantity)),
++        "input_measurement_refs": {"type": "array", "uniqueItems": True, "items": reference("reference", False)},
++        "mass_factor_applied_to_rate": {"const": False}}), "x-source": "literature_amount_cells"}
++    # The application return boundary requires explicit types even for closed
++    # enums/consts. All enum codes here are strings with declared nullable cases.
++    def typed(node):
++        if not isinstance(node, dict):
++            return
++        if "enum" in node and "type" not in node:
++            node["type"] = ["string", "null"] if None in node["enum"] else "string"
++        if "const" in node and "type" not in node:
++            node["type"] = "boolean" if type(node["const"]) is bool else "string"
++        for child in node.get("properties", {}).values():
++            typed(child)
++        if "items" in node:
++            typed(node["items"])
++    typed(schema)
++    return schema
++
++
++__all__ = ["PROVIDER", "VERSION", "COMPONENTS", "LiteratureAmountRepository", "amount_cells_schema"]
+--- pin024/tests/test_literature_amount_calculations.py
++++ current027/tests/test_literature_amount_calculations.py
+@@ -0,0 +1,267 @@
++"""Explicit synthetic numerical inputs; no paper parsing or scientific run."""
++from copy import deepcopy
++from fractions import Fraction
++import math
++
++import pytest
++
++from gene_annotation_episode.literature_amount_calculations import COMPONENTS, populate_amount_components
++from gene_annotation_episode.literature_amount_inputs import validate_amount_calculation_inputs
++from gene_annotation_episode.literature_experimental_contracts import ExperimentalContractError
++
++
++def quantity(value, role, key, *, unit="mg/ml", kind="estimated", approximate=False):
++    return {"value": value, "unit": unit, "status": "observed", "bound": "none",
++        "approximate": approximate,
++        "qualification": "source_qualified_approximate" if approximate else "reported_point",
++        "amount_role": role, "amount_kind": kind, "basis_status": "supported",
++        "measurement_key": key, "physical_observation_key": None, "origin": "synthetic", "unavailable_reason": None}
++
++
++def stock(n=5, d=7):
++    return {"quantities": {
++        "numerator": quantity(n, "target_mass_estimate", "target-estimate", approximate=True),
++        "denominator": quantity(d, "total_protein_mass_estimate", "total-estimate")},
++        "comparison_kind": "stock_target_mass_estimate_over_total_mass_estimate",
++        "pair_relationship": "supported", "stock_relationship": "same",
++        "covariance": None, "covariance_origin": None, "variance_status": "unknown"}
++
++
++def arms(n=8.4, d=8.8):
++    args = stock()
++    args.update(comparison_kind="between_arm_nominal_molar_amount", stock_relationship="not_applicable")
++    args["quantities"] = {role: quantity(value, "nominal_molecule_amount", role,
++        unit="uM", kind="nominal") for role, value in (("numerator", n), ("denominator", d))}
++    return args
++
++
++def covariance(args, matrix=((.25, .1), (.1, .49)), status="estimated"):
++    args.update(covariance=[list(row) for row in matrix], covariance_origin="synthetic", variance_status=status)
++    return args
++
++
++def test_stock_estimate_arithmetic_and_factor_alias_without_rate_application():
++    args = stock()
++    before = deepcopy(args)
++    sheet = populate_amount_components(args)
++    cells = sheet["cells"]
++    assert tuple(cells) == COMPONENTS
++    assert cells["numerator_amount"]["value"] == 5
++    assert cells["denominator_amount"]["value"] == 7
++    assert cells["amount_difference"]["value"] == -2
++    assert cells["amount_difference"]["unit"] == "mg/ml"
++    assert cells["amount_ratio"]["value"] == 5 / 7
++    assert cells["reciprocal_amount_ratio"]["value"] == 1.4
++    assert cells["conditional_mass_denominator_factor"]["value"] == 1.4
++    assert cells["conditional_mass_denominator_factor"]["approximate"]
++    assert sheet["mass_factor_alias_of"] == "reciprocal_amount_ratio"
++    assert sheet["mass_factor_applied_to_rate"] is False
++    assert sheet["annotation_credit"] is sheet["independent_preparation_count"] is None
++    assert "target_and_total_protein_are_different_measurands" in sheet["interpretation_limits"]
++    assert args == before
++    sheet["inputs"]["quantities"]["numerator"]["value"] = 100
++    assert args == before
++
++
++def test_nominal_arm_comparability_is_not_mass_factor_or_activity_correction():
++    sheet = populate_amount_components(arms())
++    cells = sheet["cells"]
++    assert cells["amount_difference"]["value"] == pytest.approx(-.4)
++    assert cells["amount_difference"]["unit"] == "uM"
++    assert cells["amount_ratio"]["value"] == pytest.approx(8.4 / 8.8)
++    assert cells["reciprocal_amount_ratio"]["value"] == pytest.approx(8.8 / 8.4)
++    assert cells["conditional_mass_denominator_factor"]["value"] is None
++    assert cells["conditional_mass_denominator_factor"]["unavailable_reason"] == "mass_factor_not_applicable"
++    assert not cells["amount_ratio"]["approximate"]
++    assert "nominal_amount_ratio_is_not_amount_response_correction" in sheet["interpretation_limits"]
++
++
++def test_estimate_ratio_above_one_is_retained_without_purity_clamp():
++    cells = populate_amount_components(stock(8, 7))["cells"]
++    assert cells["amount_ratio"]["value"] == 8 / 7 > 1
++    assert cells["conditional_mass_denominator_factor"]["value"] == 7 / 8
++
++
++@pytest.mark.parametrize("n,d", [(-5, 7), (5, -7), (-5, -7), (0, 7), (5, 0)])
++def test_nonpositive_noisy_estimates_survive_but_physical_mass_factor_does_not(n, d):
++    cells = populate_amount_components(stock(n, d))["cells"]
++    assert cells["numerator_amount"]["value"] == n
++    assert cells["denominator_amount"]["value"] == d
++    assert cells["amount_difference"]["value"] == n - d
++    assert cells["conditional_mass_denominator_factor"]["value"] is None
++    if n:
++        assert cells["reciprocal_amount_ratio"]["value"] == d / n
++    else:
++        assert cells["reciprocal_amount_ratio"]["unavailable_reason"] == "zero_numerator_amount"
++    if d:
++        assert cells["amount_ratio"]["value"] == n / d
++    else:
++        assert cells["amount_ratio"]["unavailable_reason"] == "zero_denominator_amount"
++
++
++@pytest.mark.parametrize("field,value,reason", [
++    ("pair_relationship", "unknown", "pair_relationship_unknown"),
++    ("pair_relationship", "conflicting", "pair_relationship_conflicting"),
++    ("comparison_kind", "unknown", "comparison_kind_unknown"),
++    ("comparison_kind", "conflicting", "comparison_kind_conflicting"),
++    ("stock_relationship", "different", "different_stocks"),
++    ("stock_relationship", "unknown", "stock_relationship_unknown"),
++    ("stock_relationship", "conflicting", "stock_relationship_conflicting"),
++])
++def test_unavailable_relationship_preserves_individual_values(field, value, reason):
++    args = stock()
++    args[field] = value
++    cells = populate_amount_components(args)["cells"]
++    assert cells["numerator_amount"]["value"] == 5
++    assert cells["denominator_amount"]["value"] == 7
++    assert cells["amount_ratio"]["value"] is None
++    assert cells["amount_ratio"]["unavailable_reason"] == reason
++
++
++@pytest.mark.parametrize("field,value,reason", [
++    ("basis_status", "unknown", "amount_basis_unknown"),
++    ("basis_status", "conflicting", "amount_basis_conflicting"),
++    ("amount_role", "total_protein_mass_estimate", "amount_role_mismatch"),
++    ("amount_kind", "nominal", "amount_kind_unresolved"),
++    ("unit", "uM", "incompatible_amount_dimensions"),
++    ("qualification", "unknown", "amount_qualification_unknown"),
++    ("qualification", "conflicting", "amount_qualification_conflicting"),
++])
++def test_quantity_meanings_and_dimensions_control_pairing_not_individual_record(field, value, reason):
++    args = stock()
++    args["quantities"]["numerator"][field] = value
++    cells = populate_amount_components(args)["cells"]
++    assert cells["numerator_amount"]["value"] == 5
++    assert cells["amount_ratio"]["value"] is None
++    assert cells["amount_ratio"]["unavailable_reason"] == reason
++
++
++def test_missing_other_arm_does_not_erase_reported_operand():
++    args = stock()
++    args["quantities"]["denominator"] = None
++    cells = populate_amount_components(args)["cells"]
++    assert cells["numerator_amount"]["value"] == 5
++    assert cells["denominator_amount"]["value"] is None
++    assert cells["amount_ratio"]["unavailable_reason"] == "source_measurement_unavailable"
++
++
++@pytest.mark.parametrize("bound", ["lt", "le", "gt", "ge"])
++def test_censored_threshold_remains_visible_but_never_a_point_ratio(bound):
++    args = stock()
++    args["quantities"]["numerator"].update(status="censored", bound=bound)
++    cells = populate_amount_components(args)["cells"]
++    assert cells["numerator_amount"]["value"] is None
++    assert cells["numerator_amount"]["threshold"] == 5
++    assert cells["numerator_amount"]["bound"] == bound
++    assert cells["amount_ratio"]["value"] is None
++    assert cells["amount_ratio"]["unavailable_reason"] == "censored_measurement"
++
++
++def test_reported_point_selection_cannot_erase_lexical_approximation_flag():
++    args = stock()
++    args["quantities"]["numerator"]["qualification"] = "reported_point"
++    cells = populate_amount_components(args)["cells"]
++    assert cells["amount_ratio"]["value"] == 5 / 7
++    assert cells["amount_ratio"]["approximate"]
++
++
++def test_approximation_does_not_supply_uncertainty_or_covariance():
++    sheet = populate_amount_components(stock())
++    for key in COMPONENTS[6:]:
++        assert sheet["cells"][key]["value"] is None
++        assert sheet["cells"][key]["unavailable_reason"] == "amount_covariance_unreported"
++    assert sheet["variance_status"] == "unknown"
++
++
++@pytest.mark.parametrize("status", ["known", "estimated"])
++def test_actual_nonzero_correlated_covariance_with_signed_cross_terms(status):
++    sheet = populate_amount_components(covariance(stock(), status=status))
++    cells = sheet["cells"]
++    ratio_variance = float(Fraction(1, 7)**2 * Fraction(1, 4)
++        + Fraction(-5, 49)**2 * Fraction(49, 100)
++        + 2 * Fraction(1, 7) * Fraction(-5, 49) * Fraction(1, 10))
++    assert cells["amount_difference_variance"]["value"] == pytest.approx(.54)
++    assert cells["amount_difference_standard_uncertainty"]["value"] == pytest.approx(math.sqrt(.54))
++    assert cells["amount_ratio_variance"]["value"] == pytest.approx(ratio_variance)
++    assert cells["amount_ratio_standard_uncertainty"]["value"] == pytest.approx(math.sqrt(ratio_variance))
++    assert cells["reciprocal_amount_ratio_variance"]["value"] == pytest.approx(.028)
++    assert cells["reciprocal_amount_ratio_standard_uncertainty"]["value"] == pytest.approx(math.sqrt(.028))
++    assert sheet["variance_status"] == status
++    assert sheet["covariance_origin"] == "synthetic"
++    assert "first_order_covariance_propagation" in cells["amount_ratio_variance"]["conditional_on"]
++    assert "linear_covariance_propagation" in cells["amount_difference_variance"]["conditional_on"]
++    independent = populate_amount_components(covariance(stock(), ((.25, 0), (0, .49))))
++    assert independent["cells"]["amount_ratio_variance"]["value"] > cells["amount_ratio_variance"]["value"]
++
++
++def test_noisy_negative_correlation_is_not_replaced_by_absolute_or_zero_cross_term():
++    positive = populate_amount_components(covariance(stock()))
++    negative = populate_amount_components(covariance(stock(), ((.25, -.1), (-.1, .49))))
++    assert negative["cells"]["amount_ratio_variance"]["value"] > positive["cells"]["amount_ratio_variance"]["value"]
++    assert negative["cells"]["amount_difference_variance"]["value"] == pytest.approx(.94)
++
++
++@pytest.mark.parametrize("fixture,unit", [(stock, "mg/ml"), (arms, "uM")])
++def test_variance_units_square_the_entire_quantity_unit(fixture, unit):
++    cells = populate_amount_components(covariance(fixture()))["cells"]
++    assert cells["amount_difference_variance"]["unit"] == f"({unit})^2"
++    assert cells["amount_difference_standard_uncertainty"]["unit"] == unit
++    assert cells["amount_ratio_variance"]["unit"] == "dimensionless"
++
++
++@pytest.mark.parametrize("field", ["measurement_key", "physical_observation_key"])
++def test_shared_observation_does_not_supply_a_new_comparison_or_independent_precision(field):
++    args = stock(5, 5)
++    for row in args["quantities"].values():
++        row[field] = "one-physical-measurement"
++    covariance(args, ((.25, .1), (.1, .49)))
++    with pytest.raises(ExperimentalContractError, match="shared_measurement_covariance_mismatch"):
++        populate_amount_components(args)
++    covariance(args, ((.25, .25), (.25, .25)))
++    cells = populate_amount_components(args)["cells"]
++    assert cells["numerator_amount"]["value"] == cells["denominator_amount"]["value"] == 5
++    assert cells["amount_ratio"]["unavailable_reason"] == "reused_source_observation"
++    assert cells["amount_ratio_variance"]["value"] is None
++
++
++def test_equal_values_at_distinct_locations_are_not_treated_as_same_observation():
++    cells = populate_amount_components(stock(5, 5))["cells"]
++    assert cells["amount_ratio"]["value"] == 1
++    assert cells["amount_ratio_variance"]["value"] is None
++
++
++@pytest.mark.parametrize("matrix,error", [
++    ([[1]], "two_by_two_covariance_required"),
++    ([[1, 0], [.1, 1]], "symmetric_covariance_required"),
++    ([[1, 2], [2, 1]], "positive_semidefinite_covariance_required"),
++    ([[-1, 0], [0, 1]], "positive_semidefinite_covariance_required"),
++    ([[True, 0], [0, 1]], "finite_number_required"),
++    ([[math.inf, 0], [0, 1]], "finite_number_required"),
++])
++def test_covariance_is_not_repaired(matrix, error):
++    with pytest.raises(ExperimentalContractError, match=error):
++        populate_amount_components(covariance(stock(), matrix))
++
++
++@pytest.mark.parametrize("mutation,error", [
++    (lambda x: x.update(extra=1), "closed_fields_required"),
++    (lambda x: x["quantities"]["numerator"].update(value=True), "finite_number_required"),
++    (lambda x: x["quantities"]["numerator"].update(value=math.nan), "finite_number_required"),
++    (lambda x: x["quantities"]["numerator"].update(measurement_key=None), "measurement_owner_key_required"),
++    (lambda x: x["quantities"]["numerator"].update(approximate=False), "source_approximation_not_retained"),
++    (lambda x: x.update(variance_status="known"), "covariance_status_without_matrix"),
++])
++def test_closed_numerical_input_relationships(mutation, error):
++    args = stock()
++    mutation(args)
++    with pytest.raises(ExperimentalContractError, match=error):
++        validate_amount_calculation_inputs(args)
++
++
++def test_extreme_arithmetic_preserves_finite_inputs_without_nonfinite_cells():
++    cells = populate_amount_components(stock(1e308, -1e308))["cells"]
++    assert cells["numerator_amount"]["value"] == 1e308
++    assert cells["amount_difference"]["value"] is None
++    assert cells["amount_difference"]["unavailable_reason"] == "numerical_model_range"
++    assert cells["amount_difference_variance"]["value"] is None
++    assert all(row["value"] is None or math.isfinite(row["value"]) for row in cells.values())
+--- pin024/tests/test_literature_amount_contracts.py
++++ current027/tests/test_literature_amount_contracts.py
+@@ -0,0 +1,68 @@
++"""Closed source-selector contracts and unwired recurring amount instructions."""
++import pytest
++
++from gene_annotation_episode.domain import ContractError, validate_schema
++from gene_annotation_episode.literature_amount_inputs import amount_arguments_schema
++from gene_annotation_episode.literature_amount_prompt import AMOUNT_TASK
++
++
++def unknown():
++    return {"value": "unknown", "witnesses": []}
++
++
++def arguments():
++    return {"source_ref": "source_" + "1" * 24, "source_kind": "primary_source", "experiment": None,
++        "comparison_kind": unknown(), "pair_relationship": unknown(), "stock_relationship": unknown(),
++        "intended_change": None, "quantities": {"numerator": None, "denominator": None},
++        "covariance_source_ref": None}
++
++
++def test_schema_accepts_explicit_unknown_without_public_gene_name():
++    validate_schema(arguments(), amount_arguments_schema())
++
++
++def test_every_closed_object_property_is_required_including_nullable_fields():
++    def check(node):
++        if isinstance(node, dict):
++            if "properties" in node:
++                assert set(node["required"]) == set(node["properties"])
++                assert node["additionalProperties"] is False
++            for child in node.values():
++                check(child)
++        elif isinstance(node, list):
++            for child in node:
++                check(child)
++    check(amount_arguments_schema())
++
++
++@pytest.mark.parametrize("field", list(arguments()))
++def test_omitting_explicit_null_or_unknown_is_invalid(field):
++    args = arguments()
++    args.pop(field)
++    with pytest.raises(ContractError, match="representation_error"):
++        validate_schema(args, amount_arguments_schema())
++
++
++def test_schema_calls_for_selectors_instead_of_model_authored_scientific_numbers():
++    schema = amount_arguments_schema()
++    def number_fields(node, path=()):
++        if isinstance(node, dict):
++            if node.get("type") in ("number", "integer"):
++                yield path[-1]
++            for key, child in node.items():
++                yield from number_fields(child, (*path, key))
++        elif isinstance(node, list):
++            for child in node:
++                yield from number_fields(child, path)
++    assert set(number_fields(schema)) <= {"start", "end", "number_start", "number_end"}
++
++
++def test_prompt_is_aspect_specific_and_preserves_scientific_qualifications():
++    for text in ("different measurands", "mass-fraction estimate", "never automatically validated purity",
++        "ratio above one", "nominal recipe amount", "public searchable name is not required",
++        "reported-point selection cannot override", "missing covariance stays unknown",
++        "already target-normalized", "effect isolation"):
++        assert text.lower() in AMOUNT_TASK.lower()
++    assert "amount_ratio_variance" not in AMOUNT_TASK
++    assert "J_transpose" not in AMOUNT_TASK
++    assert "scoring_rubric" not in AMOUNT_TASK
+--- pin024/tests/test_literature_amount_inputs.py
++++ current027/tests/test_literature_amount_inputs.py
+@@ -0,0 +1,227 @@
++"""Synthetic source witnesses exercise amount meanings, units and covariance."""
++from copy import deepcopy
++import json
++
++import pytest
++
++from gene_annotation_episode.literature_amount_inputs import read_amount_inputs, LITERAL_FIELDS
++from gene_annotation_episode.literature_amount_calculations import populate_amount_components
++from gene_annotation_episode.literature_experimental_contracts import ExperimentalContractError
++
++
++SOURCE = "source_" + "1" * 24
++COV_SOURCE = "source_" + "2" * 24
++ARTIFACT = "artifact_" + "1" * 24
++TEXT = ("The same unnamed stock: target estimated by band intensity at an approximate concentration of 5 mg/ml; "
++        "total protein estimated by Bradford analysis at 7 mg/ml. Separate nominal arms use 8.4 uM HFP and 8.8 uM IMP.")
++
++
++def witness(text, quote, *, reference=SOURCE, occurrence=0):
++    start = -1
++    for _ in range(occurrence + 1):
++        start = text.index(quote, start + 1)
++    return {"source_ref": reference, "representation": "original", "start": len(text[:start].encode()),
++        "end": len(text[:start + len(quote)].encode()), "quote": quote}
++
++
++def meaning(value, text=TEXT, quote="same unnamed stock"):
++    return {"value": value, "witnesses": [] if value in ("unknown", "unreported") else [witness(text, quote)]}
++
++
++def selected(text, quote, number, unit, role, *, qualification="reported_point"):
++    return {**dict.fromkeys(LITERAL_FIELDS),
++        "measurement": {"number": {"witness": witness(text, quote), "number_start": quote.index(number),
++            "number_end": quote.index(number) + len(number)},
++            "unit": witness(text, unit, occurrence=text[:text.index(quote)].count(unit)) if unit else None},
++        "amount_role": meaning(role, text, quote), "amount_kind": meaning("estimated", text, quote),
++        "qualification": meaning(qualification, text, quote), "basis_status": meaning("supported", text, quote),
++        "reported_uncertainty": {"kind": meaning("unreported"), "statement": None}}
++
++
++def fixture(text=TEXT, first="5 mg/ml", second="7 mg/ml", n="5", d="7", nunit="mg/ml", dunit="mg/ml"):
++    args = {"source_ref": SOURCE, "source_kind": "synthetic_fixture", "experiment": None, "intended_change": None,
++        "comparison_kind": meaning("stock_target_mass_estimate_over_total_mass_estimate", text, first),
++        "pair_relationship": meaning("supported", text, first), "stock_relationship": meaning("same", text, first),
++        "quantities": {
++            "numerator": selected(text, first, n, nunit, "target_mass_estimate"),
++            "denominator": selected(text, second, d, dunit, "total_protein_mass_estimate")},
++        "covariance_source_ref": None}
++    sources = {SOURCE: {"artifact_ref": ARTIFACT, "content": text.encode()}}
++    def reader(reference, representation):
++        assert representation in ("original", "text")
++        return deepcopy(sources[reference])
++    return args, sources, reader
++
++
++def add_covariance(args, sources, reader, matrix=((.25, .1), (.1, .49))):
++    first = read_amount_inputs(args, read_source=reader)
++    quantities = first["quantities"]
++    data = {"version": "a105_amount_covariance_v1", "quantity_order": ["numerator", "denominator"],
++        "quantity_measurement_keys": [quantities[role]["measurement_key"] for role in quantities],
++        "quantity_physical_observation_keys": [quantities[role]["physical_observation_key"] for role in quantities],
++        "quantity_owner_keys": [quantities[role]["owner_key"] for role in quantities],
++        "quantity_units": [quantities[role]["unit"]["raw_unit"] for role in quantities],
++        "covariance": [list(row) for row in matrix], "origin": "synthetic", "variance_status": "estimated"}
++    sources[COV_SOURCE] = {"artifact_ref": "artifact_" + "2" * 24, "content": json.dumps(data).encode()}
++    args["covariance_source_ref"] = COV_SOURCE
++    return data
++
++
++def test_nonadjacent_prose_approximation_is_source_qualified_without_erasing_literal():
++    args, _, reader = fixture()
++    q = args["quantities"]["numerator"]
++    q["qualification"] = meaning("source_qualified_approximate", TEXT, "an approximate concentration of 5 mg/ml")
++    result = read_amount_inputs(args, read_source=reader)
++    assert result["quantities"]["numerator"]["number"]["raw_number"] == "5"
++    assert result["quantities"]["numerator"]["number"]["approximate"] is False
++    assert result["quantities"]["numerator"]["approximate"]
++    sheet = populate_amount_components(result["calculation_inputs"])
++    assert sheet["cells"]["amount_ratio"]["value"] == 5 / 7
++    assert sheet["cells"]["amount_ratio"]["approximate"]
++    assert result["calculation_inputs"]["covariance"] is None
++
++
++def test_actual_relationships_need_witnesses_but_no_public_subject_name_or_stock_name():
++    args, _, reader = fixture()
++    result = read_amount_inputs(args, read_source=reader)
++    assert result["quantities"]["numerator"]["meanings"]["subject"] is None
++    assert result["quantities"]["numerator"]["meanings"]["stock"] is None
++    assert populate_amount_components(result["calculation_inputs"])["cells"]["amount_ratio"]["value"] == 5 / 7
++    args["pair_relationship"]["witnesses"] = []
++    with pytest.raises(ExperimentalContractError, match="interpretation_witness_required"):
++        read_amount_inputs(args, read_source=reader)
++
++
++@pytest.mark.parametrize("prefix,bound,approximate", [("<", "lt", False), (">=", "ge", False),
++    ("approximately ", "none", True), ("about >", "gt", True), ("&lt;", "lt", False)])
++def test_lexical_bounds_or_approximation_survive_reported_point_selection(prefix, bound, approximate):
++    text = f"Stock target {prefix}5 mg/ml; total 7 mg/ml."
++    args, _, reader = fixture(text)
++    result = read_amount_inputs(args, read_source=reader)
++    row = result["quantities"]["numerator"]
++    assert row["bound"] == bound
++    assert row["approximate"] is approximate
++    assert row["qualification"]["value"] == "reported_point"
++    cell = populate_amount_components(result["calculation_inputs"])["cells"]["amount_ratio"]
++    assert (cell["value"] is None) == (bound != "none")
++
++
++@pytest.mark.parametrize("text,first,n,unit,error", [
++    ("Stock target 15 mg/ml; total 7 mg/ml.", "5 mg/ml", "5", "mg/ml", "partial_source_numeric_token"),
++    ("Stock target 1/5 mg/ml; total 7 mg/ml.", "5 mg/ml", "5", "mg/ml", "source_arithmetic_expression_unsupported"),
++    ("Stock target 5 × 10 mg/ml; total 7 mg/ml.", "5 × 10 mg/ml", "5", "mg/ml", "source_arithmetic_expression_unsupported"),
++    ("Stock target 5% mg/ml; total 7 mg/ml.", "5% mg/ml", "5", "mg/ml", "source_number_unit_role_mismatch"),
++    ("Stock target 5 ± 1 mg/ml; total 7 mg/ml.", "1 mg/ml", "1", "mg/ml", "uncertainty_is_not_rate_point"),
++    ("Stock target 5 mg/ml/min; total 7 mg/ml.", "5 mg/ml/min", "5", "mg/ml", "partial_source_amount_unit"),
++])
++def test_amount_adapter_keeps_released_lexical_guards_and_owns_dimensional_guards(text, first, n, unit, error):
++    args, _, reader = fixture(text, first=first, n=n, nunit=unit)
++    with pytest.raises(ExperimentalContractError, match=error):
++        read_amount_inputs(args, read_source=reader)
++
++
++@pytest.mark.parametrize("raw,number,unit,expected", [
++    ("5000 ug/ml", "5000", "ug/ml", 5), ("5 g/L", "5", "g/L", 5),
++    ("5000 mg/L", "5000", "mg/L", 5), ("5 mg ml−1", "5", "mg ml−1", 5),
++])
++def test_amount_specific_mass_scale_conversion(raw, number, unit, expected):
++    text = f"Stock target {raw}; total 7 mg/ml."
++    args, _, reader = fixture(text, first=raw, n=number, nunit=unit)
++    result = read_amount_inputs(args, read_source=reader)
++    assert result["calculation_inputs"]["quantities"]["numerator"]["value"] == expected
++    assert result["calculation_inputs"]["quantities"]["numerator"]["unit"] == "mg/ml"
++    row = result["quantities"]["numerator"]
++    assert row["source_origin"] == "synthetic"
++    assert row["origin"] == ("derived" if row["unit"]["multiplier"] != 1 else "synthetic")
++    assert populate_amount_components(result["calculation_inputs"])["cells"]["numerator_amount"]["origin"] == row["origin"]
++
++
++def test_amount_units_cannot_be_borrowed_from_a_differently_dimensioned_number():
++    text = "Stock target 5 uM; total 7 mg/ml."
++    args, _, reader = fixture(text, first="5 uM", nunit="mg/ml")
++    with pytest.raises(ExperimentalContractError, match="source_amount_unit_mismatch"):
++        read_amount_inputs(args, read_source=reader)
++
++
++def test_per_measurement_method_is_not_a_hidden_physical_denominator():
++    text = "Stock target 5 mg/ml; total 7 mg/ml per Bradford analysis."
++    args, _, reader = fixture(text)
++    assert read_amount_inputs(args, read_source=reader)["quantities"]["denominator"]["value"] == 7
++    text = "Stock target 5 mg/ml per min; total 7 mg/ml."
++    args, _, reader = fixture(text)
++    with pytest.raises(ExperimentalContractError, match="partial_source_amount_unit"):
++        read_amount_inputs(args, read_source=reader)
++
++
++def test_unknown_unit_retains_raw_number_and_other_amount_without_fabricating_conversion():
++    text = "Stock target 5 arbitrary; total 7 mg/ml."
++    args, _, reader = fixture(text, first="5 arbitrary", nunit="arbitrary")
++    result = read_amount_inputs(args, read_source=reader)
++    assert result["quantities"]["numerator"]["number"]["value"] == 5
++    assert result["quantities"]["numerator"]["value"] is None
++    cells = populate_amount_components(result["calculation_inputs"])["cells"]
++    assert cells["denominator_amount"]["value"] == 7
++    assert cells["numerator_amount"]["unavailable_reason"] == "unsupported_source_amount_unit"
++
++
++def test_unknown_unit_preserves_known_inequality_without_canonical_threshold():
++    from gene_annotation_episode.literature_amount_inputs import validate_amount_extraction
++    text = "Stock target <5 arbitrary; total 7 mg/ml."
++    args, _, reader = fixture(text, first="5 arbitrary", nunit="arbitrary")
++    result = read_amount_inputs(args, read_source=reader)
++    validate_amount_extraction(result)
++    row = result["quantities"]["numerator"]
++    assert row["bound"] == "lt" and row["status"] == "unavailable"
++    cell = populate_amount_components(result["calculation_inputs"])["cells"]["numerator_amount"]
++    assert cell["bound"] == "lt"
++    assert cell["value"] is cell["threshold"] is cell["unit"] is None
++
++
++def test_covariance_scales_both_axes_and_matches_number_and_scientific_owners():
++    text = "Stock target 5000 ug/ml; total 7 mg/ml."
++    args, sources, reader = fixture(text, first="5000 ug/ml", n="5000", nunit="ug/ml")
++    data = add_covariance(args, sources, reader, ((250000, 100), (100, .49)))
++    result = read_amount_inputs(args, read_source=reader)
++    assert result["calculation_inputs"]["covariance"] == [[.25, .1], [.1, .49]]
++    assert result["calculation_inputs"]["variance_status"] == "estimated"
++    assert result["source_refs"] == [SOURCE, COV_SOURCE]
++    cells = populate_amount_components(result["calculation_inputs"])["cells"]
++    assert cells["amount_difference_variance"]["value"] == pytest.approx(.54)
++    assert cells["reciprocal_amount_ratio_variance"]["value"] == pytest.approx(.028)
++    # Same numeric token with a changed source-subject assertion is a different
++    # scientific owner; it cannot inherit another quantity's covariance.
++    args["quantities"]["numerator"]["subject"] = witness(text, "target")
++    with pytest.raises(ExperimentalContractError, match="amount_covariance_owner_or_unit_mismatch"):
++        read_amount_inputs(args, read_source=reader)
++
++
++@pytest.mark.parametrize("field", ["quantity_order", "quantity_measurement_keys", "quantity_physical_observation_keys",
++    "quantity_owner_keys", "quantity_units"])
++def test_covariance_order_unit_and_physical_owner_mismatches_are_rejected(field):
++    args, sources, reader = fixture()
++    data = add_covariance(args, sources, reader)
++    data[field][0] = "wrong"
++    sources[COV_SOURCE]["content"] = json.dumps(data).encode()
++    with pytest.raises(ExperimentalContractError, match="amount_covariance_owner_or_unit_mismatch"):
++        read_amount_inputs(args, read_source=reader)
++
++
++def test_original_and_text_alias_of_same_artifact_have_one_source_token_identity():
++    args, _, reader = fixture()
++    args["quantities"]["denominator"] = deepcopy(args["quantities"]["numerator"])
++    args["quantities"]["denominator"]["measurement"]["number"]["witness"]["representation"] = "text"
++    result = read_amount_inputs(args, read_source=reader)
++    rows = result["quantities"]
++    assert rows["numerator"]["measurement_key"] == rows["denominator"]["measurement_key"]
++    assert populate_amount_components(result["calculation_inputs"])["cells"]["amount_ratio"]["unavailable_reason"] == "reused_source_observation"
++
++
++def test_structural_html_cells_bound_lexical_context_while_inline_tags_do_not():
++    text = "<table><tr><td>5</td><td>target</td><td>7</td></tr></table><p>mg/ml</p>"
++    args, _, reader = fixture(text, first="5", second="7", nunit="mg/ml", dunit="mg/ml")
++    result = read_amount_inputs(args, read_source=reader)
++    assert result["quantities"]["numerator"]["value"] == 5
++    text = "<p>target 1<i>5</i> mg/ml; total 7 mg/ml.</p>"
++    args, _, reader = fixture(text, first="5</i> mg/ml")
++    with pytest.raises(ExperimentalContractError, match="partial_source_numeric_token"):
++        read_amount_inputs(args, read_source=reader)
+--- pin024/tests/test_literature_amount_storage.py
++++ current027/tests/test_literature_amount_storage.py
+@@ -0,0 +1,170 @@
++"""Synthetic selected amount persistence and exact saved-subset return tests."""
++from copy import deepcopy
++from dataclasses import replace
++import json
++
++import pytest
++
++from gene_annotation_episode.communication import plain, validate_form
++from gene_annotation_episode.domain import ContractError, canonical, obj, validate_schema
++from gene_annotation_episode.episode_bindings import BindingContext
++from gene_annotation_episode.literature_amount_inputs import validate_amount_extraction, validate_amount_selection
++from gene_annotation_episode.literature_amount_storage import LiteratureAmountRepository, amount_cells_schema
++from gene_annotation_episode.state import Store
++from test_literature_amount_inputs import fixture, SOURCE, TEXT
++
++
++def setup(path, *, text=TEXT, arguments=None):
++    store = Store(path)
++    store.create_problem(raw_sequence="ATGGCT", molecule="dna")
++    artifact = store.artifact(text, "text/plain")
++    source = store.put("source", {"provider": "synthetic_amount_fixture", "accession": None, "uri": None,
++        "artifact_ref": artifact, "text_ref": artifact, "request_ref": None,
++        "version": None, "retrieved_at": None}, origin="caller")["id"]
++    args = deepcopy(arguments) if arguments is not None else fixture()[0]
++    def replace_source(value):
++        if isinstance(value, dict):
++            return {key: replace_source(child) for key, child in value.items()}
++        if isinstance(value, list):
++            return [replace_source(child) for child in value]
++        return source if value == SOURCE else value
++    args = replace_source(args)
++    context = BindingContext("amount-run", "amount-child", "literature", (("literature", "case"),),
++        store.validate_scope(), {"version": "literature_assignment_v1", "question_context_refs": [],
++            "source_refs": [source]}, {}, [source])
++    return store, context, args
++
++
++def test_selected_saved_amounts_have_closed_semantic_projection_and_only_requested_numbers(tmp_path):
++    store, context, args = setup(tmp_path)
++    try:
++        repo = LiteratureAmountRepository(store, context.run_id)
++        outcome = repo.populate(context, args, "selected")
++        assert outcome["status"] == "completed"
++        ref = outcome["result"]["sheet_ref"]
++        saved = repo.read(ref)
++        validate_amount_extraction(saved["extraction"])
++        validate_amount_selection(args, saved["extraction"])
++        projected = repo.project_cells([ref], permitted_record_refs=outcome["record_refs"],
++            components=["amount_ratio", "conditional_mass_denominator_factor"])
++        validate_schema(projected, amount_cells_schema())
++        form = obj({"amounts": amount_cells_schema()})
++        validate_form({"amounts": projected}, form,
++            lambda reference, namespace: store.reference_subset([reference], plain(context.scope)))
++        assert [row["value"] for row in projected] == [5 / 7, 1.4]
++        assert projected[0]["comparison_kind"] == "stock_target_mass_estimate_over_total_mass_estimate"
++        assert projected[0]["numerator"]["amount_role"] == "target_mass_estimate"
++        assert projected[0]["denominator"]["amount_role"] == "total_protein_mass_estimate"
++        assert projected[0]["numerator"]["subject_ref"] is None
++        assert "value" not in projected[0]["numerator"]
++        assert len(projected[0]["input_measurement_refs"]) == 2
++        assert projected[0]["variance_status"] == "unknown"
++        assert all(row["mass_factor_applied_to_rate"] is False for row in projected)
++        assert len(saved["sheet"]["cells"]) == 12
++        assert not store.list("observation") and not store.list("assessment")
++    finally:
++        store.close()
++
++
++@pytest.mark.parametrize("mutation", [
++    lambda x: x.update(value=100), lambda x: x.update(unit="uM"),
++    lambda x: x.update(unavailable_reason="amount_basis_unknown"),
++    lambda x: x["numerator"].update(amount_role="nominal_molecule_amount"),
++    lambda x: x["denominator"].update(qualification="unknown"),
++    lambda x: x["numerator"].update(measurement_ref=None),
++])
++def test_typed_subset_rejects_changed_value_or_scientific_meaning(tmp_path, mutation):
++    store, context, args = setup(tmp_path)
++    try:
++        repo = LiteratureAmountRepository(store, context.run_id)
++        outcome = repo.populate(context, args, "selected")
++        refs = outcome["record_refs"]
++        rows = repo.project_cells([outcome["result"]["sheet_ref"]], permitted_record_refs=refs, components=["amount_ratio"])
++        mutation(rows[0])
++        with pytest.raises(ContractError, match="differs_from_saved_cells"):
++            repo.validate_returned_values(rows, permitted_record_refs=refs)
++    finally:
++        store.close()
++
++
++def test_saved_only_reconstruction_replay_and_exact_received_subset(tmp_path, monkeypatch):
++    store, context, args = setup(tmp_path)
++    repo = LiteratureAmountRepository(store, context.run_id)
++    outcome = repo.populate(context, args, "selected")
++    ref = outcome["result"]["sheet_ref"]
++    rows = repo.project_cells([ref], permitted_record_refs=outcome["record_refs"], components=["amount_ratio"])
++    parent = replace(context, episode_id="parent", role="annotation", path=(("annotation", "parent"),), assignment={})
++    repo.receive_cells(parent, rows, "delivery")
++    repo.receive_cells(parent, rows, "delivery")
++    source_artifact = store.get(args["source_ref"])["artifact_ref"]
++    store.close()
++    def forbidden(*args, **kwargs):
++        raise AssertionError("saved replay must not parse source or recalculate cells")
++    monkeypatch.setattr("gene_annotation_episode.literature_amount_storage.read_amount_inputs", forbidden)
++    monkeypatch.setattr("gene_annotation_episode.literature_amount_storage.populate_amount_components", forbidden)
++    with Store(tmp_path) as reopened:
++        original_get = reopened.get_artifact
++        def guarded(reference):
++            assert reference != source_artifact, "scientific source bytes must not be reopened"
++            return original_get(reference)
++        monkeypatch.setattr(reopened, "get_artifact", guarded)
++        repo = LiteratureAmountRepository(reopened, context.run_id)
++        assert repo.read(ref)["sheet"]["cells"]["amount_ratio"]["value"] == 5 / 7
++        assert repo.populate(context, args, "selected") == outcome
++        assert repo.received_cells(parent) == rows
++        assert len(repo.received_cells(parent)) == 1
++        with pytest.raises(ContractError, match="not_received"):
++            repo.populate(replace(context, received_record_refs=[]), args, "selected")
++        changed = deepcopy(args)
++        changed["pair_relationship"] = {"value": "unknown", "witnesses": []}
++        with pytest.raises(ContractError, match="operation_key_reused"):
++            repo.populate(context, changed, "selected")
++
++
++def test_missing_receipt_and_assigned_source_ancestry_are_not_global_access(tmp_path):
++    store, context, args = setup(tmp_path)
++    try:
++        repo = LiteratureAmountRepository(store, context.run_id)
++        with pytest.raises(ContractError, match="not_received"):
++            repo.populate(replace(context, received_record_refs=[]), args, "selected")
++        unrelated_artifact = store.artifact("Other paper", "text/plain")
++        other = store.put("source", {"provider": "synthetic_other", "accession": None, "uri": None,
++            "artifact_ref": unrelated_artifact, "text_ref": unrelated_artifact, "request_ref": None,
++            "version": None, "retrieved_at": None}, origin="caller")["id"]
++        page = replace(context, role="literature_page", path=(("literature_page", "page"),), assignment={"source_ref": other})
++        with pytest.raises(ContractError, match="outside_assigned_source"):
++            repo.populate(page, args, "outside")
++        assert store.db.execute("SELECT count(*) FROM literature_amount_operations").fetchone()[0] == 0
++    finally:
++        store.close()
++
++
++def test_copied_provider_label_cannot_manufacture_a_selected_amount_sheet(tmp_path):
++    store, context, args = setup(tmp_path)
++    try:
++        repo = LiteratureAmountRepository(store, context.run_id)
++        outcome = repo.populate(context, args, "selected")
++        row = store.get(outcome["result"]["sheet_ref"])
++        request = json.loads(store.get_artifact(row["request_ref"]))
++        request["operation_key"] = "never-selected"
++        fields = {field: row[field] for field in ("provider", "accession", "uri", "artifact_ref", "text_ref", "version", "retrieved_at", "parent_source_refs")}
++        fields["request_ref"] = store.artifact(canonical(request), "application/json")
++        fake = store.put("source", fields, origin="tool", scope=plain(context.scope))
++        with pytest.raises(ContractError, match="not_selected_output"):
++            repo.read(fake["id"])
++    finally:
++        store.close()
++
++
++@pytest.mark.parametrize("field,value", [("value", 20), ("measurement_key", "wrong"), ("owner_key", "wrong")])
++def test_saved_extraction_checks_source_token_scientific_owner_and_derived_associations(tmp_path, field, value):
++    store, context, args = setup(tmp_path)
++    try:
++        repo = LiteratureAmountRepository(store, context.run_id)
++        outcome = repo.populate(context, args, "selected")
++        extraction = repo.read(outcome["result"]["sheet_ref"])["extraction"]
++        extraction["quantities"]["numerator"][field] = value
++        with pytest.raises(ValueError, match="amount_saved_quantity_mismatch"):
++            validate_amount_extraction(extraction)
++    finally:
++        store.close()
+--- pin024/tests/test_literature_amount_integration.py
++++ current027/tests/test_literature_amount_integration.py
+@@ -0,0 +1,154 @@
++"""Controlled ordinary episode amount return mechanics; no model inference."""
++import asyncio
++from copy import deepcopy
++from dataclasses import replace
++from functools import partial
++import json
++from types import SimpleNamespace
++
++import pytest
++
++from gene_annotation_episode.communication import ReportBoundaryError, form_with_facts, plain
++from gene_annotation_episode.domain import obj
++from gene_annotation_episode.episode_services import WorkflowServices
++from gene_annotation_episode.episode_bindings import EpisodeBindingRegistry
++from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
++from gene_annotation_episode.literature_episodes import LiteratureEpisodes
++from gene_annotation_episode.literature_amount_prompt import AMOUNT_TASK
++from gene_annotation_episode.literature_amount_storage import amount_cells_schema
++from gene_annotation_episode.literature_experimental_prompt import render_literature_experimental_prompt
++from gene_annotation_episode.runtime import run_workflow
++from gene_annotation_episode.tools import ToolRegistry
++from test_literature_amount_storage import setup
++from test_literature_amount_inputs import TEXT, fixture, witness
++from test_runtime import FixtureController, ScriptedProvider
++
++
++COMPONENTS = ["amount_ratio", "conditional_mass_denominator_factor", "amount_ratio_variance"]
++FORM = obj({"requested_amounts": amount_cells_schema()})
++
++
++def binding_for(store, context):
++    host = SimpleNamespace(store=store, run_id=context.run_id, tools=ToolRegistry(store))
++    binding = LiteratureEpisodes(WorkflowServices(host), rate_population=True)
++    host.episode_bindings = EpisodeBindingRegistry((binding,))
++    return binding
++
++
++def test_c7_selected_amount_operation_exact_return_and_parent_subset(tmp_path):
++    store, context, args = setup(tmp_path)
++    try:
++        context = replace(context, assignment={**plain(context.assignment), "requested_amount_components": COMPONENTS})
++        binding = binding_for(store, context)
++        outcome = asyncio.run(binding.execute(context, "literature.amount.populate", args, "selected"))
++        assert outcome["status"] == "completed", outcome
++        current = replace(context, received_record_refs=(*context.received_record_refs, *outcome["record_refs"]))
++        facts = binding.facts(current, {"committed_record_refs": [outcome["result"]["sheet_ref"]]})
++        form = form_with_facts({}, FORM, facts)
++        binding.validate_report(current, form, FORM)
++        rows = form["requested_amounts"]
++        assert [row["component"] for row in rows] == COMPONENTS
++        assert rows[0]["value"] == 5 / 7 and rows[1]["value"] == 1.4 and rows[2]["value"] is None
++        wrong = deepcopy(form)
++        wrong["requested_amounts"][0]["numerator"]["amount_role"] = "unknown"
++        with pytest.raises(ReportBoundaryError, match="differs_from_saved"):
++            binding.validate_report(current, wrong, FORM)
++        parent = replace(current, role="annotation", episode_id="parent", path=(("annotation", "parent"),), assignment={})
++        binding.received_form_references(parent, form, FORM, "admitted")
++        assert binding.received_report_facts(parent)["literature_amount_cells"] == rows
++        assert len(binding.services.literature_amount_repository().read(outcome["result"]["sheet_ref"])["sheet"]["cells"]) == 12
++    finally:
++        store.close()
++
++
++def test_c7_unknown_unit_preserves_source_inequality_in_closed_parent_cell(tmp_path):
++    text = "Stock target <5 arbitrary; total 7 mg/ml."
++    arguments = fixture(text, first="5 arbitrary", nunit="arbitrary")[0]
++    store, context, args = setup(tmp_path, text=text, arguments=arguments)
++    try:
++        context = replace(context, assignment={**plain(context.assignment), "requested_amount_components": ["numerator_amount"]})
++        binding = binding_for(store, context)
++        outcome = asyncio.run(binding.execute(context, "literature.amount.populate", args, "known-bound-unknown-unit"))
++        assert outcome["status"] == "completed", outcome
++        current = replace(context, received_record_refs=(*context.received_record_refs, *outcome["record_refs"]))
++        form = form_with_facts({}, FORM, binding.facts(current, {"committed_record_refs": [outcome["result"]["sheet_ref"]]}))
++        binding.validate_report(current, form, FORM)
++        row, = form["requested_amounts"]
++        assert row["bound"] == "lt" and row["status"] == "unavailable"
++        assert row["value"] is row["threshold"] is row["unit"] is None
++        assert row["unavailable_reason"] == "unsupported_source_amount_unit"
++    finally:
++        store.close()
++
++
++@pytest.mark.parametrize("mode", ["requested_components", "ratio_only_unique_tokens", "numerator_requested_unique_tokens"])
++def test_controlled_child_selected_amounts_return_once_with_no_internal_observations(tmp_path, mode):
++    unique = mode != "requested_components"
++    numerator_requested = mode == "numerator_requested_unique_tokens"
++    n, d = (105.1234567, 207.7654321) if unique else (5, 7)
++    text = TEXT.replace("7 mg/ml", f"{d} mg/ml").replace("5 mg/ml", f"{n} mg/ml") if unique else TEXT
++    selected_args = fixture(text, first=f"{n} mg/ml", second=f"{d} mg/ml", n=str(n), d=str(d))[0] if unique else None
++    if unique:
++        for role, subject, method, number in (("numerator", "target", "band intensity", n),
++                ("denominator", "total protein", "Bradford analysis", d)):
++            selected_args["quantities"][role].update(subject=witness(text, subject), method=witness(text, method),
++                reported_basis=witness(text, f"{number} mg/ml"),
++                measurement_identity=witness(text, f"{subject} estimated by {method} at " +
++                    (f"an approximate concentration of {number} mg/ml" if role == "numerator" else f"{number} mg/ml")))
++    store, context, args = setup(tmp_path / "state", text=text, arguments=selected_args)
++    received, controllers = [], []
++    components = ["numerator_amount", "amount_ratio"] if numerator_requested else ["amount_ratio"] if unique else COMPONENTS
++    form_schema = obj({"requested_amounts": amount_cells_schema()})
++    assignment = {**plain(context.assignment), "requested_amount_components": components}
++    child = {"selection": {"kind": "episode_child", "role": "literature", "assignment": assignment,
++        "goal": "Compare the explicitly selected synthetic target/total stock estimates.",
++        "scope": plain(context.scope), "purpose": "Return only the declared amount components and their source meanings.",
++        "schema_json": json.dumps(form_schema), "initial_report_json": "{}"}, "report_update": {}}
++    work = {"selection": {"kind": "tool", "tool": "literature.amount.populate", "arguments": args}, "report_update": {}}
++    def receives(inputs):
++        form, = inputs["child_reports"]
++        assert [row["component"] for row in form["requested_amounts"]] == components
++        assert form["requested_amounts"][0]["value"] == (n if numerator_requested else n / d)
++        assert form["requested_amounts"][0]["numerator"]["amount_role"] == "target_mass_estimate"
++        assert form["requested_amounts"][0]["denominator"]["amount_role"] == "total_protein_mass_estimate"
++        received.append(form)
++        prompt = render_literature_experimental_prompt(inputs, "Evaluate the synthetic source comparison.")
++        task, steering = prompt.split("\n\nSTEERING\n")
++        assert AMOUNT_TASK not in task
++        assert "Admitted requested amount components" in steering
++        assert "target_mass_estimate" in steering and "total_protein_mass_estimate" in steering
++        if not unique:
++            assert "amount_covariance_unreported" in steering
++        else:
++            (tmp_path / "ratio_only_parent_prompt.txt").write_text(prompt)
++            assert (str(n) in steering) is numerator_requested
++            assert str(d) not in steering
++            assert "band intensity" in steering and "Bradford analysis" in steering
++            assert "target" in steering and "total protein" in steering
++        assert ("numerator_amount" in steering) is numerator_requested
++        commit = {field: [] for field in store.reasoning_schema()["required"]}
++        source = store.get(args["source_ref"])
++        commit["source_subjects"] = [{"alias": "synthetic_stock", "reference_type": "assay", "source_ref": args["source_ref"],
++            "label": "same unnamed stock", "anchor": {"source_ref": args["source_ref"], "artifact_ref": source["artifact_ref"],
++                "start": 0, "end": len(text.encode()), "quote": text}}]
++        return {"selection": {"kind": "reason", "commit": commit}, "report_update": {}}
++    def controller(path, initial):
++        result = FixtureController(str(path), initial, 2 if len(path) == 1 else 1)
++        controllers.append(result)
++        return result
++    try:
++        scorer = ScientificFindingProgress(FindingProgressPolicy(1))
++        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([child, work, receives]),
++            run_dir=tmp_path / "run", controller_factory=controller, project_credit=scorer,
++            initial_known_record_refs=list(context.received_record_refs),
++            episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True, reference_parent_sources=[args["source_ref"]]),),
++            binding_definitions={"credit": scorer.as_record()}))
++        assert len(received) == 1
++        assert summary["credit"] == 0
++        assert [row.scores for row in controllers] == [[0, 0], [0]]
++        assert store.db.execute("SELECT count(*) FROM runtime_observations").fetchone()[0] == 3
++        assert store.db.execute("SELECT count(*) FROM literature_amount_operations").fetchone()[0] == 1
++        assert len(store.db.execute("SELECT form FROM runtime_forms").fetchall()) == 1
++        assert not store.list("observation") and not store.list("assessment")
++    finally:
++        store.close()
+--- pin024/gene_annotation_episode/literature_episodes.py
++++ current027/gene_annotation_episode/literature_episodes.py
+@@ -127,6 +127,10 @@
+     result.append({"name": "literature.rate.source.populate",
+         "description": "Populate the existing source-rate comparison sheet directly from selected literal paper spans, without a prepared CSV/TSV or model-authored scientific numbers. Request its closed literature_rate_source_cells return projection, which preserves each arm's subject, construct, preparation and approximation; literature_rate_cells is the separate legacy table projection. Select source-backed endpoint/basis relationships and statistical assumptions; different constructs may be the intended comparison. Source-defined U/mg requires its endpoint-specific definition. Missing meanings, unsupported units and censored values retain partial inputs. Exact witnesses verify custody, not causal isolation, target correspondence or annotation credit.",
+         "input_schema": rate_source_population_schema()})
++    from .literature_amount_inputs import amount_arguments_schema
++    result.append({"name": "literature.amount.populate",
++        "description": "Populate A105 source amount components from exact reported numerical/unit spans and witnessed experimental meanings. Keep target/total same-stock mass-fraction estimates separate from nominal molar amounts between arms. Preserve both quantity roles, preparations, methods, bases, bounds, approximation and source-owned covariance. Ratios above one and missing relationships remain explicit; no active fraction, universal activity correction, target transfer or annotation credit is inferred. The conditional mass-denominator factor is retained without applying it to a saved rate.",
++        "input_schema": amount_arguments_schema()})
+     return result
+ 
+ 
+@@ -187,7 +191,8 @@
+                          "literature_partner_calculations.py", "literature_partner_inputs.py",
+                          "literature_partner_storage.py", "literature_partner_prompt.py",
+                          "literature_partner_source_fields.py", "literature_partner_native_inputs.py",
+-                         "literature_partner_defined_units.py"):
++                         "literature_partner_defined_units.py", "literature_amount_inputs.py",
++                         "literature_amount_calculations.py", "literature_amount_storage.py"):
+                 implementation += Path(__file__).with_name(name).read_bytes()
+         if self.reference_parent_sources is not None:
+             configuration["reference_parent_sources"] = list(self.reference_parent_sources)
+@@ -263,6 +268,9 @@
+             from .literature_partner_calculations import COMPONENTS as PARTNER_COMPONENTS
+             schema["properties"]["requested_partner_components"] = {
+                 "type": "array", "uniqueItems": True, "items": {"enum": list(PARTNER_COMPONENTS)}}
++            from .literature_amount_calculations import COMPONENTS as AMOUNT_COMPONENTS
++            schema["properties"]["requested_amount_components"] = {
++                "type": "array", "uniqueItems": True, "items": {"enum": list(AMOUNT_COMPONENTS)}}
+         return schema
+ 
+     def permitted_common_actions(self, context):
+@@ -458,7 +466,7 @@
+                     and "sheet_key" in assignment["selection"]):
+                 if arguments["sheet_key"] != assignment["selection"]["sheet_key"]:
+                     raise ContractError("literature_table_sheet_mismatch")
+-            if tool_name in {"literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate"}:
++            if tool_name in {"literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate"}:
+                 def sources(value):
+                     if isinstance(value, dict):
+                         for key, child in value.items():
+@@ -488,13 +496,14 @@
+                 "record_refs": [], "changed_record_refs": [], "result": None,
+                 "feedback": {"category": "arguments_or_reference", "code": str(error),
+                     **({"detail": error.detail} if error.detail else {})}}
+-        if tool_name in {"literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate"}:
++        if tool_name in {"literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate"}:
+             from .literature_experimental_contracts import ExperimentalContractError
+             try:
+                 repo = {"literature.rate.populate": self.services.literature_rate_repository,
+                         "literature.rate.source.populate": self.services.literature_rate_repository,
+                         "literature.quantity.populate": self.services.literature_quantity_repository,
+                         "literature.assay.populate": self.services.literature_assay_repository,
++                        "literature.amount.populate": self.services.literature_amount_repository,
+                         "literature.ratio.populate": self.services.literature_ratio_repository,
+                         "literature.binding.populate": self.services.literature_binding_repository,
+                         "literature.binding.model.populate": self.services.literature_binding_model_repository,
+@@ -547,6 +556,7 @@
+         from .literature_context_storage import context_cells_schema
+         from .literature_figure_storage import figure_cells_schema
+         from .literature_partner_storage import partner_cells_schema
++        from .literature_amount_storage import amount_cells_schema
+         return {"literature_rate_cells": {"type": "array", "meaning":
+             "Saved source-preparation rate cells with measured subject/experiment retained in the referenced sheet. Conditional statistics are not annotation probabilities or target-transfer scores; unavailable operands remain null with reasons.",
+             "report_schema": rate_cells_schema()},
+@@ -588,7 +598,10 @@
+                 "report_schema": figure_cells_schema()},
+             "literature_partner_cells": {"type": "array", "meaning":
+                 "Saved experimental partner-removal and addback components with actual molecule/partner identities, nonpartner-condition comparisons, normalization, physical observation identity and reported spread meanings. Native rates survive unavailable controlled comparisons. Bounds condition on supplied censor domains and exact reported means; they are not sampling confidence. Directed condition-specific dependence does not establish universal necessity, genomic presence, coexpression, target correspondence or annotation credit.",
+-                "report_schema": partner_cells_schema()}}
++                "report_schema": partner_cells_schema()},
++            "literature_amount_cells": {"type": "array", "meaning":
++                "Saved A105 source amount components with both quantities' actual roles, preparation/stock, method, basis, qualification and covariance ownership. Target/total mass-fraction estimates differ from nominal molar arm comparisons. Conditional denominator conversion is not applied to a rate; uncertainty and unknown relationships remain explicit, without target correspondence or annotation credit.",
++                "report_schema": amount_cells_schema()}}
+ 
+     def _population_routes(self):
+         from .literature_rate_storage import COMPONENTS, PROVIDER
+@@ -607,6 +620,7 @@
+         from .literature_context_storage import COMPONENTS as CONTEXT_COMPONENTS, PROVIDER as CONTEXT_PROVIDER
+         from .literature_figure_storage import COMPONENTS as FIGURE_COMPONENTS, PROVIDER as FIGURE_PROVIDER
+         from .literature_partner_storage import COMPONENTS as PARTNER_COMPONENTS, PROVIDER as PARTNER_PROVIDER
++        from .literature_amount_storage import COMPONENTS as AMOUNT_COMPONENTS, PROVIDER as AMOUNT_PROVIDER
+         return (("literature_rate_cells", "requested_rate_components", PROVIDER,
+                  COMPONENTS, self.services.literature_rate_repository),
+                 ("literature_rate_source_cells", "requested_rate_components", PROVIDER,
+@@ -634,7 +648,9 @@
+                 ("literature_figure_cells", "requested_figure_components", FIGURE_PROVIDER,
+                  FIGURE_COMPONENTS, self.services.literature_figure_repository),
+                 ("literature_partner_cells", "requested_partner_components", PARTNER_PROVIDER,
+-                 PARTNER_COMPONENTS, self.services.literature_partner_repository))
++                 PARTNER_COMPONENTS, self.services.literature_partner_repository),
++                ("literature_amount_cells", "requested_amount_components", AMOUNT_PROVIDER,
++                 AMOUNT_COMPONENTS, self.services.literature_amount_repository))
+ 
+     def _rate_facts(self, context, references):
+         result = {}
+--- pin024/gene_annotation_episode/episode_services.py
++++ current027/gene_annotation_episode/episode_services.py
+@@ -85,6 +85,14 @@
+             self._literature_assay_repository = LiteratureAssayRepository(
+                 self.workflow.store, self.workflow.run_id)
+         return self._literature_assay_repository
++
++    def literature_amount_repository(self):
++        """Access selected source amount components without choosing work."""
++        from .literature_amount_storage import LiteratureAmountRepository
++        if not hasattr(self, '_literature_amount_repository'):
++            self._literature_amount_repository = LiteratureAmountRepository(
++                self.workflow.store, self.workflow.run_id)
++        return self._literature_amount_repository
+ 
+     def literature_ratio_repository(self):
+         """Access retained relative-signal components without choosing work."""
+--- pin024/gene_annotation_episode/literature_experimental_prompt.py
++++ current027/gene_annotation_episode/literature_experimental_prompt.py
+@@ -67,7 +67,7 @@
+                 if key not in _TRACKING and not key.startswith("private_")
+                 and not key.endswith("_sha256")
+                 and not (key == "accession" and isinstance(child, str)
+-                    and child.startswith(("transport_curve_", "transport_quantity_", "native_rate_")))}
++                    and child.startswith(("transport_curve_", "transport_quantity_", "native_rate_", "amount_")))}
+     if isinstance(value, (list, tuple)):
+         return [_safe(child) for child in value]
+     return value
+@@ -146,14 +146,57 @@
+         *_references(state.get("current_report_update", {})),
+         *state.get("current_report_basis_refs", ()),
+     ]))
++    # Numerical operand references preserve host custody in an amount return;
++    # they do not request automatic exposure of the child's raw operand values.
++    # Only a requested individual amount authorizes that role's expansion.
++    hidden_amount_measurements = _unrequested_amount_measurements(state.get("child_reports", ()), records)
+     selected = {}
+     for reference in pending:
+-        if reference in selected or reference not in records:
++        if reference in selected or reference not in records or reference in hidden_amount_measurements:
+             continue
+         row = records[reference]
+         selected[reference] = _safe(row)
+         pending.extend(ref for ref in _references(row) if ref not in selected)
+     return list(selected.values())
++
++
++def _unrequested_amount_measurements(reports, records):
++    hidden, requested, associated = set(), set(), {}
++    for report in reports:
++        if not isinstance(report, Mapping):
++            continue
++        for rows in report.values():
++            if not isinstance(rows, (list, tuple)):
++                continue
++            for row in rows:
++                if not isinstance(row, Mapping) or row.get("evaluation_scope") != "source_amount_comparison":
++                    continue
++                for role in ("numerator", "denominator"):
++                    quantity = row.get(role)
++                    reference = quantity.get("measurement_ref") if isinstance(quantity, Mapping) else None
++                    if isinstance(reference, str):
++                        hidden.add(reference)
++                        associated.setdefault(reference, set()).update(ref for field, ref in quantity.items()
++                            if field.endswith("_ref") and isinstance(ref, str))
++                        if row.get("component") == role + "_amount":
++                            requested.add(reference)
++    hidden -= requested
++    result = set(hidden)
++    for measurement in hidden:
++        anchor = records.get(measurement, {}).get("anchor")
++        if not isinstance(anchor, Mapping):
++            continue
++        for reference in associated.get(measurement, ()):
++            candidate = records.get(reference, {}).get("anchor")
++            if (isinstance(candidate, Mapping)
++                    and all(candidate.get(key) == anchor.get(key) for key in ("source_ref", "artifact_ref"))
++                    and type(candidate.get("start")) is int and type(candidate.get("end")) is int
++                    and candidate["start"] <= anchor["start"] < anchor["end"] <= candidate["end"]):
++                # A broad source-basis/identity witness can expose the same raw
++                # operand too. Preserve its original host/typed reference, but
++                # do not auto-expand that witness into the receiving prompt.
++                result.add(reference)
++    return result
+ 
+ 
+ def _task(state, instructions):
+@@ -190,7 +233,7 @@
+     assignment = _pick(state.get("literature_assignment", {}), (
+         "question_context_refs", "source_refs", "prior_search_refs", "search_result_refs",
+         "source_ref", "representation", "artifact_ref", "page", "selection",
+-        "requested_rate_components", "requested_quantity_components", "requested_assay_components", "requested_ratio_components", "requested_binding_components", "requested_binding_model_components", "requested_transport_components", "requested_perturbation_components", "requested_structure_components", "requested_reaction_components", "requested_context_components", "requested_figure_components", "requested_partner_components", "constraints", "context"))
++        "requested_rate_components", "requested_quantity_components", "requested_assay_components", "requested_ratio_components", "requested_binding_components", "requested_binding_model_components", "requested_transport_components", "requested_perturbation_components", "requested_structure_components", "requested_reaction_components", "requested_context_components", "requested_figure_components", "requested_partner_components", "requested_amount_components", "constraints", "context"))
+     # Version labels identify host assignment schemas, not source science.
+     if isinstance(assignment.get("page"), Mapping):
+         assignment["page"] = {key: value for key, value in assignment["page"].items() if key != "version"}
+@@ -278,6 +321,7 @@
+             "partner_necessity", "comparison_checks", "arm_metadata"))))
+         _structure_definitions(parts, content)
+         _context_definitions(parts, content)
++        _amount_metadata(parts, content)
+     assay = content.get("assay_interpretation")
+     if isinstance(assay, Mapping):
+         rows = []
+@@ -313,6 +357,22 @@
+         f"insertion={insertion} alt={selector.get('alt_id')}" + (f" atoms={atoms}" if atoms else ""))
+ 
+ 
++def _amount_metadata(parts, content):
++    """Render requested amount meanings, not private numerical operands."""
++    quantities = content.get("quantity_metadata")
++    if not isinstance(quantities, Mapping):
++        return
++    _section(parts, "Source amount comparison meaning", _values(_pick(content, (
++        "comparison_kind", "pair_relationship", "stock_relationship", "variance_status",
++        "covariance_origin", "mass_factor_applied_to_rate"))))
++    _section(parts, "Numerator and denominator meanings", _table(("Quantity", "Amount role", "Amount basis",
++        "Basis relationship", "Qualification", "Approximate", "Subject", "Preparation", "Stock", "Method", "Reported basis", "Condition", "Uncertainty kind"), (
++            (role, row.get("amount_role"), row.get("amount_kind"), row.get("basis_status"), row.get("qualification"), row.get("approximate"),
++             row.get("subject_ref"), row.get("preparation_ref"), row.get("stock_ref"), row.get("method_ref"),
++             row.get("reported_basis_ref"), row.get("condition_ref"), row.get("reported_uncertainty_kind"))
++            for role, row in quantities.items())))
++
++
+ def _structure_definitions(parts, content):
+     """Render received scientific selectors/criteria, without coordinate dumps."""
+     geometry = content.get("geometry_definition")
+@@ -353,7 +413,7 @@
+ 
+ def _received_returns(parts, reports):
+     """Show received scientific definitions once alongside requested cells."""
+-    ordinary, grouped, reactions, contexts, figures, partners = [], {}, {}, {}, {}, {}
++    ordinary, grouped, reactions, contexts, figures, partners, amounts = [], {}, {}, {}, {}, {}, {}
+     for report in reports:
+         remainder = {}
+         if not isinstance(report, Mapping):
+@@ -386,6 +446,10 @@
+                     and "component" in row for row in value)):
+                 for row in value:
+                     partners.setdefault(row.get("sheet_ref"), []).append(row)
++            elif (isinstance(value, (list, tuple)) and value and all(isinstance(row, Mapping)
++                    and row.get("evaluation_scope") == "source_amount_comparison" and "component" in row for row in value)):
++                for row in value:
++                    amounts.setdefault(row.get("sheet_ref"), []).append(row)
+             else:
+                 remainder[name] = value
+         if remainder:
+@@ -455,6 +519,17 @@
+             "sheet_ref", "evidence_source_ref", "data_source_ref", "subject_ref", "partner_ref",
+             "experiment_ref", "endpoint_ref", "normalization_ref", "reference_condition_ref",
+             "omitted_condition_ref", "addback_condition_ref", "function_ref"))))
++    for sheet_ref, rows in amounts.items():
++        parts.extend(["", "Admitted requested amount components"])
++        first = rows[0]
++        scientific_units = {"mg2/ml2": "(mg/ml)^2", "uM2": "(uM)^2"}
++        cells = {row["component"]: {**_pick(row, ("value", "threshold", "bound", "status", "origin",
++            "unavailable_reason", "conditional_on", "approximate")),
++            "unit": scientific_units.get(row.get("unit"), row.get("unit"))} for row in rows}
++        content = {**_pick(first, ("comparison_kind", "pair_relationship", "stock_relationship",
++            "variance_status", "covariance_origin", "mass_factor_applied_to_rate")), "cells": cells,
++            "quantity_metadata": {role: first[role] for role in ("numerator", "denominator")}}
++        _source_result(parts, {"result": content}, "Admitted requested amount components")
+ 
+ 
+ def _steering(state, lookup_results):
+--- pin024/tests/test_literature_parent_population_information.py
++++ current027/tests/test_literature_parent_population_information.py
+@@ -55,6 +55,15 @@
+     return entry
+ 
+ 
++def amount_addition():
++    """The A105 amount component operation is additive to baseline and024."""
++    from gene_annotation_episode.literature_amount_inputs import amount_arguments_schema
++    entry, = [row for row in _population_catalog() if row["name"] == "literature.amount.populate"]
++    assert entry["input_schema"] == amount_arguments_schema()
++    assert "mass-fraction estimates" in entry["description"]
++    return entry
++
++
+ def enabled_parent(store, child, source):
+     services, _ = service_binding(store, child)
+     binding = LiteratureEpisodes(services, rate_population=True,
+@@ -78,7 +87,7 @@
+         services = binding.services
+         disabled = LiteratureEpisodes(services)
+         ordinary = disabled.catalog(context)
+-        expected = ordinary + baseline() + [native_addition()]
++        expected = ordinary + baseline() + [native_addition(), amount_addition()]
+         before = deepcopy(expected)
+         assert binding.catalog(context) == expected
+         # No schema aliasing between separate catalog construction calls.
+@@ -119,7 +128,7 @@
+         descriptor_info = information["reference_evidence_parent"]
+         assert descriptor_info["source_refs"] == [args["source_ref"]]
+         assert descriptor_info["source_custody"][0]["artifact_ref"] == store.get(args["source_ref"])["artifact_ref"]
+-        expected = [{key: row[key] for key in ("name", "description")} for row in [*baseline(), native_addition()]]
++        expected = [{key: row[key] for key in ("name", "description")} for row in [*baseline(), native_addition(), amount_addition()]]
+         assert descriptor_info["child_population_operations"] == expected
+         assert all(set(row) == {"name", "description"} for row in expected)
+         assert store.db.total_changes == rows_before
+@@ -282,7 +291,7 @@
+         def commission(inputs):
+             descriptor = inputs["reference_evidence_parent"]
+             assert descriptor["child_population_operations"] == [
+-                {key: row[key] for key in ("name", "description")} for row in [*baseline(), native_addition()]]
++                {key: row[key] for key in ("name", "description")} for row in [*baseline(), native_addition(), amount_addition()]]
+             assert not any(row["name"].startswith("literature.") for row in inputs["tools"])
+             assert inputs["child_reports"] == []
+             assert not store.list("observation") and not store.list("assessment")

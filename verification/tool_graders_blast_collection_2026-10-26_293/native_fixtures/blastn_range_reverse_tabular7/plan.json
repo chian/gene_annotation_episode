@@ -1,0 +1,154 @@
+{
+  "version": "native_blast_run_plan_v1",
+  "identity": {
+    "run_id": "verification294",
+    "episode_id": "explicit-example-selection",
+    "resource_id": "local",
+    "execution_id": "blastn_range_reverse_tabular7",
+    "attempt_id": "blastn_range_reverse_tabular7",
+    "operation_key": "selected:blastn_range_reverse_tabular7",
+    "requested_job_sha256": "ca32e7f1cbbf5a07ee41e7a6a4a2006c1a49633194a77d4639e15e14f2c6ddfb"
+  },
+  "requested_job": {
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastn",
+      "-task",
+      "blastn",
+      "-dust",
+      "no",
+      "-strand",
+      "plus",
+      "-query_loc",
+      "31-210",
+      "-subject_loc",
+      "31-240",
+      "-num_threads",
+      "1",
+      "-query",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_tabular7/query_sequence.fa",
+      "-subject",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_tabular7/subject_sequence.fa",
+      "-outfmt",
+      "7 qseqid sseqid qlen slen qstart qend sstart send qframe sframe length nident gaps mismatch score bitscore evalue qseq sseq btop",
+      "-out",
+      "report.tsv"
+    ],
+    "environment": {},
+    "native_blast": {
+      "version": "native_blast_job_v1",
+      "program": "blastn",
+      "mode": "pairwise",
+      "software": {
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastn",
+        "sha256": "33b64bc67d3149cee2459b2f7766b363323df632cf12c099546de00aea9698b5",
+        "engine_version": "2.17.0+"
+      },
+      "environment": {},
+      "operands": [
+        {
+          "role": "query_sequence",
+          "format": "fasta",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_tabular7/query_sequence.fa",
+          "sha256": "f77f6c9ccd0e5a026feb962e7fbb4233942b777168a072dff92707b8113e7bbb",
+          "size_bytes": 269,
+          "artifact_ref": null
+        },
+        {
+          "role": "subject_sequence",
+          "format": "fasta",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_tabular7/subject_sequence.fa",
+          "sha256": "856f8e9bf2cd337153db483fddb2b5c17011ff44f07694df73f47e736155d4d0",
+          "size_bytes": 271,
+          "artifact_ref": null
+        }
+      ],
+      "operand_bindings": [
+        {
+          "operand_role": "query_sequence",
+          "record_ordinal": 0,
+          "native_name": "query_blastn_range_reverse",
+          "native_accession": null,
+          "subject_ref": "query_subject",
+          "reference_ref": null
+        },
+        {
+          "operand_role": "subject_sequence",
+          "record_ordinal": 0,
+          "native_name": "subject_blastn_range_reverse",
+          "native_accession": null,
+          "subject_ref": null,
+          "reference_ref": "paired_reference"
+        }
+      ],
+      "options": [
+        "-task",
+        "blastn",
+        "-dust",
+        "no",
+        "-strand",
+        "plus",
+        "-query_loc",
+        "31-210",
+        "-subject_loc",
+        "31-240",
+        "-num_threads",
+        "1"
+      ],
+      "outputs": [
+        {
+          "role": "stdout",
+          "format": "text",
+          "relative_path": "stdout.txt",
+          "fields": null,
+          "delimiter": null
+        },
+        {
+          "role": "stderr",
+          "format": "text",
+          "relative_path": "stderr.txt",
+          "fields": null,
+          "delimiter": null
+        },
+        {
+          "role": "primary_report",
+          "format": "tabular7",
+          "relative_path": "report.tsv",
+          "fields": [
+            "qseqid",
+            "sseqid",
+            "qlen",
+            "slen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "qframe",
+            "sframe",
+            "length",
+            "nident",
+            "gaps",
+            "mismatch",
+            "score",
+            "bitscore",
+            "evalue",
+            "qseq",
+            "sseq",
+            "btop"
+          ],
+          "delimiter": "\t"
+        }
+      ],
+      "metadata": {
+        "engineering_example": "blastn_range_reverse_tabular7",
+        "input_kind": "synthetic_derivative_of_retained_public_sequence"
+      },
+      "grading_parameters": {}
+    }
+  },
+  "attempt_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_range_reverse_tabular7/attempt",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  }
+}

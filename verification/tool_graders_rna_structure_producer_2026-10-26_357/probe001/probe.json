@@ -1,0 +1,170 @@
+{
+  "python_executable": "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+  "python_version": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+  "RNA_version": "2.7.0",
+  "distribution_version": "2.7.0",
+  "module_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_structure_producer_2026-10-26_357/native-site/RNA/__init__.py",
+  "module_sha256": "3d136533fd55f2ca6bb4cbb7428004b5da2e79c8cee53aef76c6662624d91946",
+  "extension_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_rna_structure_producer_2026-10-26_357/native-site/RNA/_RNA.cpython-312-x86_64-linux-gnu.so",
+  "extension_sha256": "451e5ac69fba96b9d9a0640d1311b844962a1f97143d050446ebd459dfd0494d",
+  "INF": 10000000,
+  "settings": {
+    "alias": {
+      "type": "SwigPyObject",
+      "value": null
+    },
+    "backbone_length": {
+      "type": "float",
+      "value": 6.0
+    },
+    "backtrack": {
+      "type": "int",
+      "value": 1
+    },
+    "backtrack_type": {
+      "type": "str",
+      "value": "F"
+    },
+    "betaScale": {
+      "type": "float",
+      "value": 1.0
+    },
+    "circ": {
+      "type": "int",
+      "value": 0
+    },
+    "circ_alpha0": {
+      "type": "float",
+      "value": 0.0
+    },
+    "circ_penalty": {
+      "type": "int",
+      "value": 1
+    },
+    "compute_bpp": {
+      "type": "int",
+      "value": 1
+    },
+    "cv_fact": {
+      "type": "float",
+      "value": 1.0
+    },
+    "dangles": {
+      "type": "int",
+      "value": 2
+    },
+    "energy_set": {
+      "type": "int",
+      "value": 0
+    },
+    "gquad": {
+      "type": "int",
+      "value": 0
+    },
+    "helical_rise": {
+      "type": "float",
+      "value": 2.799999952316284
+    },
+    "logML": {
+      "type": "int",
+      "value": 0
+    },
+    "max_bp_span": {
+      "type": "int",
+      "value": -1
+    },
+    "min_loop_size": {
+      "type": "int",
+      "value": 3
+    },
+    "nc_fact": {
+      "type": "float",
+      "value": 1.0
+    },
+    "noGU": {
+      "type": "int",
+      "value": 0
+    },
+    "noGUclosure": {
+      "type": "int",
+      "value": 0
+    },
+    "noLP": {
+      "type": "int",
+      "value": 0
+    },
+    "nonstandards": {
+      "type": "str",
+      "value": ""
+    },
+    "oldAliEn": {
+      "type": "int",
+      "value": 0
+    },
+    "pair": {
+      "type": "list",
+      "value": null
+    },
+    "pf_smooth": {
+      "type": "int",
+      "value": 1
+    },
+    "ribo": {
+      "type": "int",
+      "value": 0
+    },
+    "rtype": {
+      "type": "list",
+      "value": null
+    },
+    "salt": {
+      "type": "float",
+      "value": 1.021
+    },
+    "saltDPXInit": {
+      "type": "int",
+      "value": 99999
+    },
+    "saltDPXInitFact": {
+      "type": "float",
+      "value": -45.32400131225586
+    },
+    "saltMLLower": {
+      "type": "int",
+      "value": 6
+    },
+    "saltMLUpper": {
+      "type": "int",
+      "value": 24
+    },
+    "sfact": {
+      "type": "float",
+      "value": 1.07
+    },
+    "special_hp": {
+      "type": "int",
+      "value": 1
+    },
+    "temperature": {
+      "type": "float",
+      "value": 37.0
+    },
+    "this": {
+      "type": "SwigPyObject",
+      "value": null
+    },
+    "uniq_ML": {
+      "type": "int",
+      "value": 0
+    },
+    "window_size": {
+      "type": "int",
+      "value": -1
+    }
+  },
+  "params_load_doc": "\n    params_load(std::string filename=\"\", unsigned int options=) -> int\n\n\n    Load energy parameters from a file.  \n\n    .. admonition:: SWIG Wrapper Notes\n\n        This function is available as overloaded function `params_load`(fname=\"\",\n        options=RNA.PARAMETER_FORMAT_DEFAULT). Here, the empty filename string indicates to load\n        default RNA parameters, i.e. this is equivalent to calling RNA.params_load_defaults(). See,\n        e.g.  :py:func:`RNA.fold_compound.params_load()` in the :doc:`/api_python`.  \n\n    Parameters\n    ----------\n    fname : const char\n        The path to the file containing the energy parameters  \n    options : unsigned int\n        File format bit-mask (usually RNA.PARAMETER_FORMAT_DEFAULT)  \n\n    Returns\n    -------\n    int  \n        Non-zero on success, 0 on failure  \n\n    See Also\n    --------\n    RNA.params_load_from_string(), RNA.params_save(), RNA.params_load_defaults(),\n    RNA.params_load_RNA_Turner2004(), RNA.params_load_RNA_Turner1999(),\n    RNA.params_load_RNA_Andronescu2007(), RNA.params_load_RNA_Langdon2018(),\n    RNA.params_load_RNA_misc_special_hairpins(), RNA.params_load_DNA_Mathews2004(),\n    RNA.params_load_DNA_Mathews1999()  \n\n    ",
+  "params_save_doc": "\n    params_save(std::string filename, unsigned int options=) -> int\n\n\n    Save energy parameters to a file.  \n\n    .. admonition:: SWIG Wrapper Notes\n\n        This function is available as overloaded function `params_save`(fname,\n        options=RNA.PARAMETER_FORMAT_DEFAULT). See, e.g.  :py:func:`RNA.params_save()` in the\n        :doc:`/api_python`.  \n\n    Parameters\n    ----------\n    fname : const char\n        A filename (path) for the file where the current energy parameters will be written to  \n    options : unsigned int\n        File format bit-mask (usually RNA.PARAMETER_FORMAT_DEFAULT)  \n\n    Returns\n    -------\n    int  \n        Non-zero on success, 0 on failure  \n\n    See Also\n    --------\n    RNA.params_load()  \n\n    ",
+  "turner_doc": "\n\n\n    Load Turner 2004 RNA energy parameter set.  \n\n    .. admonition:: SWIG Wrapper Notes\n\n        This function is available as function `params_load_RNA_Turner2004()`. See, e.g.\n        :py:func:`RNA.params_load_RNA_Turner2004()` in the :doc:`/api_python`.  \n\n    Returns\n    -------\n    int  \n        Non-zero on success, 0 on failure  \n\n    Warnings\n    --------\n    This function also resets the default geometric parameters as stored in RNA.md() to those of RNA.\n    Only subsequently initialized RNA.md() structures will be affected by this change.  \n\n    See Also\n    --------\n    RNA.params_load(), RNA.params_load_from_string(), RNA.params_save(), RNA.params_load_defaults(),\n    RNA.params_load_RNA_Turner1999(), RNA.params_load_RNA_Andronescu2007(),\n    RNA.params_load_RNA_Langdon2018(), RNA.params_load_RNA_misc_special_hairpins(),\n    RNA.params_load_DNA_Mathews2004(), RNA.params_load_DNA_Mathews1999()  \n\n    ",
+  "mfe_doc": "\n        mfe() -> (structure, energy)\n\n\n        Compute minimum free energy and an appropriate secondary structure of an RNA sequence, or RNA\n        sequence alignment.  \n\n        Depending on the type of the provided RNA.fold_compound(), this function predicts the MFE for a\n        single sequence (or connected component of multiple sequences), or an averaged MFE for a sequence\n        alignment. If backtracking is activated, it also constructs the corresponding secondary structure,\n        or consensus structure. Therefore, the second parameter, *structure*, has to point to an allocated\n        block of memory with a size of at least :math:`\\mathrm{strlen}(\\mathrm{sequence})+1` to store the\n        backtracked MFE structure. (For consensus structures, this is the length of the alignment + 1. If\n        `NULL` is passed, no backtracking will be performed.  \n\n        .. admonition:: SWIG Wrapper Notes\n\n            This function is attached as method `mfe()` to objects of type `fold_compound`. The parameter\n            `structure` is returned along with the MFE und must not be provided. See e.g.\n            :py:meth:`RNA.fold_compound.mfe()` in the :doc:`/api_python`.  \n\n        Parameters\n        ----------\n        structure : char *\n            A pointer to the character array where the secondary structure in dot-bracket notation will be\n            written to (Maybe NULL)  \n\n        Returns\n        -------\n        float  \n            the minimum free energy (MFE) in kcal/mol  \n\n        See Also\n        --------\n        RNA.fold_compound(), RNA.fold_compound(), RNA.fold(), RNA.circfold(),\n        RNA.fold_compound_comparative(), RNA.alifold(), RNA.circalifold()  \n\n        Note\n        ----\n        This function is polymorphic. It accepts RNA.fold_compound() of type RNA.FC_TYPE_SINGLE, and\n        RNA.FC_TYPE_COMPARATIVE.  \n\n        ",
+  "eval_doc": "\n\n\n        Calculate the free energy of an already folded RNA.  \n\n        This function allows for energy evaluation of a given pair of structure and sequence (alignment).\n        Model details, energy parameters, and possibly soft constraints are used as provided via the\n        parameter 'fc'. The RNA.fold_compound() does not need to contain any DP matrices, but requires all\n        most basic init values as one would get from a call like this:  \n\n        .. admonition:: SWIG Wrapper Notes\n\n            This function is attached as method `eval_structure()` to objects of type `fold_compound`. See,\n            e.g.   :py:meth:`RNA.fold_compound.eval_structure()` in the :doc:`/api_python` .  \n\n        Parameters\n        ----------\n        structure : const char *\n            Secondary structure in dot-bracket notation  \n\n        Returns\n        -------\n        float  \n            The free energy of the input structure given the input sequence in kcal/mol  \n\n        See Also\n        --------\n        RNA.fold_compound.eval_structure_pt(), RNA.fold_compound.eval_structure_verbose(),\n        RNA.fold_compound.eval_structure_pt_verbose(),\n        RNA.fold_compound(), RNA.fold_compound_comparative(), RNA.fold_compound.eval_covar_structure()  \n\n        Note\n        ----\n        Accepts RNA.fold_compound() of type RNA.FC_TYPE_SINGLE and RNA.FC_TYPE_COMPARATIVE  \n\n        "
+}

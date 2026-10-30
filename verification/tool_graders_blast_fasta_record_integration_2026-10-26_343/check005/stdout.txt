@@ -1,0 +1,40 @@
+...F
+=================================== FAILURES ===================================
+_ test_native_actual_worker_record_quality_and_saved_iteration_reuse[psiblast] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check005/temporary/pytest/test_native_actual_worker_reco0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7e60cf9f0bc0>
+program = 'psiblast'
+
+    @pytest.mark.parametrize('program', ['psiblast', 'deltablast'])
+    def test_native_actual_worker_record_quality_and_saved_iteration_reuse(tmp_path, monkeypatch, program):
+>       request = native_request(tmp_path, program)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+../../../tests/test_blast_fasta_record_identity_integration.py:174: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../tests/test_blast_fasta_record_identity_integration.py:147: in native_request
+    request = nr.request_fixture(tmp_path, program, native_report=sf.encoded(document), query_bytes=b'>q\nACDEFGHI\n',
+../../../tests/test_native_blast_database_result_worker.py:240: in request_fixture
+    native.refresh_plan(path, plan)
+../../../tests/test_native_blast_database_driver.py:130: in refresh_plan
+    plan["requested_job"] = c.requested_job_from_native_blast_database(job)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_contracts.py:556: in requested_job_from_native_blast_database
+    job = validate_native_blast_database_job(job)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../gene_annotation_episode/native_blast_database_contracts.py:450: in validate_native_blast_database_job
+    _fail("metadata_descriptor_input_conflict")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'metadata_descriptor_input_conflict'
+
+    def _fail(code):
+>       raise ValueError(_PREFIX + code)
+E       ValueError: native_blast_database_metadata_descriptor_input_conflict
+
+../../../gene_annotation_episode/native_blast_database_contracts.py:108: ValueError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_fasta_record_identity_integration.py::test_native_actual_worker_record_quality_and_saved_iteration_reuse[psiblast]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 3 passed in 4.05s

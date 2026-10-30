@@ -1,0 +1,1906 @@
+--- /dev/null
++++ b/gene_annotation_episode/literature_ratio_source_inputs.py
+@@ -0,0 +1,543 @@
++"""Pure printed relative-signal source reader. Host authorizes actual custody.
++Visual literals remain episode interpretations, never verified OCR text.
++No Store/model/workflow/observation is performed here.
++"""
++from __future__ import annotations
++from copy import deepcopy
++import errno
++import hashlib
++from io import BytesIO
++import json
++import re
++import xml.etree.ElementTree as ET
++from PIL import Image
++from jsonschema import Draft202012Validator
++from .literature_experimental_contracts import ExperimentalContractError
++from .literature_prose_reader import _check_declarations, _direct_paragraph_text, _tag
++from .literature_ratio_reader import _PERCENT, _contains_literal, _sentence_end, _LIMIT_PREFIX, _RANGE_PREFIX
++
++
++def _build_schemas():
++    """Exact008 type graph, including association, origin and text-span corrections.
++
++    Kept local to avoid mutable public type fragments. No design-artifact import
++    is required at runtime; tests independently compare all three full schemas.
++    """
++    def obj(fields):
++        return {'type': 'object', 'properties': fields, 'required': list(fields), 'additionalProperties': False}
++
++
++    def arr(item, **extra):
++        return {'type': 'array', 'items': item, **extra}
++
++
++    def choice(*values):
++        return {'type': 'string', 'enum': list(values)}
++
++
++    def nullable(value):
++        return {'anyOf': [value, {'type': 'null'}]}
++
++
++    TEXT = {'type': 'string', 'minLength': 1}
++    REF = {'type': 'string', 'format': 'reference'}
++    NUMBER = {'type': ['number', 'null']}
++    BOOL = {'type': 'boolean'}
++    INDEX = {'type': 'integer', 'minimum': 0}
++    BOX = {'type': 'array', 'minItems': 4, 'maxItems': 4, 'items': INDEX}
++    READING = ('exact', 'ambiguous', 'unreadable', 'conflicting')
++    COMPONENTS = ('reported_ratio', 'difference_from_reference', 'log_reported_ratio',
++                  'calibrated_amount_ratio', 'amount_adjusted_effect', 'source_profile_log_ratio', 'source_signed_index')
++    REASONS = ('no_selected_representations', 'source_dependency_unavailable', 'unreadable_transcription',
++        'ambiguous_transcription', 'source_representation_conflict', 'incomplete_conflicting_representations',
++        'comparison_association_unresolved', 'signal_scale_unresolved', 'unsupported_expression',
++        'negative_reported_signal_unsupported', 'reported_limit_not_point', 'positive_denominator_not_established',
++        'zero_reported_ratio', 'numerical_model_range', 'jats_expression_capability_partial',
++        'calibrated_amount_conversion_unimplemented', 'functional_response_conversion_unimplemented',
++        'observation_model_unimplemented')
++    TW = obj({'kind': {'const': 'text'}, 'source_ref': REF, 'representation': choice('original', 'text'),
++              'start': INDEX, 'end': {'type': 'integer', 'minimum': 1}, 'quote': TEXT})
++    IW = obj({'kind': {'const': 'image'}, 'view_ref': REF, 'region': BOX, 'quote': TEXT})
++    WITNESS = {'oneOf': [TW, IW]}
++    FRAGMENT = obj({'view_ref': REF, 'region': BOX, 'raw_fragment': {'type': ['string', 'null']}})
++
++
++    def meaning(values=None):
++        value = {'type': ['string', 'null']}
++        if values:
++            value['enum'] = [*values, None]
++        return obj({'status': choice('known', 'unknown', 'conflicting'), 'value': value,
++                    'witnesses': arr(WITNESS)})
++
++
++    RELATION = obj({'value': choice('supported', 'unknown', 'conflicting'), 'witnesses': arr(WITNESS)})
++    COMPARISON_FIELDS = ('subject', 'variant', 'reference', 'organism', 'genotype', 'construct_variant',
++        'construct_reference', 'preparation_variant', 'preparation_reference', 'experiment', 'condition',
++        'endpoint', 'normalization')
++    comparison = {name: meaning() for name in COMPARISON_FIELDS}
++    comparison.update(signal_kind=meaning(('protein_band', 'transcript_signal', 'other_reported_signal')),
++        reference_role=meaning(('tagged_wt_complementation', 'endogenous_wt', 'other_reported_reference')),
++        arrangement=meaning(('single_preparation', 'replacement', 'coexistence', 'not_applicable')),
++        signal_use=meaning(('experimental_comparability', 'measured_endpoint', 'other')))
++    pair = obj({'numerator': IW, 'denominator': nullable(IW)})
++    visual_selection = obj({'reading_state': choice(*READING), 'candidates': arr(pair), 'fragments': arr(FRAGMENT),
++                            'signal_scale': RELATION})
++    jats_selection = obj({'source_ref': REF, 'section_id': TEXT, 'paragraph_index': INDEX,
++        'expected_subject': TEXT, 'variant': TEXT, 'reference_literal': TEXT})
++
++
++    def representation(kind, selection):
++        return obj({'representation_id': TEXT, 'kind': {'const': kind}, 'selection': selection,
++            'comparison_relation': RELATION, 'physical_measurement': meaning(), 'reference_measurement': meaning()})
++
++
++    REQUEST = obj({'version': {'const': 'relative_signal_source_selection_v2'}, 'source_ref': REF,
++        'comparison': obj(comparison), 'representations': arr({'oneOf': [representation('jats_percent', jats_selection),
++            *[representation(kind, visual_selection) for kind in ('visual_ratio', 'visual_percent', 'visual_signal_pair')]]})})
++    RATIONAL = obj({'numerator': {'type': 'string', 'pattern': '^-?[0-9]+$'},
++                    'denominator': {'type': 'string', 'pattern': '^[1-9][0-9]*$'}})
++    DOMAIN = obj({'lower': NUMBER, 'lower_infinite': BOOL, 'lower_closed': BOOL,
++                  'upper': NUMBER, 'upper_infinite': BOOL, 'upper_closed': BOOL,
++                  'meaning': {'const': 'reported_estimate_domain'}})
++    JATS_LOCATOR = obj({'kind': {'const': 'jats'}, 'source_ref': REF, 'artifact_ref': REF,
++        'section_id': TEXT, 'paragraph_index': INDEX, 'paragraph_text': TEXT, 'expression': TEXT,
++        'expression_start': INDEX, 'expression_end': {'type': 'integer', 'minimum': 1}})
++    IMAGE_LOCATOR = obj({'kind': {'const': 'image'}, 'view_ref': REF, 'source_ref': REF, 'artifact_ref': REF,
++        'original_source_ref': REF, 'original_artifact_ref': REF, 'frame': INDEX, 'region': BOX, 'quote': TEXT})
++    LOCATOR = {'oneOf': [JATS_LOCATOR, IMAGE_LOCATOR]}
++    DIAGNOSTIC = obj({'code': choice(*REASONS), 'field': TEXT, 'source_refs': arr(REF, uniqueItems=True)})
++    AUTH_WITNESS = obj({'selection': WITNESS, 'locator': nullable(LOCATOR),
++        'authentication': choice('exact_utf8_span', 'native_view_bytes_and_geometry', 'unavailable'),
++        'attribution': choice('literal_source_record', 'investigating_episode_interpretation'),
++        'diagnostics': arr(DIAGNOSTIC)})
++
++
++    def extracted_meaning(selected):
++        fields = deepcopy(selected['properties'])
++        fields['witnesses'] = arr(AUTH_WITNESS)
++        fields['interpretation_kind'] = {'const': 'episode_source_interpretation'}
++        return obj(fields)
++
++
++    view_fields = {'id': REF, 'record_type': {'const': 'image_view'}, 'origin': {'const': 'tool'},
++        'representation': {'const': 'selected_native_image_frame_v1'}, 'source_ref': REF, 'input_source_ref': REF,
++        'original_artifact_ref': REF, 'image_artifact_ref': REF, 'native_format': TEXT, 'native_initial_mode': TEXT,
++        'selected_mode': TEXT, 'display_mode': TEXT, 'frame': INDEX,
++        'frame_count': {'type': 'integer', 'minimum': 1}, 'width': {'type': 'integer', 'minimum': 1},
++        'height': {'type': 'integer', 'minimum': 1}, 'colour_conversion': choice('preserve', 'rgb'),
++        'software': {'const': 'Pillow'}, 'software_version': TEXT, 'geometric_transform': {'const': 'identity'},
++        'contrast_transform': {'const': 'identity'}, 'orientation': {'const': 'stored_pixel_axis_no_exif_rotation'}}
++    OWN_VIEW_RECEIPT = obj({'run_id': TEXT, 'episode_id': TEXT, 'decision_index': INDEX,
++        'operation_ref': REF, 'result_sha256': TEXT, 'view_ref': REF})
++    view = obj({'view_ref': REF, 'metadata': nullable(obj(view_fields)),
++        'original_sha256': {'type': ['string', 'null']}, 'display_sha256': {'type': ['string', 'null']},
++        'own_action_receipt': nullable(OWN_VIEW_RECEIPT), 'state': choice('available', 'unavailable'),
++        'diagnostics': arr(DIAGNOSTIC)})
++    parsed_number = obj({'literal': TEXT, 'relation': choice('point', 'lt', 'le', 'gt', 'ge', 'unavailable'),
++        'value': NUMBER, 'exact': nullable(RATIONAL), 'locator': nullable(LOCATOR), 'diagnostics': arr(DIAGNOSTIC)})
++    reading = obj({'candidate_index': INDEX, 'numerator': parsed_number, 'denominator': nullable(parsed_number),
++        'ratio': NUMBER, 'ratio_exact': nullable(RATIONAL), 'reported_domains': arr(DOMAIN),
++        'source_reading_key': {'type': ['string', 'null']}, 'diagnostics': arr(DIAGNOSTIC)})
++    row = obj({'representation_id': TEXT, 'kind': choice('jats_percent', 'visual_ratio', 'visual_percent', 'visual_signal_pair'),
++        'selection': {'oneOf': [jats_selection, visual_selection]},
++        'comparison_relation': extracted_meaning(RELATION),
++        'physical_measurement': extracted_meaning(meaning()), 'reference_measurement': extracted_meaning(meaning()),
++        'reading_state': choice(*READING), 'readings': arr(reading),
++        'fragments': arr(obj({'selection': FRAGMENT, 'locator': nullable(IMAGE_LOCATOR), 'diagnostics': arr(DIAGNOSTIC)})),
++        'origin': choice('reported', 'visual_transcription'), 'diagnostics': arr(DIAGNOSTIC)})
++    EXTRACTION = obj({'version': {'const': 'relative_signal_source_extraction_v2'}, 'selection': REQUEST,
++        'sources': arr(obj({'source_ref': REF, 'representation': choice('original', 'text'),
++            'artifact_ref': {'type': ['string', 'null'], 'format': 'reference'},
++            'byte_sha256': {'type': ['string', 'null']}, 'state': choice('available', 'unavailable'),
++            'diagnostics': arr(DIAGNOSTIC)})), 'views': arr(view),
++        'comparison': obj({name: extracted_meaning(value) for name, value in comparison.items()}),
++        'representations': arr(row), 'interpretation_attribution': {'const': 'investigating_episode_interpretation'}})
++    CELL = obj({'value': NUMBER, 'value_candidates': arr({'type': 'number'}, uniqueItems=True),
++        'reported_domains': arr(DOMAIN), 'unit': {'type': ['string', 'null'], 'enum': ['fraction', 'dimensionless', None]},
++        'status': choice('populated', 'conflicting', 'unavailable'), 'origin': choice('reported', 'visual_transcription', 'derived', 'proposed'),
++        'formula': TEXT, 'unavailable_reason': {'type': ['string', 'null'], 'enum': [*REASONS, None]},
++        'conditional_on': arr(choice('source_comparison_interpretation', 'nominated_printed_signal_pair'), uniqueItems=True)})
++    SHEET = obj({'version': {'const': 'relative_signal_sheet_v2'}, 'scope': {'const': 'reported_relative_signal'},
++        'cells': obj({name: CELL for name in COMPONENTS}), 'selected_roster_resolved': BOOL,
++        'point_candidate_set_complete': BOOL, 'known_source_conflict': BOOL,
++        'independent_preparation_count': {'type': 'null'}, 'annotation_credit': {'type': 'null'}})
++
++    IMAGE_LOCATOR['properties']['quote'] = {'type': ['string', 'null']}
++    RELATION['properties']['value'] = choice('supported', 'different', 'unknown', 'conflicting')
++    visual_selection['properties']['signal_scale'] = obj({
++        'value': choice('supported', 'different', 'unknown', 'conflicting', 'not_applicable'),
++        'witnesses': arr(WITNESS)})
++    row['properties']['comparison_relation'] = extracted_meaning(RELATION)
++    row['properties']['reading_state'] = choice(*READING, 'not_applicable')
++    row['properties']['parse_status'] = choice('parsed', 'partial', 'unavailable')
++    row['required'].append('parse_status')
++    reasons = (*REASONS, 'different_reported_quantities', 'signal_scales_differ')
++    DIAGNOSTIC['properties']['code'] = choice(*reasons)
++    CELL['properties']['unavailable_reason']['enum'] = [*reasons, None]
++    row['properties']['origin']['enum'].append('synthetic')
++    CELL['properties']['origin']['enum'].append('synthetic')
++    EXTRACTION['properties']['evidence_origin'] = choice('reported_source', 'synthetic_fixture')
++    EXTRACTION['required'].append('evidence_origin')
++    #008 adds truthful generic UTF8 spans ONLY to authenticated witness locators.
++    text_span = obj({'kind': {'const': 'text_span'}, 'source_ref': deepcopy(REF),
++        'artifact_ref': deepcopy(REF), 'representation': choice('original', 'text'),
++        'start': INDEX, 'end': {'type': 'integer', 'minimum': 1}, 'quote': TEXT})
++    visited = set()
++    def add_text_spans(node):
++        if isinstance(node, dict):
++            if id(node) in visited:
++                return
++            visited.add(id(node))
++            if set(node.get('properties', {})) == {'selection', 'locator', 'authentication', 'attribution', 'diagnostics'}:
++                # Break the constructor's shared LOCATOR alias:008 extends
++                # witness locators only, never numeric operand locators.
++                node['properties']['locator'] = deepcopy(node['properties']['locator'])
++                union = node['properties']['locator']['anyOf'][0]['oneOf']
++                union.append(deepcopy(text_span))
++            for child in node.values():
++                add_text_spans(child)
++        elif isinstance(node, list):
++            for child in node:
++                add_text_spans(child)
++    add_text_spans(EXTRACTION)
++    EXTRACTION['properties']['version']['const'] = 'relative_signal_source_extraction_v3'
++    return REQUEST, EXTRACTION, SHEET
++
++
++_REQUEST_SCHEMA, _EXTRACTION_SCHEMA, _SHEET_SCHEMA = _build_schemas()
++
++
++def _fail(code, field):
++    raise ExperimentalContractError(code, field)
++
++
++def _canonical(value):
++    return json.dumps(value, sort_keys=True, separators=(',', ':'), ensure_ascii=False, allow_nan=False)
++
++
++def _hash(content):
++    return hashlib.sha256(content).hexdigest()
++
++
++def _json(value, field):
++    import math
++    if isinstance(value, dict):
++        if any(type(k) is not str for k in value):
++            _fail('json_string_keys_required', field)
++        for k, v in value.items():
++            _json(v, field + '.' + k)
++    elif isinstance(value, list):
++        for i, v in enumerate(value):
++            _json(v, f'{field}[{i}]')
++    elif value is not None and type(value) not in (str, bool, int, float):
++        _fail('json_value_required', field)
++    elif type(value) in (int, float):
++        try:
++            finite = math.isfinite(value)
++        except OverflowError:
++            finite = False
++        if not finite:
++            _fail('finite_number_required', field)
++
++
++def _shape(value, schema, field):
++    _json(value, field)
++    error = next(Draft202012Validator(schema).iter_errors(value), None)
++    if error:
++        _fail('schema_mismatch', field + '.' + '.'.join(map(str, error.absolute_path)))
++    def numeric(v, node, path):
++        if isinstance(v, dict):
++            for k, item in v.items():
++                numeric(item, node.get('properties', {}).get(k, {}), path + '.' + k)
++        elif isinstance(v, list):
++            for i, item in enumerate(v):
++                numeric(item, node.get('items', {}), f'{path}[{i}]')
++        if node.get('type') == 'integer' and type(v) is not int:
++            _fail('integer_required', path)
++        for kind in ('oneOf', 'anyOf'):
++            for child in node.get(kind, []):
++                if Draft202012Validator(child).is_valid(v):
++                    numeric(v, child, path)
++                    break
++    numeric(value, schema, field)
++
++
++def _diagnostic(code, field, refs=()):
++    return {'code': code, 'field': field, 'source_refs': list(dict.fromkeys(refs))}
++
++
++def relative_signal_source_arguments_schema():
++    return deepcopy(_REQUEST_SCHEMA)
++
++
++def validate_relative_signal_source_selection(selection):
++    from .literature_ratio_source_validation import _validate_selection
++    _validate_selection(selection)
++    return deepcopy(selection)
++
++
++def validate_relative_signal_source_extraction(extraction):
++    from .literature_ratio_source_validation import _validate_extraction
++    _validate_extraction(extraction)
++    return deepcopy(extraction)
++
++
++def _dependencies(selection):
++    sources, views = [], []
++    def visit(value):
++        if isinstance(value, dict):
++            if value.get('kind') == 'text':
++                key = (value['source_ref'], value['representation'])
++                if key not in sources:
++                    sources.append(key)
++            if 'view_ref' in value and value['view_ref'] not in views:
++                views.append(value['view_ref'])
++            for child in value.values():
++                visit(child)
++        elif isinstance(value, list):
++            for child in value:
++                visit(child)
++    visit(selection)
++    for row in selection['representations']:
++        if row['kind'] == 'jats_percent':
++            key = (row['selection']['source_ref'], 'original')
++            if key not in sources:
++                sources.append(key)
++    return sources, views
++
++
++def _available_call(callback, *args):
++    try:
++        return callback(*args)
++    except OSError as error:
++        if error.errno not in (errno.ENOENT, errno.EIO, errno.ETIMEDOUT):
++            raise
++        return _UNAVAILABLE
++
++
++def _register(artifacts, ref, content):
++    if type(ref) is not str or not ref.strip() or type(content) is not bytes:
++        _fail('immutable_artifact_bytes_required', 'callback')
++    digest = _hash(content)
++    if ref in artifacts and artifacts[ref] != digest:
++        _fail('artifact_bytes_mismatch', ref)
++    artifacts[ref] = digest
++    return digest
++
++
++def _view_bytes(ref, raw, artifacts):
++    if type(raw) is not dict or set(raw) != {'metadata', 'original_bytes', 'display_bytes', 'own_action_receipt'}:
++        _fail('closed_fields_required', 'read_view')
++    schema = _EXTRACTION_SCHEMA['properties']['views']['items']['properties']
++    _shape(raw['metadata'], schema['metadata']['anyOf'][0], 'view.metadata')
++    _shape(raw['own_action_receipt'], schema['own_action_receipt']['anyOf'][0], 'view.receipt')
++    m, receipt = raw['metadata'], raw['own_action_receipt']
++    from .literature_ratio_source_validation import _view_binding
++    _view_binding(ref, m, receipt)
++    original_hash = _register(artifacts, m['original_artifact_ref'], raw['original_bytes'])
++    display_hash = _register(artifacts, m['image_artifact_ref'], raw['display_bytes'])
++    try:
++        with Image.open(BytesIO(raw['original_bytes'])) as original:
++            fmt, initial = original.format, original.mode
++            count = getattr(original, 'n_frames', 1)
++            if not 0 <= m['frame'] < count:
++                _fail('image_frame_outside_source', ref)
++            original.seek(m['frame'])
++            original.load()
++            if (fmt != m['native_format'] or initial != m['native_initial_mode'] or count != m['frame_count']
++                    or original.mode != m['selected_mode'] or original.size != (m['width'], m['height'])):
++                _fail('native_image_metadata_mismatch', ref)
++            selected = original.convert('RGB') if m['colour_conversion'] == 'rgb' else original
++            with Image.open(BytesIO(raw['display_bytes'])) as display:
++                display.load()
++                if (display.format != 'PNG' or display.mode != m['display_mode']
++                        or display.size != selected.size or getattr(display, 'n_frames', 1) != 1):
++                    _fail('display_image_metadata_mismatch', ref)
++                restored = display if display.mode == selected.mode else display.convert(selected.mode)
++                if restored.tobytes() != selected.tobytes() or (selected.mode == 'P'
++                        and selected.convert('RGBA').tobytes() != display.convert('RGBA').tobytes()):
++                    _fail('display_pixels_mismatch', ref)
++    except ExperimentalContractError:
++        raise
++    except (OSError, ValueError, SyntaxError) as error:
++        raise ExperimentalContractError('image_decode_failed', ref) from error
++    return {'view_ref': ref, 'metadata': deepcopy(m), 'original_sha256': original_hash,
++        'display_sha256': display_hash, 'own_action_receipt': deepcopy(receipt),
++        'state': 'available', 'diagnostics': []}
++
++
++def _image_locator(witness, view):
++    if view['state'] == 'unavailable':
++        return None
++    m, box = view['metadata'], witness['region']
++    if not (0 <= box[0] < box[2] <= m['width'] and 0 <= box[1] < box[3] <= m['height']):
++        _fail('image_region_out_of_bounds', 'region')
++    return {'kind': 'image', 'view_ref': witness['view_ref'], 'source_ref': m['source_ref'],
++        'artifact_ref': m['image_artifact_ref'], 'original_source_ref': m['input_source_ref'],
++        'original_artifact_ref': m['original_artifact_ref'], 'frame': m['frame'],
++        'region': deepcopy(box), 'quote': witness.get('quote', witness.get('raw_fragment'))}
++
++
++def _reading_key(numerator, denominator):
++    def identity(operand):
++        if operand is None or operand['locator'] is None:
++            return None
++        loc = operand['locator']
++        if loc['kind'] == 'image':
++            return {k: loc[k] for k in ('original_artifact_ref', 'frame', 'region', 'quote')}
++        return {k: loc[k] for k in ('artifact_ref', 'section_id', 'paragraph_index', 'expression_start', 'expression_end', 'expression')}
++    if numerator['locator'] is None or denominator is not None and denominator['locator'] is None:
++        return None
++    return _hash(_canonical({'numerator': identity(numerator), 'denominator': identity(denominator)}).encode('utf-8'))
++
++
++def read_relative_signal_source_inputs(selection, *, read_source, read_view, evidence_origin):
++    selection = validate_relative_signal_source_selection(selection)
++    if type(evidence_origin) is not str or evidence_origin not in ('reported_source', 'synthetic_fixture'):
++        _fail('evidence_origin_required', 'evidence_origin')
++    if not callable(read_source) or not callable(read_view):
++        _fail('source_callbacks_required', 'callbacks')
++    source_deps, view_deps = _dependencies(selection)
++    # Complete callback authorization/acquisition for ALL dependencies before
++    # helpers/decoding/parsing. None is not a callback availability signal.
++    source_raw, view_raw = [], []
++    for key in source_deps:
++        raw = _available_call(read_source, *key)
++        source_raw.append((key, raw))
++    for ref in view_deps:
++        view_raw.append((ref, _available_call(read_view, ref)))
++    artifacts, sources, views, contents = {}, [], [], {}
++    for (ref, representation), raw in source_raw:
++        row = {'source_ref': ref, 'representation': representation, 'artifact_ref': None,
++            'byte_sha256': None, 'state': 'unavailable', 'diagnostics': [_diagnostic('source_dependency_unavailable', 'source', [ref])]}
++        if raw is not _UNAVAILABLE:
++            if type(raw) is not dict or set(raw) != {'artifact_ref', 'content'}:
++                _fail('closed_fields_required', 'read_source')
++            digest = _register(artifacts, raw['artifact_ref'], raw['content'])
++            row.update(artifact_ref=raw['artifact_ref'], byte_sha256=digest, state='available', diagnostics=[])
++            contents[(ref, representation)] = raw['content']
++        sources.append(row)
++    for ref, raw in view_raw:
++        views.append(_view_bytes(ref, raw, artifacts) if raw is not _UNAVAILABLE else {
++            'view_ref': ref, 'metadata': None, 'original_sha256': None, 'display_sha256': None,
++            'own_action_receipt': None, 'state': 'unavailable',
++            'diagnostics': [_diagnostic('source_dependency_unavailable', 'view', [ref])]})
++    source_map = {(r['source_ref'], r['representation']): r for r in sources}
++    view_map = {r['view_ref']: r for r in views}
++    def witness(w):
++        refs = [w.get('source_ref', w.get('view_ref'))]
++        if w['kind'] == 'image':
++            locator = _image_locator(w, view_map[w['view_ref']])
++            authentication, attribution = 'native_view_bytes_and_geometry', 'investigating_episode_interpretation'
++        else:
++            row = source_map[(w['source_ref'], w['representation'])]
++            locator = None
++            if row['state'] == 'available':
++                content = contents[(w['source_ref'], w['representation'])]
++                try:
++                    actual = content[w['start']:w['end']].decode('utf-8')
++                except UnicodeDecodeError as error:
++                    raise ExperimentalContractError('source_span_utf8_boundary_required', 'witness') from error
++                if w['end'] > len(content) or actual != w['quote']:
++                    _fail('source_quote_mismatch', 'witness')
++                locator = {'kind': 'text_span', 'source_ref': w['source_ref'], 'artifact_ref': row['artifact_ref'],
++                    'representation': w['representation'], 'start': w['start'], 'end': w['end'], 'quote': w['quote']}
++            authentication, attribution = 'exact_utf8_span', 'literal_source_record'
++        return {'selection': deepcopy(w), 'locator': locator,
++            'authentication': authentication if locator is not None else 'unavailable', 'attribution': attribution,
++            'diagnostics': [] if locator is not None else [_diagnostic('source_dependency_unavailable', 'witness', refs)]}
++    def meaning(m):
++        return {**deepcopy(m), 'witnesses': [witness(w) for w in m['witnesses']], 'interpretation_kind': 'episode_source_interpretation'}
++    from .literature_ratio_source_validation import _operand, _ratio_reading
++    rows = []
++    for spec in selection['representations']:
++        selected, kind = spec['selection'], spec['kind']
++        row = {**{k: deepcopy(spec[k]) for k in ('representation_id', 'kind', 'selection')},
++            **{k: meaning(spec[k]) for k in ('comparison_relation', 'physical_measurement', 'reference_measurement')},
++            'reading_state': 'not_applicable' if kind == 'jats_percent' else selected['reading_state'],
++            'readings': [], 'fragments': [], 'origin': 'synthetic' if evidence_origin == 'synthetic_fixture' else
++            'reported' if kind == 'jats_percent' else 'visual_transcription', 'diagnostics': [], 'parse_status': 'partial'}
++        if kind == 'jats_percent':
++            source = source_map[(selected['source_ref'], 'original')]
++            if source['state'] == 'unavailable':
++                row['diagnostics'] = [_diagnostic('source_dependency_unavailable', 'jats', [selected['source_ref']])]
++            else:
++                # Finite capability failures remain distinct from image readability.
++                try:
++                    text, match = _jats_expression(contents[(selected['source_ref'], 'original')], selected)
++                    locator = {'kind': 'jats', 'source_ref': selected['source_ref'], 'artifact_ref': source['artifact_ref'],
++                        'section_id': selected['section_id'], 'paragraph_index': selected['paragraph_index'],
++                        'paragraph_text': text, 'expression': match.group(), 'expression_start': match.start(), 'expression_end': match.end()}
++                    operand = _operand(match['number'] + '%', locator, percent=True)
++                    row['readings'] = [_ratio_reading(0, operand, None, kind, None)]
++                except (UnicodeDecodeError, ET.ParseError, ValueError, IndexError):
++                    row['diagnostics'] = [_diagnostic('jats_expression_capability_partial', 'jats', [selected['source_ref']])]
++        else:
++            scale_auth = meaning(selected['signal_scale'])
++            for i, candidate in enumerate(selected['candidates']):
++                nw, dw = candidate['numerator'], candidate['denominator']
++                n = _operand(nw['quote'], _image_locator(nw, view_map[nw['view_ref']]), percent=kind == 'visual_percent')
++                d = _operand(dw['quote'], _image_locator(dw, view_map[dw['view_ref']])) if dw else None
++                row['readings'].append(_ratio_reading(i, n, d, kind, scale_auth))
++            for fragment in selected['fragments']:
++                loc = _image_locator(fragment, view_map[fragment['view_ref']])
++                row['fragments'].append({'selection': deepcopy(fragment), 'locator': loc,
++                    'diagnostics': [] if loc else [_diagnostic('source_dependency_unavailable', 'fragment', [fragment['view_ref']])]})
++            if row['reading_state'] == 'unreadable':
++                row['diagnostics'].append(_diagnostic('unreadable_transcription', 'reading_state'))
++            elif row['reading_state'] in ('ambiguous', 'conflicting'):
++                row['diagnostics'].append(_diagnostic('ambiguous_transcription' if row['reading_state'] == 'ambiguous' else 'source_representation_conflict', 'reading_state'))
++        row['parse_status'] = _parse_status(row)
++        rows.append(row)
++    output = {'version': 'relative_signal_source_extraction_v3', 'selection': selection,
++        'sources': sources, 'views': views, 'comparison': {k: meaning(v) for k, v in selection['comparison'].items()},
++        'representations': rows, 'interpretation_attribution': 'investigating_episode_interpretation', 'evidence_origin': evidence_origin}
++    return validate_relative_signal_source_extraction(output)
++
++
++def _jats_expression(content, selected):
++    xml = content.decode('utf-8')
++    _check_declarations(xml)
++    root = ET.fromstring(xml)
++    if _tag(root) != 'article':
++        raise ValueError('article')
++    sections = [e for e in root.iter() if e.get('id') == selected['section_id']]
++    if len(sections) != 1 or _tag(sections[0]) != 'sec':
++        raise ValueError('section')
++    paragraphs = [e for e in sections[0] if _tag(e) == 'p']
++    return _jats_matches(_direct_paragraph_text(paragraphs[selected['paragraph_index']]), selected)
++
++
++def _jats_matches(text, selected):
++    if not _contains_literal(text, selected['expected_subject']):
++        raise ValueError('subject')
++    matches = []
++    for match in _PERCENT.finditer(text):
++        if not _contains_literal(match['label'], selected['variant']):
++            continue
++        following = text[match.end():_sentence_end(text, match.end())]
++        refs = list(re.finditer(r'(?<!\w)of\s+' + re.escape(selected['reference_literal']) + r'(?!\w)', following))
++        first = re.search(r'(?<!\w)of\b', following)
++        if len(refs) != 1 or first is None or first.start() != refs[0].start():
++            continue
++        if (_LIMIT_PREFIX.search(text[:match.start()]) or _RANGE_PREFIX.search(text[:match.start()])
++                or re.search(r'±|\+\s*/\s*[−-]|\b(?:SD|SEM|CI)\b', following[:refs[0].start()])
++                or re.match(r'\s*(?:or\s+(?:less|more|greater|lower|higher)|at\s+(?:most|least))\b', following)):
++            raise ValueError('qualified expression')
++        matches.append(match)
++    if len(matches) != 1:
++        raise ValueError('one expression')
++    return text, matches[0]
++
++
++def _parse_status(row):
++    if any(r['numerator']['locator'] is None or r['denominator'] is not None and r['denominator']['locator'] is None for r in row['readings']):
++        return 'unavailable'
++    if not row['readings'] and row['diagnostics'] and row['diagnostics'][0]['code'] == 'source_dependency_unavailable':
++        return 'unavailable'
++    return 'parsed' if row['readings'] and all(r['reported_domains'] for r in row['readings']) else 'partial'
++
++
++_UNAVAILABLE = object()
++__all__ = ['relative_signal_source_arguments_schema', 'validate_relative_signal_source_selection',
++           'read_relative_signal_source_inputs', 'validate_relative_signal_source_extraction']
+--- /dev/null
++++ b/gene_annotation_episode/literature_ratio_source_calculations.py
+@@ -0,0 +1,49 @@
++"""Deterministic v2 printed-relative-signal numerical sheet population.
++
++Seven v1 component meanings are preserved. Only ratio, difference and positive
++log transforms are populated; amount/response/observation models remain explicit
++route limits. These dependent descriptions are not separate evidence credits.
++"""
++from .literature_ratio_source_inputs import validate_relative_signal_source_extraction, _shape, _SHEET_SCHEMA
++from .literature_ratio_source_validation import (
++    COMPONENTS, _facts, _FORMULAS, _LIMITS, _component_contract,
++    _transform, _domain_transform,
++)
++
++
++def _component_facts(e, facts, name):
++    point, exacts = facts['point'], facts['exacts']
++    reason = facts['reason']
++    unit, origin, conditional = _component_contract(e, name)
++    if name in _LIMITS:
++        return None, [], [], unit, 'unavailable', origin, _LIMITS[name], conditional
++    candidates = sorted({v for x in exacts if (v := _transform(x, name)) is not None})
++    value = _transform(point, name) if point is not None else None
++    if point is not None and value is None:
++        reason = 'zero_reported_ratio' if name == 'log_reported_ratio' and point == 0 else 'numerical_model_range'
++    domains = [domain for reading in facts['readings'] for domain in _domain_transform(reading, name)]
++    status = 'populated' if value is not None else 'conflicting' if facts['conflict'] and facts['resolved'] else 'unavailable'
++    if name == 'log_reported_ratio' and 0 in exacts:
++        if not facts['conflict']:
++            reason = 'zero_reported_ratio'
++        if value is None:
++            status = 'unavailable'
++    return value, candidates, domains, unit, status, origin, reason, conditional
++
++
++def populate_relative_signal_v2(extraction):
++    extraction = validate_relative_signal_source_extraction(extraction)
++    facts = _facts(extraction)
++    fields = ('value', 'value_candidates', 'reported_domains', 'unit', 'status', 'origin', 'unavailable_reason', 'conditional_on')
++    cells = {}
++    for name in COMPONENTS:
++        cells[name] = dict(zip(fields, _component_facts(extraction, facts, name)))
++        cells[name]['formula'] = _FORMULAS[name]
++    sheet = {'version': 'relative_signal_sheet_v2', 'scope': 'reported_relative_signal', 'cells': cells,
++        'selected_roster_resolved': facts['resolved'], 'point_candidate_set_complete': facts['complete'],
++        'known_source_conflict': facts['conflict'], 'independent_preparation_count': None, 'annotation_credit': None}
++    _shape(sheet, _SHEET_SCHEMA, 'sheet')
++    return sheet
++
++
++__all__ = ['populate_relative_signal_v2']
+--- /dev/null
++++ b/gene_annotation_episode/literature_ratio_source_validation.py
+@@ -0,0 +1,671 @@
++"""Authoritative detached v2 relationship checks and exact numerical primitives.
++
++Saved validation uses retained operands and recorded associations only: no source
++callbacks, XML reader, image decoder or population function is called. It checks
++arithmetic identities rather than constructing a replacement historical sheet.
++Native Store/provider/caller identity remains the repository's responsibility.
++"""
++from __future__ import annotations
++from copy import deepcopy
++from decimal import Decimal, InvalidOperation, localcontext
++from fractions import Fraction
++import math
++import re
++import sys
++
++from .literature_ratio_source_inputs import (
++    _REQUEST_SCHEMA, _EXTRACTION_SCHEMA, _SHEET_SCHEMA, _shape, _fail,
++    _canonical, _diagnostic, _dependencies, _reading_key, _image_locator, _parse_status,
++)
++
++COMPONENTS = tuple(_SHEET_SCHEMA['properties']['cells']['properties'])
++_NUM = re.compile(r'(?P<rel><=|>=|<|>|≤|≥)?\s*(?P<num>[+−-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+−-]?[0-9]+)?)')
++_HEX = re.compile(r'[a-f0-9]{64}')
++
++
++def _same(actual, expected, field):
++    if _canonical(actual) != _canonical(expected):
++        _fail('saved_relationship_mismatch', field)
++
++
++def _nonempty(value, field):
++    if type(value) is not str or not value.strip():
++        _fail('nonempty_token_required', field)
++
++
++def _walk_shape(value):
++    if isinstance(value, dict):
++        if 'region' in value:
++            box = value['region']
++            if any(type(x) is not int for x in box) or box[0] >= box[2] or box[1] >= box[3]:
++                _fail('nonempty_integer_image_region_required', 'region')
++        if value.get('kind') in ('text', 'text_span') and (value['start'] >= value['end'] or value['end'] - value['start'] != len(value['quote'].encode('utf-8'))):
++            _fail('nonempty_utf8_span_required', 'witness')
++        for k, v in value.items():
++            if type(v) is str and (k.endswith('_ref') or k == 'representation_id'):
++                _nonempty(v, k)
++            _walk_shape(v)
++    elif isinstance(value, list):
++        for v in value:
++            _walk_shape(v)
++
++
++def _meaning(m, field):
++    witnesses = m['witnesses']
++    state = m.get('status', m.get('value'))
++    count = len({_canonical(w) for w in witnesses})
++    if state in ('known', 'supported', 'different') and not count:
++        _fail('interpretation_witness_required', field)
++    if state == 'known':
++        _nonempty(m['value'], field)
++    if state in ('unknown', 'conflicting') and 'status' in m and m['value'] is not None:
++        _fail('unresolved_meaning_requires_null', field)
++    if state == 'conflicting' and count < 2:
++        _fail('distinct_conflict_witnesses_required', field)
++
++
++def _validate_selection(selection):
++    _shape(selection, _REQUEST_SCHEMA, 'selection')
++    _walk_shape(selection)
++    for key, m in selection['comparison'].items():
++        _meaning(m, 'comparison.' + key)
++    ids = set()
++    for row in selection['representations']:
++        if row['representation_id'] in ids:
++            _fail('duplicate_representation_id', 'representations')
++        ids.add(row['representation_id'])
++        for key in ('comparison_relation', 'physical_measurement', 'reference_measurement'):
++            _meaning(row[key], key)
++        if row['kind'] == 'jats_percent':
++            continue
++        s = row['selection']
++        _meaning(s['signal_scale'], 'signal_scale')
++        if row['kind'] == 'visual_signal_pair' and s['signal_scale']['value'] == 'not_applicable':
++            _fail('pair_scale_state_required', 'signal_scale')
++        count = len(s['candidates'])
++        if s['reading_state'] == 'exact' and (count != 1 or s['fragments']):
++            _fail('one_exact_candidate_required', 'candidates')
++        if s['reading_state'] == 'unreadable' and (count or not s['fragments']):
++            _fail('unreadable_fragment_required', 'fragments')
++        if s['reading_state'] in ('ambiguous', 'conflicting'):
++            signatures = {_canonical(c) for c in s['candidates']}
++            if len(signatures) < 2:
++                _fail('distinct_transcription_candidates_required', 'candidates')
++        for c in s['candidates']:
++            if (c['denominator'] is not None) != (row['kind'] == 'visual_signal_pair'):
++                _fail('denominator_kind_mismatch', 'candidate')
++
++
++def _view_binding(ref, m, receipt):
++    if m['id'] != ref or receipt['view_ref'] != ref:
++        _fail('view_receipt_mismatch', ref)
++    if not 0 <= m['frame'] < m['frame_count']:
++        _fail('image_frame_outside_source', ref)
++    for field in ('run_id', 'episode_id', 'operation_ref'):
++        _nonempty(receipt[field], 'receipt.' + field)
++    if not receipt['operation_ref'].startswith('operation_') or not _HEX.fullmatch(receipt['result_sha256']):
++        _fail('native_receipt_binding_required', ref)
++    for field in ('native_format', 'native_initial_mode', 'selected_mode', 'display_mode', 'software_version'):
++        _nonempty(m[field], 'metadata.' + field)
++    if m['colour_conversion'] == 'rgb' and m['display_mode'] != 'RGB':
++        _fail('rgb_display_mode_required', ref)
++
++
++def _fraction(value):
++    return Fraction(int(value['numerator']), int(value['denominator']))
++
++
++def _rational(value):
++    return {'numerator': str(value.numerator), 'denominator': str(value.denominator)}
++
++
++def _project(value):
++    try:
++        number = float(value)
++    except (OverflowError, ValueError):
++        return None
++    return number if math.isfinite(number) and (number != 0 or value == 0) else None
++
++
++def _outward(value, upper):
++    number = _project(value)
++    if number is None:
++        return None
++    actual = Fraction.from_float(number)
++    if upper and actual < value:
++        number = math.nextafter(number, math.inf)
++    elif not upper and actual > value:
++        number = math.nextafter(number, -math.inf)
++    return number if math.isfinite(number) else None
++
++
++def _domain(bounds):
++    lo, hi, lc, uc = bounds
++    lower = _outward(lo, False) if lo is not None else None
++    upper = _outward(hi, True) if hi is not None else None
++    if lo is not None and lower is None or hi is not None and upper is None:
++        return None
++    return {'lower': lower, 'lower_infinite': lo is None, 'lower_closed': lc if lo is not None else False,
++        'upper': upper, 'upper_infinite': hi is None, 'upper_closed': uc if hi is not None else False,
++        'meaning': 'reported_estimate_domain'}
++
++
++def _literal(literal, *, percent=False):
++    raw = literal.strip()
++    if percent:
++        if not raw.endswith('%'):
++            return 'unavailable', None, None, 'unsupported_expression'
++        raw = raw[:-1].strip()
++    match = _NUM.fullmatch(raw)
++    if not match:
++        return 'unavailable', None, None, 'unsupported_expression'
++    relation = {None: 'point', '<': 'lt', '<=': 'le', '≤': 'le', '>': 'gt', '>=': 'ge', '≥': 'ge'}[match['rel']]
++    try:
++        decimal = Decimal(match['num'].replace('−', '-'))
++        # Materializing an exponent with billions of digits is outside this
++        # finite export implementation. Use the interpreter's actual integer
++        # string limit (not an evidence/roster limit) before allocating powers.
++        digits = sys.get_int_max_str_digits() or 4300
++        projected_digits = len(decimal.as_tuple().digits) + abs(decimal.as_tuple().exponent)
++        if not decimal.is_zero() and projected_digits > digits:
++            return relation, None, None, 'numerical_model_range'
++        # Out-of-range literal remains retained even if Python cannot materialize
++        # an enormous exact integer. Ordinary overflow/underflow keeps rational.
++        numerator, denominator = decimal.as_integer_ratio()
++        exact = Fraction(numerator, denominator)
++        rational = _rational(exact)
++    except (InvalidOperation, OverflowError, ValueError):
++        return relation, None, None, 'numerical_model_range'
++    if exact < 0:
++        return relation, None, rational, 'negative_reported_signal_unsupported'
++    value = _project(exact)
++    if value is None:
++        return relation, None, rational, 'numerical_model_range'
++    if relation == 'lt' and exact == 0:
++        return relation, value, rational, 'unsupported_expression'
++    return relation, value, rational, None
++
++
++def _operand(literal, locator, *, percent=False):
++    relation, value, exact, reason = (_literal(literal, percent=percent) if locator is not None else
++        ('unavailable', None, None, 'source_dependency_unavailable'))
++    refs = [locator['source_ref']] if locator else []
++    return {'literal': literal, 'relation': relation, 'value': value, 'exact': exact, 'locator': deepcopy(locator),
++        'diagnostics': [] if reason is None else [_diagnostic(reason, 'operand', refs)]}
++
++
++def _bounds(operand, *, percent=False):
++    if operand['diagnostics'] or operand['exact'] is None:
++        return None
++    value = _fraction(operand['exact']) / (100 if percent else 1)
++    relation = operand['relation']
++    if relation == 'point':
++        return value, value, True, True
++    if relation in ('lt', 'le'):
++        return Fraction(0), value, True, relation == 'le'
++    if relation in ('gt', 'ge'):
++        return value, None, relation == 'ge', False
++    return None
++
++
++def _ratio_semantics(n, d, kind, scale):
++    """One declared candidate's arithmetic; also validates saved identities."""
++    reasons = [x['code'] for operand in (n, d) if operand for x in operand['diagnostics']]
++    if reasons:
++        return None, None, [], reasons[0]
++    a = _bounds(n, percent=kind in ('visual_percent', 'jats_percent'))
++    if a is None:
++        return None, None, [], 'unsupported_expression'
++    if d is not None:
++        if scale['value'] == 'different':
++            return None, None, [], 'signal_scales_differ'
++        if scale['value'] != 'supported' or any(w['authentication'] == 'unavailable' for w in scale['witnesses']):
++            return None, None, [], 'signal_scale_unresolved'
++        b = _bounds(d)
++        if b is None or b[0] < 0 or b[0] == 0 and b[2]:
++            return None, None, [], 'positive_denominator_not_established'
++        lo = a[0] / b[1] if b[1] is not None else Fraction(0)
++        hi = None if a[1] is None or b[0] == 0 and a[1] > 0 else a[1] / b[0] if b[0] else Fraction(0)
++        lc = a[2] and b[3] if b[1] is not None else a[0] == 0 and a[2]
++        uc = a[3] and b[2] if hi is not None else False
++        if a[0] == 0 and a[2]:
++            lc = True
++        if hi == 0 and a[1] == 0 and a[3]:
++            uc = True
++        bounds = lo, hi, lc, uc
++    else:
++        bounds = a
++    exact = None
++    if n['relation'] == 'point' and (d is None or d['relation'] == 'point'):
++        exact = _fraction(n['exact']) / (100 if kind in ('visual_percent', 'jats_percent') else 1)
++        if d is not None:
++            exact /= _fraction(d['exact'])
++    domain = _domain(bounds)
++    ratio = _project(exact) if exact is not None else None
++    if domain is None or exact is not None and ratio is None:
++        return None, _rational(exact) if exact is not None else None, [], 'numerical_model_range'
++    return ratio, _rational(exact) if exact is not None else None, [domain], None
++
++
++def _ratio_reading(index, n, d, kind, scale):
++    ratio, exact, domains, reason = _ratio_semantics(n, d, kind, scale)
++    return {'candidate_index': index, 'numerator': n, 'denominator': d, 'ratio': ratio,
++        'ratio_exact': exact, 'reported_domains': domains, 'source_reading_key': _reading_key(n, d),
++        'diagnostics': [] if reason is None else [_diagnostic(reason, 'reading')]}
++
++
++def _saved_witness(selected, saved, sources, views):
++    _same(saved['selection'], selected, 'witness.selection')
++    if selected['kind'] == 'image':
++        expected = _image_locator(selected, views[selected['view_ref']])
++        authentication, attribution = 'native_view_bytes_and_geometry', 'investigating_episode_interpretation'
++    else:
++        source = sources[(selected['source_ref'], selected['representation'])]
++        expected = None if source['state'] == 'unavailable' else {
++            'kind': 'text_span', 'source_ref': selected['source_ref'], 'artifact_ref': source['artifact_ref'],
++            'representation': selected['representation'], 'start': selected['start'],
++            'end': selected['end'], 'quote': selected['quote']}
++        authentication, attribution = 'exact_utf8_span', 'literal_source_record'
++    _same(saved['locator'], expected, 'witness.locator')
++    _same(saved['authentication'], authentication if expected is not None else 'unavailable', 'witness.authentication')
++    _same(saved['attribution'], attribution, 'witness.attribution')
++    refs = [selected.get('source_ref', selected.get('view_ref'))]
++    _same(saved['diagnostics'], [] if expected is not None else [_diagnostic('source_dependency_unavailable', 'witness', refs)], 'witness.diagnostics')
++
++
++def _saved_meaning(selected, saved, sources, views):
++    for field in selected:
++        if field != 'witnesses':
++            _same(saved[field], selected[field], 'meaning.' + field)
++    if len(selected['witnesses']) != len(saved['witnesses']):
++        _fail('witness_roster_mismatch', 'meaning')
++    for a, b in zip(selected['witnesses'], saved['witnesses']):
++        _saved_witness(a, b, sources, views)
++
++
++def _validate_extraction(e):
++    _shape(e, _EXTRACTION_SCHEMA, 'extraction')
++    _validate_selection(e['selection'])
++    _walk_shape(e)
++    deps, view_deps = _dependencies(e['selection'])
++    _same([(s['source_ref'], s['representation']) for s in e['sources']], deps, 'sources.roster')
++    _same([v['view_ref'] for v in e['views']], view_deps, 'views.roster')
++    sources = {(s['source_ref'], s['representation']): s for s in e['sources']}
++    views = {v['view_ref']: v for v in e['views']}
++    artifacts = {}
++    def digest(ref, value):
++        if not _HEX.fullmatch(value or ''):
++            _fail('sha256_required', 'dependency')
++        if ref in artifacts and artifacts[ref] != value:
++            _fail('artifact_hash_alias_mismatch', ref)
++        artifacts[ref] = value
++    for s in e['sources']:
++        available = s['state'] == 'available'
++        if available:
++            _nonempty(s['artifact_ref'], 'source.artifact_ref')
++            digest(s['artifact_ref'], s['byte_sha256'])
++        elif s['artifact_ref'] is not None or s['byte_sha256'] is not None:
++            _fail('unavailable_dependency_has_bytes', 'source')
++        _same(s['diagnostics'], [] if available else [_diagnostic('source_dependency_unavailable', 'source', [s['source_ref']])], 'source.diagnostics')
++    receipts = set()
++    for v in e['views']:
++        if v['state'] == 'available':
++            if v['metadata'] is None or v['own_action_receipt'] is None:
++                _fail('view_metadata_receipt_required', 'view')
++            _view_binding(v['view_ref'], v['metadata'], v['own_action_receipt'])
++            m = v['metadata']
++            digest(m['original_artifact_ref'], v['original_sha256'])
++            digest(m['image_artifact_ref'], v['display_sha256'])
++            receipts.add((v['own_action_receipt']['run_id'], v['own_action_receipt']['episode_id']))
++        elif any(v[k] is not None for k in ('metadata', 'own_action_receipt', 'original_sha256', 'display_sha256')):
++            _fail('unavailable_view_has_bytes', 'view')
++        _same(v['diagnostics'], [] if v['state'] == 'available' else [_diagnostic('source_dependency_unavailable', 'view', [v['view_ref']])], 'view.diagnostics')
++    if len(receipts) > 1:
++        _fail('view_receipt_owner_mismatch', 'views')
++    for name, meaning in e['selection']['comparison'].items():
++        _saved_meaning(meaning, e['comparison'][name], sources, views)
++    selected_rows = e['selection']['representations']
++    if len(e['representations']) != len(selected_rows):
++        _fail('representation_roster_mismatch', 'representations')
++    for spec, row in zip(selected_rows, e['representations']):
++        for key in ('representation_id', 'kind', 'selection'):
++            _same(row[key], spec[key], 'row.' + key)
++        for key in ('comparison_relation', 'physical_measurement', 'reference_measurement'):
++            _saved_meaning(spec[key], row[key], sources, views)
++        origin = ('synthetic' if e['evidence_origin'] == 'synthetic_fixture' else
++            'reported' if row['kind'] == 'jats_percent' else 'visual_transcription')
++        _same(row['origin'], origin, 'row.origin')
++        visual = row['kind'] != 'jats_percent'
++        selected = spec['selection']
++        _same(row['reading_state'], selected['reading_state'] if visual else 'not_applicable', 'row.reading_state')
++        scale = None
++        if visual:
++            # Scale witnesses have no separate extracted field in008; validate
++            # their authenticated saved dependencies/geometry without reacquisition.
++            scale = deepcopy(selected['signal_scale'])
++            scale['witnesses'] = []
++            for w in selected['signal_scale']['witnesses']:
++                available = views[w['view_ref']]['state'] == 'available' if w['kind'] == 'image' else sources[(w['source_ref'], w['representation'])]['state'] == 'available'
++                if w['kind'] == 'image':
++                    _image_locator(w, views[w['view_ref']])
++                scale['witnesses'].append({'authentication': 'available' if available else 'unavailable'})
++            if len(row['readings']) != len(selected['candidates']):
++                _fail('candidate_roster_mismatch', 'readings')
++            if len(row['fragments']) != len(selected['fragments']):
++                _fail('fragment_roster_mismatch', 'fragments')
++            for original, fragment in zip(selected['fragments'], row['fragments']):
++                _same(fragment['selection'], original, 'fragment.selection')
++                expected = _image_locator(original, views[original['view_ref']])
++                _same(fragment['locator'], expected, 'fragment.locator')
++                _same(fragment['diagnostics'], [] if expected else [_diagnostic('source_dependency_unavailable', 'fragment', [original['view_ref']])], 'fragment.diagnostics')
++            diagnostics = []
++            if row['reading_state'] in ('unreadable', 'ambiguous', 'conflicting'):
++                code = {'unreadable': 'unreadable_transcription', 'ambiguous': 'ambiguous_transcription', 'conflicting': 'source_representation_conflict'}[row['reading_state']]
++                diagnostics = [_diagnostic(code, 'reading_state')]
++            _same(row['diagnostics'], diagnostics, 'row.diagnostics')
++        else:
++            _same(row['fragments'], [], 'jats.fragments')
++            src = sources[(selected['source_ref'], 'original')]
++            if not row['readings']:
++                code = 'source_dependency_unavailable' if src['state'] == 'unavailable' else 'jats_expression_capability_partial'
++                _same(row['diagnostics'], [_diagnostic(code, 'jats', [selected['source_ref']])], 'jats.diagnostics')
++            elif len(row['readings']) != 1 or src['state'] != 'available' or row['diagnostics']:
++                _fail('jats_reading_mismatch', 'readings')
++        for i, reading in enumerate(row['readings']):
++            _same(reading['candidate_index'], i, 'candidate_index')
++            if visual:
++                candidate = selected['candidates'][i]
++                for name in ('numerator', 'denominator'):
++                    w, operand = candidate[name], reading[name]
++                    if w is None:
++                        _same(operand, None, 'reading.denominator')
++                    else:
++                        _same(operand['literal'], w['quote'], 'operand.literal')
++                        _same(operand['locator'], _image_locator(w, views[w['view_ref']]), 'operand.locator')
++            else:
++                _same(reading['denominator'], None, 'jats.denominator')
++                locator = reading['numerator']['locator']
++                if locator is None or locator['kind'] != 'jats':
++                    _fail('jats_locator_required', 'locator')
++                for key in ('source_ref', 'section_id', 'paragraph_index'):
++                    _same(locator[key], selected[key], 'jats.' + key)
++                _same(locator['artifact_ref'], src['artifact_ref'], 'jats.artifact_ref')
++                start, end = locator['expression_start'], locator['expression_end']
++                if not 0 <= start < end <= len(locator['paragraph_text']):
++                    _fail('jats_expression_bounds', 'locator')
++                _same(locator['paragraph_text'][start:end], locator['expression'], 'jats.expression')
++                # Saved-only finite grammar validation; no XML/parser call. Exact
++                # expression retains complete percentage and variant label.
++                m = re.fullmatch(r'(?P<number>[+−-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+−-]?[0-9]+)?)\s*%\s*\((?P<label>[^()]*)\)', locator['expression'])
++                if m is None or not re.search(r'(?<!\w)' + re.escape(selected['variant']) + r'(?!\w)', m['label']):
++                    _fail('jats_expression_literal_mismatch', 'locator')
++                _same(reading['numerator']['literal'], m['number'] + '%', 'jats.literal')
++                text = locator['paragraph_text']
++                if not re.search(r'(?<!\w)' + re.escape(selected['expected_subject']) + r'(?!\w)', text):
++                    _fail('jats_subject_mismatch', 'locator')
++                # Preserve denominator association in the retained paragraph.
++                after = text[end:]
++                first_of = re.search(r'(?<!\w)of\s+', after)
++                if first_of is None or not after[first_of.end():].startswith(selected['reference_literal']):
++                    _fail('jats_reference_mismatch', 'locator')
++            for name in ('numerator', 'denominator'):
++                operand = reading[name]
++                if operand is None:
++                    continue
++                percent = name == 'numerator' and row['kind'] in ('visual_percent', 'jats_percent')
++                relation, value, exact, reason = _literal(operand['literal'], percent=percent) if operand['locator'] is not None else ('unavailable', None, None, 'source_dependency_unavailable')
++                for key, expected in (('relation', relation), ('value', value), ('exact', exact)):
++                    _same(operand[key], expected, 'operand.' + key)
++                refs = [operand['locator']['source_ref']] if operand['locator'] else []
++                _same(operand['diagnostics'], [] if reason is None else [_diagnostic(reason, 'operand', refs)], 'operand.diagnostics')
++            ratio, exact, domains, reason = _ratio_semantics(reading['numerator'], reading['denominator'], row['kind'], scale)
++            for key, expected in (('ratio', ratio), ('ratio_exact', exact), ('reported_domains', domains),
++                    ('source_reading_key', _reading_key(reading['numerator'], reading['denominator'])),
++                    ('diagnostics', [] if reason is None else [_diagnostic(reason, 'reading')])):
++                _same(reading[key], expected, 'reading.' + key)
++        _same(row['parse_status'], _parse_status(row), 'row.parse_status')
++
++
++def _log_fraction(value):
++    if value <= 0:
++        return None
++    if value == 1:
++        return 0.0
++    # Decimal division with enough significant digits to retain distance from1
++    # avoids math.log(float(exact)) turning a nonunit rational into exact0.
++    with localcontext() as context:
++        context.prec = max(len(str(abs(value.numerator))), len(str(value.denominator))) + 50
++        result = (Decimal(value.numerator) / Decimal(value.denominator)).ln()
++        out = float(result)
++    return out if math.isfinite(out) and out != 0 else None
++
++
++def _domain_transform(reading, component):
++    """Transform a retained domain with outward finite projection."""
++    if not reading['reported_domains']:
++        return []
++    exact = _fraction(reading['ratio_exact']) if reading['ratio_exact'] else None
++    domain = reading['reported_domains'][0]
++    if exact is not None:
++        if component == 'reported_ratio':
++            return deepcopy(reading['reported_domains'])
++        if component == 'difference_from_reference':
++            projected = _domain((exact - 1, exact - 1, True, True))
++            return [projected] if projected else []
++        value = _log_fraction(exact)
++        if value is None:
++            return []
++        # The numerical log bound is conservatively rounded outward.
++        lo = value if exact == 1 else math.nextafter(value, -math.inf)
++        hi = value if exact == 1 else math.nextafter(value, math.inf)
++        if not math.isfinite(lo) or not math.isfinite(hi):
++            return []
++        return [{**domain, 'lower': lo, 'upper': hi, 'lower_infinite': False, 'upper_infinite': False,
++            'lower_closed': True, 'upper_closed': True}]
++    if component == 'reported_ratio':
++        return deepcopy(reading['reported_domains'])
++    out = deepcopy(domain)
++    if component == 'difference_from_reference':
++        for end, upper in (('lower', False), ('upper', True)):
++            if not domain[end + '_infinite']:
++                projected = _outward(Fraction.from_float(domain[end]) - 1, upper)
++                if projected is None:
++                    return []
++                out[end] = projected
++    else:
++        # Positive branch only: zero can be the lower limit, never a log point.
++        if not domain['upper_infinite'] and domain['upper'] <= 0:
++            return []
++        if domain['lower_infinite'] or domain['lower'] <= 0:
++            out.update(lower=None, lower_infinite=True, lower_closed=False)
++        else:
++            value = _log_fraction(Fraction.from_float(domain['lower']))
++            if value is None:
++                return []
++            out['lower'] = math.nextafter(value, -math.inf)
++        if not domain['upper_infinite']:
++            value = _log_fraction(Fraction.from_float(domain['upper']))
++            if value is None:
++                return []
++            out['upper'] = math.nextafter(value, math.inf)
++    return [out]
++
++
++def _association(row):
++    relation = row['comparison_relation']
++    if relation['value'] == 'supported' and any(w['authentication'] == 'unavailable' for w in relation['witnesses']):
++        return 'unknown'
++    return relation['value']
++
++
++def _facts(e):
++    """Saved roster semantics, not a replacement sheet or interpretation.
++
++    Shared by initial population and saved relationship checks so they cannot
++    disagree about selected completeness, linked source conflict or dedup aliases.
++    """
++    rows, readings, seen, reasons = e['representations'], [], set(), []
++    resolved, points, conflict = bool(rows), bool(rows), False
++    if not rows:
++        reasons.append('no_selected_representations')
++    exacts, certain = set(), set()
++    for row in rows:
++        association = _association(row)
++        if association != 'supported':
++            resolved = points = False
++            reasons.append('different_reported_quantities' if association == 'different' else 'comparison_association_unresolved')
++        state = row['reading_state']
++        if state not in ('exact', 'not_applicable'):
++            resolved = points = False
++            reasons.append({'unreadable': 'unreadable_transcription', 'ambiguous': 'ambiguous_transcription', 'conflicting': 'source_representation_conflict'}[state])
++        if association == 'supported' and state == 'conflicting':
++            conflict = True
++        if row['parse_status'] != 'parsed':
++            resolved = points = False
++            reasons.extend(d['code'] for d in row['diagnostics'])
++        if not row['readings']:
++            resolved = points = False
++        row_exacts = set()
++        for reading in row['readings']:
++            if not reading['reported_domains']:
++                resolved = points = False
++                reasons.extend(d['code'] for d in reading['diagnostics'])
++            if reading['ratio'] is None:
++                points = False
++                if reading['reported_domains']:
++                    reasons.append('reported_limit_not_point')
++            if association != 'supported':
++                continue
++            signature = (reading['source_reading_key'], _canonical(reading['ratio_exact']), _canonical(reading['reported_domains']))
++            if signature not in seen:
++                readings.append(reading)
++                seen.add(signature)
++            if reading['ratio_exact'] is not None and reading['ratio'] is not None:
++                exact = _fraction(reading['ratio_exact'])
++                exacts.add(exact)
++                row_exacts.add(exact)
++        if association == 'supported' and state in ('exact', 'not_applicable') and len(row_exacts) == 1:
++            certain.update(row_exacts)
++    conflict = conflict or len(certain) > 1
++    # Complete ambiguous alternatives remain incomplete as point interpretations.
++    full = resolved and points and len(exacts) == 1 and not conflict
++    reason = None if full else ('incomplete_conflicting_representations' if conflict and not resolved else
++        'source_representation_conflict' if conflict else next(iter(reasons), 'unsupported_expression'))
++    return {'resolved': resolved, 'complete': resolved and points, 'conflict': conflict,
++        'readings': readings, 'exacts': sorted(exacts), 'point': next(iter(exacts)) if full else None,
++        'reason': reason}
++
++
++_FORMULAS = {
++    'reported_ratio': 'printed_ratio; printed_percent/100; or printed_numerator/printed_reference',
++    'difference_from_reference': 'reported_ratio-1', 'log_reported_ratio': 'ln(reported_ratio), positive branch',
++    'calibrated_amount_ratio': 'applicable_calibrated_amount_response',
++    'amount_adjusted_effect': 'applicable_functional_response_at_matched_amount',
++    'source_profile_log_ratio': 'supported_joint_observation_model', 'source_signed_index': 'tanh(source_profile_log_ratio/2)',
++}
++_LIMITS = {'calibrated_amount_ratio': 'calibrated_amount_conversion_unimplemented',
++    'amount_adjusted_effect': 'functional_response_conversion_unimplemented',
++    'source_profile_log_ratio': 'observation_model_unimplemented', 'source_signed_index': 'observation_model_unimplemented'}
++
++
++def _component_contract(e, name):
++    unit = ('dimensionless' if name in ('log_reported_ratio', 'source_profile_log_ratio', 'source_signed_index')
++        else None if name == 'amount_adjusted_effect' else 'fraction')
++    origin = 'proposed' if name == 'source_signed_index' else 'derived'
++    if name == 'reported_ratio':
++        origins = {row['origin'] for row in e['representations']}
++        origin = next(iter(origins)) if len(origins) == 1 else 'derived'
++    conditional = [] if name in _LIMITS else ['source_comparison_interpretation']
++    if conditional and any(row['kind'] == 'visual_signal_pair' for row in e['representations']):
++        conditional.append('nominated_printed_signal_pair')
++    return unit, origin, conditional
++
++
++def _transform(exact, name):
++    if name == 'reported_ratio':
++        return _project(exact)
++    if name == 'difference_from_reference':
++        return _project(exact - 1)
++    return _log_fraction(exact)
++
++
++def _validate_cell(cell, e, facts, name):
++    """Check equations on saved operands; never construct a replacement cell."""
++    unit, origin, conditional = _component_contract(e, name)
++    for field, expected in (('unit', unit), ('origin', origin), ('conditional_on', conditional), ('formula', _FORMULAS[name])):
++        _same(cell[field], expected, 'cell.' + name + '.' + field)
++    if name in _LIMITS:
++        for field, expected in (('value', None), ('value_candidates', []), ('reported_domains', []),
++                ('status', 'unavailable'), ('unavailable_reason', _LIMITS[name])):
++            _same(cell[field], expected, 'cell.' + name + '.' + field)
++        return
++    # Each candidate is exactly a transform of at least one retained rational;
++    # each transform with a finite projection occurs once. Rounded equality
++    # cannot erase the exact source-conflict flag checked separately.
++    projected = {_transform(x, name) for x in facts['exacts']}
++    projected.discard(None)
++    if cell['value_candidates'] != sorted(projected):
++        _fail('candidate_transform_mismatch', 'cell.' + name)
++    point = facts['point']
++    expected_value = _transform(point, name) if point is not None else None
++    _same(cell['value'], expected_value, 'cell.' + name + '.value')
++    reason = facts['reason']
++    if point is not None and expected_value is None:
++        reason = 'zero_reported_ratio' if name == 'log_reported_ratio' and point == 0 else 'numerical_model_range'
++    status = 'populated' if cell['value'] is not None else 'conflicting' if facts['conflict'] and facts['resolved'] else 'unavailable'
++    if name == 'log_reported_ratio' and 0 in facts['exacts']:
++        if not facts['conflict']:
++            reason = 'zero_reported_ratio'
++        if cell['value'] is None:
++            status = 'unavailable'
++    _same(cell['unavailable_reason'], reason, 'cell.' + name + '.reason')
++    _same(cell['status'], status, 'cell.' + name + '.status')
++    cursor = 0
++    for reading in facts['readings']:
++        domains = _domain_transform(reading, name)
++        _same(cell['reported_domains'][cursor:cursor + len(domains)], domains, 'cell.' + name + '.domains')
++        cursor += len(domains)
++    if cursor != len(cell['reported_domains']):
++        _fail('domain_roster_mismatch', 'cell.' + name)
++
++
++def validate_relative_signal_saved(selection, extraction, sheet, saved_outcome):
++    """Validate detached saved relationships, with no original source access.
++
++    This does not authenticate actual provider/owner/request artifacts in Store.
++    Those actual record checks are required in the native repository separately.
++    """
++    _validate_selection(selection)
++    _validate_extraction(extraction)
++    _same(extraction['selection'], selection, 'selection')
++    _shape(sheet, _SHEET_SCHEMA, 'sheet')
++    facts = _facts(extraction)
++    for name, key in (('selected_roster_resolved', 'resolved'), ('point_candidate_set_complete', 'complete'), ('known_source_conflict', 'conflict')):
++        _same(sheet[name], facts[key], 'sheet.' + name)
++    for name in COMPONENTS:
++        _validate_cell(sheet['cells'][name], extraction, facts, name)
++    if type(saved_outcome) is not dict or set(saved_outcome) != {'status', 'operation_ref', 'record_refs', 'changed_record_refs', 'result', 'feedback'}:
++        _fail('closed_fields_required', 'saved_outcome')
++    _same(saved_outcome['status'], 'completed', 'outcome.status')
++    _same(saved_outcome['feedback'], None, 'outcome.feedback')
++    op = saved_outcome['operation_ref']
++    if type(op) is not str or not op.startswith('operation_') or not op.removeprefix('operation_'):
++        _fail('operation_reference_required', 'outcome.operation_ref')
++    for field in ('record_refs', 'changed_record_refs'):
++        refs = saved_outcome[field]
++        if type(refs) is not list or any(type(ref) is not str or not ref.strip() for ref in refs) or len(set(refs)) != len(refs):
++            _fail('unique_reference_array_required', 'outcome.' + field)
++    if not set(saved_outcome['changed_record_refs']) <= set(saved_outcome['record_refs']):
++        _fail('changed_record_subset_required', 'outcome')
++    result = saved_outcome['result']
++    if type(result) is not dict or set(result) != {'sheet_ref', 'cells', 'selected_roster_resolved', 'point_candidate_set_complete', 'known_source_conflict'}:
++        _fail('closed_fields_required', 'outcome.result')
++    ref = result['sheet_ref']
++    if type(ref) is not str or not ref.startswith('source_') or ref not in saved_outcome['record_refs']:
++        _fail('sheet_output_membership_required', 'outcome.result.sheet_ref')
++    _same(result['cells'], sheet['cells'], 'outcome.cells')
++    for field in ('selected_roster_resolved', 'point_candidate_set_complete', 'known_source_conflict'):
++        _same(result[field], sheet[field], 'outcome.' + field)
++
++
++__all__ = ['validate_relative_signal_saved']
+--- /dev/null
++++ b/tests/test_literature_ratio_source_inputs.py
+@@ -0,0 +1,286 @@
++"""Engineering fixtures only: constructed pixels/receipts are NOT native custody."""
++from copy import deepcopy
++import errno
++import hashlib
++from io import BytesIO
++import json
++from pathlib import Path
++
++from PIL import Image, ImageDraw, __version__ as PILLOW_VERSION
++import pytest
++
++from gene_annotation_episode.literature_experimental_contracts import ExperimentalContractError
++from gene_annotation_episode.literature_ratio_source_inputs import (
++    relative_signal_source_arguments_schema, validate_relative_signal_source_selection,
++    validate_relative_signal_source_extraction, read_relative_signal_source_inputs,
++)
++
++SOURCE = 'source_' + 'a' * 24
++TEXT = 'source_' + 'b' * 24
++VIEW = 'image_view_' + 'c' * 24
++VIEW2 = 'image_view_' + 'd' * 24
++FIELDS = ('subject', 'variant', 'reference', 'organism', 'genotype', 'construct_variant',
++    'construct_reference', 'preparation_variant', 'preparation_reference', 'experiment', 'condition',
++    'endpoint', 'normalization', 'signal_kind', 'reference_role', 'arrangement', 'signal_use')
++
++
++def unknown():
++    return {'status': 'unknown', 'value': None, 'witnesses': []}
++
++
++def image(quote, *, ref=False, view=VIEW):
++    return {'kind': 'image', 'view_ref': view, 'region': [110, 40, 180, 65] if ref else [10, 40, 80, 65], 'quote': quote}
++
++
++def visual(label='0.60', denominator='1.00', *, ident='v1', kind='visual_signal_pair', state='exact', relation='supported', scale='supported', view=VIEW):
++    w = image(label, view=view)
++    return {'representation_id': ident, 'kind': kind, 'selection': {'reading_state': state,
++        'candidates': [] if state == 'unreadable' else [{'numerator': w,
++            'denominator': image(denominator, ref=True, view=view) if kind == 'visual_signal_pair' else None}],
++        'fragments': [{'view_ref': view, 'region': [10, 40, 80, 65], 'raw_fragment': None}] if state == 'unreadable' else [],
++        'signal_scale': {'value': scale if kind == 'visual_signal_pair' else 'not_applicable',
++            'witnesses': [w] if kind == 'visual_signal_pair' and scale != 'unknown' else []}},
++        'comparison_relation': {'value': relation, 'witnesses': [w] if relation != 'unknown' else []},
++        'physical_measurement': unknown(), 'reference_measurement': unknown()}
++
++
++def prose():
++    return {'representation_id': 'p1', 'kind': 'jats_percent', 'selection': {'source_ref': TEXT,
++        'section_id': 's1', 'paragraph_index': 0, 'expected_subject': 'SyntheticProtein', 'variant': 'V', 'reference_literal': 'WT levels'},
++        'comparison_relation': {'value': 'supported', 'witnesses': [image('0.60')]},
++        'physical_measurement': unknown(), 'reference_measurement': unknown()}
++
++
++def request(rows=None):
++    return {'version': 'relative_signal_source_selection_v2', 'source_ref': SOURCE,
++        'comparison': {field: unknown() for field in FIELDS}, 'representations': [visual()] if rows is None else rows}
++
++
++def view_callback(*, view=VIEW, fmt='PNG', frame=0, rgb=False):
++    im = Image.new('L', (200, 100), 255)
++    ImageDraw.Draw(im).text((10, 40), 'synthetic fixture 0.60 1.00', fill=0)
++    stream = BytesIO()
++    if fmt == 'TIFF':
++        im.save(stream, format=fmt, save_all=True, append_images=[Image.new('L', im.size, 123)])
++    else:
++        im.save(stream, format=fmt)
++    original = stream.getvalue()
++    with Image.open(BytesIO(original)) as native:
++        initial, count = native.mode, getattr(native, 'n_frames', 1)
++        native.seek(frame)
++        native.load()
++        selected_mode = native.mode
++        selected = native.convert('RGB') if rgb else native
++        output = BytesIO()
++        selected.save(output, format='PNG')
++        display = output.getvalue()
++        display_mode = selected.mode
++    m = {'id': view, 'record_type': 'image_view', 'origin': 'tool', 'representation': 'selected_native_image_frame_v1',
++        'source_ref': 'source_' + ('e' if view == VIEW else 'f') * 24, 'input_source_ref': SOURCE,
++        'original_artifact_ref': 'artifact_' + hashlib.sha256(original).hexdigest()[:24],
++        'image_artifact_ref': 'artifact_' + hashlib.sha256(display).hexdigest()[:24],
++        'native_format': fmt, 'native_initial_mode': initial, 'selected_mode': selected_mode, 'display_mode': display_mode,
++        'frame': frame, 'frame_count': count, 'width': 200, 'height': 100,
++        'colour_conversion': 'rgb' if rgb else 'preserve', 'software': 'Pillow', 'software_version': PILLOW_VERSION,
++        'geometric_transform': 'identity', 'contrast_transform': 'identity', 'orientation': 'stored_pixel_axis_no_exif_rotation'}
++    return {'metadata': m, 'original_bytes': original, 'display_bytes': display, 'own_action_receipt': {
++        'run_id': 'synthetic_run', 'episode_id': 'synthetic_episode', 'decision_index': 0,
++        'operation_ref': 'operation_' + 'a' * 24, 'result_sha256': 'a' * 64, 'view_ref': view}}
++
++
++def callbacks(*, xml=None, views=None, text=b'\xce\xbc exact words'):
++    xml = xml if xml is not None else b'<article><body><sec id="s1"><p>SyntheticProtein 60% (V) of WT levels.</p></sec></body></article>'
++    mapping = {VIEW: view_callback(), VIEW2: view_callback(view=VIEW2)} if views is None else views
++    calls = []
++    def source(ref, representation):
++        calls.append(('source', ref, representation))
++        content = xml if representation == 'original' else text
++        return {'artifact_ref': 'artifact_' + hashlib.sha256(content).hexdigest()[:24], 'content': content}
++    def view(ref):
++        calls.append(('view', ref))
++        return deepcopy(mapping[ref])
++    return source, view, calls
++
++
++def extract(selected=None, **options):
++    source, view, calls = callbacks(**options)
++    result = read_relative_signal_source_inputs(request() if selected is None else selected,
++        read_source=source, read_view=view, evidence_origin='synthetic_fixture')
++    return result, calls
++
++
++def test_visual_only_mixed_percent_and_joint_pairs():
++    for rows in ([visual()], [visual(kind='visual_ratio')], [visual('60%', kind='visual_percent')], [prose(), visual()]):
++        out, calls = extract(request(rows))
++        assert [r['ratio'] for row in out['representations'] for r in row['readings']] == [.6] * len(rows)
++        assert all(row['origin'] == 'synthetic' for row in out['representations'])
++        assert out['evidence_origin'] == 'synthetic_fixture'
++        assert not out['sources'] if len(rows) == 1 else out['sources'][0]['source_ref'] == TEXT
++        detached = validate_relative_signal_source_extraction(out)
++        detached['selection']['source_ref'] = 'changed'
++        assert out['selection']['source_ref'] == SOURCE
++    a = visual('0.60', '2', state='ambiguous')
++    a['selection']['candidates'].append({'numerator': image('0.80'), 'denominator': image('4', ref=True)})
++    out, _ = extract(request([a]))
++    assert [r['ratio'] for r in out['representations'][0]['readings']] == [.3, .2]
++
++
++def test_schema_exact_detached_and_selection_contract():
++    base = Path(__file__).resolve().parents[1]
++    normative = base / 'verification/literature_reference_evidence_2026-10-25_001/a105_visual_signal_reader_070/normative'
++    assert relative_signal_source_arguments_schema() == json.loads((normative / 'REQUEST_SCHEMA_008.json').read_text())
++    schema = relative_signal_source_arguments_schema()
++    schema['properties'].clear()
++    assert relative_signal_source_arguments_schema()['properties']
++    for edit in (lambda s: s.update(extra=1), lambda s: s['representations'].append(deepcopy(s['representations'][0])),
++                 lambda s: s['comparison']['subject'].update(status='known', value='P'),
++                 lambda s: s['representations'][0]['selection']['candidates'][0]['numerator']['region'].__setitem__(0, True),
++                 lambda s: s['representations'][0]['selection']['candidates'][0]['numerator']['region'].__setitem__(0, 10.0),
++                 lambda s: s['representations'][0]['selection'].update(reading_state='ambiguous')):
++        selected = request()
++        edit(selected)
++        with pytest.raises(ExperimentalContractError):
++            validate_relative_signal_source_selection(selected)
++
++
++@pytest.mark.parametrize('fmt,frame,rgb', [('TIFF', 1, True), ('JPEG', 0, False), ('PNG', 0, True)])
++def test_native_frame_rgb_and_jpeg(fmt, frame, rgb):
++    out, _ = extract(views={VIEW: view_callback(fmt=fmt, frame=frame, rgb=rgb)})
++    assert out['views'][0]['metadata']['frame'] == frame
++    assert out['representations'][0]['readings'][0]['ratio'] == .6
++
++
++def test_all_dependencies_before_decode_and_permission_propagates(monkeypatch):
++    from gene_annotation_episode import literature_ratio_source_inputs as mod
++    selected = request([visual(), visual('0.8', ident='v2', view=VIEW2), prose()])
++    source, view, calls = callbacks()
++    original = mod._view_bytes
++    def guarded(*a):
++        assert {c[1] for c in calls} == {TEXT, VIEW, VIEW2}
++        return original(*a)
++    monkeypatch.setattr(mod, '_view_bytes', guarded)
++    read_relative_signal_source_inputs(selected, read_source=source, read_view=view, evidence_origin='synthetic_fixture')
++    for error in (PermissionError(errno.EACCES, 'scope'), RuntimeError('provider bug'), ExperimentalContractError('denied', 'scope')):
++        def denied(_):
++            raise error
++        with pytest.raises(type(error)):
++            read_relative_signal_source_inputs(request(), read_source=source, read_view=denied, evidence_origin='synthetic_fixture')
++
++
++@pytest.mark.parametrize('number', [errno.ENOENT, errno.EIO, errno.ETIMEDOUT])
++def test_availability_is_dependency_partial(number):
++    selected = request([visual(), visual('0.8', ident='v2', view=VIEW2)])
++    source, view, _ = callbacks()
++    def partial(ref):
++        if ref == VIEW2:
++            raise OSError(number, 'explicit fixture availability failure')
++        return view(ref)
++    out = read_relative_signal_source_inputs(selected, read_source=source, read_view=partial, evidence_origin='synthetic_fixture')
++    assert out['representations'][0]['readings'][0]['ratio'] == .6
++    assert out['representations'][1]['reading_state'] == 'exact'
++    assert out['representations'][1]['parse_status'] == 'unavailable'
++
++
++def test_utf8_exact_boundaries_and_geometry_receipt_hash_failures():
++    selected = request()
++    selected['comparison']['subject'] = {'status': 'known', 'value': 'fixture', 'witnesses': [
++        {'kind': 'text', 'source_ref': TEXT, 'representation': 'text', 'start': 0, 'end': 2, 'quote': '\u03bc'}]}
++    out, _ = extract(selected)
++    assert out['comparison']['subject']['witnesses'][0]['authentication'] == 'exact_utf8_span'
++    for end, quote in ((1, '\u03bc'), (2, 'x')):
++        bad = deepcopy(selected)
++        bad['comparison']['subject']['witnesses'][0].update(end=end, quote=quote)
++        with pytest.raises(ExperimentalContractError):
++            extract(bad)
++    for mutate in (lambda v: v['metadata'].update(width=199), lambda v: v['metadata'].update(frame=1),
++                   lambda v: v['own_action_receipt'].update(view_ref=VIEW2),
++                   lambda v: v['metadata'].update(image_artifact_ref=v['metadata']['original_artifact_ref']) if v['original_bytes'] != v['display_bytes'] else v.update(display_bytes=b'bad'),
++                   lambda v: v.update(extra='no'), lambda v: v.update(original_bytes=bytearray(v['original_bytes']))):
++        raw = view_callback(fmt='JPEG')
++        mutate(raw)
++        with pytest.raises(ExperimentalContractError):
++            extract(views={VIEW: raw})
++    bad = request()
++    bad['representations'][0]['selection']['candidates'][0]['numerator']['region'][2] = 201
++    with pytest.raises(ExperimentalContractError):
++        extract(bad)
++
++
++def test_unreadable_ambiguous_fragments_and_jats_capability_separate():
++    out, _ = extract(request([visual(state='unreadable')]))
++    row = out['representations'][0]
++    assert row['reading_state'] == 'unreadable' and row['parse_status'] == 'partial'
++    assert row['fragments'][0]['locator']['quote'] is None
++    out, _ = extract(request([prose(), visual()]), xml=b'<article><body><sec id="s1"><p>unsupported</p></sec></body></article>')
++    assert out['representations'][0]['reading_state'] == 'not_applicable'
++    assert out['representations'][0]['diagnostics'][0]['code'] == 'jats_expression_capability_partial'
++    assert out['representations'][1]['readings'][0]['ratio'] == .6
++
++
++def test_malformed_callback_none_and_same_handle_unequal_bytes_reject():
++    source, _, _ = callbacks()
++    with pytest.raises(ExperimentalContractError):
++        read_relative_signal_source_inputs(request(), read_source=source, read_view=lambda _: None, evidence_origin='synthetic_fixture')
++    raw, other = view_callback(), view_callback(view=VIEW2)
++    other['metadata']['original_artifact_ref'] = raw['metadata']['original_artifact_ref']
++    other['original_bytes'] = b'different'
++    with pytest.raises(ExperimentalContractError, match='artifact_bytes_mismatch'):
++        extract(request([visual(), visual(ident='v2', view=VIEW2)]), views={VIEW: raw, VIEW2: other})
++
++
++def test_source_availability_preserves_visual_and_origin_is_explicit():
++    source, view, _ = callbacks()
++    def missing(ref, representation):
++        raise FileNotFoundError(errno.ENOENT, 'authorized fixture bytes absent')
++    out = read_relative_signal_source_inputs(request([prose(), visual()]), read_source=missing, read_view=view, evidence_origin='synthetic_fixture')
++    assert out['representations'][0]['parse_status'] == 'unavailable'
++    assert out['representations'][0]['reading_state'] == 'not_applicable'
++    assert out['representations'][1]['readings'][0]['ratio'] == .6
++    reported = read_relative_signal_source_inputs(request([prose(), visual()]), read_source=source, read_view=view, evidence_origin='reported_source')
++    # This checks the API's declared propagation only; the callbacks here remain
++    # engineering fixtures and do not constitute actual reported-source custody.
++    assert [r['origin'] for r in reported['representations']] == ['reported', 'visual_transcription']
++    assert out['representations'][0]['origin'] == 'synthetic'
++
++
++def test_conflicting_interpretations_need_distinct_authenticated_witnesses():
++    selected = request()
++    w1, w2 = image('reference A'), image('reference B', ref=True)
++    selected['comparison']['reference'] = {'status': 'conflicting', 'value': None, 'witnesses': [w1, w2]}
++    row = selected['representations'][0]
++    row['physical_measurement'] = {'status': 'known', 'value': 'fixture measurement', 'witnesses': [w1]}
++    row['reference_measurement'] = {'status': 'conflicting', 'value': None, 'witnesses': [w1, w2]}
++    out, _ = extract(selected)
++    assert out['comparison']['reference']['status'] == 'conflicting'
++    assert out['representations'][0]['physical_measurement']['value'] == 'fixture measurement'
++    assert all(w['authentication'] == 'native_view_bytes_and_geometry' for w in out['comparison']['reference']['witnesses'])
++    for field in ('comparison_relation',):
++        bad = request()
++        bad['representations'][0][field] = {'value': 'conflicting', 'witnesses': [w1, w1]}
++        with pytest.raises(ExperimentalContractError):
++            extract(bad)
++    for scale in ('unknown', 'conflicting'):
++        bad = request()
++        bad['representations'][0]['selection']['signal_scale'] = {'value': scale, 'witnesses': [] if scale == 'unknown' else [w1, w2]}
++        out, _ = extract(bad)
++        assert out['representations'][0]['readings'][0]['ratio'] is None
++        assert out['representations'][0]['readings'][0]['numerator']['value'] == .6
++        assert out['representations'][0]['readings'][0]['diagnostics'][0]['code'] == 'signal_scale_unresolved'
++
++
++def test_nomination_identity_includes_regions_even_with_equal_literals():
++    row = visual(state='ambiguous')
++    alternate = deepcopy(row['selection']['candidates'][0])
++    alternate['numerator']['region'] = [20, 40, 90, 65]
++    row['selection']['candidates'].append(alternate)
++    out, _ = extract(request([row]))
++    readings = out['representations'][0]['readings']
++    assert [r['ratio'] for r in readings] == [.6, .6]
++    assert readings[0]['source_reading_key'] != readings[1]['source_reading_key']
++    from gene_annotation_episode.literature_ratio_source_calculations import populate_relative_signal_v2
++    sheet = populate_relative_signal_v2(out)
++    assert sheet['cells']['reported_ratio']['value'] is None
++    assert not sheet['selected_roster_resolved'] and not sheet['point_candidate_set_complete']
++    row['selection']['candidates'][1] = deepcopy(row['selection']['candidates'][0])
++    with pytest.raises(ExperimentalContractError, match='distinct_transcription_candidates_required'):
++        extract(request([row]))
+--- /dev/null
++++ b/tests/test_literature_ratio_source_calculations.py
+@@ -0,0 +1,155 @@
++"""Whole-API arithmetic contrasts on explicit engineering source fixtures."""
++from copy import deepcopy
++from fractions import Fraction
++import json
++import math
++from pathlib import Path
++
++import pytest
++
++from gene_annotation_episode.literature_ratio_source_calculations import populate_relative_signal_v2
++from test_literature_ratio_source_inputs import extract, request, visual, image, prose
++
++
++def sheet(rows):
++    extraction, _ = extract(request(rows))
++    return populate_relative_signal_v2(extraction)
++
++
++def test_all_twelve_declared_constructed_cases():
++    ambiguous = visual(state='ambiguous')
++    ambiguous['selection']['candidates'].append({'numerator': image('0.80'), 'denominator': image('1.00', ref=True)})
++    cases = [
++        ('visual_only', [visual()], .6, [.6], None, True, True, False),
++        ('mixed_same_reported_quantity', [prose(), visual()], .6, [.6], None, True, True, False),
++        ('linked_representation_conflict', [visual('1.00'), visual('1.12', ident='v2')], None, [1., 1.12], 'source_representation_conflict', True, True, True),
++        ('known_plus_unreadable', [visual('0.64'), visual(state='unreadable', ident='v2')], None, [.64], 'unreadable_transcription', False, False, False),
++        ('ambiguous_numeral', [ambiguous], None, [.6, .8], 'ambiguous_transcription', False, False, False),
++        ('printed_zero', [visual('0')], 0., [0.], None, True, True, False),
++        ('printed_upper_limit', [visual('<0.10')], None, [], 'reported_limit_not_point', True, False, False),
++        ('reported_ND_without_limit', [visual('ND')], None, [], 'unsupported_expression', False, False, False),
++        ('zero_reference', [visual('0.60', '0')], None, [], 'positive_denominator_not_established', False, False, False),
++        ('known_different_signal_scales', [visual(scale='different')], None, [], 'signal_scales_differ', False, False, False),
++        ('exact_source_duplicate', [visual(), visual(ident='copy')], .6, [.6], None, True, True, False),
++        ('different_reported_quantities', [visual(), visual('0.80', ident='v2', relation='different')], None, [.6], 'different_reported_quantities', False, False, False),
++    ]
++    assert len(cases) == 12
++    for name, rows, value, candidates, reason, resolved, complete, conflict in cases:
++        out = sheet(rows)
++        cell = out['cells']['reported_ratio']
++        assert (cell['value'], cell['value_candidates'], cell['unavailable_reason']) == (value, candidates, reason), name
++        assert (out['selected_roster_resolved'], out['point_candidate_set_complete'], out['known_source_conflict']) == (resolved, complete, conflict), name
++        assert out['independent_preparation_count'] is None and out['annotation_credit'] is None
++        for component, why in (('calibrated_amount_ratio', 'calibrated_amount_conversion_unimplemented'),
++                               ('amount_adjusted_effect', 'functional_response_conversion_unimplemented'),
++                               ('source_profile_log_ratio', 'observation_model_unimplemented'), ('source_signed_index', 'observation_model_unimplemented')):
++            assert out['cells'][component]['value'] is None
++            assert out['cells'][component]['unavailable_reason'] == why
++    out = sheet([visual('0')])
++    assert out['cells']['difference_from_reference']['value'] == -1
++    assert out['cells']['log_reported_ratio']['unavailable_reason'] == 'zero_reported_ratio'
++    assert out['cells']['log_reported_ratio']['reported_domains'] == []
++
++
++def test_exact_rational_equality_and_rounded_inequality():
++    out = sheet([visual('0.60', '2'), visual('30%', kind='visual_percent', ident='percent'), visual('0.3', kind='visual_ratio', ident='ratio')])
++    assert out['cells']['reported_ratio']['value'] == .3 and not out['known_source_conflict']
++    assert out['cells']['difference_from_reference']['value'] == -.7
++    assert out['cells']['log_reported_ratio']['value'] == pytest.approx(math.log(.3))
++    # Both project to float1 but retain different exact fractions.
++    out = sheet([visual('1'), visual('1.0000000000000000000000000000000000001', ident='v2')])
++    assert out['known_source_conflict'] and out['cells']['reported_ratio']['value'] is None
++    assert out['cells']['log_reported_ratio']['value_candidates'][1] > 0
++    out = sheet([visual('1.0000000000000000000000000000000000001')])
++    assert out['cells']['log_reported_ratio']['value'] > 0
++    assert out['cells']['difference_from_reference']['value'] == 1e-37
++
++
++@pytest.mark.parametrize('literal,reason', [('ND', 'unsupported_expression'), ('n.d.', 'unsupported_expression'),
++    ('0.6 ± 0.1', 'unsupported_expression'), ('-0.6', 'negative_reported_signal_unsupported'),
++    ('<0', 'unsupported_expression'), ('1e309', 'numerical_model_range'), ('1e-400', 'numerical_model_range')])
++def test_literal_capability_partials_never_become_zeros(literal, reason):
++    extraction, _ = extract(request([visual(literal)]))
++    reading = extraction['representations'][0]['readings'][0]
++    assert reading['numerator']['literal'] == literal
++    assert reading['ratio'] is None and reading['reported_domains'] == []
++    out = populate_relative_signal_v2(extraction)
++    assert out['cells']['reported_ratio']['value'] is None
++    assert out['cells']['reported_ratio']['unavailable_reason'] == reason
++
++
++def test_strict_domains_nonnegative_feasibility_and_outward_projection():
++    out = sheet([visual('<0.10')])
++    ratio = out['cells']['reported_ratio']['reported_domains'][0]
++    assert ratio['lower'] == 0 and ratio['lower_closed'] and not ratio['upper_closed']
++    assert Fraction.from_float(ratio['upper']) >= Fraction(1, 10)
++    diff = out['cells']['difference_from_reference']['reported_domains'][0]
++    assert diff['lower'] == -1 and diff['upper'] >= -.9 and not diff['upper_closed']
++    log = out['cells']['log_reported_ratio']['reported_domains'][0]
++    assert log['lower'] is None and log['lower_infinite'] and not log['lower_closed']
++    assert log['upper'] >= math.log(.1) and not log['upper_closed']
++    for literal, low_closed, high_closed in [('<=0', True, True), ('>0', False, False), ('≥0.1', True, False)]:
++        out = sheet([visual(literal)])
++        domain = out['cells']['reported_ratio']['reported_domains'][0]
++        assert domain['lower_closed'] == low_closed
++        assert domain['upper_closed'] == high_closed
++    # A positive lower-open reference is a positive domain; division can be
++    # unbounded, whereas a reference domain including zero is unsupported.
++    out = sheet([visual('1', '>0')])
++    domain = out['cells']['reported_ratio']['reported_domains'][0]
++    assert domain['upper_infinite'] and domain['upper'] is None and domain['lower'] == 0
++    out = sheet([visual('1', '<1')])
++    assert out['cells']['reported_ratio']['unavailable_reason'] == 'positive_denominator_not_established'
++    json.dumps(out, allow_nan=False)
++
++
++def test_known_conflict_survives_unresolved_and_aliases_do_not_add_measurements():
++    out = sheet([visual('1'), visual('1.12', ident='v2'), visual(state='unreadable', ident='v3')])
++    assert out['known_source_conflict']
++    assert out['cells']['reported_ratio']['unavailable_reason'] == 'incomplete_conflicting_representations'
++    out = sheet([visual(), visual(ident='copy')])
++    assert len(out['cells']['reported_ratio']['reported_domains']) == 1
++    assert out['independent_preparation_count'] is None
++    unknown = visual('0.8', ident='unknown', relation='unknown')
++    out = sheet([visual(), unknown])
++    assert not out['known_source_conflict']
++    assert out['cells']['reported_ratio']['value_candidates'] == [.6]
++    assert out['cells']['reported_ratio']['unavailable_reason'] == 'comparison_association_unresolved'
++
++
++def test_numerical_range_during_division_and_nonunit_log_underflow():
++    extraction, _ = extract(request([visual('1e308', '1e-308')]))
++    reading = extraction['representations'][0]['readings'][0]
++    assert reading['ratio_exact'] is not None and reading['ratio'] is None
++    assert populate_relative_signal_v2(extraction)['cells']['reported_ratio']['unavailable_reason'] == 'numerical_model_range'
++    value = '1.' + '0' * 330 + '1'
++    out = sheet([visual(value)])
++    assert out['cells']['log_reported_ratio']['value'] is None
++    assert out['cells']['log_reported_ratio']['unavailable_reason'] == 'numerical_model_range'
++
++
++def test_empty_roster_preserves_unknown_components():
++    out = sheet([])
++    assert out['cells']['reported_ratio']['unavailable_reason'] == 'no_selected_representations'
++    assert not out['point_candidate_set_complete'] and not out['selected_roster_resolved']
++
++
++def test_complete_literal_percent_negatives_compound_and_blank():
++    for literal in (' ', '60', '60% extra', '~60%', '60% ±2%'):
++        out = sheet([visual(literal, kind='visual_percent')])
++        assert out['cells']['reported_ratio']['value'] is None
++        assert out['cells']['reported_ratio']['unavailable_reason'] == 'unsupported_expression'
++    out = sheet([visual('<=10%', kind='visual_percent')])
++    domain = out['cells']['reported_ratio']['reported_domains'][0]
++    assert domain['upper'] >= .1 and domain['upper_closed']
++    out = sheet([visual('0.6'), visual('0.8', ident='other', relation='unknown')])
++    assert out['cells']['reported_ratio']['value_candidates'] == [.6]
++    assert not out['point_candidate_set_complete'] and not out['known_source_conflict']
++
++
++def test_extreme_exponent_preserves_literal_without_allocating_giant_integer():
++    extraction, _ = extract(request([visual('1e999999999999')]))
++    operand = extraction['representations'][0]['readings'][0]['numerator']
++    assert operand['literal'] == '1e999999999999' and operand['value'] is None
++    out = populate_relative_signal_v2(extraction)
++    assert out['cells']['reported_ratio']['unavailable_reason'] == 'numerical_model_range'
+--- /dev/null
++++ b/tests/test_literature_ratio_source_validation.py
+@@ -0,0 +1,184 @@
++"""Saved numeric/meaning/owner/output forgery and source-free validation checks."""
++from copy import deepcopy
++import json
++from pathlib import Path
++
++import pytest
++
++from gene_annotation_episode.literature_experimental_contracts import ExperimentalContractError
++from gene_annotation_episode.literature_ratio_source_calculations import populate_relative_signal_v2
++from gene_annotation_episode.literature_ratio_source_inputs import validate_relative_signal_source_extraction
++from gene_annotation_episode.literature_ratio_source_validation import validate_relative_signal_saved
++from test_literature_ratio_source_inputs import extract, request, visual, image, prose, VIEW, VIEW2, TEXT
++
++
++def saved(rows=None):
++    selection = request([visual()] if rows is None else rows)
++    extraction, _ = extract(selection)
++    sheet = populate_relative_signal_v2(extraction)
++    ref = 'source_' + '1' * 24
++    outcome = {'status': 'completed', 'operation_ref': 'operation_' + '2' * 24,
++        'record_refs': [ref], 'changed_record_refs': [ref], 'feedback': None,
++        'result': {'sheet_ref': ref, 'cells': deepcopy(sheet['cells']),
++            **{k: sheet[k] for k in ('selected_roster_resolved', 'point_candidate_set_complete', 'known_source_conflict')}}}
++    return selection, extraction, sheet, outcome
++
++
++def test_saved_whole_api_source_free_and_detached(monkeypatch):
++    from gene_annotation_episode import literature_ratio_source_inputs as inputs
++    from gene_annotation_episode import literature_ratio_source_calculations as calculations
++    from PIL import Image
++    selected, extraction, sheet, outcome = saved([prose(), visual()])
++    before = deepcopy((selected, extraction, sheet, outcome))
++    def forbidden(*a, **kw):
++        raise AssertionError('saved validation called forbidden source/reader/calculator/decoder')
++    for module, name in ((inputs, 'read_relative_signal_source_inputs'), (inputs, '_view_bytes'),
++                         (inputs, '_jats_expression'), (inputs, '_jats_matches'),
++                         (calculations, 'populate_relative_signal_v2'), (calculations, '_component_facts'), (Image, 'open')):
++        monkeypatch.setattr(module, name, forbidden)
++    validate_relative_signal_saved(selected, extraction, sheet, outcome)
++    assert (selected, extraction, sheet, outcome) == before
++
++
++@pytest.mark.parametrize('path,value', [
++    (('representations', 0, 'readings', 0, 'ratio'), .9),
++    (('representations', 0, 'readings', 0, 'ratio_exact', 'numerator'), '9'),
++    (('representations', 0, 'readings', 0, 'numerator', 'value'), .9),
++    (('representations', 0, 'readings', 0, 'numerator', 'exact', 'denominator'), '7'),
++    (('representations', 0, 'readings', 0, 'numerator', 'literal'), '0.9'),
++    (('representations', 0, 'readings', 0, 'reported_domains', 0, 'lower'), .9),
++    (('representations', 0, 'readings', 0, 'source_reading_key'), 'f' * 64),
++    (('representations', 0, 'readings', 0, 'numerator', 'locator', 'frame'), 9),
++    (('representations', 0, 'readings', 0, 'numerator', 'locator', 'original_source_ref'), 'source_' + 'f' * 24),
++    (('representations', 0, 'origin'), 'reported'),
++    (('representations', 0, 'reading_state'), 'conflicting'),
++    (('representations', 0, 'parse_status'), 'unavailable'),
++    (('representations', 0, 'physical_measurement', 'value'), 'fake_owner'),
++    (('representations', 0, 'comparison_relation', 'value'), 'unknown'),
++    (('representations', 0, 'comparison_relation', 'witnesses', 0, 'authentication'), 'unavailable'),
++    (('views', 0, 'own_action_receipt', 'view_ref'), VIEW2),
++    (('views', 0, 'metadata', 'width'), 1),
++    (('views', 0, 'state'), 'unavailable'),
++    (('views', 0, 'original_sha256'), 'bad'),
++    (('evidence_origin',), 'reported_source'),
++    (('comparison', 'endpoint', 'status'), 'known'),
++])
++def test_saved_extraction_forgery_rejected(path, value):
++    selection, extraction, sheet, outcome = saved()
++    target = extraction
++    for field in path[:-1]:
++        target = target[field]
++    target[path[-1]] = value
++    with pytest.raises(ExperimentalContractError):
++        validate_relative_signal_saved(selection, extraction, sheet, outcome)
++
++
++@pytest.mark.parametrize('component,field,value', [
++    ('reported_ratio', 'value', .9), ('reported_ratio', 'value_candidates', [.9]),
++    ('reported_ratio', 'reported_domains', []), ('reported_ratio', 'status', 'unavailable'),
++    ('reported_ratio', 'unavailable_reason', 'reported_limit_not_point'), ('reported_ratio', 'origin', 'reported'),
++    ('reported_ratio', 'conditional_on', []), ('reported_ratio', 'formula', 'forged'),
++    ('difference_from_reference', 'value', .4), ('log_reported_ratio', 'value', 0.),
++    ('calibrated_amount_ratio', 'value', .6), ('amount_adjusted_effect', 'unit', 'fraction'),
++    ('source_profile_log_ratio', 'unavailable_reason', 'numerical_model_range'),
++])
++def test_saved_sheet_forgery_even_matching_outcome_rejected(component, field, value):
++    selection, extraction, sheet, outcome = saved()
++    sheet['cells'][component][field] = value
++    outcome['result']['cells'] = deepcopy(sheet['cells'])
++    with pytest.raises(ExperimentalContractError):
++        validate_relative_signal_saved(selection, extraction, sheet, outcome)
++
++
++def test_saved_roster_and_completeness_reason_domain_relations():
++    for part in ('selection', 'representations', 'views'):
++        selection, extraction, sheet, outcome = saved()
++        if part == 'selection':
++            extraction['selection']['source_ref'] = 'source_' + 'f' * 24
++        else:
++            extraction[part] = []
++        with pytest.raises(ExperimentalContractError):
++            validate_relative_signal_saved(selection, extraction, sheet, outcome)
++    for field in ('selected_roster_resolved', 'point_candidate_set_complete', 'known_source_conflict'):
++        selection, extraction, sheet, outcome = saved()
++        sheet[field] = not sheet[field]
++        outcome['result'][field] = sheet[field]
++        with pytest.raises(ExperimentalContractError):
++            validate_relative_signal_saved(selection, extraction, sheet, outcome)
++    for literal in ('ND', '<0', '-1', '<.1', '0'):
++        selection, extraction, sheet, outcome = saved([visual(literal)])
++        validate_relative_signal_saved(selection, extraction, sheet, outcome)
++        reading = extraction['representations'][0]['readings'][0]
++        reading['diagnostics'] = []
++        if literal in ('<.1', '0'):
++            sheet['cells']['reported_ratio']['reported_domains'][0]['lower_closed'] = False
++            outcome['result']['cells'] = deepcopy(sheet['cells'])
++        with pytest.raises(ExperimentalContractError):
++            validate_relative_signal_saved(selection, extraction, sheet, outcome)
++
++
++def test_saved_native_outcome_closed_dictionary_membership_not_projected_array():
++    for mutate in (lambda o: o.update(status='failed'), lambda o: o.update(feedback={}),
++                   lambda o: o.update(operation_ref=''), lambda o: o.update(extra=1),
++                   lambda o: o['record_refs'].append(o['record_refs'][0]),
++                   lambda o: o.update(changed_record_refs=['source_' + 'f' * 24]),
++                   lambda o: o['result'].update(sheet_ref='source_' + 'f' * 24),
++                   lambda o: o['result'].update(cells=[]), lambda o: o['result'].update(selected_roster_resolved=False),
++                   lambda o: o['result']['cells'].pop('source_signed_index')):
++        selection, extraction, sheet, outcome = saved()
++        mutate(outcome)
++        with pytest.raises(ExperimentalContractError):
++            validate_relative_signal_saved(selection, extraction, sheet, outcome)
++    selection, extraction, sheet, outcome = saved()
++    with pytest.raises(ExperimentalContractError):
++        validate_relative_signal_saved(selection, extraction, sheet, [{'component': 'reported_ratio'}])
++
++
++def test_runtime_all_three_schema_definitions_equal_normative008():
++    from gene_annotation_episode import literature_ratio_source_inputs as inputs
++    base = Path(__file__).resolve().parents[1] / 'verification/literature_reference_evidence_2026-10-25_001/a105_visual_signal_reader_070/normative'
++    for family in ('REQUEST', 'EXTRACTION', 'SHEET'):
++        assert getattr(inputs, '_' + family + '_SCHEMA') == json.loads((base / (family + '_SCHEMA_008.json')).read_text())
++
++
++def test_generic_html_text_span_saved_forgery_and_actual_jats_unchanged(monkeypatch):
++    from gene_annotation_episode import literature_ratio_source_inputs as inputs
++    from gene_annotation_episode.literature_ratio_source_inputs import read_relative_signal_source_inputs
++    from test_literature_ratio_source_inputs import callbacks
++    selected = request([prose(), visual()])
++    content = '<p>\u03bc source label</p>'.encode('utf-8')
++    start = len('<p>'.encode('utf-8'))
++    quote = '\u03bc source'
++    witness = {'kind': 'text', 'source_ref': TEXT, 'representation': 'text',
++        'start': start, 'end': start + len(quote.encode('utf-8')), 'quote': quote}
++    selected['comparison']['subject'] = {'status': 'known', 'value': 'fixture subject', 'witnesses': [witness]}
++    source, view, _ = callbacks(text=content)
++    extraction = read_relative_signal_source_inputs(selected, read_source=source, read_view=view, evidence_origin='synthetic_fixture')
++    locator = extraction['comparison']['subject']['witnesses'][0]['locator']
++    assert locator['kind'] == 'text_span' and locator['start'] == 3 and locator['end'] == 12
++    assert set(locator) == {'kind', 'source_ref', 'artifact_ref', 'representation', 'start', 'end', 'quote'}
++    actual_jats = extraction['representations'][0]['readings'][0]['numerator']['locator']
++    assert actual_jats['kind'] == 'jats' and actual_jats['section_id'] == 's1'
++    assert actual_jats['paragraph_index'] == 0 and actual_jats['paragraph_text'].startswith('SyntheticProtein')
++    sheet = populate_relative_signal_v2(extraction)
++    _, _, _, outcome = saved()
++    outcome['result'].update(cells=deepcopy(sheet['cells']))
++    for field in ('selected_roster_resolved', 'point_candidate_set_complete', 'known_source_conflict'):
++        outcome['result'][field] = sheet[field]
++    def forbidden(*a, **kw):
++        raise AssertionError('saved read reacquired text')
++    monkeypatch.setattr(inputs, 'read_relative_signal_source_inputs', forbidden)
++    validate_relative_signal_saved(selected, extraction, sheet, outcome)
++    for field, value in (('artifact_ref', 'artifact_' + 'f' * 24), ('representation', 'original'),
++                         ('start', 4), ('end', 13), ('quote', 'forged')):
++        bad = deepcopy(extraction)
++        bad['comparison']['subject']['witnesses'][0]['locator'][field] = value
++        with pytest.raises(ExperimentalContractError):
++            validate_relative_signal_saved(selected, bad, sheet, outcome)
++    invented = deepcopy(extraction)
++    invented['comparison']['subject']['witnesses'][0]['locator'] = {
++        'kind': 'jats', 'source_ref': TEXT, 'artifact_ref': locator['artifact_ref'],
++        'section_id': 'exact_utf8_witness', 'paragraph_index': 0, 'paragraph_text': quote,
++        'expression': quote, 'expression_start': 0, 'expression_end': len(quote)}
++    with pytest.raises(ExperimentalContractError):
++        validate_relative_signal_saved(selected, invented, sheet, outcome)

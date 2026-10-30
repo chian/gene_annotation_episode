@@ -1,0 +1,172 @@
+{
+  "notice": "All examples synthetic; schema validation does not validate native Homology parameters, custody, source truth, execution or integration.",
+  "positive": [
+    {
+      "schema": "AppServiceRequest",
+      "value": {
+        "version": "bvbrc_appservice_request_v1",
+        "effect_contract": "selected_api_effects_v1",
+        "required_application_id": "Homology",
+        "parameters": {
+          "output_path": "/example/work/results",
+          "output_file": "example",
+          "query_fasta": "/example/work/input.fa"
+        },
+        "start_parameters": {},
+        "definition_inputs": [],
+        "input_bindings": [
+          {
+            "binding_id": "query",
+            "parameter_pointer": "/query_fasta",
+            "kind": "workspace_object",
+            "content": null,
+            "workspace_path": "/example/work/input.fa",
+            "inline_value": null,
+            "link_evidence": null,
+            "members": []
+          }
+        ],
+        "workspace_targets": []
+      }
+    },
+    {
+      "schema": "OperationSelection",
+      "value": {
+        "name": "api.bvbrc_appservice.prepare",
+        "arguments": {
+          "definition": {
+            "kind": "packaged",
+            "required_application_id": "Homology"
+          }
+        }
+      }
+    },
+    {
+      "schema": "MonitorSelection",
+      "value": {
+        "requested_fields": [
+          "log_windows"
+        ],
+        "native_operation": "stderr"
+      }
+    },
+    {
+      "schema": "EffectDescriptor",
+      "value": {
+        "version": "selected_api_effects_v1",
+        "original_job_owner": {
+          "run_id": "synthetic-run",
+          "launch_episode_id": "synthetic-launch",
+          "parent_commission_operation_key": "synthetic-run:parent:0",
+          "original_launch_assignment_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "resource_id": "synthetic-api",
+        "kind": "appservice_submit",
+        "slot": {
+          "kind": "appservice_submit"
+        },
+        "payload_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+        "predecessor_evidence_refs": []
+      }
+    },
+    {
+      "schema": "ReplayResult",
+      "value": {
+        "version": "bvbrc_appservice_replay_result_v1",
+        "mode": "unknown_issued_effect",
+        "operation_key": "synthetic-run:api:3",
+        "effect_refs": [
+          "synthetic-effect"
+        ],
+        "network_calls": 0,
+        "saved_outcome_ref": null,
+        "retained_snapshot_ref": null,
+        "failure": {
+          "code": "issued_effect_unknown",
+          "phase": "recovery",
+          "affected_refs": [
+            "synthetic-effect"
+          ],
+          "affected_pointers": [],
+          "effect_outcome": "unknown",
+          "valid_record_refs": [],
+          "requirements": []
+        }
+      }
+    }
+  ],
+  "negative": [
+    {
+      "schema": "OperationSelection",
+      "value": {
+        "name": "api.bvbrc_appservice.submit",
+        "arguments": {
+          "task_id": "123"
+        }
+      },
+      "reason": "submit consumes original preparation, not caller invented task id"
+    },
+    {
+      "schema": "Arguments_download",
+      "value": {
+        "url": "https://example.invalid/file"
+      },
+      "reason": "download requires capability and exact object selection"
+    },
+    {
+      "schema": "ReplayResult",
+      "value": {
+        "version": "bvbrc_appservice_replay_result_v1",
+        "mode": "unknown_issued_effect",
+        "operation_key": "synthetic-run:api:3",
+        "effect_refs": [
+          "synthetic-effect"
+        ],
+        "network_calls": 1,
+        "saved_outcome_ref": null,
+        "retained_snapshot_ref": null,
+        "failure": {
+          "code": "issued_effect_unknown",
+          "phase": "recovery",
+          "affected_refs": [
+            "synthetic-effect"
+          ],
+          "affected_pointers": [],
+          "effect_outcome": "unknown",
+          "valid_record_refs": [],
+          "requirements": []
+        }
+      },
+      "reason": "replay never issues network"
+    },
+    {
+      "schema": "Arguments_workspace_create",
+      "value": {
+        "objects": [
+          {
+            "target_id": "t",
+            "data_binding_id": null,
+            "creation_time": null
+          }
+        ],
+        "options": {
+          "downloadLinks": 1
+        }
+      },
+      "reason": "specific native source-declared unused option"
+    },
+    {
+      "schema": "MonitorSelection",
+      "value": {
+        "requested_fields": [
+          "log_windows"
+        ],
+        "native_operation": [
+          "query_tasks",
+          "stderr"
+        ]
+      },
+      "reason": "one selected native primitive only"
+    }
+  ]
+}

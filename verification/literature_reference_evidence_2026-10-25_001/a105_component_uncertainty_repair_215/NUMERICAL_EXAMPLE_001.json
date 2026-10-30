@@ -1,0 +1,119 @@
+{
+  "source_kind": "explicitly synthetic engineering fixture; not paper data",
+  "q": 1.8,
+  "q_unit": "uM/min",
+  "E": 2.0,
+  "E_unit": "uM",
+  "covariance": {
+    "basis": "joint_covariance_of_canonical_compilation_operands",
+    "covariance": [
+      [
+        0.04,
+        0.005
+      ],
+      [
+        0.005,
+        0.01
+      ]
+    ],
+    "dependency_keys": [
+      [
+        "physical_source_span_52d46e83d16676333662b443"
+      ],
+      [
+        "physical_source_span_1261a26e6fcff2fd5c415829"
+      ]
+    ],
+    "operand_keys": [
+      "compilation_quantity_57fa53dad004ccbc8c88b893",
+      "compilation_quantity_ab66335db669e63f71742954"
+    ],
+    "origin": "synthetic",
+    "primitive_order": [
+      "q",
+      "E"
+    ],
+    "primitive_units": [
+      "uM/min",
+      "uM"
+    ],
+    "variance_status": "estimated",
+    "version": "a105_compiled_assay_covariance_v2"
+  },
+  "mean": {
+    "conditional_on": [],
+    "formula": "q/E",
+    "meaning": "Measured endpoint rate per selected molecular amount; not contaminant-isolated or nuisance-corrected.",
+    "origin": "derived",
+    "qualifications": [
+      "not_contaminant_isolated",
+      "not_nuisance_corrected"
+    ],
+    "section": "amount_normalization",
+    "status": "populated",
+    "unavailable_reason": null,
+    "unit": "per_min",
+    "value": 0.9
+  },
+  "propagated_variance": {
+    "conditional_on": [
+      "first_order_covariance_propagation"
+    ],
+    "formula": "J_measured_endpoint_per_selected_amount*selected_joint_covariance*J_measured_endpoint_per_selected_amount_transpose",
+    "meaning": "First-order variance propagated from the actual joint operands of measured_endpoint_per_selected_amount; excludes distinct residual variability and uncertainty of other estimands.",
+    "origin": "derived",
+    "qualifications": [
+      "not_contaminant_isolated",
+      "not_nuisance_corrected"
+    ],
+    "section": "uncertainty",
+    "status": "populated",
+    "unavailable_reason": null,
+    "unit": "per_min_squared",
+    "value": 0.009775
+  },
+  "propagated_standard_uncertainty": {
+    "conditional_on": [
+      "first_order_covariance_propagation"
+    ],
+    "formula": "sqrt(measured_endpoint_per_selected_amount_propagated_variance)",
+    "meaning": "Square root of the first-order propagated variance of measured_endpoint_per_selected_amount; excludes distinct residual variability and uncertainty of other estimands.",
+    "origin": "derived",
+    "qualifications": [
+      "not_contaminant_isolated",
+      "not_nuisance_corrected"
+    ],
+    "section": "uncertainty",
+    "status": "populated",
+    "unavailable_reason": null,
+    "unit": "per_min",
+    "value": 0.09886859966642594
+  },
+  "full_corrected_activity": {
+    "conditional_on": [],
+    "formula": "(q-g)*v/(k*E*u)",
+    "meaning": "Compiled source-endpoint activity under the selected calibration, amount, attribution and nuisance-control meanings.",
+    "origin": "derived",
+    "qualifications": [],
+    "section": "compiled_source_endpoint_effect",
+    "status": "unavailable",
+    "unavailable_reason": "contaminant_stage_unknown",
+    "unit": "per_min",
+    "value": null
+  },
+  "full_total_variance": {
+    "conditional_on": [
+      "first_order_covariance_propagation"
+    ],
+    "formula": "J*covariance*J_transpose+distinct_residual_variance",
+    "meaning": "Conditional first-order propagated effect variance plus the selected distinct residual variance.",
+    "origin": "derived",
+    "qualifications": [],
+    "section": "uncertainty",
+    "status": "unavailable",
+    "unavailable_reason": "contaminant_stage_unknown",
+    "unit": "per_min_squared",
+    "value": null
+  },
+  "meaning": "Partial endpoint activity per selected molecular amount; not a reliability grade, full corrected-activity uncertainty, function probability or annotation credit."
+}

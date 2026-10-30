@@ -1,0 +1,91 @@
+{
+  "scope": "reference_experimental_binding_response",
+  "origin": "derived_from_reported_point_or_limit",
+  "values_are_not_independent_evidence": true,
+  "cells": {
+    "wt_7CtoG_over_hya_IC50": {
+      "value": null,
+      "lower_threshold_arithmetic": 15.9375,
+      "relation": "gt",
+      "unit": "dimensionless",
+      "formula": "510 nM / 32 nM",
+      "interpretation": "reported limit divided by reported point; uncertainty of denominator not incorporated; not a confidence or true-parameter bound"
+    },
+    "wt_log_7CtoG_over_hya_IC50": {
+      "value": null,
+      "lower_threshold_arithmetic": 2.768674822918645,
+      "relation": "gt",
+      "unit": "dimensionless",
+      "formula": "ln(510/32)"
+    },
+    "E43A_7CtoG_over_hya_IC50": {
+      "value": 1.5454545454545454,
+      "unit": "dimensionless",
+      "formula": "17/11",
+      "uncertainty": null,
+      "missing": "joint fit covariance and appropriate fit error likelihood"
+    },
+    "E43A_log_7CtoG_over_hya_IC50": {
+      "value": 0.4353180712578455,
+      "unit": "dimensionless",
+      "formula": "ln(17/11)",
+      "uncertainty": null
+    },
+    "WT_to_E43A_protein_input_ratio": {
+      "value": 1.1,
+      "unit": "dimensionless",
+      "formula": "22 nM /20 nM",
+      "interpretation": "difference in nominal assayed protein input; no automatic correction of IC50"
+    },
+    "WT_hya_relative_reported_fit_spread": {
+      "value": 0.0625,
+      "unit": "dimensionless",
+      "formula": "2 nM /32 nM",
+      "interpretation": "reported fitted SD divided by fitted point, not between-preparation CV or SEM"
+    },
+    "E43A_hya_relative_reported_fit_spread": {
+      "value": 0.09090909090909091,
+      "unit": "dimensionless",
+      "formula": "1/11"
+    },
+    "E43A_7CtoG_relative_reported_fit_spread": {
+      "value": 0.17647058823529413,
+      "unit": "dimensionless",
+      "formula": "3/17"
+    },
+    "ratio_of_IC50_ratios_descriptive_only": {
+      "value": null,
+      "lower_threshold_arithmetic": 10.3125,
+      "relation": "gt",
+      "unit": "dimensionless",
+      "formula": "(510/32)/(17/11)",
+      "interpretation": "fixed-input assay response comparison with unequal protein concentrations across proteins; not affinity-specific free energy or likelihood"
+    },
+    "log_ratio_of_IC50_ratios_descriptive_only": {
+      "value": null,
+      "lower_threshold_arithmetic": 2.3333567516607996,
+      "relation": "gt",
+      "unit": "dimensionless",
+      "formula": "ln(510/32)-ln(17/11)"
+    },
+    "source_profile_log_ratio": {
+      "value": null,
+      "unit": "dimensionless",
+      "reason": "No supported censored joint observation likelihood; fitted spread on averaged curve is not automatically sampling SD or known variance"
+    },
+    "source_signed_index": {
+      "value": null,
+      "unit": "dimensionless",
+      "reason": "source_profile_log_ratio unavailable; no substitute numerical grade"
+    },
+    "Kd_from_IC50": {
+      "value": null,
+      "unit": "nM",
+      "reason": "No validated mass-action competition mapping with free concentrations and fit/censor uncertainty"
+    },
+    "annotation_credit": {
+      "value": null,
+      "reason": "out_of_scope"
+    }
+  }
+}

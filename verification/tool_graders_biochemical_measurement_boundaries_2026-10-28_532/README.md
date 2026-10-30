@@ -1,0 +1,42 @@
+# Biochemical measurement boundaries, packet 532
+
+This is source-inspection and proposed implementation evidence, not a goal or scope amendment. Authority remains the original user attachment `/home/chia/.codex/attachments/6960b4a1-b2e0-46d4-8003-fcb7685a2232/pasted-text-1.txt`. No operation is completed by this packet. No application import, test, compilation, scientific calculation, native execution, equipment operation or deployment was performed.
+
+The four real callables are in `reference/episode_tools/.venv/lib/python3.12/site-packages/biomni/tool/`. They are not aliases to application graders. Their full bodies were inspected. Exact-name searches found no matching consumers in `gene_annotation_episode/`, `tests/`, `reference/episode_tools/src/` or `reference/episode_tools/tests/`.
+
+| Operation | Tool information | Sheet | Parser / metadata | Calculator | Result binding | Numerical verification | Episode verification | Live resource evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `analyze_circular_dichroism_spectra` | Biomni catalog and callable present; descriptions overstate the heuristic | No application sheet found; proposed `CDMeasurementSheetV1` | Source arrays and rounded TSV layout known; unit, blank, concentration and reference bindings absent | Source sign counts and signal midpoint only; no secondary-structure fraction fit | None found | Source inspection and constructed cases only | None found | None for this operation |
+| `analyze_protease_kinetics` | Catalog and callable present; turnover units are wrong without calibration | Proposed protease input section plus shared `MichaelisMentenSheetV1` | Original arrays must be retained; formatted result text loses slopes and covariance | Reuse existing MM fit after a shared-owner extraction; new calibration / initial-rate linkage needed | None found | Existing MM owner has a historical 27-pass receipt; this wrapper is unverified | None for protease | None for protease |
+| `analyze_itc_binding_thermodynamics` | Catalog and callable present; default concentrations and volume are unsupported | No application ITC sheet found; proposed `ITCMeasurementSheetV1` | CSV / TSV / ndarray layouts known; heat and volume units, cell volume, controls and displacement model missing | Native fit is not a defensible one-site mass-balance fit; corrected model and retained operands required | None found | Source inspection and constructed cases only | None found | None for this operation |
+| `analyze_arsenic_speciation_hplc_icpms` | Catalog and callable present; laboratory-action prose is fabricated | No application arsenic sheet found; proposed `ArsenicSpeciationSheetV1` | Numeric retention-time mapping and mixed-type CSV layout known; standards / batch / area / units missing | Hardcoded retention times and default response factors cannot establish quantification; share affine calibration math | None found | Source inspection and constructed cases only | None found | None for this operation |
+
+The fixed rows `B-L150` through `B-L153`, including their `::local` rows, remain unchanged and `not_assessed`. The older inventory rows remain pending. Neither inventory status was treated as proof that an algorithm was absent.
+
+## Findings that affect coding
+
+* Protease source computes `Vmax` in fluorescence units per second and divides by enzyme concentration in micromolar, then prints `s^-1`. The resulting units are fluorescence units per second per micromolar, not turnover. The source also drops the fitted Vmax–Km covariance when calculating efficiency uncertainty.
+* ITC supplies 1 M protein and 10 M ligand when either concentration is absent, uses 1.4 mL regardless of instrument, and never declares injection-volume or heat units. Its heat model uses a free-ligand approximation without establishing that regime. A successful optimizer does not repair these deficiencies.
+* Arsenic source claims filtering, injection and instrument operation in unconditional strings. It chooses the nearest raw timepoint to six fixed retention times and multiplies by default factors. It neither integrates chromatographic peaks nor measures calibration standards.
+* CD counts signs in wavelength windows. Its thermal calculation is normalization to observed extrema followed by the nearest sampled half-range value. That supports a descriptive signal midpoint, not an equilibrium melting temperature or secondary-structure fractions.
+
+The exact boundaries, proposed closed fields, equations, failure meanings, joins, return ports and exclusive future file ownership are in [BOUNDARY_CONTRACT.md](BOUNDARY_CONTRACT.md). [NUMERICAL_CASES.md](NUMERICAL_CASES.md) contains analytical constructed examples, not native outputs or executed tests. [INSPECTION.json](INSPECTION.json) pins inspected source and records limits.
+
+## Reuse and historical evidence
+
+`gene_annotation_episode/literature_rate_observation_calculations.py:247–302` already owns a finite unweighted Michaelis–Menten fit (`dimensionless_profile_stationarity_log2_32_v1`). Its current source-cell reader accepts amount/minute responses and is not a valid fluorescence parser. The fit and matching fit components need one shared neutral owner; existing literature contrast scoring remains separate and its files remain owned by that workstream.
+
+The existing receipt `verification/literature_reference_evidence_2026-10-25_001/a105_reported_curve_precision_228/FINAL_FOCUSED_TESTS_001.log` reports **27 passed in 3.83 s**. Its report describes original-source curve/covariance checks and finite-difference sensitivity verification. The later `a105_reported_curve_binding_231/FINAL_VERIFICATION_SUMMARY_001.json` records **32 new integration checks passed**, **294 affected legacy checks passed**, and **two preexisting fixture failures**. These are historical evidence for their own pins and literature paths, not verification of protease, current live bytes, or the four requested operations. No successful checks were rerun.
+
+## Exact unfinished dependencies
+
+1. A coordinated neutral MM fit/sheet owner and adapter from the existing reported-curve owner; protease must not add a competing fitter.
+2. Actual supplied CD signal units and normalization operands; reference spectra / structure composition model if fractions are requested; thermal baseline / transition model if a physical Tm is requested.
+3. Protease reporter-product calibration, matched blank identities, selected initial-rate windows, substrate identities and active-enzyme concentration meaning. Native source has no slots for these.
+4. ITC heat and volume units, effective cell volume, protein / ligand concentrations and identities, temperature provenance, dilution-control mapping and an explicitly selected displacement / heat model. A log-only native result is insufficient for recalculation.
+5. Arsenic species standards, batch-specific retention references and tolerances, actual peak responses / integration selections, calibration coefficients or standard observations, signal and concentration units, dilution / mass basis, and explicitly sourced detection / quantification limits where used.
+6. For each operation: corrected local invocation, full artifact retention, deterministic result reader, returned-value equality, saved-only recalculation, actual child-owned return, closed replay, and live verification against supplied authentic input. No API or HPC deployment is established or automatically required.
+
+At the inspected reference environment path, NumPy, SciPy and pandas source directories exist; `matplotlib/` does not. Protease imports `matplotlib.pyplot` before its exception handler. This identifies an unverified plotting prerequisite in that checkout, not the availability of a different caller-selected environment. No imports or version probes were run.
+
+The available primary method references establish why normalization and measured standards matter; they do not supply this investigation's missing measurements: [Greenfield CD protocol](https://pmc.ncbi.nlm.nih.gov/articles/PMC2728378/), [ITC binding-model methods](https://pmc.ncbi.nlm.nih.gov/articles/PMC2812830/), and [FDA EAM 4.10, version 1.1](https://www.fda.gov/media/86499/download?attachment=). Only cached indexed excerpts of the two PMC papers were available; direct opens returned a browser check. FDA text was readable. No scientific observation from these references was substituted for caller inputs.

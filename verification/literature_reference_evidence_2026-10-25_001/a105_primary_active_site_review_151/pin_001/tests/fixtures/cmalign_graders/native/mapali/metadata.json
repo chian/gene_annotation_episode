@@ -1,0 +1,37 @@
+{
+  "operation": {
+    "program": "cmalign",
+    "native_version": "1.1.5",
+    "settings": {
+      "algorithm": "optacc",
+      "global": false,
+      "notrunc": false,
+      "matchonly": false,
+      "sub": false,
+      "noprob": false,
+      "miss": false,
+      "mapali": true,
+      "banding": "hbanded",
+      "cpu": 1,
+      "mxsize_mb": 256,
+      "verbose": false
+    }
+  },
+  "sequences": [
+    {
+      "name": "tRNA6",
+      "sequence": "GUCCCGCUGGUGUAAUGGAUAGCAUACGAUCCUUCUAAGUUUGCGGUCCUGGUUCGAUCCCAGGGCGGGAUA",
+      "origin": "newly_aligned"
+    }
+  ],
+  "model": {
+    "name": "tRNA5",
+    "consensus_length": 72
+  },
+  "inherited_alignment": {
+    "artifact_id": "tRNA5-training",
+    "format": "stockholm",
+    "content": "# STOCKHOLM 1.0\n\ntRNA1             GCGGAUUUAGCUCAGUUGGG.AGAGCGCCAGACUGAAGAUCUGGAGGUCC\ntRNA2             UCCGAUAUAGUGUAAC.GGCUAUCACAUCACGCUUUCACCGUGGAGA.CC\ntRNA3             UCCGUGAUAGUUUAAU.GGUCAGAAUGGGCGCUUGUCGCGUGCCAGA.UC\ntRNA4             GCUCGUAUGGCGCAGU.GGU.AGCGCAGCAGAUUGCAAAUCUGUUGGUCC\ntRNA5             GGGCACAUGGCGCAGUUGGU.AGCGCGCUUCCCUUGCAAGGAAGAGGUCA\n#=GC SS_cons      <<<<<<<..<<<<.........>>>>.<<<<<.......>>>>>.....<\n\ntRNA1             UGUGUUCGAUCCACAGAAUUCGCA\ntRNA2             GGGGUUCGACUCCCCGUAUCGGAG\ntRNA3             GGGGUUCAAUUCCCCGUCGCGGAG\ntRNA4             UUAGUUCGAUCCUGAGUGCGAGCU\ntRNA5             UCGGUUCGAUUCCGGUUGCGUCCA\n#=GC SS_cons      <<<<.......>>>>>>>>>>>>.\n//\n",
+    "complete": true
+  }
+}

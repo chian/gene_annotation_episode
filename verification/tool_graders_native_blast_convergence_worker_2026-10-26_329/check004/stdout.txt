@@ -1,0 +1,19 @@
+......................F......                                            [100%]
+=================================== FAILURES ===================================
+_____ test_partial_candidate_before_valid_marker_uses_actual_marker_index ______
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_blast_convergence_worker_2026-10-26_329/check004/temporary/pytest/test_partial_candidate_before_0')
+
+    def test_partial_candidate_before_valid_marker_uses_actual_marker_index(tmp_path):
+        request = request_from_packet(tmp_path, raw=report(suffix=b"Search has CONVER\n" + MARKER + b"\n"))
+        manifest = run_request(tmp_path, request)
+        assert manifest["status"] != "failed", load(request, "diagnostics.json")
+        extraction = load(request, "native-convergence.json")
+>       assert len(extraction["markers"]) == 2 and len(extraction["convergence_records"]) == 1
+E       AssertionError: assert (1 == 2)
+E        +  where 1 = len([{'byte_span': [146, 168], 'exact_text': 'Search has CONVERGED!\n', 'issue_codes': [], 'line_number': 8, ...}])
+
+../../../tests/test_native_blast_database_convergence_worker.py:236: AssertionError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_native_blast_database_convergence_worker.py::test_partial_candidate_before_valid_marker_uses_actual_marker_index
+1 failed, 28 passed in 42.46s

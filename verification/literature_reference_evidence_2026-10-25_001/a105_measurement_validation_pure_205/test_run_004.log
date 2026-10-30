@@ -1,0 +1,40 @@
+........................................................................ [ 38%]
+.....F.................................................................. [ 77%]
+...........................................                              [100%]
+=================================== FAILURES ===================================
+_______ test_Z_formula_does_not_emit_negative_physical_band_ratio[<1.1] ________
+
+printed = '<1.1'
+
+    @pytest.mark.parametrize('printed', ['>1', '>1.01', '≥1.01', '<1.1'])
+    def test_Z_formula_does_not_emit_negative_physical_band_ratio(printed):
+        s=Source(zprime=printed); args=s.args()
+        token=printed.lstrip('>≥<')
+        args['zprime'][0]['number']=s.selector(token,after=s.content.index(b'<td id="z">'))
+>       _,sheet=run(s,args); ratio=sheet['zprime'][0]['cells']['control_band_ratio']
+                ^^^^^^^^^^^
+
+tests/test_literature_measurement_validation_205.py:522: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_measurement_validation_205.py:127: in run
+    data = read_measurement_validation_inputs(args, read_source=source.read, read_component=reader)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_validation_inputs.py:432: in read_measurement_validation_inputs
+    number = _read_number(selected['number'], sources, origin)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_measurement_validation_inputs.py:217: in _read_number
+    _visible_span(sources, witness, start, end, 'number')
+gene_annotation_episode/literature_measurement_validation_inputs.py:147: in _visible_span
+    _fail('source_markup_is_not_statistic', field)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = 'source_markup_is_not_statistic', field = 'number'
+
+    def _fail(code, field):
+>       raise ExperimentalContractError(code, field)
+E       gene_annotation_episode.literature_experimental_contracts.ExperimentalContractError: source_markup_is_not_statistic:number
+
+gene_annotation_episode/literature_measurement_validation_inputs.py:50: ExperimentalContractError
+=========================== short test summary info ============================
+FAILED tests/test_literature_measurement_validation_205.py::test_Z_formula_does_not_emit_negative_physical_band_ratio[<1.1]
+1 failed, 186 passed in 2.75s

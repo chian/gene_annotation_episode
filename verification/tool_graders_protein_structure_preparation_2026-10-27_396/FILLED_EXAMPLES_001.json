@@ -1,0 +1,530 @@
+{
+  "examples": {
+    "original": {
+      "command": [
+        "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+        "-B",
+        "-m",
+        "gene_annotation_episode.protein_structure_result_worker",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_original_and_changed_save0/original/worker/plan.json"
+      ],
+      "components_file": {
+        "file_identity": {
+          "artifact_ref": "artifact_ed89c44dc04bbff8a3ce204c09e85b85cdaef9acf8442c5ff3ba64ebeb1a0370",
+          "byte_length": 12457,
+          "format": "protein_structure_components_v1",
+          "sha256": "ed89c44dc04bbff8a3ce204c09e85b85cdaef9acf8442c5ff3ba64ebeb1a0370"
+        },
+        "relative_path": "components.json"
+      },
+      "evaluation_mean_distance": {
+        "origin": "derived",
+        "reason": null,
+        "state": "present",
+        "unit": "angstrom",
+        "value": 1.9999999999999996
+      },
+      "evaluation_rmsd": {
+        "origin": "derived",
+        "reason": null,
+        "state": "present",
+        "unit": "angstrom",
+        "value": 1.9999999999999996
+      },
+      "evaluation_sse": {
+        "origin": "derived",
+        "reason": null,
+        "state": "present",
+        "unit": "angstrom_squared",
+        "value": 3.9999999999999982
+      },
+      "evaluation_used_count": {
+        "origin": "derived",
+        "reason": null,
+        "state": "present",
+        "unit": "pair",
+        "value": 1
+      },
+      "execution_metadata": {
+        "duration_measure": "systemd_service_wall_seconds",
+        "elapsed_seconds": 1.75140101,
+        "enforcement": {
+          "filesystem_sandbox": false,
+          "memory": "systemd_cgroup_v2_memory_max",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset"
+        },
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "native_returncode": 0,
+        "observed_scratch_bytes": 315392,
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "service_exit": {
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "0",
+          "SERVICE_RESULT": "success",
+          "ended": {
+            "at": "2026-10-27T08:43:23.660820+00:00",
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+            "monotonic_ns": 904165358146319
+          }
+        },
+        "verified_cgroup": {
+          "kill_mode": "control-group",
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "oom_policy": "kill",
+          "runtime_max": "infinity"
+        }
+      },
+      "fit_used_count": {
+        "origin": "derived",
+        "reason": null,
+        "state": "present",
+        "unit": "pair",
+        "value": 4
+      },
+      "sheet_file": {
+        "file_identity": {
+          "artifact_ref": "artifact_142a685528952ab4780871ada9acc2246f42859b370a45b6f8c45f422f7337bc",
+          "byte_length": 124512,
+          "format": "protein_structure_comparison_sheet_v1",
+          "sha256": "142a685528952ab4780871ada9acc2246f42859b370a45b6f8c45f422f7337bc"
+        },
+        "relative_path": "sheet.json"
+      },
+      "site_measurements": [
+        {
+          "above_threshold": null,
+          "correspondence_id": "map_4",
+          "distance": {
+            "origin": "derived",
+            "reason": null,
+            "state": "present",
+            "unit": "angstrom",
+            "value": 1.9999999999999996
+          },
+          "distance_squared": {
+            "origin": "derived",
+            "reason": null,
+            "state": "present",
+            "unit": "angstrom_squared",
+            "value": 3.9999999999999982
+          },
+          "evaluated": true,
+          "fixed_position_0based": 4,
+          "in_evaluation": true,
+          "in_fit": false,
+          "moving_position_0based": 4,
+          "moving_transformed_xyz": {
+            "origin": "derived",
+            "reason": null,
+            "state": "present",
+            "unit": "angstrom",
+            "value": [
+              0.9999999999999994,
+              1.0000000000000002,
+              2.9999999999999996
+            ]
+          },
+          "primary_reason": null,
+          "qualifications": [],
+          "request_index_0based": 0,
+          "residual_xyz": {
+            "origin": "derived",
+            "reason": null,
+            "state": "present",
+            "unit": "angstrom",
+            "value": [
+              -5.551115123125783e-16,
+              2.220446049250313e-16,
+              1.9999999999999996
+            ]
+          },
+          "selector": {
+            "kind": "sequence_position",
+            "position_0based": 4,
+            "structure_role": "moving"
+          }
+        }
+      ],
+      "unit": "gene-local-job-6b24874c61c84268a4f2e2e89a2f8321.service",
+      "worker_result_artifact_ref": "artifact_bea8f73e69bcf3906b436142b68b1fc29f860efaa9dff213f2ba1bdb9f3297a3"
+    },
+    "saved": {
+      "command": [
+        "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+        "-B",
+        "-m",
+        "gene_annotation_episode.protein_structure_result_worker",
+        "/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_original_and_changed_save0/changed/worker/plan.json"
+      ],
+      "components_file": {
+        "file_identity": {
+          "artifact_ref": "artifact_62da62b67f14cd2b30d82806b9eaa7a7bc2ecdfc795773b30ace1bc4f9749643",
+          "byte_length": 16676,
+          "format": "protein_structure_components_v1",
+          "sha256": "62da62b67f14cd2b30d82806b9eaa7a7bc2ecdfc795773b30ace1bc4f9749643"
+        },
+        "relative_path": "components.json"
+      },
+      "evaluation_mean_distance": {
+        "origin": "derived",
+        "reason": null,
+        "state": "present",
+        "unit": "angstrom",
+        "value": 0.4
+      },
+      "evaluation_rmsd": {
+        "origin": "derived",
+        "reason": null,
+        "state": "present",
+        "unit": "angstrom",
+        "value": 0.8944271909999156
+      },
+      "evaluation_sse": {
+        "origin": "derived",
+        "reason": null,
+        "state": "present",
+        "unit": "angstrom_squared",
+        "value": 3.9999999999999982
+      },
+      "evaluation_used_count": {
+        "origin": "derived",
+        "reason": null,
+        "state": "present",
+        "unit": "pair",
+        "value": 5
+      },
+      "execution_metadata": {
+        "duration_measure": "systemd_service_wall_seconds",
+        "elapsed_seconds": 1.399101839,
+        "enforcement": {
+          "filesystem_sandbox": false,
+          "memory": "systemd_cgroup_v2_memory_max",
+          "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+          "process_tree": "systemd_control_group",
+          "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+          "swap": "systemd_memory_swap_max_zero",
+          "wall_time": "unset"
+        },
+        "native_lifecycle_version": "durable_systemd_native_job_v2",
+        "native_returncode": 0,
+        "observed_scratch_bytes": 180224,
+        "policy": {
+          "memory_bytes": 21474836480,
+          "scratch_bytes": 4294967296,
+          "wall_seconds": null
+        },
+        "service_exit": {
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "0",
+          "SERVICE_RESULT": "success",
+          "ended": {
+            "at": "2026-10-27T08:43:26.726554+00:00",
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+            "monotonic_ns": 904168423880190
+          }
+        },
+        "verified_cgroup": {
+          "kill_mode": "control-group",
+          "memory_max": 21474836480,
+          "memory_swap_max": 0,
+          "oom_policy": "kill",
+          "runtime_max": "infinity"
+        }
+      },
+      "fit_used_count": {
+        "origin": "derived",
+        "reason": null,
+        "state": "present",
+        "unit": "pair",
+        "value": 4
+      },
+      "sheet_file": {
+        "file_identity": {
+          "artifact_ref": "artifact_142a685528952ab4780871ada9acc2246f42859b370a45b6f8c45f422f7337bc",
+          "byte_length": 124512,
+          "format": "protein_structure_comparison_sheet_v1",
+          "sha256": "142a685528952ab4780871ada9acc2246f42859b370a45b6f8c45f422f7337bc"
+        },
+        "relative_path": "sheet.json"
+      },
+      "site_measurements": [
+        {
+          "above_threshold": null,
+          "correspondence_id": "map_0",
+          "distance": {
+            "origin": "derived",
+            "reason": null,
+            "state": "present",
+            "unit": "angstrom",
+            "value": 1.5202354861220294e-16
+          },
+          "distance_squared": {
+            "origin": "derived",
+            "reason": null,
+            "state": "present",
+            "unit": "angstrom_squared",
+            "value": 2.311115933264683e-32
+          },
+          "evaluated": true,
+          "fixed_position_0based": 0,
+          "in_evaluation": true,
+          "in_fit": true,
+          "moving_position_0based": 0,
+          "moving_transformed_xyz": {
+            "origin": "derived",
+            "reason": null,
+            "state": "present",
+            "unit": "angstrom",
+            "value": [
+              1.3877787807814457e-16,
+              -5.551115123125783e-17,
+              2.7755575615628914e-17
+            ]
+          },
+          "primary_reason": null,
+          "qualifications": [],
+          "request_index_0based": 0,
+          "residual_xyz": {
+            "origin": "derived",
+            "reason": null,
+            "state": "present",
+            "unit": "angstrom",
+            "value": [
+              1.3877787807814457e-16,
+              -5.551115123125783e-17,
+              2.7755575615628914e-17
+            ]
+          },
+          "selector": {
+            "correspondence_id": "map_0",
+            "kind": "correspondence_id"
+          }
+        },
+        {
+          "above_threshold": null,
+          "correspondence_id": "map_1",
+          "distance": {
+            "origin": "derived",
+            "reason": null,
+            "state": "present",
+            "unit": "angstrom",
+            "value": 2.1872775922409216e-16
+          },
+          "distance_squared": {
+            "origin": "derived",
+            "reason": null,
+            "state": "present",
+            "unit": "angstrom_squared",
+            "value": 4.7841832655192433e-32
+          },
+          "evaluated": true,
+          "fixed_position_0based": 1,
+          "in_evaluation": true,
+          "in_fit": true,
+          "moving_position_0based": 1,
+          "moving_transformed_xyz": {
+            "origin": "derived",
+            "reason": null,
+            "state": "present",
+            "unit": "angstrom",
+            "value": [
+              0.9999999999999999,
+              1.4641211359218755e-16,
+              1.1865653797655863e-16
+            ]
+          },
+          "primary_reason": null,
+          "qualifications": [],
+          "request_index_0based": 1,
+          "residual_xyz": {
+            "origin": "derived",
+            "reason": null,
+            "state": "present",
+            "unit": "angstrom",
+            "value": [
+              -1.1102230246251565e-16,
+              1.4641211359218755e-16,
+              1.1865653797655863e-16
+            ]
+          },
+          "selector": {
+            "correspondence_id": "map_1",
+            "kind": "correspondence_id"
+          }
+        },
+        {
+          "above_threshold": null,
+          "correspondence_id": "map_2",
+          "distance": {
+            "origin": "derived",
+            "reason": null,
+            "state": "present",
+            "unit": "angstrom",
+            "value": 1.3402000237321731e-16
+          },
+          "distance_squared": {
+            "origin": "derived",
+            "reason": null,
+            "state": "present",
+            "unit": "angstrom_squared",
+            "value": 1.7961361036117176e-32
+          },
+          "evaluated": true,
+          "fixed_position_0based": 2,
+          "in_evaluation": true,
+          "in_fit": true,
+          "moving_position_0based": 2,
+          "moving_transformed_xyz": {
+            "origin": "derived",
+            "reason": null,
+            "state": "present",
+            "unit": "angstrom",
+            "value": [
+              -7.363973066179772e-17,
+              1.0,
+              -1.1197567193000033e-16
+            ]
+          },
+          "primary_reason": null,
+          "qualifications": [],
+          "request_index_0based": 2,
+          "residual_xyz": {
+            "origin": "derived",
+            "reason": null,
+            "state": "present",
+            "unit": "angstrom",
+            "value": [
+              -7.363973066179772e-17,
+              0.0,
+              -1.1197567193000033e-16
+            ]
+          },
+          "selector": {
+            "correspondence_id": "map_2",
+            "kind": "correspondence_id"
+          }
+        },
+        {
+          "above_threshold": null,
+          "correspondence_id": "map_3",
+          "distance": {
+            "origin": "derived",
+            "reason": null,
+            "state": "present",
+            "unit": "angstrom",
+            "value": 1.404654593002797e-16
+          },
+          "distance_squared": {
+            "origin": "derived",
+            "reason": null,
+            "state": "present",
+            "unit": "angstrom_squared",
+            "value": 1.9730545256438539e-32
+          },
+          "evaluated": true,
+          "fixed_position_0based": 3,
+          "in_evaluation": true,
+          "in_fit": true,
+          "moving_position_0based": 3,
+          "moving_transformed_xyz": {
+            "origin": "derived",
+            "reason": null,
+            "state": "present",
+            "unit": "angstrom",
+            "value": [
+              6.31453867453008e-17,
+              -5.845728136978848e-17,
+              0.9999999999999999
+            ]
+          },
+          "primary_reason": null,
+          "qualifications": [],
+          "request_index_0based": 3,
+          "residual_xyz": {
+            "origin": "derived",
+            "reason": null,
+            "state": "present",
+            "unit": "angstrom",
+            "value": [
+              6.31453867453008e-17,
+              -5.845728136978848e-17,
+              -1.1102230246251565e-16
+            ]
+          },
+          "selector": {
+            "correspondence_id": "map_3",
+            "kind": "correspondence_id"
+          }
+        },
+        {
+          "above_threshold": null,
+          "correspondence_id": "map_4",
+          "distance": {
+            "origin": "derived",
+            "reason": null,
+            "state": "present",
+            "unit": "angstrom",
+            "value": 1.9999999999999996
+          },
+          "distance_squared": {
+            "origin": "derived",
+            "reason": null,
+            "state": "present",
+            "unit": "angstrom_squared",
+            "value": 3.9999999999999982
+          },
+          "evaluated": true,
+          "fixed_position_0based": 4,
+          "in_evaluation": true,
+          "in_fit": false,
+          "moving_position_0based": 4,
+          "moving_transformed_xyz": {
+            "origin": "derived",
+            "reason": null,
+            "state": "present",
+            "unit": "angstrom",
+            "value": [
+              0.9999999999999994,
+              1.0000000000000002,
+              2.9999999999999996
+            ]
+          },
+          "primary_reason": null,
+          "qualifications": [],
+          "request_index_0based": 4,
+          "residual_xyz": {
+            "origin": "derived",
+            "reason": null,
+            "state": "present",
+            "unit": "angstrom",
+            "value": [
+              -5.551115123125783e-16,
+              2.220446049250313e-16,
+              1.9999999999999996
+            ]
+          },
+          "selector": {
+            "correspondence_id": "map_4",
+            "kind": "correspondence_id"
+          }
+        }
+      ],
+      "unit": "gene-local-job-d7a7ac506d5f44d696b3e9315b1c3297.service",
+      "worker_result_artifact_ref": "artifact_830f36bdfe91929f0ed322316b82c106a49677b0bee38249d8c71313da01f6bb"
+    }
+  },
+  "expected_original": "four fit pairs, one held-out evaluation; distance/RMSD2 angstrom, SSE4 angstrom_squared",
+  "expected_saved": "same four fit pairs, five evaluations; RMSD sqrt(4/5) angstrom; original sheet/baseline unchanged",
+  "qualification": "synthetic_native_format_engineering_fixture",
+  "source_record": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_original_and_changed_save0/filled-example.json",
+  "store": "verification/tool_graders_protein_structure_preparation_2026-10-27_396/check003/temporary/pytest/test_original_and_changed_save0/store"
+}

@@ -1,0 +1,54 @@
+{
+  "version": "controlled_response_covariance_source_v1",
+  "variables": [
+    {
+      "label": "protein one",
+      "unit": "nmol/min/mg",
+      "description": "Observation P1: protein-containing response in protocol one, 12 nmol/min/mg."
+    },
+    {
+      "label": "empty one",
+      "unit": "nmol/min/mg",
+      "description": "Observation E1: protein-free response in protocol one, 2 nmol/min/mg."
+    },
+    {
+      "label": "protein zero",
+      "unit": "nmol/min/mg",
+      "description": "Observation P0: protein-containing response in protocol zero, 5 nmol/min/mg."
+    },
+    {
+      "label": "empty zero",
+      "unit": "nmol/min/mg",
+      "description": "Observation E0: protein-free response in protocol zero, 1 nmol/min/mg."
+    }
+  ],
+  "covariance": [
+    [
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0.25,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0.36,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0.09
+    ]
+  ],
+  "origin": "synthetic",
+  "variance_status": "known",
+  "model_kind": "none"
+}

@@ -1,0 +1,6 @@
+#!/home/chia/repos/gene_annotation_episode/.venv/bin/python
+import json,os,pathlib,sys
+root=pathlib.Path(os.environ['FAKE_PBS_ROOT'])
+if (root/'selection-enabled').exists():
+    for path in sorted(root.glob('*.aurora.json')):
+        if json.loads(path.read_text())['Job_Name']==sys.argv[-1]:print(path.name[:-5])

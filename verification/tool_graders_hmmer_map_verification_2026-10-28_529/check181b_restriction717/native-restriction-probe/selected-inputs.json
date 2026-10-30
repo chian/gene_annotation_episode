@@ -1,0 +1,55 @@
+{
+  "bcgi_construction": {
+    "left_flank": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "native_motif": "CGANNNNNNTGC",
+    "replacement": {
+      "N": "A"
+    },
+    "right_flank": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  "inputs": [
+    [
+      "ecori_linear_internal",
+      "AAAAGAATTCTTTT",
+      true,
+      "explicit",
+      [
+        "EcoRI"
+      ]
+    ],
+    [
+      "ecori_linear_origin",
+      "AATTCAAAAG",
+      true,
+      "explicit",
+      [
+        "EcoRI"
+      ]
+    ],
+    [
+      "ecori_circular_origin",
+      "AATTCAAAAG",
+      false,
+      "explicit",
+      [
+        "EcoRI"
+      ]
+    ],
+    [
+      "bcgi_linear_two_cuts",
+      "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACGAAAAAAATGCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      true,
+      "explicit",
+      [
+        "BcgI"
+      ]
+    ],
+    [
+      "commercial_linear_internal",
+      "AAAAGAATTCTTTT",
+      true,
+      "commercial_native_batch",
+      null
+    ]
+  ]
+}

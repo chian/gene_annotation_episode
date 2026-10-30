@@ -1,0 +1,36 @@
+# A105 component uncertainty repair 215
+
+The existing selected `literature.assay.components.populate` compiler now has an explicitly selected v2 input/record/sheet route. It accepts owned named-subset joint covariance and populates variance and standard uncertainty for q/E, q/(kE), and fully corrected activity in the same sheet. This is an engineering repair of audit214, not a new paper review, another assay grader, a common reliability score, or an A105 adequacy claim.
+
+## Numerical meaning
+
+For a=q/E the derivative is (1/E,-q/E²); variance is Var(q)/E² + q² Var(E)/E⁴ - 2q Cov(q,E)/E³. For a=q/(kE) the derivative is (1/(kE),-q/(k²E),-q/(kE²)). Both use their actual named joint submatrix, including signed cross terms. The full six-input derivative remains the existing correction derivative. First-order propagation describes uncertainty contributed by the selected operands; it does not establish a sampling distribution or confidence level.
+
+The explicit synthetic selected example has q=1.8 uM/min, E=2 uM and covariance [[0.04,0.005],[0.005,0.01]] in the corresponding mixed canonical units. It returns q/E=0.9 per_min, propagated variance=0.009775 per_min_squared, and standard uncertainty=0.09886859966642594 per_min. Missing g/k/u/v are never padded with measurement owners. Full corrected activity and its total variance remain unavailable for this partial example. The covariance is stipulated synthetic, not extracted paper uncertainty. Exact populated values and source-owned identities are in NUMERICAL_EXAMPLE_001.json.
+
+The new corrected_activity_propagated_variance and standard-uncertainty cells exclude distinct residual variability. Existing effect_variance continues to require propagated variance plus the supported distinct residual. An actual fully owned joint block can therefore supply propagated uncertainty while total variance stays unavailable if the distinct residual is unknown. Existing conditional profile/index requirements remain unchanged; no new probability or grading ladder was introduced.
+
+## Interfaces and custody
+
+- Legacy requests without a marker and `compiled_assay_population_schema()` remain exact v1. V1 schema snapshots were captured from the frozen209 package used by audit214 and compared exactly in the new test.
+- V2 requests use `population_version: a105_compiled_assay_population_v2` and ordered unique `covariance_source_refs`. Each source is closed `a105_compiled_assay_covariance_v2` with a nonempty unique named primitive subset, exact actual operand owners, units and dependency lists, N×N covariance (nullable only for explicitly unknown status), origin, basis and known/estimated/unknown variance status.
+- Every listed owner must already be possessed and numerically eligible. Finite, symmetric, PSD and repeated-quantity relationships are checked. Overlapping blocks must agree exactly on shared owners/status/entries. The first actual joint block covering a component is selected in request order. Separate marginal blocks are never assembled by inventing missing cross terms or assuming independence.
+- `literature_compiled_assay_v2_cells` and `requested_compiled_assay_components_v2` are explicit versioned transport contracts. This spelling matches the inherited actual runtime delivery-authentication convention. V1 and v2 use the same compiler operation and operations table, with separate versioned receive/delivery views. There is no v1-to-v2 projection or implicit saved-value migration.
+- V2 rows carry component-scoped estimand, covariance source/order, actual operand keys, variance status, origin and propagation model. Derived-only returns retain dependencies without disclosing unrequested primitive values or covariance matrices. Existing numerical declaration/compaction and exact registered communication paths recognize both versions; runtime203 and its helper bytes remain unchanged.
+- The original complete recurring TASK remains intact. The exact scientific paragraph supplied by root was appended; TASK_ADDITION_001.txt preserves it. Existing controlled STEERING renders only requested rows and distinguishes operand-propagated from total uncertainty. Historical v1 rendering retains its original partial-uncertainty limit.
+
+## Execution and verification
+
+TEST_RECEIPT_002.json records the actual completed checks: 29 original compiler checks; 244 declaration203/channel188/ion199 checks; 25 new215 checks. These are 298 distinct collected cases across the listed groups; earlier subset/standalone reruns are not added. The original29 ran before the final v2-only finite-integer guard/export-list edits; the latter269 cases ran against final frozen bytes.
+
+The actual synthetic mixed v1 literal/v2 alias child run selected four upstream source population operations and two compiler operations. The ordinary loop recorded eight actions and eight observations (six child operations, one child action received by the parent, one parent source-grounded reasoning action). No internal extraction/calculation/reporting observation was created. All controller scores in this fixture remained zero under its caller-bound scheme. The first attempt used an empty parent reasoning commit and correctly failed to complete that action; only the fixture was repaired, with no controller/runtime change.
+
+selected_cold_001 contains the exact admitted mixed form, child request, saved sheets, recurring tasks and successful proof receipt. Cold reconstruction opened SQLite read-only before binding composition; source acquisition, calculators and receive were blocked; original and upstream scientific source bytes were inaccessible; both exact saved return versions were reconstructed with zero writes and unchanged state-file hashes. This is controlled engineering execution, not actual model-backed literature science or detached-process deployment.
+
+## Preserved boundaries and remaining work
+
+Nine explicitly released existing files changed; the registry-driven numerical return presenter needed no edit. FINAL_CODE_HASHES_001.json identifies the final code/test bytes. Initial protected hashes are unchanged. SCIENTIFIC209_PRESERVATION_001.json independently compares 14 relevant scientific209/runtime203/helper/presenter/parent/ion-render files against the frozen209 final pin, with zero differences. No tool-grader, other-axis, W05, controller, original goal, historical amendment or product212 file was changed.
+
+Bounded/approximate operands, native already-normalized uncertainty and covariance for bypassed correction stages remain explicitly unsupported. Algebraic correction identities are never fabricated measurement owners. This reader accepts explicitly prepared covariance sources; it does not implement a universal covariance producer from arbitrary papers or infer covariance from CV, SD, SEM or counts. The repair does not combine validation loss with k uncertainty, establish endpoint-to-function relevance, identify product, count independent assays, or coordinate a complete cross-assay reliability/validity/relevance sheet. Those scientific compilation links and W05 remain unfinished work.
+
+Read provenance and scope limitations are recorded in READ_PROVENANCE_001.json. No paper or retained paper-specific scientific packet was reviewed by this workload.

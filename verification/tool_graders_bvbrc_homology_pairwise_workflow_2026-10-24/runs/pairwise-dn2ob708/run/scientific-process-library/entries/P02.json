@@ -1,0 +1,66 @@
+{
+  "slot": "thought_pattern",
+  "id": "P02",
+  "name": "Seek cases that break a proposed predictor",
+  "description": "Treat an implication as something that can fail. Prefer feature/function discordance: feature without function challenges sufficiency; function without feature challenges necessity.",
+  "use_when": "An annotation is extended using a residue, motif, similarity rank, genomic partner or contact as a predictor.",
+  "live_alternatives": [
+    "The feature is sufficient, necessary, both or merely correlated in the relevant domain.",
+    "Discordance is a real exception.",
+    "Apparent discordance reflects incomplete measurement or an inapplicable assay."
+  ],
+  "decision_guidance": [
+    "Name the feature-to-function implication before selecting a comparison. Seek informative discordance rather than additional concordant relatives.",
+    "Keep blank genomic fields, assay limits and failed complementation distinct; none can silently become another kind of negative.",
+    "Compare alternative recognition or contextual explanations after an exception, without treating a post-hoc explanation as a validated replacement rule."
+  ],
+  "outcome_contingencies": [
+    {
+      "if_observed": "Feature-positive/function-negative is established",
+      "then_consider": "Narrow sufficiency without automatically rejecting necessity."
+    },
+    {
+      "if_observed": "Feature-negative/function-positive is established",
+      "then_consider": "Narrow necessity while retaining uncertainty about alternative mechanisms."
+    },
+    {
+      "if_observed": "The supposed negative is unmeasured or inapplicable",
+      "then_consider": "Retain unresolved status and seek an informative comparator."
+    }
+  ],
+  "boundary": "A feature/function counterexample tests an implication without establishing classifier accuracy. P01 bounds transfer from an analogue; P17 additionally requires evidence that a causal perturbation selectively changed one property while relevant alternatives survived. Natural discordance alone does not establish causal selectivity.",
+  "evidence": [
+    {
+      "case_group": "seq_hisn_impase_discrimination",
+      "case_id": "seq_hisn_impase_discrimination",
+      "source_url": "https://link.springer.com/article/10.1186/s12866-017-1069-4",
+      "source_locator": "Primary Table 3 and motif Results; comparison/counterexample_calculations.json.",
+      "observation": "A higher-scoring motif-deficient candidate failed complementation while lower-scoring motif-bearing candidates succeeded.",
+      "limit": "Selected comparisons are not a classifier benchmark; expression and host effects remain alternatives."
+    },
+    {
+      "case_group": "BC1793_Hitchcock_2013",
+      "case_id": "BC1793_Hitchcock_2013",
+      "source_url": "https://doi.org/10.1021/ja4066078",
+      "source_locator": "Primary Table 1 and SAH discussion; comparison/counterexample_calculations.json.",
+      "observation": "Arginine-positive Bc1793 lacked measured SAH activity; Tvn0515 lacked template arginines yet had SAH activity.",
+      "limit": "Censored efficiencies remain bounds; loop/contact explanations were modeled."
+    },
+    {
+      "case_group": "seq_triA_atzA_near_identity",
+      "case_id": "seq_triA_atzA_near_identity",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC95154/",
+      "source_locator": "Case-record observation; inspected scope: Primary introduction, sequence results, substrate table and competition methods/results inspected through indexed full text. Historical organism name preserved explicitly.",
+      "observation": "Nine differences in 475 residues accompanied different substrate chemistry, defeating near identity as a sufficient specificity rule.",
+      "limit": "The study did not establish a universal specificity rule for the nine substitutions."
+    },
+    {
+      "case_group": "cellular_y_complex",
+      "case_id": "cellular_y_complex",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6004469/",
+      "source_locator": "Selected-transcript processing Results; cellular/detailed_traces.json route B.",
+      "observation": "Selected RNA ends were lost while rnpB behaved differently from the rny mutant, challenging a uniform RNase Y dependency.",
+      "limit": "Processed tracks were extracted descriptively; end-chemistry validation was author-performed."
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+--- 004/gene_annotation_episode/literature_experimental_prompt.py
++++ 007/gene_annotation_episode/literature_experimental_prompt.py
+@@ -9,7 +9,8 @@
+ from .literature_binding_interaction_render import hidden_records as _interaction_hidden_records, render_received as _interaction_received
+ from .literature_ratio_source_prompt import SOURCE_RATIO_TASK
+ from .literature_ratio_source_render import (hidden_records as _ratio_source_hidden_records,
+-    render_received as _ratio_source_received, render_own_result as _ratio_source_own, is_row as _ratio_source_row)
++    render_received as _ratio_source_received, render_own_result as _ratio_source_own,
++    is_row as _ratio_source_row, rows_from_reports as _ratio_source_rows)
+ 
+ from collections.abc import Mapping
+ 
+@@ -807,7 +808,14 @@
+         _section(parts, "Relevant received experimental facts", _values(selected))
+     outcome = state.get("last_local_outcome")
+     if outcome is not None:
+-        _source_result(parts, outcome, "Last selected action outcome")
++        received_ratio_sheets = {row['sheet_ref'] for row in _ratio_source_rows(state.get('child_reports', ()))}
++        if (isinstance(outcome, Mapping) and 'result' not in outcome
++                and received_ratio_sheets.intersection(outcome.get('record_refs', ()))):
++            # The original child return's host receipt refs are not an extra
++            # scientific return. Its exact admitted rows are rendered below.
++            _section(parts, 'Last selected action outcome', _values(_pick(outcome, ('status', 'feedback'))))
++        else:
++            _source_result(parts, outcome, "Last selected action outcome")
+     if state.get("feedback") is not None and state["feedback"] != (outcome or {}).get("feedback"):
+         _section(parts, "Actionable feedback", _values(state["feedback"]))
+     if state.get("current_report_update"):

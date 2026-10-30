@@ -1,0 +1,43 @@
+.............................F.................................          [100%]
+=================================== FAILURES ===================================
+_______________ test_saved_extraction_forgery_rejected[path3-5] ________________
+
+path = ('representations', 0, 'readings', 0, 'numerator', 'exact', ...)
+value = '5'
+
+    @pytest.mark.parametrize('path,value', [
+        (('representations', 0, 'readings', 0, 'ratio'), .9),
+        (('representations', 0, 'readings', 0, 'ratio_exact', 'numerator'), '9'),
+        (('representations', 0, 'readings', 0, 'numerator', 'value'), .9),
+        (('representations', 0, 'readings', 0, 'numerator', 'exact', 'denominator'), '5'),
+        (('representations', 0, 'readings', 0, 'numerator', 'literal'), '0.9'),
+        (('representations', 0, 'readings', 0, 'reported_domains', 0, 'lower'), .9),
+        (('representations', 0, 'readings', 0, 'source_reading_key'), 'f' * 64),
+        (('representations', 0, 'readings', 0, 'numerator', 'locator', 'frame'), 9),
+        (('representations', 0, 'readings', 0, 'numerator', 'locator', 'original_source_ref'), 'source_' + 'f' * 24),
+        (('representations', 0, 'origin'), 'reported'),
+        (('representations', 0, 'reading_state'), 'conflicting'),
+        (('representations', 0, 'parse_status'), 'unavailable'),
+        (('representations', 0, 'physical_measurement', 'value'), 'fake_owner'),
+        (('representations', 0, 'comparison_relation', 'value'), 'unknown'),
+        (('representations', 0, 'comparison_relation', 'witnesses', 0, 'authentication'), 'unavailable'),
+        (('views', 0, 'own_action_receipt', 'view_ref'), VIEW2),
+        (('views', 0, 'metadata', 'width'), 1),
+        (('views', 0, 'state'), 'unavailable'),
+        (('views', 0, 'original_sha256'), 'bad'),
+        (('evidence_origin',), 'reported_source'),
+        (('comparison', 'endpoint', 'status'), 'known'),
+    ])
+    def test_saved_extraction_forgery_rejected(path, value):
+        selection, extraction, sheet, outcome = saved()
+        target = extraction
+        for field in path[:-1]:
+            target = target[field]
+        target[path[-1]] = value
+>       with pytest.raises(ExperimentalContractError):
+E       Failed: DID NOT RAISE ExperimentalContractError
+
+tests/test_literature_ratio_source_validation.py:72: Failed
+=========================== short test summary info ============================
+FAILED tests/test_literature_ratio_source_validation.py::test_saved_extraction_forgery_rejected[path3-5]
+1 failed, 62 passed in 3.80s

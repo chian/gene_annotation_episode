@@ -1,0 +1,263 @@
+{
+  "operation": {
+    "program": null,
+    "native_version": null,
+    "settings": {}
+  },
+  "artifacts": [
+    {
+      "artifact_id": "synthetic-json",
+      "artifact_index": 0,
+      "format": "rfam_single_json",
+      "content": "{\"synthetic\":true}",
+      "effective_complete": true,
+      "rows": [],
+      "issues": [],
+      "status": "available",
+      "source_descriptor": {
+        "profile": "rfam_single_json",
+        "source_ref": null,
+        "artifact_ref": null,
+        "source_sha256": null,
+        "source_byte_length": null,
+        "byte_hash_verified": false
+      }
+    }
+  ],
+  "hits": [
+    {
+      "hit_id": "synthetic-json/hits/SYNTHETIC/0",
+      "locator": {
+        "kind": "json",
+        "artifact_id": "synthetic-json",
+        "artifact_index": 0,
+        "json_pointer": "/hits/SYNTHETIC/0"
+      },
+      "sequence": {
+        "name": null,
+        "accession": null,
+        "native_role": "query",
+        "input_record_occurrence": 1,
+        "identity": {
+          "kind": "supplied_sequence_metadata",
+          "metadata_index": 0
+        },
+        "metadata_join": {
+          "status": "matched",
+          "metadata_index": 0,
+          "candidate_indices": [
+            0
+          ],
+          "rejected_identity_indices": [],
+          "unresolved_occurrence_indices": []
+        }
+      },
+      "model": {
+        "name": "SYNTHETIC",
+        "accession": "RF_SYNTHETIC",
+        "native_role": "target",
+        "input_record_occurrence": null,
+        "metadata_join": {
+          "status": "missing",
+          "metadata_index": null
+        }
+      },
+      "sequence_from": 1,
+      "sequence_to": 2,
+      "model_from": null,
+      "model_to": null,
+      "native_sequence_length": null,
+      "native_model_length": null,
+      "strand": "+",
+      "bitscore": 4.0,
+      "evalue": 0.0,
+      "gc_fraction": 0.0,
+      "bias_bits": null,
+      "algorithm": null,
+      "inclusion": null,
+      "native_tokens": {},
+      "source_details": {
+        "profile": "rfam_single_json",
+        "native_json_pointer": "/hits/SYNTHETIC/0",
+        "document_ordinal": 0,
+        "family_list_ordinal": 0,
+        "family_name": "SYNTHETIC",
+        "identity_valid": true,
+        "query_coordinates_valid": true,
+        "model_metadata_ref": null,
+        "alignment_identity": null,
+        "raw_row": {
+          "synthetic": true
+        },
+        "missing": {}
+      },
+      "attribution": {
+        "sequence": "valid",
+        "model": "valid",
+        "source_locators": [
+          {
+            "kind": "json",
+            "artifact_id": "synthetic-json",
+            "artifact_index": 0,
+            "json_pointer": "/hits/SYNTHETIC/0"
+          }
+        ]
+      },
+      "query_occurrence_key": "synthetic:occurrence:1",
+      "population_complete": true,
+      "correspondence": {
+        "status": "complete",
+        "display_model_from": 1,
+        "display_model_to": 2,
+        "display_query_from": 1,
+        "display_query_to": 2,
+        "segments": [
+          {
+            "kind": "match",
+            "model_interval": [
+              0,
+              2
+            ],
+            "query_interval": [
+              0,
+              2
+            ],
+            "model_text": "AU",
+            "query_text": "AU",
+            "model_count": 2,
+            "query_count": 2,
+            "correspondence_represented": true
+          }
+        ],
+        "paired_positions": [
+          {
+            "model_position": 0,
+            "query_position": 0,
+            "consensus_symbol": "A",
+            "query_symbol": "A"
+          },
+          {
+            "model_position": 1,
+            "query_position": 1,
+            "consensus_symbol": "U",
+            "query_symbol": "U"
+          }
+        ],
+        "aligned_model_intervals": [
+          [
+            0,
+            2
+          ]
+        ],
+        "aligned_query_intervals": [
+          [
+            0,
+            2
+          ]
+        ],
+        "posterior_segments": [],
+        "blocks": [],
+        "issues": [],
+        "model_consensus_compared_count": 2,
+        "model_consensus_equal_count": 2,
+        "query_insert_count": 0,
+        "model_delete_count": 0,
+        "truncated_model_count_5p": 0,
+        "truncated_model_count_3p": 0,
+        "local_end_model_omitted_count": 0,
+        "local_end_query_count": 0
+      },
+      "duplicate_of": null,
+      "native_rank": null,
+      "native_alignment_accuracy": null,
+      "native_model_boundary": null,
+      "native_sequence_boundary": null,
+      "issues": []
+    }
+  ],
+  "sequence_metadata": [
+    {
+      "name": null,
+      "sequence": "AU",
+      "length": 2,
+      "query_occurrence_key": "synthetic:occurrence:1"
+    },
+    {
+      "name": null,
+      "sequence": "GC",
+      "length": 2,
+      "query_occurrence_key": "synthetic:occurrence:2"
+    }
+  ],
+  "model_metadata": null,
+  "sequence_populations": [
+    {
+      "sequence_identity": {
+        "kind": "supplied_sequence_metadata",
+        "metadata_index": 0
+      },
+      "query_occurrence_key": "synthetic:occurrence:1",
+      "native_name": null,
+      "length": {
+        "native": null,
+        "supplied": 2,
+        "value": 2,
+        "status": "validated",
+        "provenance": {
+          "native": null,
+          "metadata_index": 0
+        }
+      },
+      "declared_strands": [
+        "+",
+        "-"
+      ],
+      "reported_set_complete": true,
+      "reported_row_count": 1,
+      "source_locators": [
+        {
+          "kind": "json",
+          "artifact_id": "synthetic-json",
+          "artifact_index": 0,
+          "json_pointer": "/hits/SYNTHETIC/0"
+        }
+      ],
+      "membership_basis": "frozen_complete_input",
+      "issues": []
+    },
+    {
+      "sequence_identity": {
+        "kind": "supplied_sequence_metadata",
+        "metadata_index": 1
+      },
+      "query_occurrence_key": "synthetic:occurrence:2",
+      "native_name": null,
+      "length": {
+        "native": null,
+        "supplied": 2,
+        "value": 2,
+        "status": "validated",
+        "provenance": {
+          "native": null,
+          "metadata_index": 1
+        }
+      },
+      "declared_strands": [
+        "+",
+        "-"
+      ],
+      "reported_set_complete": true,
+      "reported_row_count": 0,
+      "source_locators": [],
+      "membership_basis": "frozen_complete_input",
+      "issues": []
+    }
+  ],
+  "source_context": {
+    "profile": "rfam_single_json"
+  },
+  "issues": [],
+  "statistical_limitations": [
+    "Explicit synthetic API-shape fixture; not a scientific measurement."
+  ]
+}

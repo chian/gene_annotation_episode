@@ -1,0 +1,76 @@
+{
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "controlled_response_covariance_source_v1"
+    },
+    "variables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "unit": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "label",
+          "unit",
+          "description"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "covariance": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 1
+      },
+      "minItems": 1
+    },
+    "origin": {
+      "enum": [
+        "reported",
+        "derived",
+        "synthetic"
+      ]
+    },
+    "variance_status": {
+      "enum": [
+        "known",
+        "estimated",
+        "unknown"
+      ]
+    },
+    "model_kind": {
+      "enum": [
+        "none",
+        "known_joint_normal_source_means"
+      ]
+    }
+  },
+  "required": [
+    "version",
+    "variables",
+    "covariance",
+    "origin",
+    "variance_status",
+    "model_kind"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

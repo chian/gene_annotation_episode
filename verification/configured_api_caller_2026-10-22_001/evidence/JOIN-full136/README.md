@@ -1,0 +1,5 @@
+One distinct joined test passed against final136 runtime pin209ff0d8ca80a6ee2a592f997933115e2f688f8ccc90e6db35e40146dabb613f. The earlier failed invocation and complete fixture tree remain separate. RESULTS.json names exact commands, XML, outputs, input identities and observed outcomes.
+
+The raw fixture directories are retained in place with their original paths; each RAW_FIXTURE_TREE.json records pre-seal membership, hash, size, mode, mtime and symlink text. Publication makes regular files read-only and directories nonwritable; it does not rewrite fixture bytes. The two pytest current aliases retain their original absolute link text, pointing into this same retained evidence tree.
+
+Only synthetic local records and actual application implementations with scripted ModelConnection.complete were used. No original scientific source, configured model transport, public HTTP or native program was used. This proves the custody-to-caller baseline/credit/continuation seam and does not establish scientific usefulness or overall completion.

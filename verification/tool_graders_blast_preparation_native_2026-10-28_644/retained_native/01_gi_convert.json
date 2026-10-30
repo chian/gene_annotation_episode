@@ -1,0 +1,85 @@
+{
+  "id": "01_gi_convert",
+  "purpose": "GI conversion preserves malformed-line warning and native handling of duplicates/order",
+  "independently_selected_verification_helper": false,
+  "program": "blastdb_aliastool",
+  "argv": [
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdb_aliastool",
+    "-gi_file_in",
+    "gi.txt",
+    "-gi_file_out",
+    "ids.bgl"
+  ],
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/gi",
+  "shell": false,
+  "executable": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/source_snapshot/resources/software/ncbi-blast-2.17.0+/bin/blastdb_aliastool",
+    "sha256": "71c9fa9760f4215b714e762a230486e7ae739c8a363396dd00a4bbb0329f2524",
+    "size_bytes": 22056640
+  },
+  "input_bindings": [
+    {
+      "role": "selected_engineering_text_input",
+      "native_operand": "gi.txt",
+      "content_utf8": "# engineering\n9\n3\n9\nnot-a-gi\n\n",
+      "staged": {
+        "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/gi/gi.txt",
+        "sha256": "ef5af664eedc538978845cee991d98103e00bff5236b346b326b757f763ad2af",
+        "size_bytes": 30
+      }
+    }
+  ],
+  "inventory_before": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/gi/gi.txt",
+      "sha256": "ef5af664eedc538978845cee991d98103e00bff5236b346b326b757f763ad2af",
+      "size_bytes": 30,
+      "relative_path": "gi.txt"
+    }
+  ],
+  "started": true,
+  "returncode": 0,
+  "launch_error": null,
+  "stdout": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/logs/01_gi_convert.stdout",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "size_bytes": 0
+  },
+  "stderr": {
+    "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/logs/01_gi_convert.stderr",
+    "sha256": "4d9f49abcb2a0a30849aac49859b49d9c3ee1343fcff6b9e4f1202b26bde69e8",
+    "size_bytes": 36
+  },
+  "writer_closed": true,
+  "inventory_complete": true,
+  "captured_bytes_complete": true,
+  "native_status": "succeeded",
+  "semantic_compatibility": "unverified",
+  "inventory_after": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/gi/gi.txt",
+      "sha256": "ef5af664eedc538978845cee991d98103e00bff5236b346b326b757f763ad2af",
+      "size_bytes": 30,
+      "relative_path": "gi.txt"
+    },
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/gi/ids.bgl",
+      "sha256": "e8d7495e37440be7c9121d56f63d9cc779986a64c56ef8d3844a5c252cc245b5",
+      "size_bytes": 20,
+      "relative_path": "ids.bgl"
+    }
+  ],
+  "new_files": [
+    {
+      "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check102_blast_preparation_native/temporary/blast_preparation_native644/cases/gi/ids.bgl",
+      "sha256": "e8d7495e37440be7c9121d56f63d9cc779986a64c56ef8d3844a5c252cc245b5",
+      "size_bytes": 20,
+      "relative_path": "ids.bgl"
+    }
+  ],
+  "changed_files": [],
+  "removed_files": [],
+  "stdout_utf8": "",
+  "stderr_utf8": "Converted 3 GIs into binary GI file\n",
+  "native_text_outputs": []
+}

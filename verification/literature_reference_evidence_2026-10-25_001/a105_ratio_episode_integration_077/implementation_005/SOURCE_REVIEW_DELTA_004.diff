@@ -1,0 +1,536 @@
+--- a/gene_annotation_episode/literature_episodes.py
++++ b/gene_annotation_episode/literature_episodes.py
+@@ -65,7 +65,7 @@
+ }
+ 
+ 
+-def _population_catalog():
++def _population_catalog(*, ratio_source_population=False):
+     """Actual child population operations, independent of episode identity."""
+     result = []
+     from .literature_rate_storage import rate_population_schema
+@@ -144,6 +144,12 @@
+     result.append({"name": "literature.binding.interaction.populate",
+         "description": "Read four selected original-image binding cells for two separately assayed source molecular forms and two ligands. Populate native IC50 or reported Hill-fit Kd parameters, within-form ligand ratios and their interaction/log interaction. Preserve actual source meanings, physical-fit identity, uncertain or conflicting readings, units, limits and partial uncertainty; unknown common kind retains raw results without choosing a default. Covariance/model source reading is unimplemented here, not a finding about the paper. No intrinsic-affinity conversion, target transfer or annotation credit.",
+         "input_schema": binding_interaction_arguments_schema()})
++    if ratio_source_population:
++        from .literature_ratio_source_storage import ratio_source_population_schema
++        from .literature_ratio_source_prompt import SOURCE_RATIO_OPERATION_DESCRIPTION
++        result.append({"name": "literature.ratio.source.populate",
++            "description": SOURCE_RATIO_OPERATION_DESCRIPTION,
++            "input_schema": ratio_source_population_schema()})
+     return result
+ 
+ 
+@@ -154,7 +160,8 @@
+     entry_roles = ("literature",)
+ 
+     def __init__(self, services, *, outcome_page_size=8, rate_population=False, reference_parent_sources=None,
+-                 contract_information_profile=None):
++                 contract_information_profile=None, ratio_source_population=False,
++                 ratio_source_evidence_origin="reported_source"):
+         if type(outcome_page_size) is not int or outcome_page_size < 1:
+             raise ValueError("positive_literature_outcome_page_size_required")
+         self.services = services
+@@ -162,6 +169,15 @@
+         if type(rate_population) is not bool:
+             raise ValueError("boolean_rate_population_binding_required")
+         self.rate_population = rate_population
++        if type(ratio_source_population) is not bool:
++            raise ValueError("boolean_ratio_source_population_binding_required")
++        if ratio_source_population and not rate_population:
++            raise ValueError("ratio_source_population_requires_rate_population")
++        if (ratio_source_evidence_origin not in ("reported_source", "synthetic_fixture")
++                or not ratio_source_population and ratio_source_evidence_origin != "reported_source"):
++            raise ValueError("invalid_ratio_source_evidence_origin_binding")
++        self.ratio_source_population = ratio_source_population
++        self.ratio_source_evidence_origin = ratio_source_evidence_origin
+         from .composition_information import CONTRACT_INFORMATION_PROFILE
+         if contract_information_profile is not None and (
+                 contract_information_profile != CONTRACT_INFORMATION_PROFILE or not rate_population):
+@@ -220,7 +236,14 @@
+                          "literature_kinetic_validation.py", "literature_kinetic_storage.py",
+                          "literature_binding_interaction_inputs.py", "literature_binding_interaction_calculations.py",
+                          "literature_binding_visual_inputs.py", "literature_binding_interaction_validation.py",
+-                         "literature_binding_interaction_storage.py", "literature_binding_interaction_render.py"):
++                         "literature_binding_interaction_storage.py", "literature_binding_interaction_render.py",
++                         "literature_ratio_source_prompt.py", "literature_ratio_source_render.py"):
++                implementation += Path(__file__).with_name(name).read_bytes()
++        if self.ratio_source_population:
++            configuration.update(ratio_source_population=True,
++                ratio_source_evidence_origin=self.ratio_source_evidence_origin)
++            for name in ("literature_ratio_source_inputs.py", "literature_ratio_source_validation.py",
++                         "literature_ratio_source_calculations.py", "literature_ratio_source_storage.py"):
+                 implementation += Path(__file__).with_name(name).read_bytes()
+         if self.reference_parent_sources is not None:
+             configuration["reference_parent_sources"] = list(self.reference_parent_sources)
+@@ -322,6 +345,10 @@
+             from .literature_binding_interaction_storage import COMPONENTS as INTERACTION_COMPONENTS
+             schema["properties"]["requested_binding_interaction_components"] = {
+                 "type": "array", "uniqueItems": True, "items": {"enum": list(INTERACTION_COMPONENTS)}}
++        if self.ratio_source_population:
++            from .literature_ratio_source_storage import COMPONENTS as SOURCE_RATIO_COMPONENTS
++            schema["properties"]["requested_ratio_source_components"] = {
++                "type": "array", "uniqueItems": True, "items": {"enum": list(SOURCE_RATIO_COMPONENTS)}}
+         return schema
+ 
+     def permitted_common_actions(self, context):
+@@ -431,13 +458,18 @@
+             source = self._require(reference, context.scope, "source")
+             custody.append({"source_ref": reference, **{name: source.get(name) for name in (
+                 "artifact_ref", "text_ref", "version", "parent_source_refs")}})
+-        return {"reference_evidence_parent": {"version": "reference_evidence_parent_v1",
++        result = {"reference_evidence_parent": {"version": "reference_evidence_parent_v1",
+                     "source_refs": list(self.reference_parent_sources), "source_custody": custody,
+                     "child_population_operations": [
+                         {name: entry[name] for name in ("name", "description")}
+-                        for entry in _population_catalog()]},
++                        for entry in _population_catalog(ratio_source_population=self.ratio_source_population)]},
+                 "literature_experimental_work": {"version": "literature_experimental_task_v1",
+                     "aspect": "reference_evidence_parent"}}
++        if self.ratio_source_population:
++            from .literature_ratio_source_render import admitted_return_meanings
++            result["literature_ratio_source_return_meanings"] = admitted_return_meanings(
++                context, self._ratio_source_repository())
++        return result
+ 
+     def decision_context(self, context, current_view):
+         assignment = self._validate_assignment(context.role, context.assignment, context.scope)
+@@ -455,6 +487,11 @@
+         if self.rate_population:
+             result["literature_experimental_work"] = {
+                 "version": "literature_experimental_task_v1", "aspect": "source_experimental_evidence"}
++        if self.ratio_source_population:
++            from .literature_ratio_source_render import admitted_return_meanings
++            result["literature_ratio_source_work"] = {"version": "literature_ratio_source_task_v1"}
++            result["literature_ratio_source_return_meanings"] = admitted_return_meanings(
++                context, self._ratio_source_repository())
+         return result
+ 
+     def catalog(self, context):
+@@ -481,7 +518,7 @@
+                 entry["input_schema"] = {"anyOf": branches}
+             result.append(entry)
+         if self.rate_population:
+-            populations = _population_catalog()
++            populations = _population_catalog(ratio_source_population=self.ratio_source_population)
+             if self._contract_information_profile is not None:
+                 from .composition_information import CONTRACT_ARGUMENT_TRANSPORT
+                 populations = [{**row, 'argument_transport': CONTRACT_ARGUMENT_TRANSPORT} for row in populations]
+@@ -521,7 +558,7 @@
+                     and "sheet_key" in assignment["selection"]):
+                 if arguments["sheet_key"] != assignment["selection"]["sheet_key"]:
+                     raise ContractError("literature_table_sheet_mismatch")
+-            if tool_name in {"literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.binding.interaction.populate"}:
++            if tool_name in {"literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.binding.interaction.populate"}:
+                 def sources(value):
+                     if isinstance(value, dict):
+                         for key, child in value.items():
+@@ -551,7 +588,7 @@
+                 "record_refs": [], "changed_record_refs": [], "result": None,
+                 "feedback": {"category": "arguments_or_reference", "code": str(error),
+                     **({"detail": error.detail} if error.detail else {})}}
+-        if tool_name in {"literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.binding.interaction.populate"}:
++        if tool_name in {"literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.binding.interaction.populate"}:
+             from .literature_experimental_contracts import ExperimentalContractError
+             try:
+                 repo = {"literature.rate.populate": self.services.literature_rate_repository,
+@@ -563,6 +600,7 @@
+                         "literature.kinetic.populate": self.services.literature_kinetic_repository,
+                         "literature.binding.interaction.populate": self.services.literature_binding_interaction_repository,
+                         "literature.ratio.populate": self.services.literature_ratio_repository,
++                        "literature.ratio.source.populate": self._ratio_source_repository,
+                         "literature.binding.populate": self.services.literature_binding_repository,
+                         "literature.binding.model.populate": self.services.literature_binding_model_repository,
+                         "literature.transport.response.populate": self.services.literature_transport_repository,
+@@ -603,8 +641,11 @@
+             return {}
+         return self._rate_facts(context, completion_snapshot["committed_record_refs"])
+ 
+-    @staticmethod
+-    def _rate_fact_sources():
++    def _ratio_source_repository(self):
++        return self.services.literature_ratio_source_repository(
++            evidence_origin=self.ratio_source_evidence_origin)
++
++    def _rate_fact_sources(self):
+         from .literature_rate_storage import rate_cells_schema, rate_source_cells_schema
+         from .literature_quantity_storage import quantity_cells_schema
+         from .literature_assay_storage import assay_cells_schema
+@@ -622,7 +663,7 @@
+         from .literature_optical_storage import optical_cells_schema
+         from .literature_kinetic_storage import kinetic_cells_schema
+         from .literature_binding_interaction_storage import binding_interaction_cells_schema
+-        return {"literature_rate_cells": {"type": "array", "meaning":
++        result = {"literature_rate_cells": {"type": "array", "meaning":
+             "Saved source-preparation rate cells with measured subject/experiment retained in the referenced sheet. Conditional statistics are not annotation probabilities or target-transfer scores; unavailable operands remain null with reasons.",
+             "report_schema": rate_cells_schema()},
+             "literature_rate_source_cells": {"type": "array", "meaning":
+@@ -676,6 +717,12 @@
+             "literature_binding_interaction_cells": {"type": "array", "meaning":
+                 "Eight saved native source binding-discrimination interaction components for two molecular forms and two ligands. A requested raw parameter row alone expands that role's numerical source readings and partial uncertainty. Derived rows preserve source meaning/status references without unrequested operand numbers. Unknown common kind does not imply IC50; the model/covariance source reader is unimplemented, not a paper omission. No target transfer or annotation credit.",
+                 "report_schema": binding_interaction_cells_schema()}}
++        if self.ratio_source_population:
++            from .literature_ratio_source_storage import ratio_source_cells_schema
++            result["literature_ratio_source_cells"] = {"type": "array", "meaning":
++                "Saved selected source-reported relative-signal components with candidates, reported-estimate domains, selected-roster/completeness/conflict flags, actual scientific meaning/status and source origins. Common scale, source association and physical identity remain separate. Numeric uncertainty, calibrated amount, functional-response and observation-model readers are unimplemented in this route, not demonstrated paper omissions. Dependent transforms do not add independent experimental support or annotation credit.",
++                "report_schema": ratio_source_cells_schema()}
++        return result
+ 
+     def _population_routes(self):
+         from .literature_rate_storage import COMPONENTS, PROVIDER
+@@ -698,7 +745,7 @@
+         from .literature_optical_storage import COMPONENTS as OPTICAL_COMPONENTS, PROVIDER as OPTICAL_PROVIDER
+         from .literature_kinetic_storage import COMPONENTS as KINETIC_COMPONENTS, PROVIDER as KINETIC_PROVIDER
+         from .literature_binding_interaction_storage import COMPONENTS as INTERACTION_COMPONENTS, PROVIDER as INTERACTION_PROVIDER
+-        return (("literature_rate_cells", "requested_rate_components", PROVIDER,
++        result = (("literature_rate_cells", "requested_rate_components", PROVIDER,
+                  COMPONENTS, self.services.literature_rate_repository),
+                 ("literature_rate_source_cells", "requested_rate_components", PROVIDER,
+                  COMPONENTS, self.services.literature_rate_repository().source_projection),
+@@ -734,6 +781,11 @@
+                  KINETIC_COMPONENTS, self.services.literature_kinetic_repository),
+                 ("literature_binding_interaction_cells", "requested_binding_interaction_components", INTERACTION_PROVIDER,
+                  INTERACTION_COMPONENTS, self.services.literature_binding_interaction_repository))
++        if self.ratio_source_population:
++            from .literature_ratio_source_storage import COMPONENTS as SOURCE_COMPONENTS, PROVIDER as SOURCE_PROVIDER
++            result += (("literature_ratio_source_cells", "requested_ratio_source_components", SOURCE_PROVIDER,
++                SOURCE_COMPONENTS, self._ratio_source_repository),)
++        return result
+ 
+     def _rate_facts(self, context, references):
+         result = {}
+@@ -750,6 +802,8 @@
+                             raise ContractError("literature_rate_projection_version_mismatch")
+                         if row.get("version") != adapter.record_version:
+                             continue
++                    if namespace == "literature_ratio_source_cells" and row.get("version") != adapter.record_version:
++                        raise ContractError("literature_ratio_source_projection_version_mismatch")
+                     selected.append(reference)
+             components = tuple(context.assignment.get(requested_field, defaults))
+             result[namespace] = adapter.fact_cells(context, selected, components=components)
+--- a/gene_annotation_episode/episode_services.py
++++ b/gene_annotation_episode/episode_services.py
+@@ -116,6 +116,17 @@
+         if not hasattr(self, '_literature_ratio_repository'):
+             self._literature_ratio_repository = LiteratureRatioRepository(self.workflow.store, self.workflow.run_id)
+         return self._literature_ratio_repository
++
++    def literature_ratio_source_repository(self, *, evidence_origin="reported_source"):
++        """Access selected native source-signal cells with the caller's bound origin."""
++        from .literature_ratio_source_storage import LiteratureRatioSourceRepository
++        if not hasattr(self, '_literature_ratio_source_repositories'):
++            self._literature_ratio_source_repositories = {}
++        if evidence_origin not in self._literature_ratio_source_repositories:
++            repository = LiteratureRatioSourceRepository(self.workflow.store, self.workflow.run_id,
++                evidence_origin=evidence_origin)
++            self._literature_ratio_source_repositories[evidence_origin] = repository
++        return self._literature_ratio_source_repositories[evidence_origin]
+ 
+     def literature_binding_interaction_repository(self):
+         """Access selected four-cell source binding interaction components."""
+--- a/gene_annotation_episode/literature_experimental_prompt.py
++++ b/gene_annotation_episode/literature_experimental_prompt.py
+@@ -7,6 +7,9 @@
+ from __future__ import annotations
+ 
+ from .literature_binding_interaction_render import hidden_records as _interaction_hidden_records, render_received as _interaction_received
++from .literature_ratio_source_prompt import SOURCE_RATIO_TASK
++from .literature_ratio_source_render import (hidden_records as _ratio_source_hidden_records,
++    render_received as _ratio_source_received, render_own_result as _ratio_source_own, is_row as _ratio_source_row)
+ 
+ from collections.abc import Mapping
+ 
+@@ -163,9 +166,10 @@
+     hidden_optical = _optical_hidden_records(state.get("child_reports", ()), records)
+     hidden_kinetic = _kinetic_hidden_records(state.get("child_reports", ()), records)
+     hidden_interaction = _interaction_hidden_records(state.get("child_reports", ()), records)
++    hidden_ratio_source = _ratio_source_hidden_records(state.get("child_reports", ()), records)
+     selected = {}
+     for reference in pending:
+-        if reference in selected or reference not in records or reference in hidden_amount_measurements or reference in hidden_optical or reference in hidden_kinetic or reference in hidden_interaction:
++        if reference in selected or reference not in records or reference in hidden_amount_measurements or reference in hidden_optical or reference in hidden_kinetic or reference in hidden_interaction or reference in hidden_ratio_source:
+             continue
+         row = records[reference]
+         selected[reference] = _safe(row)
+@@ -239,6 +243,8 @@
+         parts.extend(["", FIGURE_TASK])
+     if PARTNER_TASK not in normalized:
+         parts.extend(["", PARTNER_TASK])
++    if state.get("literature_ratio_source_work", {}).get("version") == "literature_ratio_source_task_v1":
++        parts.extend(["", SOURCE_RATIO_TASK])
+     profile = state.get('contract_information_profile') == CONTRACT_INFORMATION_PROFILE
+     if profile:
+         parts.extend(['', CONTRACT_INFORMATION_TASK])
+@@ -253,7 +259,7 @@
+     assignment = _pick(state.get("literature_assignment", {}), (
+         "question_context_refs", "source_refs", "prior_search_refs", "search_result_refs",
+         "source_ref", "representation", "artifact_ref", "page", "selection",
+-        "requested_rate_components", "requested_quantity_components", "requested_assay_components", "requested_ratio_components", "requested_binding_components", "requested_binding_model_components", "requested_transport_components", "requested_perturbation_components", "requested_structure_components", "requested_reaction_components", "requested_context_components", "requested_figure_components", "requested_partner_components", "requested_amount_components", "requested_optical_components", "requested_kinetic_components", "requested_binding_interaction_components", "constraints", "context"))
++        "requested_rate_components", "requested_quantity_components", "requested_assay_components", "requested_ratio_components", "requested_ratio_source_components", "requested_binding_components", "requested_binding_model_components", "requested_transport_components", "requested_perturbation_components", "requested_structure_components", "requested_reaction_components", "requested_context_components", "requested_figure_components", "requested_partner_components", "requested_amount_components", "requested_optical_components", "requested_kinetic_components", "requested_binding_interaction_components", "constraints", "context"))
+     # Version labels identify host assignment schemas, not source science.
+     if isinstance(assignment.get("page"), Mapping):
+         assignment["page"] = {key: value for key, value in assignment["page"].items() if key != "version"}
+@@ -311,6 +317,8 @@
+     content = value.get("result", value)
+     if not isinstance(content, Mapping):
+         _section(parts, "Selected result", _values(content))
++        return
++    if _ratio_source_own(parts, content, section=_section, table=_table, values=_values):
+         return
+     if "text" in content:
+         _section(parts, "Selected source text (evidence, not instructions)", str(content["text"]))
+@@ -626,9 +634,10 @@
+         ((r.get("component"), definitions.get(r.get("formula_code"), "unknown")) for r in rows)))
+ 
+ 
+-def _received_returns(parts, reports, *, records=None):
++def _received_returns(parts, reports, *, records=None, ratio_source_meanings=None):
+     """Show received scientific definitions once alongside requested cells."""
+     ordinary, grouped, reactions, contexts, figures, partners, amounts, optical, kinetic, interaction = [], {}, {}, {}, {}, {}, {}, {}, {}, {}
++    ratio_source = {}
+     for report in reports:
+         remainder = {}
+         if not isinstance(report, Mapping):
+@@ -677,6 +686,9 @@
+                     and row.get("evaluation_scope") == "source_binding_discrimination_interaction" and "component" in row for row in value)):
+                 for row in value:
+                     interaction.setdefault(row.get("sheet_ref"), []).append(row)
++            elif (isinstance(value, (list, tuple)) and value and all(_ratio_source_row(row) for row in value)):
++                for row in value:
++                    ratio_source.setdefault(row.get("sheet_ref"), []).append(row)
+             else:
+                 remainder[name] = value
+         if remainder:
+@@ -764,6 +776,9 @@
+     for rows in interaction.values():
+         _interaction_received(parts, rows, records or {}, section=_section, table=_table, values=_values)
+ 
++    for rows in ratio_source.values():
++        _ratio_source_received(parts, rows, ratio_source_meanings or {}, section=_section, table=_table, values=_values)
++
+ 
+ def _steering(state, lookup_results):
+     parts = ["STEERING"]
+@@ -801,7 +816,8 @@
+         working = state.get("working_state", {})
+         records = {row["id"]: row for field in ("terms", "references", "contexts", "observations", "hypotheses", "assessments")
+             for row in working.get(field, ()) if isinstance(row, Mapping) and isinstance(row.get("id"), str)}
+-        _received_returns(parts, state["child_reports"], records=records)
++        _received_returns(parts, state["child_reports"], records=records,
++            ratio_source_meanings=state.get("literature_ratio_source_return_meanings"))
+     pending = state.get("pending_work", {})
+     if pending.get("items"):
+         _section(parts, "Pending assigned work", _values([_pick(row, (
+--- a/gene_annotation_episode/literature_reference_parent_prompt.py
++++ b/gene_annotation_episode/literature_reference_parent_prompt.py
+@@ -129,7 +129,8 @@
+     # The shared mechanical renderer selects own outcomes, received records and
+     # admitted forms. Do not seed it with a child's assignment or task/history.
+     steering_fields = ("action_yields", "controller", "working_state", "last_local_outcome",
+-        "feedback", "current_report_update", "child_reports", "pending_work", "current_report_basis_refs")
++        "feedback", "current_report_update", "child_reports", "pending_work", "current_report_basis_refs",
++        "literature_ratio_source_return_meanings")
+     steering_state = {name: state[name] for name in steering_fields if name in state}
+     if state.get('contract_information_profile') == CONTRACT_INFORMATION_PROFILE:
+         return _requested_contract_task(_task(state, instructions, descriptor), lookup_results) + '\n\n' + _steering(
+--- /dev/null
++++ b/gene_annotation_episode/literature_ratio_source_prompt.py
+@@ -0,0 +1,5 @@
++"""Recurring source-ratio investigation instructions, separate from sheet/calculator."""
++
++SOURCE_RATIO_TASK = "Determine what the reported signal comparison establishes about the studied molecule and the experiment you were assigned. Identify the actual organism, recipient genotype, assayed molecule, preparation, tested construct, reference construct and condition before interpreting a ratio. Establish whether the proteins replace one another or coexist. A WT label may mean tagged plasmid complementation rather than an unmodified organism or endogenous protein. Separate the intended experimental change from expression, loading and other differences that could explain the measured result.\n\nIdentify the endpoint and printed signal meaning, its numerator and reference, normalization and signal use. A band or antibody signal can qualify expression comparability without measuring active protein amount, catalysis or the functional endpoint. Growth recovery and survival are different endpoints. Do not borrow a mutant panel, repetition count, loading control, exposure or calibration from another experiment. Preserve meaningful source definitions, including numeric construct names, boundaries and conditions, as definitions rather than broad copied source prose.\n\nChoose the source reads, neighboring context, table investigation or native image view useful for your question. For a printed figure value, examine the actual native image view received by your own episode. Identify its frame and the complete numerator and reference regions. Nominate a printed normalized ratio, percentage or pair of printed signals according to what the source reports. Retain the complete literal, including percent signs and inequalities. Band darkness is not a printed number; this route does not perform densitometry, OCR or calibration.\n\nRecord each visual reading as exact, ambiguous, unreadable or conflicting according to the evidence. Preserve distinct joint numerator/reference alternatives and unreadable fragments/regions. A pair requires a supported common signal scale; different exposures do not automatically share a scale. A known different scale is different, not contradictory source evidence. Do not invent a value, positive reference, calibration or detection threshold. Printed zero is a reported signal value, not proof of zero molecules. ND or n.d. alone supplies no numerical limit.\n\nDecide whether each selected prose statement or figure describes the same single reported signal quantity, a different quantity, an unknown association or a conflicting association. Separately establish physical measurement and reference identity from source witnesses. Equal values, repeated displays and a common paper prove neither physical identity nor independence. Preserve linked disagreements, all selected unreadable/ambiguous alternatives and distinct experimental quantities. Do not average, choose a favorable representation, discard an unresolved alternative or treat separate experiments as a representation conflict.\n\nIdentify source meanings, exact locations and literal candidates. Deterministic readers authenticate custody and parse the literals; separate calculators perform division and transforms. Ratio, difference and positive log ratio describe one comparison and are not independent evidence credits. A reported-estimate censor domain is not a sampling confidence interval. Keep actual uncertainty meanings and unknowns. Numeric uncertainty reading, calibrated amount, functional-response conversion and observation-model calculations remain unimplemented in this route; that capability limit is not a finding that the source lacks such information.\n\nReturn only the parent's requested numerical components and their declared experimental qualifications through its original typed form. Unknown, censored, contradictory and valid partial outcomes remain useful. Source access does not give a parent unrequested numerical knowledge or private image context. Do not calculate target correspondence, annotation probability or combined annotation credit; do not add a report-composition model call, new episode type, fixed reading itinerary or synthetic observation. Choose iteratively from actual outcomes. The shared method loop and configured controller retain continuation authority."
++
++SOURCE_RATIO_OPERATION_DESCRIPTION = "Read the selected source-reported relative signal from exact JATS percentage syntax or literal nominations in this episode's own native image views. Preserve actual subject, constructs, organism, conditions, arrangement, endpoint, normalization, joint numerator/reference alternatives, source association and physical identity. Pair division requires a supported common scale. Candidates, censor domains and unresolved selected representations remain explicit; ratio/difference/log are dependent descriptions. Numeric uncertainty, calibrated amount, functional-response and observation-model readers remain unimplemented here, not paper-level absence findings. No OCR, densitometry, target transfer or annotation credit."
+--- /dev/null
++++ b/gene_annotation_episode/literature_ratio_source_render.py
+@@ -0,0 +1,189 @@
++"""Saved-only custody selection and pure display of admitted source-signal rows.
++
++No source/image decoder, scientific reader, calculator, model, receipt or credit
++callback is used. Filtering display never changes admitted scientific values.
++"""
++from collections.abc import Mapping
++import re
++
++MEANINGS = ('subject', 'variant', 'reference', 'organism', 'genotype',
++    'construct_variant', 'construct_reference', 'preparation_variant',
++    'preparation_reference', 'experiment', 'condition', 'endpoint', 'normalization')
++MARKERS = {'candidate_basis': 'selected_received_source_representations',
++    'uncertainty_evaluation': 'numeric_uncertainty_reader_unimplemented'}
++_PERCENT_TOKEN = re.compile(r'[+−-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+−-]?[0-9]+)?\s*%')
++
++
++def is_row(row):
++    return isinstance(row, Mapping) and all(row.get(k) == v for k, v in MARKERS.items())
++
++
++def rows_from_reports(reports):
++    for report in reports:
++        if isinstance(report, Mapping):
++            for rows in report.values():
++                if isinstance(rows, (tuple, list)):
++                    yield from (row for row in rows if is_row(row))
++
++
++def _refs(value):
++    if isinstance(value, Mapping):
++        for key, child in value.items():
++            if key.endswith('_ref') and isinstance(child, str):
++                yield child
++            elif key.endswith('_refs') and isinstance(child, (tuple, list)):
++                yield from (ref for ref in child if isinstance(ref, str))
++            else:
++                yield from _refs(child)
++    elif isinstance(value, (tuple, list)):
++        for child in value:
++            yield from _refs(child)
++
++
++def hidden_records(reports, records):
++    rows = list(rows_from_reports(reports))
++    sources = {row['evidence_source_ref'] for row in rows}
++    return {ref for row in rows for ref in _refs(row)} | {
++        ref for ref, record in records.items() if record.get('source_ref') in sources}
++
++
++def _numeric_loci(payload):
++    """Every nominated candidate, never just a selected scalar/primary reading."""
++    loci, literals = [], set()
++    for representation in payload['extraction']['representations']:
++        for reading in representation['readings']:
++            for role in ('numerator', 'denominator'):
++                operand = reading[role]
++                if operand is None:
++                    continue
++                literals.add(operand['literal'])
++                locator = operand['locator']
++                if locator is None:
++                    continue
++                if locator['kind'] == 'jats':
++                    token = _PERCENT_TOKEN.match(locator['expression'])
++                    # Saved native validation already authenticates this finite
++                    # expression. Only the percent token is a numeric locus;
++                    # K426A in64%(K426A) is not a hidden numerical operand.
++                    if token is not None:
++                        loci.append({**locator, 'numeric_start': locator['expression_start'],
++                            'numeric_end': locator['expression_start'] + token.end()})
++                elif locator['kind'] == 'image':
++                    loci.append(locator)
++    return loci, literals
++
++
++def _overlap(a, b):
++    return a[0] < b[2] and b[0] < a[2] and a[1] < b[3] and b[1] < a[3]
++
++
++def _unique_position(text, label):
++    start = text.find(label)
++    return start if start >= 0 and text.find(label, start + 1) < 0 else None
++
++
++def _safe_definition(label, witness, loci, literals):
++    locator = witness['locator']
++    if locator is None or witness['authentication'] == 'unavailable':
++        return False
++    if locator['kind'] == 'image':
++        return not any(locus['kind'] == 'image'
++            and locus['original_artifact_ref'] == locator['original_artifact_ref']
++            and locus['frame'] == locator['frame']
++            and _overlap(locus['region'], locator['region']) for locus in loci)
++    if locator['kind'] != 'text_span':
++        return False
++    offset = _unique_position(locator['quote'], label)
++    if offset is None:
++        return False
++    # Generic witnesses have original UTF8 byte coordinates. JATS expressions
++    # have paragraph Unicode-character coordinates. Map only an exact unique
++    # retained quote into the retained paragraph; never compare unlike offsets.
++    matched = False
++    for locus in loci:
++        if locus['kind'] != 'jats' or locus['artifact_ref'] != locator['artifact_ref']:
++            continue
++        position = _unique_position(locus['paragraph_text'], locator['quote'])
++        if position is None:
++            return False
++        matched = True
++        start, end = position + offset, position + offset + len(label)
++        if start < locus['numeric_end'] and locus['numeric_start'] < end:
++            return False
++    # A broad copied text definition can duplicate the image's private printed
++    # operands on another representation. With no common-coordinate disjointness
++    # proof, retain it for scoped access. This is literal custody filtering, not
++    # blanket digit masking: K426A/residue bounds/temperature remain intact.
++    if not matched and any(re.search(r'(?<!\w)' + re.escape(token) + r'(?!\w)', label)
++            for token in literals if token):
++        return False
++    return True
++
++
++def admitted_return_meanings(context, repository):
++    """Select bounded labels using saved custody for actual admitted rows only."""
++    rows = repository.received_cells(context)
++    sheets = []
++    for reference in dict.fromkeys(row['sheet_ref'] for row in rows):
++        payload = repository.read(reference)
++        loci, literals = _numeric_loci(payload)
++        meanings = []
++        for role in MEANINGS:
++            meaning = payload['extraction']['comparison'][role]
++            known = meaning['status'] == 'known'
++            safe = known and any(_safe_definition(meaning['value'], witness, loci, literals)
++                for witness in meaning['witnesses'])
++            meanings.append({'role': role, 'status': meaning['status'],
++                'label': meaning['value'] if safe else None,
++                'display_status': ('supplied_definition' if safe else
++                    'retained_for_scoped_access' if known else 'unresolved_source_meaning')})
++        sheets.append({'sheet_ref': reference, 'roles': meanings})
++    return {'version': 'ratio_source_prompt_meanings_v1', 'sheets': sheets}
++
++
++def _domain(region):
++    lower = '−∞' if region['lower_infinite'] else str(region['lower'])
++    upper = '+∞' if region['upper_infinite'] else str(region['upper'])
++    return ('[' if region['lower_closed'] else '(') + lower + ', ' + upper + (']' if region['upper_closed'] else ')')
++
++
++def render_received(parts, rows, meanings, *, section, table, values):
++    first = rows[0]
++    section(parts, 'Admitted requested source signal components', table(
++        ('Component', 'Value', 'Unit', 'Status', 'Origin', 'Candidates', 'Reported-estimate domains', 'Unavailable reason'),
++        ((row['component'], row['value'], row['unit'], row['status'], row['origin'],
++          ', '.join(str(v) for v in row['value_candidates']) or 'none',
++          '; '.join(_domain(v) for v in row['reported_domains']) or 'none', row['unavailable_reason']) for row in rows)))
++    section(parts, 'Source signal comparison meaning', values({name: first[name] for name in (
++        'signal_kind', 'reference_role', 'arrangement', 'signal_use', 'source_origins',
++        'representation_reading_states', 'comparison_relation_states', 'signal_scale_states',
++        'physical_identity_states', 'reference_identity_states', 'independent_preparation_count',
++        'selected_roster_resolved', 'point_candidate_set_complete', 'known_source_conflict',
++        'uncertainty_kind', 'uncertainty_evaluation', 'candidate_basis')}))
++    selected = next((sheet['roles'] for sheet in meanings.get('sheets', ())
++        if sheet['sheet_ref'] == first['sheet_ref']), ()) if isinstance(meanings, Mapping) else ()
++    by_role = {row['role']: row for row in selected}
++    section(parts, 'Source signal experimental definitions', table(('Meaning', 'Status', 'Source definition'), (
++        (role, first['meaning_statuses'][role], by_role.get(role, {}).get('label') or
++         ('source-bound definition retained for scoped access' if first['meaning_statuses'][role] == 'known'
++          else first['meaning_statuses'][role])) for role in MEANINGS)))
++    section(parts, 'Source signal interpretation limits',
++        'Reported signal describes this comparison, not calibrated amount or isolated activity. '
++        'Domains retain reported estimates and finite outward rounding, not sampling confidence. '
++        'Dependent transforms do not add independent evidence. Numeric uncertainty, calibration, '
++        'functional-response and observation-model readers remain unimplemented here.')
++
++
++def render_own_result(parts, content, *, section, table, values):
++    cells = content.get('cells') if isinstance(content, Mapping) else None
++    flags = ('selected_roster_resolved', 'point_candidate_set_complete', 'known_source_conflict')
++    if not isinstance(cells, Mapping) or 'reported_ratio' not in cells or not all(k in content for k in flags):
++        return False
++    section(parts, 'Selected source signal population', table(
++        ('Component', 'Value', 'Unit', 'Status', 'Origin', 'Candidates', 'Reported-estimate domains', 'Unavailable reason'),
++        ((name, row['value'], row['unit'], row['status'], row['origin'],
++          ', '.join(str(v) for v in row['value_candidates']) or 'none',
++          '; '.join(_domain(v) for v in row['reported_domains']) or 'none', row['unavailable_reason'])
++         for name, row in cells.items())))
++    section(parts, 'Selected source signal roster', values({key: content[key] for key in flags}))
++    return True

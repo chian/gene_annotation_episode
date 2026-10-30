@@ -1,0 +1,290 @@
+{
+  "synthetic_only": true,
+  "baseline_sha256": {
+    "gene_annotation_episode/literature_binding_interaction_calculations.py": {
+      "sha256": "26dffa5d6d9e4eb4b419f2243369344bebc6eee2c637a141edfaedb21cd3232e",
+      "bytes": 30735,
+      "baseline": "baseline_001/gene_annotation_episode/literature_binding_interaction_calculations.py"
+    },
+    "tests/test_literature_binding_interaction_calculations.py": {
+      "sha256": "0ed1dd22a04fcb691e6ba848c029bf2343e4aac8781e281c2d2532450c493c79",
+      "bytes": 24433,
+      "baseline": "baseline_001/tests/test_literature_binding_interaction_calculations.py"
+    }
+  },
+  "complete_native_interaction": {
+    "operands": [
+      "reference_subject_reference_ligand",
+      "reference_subject_test_ligand",
+      "test_subject_reference_ligand",
+      "test_subject_test_ligand"
+    ],
+    "formula": {
+      "expression": "product(p_i ** c_i)",
+      "coefficients": [
+        -1,
+        1,
+        1,
+        -1
+      ]
+    },
+    "unit": "dimensionless",
+    "value": 4.0,
+    "threshold": null,
+    "relation": "eq",
+    "status": "computed",
+    "reason": null
+  },
+  "complete_known_model_cells": {
+    "parameter_rr": {
+      "operands": [
+        "reference_subject_reference_ligand"
+      ],
+      "formula": "reported parameter",
+      "unit": "nM",
+      "value": 5,
+      "threshold": null,
+      "relation": "eq",
+      "status": "reported",
+      "reason": null
+    },
+    "parameter_rt": {
+      "operands": [
+        "reference_subject_test_ligand"
+      ],
+      "formula": "reported parameter",
+      "unit": "nM",
+      "value": 40,
+      "threshold": null,
+      "relation": "eq",
+      "status": "reported",
+      "reason": null
+    },
+    "parameter_tr": {
+      "operands": [
+        "test_subject_reference_ligand"
+      ],
+      "formula": "reported parameter",
+      "unit": "nM",
+      "value": 2,
+      "threshold": null,
+      "relation": "eq",
+      "status": "reported",
+      "reason": null
+    },
+    "parameter_tt": {
+      "operands": [
+        "test_subject_test_ligand"
+      ],
+      "formula": "reported parameter",
+      "unit": "nM",
+      "value": 4,
+      "threshold": null,
+      "relation": "eq",
+      "status": "reported",
+      "reason": null
+    },
+    "reference_subject_ratio": {
+      "operands": [
+        "reference_subject_reference_ligand",
+        "reference_subject_test_ligand"
+      ],
+      "formula": {
+        "expression": "product(p_i ** c_i)",
+        "coefficients": [
+          -1,
+          1
+        ]
+      },
+      "unit": "dimensionless",
+      "value": 8.0,
+      "threshold": null,
+      "relation": "eq",
+      "status": "computed",
+      "reason": null
+    },
+    "test_subject_ratio": {
+      "operands": [
+        "test_subject_reference_ligand",
+        "test_subject_test_ligand"
+      ],
+      "formula": {
+        "expression": "product(p_i ** c_i)",
+        "coefficients": [
+          -1,
+          1
+        ]
+      },
+      "unit": "dimensionless",
+      "value": 2.0,
+      "threshold": null,
+      "relation": "eq",
+      "status": "computed",
+      "reason": null
+    },
+    "interaction_ratio": {
+      "operands": [
+        "reference_subject_reference_ligand",
+        "reference_subject_test_ligand",
+        "test_subject_reference_ligand",
+        "test_subject_test_ligand"
+      ],
+      "formula": {
+        "expression": "product(p_i ** c_i)",
+        "coefficients": [
+          -1,
+          1,
+          1,
+          -1
+        ]
+      },
+      "unit": "dimensionless",
+      "value": 4.0,
+      "threshold": null,
+      "relation": "eq",
+      "status": "computed",
+      "reason": null
+    },
+    "log_interaction": {
+      "operands": [
+        "reference_subject_reference_ligand",
+        "reference_subject_test_ligand",
+        "test_subject_reference_ligand",
+        "test_subject_test_ligand"
+      ],
+      "formula": {
+        "expression": "sum(c_i * ln(p_i))",
+        "coefficients": [
+          -1,
+          1,
+          1,
+          -1
+        ]
+      },
+      "unit": "dimensionless",
+      "value": 1.3862943611198906,
+      "threshold": null,
+      "relation": "eq",
+      "status": "computed",
+      "reason": null
+    },
+    "log_interaction_variance": {
+      "operands": [
+        "reference_subject_reference_ligand",
+        "reference_subject_test_ligand",
+        "test_subject_reference_ligand",
+        "test_subject_test_ligand"
+      ],
+      "formula": "c' C c; c=(-1,1,1,-1)",
+      "unit": "dimensionless_squared",
+      "value": 0.16,
+      "threshold": null,
+      "relation": "eq",
+      "status": "computed",
+      "reason": null
+    },
+    "log_interaction_standard_uncertainty": {
+      "operands": [
+        "reference_subject_reference_ligand",
+        "reference_subject_test_ligand",
+        "test_subject_reference_ligand",
+        "test_subject_test_ligand"
+      ],
+      "formula": "sqrt(c' C c)",
+      "unit": "dimensionless",
+      "value": 0.39999999999999963,
+      "threshold": null,
+      "relation": "eq",
+      "status": "computed",
+      "reason": null
+    },
+    "signed_profile_log_ratio": {
+      "operands": [
+        "reference_subject_reference_ligand",
+        "reference_subject_test_ligand",
+        "test_subject_reference_ligand",
+        "test_subject_test_ligand"
+      ],
+      "formula": "e * abs(e) / (2 * V)",
+      "unit": "dimensionless",
+      "value": 6.005662673977517,
+      "threshold": null,
+      "relation": "eq",
+      "status": "computed",
+      "reason": null
+    },
+    "signed_index": {
+      "operands": [
+        "reference_subject_reference_ligand",
+        "reference_subject_test_ligand",
+        "test_subject_reference_ligand",
+        "test_subject_test_ligand"
+      ],
+      "formula": "tanh(S / 2)",
+      "unit": "dimensionless",
+      "value": 0.9950826092099055,
+      "threshold": null,
+      "relation": "eq",
+      "status": "computed",
+      "reason": null
+    }
+  },
+  "partial_states_rejected": [
+    {
+      "case": "unresolved_whole_metadata",
+      "status": "rejected",
+      "code": "closed_fields_required",
+      "field": "inputs.operands.reference_subject_reference_ligand.uncertainty"
+    },
+    {
+      "case": "sd_magnitude_unavailable",
+      "status": "rejected",
+      "code": "reported_spread_required",
+      "field": "inputs.operands.reference_subject_reference_ligand.uncertainty"
+    },
+    {
+      "case": "sem_magnitude_unavailable",
+      "status": "rejected",
+      "code": "reported_spread_required",
+      "field": "inputs.operands.reference_subject_reference_ligand.uncertainty"
+    },
+    {
+      "case": "unspecified_magnitude_unavailable",
+      "status": "rejected",
+      "code": "reported_spread_required",
+      "field": "inputs.operands.reference_subject_reference_ligand.uncertainty"
+    },
+    {
+      "case": "ci_level_unknown",
+      "status": "rejected",
+      "code": "finite_number_required",
+      "field": "inputs.operands.reference_subject_reference_ligand.uncertainty.confidence_level"
+    },
+    {
+      "case": "ci_endpoints_unknown",
+      "status": "rejected",
+      "code": "confidence_interval_endpoints_required",
+      "field": "inputs.operands.reference_subject_reference_ligand.uncertainty.interval"
+    },
+    {
+      "case": "ci_upper_unknown",
+      "status": "rejected",
+      "code": "finite_number_required",
+      "field": "inputs.operands.reference_subject_reference_ligand.uncertainty.interval"
+    },
+    {
+      "case": "ci_lower_unknown",
+      "status": "rejected",
+      "code": "finite_number_required",
+      "field": "inputs.operands.reference_subject_reference_ligand.uncertainty.interval"
+    },
+    {
+      "case": "ci_both_endpoints_unknown",
+      "status": "rejected",
+      "code": "finite_number_required",
+      "field": "inputs.operands.reference_subject_reference_ligand.uncertainty.interval"
+    }
+  ],
+  "meaning": "Pure contract gaps only, not source truth, Store authentication or configured-model evidence",
+  "production_or_test_edits": false
+}

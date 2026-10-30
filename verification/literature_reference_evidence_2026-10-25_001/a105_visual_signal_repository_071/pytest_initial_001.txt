@@ -1,0 +1,40 @@
+............................F.                                           [100%]
+=================================== FAILURES ===================================
+______ test_original_owner_inherited_subset_empty_and_unchanged_delivery _______
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1696/test_original_owner_inherited_0')
+
+    def test_original_owner_inherited_subset_empty_and_unchanged_delivery(tmp_path):
+        store, context, selection, _ = native_case(tmp_path)
+        try:
+            repo = repository(store, context); outcome = repo.populate(context, selection, 'owned')
+            owner = owned(context, outcome); sheet = outcome['result']['sheet_ref']
+            all_cells = repo.fact_cells(owner, [sheet], components=list(repo.components))
+>           parent = replace(owner, episode_id='fixture-parent', role='literature', assignment={})
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_ratio_source_storage.py:298: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/dataclasses.py:1581: in replace
+    return obj.__class__(**changes)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:11: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = BindingContext(run_id='fixture-run', episode_id='fixture-parent', role='literature', path=(('literature_page', 'synthe...a774302', 'image_view_c6b1f9986aeefe995585fb9c', 'source_eaf4c2e6fc47c12cf6188651', 'source_b19983d40cbfe5eaee429c8b'))
+
+    def __post_init__(self):
+        for name in ('run_id', 'episode_id', 'role'):
+            if not isinstance(getattr(self, name), str) or not getattr(self, name):
+                raise ValueError(f'nonempty_{name}_required')
+        path = tuple(tuple(part) for part in self.path)
+        if (not path or any(len(part) != 2 or any(not isinstance(item, str) or not item
+                for item in part) for part in path) or path[-1][0] != self.role):
+>           raise ValueError('binding_context_path_must_match_role')
+E           ValueError: binding_context_path_must_match_role
+
+gene_annotation_episode/episode_bindings.py:71: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_literature_ratio_source_storage.py::test_original_owner_inherited_subset_empty_and_unchanged_delivery
+1 failed, 29 passed in 92.55s (0:01:32)

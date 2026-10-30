@@ -1,0 +1,78 @@
+USAGE
+  blast_vdb_cmd [-h] [-help] -db VDB_ACCESSIONS
+    -dbs_file Input_File_with_VDB_ACCESSIONS [-outfmt format]
+    [-entry sequence_identifier] [-entry_batch input_file]
+    [-line_length number] [-include_filtered_reads] [-info] [-ref] [-paths]
+    [-paths_all] [-out output_file] [-logfile File_Name] [-version]
+
+DESCRIPTION
+   BLAST-VDB Cmd
+
+REQUIRED ARGUMENTS
+ -db <String>
+   List of whitespace-separated VDB accessions
+    * Incompatible with:  dbs_file
+ -dbs_file <File_In>
+   File with a newline delimited list of VDB Run accessions
+    * Incompatible with:  db
+
+OPTIONAL ARGUMENTS
+ -h
+   Print USAGE and DESCRIPTION;  ignore all other parameters
+ -help
+   Print USAGE, DESCRIPTION and ARGUMENTS; ignore all other parameters
+ -version
+   Print version number;  ignore other arguments
+
+ *** VDB 'BLASTDB' options
+ -outfmt <String>
+   Output format, where the available format specifiers are:
+   		%f means sequence in FASTA format
+   		%s means sequence data (without defline)
+   		%a means accession
+   		%o means ordinal id (OID)
+   		%i means sequence id
+   		%t means sequence title
+   		%l means sequence length
+   	For every format except '%f', each line of output will correspond
+   	to a sequence.
+   Default = `%f'
+
+ *** Retrieval options
+ -entry <String>
+   Comma-delimited search string(s) of sequence identifiers:
+   	e.g.: 'gnl|SRR|SRR066117.18823.2', or 'all' to select all
+   	sequences in the database
+    * Incompatible with:  entry_batch, info, paths, paths_all
+ -entry_batch <File_In>
+   Input file for batch processing (Format: one entry per line)
+    * Incompatible with:  entry, info, ref, paths, paths_all
+ -line_length <Integer, >=1>
+   Line length for output
+   Default = `80'
+ -include_filtered_reads
+   Include Filtered reads
+    * Incompatible with:  info, ref, paths, paths_all
+ -info
+   Print VDB information
+    * Incompatible with:  include_filtered_reads, entry, entry_batch, ref,
+   paths, paths_all
+ -ref
+   Dump reference seqs
+    * Incompatible with:  info, entry_batch, include_filtered_reads
+ -paths
+   Get top level paths
+    * Incompatible with:  scan_uncompressed, scan_compressed, info, entry,
+   entry_batch, include_filtered_reads
+ -paths_all
+   Get all vdb and alias paths
+    * Incompatible with:  scan_uncompressed, scan_compressed, info, entry,
+   entry_batch, include_filtered_reads
+
+ *** Output configuration options
+ -out <File_Out>
+   Output file name
+   Default = `-'
+ -logfile <File_Out>
+   File to which the program log should be redirected
+

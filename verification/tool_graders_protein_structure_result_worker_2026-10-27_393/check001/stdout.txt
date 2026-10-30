@@ -1,0 +1,249 @@
+............FFF.F..F........................F........................... [ 96%]
+F..                                                                      [100%]
+=================================== FAILURES ===================================
+________ test_saved_recalculation_changes_only_separate_components_once ________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_result_worker_2026-10-27_393/check001/temporary/pytest/test_saved_recalculation_chang0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x78a5ddae1400>
+
+    def test_saved_recalculation_changes_only_separate_components_once(tmp_path, monkeypatch):
+        plan, sheet = _saved_plan(tmp_path)
+        plan["parameters"]["evaluation_selection"] = {"kind": "all_mapped_pairs"}
+        plan["parameters"]["distance_threshold_A"] = 1.5
+        original_sheet_bytes = Path(plan["sheet"]["path"]).read_bytes()
+        original_components_bytes = Path(plan["original_components"]["path"]).read_bytes()
+        calls = []
+        calculate = worker.calculate_protein_structure_components
+    
+        def counted(value, *, parameters):
+            calls.append(deepcopy(parameters))
+            return calculate(value, parameters=parameters)
+    
+        monkeypatch.setattr(worker, "calculate_protein_structure_components", counted)
+        _no_acquisition(monkeypatch)
+        real_open = os.open
+        permitted = {plan["sheet"]["path"], plan["original_components"]["path"]}
+    
+        def confined_open(path, flags, *args, **kwargs):
+            name = str(path)
+            assert name in permitted or Path(name).is_relative_to(plan["directory"]), name
+            return real_open(path, flags, *args, **kwargs)
+    
+        monkeypatch.setattr(os, "open", confined_open)
+        result = worker.run_protein_structure_result_worker(plan)
+>       assert calls == [plan["parameters"]]
+E       AssertionError: assert [] == [{'coordinate...pairs'}, ...}]
+E         
+E         Right contains one more item: {'coordinate_sets': [], 'declared_transform': None, 'distance_threshold_A': 1.5, 'evaluation_selection': {'kind': 'all_mapped_pairs'}, ...}
+E         Use -v to get more diff
+
+source_snapshot/tests/test_protein_structure_result_worker.py:221: AssertionError
+____________________ test_saved_explicit_new_fit_selection _____________________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_result_worker_2026-10-27_393/check001/temporary/pytest/test_saved_explicit_new_fit_se0')
+
+    def test_saved_explicit_new_fit_selection(tmp_path):
+        plan, sheet = _saved_plan(tmp_path)
+        plan["parameters"]["fit_selection"] = {"kind": "all_mapped_pairs"}
+        result = worker.run_protein_structure_result_worker(plan)
+>       components = _output(plan, result, "components_file")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_protein_structure_result_worker.py:243: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+plan = {'version': 'protein_structure_result_worker_plan_v1', 'mode': 'saved_sheet_recalculation', 'directory': '/home/chia/r...ture_result_worker_2026-10-27_393/check001/temporary/pytest/test_saved_explicit_new_fit_se0/retained/sheet.json'}, ...}
+result = {'version': 'protein_structure_result_worker_result_v1', 'mode': 'saved_sheet_recalculation', 'operation': 'compare', 'native_result_file': None, ...}
+field = 'components_file'
+
+    def _output(plan, result, field):
+        row = result[field]
+>       raw = (Path(plan["directory"]) / row["relative_path"]).read_bytes()
+                                         ^^^^^^^^^^^^^^^^^^^^
+E       TypeError: 'NoneType' object is not subscriptable
+
+source_snapshot/tests/test_protein_structure_result_worker.py:80: TypeError
+_________________ test_saved_explicit_mode_change_without_svd __________________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_result_worker_2026-10-27_393/check001/temporary/pytest/test_saved_explicit_mode_chang0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x78a5dd9ba060>
+
+    def test_saved_explicit_mode_change_without_svd(tmp_path, monkeypatch):
+        plan, sheet = _saved_plan(tmp_path)
+        plan["parameters"].update(mode="evaluate_declared_transform_ca", fit_selection=None,
+            declared_transform={"version": "protein_structure_transform_v1", "direction": "moving_to_fixed",
+                "convention": "row_vector_y_R_plus_t", "rotation": [[1, 0, 0], [0, 1, 0], [0, 0, 1]],
+                "translation_A": [0, 0, 0], "fixed_selection": deepcopy(sheet["sequences"]["fixed"]["selection"]),
+                "moving_selection": deepcopy(sheet["sequences"]["moving"]["selection"]), "origin": "supplied", "received_from": None})
+        monkeypatch.setattr(np.linalg, "svd", _forbid)
+        _no_acquisition(monkeypatch)
+        result = worker.run_protein_structure_result_worker(plan)
+>       components = _output(plan, result, "components_file")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_protein_structure_result_worker.py:259: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+plan = {'version': 'protein_structure_result_worker_plan_v1', 'mode': 'saved_sheet_recalculation', 'directory': '/home/chia/r...ture_result_worker_2026-10-27_393/check001/temporary/pytest/test_saved_explicit_mode_chang0/retained/sheet.json'}, ...}
+result = {'version': 'protein_structure_result_worker_result_v1', 'mode': 'saved_sheet_recalculation', 'operation': 'compare', 'native_result_file': None, ...}
+field = 'components_file'
+
+    def _output(plan, result, field):
+        row = result[field]
+>       raw = (Path(plan["directory"]) / row["relative_path"]).read_bytes()
+                                         ^^^^^^^^^^^^^^^^^^^^
+E       TypeError: 'NoneType' object is not subscriptable
+
+source_snapshot/tests/test_protein_structure_result_worker.py:80: TypeError
+_ test_saved_failure_keeps_diagnostic_sheet_without_calculation[different_baseline] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_result_worker_2026-10-27_393/check001/temporary/pytest/test_saved_failure_keeps_diagn1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x78a5ddde0320>
+failure = 'different_baseline'
+
+    @pytest.mark.parametrize("failure", ["missing_baseline", "different_baseline", "invalid_arithmetic", "wrong_original_parameters", "missing_components"])
+    def test_saved_failure_keeps_diagnostic_sheet_without_calculation(tmp_path, monkeypatch, failure):
+        plan, sheet = _saved_plan(tmp_path)
+        original = json.loads(Path(plan["original_components"]["path"]).read_bytes())
+        if failure == "missing_baseline":
+            sheet["native_baseline"] = None
+            _replace(plan, "sheet", sheet)
+        elif failure == "different_baseline":
+            original["evaluation"]["evaluation_rmsd"]["value"] = 999.0
+            _replace(plan, "original_components", original)
+        elif failure == "invalid_arithmetic":
+            original["evaluation"]["evaluation_rmsd"]["value"] = 999.0
+            sheet["native_baseline"] = deepcopy(original)
+            _replace(plan, "sheet", sheet)
+            _replace(plan, "original_components", original)
+        elif failure == "wrong_original_parameters":
+            sheet["native_request"]["distance_threshold_A"] = 17.0
+            _replace(plan, "sheet", sheet)
+        else:
+            Path(plan["original_components"]["path"]).unlink()
+        _no_refit(monkeypatch)
+        result = worker.run_protein_structure_result_worker(plan)
+        assert result["state"] == ("unavailable" if failure == "missing_components" else "invalid")
+>       assert same(_output(plan, result, "sheet_file"), sheet)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_protein_structure_result_worker.py:290: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+plan = {'version': 'protein_structure_result_worker_plan_v1', 'mode': 'saved_sheet_recalculation', 'directory': '/home/chia/r...ture_result_worker_2026-10-27_393/check001/temporary/pytest/test_saved_failure_keeps_diagn1/retained/sheet.json'}, ...}
+result = {'version': 'protein_structure_result_worker_result_v1', 'mode': 'saved_sheet_recalculation', 'operation': 'compare', 'native_result_file': None, ...}
+field = 'sheet_file'
+
+    def _output(plan, result, field):
+        row = result[field]
+>       raw = (Path(plan["directory"]) / row["relative_path"]).read_bytes()
+                                         ^^^^^^^^^^^^^^^^^^^^
+E       TypeError: 'NoneType' object is not subscriptable
+
+source_snapshot/tests/test_protein_structure_result_worker.py:80: TypeError
+_ test_saved_failure_keeps_diagnostic_sheet_without_calculation[missing_components] _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_result_worker_2026-10-27_393/check001/temporary/pytest/test_saved_failure_keeps_diagn4')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x78a5dd9bb860>
+failure = 'missing_components'
+
+    @pytest.mark.parametrize("failure", ["missing_baseline", "different_baseline", "invalid_arithmetic", "wrong_original_parameters", "missing_components"])
+    def test_saved_failure_keeps_diagnostic_sheet_without_calculation(tmp_path, monkeypatch, failure):
+        plan, sheet = _saved_plan(tmp_path)
+        original = json.loads(Path(plan["original_components"]["path"]).read_bytes())
+        if failure == "missing_baseline":
+            sheet["native_baseline"] = None
+            _replace(plan, "sheet", sheet)
+        elif failure == "different_baseline":
+            original["evaluation"]["evaluation_rmsd"]["value"] = 999.0
+            _replace(plan, "original_components", original)
+        elif failure == "invalid_arithmetic":
+            original["evaluation"]["evaluation_rmsd"]["value"] = 999.0
+            sheet["native_baseline"] = deepcopy(original)
+            _replace(plan, "sheet", sheet)
+            _replace(plan, "original_components", original)
+        elif failure == "wrong_original_parameters":
+            sheet["native_request"]["distance_threshold_A"] = 17.0
+            _replace(plan, "sheet", sheet)
+        else:
+            Path(plan["original_components"]["path"]).unlink()
+        _no_refit(monkeypatch)
+        result = worker.run_protein_structure_result_worker(plan)
+>       assert result["state"] == ("unavailable" if failure == "missing_components" else "invalid")
+E       AssertionError: assert 'invalid' == 'unavailable'
+E         
+E         - unavailable
+E         + invalid
+
+source_snapshot/tests/test_protein_structure_result_worker.py:289: AssertionError
+___ test_saved_wrong_format_and_missing_bytes_are_typed[original_components] ___
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_result_worker_2026-10-27_393/check001/temporary/pytest/test_saved_wrong_format_and_mi1')
+key = 'original_components'
+
+    @pytest.mark.parametrize("key", ["sheet", "original_components"])
+    def test_saved_wrong_format_and_missing_bytes_are_typed(tmp_path, key):
+        plan, _ = _saved_plan(tmp_path / "format")
+        plan[key]["file_identity"]["format"] = "text"
+        result = worker.run_protein_structure_result_worker(plan)
+>       assert result["state"] == "invalid" and result["issues"][-1]["code"] == "unsupported_format"
+E       AssertionError: assert ('invalid' == 'invalid'
+E         
+E           invalid and 'invalid_schema' == 'unsupported_format'
+E         
+E         - unsupported_format
+E         + invalid_schema)
+
+source_snapshot/tests/test_protein_structure_result_worker.py:361: AssertionError
+____________________ test_real_cli_and_output_bytes[saved] _____________________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_protein_structure_result_worker_2026-10-27_393/check001/temporary/pytest/test_real_cli_and_output_bytes1')
+mode = 'saved'
+
+    @pytest.mark.parametrize("mode", ["native", "saved", "failure"])
+    def test_real_cli_and_output_bytes(tmp_path, mode):
+        if mode == "saved":
+            plan, sheet = _saved_plan(tmp_path)
+            plan["parameters"]["evaluation_selection"] = {"kind": "all_mapped_pairs"}
+        else:
+            plan, native = _native_plan(tmp_path)
+            if mode == "failure": plan["native_result"] = None
+        plan_file = tmp_path / "plan.json"
+        plan_file.write_bytes(_bytes(plan))
+        command = [sys.executable, "-B", "-m", "gene_annotation_episode.protein_structure_result_worker", str(plan_file)]
+        completed = subprocess.run(command, cwd=tmp_path, capture_output=True, check=False)
+        (tmp_path / "cli-command.json").write_bytes(_bytes(command))
+        (tmp_path / "cli-stdout.txt").write_bytes(completed.stdout)
+        (tmp_path / "cli-stderr.txt").write_bytes(completed.stderr)
+        assert completed.returncode == 0, completed.stderr.decode()
+        result = json.loads((Path(plan["directory"]) / "worker-result.json").read_bytes())
+        _result_bytes(plan, result)
+        if mode == "failure":
+            assert result["state"] == "unavailable" and result["native_result_file"] is None
+        else:
+>           components = _output(plan, result, "components_file")
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+source_snapshot/tests/test_protein_structure_result_worker.py:506: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+plan = {'version': 'protein_structure_result_worker_plan_v1', 'mode': 'saved_sheet_recalculation', 'directory': '/home/chia/r...ture_result_worker_2026-10-27_393/check001/temporary/pytest/test_real_cli_and_output_bytes1/retained/sheet.json'}, ...}
+result = {'components_file': None, 'issues': [{'artifact_role': None, 'atom_row_key': None, 'code': 'invalid_schema', 'correspondence_id': None, ...}], 'mode': 'saved_sheet_recalculation', 'native_result_file': None, ...}
+field = 'components_file'
+
+    def _output(plan, result, field):
+        row = result[field]
+>       raw = (Path(plan["directory"]) / row["relative_path"]).read_bytes()
+                                         ^^^^^^^^^^^^^^^^^^^^
+E       TypeError: 'NoneType' object is not subscriptable
+
+source_snapshot/tests/test_protein_structure_result_worker.py:80: TypeError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_protein_structure_result_worker.py::test_saved_recalculation_changes_only_separate_components_once
+FAILED source_snapshot/tests/test_protein_structure_result_worker.py::test_saved_explicit_new_fit_selection
+FAILED source_snapshot/tests/test_protein_structure_result_worker.py::test_saved_explicit_mode_change_without_svd
+FAILED source_snapshot/tests/test_protein_structure_result_worker.py::test_saved_failure_keeps_diagnostic_sheet_without_calculation[different_baseline]
+FAILED source_snapshot/tests/test_protein_structure_result_worker.py::test_saved_failure_keeps_diagnostic_sheet_without_calculation[missing_components]
+FAILED source_snapshot/tests/test_protein_structure_result_worker.py::test_saved_wrong_format_and_missing_bytes_are_typed[original_components]
+FAILED source_snapshot/tests/test_protein_structure_result_worker.py::test_real_cli_and_output_bytes[saved]
+7 failed, 68 passed in 20.79s

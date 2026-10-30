@@ -1,0 +1,9 @@
+# Evidence-reader correction
+
+The first ad hoc read-only MinHash journal query exited 1 before writing its proposed report. It incorrectly called `json.loads(action['credit'])`; SQLite stores `runtime_actions.credit` as REAL, while the JSON observation carries a credit object. The actual exception was `TypeError: the JSON object must be str, bytes or bytearray, not float`.
+
+`PRAGMA table_info(runtime_actions)` and the completed journal rows establish the correct comparison: `action['credit'] == observation['credit']['credit']`. The unexecuted full-Workflow evidence collector received the same reader correction. No application source, test expectation, journal, observation or credit changed. This evidence-reader error is separate from the completed five passing tests.
+
+## Additive completed Workflow audit reader correction
+
+accounting_audit_001 exited 1 in 0.0363182439468801 seconds because the initial reader indexed a nonexistent root annotation return row in runtime_forms. Read-only inspection of both completed journals established four child return rows and no parent return for the root annotation episode. The initial reader is preserved as collect_workflow_accounts.py (SHA-256 6988209a8297fc5402c6fd6383f8d31d471d599bfb5c4e61256df0afc33cd5da). The corrected collect_workflow_accounts_v2.py explicitly asserts the absent root return and requires each child return, while retaining every action, observation, credit, practical completion and typed forwarding assertion. It uses canonical JSON equality for the forwarded subset to preserve integer/float and boolean distinctions. No candidate code, test expectation, runtime row or existing invocation was changed. The failed receipt/log remain under accounting_audit_001; the corrected read-only audit will have a separate receipt.

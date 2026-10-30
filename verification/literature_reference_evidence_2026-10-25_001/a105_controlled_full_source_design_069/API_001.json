@@ -1,0 +1,24 @@
+{
+  "status": "design_only_no_production_release",
+  "shared_module": "gene_annotation_episode/literature_controlled_response_inputs.py",
+  "shared_host_signatures": [
+    "open_controlled_response_sources(arguments, *, read_source) -> SourceContext",
+    "read_controlled_response_arm_science(context, selected_arm) -> ArmScience",
+    "read_controlled_response_text_measurement(context, selected, *, endpoint) -> MeasurementReading",
+    "finish_controlled_response_arm(context, arm_science, *, measurement) -> ArmExtraction",
+    "finish_controlled_response_inputs(context, *, arms) -> SourceExtraction",
+    "validate_controlled_response_saved_science(arguments, extraction, *, measurement_checks) -> SourceExtraction"
+  ],
+  "v2_module": "gene_annotation_episode/literature_controlled_response_v2_inputs.py",
+  "public_signatures": [
+    "controlled_response_v2_arguments_schema() -> dict",
+    "validate_controlled_response_v2_selection(arguments) -> dict",
+    "read_controlled_response_v2_inputs(arguments, *, read_source) -> dict",
+    "validate_controlled_response_v2_extraction(arguments, extraction) -> dict"
+  ],
+  "callback": "read_source(source_ref: str, representation: Literal['original','text']) -> exactly {artifact_ref: nonempty str, content: built-in immutable bytes}",
+  "host_measurement_check": "validate_measurement(selected, saved_measurement, *, source_records, image_records) -> MeasurementReading",
+  "separate_calculator": "populate_controlled_response_owner(extraction['calculation_inputs']) -> controlled_response_owner_sheet_v2",
+  "source_calls_calculator": false,
+  "v3_proposal": "Separate four-function API with v3 names; not an overload of v1/v2; nullable calculation_inputs only in explicit unresolved v3 result"
+}

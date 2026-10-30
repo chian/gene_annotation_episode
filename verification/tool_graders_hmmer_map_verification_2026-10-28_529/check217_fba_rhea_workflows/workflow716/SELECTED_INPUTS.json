@@ -1,0 +1,671 @@
+{
+  "model_file": {
+    "file": {
+      "witness_ref": "source_d29ee08b473fbf409b543796",
+      "version": null,
+      "artifact_field": "artifact_ref",
+      "format": "cobra_json"
+    },
+    "original_loader_selection": "json_file",
+    "repository_identifier": null,
+    "acquisition_receipt_file": null
+  },
+  "parameters": {
+    "active_flux_thresholds": [
+      {
+        "subject_id": "IN",
+        "unit": {
+          "basis": "unknown",
+          "native_text": null,
+          "source": null
+        },
+        "value": 1e-08
+      },
+      {
+        "subject_id": "AB",
+        "unit": {
+          "basis": "unknown",
+          "native_text": null,
+          "source": null
+        },
+        "value": 1e-08
+      },
+      {
+        "subject_id": "OUT",
+        "unit": {
+          "basis": "unknown",
+          "native_text": null,
+          "source": null
+        },
+        "value": 1e-08
+      }
+    ],
+    "constraint_activity_tolerances": [
+      {
+        "subject_id": "A",
+        "unit": {
+          "basis": "unknown",
+          "native_text": null,
+          "source": null
+        },
+        "value": 1e-08
+      },
+      {
+        "subject_id": "B",
+        "unit": {
+          "basis": "unknown",
+          "native_text": null,
+          "source": null
+        },
+        "value": 1e-08
+      }
+    ],
+    "constraint_tolerances": [
+      {
+        "subject_id": "A",
+        "unit": {
+          "basis": "unknown",
+          "native_text": null,
+          "source": null
+        },
+        "value": 1e-08
+      },
+      {
+        "subject_id": "B",
+        "unit": {
+          "basis": "unknown",
+          "native_text": null,
+          "source": null
+        },
+        "value": 1e-08
+      }
+    ],
+    "objective_absolute_tolerance": 1e-08,
+    "reaction_bound_tolerances": [
+      {
+        "subject_id": "IN",
+        "unit": {
+          "basis": "unknown",
+          "native_text": null,
+          "source": null
+        },
+        "value": 1e-08
+      },
+      {
+        "subject_id": "AB",
+        "unit": {
+          "basis": "unknown",
+          "native_text": null,
+          "source": null
+        },
+        "value": 1e-08
+      },
+      {
+        "subject_id": "OUT",
+        "unit": {
+          "basis": "unknown",
+          "native_text": null,
+          "source": null
+        },
+        "value": 1e-08
+      }
+    ],
+    "reaction_flux_tolerances": [
+      {
+        "subject_id": "IN",
+        "unit": {
+          "basis": "unknown",
+          "native_text": null,
+          "source": null
+        },
+        "value": 1e-08
+      },
+      {
+        "subject_id": "AB",
+        "unit": {
+          "basis": "unknown",
+          "native_text": null,
+          "source": null
+        },
+        "value": 1e-08
+      },
+      {
+        "subject_id": "OUT",
+        "unit": {
+          "basis": "unknown",
+          "native_text": null,
+          "source": null
+        },
+        "value": 1e-08
+      }
+    ],
+    "variable_bound_tolerances": [
+      {
+        "subject_id": "IN",
+        "unit": {
+          "basis": "unknown",
+          "native_text": null,
+          "source": null
+        },
+        "value": 1e-08
+      },
+      {
+        "subject_id": "IN_reverse_c86ee",
+        "unit": {
+          "basis": "unknown",
+          "native_text": null,
+          "source": null
+        },
+        "value": 1e-08
+      },
+      {
+        "subject_id": "AB",
+        "unit": {
+          "basis": "unknown",
+          "native_text": null,
+          "source": null
+        },
+        "value": 1e-08
+      },
+      {
+        "subject_id": "AB_reverse_b86fc",
+        "unit": {
+          "basis": "unknown",
+          "native_text": null,
+          "source": null
+        },
+        "value": 1e-08
+      },
+      {
+        "subject_id": "OUT",
+        "unit": {
+          "basis": "unknown",
+          "native_text": null,
+          "source": null
+        },
+        "value": 1e-08
+      },
+      {
+        "subject_id": "OUT_reverse_ef373",
+        "unit": {
+          "basis": "unknown",
+          "native_text": null,
+          "source": null
+        },
+        "value": 1e-08
+      }
+    ],
+    "version": "fba_calculation_parameters_v1"
+  },
+  "parameters_reused_from": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check217_fba_rhea_workflows/source_snapshot/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check151c_producer688/producer-emissions/cobra_json/calculated.json",
+  "historical_outputs_reused_as_new_results": false,
+  "software_sha256": "230fe0d8a40eab21af86171935c3c138c2cc8c40d281c615fc6461192b6147ad",
+  "actual_tool_information": [
+    {
+      "name": "perform_flux_balance_analysis",
+      "description": "Test a supplied metabolic model with selected reaction bounds or objective, returning the requested objective value or reaction fluxes.",
+      "resources": "local",
+      "instructions": "Use the assigned question and model, together with any supplied hypothesis, evidence and reaction correspondence. For an assigned reaction knockout, set both bounds of that existing model reaction to zero. Select SBML or COBRA JSON input, optional bounds for existing reactions, and either the model's objective or one existing reaction as objective. Objective direction is retained. Describe an objective as growth only when the supplied model/question identifies it as growth or biomass. Return requested objective values or named reaction fluxes with relevant conditions and diagnostic qualifications through the existing FBA result forms and calculators. Predictions remain conditional on the supplied model and correspondence. Saved-sheet recalculation changes supported diagnostics/projections; changed models, bounds, or objectives require new selected native work.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "const": "flux_balance_scientific_request_v1"
+          },
+          "operation": {
+            "const": "perform_flux_balance_analysis"
+          },
+          "mode": {
+            "const": "steady_state_linear_fba"
+          },
+          "model_input": {
+            "type": "object",
+            "properties": {
+              "file": {
+                "type": "object",
+                "properties": {
+                  "witness_ref": {
+                    "type": "string",
+                    "minLength": 1,
+                    "format": "reference"
+                  },
+                  "version": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "artifact_field": {
+                    "enum": [
+                      null,
+                      "artifact_ref",
+                      "text_ref",
+                      "request_ref",
+                      "stdout_ref",
+                      "stderr_ref"
+                    ]
+                  },
+                  "format": {
+                    "enum": [
+                      "cobra_json"
+                    ]
+                  }
+                },
+                "required": [
+                  "witness_ref",
+                  "version",
+                  "artifact_field",
+                  "format"
+                ],
+                "additionalProperties": false
+              },
+              "original_loader_selection": {
+                "enum": [
+                  "sbml_file",
+                  "json_file",
+                  "repository_identifier"
+                ]
+              },
+              "repository_identifier": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "acquisition_receipt_file": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "witness_ref": {
+                        "type": "string",
+                        "minLength": 1,
+                        "format": "reference"
+                      },
+                      "version": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "artifact_field": {
+                        "enum": [
+                          null,
+                          "artifact_ref",
+                          "text_ref",
+                          "request_ref",
+                          "stdout_ref",
+                          "stderr_ref"
+                        ]
+                      },
+                      "format": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "witness_ref",
+                      "version",
+                      "artifact_field",
+                      "format"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "file",
+              "original_loader_selection",
+              "repository_identifier",
+              "acquisition_receipt_file"
+            ],
+            "additionalProperties": false
+          },
+          "constraints": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "reaction_id": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "lower": {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "enum": [
+                            "finite",
+                            "negative_infinity",
+                            "positive_infinity",
+                            "missing",
+                            "invalid"
+                          ]
+                        },
+                        "value": {
+                          "anyOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "native_token": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "float_hex": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 1048576,
+                              "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "source": {
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "file": {
+                                  "type": "object",
+                                  "properties": {
+                                    "witness_ref": {
+                                      "type": "string",
+                                      "minLength": 1,
+                                      "format": "reference"
+                                    },
+                                    "version": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "artifact_field": {
+                                      "enum": [
+                                        null,
+                                        "artifact_ref",
+                                        "text_ref",
+                                        "request_ref",
+                                        "stdout_ref",
+                                        "stderr_ref"
+                                      ]
+                                    },
+                                    "format": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    }
+                                  },
+                                  "required": [
+                                    "witness_ref",
+                                    "version",
+                                    "artifact_field",
+                                    "format"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                "pointer": {
+                                  "type": "string",
+                                  "pattern": "^(?:/(?:[^~]|~[01])*)*$"
+                                }
+                              },
+                              "required": [
+                                "file",
+                                "pointer"
+                              ],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-fba-record": "Bound"
+                    },
+                    "upper": {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "enum": [
+                            "finite",
+                            "negative_infinity",
+                            "positive_infinity",
+                            "missing",
+                            "invalid"
+                          ]
+                        },
+                        "value": {
+                          "anyOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "native_token": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "float_hex": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 1048576,
+                              "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "source": {
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "file": {
+                                  "type": "object",
+                                  "properties": {
+                                    "witness_ref": {
+                                      "type": "string",
+                                      "minLength": 1,
+                                      "format": "reference"
+                                    },
+                                    "version": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "artifact_field": {
+                                      "enum": [
+                                        null,
+                                        "artifact_ref",
+                                        "text_ref",
+                                        "request_ref",
+                                        "stdout_ref",
+                                        "stderr_ref"
+                                      ]
+                                    },
+                                    "format": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    }
+                                  },
+                                  "required": [
+                                    "witness_ref",
+                                    "version",
+                                    "artifact_field",
+                                    "format"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                "pointer": {
+                                  "type": "string",
+                                  "pattern": "^(?:/(?:[^~]|~[01])*)*$"
+                                }
+                              },
+                              "required": [
+                                "file",
+                                "pointer"
+                              ],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-fba-record": "Bound"
+                    }
+                  },
+                  "required": [
+                    "reaction_id",
+                    "lower",
+                    "upper"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "objective": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "enum": [
+                  "model_default",
+                  "single_reaction"
+                ]
+              },
+              "reaction_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1048576,
+                    "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "kind",
+              "reaction_id"
+            ],
+            "additionalProperties": false,
+            "x-fba-record": "ObjectiveRequest"
+          },
+          "solver_options": {
+            "type": "object",
+            "properties": {
+              "feasibility_tolerance": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "optimality_tolerance": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "integrality_tolerance": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "feasibility_tolerance",
+              "optimality_tolerance",
+              "integrality_tolerance"
+            ],
+            "additionalProperties": false,
+            "x-fba-record": "RequestedSolverOptions"
+          }
+        },
+        "required": [
+          "version",
+          "operation",
+          "mode",
+          "model_input",
+          "constraints",
+          "objective",
+          "solver_options"
+        ],
+        "additionalProperties": false
+      },
+      "invocation_route": {
+        "kind": "commission",
+        "routes": [
+          {
+            "entry_role": "launch",
+            "resource_id": "here",
+            "resource_role": "launch_local"
+          }
+        ]
+      }
+    }
+  ]
+}

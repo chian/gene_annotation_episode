@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.553" timestamp="2026-10-28T21:33:41.416393-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_blast_vdb_native_observation_661" name="test_selected_native_observation" time="0.306"><failure message="ValueError: invalid literal for int() with base 0: '002'">source_snapshot/tests/test_blast_vdb_native_observation_661.py:234: in test_selected_native_observation
+    evidence = (trace_evidence(trace.read_bytes(), selection, returncode, stderr_bytes)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_blast_vdb_native_observation_661.py:81: in trace_evidence
+    result=match[3], result_integer=int(result[1], 0) if result else None,
+                                    ^^^^^^^^^^^^^^^^^
+E   ValueError: invalid literal for int() with base 0: '002'</failure></testcase></testsuite></testsuites>

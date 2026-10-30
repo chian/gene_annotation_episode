@@ -1,0 +1,71 @@
+{
+  "actions": 6,
+  "model_calls": 6,
+  "observations": 6,
+  "results_final_estimate": {
+    "diagnostics": {
+      "completed_acquisition_turns": 1,
+      "completion_action_index": 0,
+      "completion_proof": {
+        "assignment_sha256": "23d0fda910574ef58df4c558c7a8220d3b7afaf8ed231d158000a9c4949c9881",
+        "endpoint": "usable_handoff",
+        "episode_id": "episode_a32201b6025387a6e87fd33c7d70c5ab71b451e570b110673d0f01efd9d62af0",
+        "operation_key": "rfam-report-composed-complete_zero:episode_a32201b6025387a6e87fd33c7d70c5ab71b451e570b110673d0f01efd9d62af0:0",
+        "receipt_sha256": "3cdb5ddb992e2c40db7f7722c3d72180712583041b570979c3559a0c19d824ee",
+        "run_id": "rfam-report-composed-complete_zero",
+        "validation_keys": [
+          "requested_service_result"
+        ],
+        "version": "practical_completion_v1"
+      },
+      "completion_unit_ref": {
+        "episode_id": "episode_a32201b6025387a6e87fd33c7d70c5ab71b451e570b110673d0f01efd9d62af0",
+        "unit_id": "unit_2455ae49481c28198e8453a0714631c2819068e015eb677317b46122986bf581",
+        "unit_index": 0
+      },
+      "fitting_scope": "verified_assignment_endpoint",
+      "history_used": 1
+    },
+    "expected_next_gain": {
+      "alpha": 0.0,
+      "lower": 0.0,
+      "status_code": 0,
+      "uncertainty_code": 0,
+      "upper": 0.0,
+      "value": 0.0
+    },
+    "parameters": {
+      "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+      "subsample_size": 50,
+      "uncertainty_alpha": 0.05,
+      "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
+      "window_size": 100
+    },
+    "provenance": {
+      "base_estimator": "gene_annotation_episode.numerical.estimate_score_yield",
+      "completion_proof": "practical_completion_v1",
+      "completion_verifier": "gene_annotation_episode.execution_episodes.ExecutionEpisodes.practical_estimator.<locals>.<lambda>",
+      "continuation": "existing_available_upper_bound_lte_configured_cost",
+      "interface": "raw_credit_history_parameters_aligned_execution_contexts_v1",
+      "raw_history": "unchanged_one_observation_per_completed_own_action",
+      "terminal_forecast": "exact_zero_after_verified_assignment_completion",
+      "version": "verified_practical_endpoint_yield_v1"
+    },
+    "turns": 1
+  },
+  "results_gains": [
+    2.0
+  ],
+  "results_practical_completion": {
+    "assignment_sha256": "23d0fda910574ef58df4c558c7a8220d3b7afaf8ed231d158000a9c4949c9881",
+    "endpoint": "usable_handoff",
+    "episode_id": "episode_a32201b6025387a6e87fd33c7d70c5ab71b451e570b110673d0f01efd9d62af0",
+    "operation_key": "rfam-report-composed-complete_zero:episode_a32201b6025387a6e87fd33c7d70c5ab71b451e570b110673d0f01efd9d62af0:0",
+    "receipt_sha256": "3cdb5ddb992e2c40db7f7722c3d72180712583041b570979c3559a0c19d824ee",
+    "run_id": "rfam-report-composed-complete_zero",
+    "validation_keys": [
+      "requested_service_result"
+    ],
+    "version": "practical_completion_v1"
+  }
+}

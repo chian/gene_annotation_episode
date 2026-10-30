@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>mixed.sam - SAMStat report</title>
+<style>
+:root{--ink:#1a1a1a;--muted:#555555;--line:#c9cdd3;--wash:#f4f5f7;--accent:#0b4f8a;--accent-bg:#eaf1f8}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;background:#ffffff;color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+.page{max-width:52rem;margin:0 auto;padding:28px 16px 48px}
+h1,h2{line-height:1.25;overflow-wrap:anywhere}
+h1{font-size:1.75rem;margin:0 0 .25rem}
+h2{font-size:1.3rem;margin:0 0 .35rem}
+p{margin:0 0 .75rem}
+.eyebrow{margin:0 0 .25rem;font-size:.875rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--accent)}
+.meta{margin:0;color:var(--muted)}
+.partial{font-weight:600;color:var(--ink)}
+main>section,main>.strip,main>.notes{margin-top:2.25rem}
+main>.strip{margin-top:1.75rem}
+.strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:0}
+@media (max-width:42rem){.strip{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:24rem){.strip{grid-template-columns:minmax(0,1fr)}}
+.strip>div{margin:0;padding:12px 14px;background:var(--wash);border:1px solid var(--line);border-radius:8px}
+.strip dt{margin:0;font-size:.9rem;color:var(--muted)}
+.strip dd{margin:.1rem 0 0;font-size:clamp(1.25rem,5vw,1.75rem);line-height:1.2;font-weight:650;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.strip .sub{display:block;font-size:.85rem;font-weight:400;color:var(--muted)}
+.notes{list-style:none;padding:0}
+.banner{margin:1.75rem 0 0;padding:.9rem 1.1rem;background:var(--wash);border-left:5px solid var(--muted);border-radius:0 6px 6px 0;font-size:1.15rem;font-weight:600}
+.notes li{margin:0 0 8px;padding:.6rem .9rem;background:var(--wash);border-left:5px solid var(--muted);border-radius:0 6px 6px 0}
+.caption{max-width:48rem;margin-bottom:1rem}
+.table-wrap{overflow-x:auto}
+table{border-collapse:collapse;min-width:20rem}
+th,td{padding:.55rem .9rem;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+thead th{border-bottom:2px solid var(--ink);font-size:.9rem}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+td svg{display:block}
+.plot h2 .num{display:inline-block;min-width:1.6rem;color:var(--accent)}
+.figs{margin:0 0 .5rem;overflow-x:auto}
+.figs svg{display:block;width:100%;margin:0 0 12px 0}
+.figs:not(.paired)>svg{min-width:30rem}
+.figs .plot-key svg{width:auto}
+.figs.paired{max-width:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}
+.figs.paired>p{grid-column:1/-1}
+.figs.paired svg{max-width:32rem}
+@media (max-width:40rem){.figs.paired{grid-template-columns:minmax(0,1fr)}}
+.good{max-width:48rem;margin:0 0 .6rem}
+.plot-na{display:inline-block;margin:0 0 .75rem;padding:.6rem .9rem;border:2px dashed var(--muted);border-radius:6px}
+.plot-note{margin:0 0 .75rem;padding:.5rem .9rem;background:var(--wash);border-left:5px solid var(--muted);border-radius:0 6px 6px 0;max-width:48rem}
+.plot-key{margin:0 0 .5rem}
+.plot-key svg{margin:0}
+details{margin:.25rem 0 0;border:1px solid var(--line);border-radius:6px;max-width:48rem}
+summary{padding:.5rem .9rem;font-weight:600;color:var(--accent);cursor:pointer}
+summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+details[open] summary{border-bottom:1px solid var(--line)}
+.howto{padding:.75rem .9rem 0}
+.howto p{margin-bottom:.6rem}
+footer{margin-top:3rem;padding-top:1rem;border-top:2px solid var(--line);font-size:.9rem;color:var(--muted)}
+footer p{margin-bottom:.5rem}
+@page{size:A4 portrait;margin:14mm}
+@media print{
+body{font-size:11pt;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{max-width:none;padding:0}
+main>section,.strip>div,.notes li,details,table,tr,.figs,.plot-na,.plot-note,.good{break-inside:avoid}
+h1,h2,summary{break-after:avoid}
+section.plot{break-inside:avoid-page}
+details>*:not(summary){display:block!important}
+details::details-content{content-visibility:visible!important;display:block!important}
+details>summary{list-style:none;border-bottom:1px solid var(--line)}
+details>summary::-webkit-details-marker{display:none}
+summary{color:var(--ink)}
+}
+</style>
+</head>
+<body>
+<div class="page">
+<header>
+<p class="eyebrow">SAMStat report</p>
+<h1>mixed.sam</h1>
+<p class="meta">SAM &middot; short reads (median 4 bp) &middot; SAMStat 2.5.0</p>
+</header>
+<main>
+<dl class="strip" aria-label="Summary">
+<div><dt>Reads (R1+R2)</dt><dd>10</dd></div>
+<div><dt>Bases</dt><dd>50 bp</dd></div>
+<div><dt>N50</dt><dd>5 bp<span class="sub">half of all bases are in reads at least this long</span></dd></div>
+<div><dt>Mean Q</dt><dd>16.2<span class="sub">average base quality (Q30 = 1 error in 1000 bases)</span></dd></div>
+<div><dt>% mapped</dt><dd>90.0%</dd></div>
+<div><dt>% MAPQ &gt;= 30</dt><dd>40.0%<span class="sub">reads placed with high confidence</span></dd></div>
+<div><dt>% bases clipped</dt><dd>0.0%<span class="sub">ends the aligner trimmed off</span></dd></div>
+<div><dt>Median identity</dt><dd>n/a</dd></div>
+</dl>
+<ul class="notes" aria-label="Notes">
+<li>Only 10 reads: per-position plots (3-5) are not reliable and are hidden.</li>
+<li>Identity unavailable for 9 of 9 mapped reads (no NM tag and no =/X operations).</li>
+</ul>
+<section id="mapq" aria-labelledby="mapq-title">
+<h2 id="mapq-title">How well did reads map?</h2>
+<p class="caption">MAPQ is the aligner&#39;s confidence that a read is placed correctly; aligners scale it differently.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">Line in plots</th><th scope="col">Class</th><th scope="col" class="num">Reads</th><th scope="col" class="num">% of reads</th><th scope="col" class="num">Read 1</th><th scope="col" class="num">Read 2</th></tr></thead>
+<tbody>
+<tr><td><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="samstat-mapq-0-t samstat-mapq-0-d" width="52" height="14" viewBox="0 0 52 14" style="vertical-align:middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="12" fill="#1a1a1a"><title id="samstat-mapq-0-t">solid blue line</title><desc id="samstat-mapq-0-d">Line sample: blue, solid.</desc><path fill="none" stroke="#0072B2" stroke-width="2.5" d="M2,7H50"/></svg>
+</td><th scope="row">MAPQ &gt;= 30</th><td class="num">4</td><td class="num">40.0</td><td class="num">4</td><td class="num">0</td></tr>
+<tr><td><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="samstat-mapq-1-t samstat-mapq-1-d" width="52" height="14" viewBox="0 0 52 14" style="vertical-align:middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="12" fill="#1a1a1a"><title id="samstat-mapq-1-t">dashed orange line</title><desc id="samstat-mapq-1-d">Line sample: orange, dashed.</desc><path fill="none" stroke="#B86E00" stroke-width="2.5" stroke-dasharray="8 4" d="M2,7H50"/></svg>
+</td><th scope="row">MAPQ 10-29</th><td class="num">3</td><td class="num">30.0</td><td class="num">2</td><td class="num">1</td></tr>
+<tr><td><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="samstat-mapq-2-t samstat-mapq-2-d" width="52" height="14" viewBox="0 0 52 14" style="vertical-align:middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="12" fill="#1a1a1a"><title id="samstat-mapq-2-t">dotted vermillion line</title><desc id="samstat-mapq-2-d">Line sample: vermillion, dotted.</desc><path fill="none" stroke="#D55E00" stroke-width="2.5" stroke-dasharray="3 4" d="M2,7H50"/></svg>
+</td><th scope="row">MAPQ &lt; 10</th><td class="num">2</td><td class="num">20.0</td><td class="num">2</td><td class="num">0</td></tr>
+<tr><td><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="samstat-mapq-3-t samstat-mapq-3-d" width="52" height="14" viewBox="0 0 52 14" style="vertical-align:middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="12" fill="#1a1a1a"><title id="samstat-mapq-3-t">dash-dot grey line</title><desc id="samstat-mapq-3-d">Line sample: grey, dash-dot.</desc><path fill="none" stroke="#777777" stroke-width="2.5" stroke-dasharray="12 4 2 4" d="M2,7H50"/></svg>
+</td><th scope="row">Unmapped</th><td class="num">1</td><td class="num">10.0</td><td class="num">1</td><td class="num">0</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="plot" id="plot-1" aria-labelledby="plot-1-title">
+<h2 id="plot-1-title"><span class="num">1.</span> How long are the reads?</h2>
+<p class="caption">Reads per length bin (log scale for long reads). The dashed line is N50: half of all bases are in reads at least this long.</p>
+<div class="figs paired">
+<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="samstat-p1-r1-t samstat-p1-r1-d" width="400" height="398" viewBox="0 0 400 398" style="max-width:100%;height:auto;vertical-align:top" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="15" fill="#1a1a1a"><title id="samstat-p1-r1-t">How long are the reads? Read 1</title><desc id="samstat-p1-r1-d">Number of reads per read-length bin. Read lengths range from 4 bp to 8 bp. Lines: MAPQ &gt;= 30, MAPQ 10-29, MAPQ &lt; 10, Unmapped. The dashed vertical line marks N50, 5 bp: half of all bases are in reads at least this long.</desc><rect width="400" height="398" fill="#fff"/><path fill="none" stroke="#0072B2" stroke-width="2.5" d="M7.5,18.8H43.5"/><text x="49.5" y="24">MAPQ &gt;= 30 (4 reads)</text><path fill="none" stroke="#B86E00" stroke-width="2.5" stroke-dasharray="8 4" d="M7.5,41.2H43.5"/><text x="49.5" y="46.5">MAPQ 10-29 (2 reads)</text><path fill="none" stroke="#D55E00" stroke-width="2.5" stroke-dasharray="3 4" d="M7.5,63.8H43.5"/><text x="49.5" y="69">MAPQ &lt; 10 (2 reads)</text><path fill="none" stroke="#777777" stroke-width="2.5" stroke-dasharray="12 4 2 4" d="M7.5,86.2H43.5"/><text x="49.5" y="91.5">Unmapped (1 read)</text><path fill="none" stroke="#e4e4e4" stroke-width="1" d="M82.5,347H377.5M82.5,293.2H377.5M82.5,239.5H377.5M82.5,185.8H377.5M82.5,132H377.5"/><path fill="none" stroke="#595959" stroke-width="1" d="M82.5,132V347H377.5M112,347v4M171,347v4M230,347v4M289,347v4M348,347v4M82.5,347h-4M82.5,293.2h-4M82.5,239.5h-4M82.5,185.8h-4M82.5,132h-4"/><text x="82.5" y="119.2" font-weight="bold">Read 1</text><text x="112" y="365.2" text-anchor="middle">2</text><text x="171" y="365.2" text-anchor="middle">4</text><text x="230" y="365.2" text-anchor="middle">6</text><text x="289" y="365.2" text-anchor="middle">8</text><text x="348" y="365.2" text-anchor="middle">10</text><text x="230" y="388.5" text-anchor="middle">read length (bp)</text><text x="75.5" y="352.2" text-anchor="end">0</text><text x="75.5" y="298.5" text-anchor="end">1</text><text x="75.5" y="244.8" text-anchor="end">2</text><text x="75.5" y="191" text-anchor="end">3</text><text x="75.5" y="137.2" text-anchor="end">4</text><text transform="translate(14.2 239.5) rotate(-90)" text-anchor="middle">number of reads</text><path fill="none" stroke="#777777" stroke-width="2" stroke-linejoin="round" stroke-dasharray="12 4 2 4" d="M156.2,347V293.2H185.8V347"><title>Unmapped, Read 1</title></path><path fill="none" stroke="#D55E00" stroke-width="2" stroke-linejoin="round" stroke-dasharray="3 4" d="M156.2,347V293.2H185.8H215.2V347"><title>MAPQ &lt; 10, Read 1</title></path><path fill="none" stroke="#B86E00" stroke-width="2" stroke-linejoin="round" stroke-dasharray="8 4" d="M215.2,347V293.2H244.8H274.2V347"><title>MAPQ 10-29, Read 1</title></path><path fill="none" stroke="#0072B2" stroke-width="2" stroke-linejoin="round" d="M156.2,347V185.8H185.8V347M274.2,347V293.2H303.8V347"><title>MAPQ &gt;= 30, Read 1</title></path><path fill="none" stroke="#000000" stroke-width="1.25" stroke-dasharray="5 3" d="M200.5,132V347"><title>N50 5 bp</title></path><text x="205.5" y="148.5" text-anchor="start" fill="#fff" stroke="#fff" stroke-width="4" stroke-linejoin="round">N50 5 bp</text><text x="205.5" y="148.5" text-anchor="start">N50 5 bp</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="samstat-p1-r2-t samstat-p1-r2-d" width="400" height="398" viewBox="0 0 400 398" style="max-width:100%;height:auto;vertical-align:top" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="15" fill="#1a1a1a"><title id="samstat-p1-r2-t">How long are the reads? Read 2</title><desc id="samstat-p1-r2-d">Number of reads per read-length bin. Read lengths range from 4 bp to 8 bp. Lines: MAPQ 10-29. The dashed vertical line marks N50, 5 bp: half of all bases are in reads at least this long.</desc><rect width="400" height="398" fill="#fff"/><path fill="none" stroke="#0072B2" stroke-width="2.5" d="M7.5,18.8H43.5"/><text x="49.5" y="24">MAPQ &gt;= 30 (0 reads)</text><path fill="none" stroke="#B86E00" stroke-width="2.5" stroke-dasharray="8 4" d="M7.5,41.2H43.5"/><text x="49.5" y="46.5">MAPQ 10-29 (1 read)</text><path fill="none" stroke="#D55E00" stroke-width="2.5" stroke-dasharray="3 4" d="M7.5,63.8H43.5"/><text x="49.5" y="69">MAPQ &lt; 10 (0 reads)</text><path fill="none" stroke="#777777" stroke-width="2.5" stroke-dasharray="12 4 2 4" d="M7.5,86.2H43.5"/><text x="49.5" y="91.5">Unmapped (0 reads)</text><path fill="none" stroke="#e4e4e4" stroke-width="1" d="M82.5,347H377.5M82.5,293.2H377.5M82.5,239.5H377.5M82.5,185.8H377.5M82.5,132H377.5"/><path fill="none" stroke="#595959" stroke-width="1" d="M82.5,132V347H377.5M112,347v4M171,347v4M230,347v4M289,347v4M348,347v4M82.5,347h-4M82.5,293.2h-4M82.5,239.5h-4M82.5,185.8h-4M82.5,132h-4"/><text x="82.5" y="119.2" font-weight="bold">Read 2</text><text x="112" y="365.2" text-anchor="middle">2</text><text x="171" y="365.2" text-anchor="middle">4</text><text x="230" y="365.2" text-anchor="middle">6</text><text x="289" y="365.2" text-anchor="middle">8</text><text x="348" y="365.2" text-anchor="middle">10</text><text x="230" y="388.5" text-anchor="middle">read length (bp)</text><text x="75.5" y="352.2" text-anchor="end">0</text><text x="75.5" y="298.5" text-anchor="end">1</text><text x="75.5" y="244.8" text-anchor="end">2</text><text x="75.5" y="191" text-anchor="end">3</text><text x="75.5" y="137.2" text-anchor="end">4</text><text transform="translate(14.2 239.5) rotate(-90)" text-anchor="middle">number of reads</text><path fill="none" stroke="#B86E00" stroke-width="2" stroke-linejoin="round" stroke-dasharray="8 4" d="M156.2,347V293.2H185.8V347"><title>MAPQ 10-29, Read 2</title></path><path fill="none" stroke="#000000" stroke-width="1.25" stroke-dasharray="5 3" d="M200.5,132V347"><title>N50 5 bp</title></path><text x="205.5" y="148.5" text-anchor="start" fill="#fff" stroke="#fff" stroke-width="4" stroke-linejoin="round">N50 5 bp</text><text x="205.5" y="148.5" text-anchor="start">N50 5 bp</text></svg>
+</div>
+<p class="good"><strong>What good looks like:</strong> One peak where the library preparation or sequencing kit puts it.</p>
+<details>
+<summary>How to read plot 1</summary>
+<div class="howto">
+<p><strong>Worth a look:</strong> A second peak of short reads (adapter dimers, degraded input, failed reads), especially if those reads are unmapped.</p>
+<p><strong>Often benign:</strong> Trimmed short reads form a ramp below the full read length; amplicon libraries show one peak per amplicon.</p>
+<p><strong>How it is calculated:</strong> Files whose median read length is 1 kb or more are drawn in the long-read style: a log length axis here, and positions as % of read length in plots 3-5.</p>
+</div>
+</details>
+</section>
+<section class="plot" id="plot-2" aria-labelledby="plot-2-title">
+<h2 id="plot-2-title"><span class="num">2.</span> How good is each read?</h2>
+<p class="caption">Reads by their average base quality (higher is better; Q20 = 1 error in 100 bases, Q30 = 1 in 1000).</p>
+<div class="figs paired">
+<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="samstat-p2-r1-t samstat-p2-r1-d" width="400" height="398" viewBox="0 0 400 398" style="max-width:100%;height:auto;vertical-align:top" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="15" fill="#1a1a1a"><title id="samstat-p2-r1-t">How good is each read? Read 1</title><desc id="samstat-p2-r1-d">Number of reads by their mean base quality, from Q5 to Q40. Lines: MAPQ &gt;= 30, MAPQ 10-29, MAPQ &lt; 10, Unmapped. Qualities are averaged as error probabilities.</desc><rect width="400" height="398" fill="#fff"/><path fill="none" stroke="#0072B2" stroke-width="2.5" d="M7.5,18.8H43.5"/><text x="49.5" y="24">MAPQ &gt;= 30 (4 reads)</text><path fill="none" stroke="#B86E00" stroke-width="2.5" stroke-dasharray="8 4" d="M7.5,41.2H43.5"/><text x="49.5" y="46.5">MAPQ 10-29 (2 reads)</text><path fill="none" stroke="#D55E00" stroke-width="2.5" stroke-dasharray="3 4" d="M7.5,63.8H43.5"/><text x="49.5" y="69">MAPQ &lt; 10 (2 reads)</text><path fill="none" stroke="#777777" stroke-width="2.5" stroke-dasharray="12 4 2 4" d="M7.5,86.2H43.5"/><text x="49.5" y="91.5">Unmapped (1 read)</text><path fill="none" stroke="#e4e4e4" stroke-width="1" d="M82.5,347H377.5M82.5,293.2H377.5M82.5,239.5H377.5M82.5,185.8H377.5M82.5,132H377.5"/><path fill="none" stroke="#595959" stroke-width="1" d="M82.5,132V347H377.5M82.5,347v4M148.1,347v4M213.6,347v4M279.2,347v4M344.7,347v4M82.5,347h-4M82.5,293.2h-4M82.5,239.5h-4M82.5,185.8h-4M82.5,132h-4"/><text x="82.5" y="119.2" font-weight="bold">Read 1</text><text x="82.5" y="365.2" text-anchor="middle">0</text><text x="148.1" y="365.2" text-anchor="middle">10</text><text x="213.6" y="365.2" text-anchor="middle">20</text><text x="279.2" y="365.2" text-anchor="middle">30</text><text x="344.7" y="365.2" text-anchor="middle">40</text><text x="209" y="388.5" text-anchor="middle">average base quality per read (Q), 1-Q bins</text><text x="75.5" y="352.2" text-anchor="end">0</text><text x="75.5" y="298.5" text-anchor="end">1</text><text x="75.5" y="244.8" text-anchor="end">2</text><text x="75.5" y="191" text-anchor="end">3</text><text x="75.5" y="137.2" text-anchor="end">4</text><text transform="translate(14.2 239.5) rotate(-90)" text-anchor="middle">number of reads</text><path fill="none" stroke="#595959" stroke-width="1" d="M82.5,347v2.5M89.1,347v2.5M95.6,347v2.5M102.2,347v2.5M108.7,347v2.5M115.3,347v2.5M121.8,347v2.5M128.4,347v2.5M134.9,347v2.5M141.5,347v2.5M148.1,347v2.5M154.6,347v2.5M161.2,347v2.5M167.7,347v2.5M174.3,347v2.5M180.8,347v2.5M187.4,347v2.5M193.9,347v2.5M200.5,347v2.5M207.1,347v2.5M213.6,347v2.5M220.2,347v2.5M226.7,347v2.5M233.3,347v2.5M239.8,347v2.5M246.4,347v2.5M252.9,347v2.5M259.5,347v2.5M266.1,347v2.5M272.6,347v2.5M279.2,347v2.5M285.7,347v2.5M292.3,347v2.5M298.8,347v2.5M305.4,347v2.5M311.9,347v2.5M318.5,347v2.5M325.1,347v2.5M331.6,347v2.5M338.2,347v2.5M344.7,347v2.5M351.3,347v2.5M357.8,347v2.5M364.4,347v2.5M370.9,347v2.5M377.5,347v2.5"/><path fill="none" stroke="#777777" stroke-width="2" stroke-linejoin="round" stroke-dasharray="12 4 2 4" d="M344.7,347V293.2H351.3V347"><title>Unmapped, Read 1</title></path><path fill="none" stroke="#D55E00" stroke-width="2" stroke-linejoin="round" stroke-dasharray="3 4" d="M344.7,347V239.5H351.3V347"><title>MAPQ &lt; 10, Read 1</title></path><path fill="none" stroke="#B86E00" stroke-width="2" stroke-linejoin="round" stroke-dasharray="8 4" d="M344.7,347V239.5H351.3V347"><title>MAPQ 10-29, Read 1</title></path><path fill="none" stroke="#0072B2" stroke-width="2" stroke-linejoin="round" d="M344.7,347V185.8H351.3V347"><title>MAPQ &gt;= 30, Read 1</title></path></svg>
+<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="samstat-p2-r2-t samstat-p2-r2-d" width="400" height="398" viewBox="0 0 400 398" style="max-width:100%;height:auto;vertical-align:top" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="15" fill="#1a1a1a"><title id="samstat-p2-r2-t">How good is each read? Read 2</title><desc id="samstat-p2-r2-d">Number of reads by their mean base quality, from Q5 to Q40. Lines: MAPQ 10-29. Qualities are averaged as error probabilities.</desc><rect width="400" height="398" fill="#fff"/><path fill="none" stroke="#0072B2" stroke-width="2.5" d="M7.5,18.8H43.5"/><text x="49.5" y="24">MAPQ &gt;= 30 (0 reads)</text><path fill="none" stroke="#B86E00" stroke-width="2.5" stroke-dasharray="8 4" d="M7.5,41.2H43.5"/><text x="49.5" y="46.5">MAPQ 10-29 (1 read)</text><path fill="none" stroke="#D55E00" stroke-width="2.5" stroke-dasharray="3 4" d="M7.5,63.8H43.5"/><text x="49.5" y="69">MAPQ &lt; 10 (0 reads)</text><path fill="none" stroke="#777777" stroke-width="2.5" stroke-dasharray="12 4 2 4" d="M7.5,86.2H43.5"/><text x="49.5" y="91.5">Unmapped (0 reads)</text><path fill="none" stroke="#e4e4e4" stroke-width="1" d="M82.5,347H377.5M82.5,293.2H377.5M82.5,239.5H377.5M82.5,185.8H377.5M82.5,132H377.5"/><path fill="none" stroke="#595959" stroke-width="1" d="M82.5,132V347H377.5M82.5,347v4M148.1,347v4M213.6,347v4M279.2,347v4M344.7,347v4M82.5,347h-4M82.5,293.2h-4M82.5,239.5h-4M82.5,185.8h-4M82.5,132h-4"/><text x="82.5" y="119.2" font-weight="bold">Read 2</text><text x="82.5" y="365.2" text-anchor="middle">0</text><text x="148.1" y="365.2" text-anchor="middle">10</text><text x="213.6" y="365.2" text-anchor="middle">20</text><text x="279.2" y="365.2" text-anchor="middle">30</text><text x="344.7" y="365.2" text-anchor="middle">40</text><text x="209" y="388.5" text-anchor="middle">average base quality per read (Q), 1-Q bins</text><text x="75.5" y="352.2" text-anchor="end">0</text><text x="75.5" y="298.5" text-anchor="end">1</text><text x="75.5" y="244.8" text-anchor="end">2</text><text x="75.5" y="191" text-anchor="end">3</text><text x="75.5" y="137.2" text-anchor="end">4</text><text transform="translate(14.2 239.5) rotate(-90)" text-anchor="middle">number of reads</text><path fill="none" stroke="#595959" stroke-width="1" d="M82.5,347v2.5M89.1,347v2.5M95.6,347v2.5M102.2,347v2.5M108.7,347v2.5M115.3,347v2.5M121.8,347v2.5M128.4,347v2.5M134.9,347v2.5M141.5,347v2.5M148.1,347v2.5M154.6,347v2.5M161.2,347v2.5M167.7,347v2.5M174.3,347v2.5M180.8,347v2.5M187.4,347v2.5M193.9,347v2.5M200.5,347v2.5M207.1,347v2.5M213.6,347v2.5M220.2,347v2.5M226.7,347v2.5M233.3,347v2.5M239.8,347v2.5M246.4,347v2.5M252.9,347v2.5M259.5,347v2.5M266.1,347v2.5M272.6,347v2.5M279.2,347v2.5M285.7,347v2.5M292.3,347v2.5M298.8,347v2.5M305.4,347v2.5M311.9,347v2.5M318.5,347v2.5M325.1,347v2.5M331.6,347v2.5M338.2,347v2.5M344.7,347v2.5M351.3,347v2.5M357.8,347v2.5M364.4,347v2.5M370.9,347v2.5M377.5,347v2.5"/><path fill="none" stroke="#B86E00" stroke-width="2" stroke-linejoin="round" stroke-dasharray="8 4" d="M115.3,347V293.2H121.8V347"><title>MAPQ 10-29, Read 2</title></path></svg>
+</div>
+<p class="good"><strong>What good looks like:</strong> One peak at high quality.</p>
+<details>
+<summary>How to read plot 2</summary>
+<div class="howto">
+<p><strong>Worth a look:</strong> A second, low-quality peak, especially if it matches the poorly mapped or unmapped reads.</p>
+<p><strong>Often benign:</strong> Instruments that bin qualities give a few spikes instead of a smooth curve.</p>
+<p><strong>How it is calculated:</strong> Base qualities are averaged as error probabilities, so a few bad bases pull a read down and the values read lower than a plain average of Q scores, which is what FastQC reports. Mean Q at the top of the page and plot 3 are averaged in the same way.</p>
+</div>
+</details>
+</section>
+<section class="plot" id="plot-3" aria-labelledby="plot-3-title">
+<h2 id="plot-3-title"><span class="num">3.</span> Where along the read does quality drop?</h2>
+<div class="figs">
+<p class="plot-na">Too few reads (10) for a per-position plot (needs at least 50).</p>
+</div>
+</section>
+<section class="plot" id="plot-4" aria-labelledby="plot-4-title">
+<h2 id="plot-4-title"><span class="num">4.</span> Is base composition even along the read?</h2>
+<div class="figs">
+<p class="plot-na">Too few reads (10) for a per-position plot (needs at least 50).</p>
+</div>
+</section>
+<section class="plot" id="plot-5" aria-labelledby="plot-5-title">
+<h2 id="plot-5-title"><span class="num">5.</span> Where along the read do errors occur?</h2>
+<div class="figs">
+<p class="plot-na">Too few reads (10) for a per-position plot (needs at least 50).</p>
+</div>
+</section>
+<section class="plot" id="plot-6" aria-labelledby="plot-6-title">
+<h2 id="plot-6-title"><span class="num">6.</span> How accurate are the aligned reads?</h2>
+<div class="figs">
+<p class="plot-na">Identity not available: no NM tag and no =/X operations.</p>
+</div>
+</section>
+</main>
+<footer>
+<p>Report of <strong>mixed.sam</strong> made by SAMStat 2.5.0.</p>
+<p>1 secondary alignments (not counted); 1 supplementary alignments (not counted).</p>
+<p>Please cite: Lassmann T., &ldquo;SAMStat 2: quality control for next generation sequencing data&rdquo;, <em>Bioinformatics</em> 39(1), btad019, 2023, doi:10.1093/bioinformatics/btad019.</p>
+<p>Original method: Lassmann T., Hayashizaki Y., Daub C.O., &ldquo;SAMStat: monitoring biases in next generation sequencing data&rdquo;, <em>Bioinformatics</em> 27(1), 130-131, 2011, doi:10.1093/bioinformatics/btq614.</p>
+</footer>
+</div>
+</body>
+</html>

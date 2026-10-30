@@ -1,0 +1,48 @@
+{
+  "additive_correction_of_048": true,
+  "artifact_sha256": {
+    "AST_UNCHANGED_PROOF_002.json": "63b650d95a5f3601003827bc6fbc639784c9f7acebccadcf3dab3c6e065daa88",
+    "BASELINE_COMPARISON_002.json": "bf8633da957b9d26578be58db77dd914f312d44a2ebd2b28a4ae8e8623f59ada",
+    "FULL_PATCH_002.diff": "a0787bca59066002512aac44934996909202661e6e3e4fc9df47facaf0685d01",
+    "TERMINAL_002.txt": "86f5b71e84a7ef7bb0f1eeedfc95968b6c9456ec105c20e08cb11032bf5c90b8",
+    "verify_release_002.py": "ebf8509435916f56ffc64a30e5a8065fcb2021bf0eeafd9a7b9cfee94053ea94"
+  },
+  "baseline_files_preserved_exact": true,
+  "complete_output_comparisons": 84,
+  "counts_overlap_not_additive": true,
+  "native_adapter_run": false,
+  "production_files": {
+    "gene_annotation_episode/literature_binding_interaction_calculations.py": {
+      "baseline_sha256": "26dffa5d6d9e4eb4b419f2243369344bebc6eee2c637a141edfaedb21cd3232e",
+      "bytes": 32760,
+      "released_sha256": "ac7ea12c105e16df5085942090ec8e3f96c618b4f5866283325c46c92804b432",
+      "snapshot": "snapshot_002/gene_annotation_episode/literature_binding_interaction_calculations.py",
+      "stable_through_terminal_run": true
+    },
+    "tests/test_literature_binding_interaction_calculations.py": {
+      "baseline_sha256": "0ed1dd22a04fcb691e6ba848c029bf2343e4aac8781e281c2d2532450c493c79",
+      "bytes": 36710,
+      "released_sha256": "1a61ddd3126eec2293b75efdaac8e1ef77d4dfeab0cb3040bef31c13dccb60ed",
+      "snapshot": "snapshot_002/tests/test_literature_binding_interaction_calculations.py",
+      "stable_through_terminal_run": true
+    }
+  },
+  "recorded_at_utc": "2026-10-26T16:55:27.482618+00:00",
+  "runtime_or_model_provider_run": false,
+  "scope": "pure 048 partial-state correction; no new grader, axis, W05 or router",
+  "source_papers_read": false,
+  "synthetic_only": true,
+  "test_command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-B",
+    "-m",
+    "pytest",
+    "-p",
+    "no:cacheprovider",
+    "-q",
+    "--tb=short",
+    "tests/test_literature_binding_interaction_calculations.py"
+  ],
+  "test_exit_code": 0,
+  "test_result": "99 passed in 0.38s"
+}

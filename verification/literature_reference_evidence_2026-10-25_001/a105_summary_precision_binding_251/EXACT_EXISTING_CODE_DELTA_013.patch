@@ -1,0 +1,447 @@
+--- verification/literature_reference_evidence_2026-10-25_001/a105_summary_precision_components_248/pin_006/gene_annotation_episode/literature_episodes.py
++++ gene_annotation_episode/literature_episodes.py
+@@ -159,10 +159,11 @@
+     result.append({"name": "literature.optical.populate",
+         "description": "Populate the existing net_rate and variance_net_rate input meanings from selected source-bound optical observations. Preserve NADH-depletion endpoint scope, actual subject/construct/preparation/conditions, qualified or missing inputs and source-owned covariance. Optical epsilon/path conversion is not recovery k, protein amount, product attribution or a complete activity score. Repeated representations create no independent evidence or annotation credit.",
+         "input_schema": optical_arguments_schema()})
+-    from .literature_kinetic_inputs import kinetic_arguments_schema
++    from .literature_kinetic_summary_precision_storage import kinetic_operation_schema
++    from .literature_kinetic_summary_precision_prompt import SUMMARY_PRECISION_OPERATION_DESCRIPTION
+     result.append({"name": "literature.kinetic.populate",
+-        "description": "Read source-bound reported Km, kcat or catalytic-efficiency estimates and populate native parameter, difference, ratio and log-contrast components for separately assayed substrates. Preserve actual molecule/construct, per-row protocols, qualifications and source uncertainty meanings. This native route has no covariance/model source reader; model-dependent evidence cells are not supported here, which is not a finding that the paper lacks covariance. No quotient of reported means, common-condition correction, intrinsic-affinity inference, target transfer or annotation credit.",
+-        "input_schema": kinetic_arguments_schema()})
++        "description": "Read source-bound reported Km, kcat or catalytic-efficiency estimates and populate native parameter, difference, ratio and log-contrast components for separately assayed substrates. Preserve actual molecule/construct, per-row protocols, qualifications and source uncertainty meanings. This native route has no covariance/model source reader; model-dependent evidence cells are not supported here, which is not a finding that the paper lacks covariance. No quotient of reported means, common-condition correction, intrinsic-affinity inference, target transfer or annotation credit. " + SUMMARY_PRECISION_OPERATION_DESCRIPTION,
++        "input_schema": kinetic_operation_schema()})
+     from .literature_kinetic_model_storage import kinetic_model_population_schema
+     result.append({"name": "literature.kinetic.model.populate",
+         "description": "Populate the existing four conditional kinetic log-model cells from an actually received committed native kinetic sheet and an optional received retained model source. Model JSON uses a105_kinetic_log_model_v1 fields except source; provenance is bound from actual bytes. Preserve exact numerator/denominator physical estimate owners, natural-log canonical-parameter basis, full covariance, known/estimated/unknown variance and source interpretation witnesses. Reported SD/SEM/counts never supply covariance. These dependent parameter-contrast statistics are not assay reliability, function probabilities, target transfer or annotation credit.",
+@@ -419,6 +420,9 @@
+                          "literature_optical_validation.py", "literature_optical_storage.py",
+                          "literature_kinetic_calculations.py", "literature_kinetic_inputs.py",
+                          "literature_kinetic_validation.py", "literature_kinetic_storage.py",
++                         "literature_kinetic_summary_precision_inputs.py", "literature_kinetic_summary_precision_calculations.py",
++                         "literature_kinetic_summary_precision_prompt.py", "literature_kinetic_summary_precision_storage.py",
++                         "literature_kinetic_summary_precision_render.py",
+                          "literature_kinetic_model_inputs.py", "literature_kinetic_model_storage.py", "literature_kinetic_model_render.py", "literature_kinetic_model_prompt.py",
+                          "literature_binding_interaction_inputs.py", "literature_binding_interaction_calculations.py",
+                          "literature_binding_visual_inputs.py", "literature_binding_interaction_validation.py",
+@@ -531,6 +535,9 @@
+                           field: _REFERENCES})
+         schema = deepcopy(schema)
+         if self.rate_population:
++            from .literature_kinetic_summary_precision_storage import REQUESTED as SUMMARY_REQUESTED, COMPONENTS as SUMMARY_COMPONENTS
++            schema['properties'][SUMMARY_REQUESTED] = {'type': 'array', 'uniqueItems': True,
++                'items': {'enum': list(SUMMARY_COMPONENTS)}}
+             from .literature_rate_storage import COMPONENTS
+             from .literature_rate_observation_storage import COMPONENTS as OBSERVATION_COMPONENTS, GRID_REQUESTED
+             from .literature_rate_observation_calculations import reported_curve_precision_selector_schema
+@@ -824,6 +831,7 @@
+             result.update(self._native_rate_meaning_display_context(context))
+             result.update(self._received_fact_display_context(context))
+             result.update(self._endpoint_signal_display_context(context))
++            result.update(self._summary_precision_display_context(context))
+         return result
+ 
+     def decision_context(self, context, current_view):
+@@ -881,6 +889,7 @@
+             result.update(self._native_rate_meaning_display_context(context))
+             result.update(self._received_fact_display_context(context))
+             result.update(self._endpoint_signal_display_context(context))
++            result.update(self._summary_precision_display_context(context))
+         return result
+ 
+     def catalog(self, context):
+@@ -975,9 +984,11 @@
+             repo = self._endpoint_signal_repository()
+             if tool_name in {'source.read', 'source.locate'}:
+                 repo.authorize_source_access(context, arguments['source_ref'], arguments.get('representation', 'text'), tool_name)
++                self._summary_precision_repository().authorize_source_access(context, arguments['source_ref'], arguments.get('representation', 'text'), tool_name)
+             elif tool_name == 'state.query' and 'refs' in arguments:
+                 for ref in arguments['refs']:
+                     repo.authorize_record_access(context, self.services.read_record(ref))
++                    self._summary_precision_repository().authorize_record_access(context, self.services.read_record(ref))
+         return arguments
+ 
+     async def execute(self, context, tool_name, arguments, operation_key):
+@@ -997,6 +1008,8 @@
+             try:
+                 if tool_name == 'literature.figure.populate' and arguments.get('version') == 'literature_figure_endpoint_signal_population_v1':
+                     return self._endpoint_signal_repository().populate(context, arguments, operation_key)
++                if tool_name == 'literature.kinetic.populate' and arguments.get('version') == 'literature_kinetic_summary_precision_population_v1':
++                    return self._summary_precision_repository().populate(context, arguments, operation_key)
+                 repo = {"literature.product_coupling.populate": self._product_coupling_repository,
+                         "literature.measurement_validation.populate": self._measurement_validation_repository,
+                         "literature.ion_discrimination.populate": self._ion_discrimination_repository,
+@@ -1055,6 +1068,7 @@
+             try:
+                 for record in outcome.get('result', {}).get('records', ()):
+                     self._endpoint_signal_repository().authorize_record_access(context, record)
++                    self._summary_precision_repository().authorize_record_access(context, record)
+             except ContractError as error:
+                 return {"status": "invalid", "operation_ref": identity("operation", {
+                     "key": operation_key, "name": tool_name, "arguments": plain(arguments)}),
+@@ -1080,6 +1094,20 @@
+         if not hasattr(self, '_endpoint_signal_repo'):
+             self._endpoint_signal_repo = LiteratureEndpointSignalRepository(self.services.workflow.store, self.services.workflow.run_id)
+         return self._endpoint_signal_repo
++
++    def _summary_precision_repository(self):
++        from .literature_kinetic_summary_precision_storage import LiteratureKineticSummaryPrecisionRepository
++        if not hasattr(self, '_summary_precision_repo'):
++            self._summary_precision_repo = LiteratureKineticSummaryPrecisionRepository(self.services.workflow.store, self.services.workflow.run_id)
++        return self._summary_precision_repo
++
++    def _summary_precision_display_context(self, context):
++        from .literature_kinetic_summary_precision_storage import REQUESTED
++        repo = self._summary_precision_repository()
++        result = {'literature_summary_precision_receipt_bindings': repo.receipt_bindings()}
++        if context.assignment.get(REQUESTED) or repo.has_work(context):
++            result['literature_kinetic_summary_precision_work'] = {'version': 'literature_summary_precision_task_v1'}
++        return result
+ 
+     def _endpoint_signal_display_context(self, context):
+         repo = self._endpoint_signal_repository()
+@@ -1373,6 +1401,7 @@
+         return {"literature_rate_source_meaning_display": {"cells": list(unique.values()), "records": records}}
+ 
+     def _rate_fact_sources(self):
++        from .literature_kinetic_summary_precision_storage import SUMMARY_PRECISION_CELLS_SCHEMA_V1
+         from .literature_product_coupling_storage import product_coupling_cells_schema
+         from .literature_measurement_validation_storage import measurement_validation_cells_schema
+         from .literature_calibration_recovery_storage import calibration_recovery_cells_schema
+@@ -1402,7 +1431,9 @@
+         from .literature_binding_interaction_model_storage import binding_interaction_model_cells_schema
+         from .literature_binding_interaction_storage import binding_interaction_cells_schema
+         from .literature_endpoint_signal_storage import ENDPOINT_SIGNAL_CELLS_SCHEMA_V1, NAMESPACE as ENDPOINT_NAMESPACE
+-        result = {ENDPOINT_NAMESPACE: {"type": "array", "meaning":
++        result = {'literature_kinetic_summary_precision_cells': {'type': 'array', 'meaning':
++            'Exactly requested source/scenario precision cells for one kinetic summary with actual subject/context, units, physical versus estimator sampling basis, explicit conditions and precise unavailable reasons. Estimated random mean precision, dependent interval calculation parameters and source facts remain distinct. No unrequested operands, independent assay count or annotation credit.',
++            'report_schema': deepcopy(SUMMARY_PRECISION_CELLS_SCHEMA_V1)}, ENDPOINT_NAMESPACE: {"type": "array", "meaning":
+             "Exactly requested saved endpoint amplitudes, conditional correction fractions and variances. Preserve subject, endpoint, coexistence, finite window, correction stage/applicability, source origin, reading-versus-physical uncertainty and shared measurements. Unrequested source coordinates, amplitudes, caption results and covariance remain private; this is not initial-rate g, molecular attribution, function probability or annotation credit.",
+             "report_schema": deepcopy(ENDPOINT_SIGNAL_CELLS_SCHEMA_V1)}, "literature_product_coupling_cells": {"type": "array", "meaning":
+             "Exactly requested saved product/cofactor numerical components with actual molecule, construct, preparation, endpoint and experimental relationships. Native reports, descriptive product-per-cofactor ratio, conditional physical fraction and original author-reported coupling remain distinct. Preserve reaction-account direction/status/model identity, shared measurements and dependent reconstruction; requested uncertainty carries source/owner/basis/origin/status provenance without raw covariance. No unrequested native operands, molecular attribution, independent replication, function probability, target transfer or annotation credit is inferred.",
+@@ -1560,6 +1591,7 @@
+         return result
+ 
+     def _population_routes(self):
++        from .literature_kinetic_summary_precision_storage import PROVIDER as SUMMARY_PROVIDER, NAMESPACE as SUMMARY_NAMESPACE, REQUESTED as SUMMARY_REQUESTED
+         from .literature_product_coupling_storage import PROVIDER as COUPLING_PROVIDER, NAMESPACE as COUPLING_NAMESPACE, REQUESTED as COUPLING_REQUESTED
+         from .literature_measurement_validation_storage import PROVIDER as VALIDATION_PROVIDER, NAMESPACE as VALIDATION_NAMESPACE, REQUESTED as VALIDATION_REQUESTED
+         from .literature_calibration_recovery_storage import PROVIDER as RECOVERY_PROVIDER
+@@ -1589,7 +1621,8 @@
+         from .literature_binding_interaction_storage import COMPONENTS as INTERACTION_COMPONENTS, PROVIDER as INTERACTION_PROVIDER
+         from .literature_binding_interaction_model_storage import COMPONENTS as INTERACTION_MODEL_COMPONENTS, PROVIDER as INTERACTION_MODEL_PROVIDER
+         from .literature_endpoint_signal_storage import PROVIDER as ENDPOINT_PROVIDER, NAMESPACE as ENDPOINT_NAMESPACE, REQUESTED as ENDPOINT_REQUESTED
+-        result = ((ENDPOINT_NAMESPACE, ENDPOINT_REQUESTED, ENDPOINT_PROVIDER, (), self._endpoint_signal_repository),
++        result = ((SUMMARY_NAMESPACE, SUMMARY_REQUESTED, SUMMARY_PROVIDER, (), self._summary_precision_repository),
++                (ENDPOINT_NAMESPACE, ENDPOINT_REQUESTED, ENDPOINT_PROVIDER, (), self._endpoint_signal_repository),
+                 (COUPLING_NAMESPACE, COUPLING_REQUESTED, COUPLING_PROVIDER,
+                  (), self._product_coupling_repository),
+                 (VALIDATION_NAMESPACE, VALIDATION_REQUESTED, VALIDATION_PROVIDER,
+@@ -1831,6 +1864,9 @@
+             if cells:
+                 repository().receive_cells(context, cells, operation_key)
+         references = []
++        summary_cells = [row for name, node in schema.get('properties', {}).items()
++            if node.get('x-source') == 'literature_kinetic_summary_precision_cells' for row in form[name]]
++        references.extend(self._summary_precision_repository().cell_record_refs(summary_cells))
+         endpoint_cells = [row for name, node in schema.get('properties', {}).items()
+             if node.get('x-source') == 'literature_endpoint_signal_cells' for row in form[name]]
+         references.extend(self._endpoint_signal_repository().cell_record_refs(endpoint_cells))
+@@ -1928,7 +1964,7 @@
+                     continue
+                 rows = form[name]
+                 permitted = set(context.received_record_refs)
+-                stale_channel_receipt = (namespace in {"literature_endpoint_signal_cells", "literature_rate_grid_cells", "literature_compiled_assay_v3_cells", "literature_product_coupling_cells", "literature_measurement_validation_cells", "literature_channel_cells", "literature_ion_discrimination_cells"}
++                stale_channel_receipt = (namespace in {"literature_kinetic_summary_precision_cells", "literature_endpoint_signal_cells", "literature_rate_grid_cells", "literature_compiled_assay_v3_cells", "literature_product_coupling_cells", "literature_measurement_validation_cells", "literature_channel_cells", "literature_ion_discrimination_cells"}
+                     and bool(set(repository().selected_sheet_refs(context)) - permitted))
+                 if any(row["sheet_ref"] not in permitted for row in rows) or stale_channel_receipt:
+                     # Refresh only the exact child's later durable receipts.
+@@ -1960,7 +1996,7 @@
+                     repository().validate_fact_values(replace(context,
+                         received_record_refs=tuple(permitted)), rows)
+                     requested = context.assignment.get(requested_field,
+-                        [] if namespace in {"literature_endpoint_signal_cells", "literature_product_coupling_cells", "literature_measurement_validation_cells", "literature_calibration_recovery_cells", "literature_rate_observation_cells", "literature_rate_grid_cells", "literature_rate_replicate_cells", "literature_completion_time_cells", "literature_product_partition_cells", "literature_active_site_cells", "literature_compiled_assay_cells", "literature_compiled_assay_v2_cells", "literature_compiled_assay_v3_cells", "literature_channel_cells", "literature_ion_discrimination_cells"} else None)
++                        [] if namespace in {"literature_kinetic_summary_precision_cells", "literature_endpoint_signal_cells", "literature_product_coupling_cells", "literature_measurement_validation_cells", "literature_calibration_recovery_cells", "literature_rate_observation_cells", "literature_rate_grid_cells", "literature_rate_replicate_cells", "literature_completion_time_cells", "literature_product_partition_cells", "literature_active_site_cells", "literature_compiled_assay_cells", "literature_compiled_assay_v2_cells", "literature_compiled_assay_v3_cells", "literature_channel_cells", "literature_ion_discrimination_cells"} else None)
+                     permitted_components = repository()._components(requested or []) if namespace == "literature_rate_grid_cells" else requested
+                     if permitted_components is not None and any(row["component"] not in permitted_components for row in rows):
+                         raise ContractError("unrequested_literature_rate_component")
+@@ -1975,7 +2011,7 @@
+                             components=requested or [])
+                         if canonical(rows) != canonical(expected):
+                             raise ContractError("literature_rate_replicate_requested_subset_mismatch")
+-                    if namespace in {"literature_endpoint_signal_cells", "literature_product_coupling_cells", "literature_measurement_validation_cells", "literature_rate_observation_cells", "literature_rate_grid_cells", "literature_calibration_recovery_cells", "literature_compiled_assay_cells", "literature_compiled_assay_v2_cells", "literature_compiled_assay_v3_cells", "literature_channel_cells", "literature_ion_discrimination_cells"}:
++                    if namespace in {"literature_kinetic_summary_precision_cells", "literature_endpoint_signal_cells", "literature_product_coupling_cells", "literature_measurement_validation_cells", "literature_rate_observation_cells", "literature_rate_grid_cells", "literature_calibration_recovery_cells", "literature_compiled_assay_cells", "literature_compiled_assay_v2_cells", "literature_compiled_assay_v3_cells", "literature_channel_cells", "literature_ion_discrimination_cells"}:
+                         from .domain import canonical
+                         owned = repository().available_sheet_refs(replace(context,
+                             received_record_refs=tuple(permitted)))
+--- verification/literature_reference_evidence_2026-10-25_001/a105_summary_precision_components_248/pin_006/gene_annotation_episode/communication.py
++++ gene_annotation_episode/communication.py
+@@ -180,6 +180,14 @@
+                     or json.dumps(node, sort_keys=True, allow_nan=False)
+                     not in {json.dumps(tree, sort_keys=True, allow_nan=False) for tree in expected}):
+                 raise ReportBoundaryError(f"{path}: chromatin fact schema must match its registered source", code="invalid_schema")
++            return
++        if source == 'literature_kinetic_summary_precision_cells':
++            if depth != 1:
++                raise ReportBoundaryError(f'{path}: fact bindings apply to whole top-level fields', code='invalid_schema')
++            from .literature_kinetic_summary_precision_storage import SUMMARY_PRECISION_CELLS_SCHEMA_V1
++            if (not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False)
++                    != json.dumps(SUMMARY_PRECISION_CELLS_SCHEMA_V1, sort_keys=True, allow_nan=False)):
++                raise ReportBoundaryError(f'{path}: summary precision schema must match its registered source', code='invalid_schema')
+             return
+         if source == "literature_endpoint_signal_cells":
+             if depth != 1:
+@@ -480,7 +488,7 @@
+     # uses a placeholder. Original contracts and returned rows remain exact.
+     parent_schema = schema
+     native = {name: node for name, node in schema["properties"].items()
+-        if node.get("x-source") in {"literature_controlled_response_component_cells", "literature_gel_component_cells", "literature_ion_discrimination_cells"}
++        if node.get("x-source") in {"literature_kinetic_summary_precision_cells", "literature_controlled_response_component_cells", "literature_gel_component_cells", "literature_ion_discrimination_cells"}
+         or str(node.get("x-source", "")).startswith(("execution_protein_structure_", "genomic_overlap_", "chromatin_interaction_", "atac_differential_", "expression_nmf_"))}
+     if native:
+         parent_schema = {**schema, "properties": dict(schema["properties"])}
+@@ -554,7 +562,7 @@
+     def visit(value, node, path, resource=None):
+         if value is None or not isinstance(node, dict):
+             return
+-        if (node.get("x-source") in {"literature_controlled_response_component_cells", "literature_gel_component_cells", "literature_ion_discrimination_cells"}
++        if (node.get("x-source") in {"literature_kinetic_summary_precision_cells", "literature_controlled_response_component_cells", "literature_gel_component_cells", "literature_ion_discrimination_cells"}
+                 or str(node.get("x-source", "")).startswith(("execution_protein_structure_", "genomic_overlap_", "chromatin_interaction_", "atac_differential_", "expression_nmf_"))):
+             resource = node
+         if resource is not None and "$ref" in node:
+--- verification/literature_reference_evidence_2026-10-25_001/a105_summary_precision_components_248/pin_006/gene_annotation_episode/literature_numerical_contracts.py
++++ gene_annotation_episode/literature_numerical_contracts.py
+@@ -21,6 +21,7 @@
+ # Only existing A105 measurement/experimental-component return families belong
+ # here. Later literature axes and computational result contracts stay separate.
+ _SCHEMAS = {
++    'literature_kinetic_summary_precision_cells': ('literature_kinetic_summary_precision_storage', 'summary_precision_cells_schema'),
+     'literature_endpoint_signal_cells': ('literature_endpoint_signal_storage', 'endpoint_signal_cells_schema'),
+     'literature_rate_cells': ('literature_rate_storage', 'rate_cells_schema'),
+     'literature_rate_source_cells': ('literature_rate_storage', 'rate_source_cells_schema'),
+@@ -62,6 +63,7 @@
+ # sheet cells, formulas or population implementation. Actual bound source
+ # meanings remain available alongside them in the original host declaration.
+ RETURN_MEANINGS = {
++    'literature_kinetic_summary_precision_cells': 'Exactly requested source or explicitly selected scenario precision cells for one kinetic summary, with actual molecule, construct, endpoint, independent unit scales, physical versus statistical sampling meaning and unavailable reasons. Estimated random mean precision is not known population variance. Source SD, counts, derived variance/SE and proposed interval parameters share one contribution; no unrequested numerical operands, target transfer or annotation credit are delivered.',
+     'literature_endpoint_signal_cells': 'Exactly requested endpoint amplitude, correction-fraction or variance components with actual subject, endpoint, conditions, finite window, correction stage and applicability. Preserve conditional values, dependent views, manual reading versus physical uncertainty and source origins; no unrequested ordinates, amplitudes, caption results or covariance matrix are expanded.',
+     'literature_rate_cells': 'Source-preparation rates and conditional comparisons, retaining actual subject, endpoint, conditions, normalization, units and unavailable statistical inputs.',
+     'literature_rate_source_cells': 'Native source-rate comparisons with separate arm subject, construct and preparation identities, reported limits, approximation and statistical qualifications.',
+--- verification/literature_reference_evidence_2026-10-25_001/a105_endpoint_signal_binding_244/pin_005/gene_annotation_episode/literature_numerical_return_presentation.py
++++ gene_annotation_episode/literature_numerical_return_presentation.py
+@@ -81,6 +81,7 @@
+             return source
+     if result.get('information_kind') == 'operation_contract_information_v1':
+         return {'literature.figure.populate': 'literature_endpoint_signal_cells',
++            'literature.kinetic.populate': 'literature_kinetic_summary_precision_cells',
+             'literature.product_coupling.populate': 'literature_product_coupling_cells',
+             'literature.measurement_validation.populate': 'literature_measurement_validation_cells',
+             'literature.channel.populate': 'literature_channel_cells',
+--- verification/literature_reference_evidence_2026-10-25_001/a105_endpoint_signal_binding_244/pin_005/gene_annotation_episode/literature_experimental_prompt.py
++++ gene_annotation_episode/literature_experimental_prompt.py
+@@ -42,6 +42,7 @@
+ from . import literature_numerical_return_presentation as _numerical_return
+ from . import literature_rate_replicate_prompt as _rate_replicates
+ from . import literature_endpoint_signal_render as _endpoint_signal
++from . import literature_kinetic_summary_precision_render as _summary_precision
+ 
+ from collections.abc import Mapping
+ 
+@@ -109,6 +110,7 @@
+     "requested_gel_component_keys", "literature_gel_return_bindings", "literature_gel_return_records",
+     "literature_rate_source_display", "literature_rate_source_domain_display",
+     "literature_rate_source_meaning_display", "literature_endpoint_receipt_bindings",
++    "literature_summary_precision_receipt_bindings",
+ })
+ 
+ 
+@@ -289,9 +291,12 @@
+     endpoint_rows = list(_endpoint_signal.rows_from_values((state.get('last_local_outcome'),
+         state.get('child_reports'), state.get('current_report_update'), lookup_results)))
+     hidden_endpoint = _endpoint_signal.hidden_records(endpoint_rows, records, state.get('literature_endpoint_receipt_bindings'))
++    summary_rows = list(_summary_precision.rows_from_values((state.get('last_local_outcome'),
++        state.get('child_reports'), state.get('current_report_update'), lookup_results)))
++    hidden_summary = _summary_precision.hidden_records(summary_rows, records, state.get('literature_summary_precision_receipt_bindings'))
+     selected = {}
+     for reference in pending:
+-        if reference in selected or reference not in records or reference in hidden_amount_measurements or reference in hidden_optical or reference in hidden_kinetic or reference in hidden_interaction or reference in hidden_ratio_source or reference in hidden_controlled or reference in hidden_gel or reference in hidden_native_rate or reference in hidden_partition or reference in hidden_ion or reference in hidden_validation or reference in hidden_coupling or reference in hidden_common or reference in hidden_grid or reference in hidden_endpoint:
++        if reference in selected or reference not in records or reference in hidden_amount_measurements or reference in hidden_optical or reference in hidden_kinetic or reference in hidden_interaction or reference in hidden_ratio_source or reference in hidden_controlled or reference in hidden_gel or reference in hidden_native_rate or reference in hidden_partition or reference in hidden_ion or reference in hidden_validation or reference in hidden_coupling or reference in hidden_common or reference in hidden_grid or reference in hidden_endpoint or reference in hidden_summary:
+             continue
+         row = records[reference]
+         if reference in covariance_support:
+@@ -381,8 +386,10 @@
+         parts.extend(["", BINDING_MODEL_TASK])
+     if BINDING_INTERACTION_MODEL_TASK not in normalized:
+         parts.extend(["", BINDING_INTERACTION_MODEL_TASK])
+-    if KINETIC_MODEL_TASK not in normalized:
+-        parts.extend(["", KINETIC_MODEL_TASK])
++    if _summary_precision.legacy_task_relevant(state) and KINETIC_MODEL_TASK not in normalized:
++        parts.extend(["", 'Legacy kinetic parameter contrast', '', KINETIC_MODEL_TASK])
++    if _summary_precision.task_relevant(state) and _summary_precision.KINETIC_SUMMARY_PRECISION_TASK not in normalized:
++        parts.extend(['', 'Single kinetic summary precision', '', _summary_precision.KINETIC_SUMMARY_PRECISION_TASK])
+     if TRANSPORT_TASK not in normalized:
+         parts.extend(["", TRANSPORT_TASK])
+     if PERTURBATION_TASK not in normalized:
+@@ -423,6 +430,7 @@
+         _section(parts, 'Assigned result contract', render_schema_information(goal['result_contract'], title='Assigned result contract'))
+     _section(parts, "Assigned scope", _values(state.get("scope", {})))
+     assignment = _pick(state.get("literature_assignment", {}), (
++        "requested_kinetic_summary_precision_components",
+         "question_context_refs", "source_refs", "prior_search_refs", "search_result_refs",
+         "source_ref", "representation", "artifact_ref", "page", "selection", "requested_product_coupling_components", "requested_measurement_validation_components", "requested_calibration_recovery_components", "requested_rate_observation_components", "requested_rate_grid_components", "requested_rate_replicate_components",
+         "requested_ion_discrimination_components", "requested_channel_components", "requested_compiled_assay_components", "requested_compiled_assay_components_v2", "requested_compiled_assay_components_v3", "requested_product_partition_components", "requested_completion_time_components", "requested_active_site_components", "requested_rate_components", "requested_quantity_components", "requested_assay_components", "requested_ratio_components", "requested_ratio_source_components", "requested_binding_components", "requested_binding_model_components", "requested_transport_components", "requested_perturbation_components", "requested_perturbation_summary_components", "requested_structure_components", "requested_reaction_components", "requested_reaction_native_positions", "requested_context_components", "requested_context_native_positions", "requested_figure_components", "requested_endpoint_signal_components", "requested_partner_components", "requested_amount_components", "requested_optical_components", "requested_kinetic_components", "requested_kinetic_model_components", "requested_binding_interaction_components", "requested_binding_interaction_model_components", "requested_controlled_response_components", "requested_controlled_response_views", "requested_controlled_response_component_keys", "requested_gel_components", "requested_gel_views", "requested_gel_component_keys", "constraints", "context"))
+@@ -553,6 +561,10 @@
+         _section(parts, title, values(value))
+         return
+     content = value.get("result", value)
++    if isinstance(content, Mapping) and content.get('view') == 'kinetic_summary_precision_components':
++        _section(parts, title, values(_pick(value, ('status', 'selected_tool', 'feedback'))))
++        _summary_precision.render_received(parts, content['cells'], section=_section, table=_table)
++        return
+     if isinstance(content, Mapping) and content.get('view') == 'endpoint_signal_components':
+         _section(parts, title, values(_pick(value, ('status', 'selected_tool', 'feedback'))))
+         _endpoint_signal.render_received(parts, content['cells'], section=_section, table=_table)
+@@ -614,7 +626,7 @@
+     # A direct admitted form can contain several requested scientific families.
+     # Dispatch the complete form so recognizing one meaning view never drops
+     # its siblings. Nested history has its own explicit envelope below.
+-    if (list(_endpoint_signal.rows_from_reports([content])) or list(_product_coupling.rows_from_reports([content])) or list(_measurement_validation.rows_from_reports([content])) or list(_ion_discrimination.rows_from_reports([content])) or list(_channel.rows_from_reports([content])) or list(_compiled_assay.rows_from_reports([content])) or list(_calibration_recovery.rows_from_reports([content])) or list(_rate_observations.rows_from_reports([content])) or list(_rate_replicates.rows_from_reports([content])) or list(_rate_meanings.rows_from_reports([content])) or list(_completion_time.rows_from_reports([content])) or list(_active_site.rows_from_reports([content]))
++    if (isinstance(content, Mapping) and any(isinstance(v, (tuple, list)) and v and all(_summary_precision.is_row(r) for r in v) for v in content.values()) or list(_endpoint_signal.rows_from_reports([content])) or list(_product_coupling.rows_from_reports([content])) or list(_measurement_validation.rows_from_reports([content])) or list(_ion_discrimination.rows_from_reports([content])) or list(_channel.rows_from_reports([content])) or list(_compiled_assay.rows_from_reports([content])) or list(_calibration_recovery.rows_from_reports([content])) or list(_rate_observations.rows_from_reports([content])) or list(_rate_replicates.rows_from_reports([content])) or list(_rate_meanings.rows_from_reports([content])) or list(_completion_time.rows_from_reports([content])) or list(_active_site.rows_from_reports([content]))
+             or list(_product_partition.rows_from_reports([content]))):
+         _section(parts, title, values(_pick(value, ("status", "selected_tool", "feedback"))))
+         _received_returns(parts, [content], records=controlled_records,
+@@ -625,7 +637,7 @@
+         return
+     if (isinstance(content, Mapping) and content.get("view") == "records"
+             and isinstance(content.get("records"), (tuple, list))
+-            and (any(_endpoint_signal.endpoint_history_record(row) for row in content['records'])
++            and (any(_summary_precision.history_record(row) for row in content['records']) or any(_summary_precision.rows_from_values(content['records'])) or any(_endpoint_signal.endpoint_history_record(row) for row in content['records'])
+                 or any(_endpoint_signal.rows_from_values(content["records"]))
+                 or any(_product_coupling.rows_from_values(content["records"]))
+                 or any(_measurement_validation.rows_from_values(content["records"]))
+@@ -654,7 +666,7 @@
+                 admitted_common_sheets = {row['sheet_ref'] for row in _compiled_assay.rows_from_reports([record.get('admitted_report', {})]) if _compiled_assay.is_common_row(row)}
+                 admitted_grid_sheets = {row["sheet_ref"] for row in _rate_observations.rows_from_reports([record.get("admitted_report", {})]) if _rate_observations.is_grid_row(row)}
+                 prior_content = prior.get('result', {}) if isinstance(prior, Mapping) else {}
+-                if (isinstance(prior_content, Mapping) and (prior_content.get("view") == "endpoint_signal_components" and isinstance(record.get("admitted_report"), Mapping)
++                if (isinstance(prior_content, Mapping) and (prior_content.get("view") in {"kinetic_summary_precision_components", "endpoint_signal_components"} and isinstance(record.get("admitted_report"), Mapping)
+                         or prior_content.get("view") == "reported_curve_precision_components"
+                         and (prior_content.get("sheet_ref") in admitted_grid_sheets or isinstance(record.get("admitted_report"), Mapping))
+                         or prior_content.get('record_version') == 'literature_compiled_assay_record_v3'
+@@ -1139,6 +1151,7 @@
+     calibration_recoveries = {}
+     product_couplings = {}
+     endpoint_signals = {}
++    summary_precisions = {}
+     measurement_validations = {}
+     compiled_assays = {}
+     channels = {}
+@@ -1153,7 +1166,10 @@
+             ordinary.append(report)
+             continue
+         for name, value in report.items():
+-            if isinstance(value, (list, tuple)) and value and all(_endpoint_signal.is_row(row) for row in value):
++            if isinstance(value, (list, tuple)) and value and all(_summary_precision.is_row(row) for row in value):
++                for row in value:
++                    summary_precisions.setdefault(row['sheet_ref'], []).append(row)
++            elif isinstance(value, (list, tuple)) and value and all(_endpoint_signal.is_row(row) for row in value):
+                 for row in value:
+                     endpoint_signals.setdefault(row['sheet_ref'], []).append(row)
+             elif isinstance(value, (list, tuple)) and value and all(_product_coupling.is_row(row) for row in value):
+@@ -1275,6 +1291,7 @@
+     if ordinary:
+         _section(parts, "Admitted requested child returns", values(ordinary))
+     _endpoint_signal.render_received(parts, [row for rows in endpoint_signals.values() for row in rows], section=_section, table=_table)
++    _summary_precision.render_received(parts, [row for rows in summary_precisions.values() for row in rows], section=_section, table=_table)
+     _product_coupling.render_received(parts, [row for rows in product_couplings.values() for row in rows], section=_section, table=_table)
+     _measurement_validation.render_received(parts, [row for rows in measurement_validations.values() for row in rows], section=_section, table=_table)
+     _compiled_assay.render_received(parts, [row for rows in compiled_assays.values() for row in rows], section=_section, table=_table)
+@@ -1481,6 +1498,7 @@
+         _section(parts, "Local scientific links", "Record and excerpt labels identify this display; they do not establish independent experiments.")
+     outcome = state.get("last_local_outcome")
+     if outcome is not None:
++        received_summary_sheets = {r['sheet_ref'] for r in _summary_precision.rows_from_values(state.get('child_reports', ()))}
+         received_endpoint_sheets = {row["sheet_ref"] for row in _endpoint_signal.rows_from_reports(state.get("child_reports", ()))}
+         received_coupling_sheets = {row["sheet_ref"] for row in _product_coupling.rows_from_reports(state.get("child_reports", ()))}
+         received_validation_sheets = {row["sheet_ref"] for row in _measurement_validation.rows_from_reports(state.get("child_reports", ()))}
+@@ -1517,8 +1535,9 @@
+         grid_forwarded = (isinstance(content, Mapping) and content.get("view") == "reported_curve_precision_components"
+             and content.get("sheet_ref") in received_observation_sheets)
+         endpoint_forwarded = isinstance(content, Mapping) and content.get('view') == 'endpoint_signal_components' and content.get('sheet_ref') in received_endpoint_sheets
+-        if endpoint_forwarded or grid_forwarded or common_forwarded or coupling_forwarded or validation_forwarded or ion_forwarded or channel_forwarded or (isinstance(outcome, Mapping) and 'result' not in outcome
+-                and (received_endpoint_sheets | received_coupling_sheets | received_validation_sheets | received_ion_sheets | received_channel_sheets | received_compiled_sheets | received_recovery_sheets | received_observation_sheets | received_replicate_sheets | received_partition_sheets | received_completion_time_sheets | received_active_site_sheets | received_ratio_sheets | received_controlled_sheets | received_gel_sheets | received_native_rate_sheets | received_kinetic_model_sheets | received_interaction_model_sheets).intersection(outcome.get('record_refs', ()))):
++        summary_forwarded = isinstance(content, Mapping) and content.get('view') == 'kinetic_summary_precision_components' and content.get('sheet_ref') in received_summary_sheets
++        if summary_forwarded or endpoint_forwarded or grid_forwarded or common_forwarded or coupling_forwarded or validation_forwarded or ion_forwarded or channel_forwarded or (isinstance(outcome, Mapping) and 'result' not in outcome
++                and (received_summary_sheets | received_endpoint_sheets | received_coupling_sheets | received_validation_sheets | received_ion_sheets | received_channel_sheets | received_compiled_sheets | received_recovery_sheets | received_observation_sheets | received_replicate_sheets | received_partition_sheets | received_completion_time_sheets | received_active_site_sheets | received_ratio_sheets | received_controlled_sheets | received_gel_sheets | received_native_rate_sheets | received_kinetic_model_sheets | received_interaction_model_sheets).intersection(outcome.get('record_refs', ()))):
+             # The original child return's host receipt refs are not an extra
+             # scientific return. Its exact admitted rows are rendered below.
+             _section(parts, 'Last selected action outcome', semantic_values(_pick(outcome, ('status', 'feedback'))))
+@@ -1532,7 +1551,7 @@
+     if state.get("feedback") is not None and state["feedback"] != (outcome or {}).get("feedback"):
+         _section(parts, "Actionable feedback", semantic_values(state["feedback"]))
+     if state.get("current_report_update"):
+-        if (list(_endpoint_signal.rows_from_reports([state["current_report_update"]])) or list(_product_coupling.rows_from_reports([state["current_report_update"]])) or
++        if (list(_summary_precision.rows_from_values(state["current_report_update"])) or list(_endpoint_signal.rows_from_reports([state["current_report_update"]])) or list(_product_coupling.rows_from_reports([state["current_report_update"]])) or
+                 list(_measurement_validation.rows_from_reports([state["current_report_update"]])) or
+                 list(_ion_discrimination.rows_from_reports([state["current_report_update"]])) or
+                 list(_channel.rows_from_reports([state["current_report_update"]])) or
+@@ -1579,7 +1598,9 @@
+     # assignment and typed contract for construction, validation and delivery.
+     from .literature_endpoint_signal_render import sanitize_private
+     lookup_results = sanitize_private(lookup_results, state.get('literature_endpoint_receipt_bindings', {}))
++    lookup_results = _summary_precision.sanitize_private(lookup_results, state.get('literature_summary_precision_receipt_bindings', {}))
+     state = _endpoint_signal.state_view(_rate_observations.grid_state_view(_numerical_return.state_view(state), lookup_results), lookup_results)
++    state = _summary_precision.state_view(state, lookup_results)
+     if any(_numerical_return.common_assessment_lookup(outcome) for outcome in lookup_results) or any(
+             _compiled_assay.is_common_row(row) for row in _compiled_assay.rows_from_values(lookup_results)):
+         state = {**state, 'literature_common_assessment_work': {'version': 'literature_common_assessment_task_v1'}}
+--- verification/literature_reference_evidence_2026-10-25_001/a105_endpoint_signal_binding_244/pin_005/gene_annotation_episode/literature_reference_parent_prompt.py
++++ gene_annotation_episode/literature_reference_parent_prompt.py
+@@ -60,6 +60,14 @@
+ def _task(state, instructions, descriptor):
+     normalized = text_instructions(instructions)
+     parts = ["TASK", "", REFERENCE_PARENT_TASK, "", SAVED_NUMERICAL_RETURN_TASK]
++    from .literature_kinetic_summary_precision_render import task_relevant as summary_relevant, legacy_task_relevant
++    from .literature_kinetic_summary_precision_prompt import KINETIC_SUMMARY_PRECISION_TASK
++    if summary_relevant(state) and KINETIC_SUMMARY_PRECISION_TASK not in normalized:
++        parts.extend(['', 'Single kinetic summary precision', '', KINETIC_SUMMARY_PRECISION_TASK])
++    if state.get('literature_kinetic_union_contract_work') and legacy_task_relevant(state):
++        from .literature_kinetic_model_prompt import KINETIC_MODEL_TASK
++        if KINETIC_MODEL_TASK not in normalized:
++            parts.extend(['', 'Legacy kinetic parameter contrast', '', KINETIC_MODEL_TASK])
+     from .literature_endpoint_signal_render import task_relevant, ENDPOINT_SIGNAL_TASK
+     if task_relevant(state) and ENDPOINT_SIGNAL_TASK not in normalized:
+         parts.extend(['', ENDPOINT_SIGNAL_TASK])
+@@ -159,7 +167,10 @@
+     from .literature_endpoint_signal_render import state_view as endpoint_state_view
+     from .literature_endpoint_signal_render import sanitize_private
+     lookup_results = sanitize_private(lookup_results, state.get('literature_endpoint_receipt_bindings', {}))
++    from .literature_kinetic_summary_precision_render import state_view as summary_state_view, sanitize_private as summary_private
++    lookup_results = summary_private(lookup_results, state.get('literature_summary_precision_receipt_bindings', {}))
+     state = endpoint_state_view(grid_state_view(state_view(state), lookup_results), lookup_results)
++    state = summary_state_view(state, lookup_results)
+     from .literature_numerical_return_presentation import common_assessment_lookup
+     from .literature_compiled_assay_render import is_common_row, rows_from_values
+     if any(common_assessment_lookup(outcome) for outcome in lookup_results) or any(is_common_row(row) for row in rows_from_values(lookup_results)):
+@@ -172,7 +183,7 @@
+         "literature_ratio_source_return_meanings", "literature_controlled_response_return_bindings",
+         "literature_gel_return_bindings", "literature_gel_return_records", "literature_rate_source_display",
+         "literature_received_fact_display", "literature_rate_source_domain_display",
+-        "literature_rate_source_meaning_display", "literature_endpoint_receipt_bindings")
++        "literature_rate_source_meaning_display", "literature_endpoint_receipt_bindings", "literature_summary_precision_receipt_bindings")
+     steering_state = {name: state[name] for name in steering_fields if name in state}
+     if state.get('contract_information_profile') == CONTRACT_INFORMATION_PROFILE:
+         return _requested_contract_task(_task(state, instructions, descriptor), lookup_results) + '\n\n' + _steering(
+--- verification/literature_reference_evidence_2026-10-25_001/a105_summary_precision_components_248/pin_006/gene_annotation_episode/episode_contract_information.py
++++ gene_annotation_episode/episode_contract_information.py
+@@ -151,7 +151,8 @@
+     # aliases, external/dynamic refs and altered documents remain constrained.
+     native = {field for field, node in schema.get('properties', {}).items()
+         if isinstance(node, dict) and node.get('x-source') in {
+-            'literature_gel_component_cells', 'literature_controlled_response_component_cells'}}
++            'literature_gel_component_cells', 'literature_controlled_response_component_cells',
++            'literature_kinetic_summary_precision_cells'}}
+     for path, node in _schema_nodes(schema):
+         if not isinstance(node, dict):
+             continue

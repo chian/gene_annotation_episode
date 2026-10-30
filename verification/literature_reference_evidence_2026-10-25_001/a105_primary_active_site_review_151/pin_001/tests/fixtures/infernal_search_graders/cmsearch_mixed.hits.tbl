@@ -1,0 +1,22 @@
+#target name         accession query name           accession mdl mdl from   mdl to seq from   seq to strand trunc pass   gc  bias  score   E-value inc mdl len seq len description of target
+#------------------- --------- -------------------- --------- --- -------- -------- -------- -------- ------ ----- ---- ---- ----- ------ --------- --- ------- ------- ---------------------
+native_forward       -         tRNA5                -          cm        1       72        1       72      +    no    1 0.50   0.0   71.4   1.9e-22 !        72      72 -
+native_reverse       -         tRNA5                -          cm        1       72       72        1      -    no    1 0.50   0.0   71.4   1.9e-22 !        72      72 -
+native_repeat        -         tRNA5                -          cm        1       72        1       72      +    no    1 0.50   0.0   71.4   1.9e-22 !        72     194 -
+native_repeat        -         tRNA5                -          cm        1       72      123      194      +    no    1 0.50   0.0   71.4   1.9e-22 !        72     194 -
+native_second        -         tRNA5                -          cm        1       72        1       73      +    no    1 0.67   0.0   68.7   1.3e-21 ?        72      73 -
+native_second        -         tRNA5-hand           -          cm        1       74        1       73      +    no    1 0.67   0.0   70.5   6.2e-22 ?        74      73 -
+native_forward       -         tRNA5-hand           -          cm        1       74        1       72      +    no    1 0.50   0.0   69.2   1.6e-21 ?        74      72 -
+native_reverse       -         tRNA5-hand           -          cm        1       74       72        1      -    no    1 0.50   0.0   69.2   1.6e-21 ?        74      72 -
+native_repeat        -         tRNA5-hand           -          cm        1       74        1       72      +    no    1 0.50   0.0   69.2   1.6e-21 ?        74     194 -
+native_repeat        -         tRNA5-hand           -          cm        1       74      123      194      +    no    1 0.50   0.0   69.2   1.6e-21 ?        74     194 -
+#
+# Program:         cmsearch
+# Version:         1.1.5 (Sep 2023)
+# Pipeline mode:   SEARCH
+# Query file:      two_models.cm
+# Target file:     tiny.fa
+# Option settings: /home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmsearch --tblout hits.tbl --fmt 3 --notextw --incE 5e-22 --cpu 1 two_models.cm tiny.fa 
+# Current dir:     /home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_search_2026-10-26_219/native/cmsearch_mixed
+# Date:            Sun Oct 25 20:03:27 2026
+# [ok]

@@ -1,0 +1,5 @@
+# Intrinsic identity consistency correction002
+
+Root reviewed and approved this concrete pre-primary repair. Every retained overlapping ROI and every explicit ROI alternative must agree about each shared original image coordinate. Detached validator checks this with integer coordinate-to-gray consistency, without image decoding. Each artifact_ref in the full source closure must identify one byte SHA256; conflicting aliases are rejected before decode and during saved validation. These checks establish internal representation consistency and do not replace actual immutable original outcome custody.
+
+Three additional tests coherently recompute all changed local summary/equation/hash fields and the extraction digest before attempting saved validation; conflicting overlap/alias values still reject. Valid selected overlaps remain available raw measurements and remain unavailable for double-counted signal aggregation. Full new-suite result43 passed in0.59s. Source freeze002 supersedes the earlier001 source hash receipt; neither old receipt nor historical result was rewritten. No primary packet has been read by101 yet.

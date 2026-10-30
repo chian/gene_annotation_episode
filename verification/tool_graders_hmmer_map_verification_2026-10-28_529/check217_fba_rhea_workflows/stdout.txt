@@ -1,0 +1,34 @@
+.FF..F...                                                                [100%]
+=================================== FAILURES ===================================
+____ test_selected_native_model_numbers_reach_requested_scientific_receiver ____
+source_snapshot/tests/test_flux_balance_workflow_716.py:277: in test_selected_native_model_numbers_reach_requested_scientific_receiver
+    assert original == case.outcomes[0]['result']['projection']
+E   AssertionError: assert {'page': {'fi...}}, ...], ...} == {'page': {'fi...', ...}], ...}
+E     
+E     Omitting 1 identical items, use -vv to show
+E     Differing items:
+E     {'population': {'axis': 'run_fields', 'expected_count': 13, 'expected_count_basis': 'field_catalog', 'model_completeness': None, ...}} != {'population': {'axis': 'reactions', 'expected_count': 3, 'expected_count_basis': 'model_population', 'model_completeness': 'complete', ...}}
+E     {'page': {'filter_unknown_row_count': 0, 'filtered_row_count': 9, 'has_more': False, 'matched_row_count': 9, ...}} != {'page': {'filter_unknown_row_count': 0, 'filtered_row_count': 3, 'has_more': True, 'matched_row_count': 3, ...}}
+E     {'selec...
+E     
+E     ...Full output truncated (4 lines hidden), use '-vv' to show
+____ test_received_sheet_alone_recalculates_without_new_native_acquisition _____
+source_snapshot/tests/test_flux_balance_workflow_716.py:312: in test_received_sheet_alone_recalculates_without_new_native_acquisition
+    assert original['acquired_population'] is not None and recalculated['acquired_population'] is None
+E   assert (None is not None)
+_______ test_public_results_are_exact_views_of_retained_private_receipts _______
+source_snapshot/tests/test_flux_balance_workflow_716.py:435: in test_public_results_are_exact_views_of_retained_private_receipts
+    assert public['result']['facts'] == private['result']['facts']
+E   AssertionError: assert {'flux_balanc...es': 125052}]} == {'flux_balanc...es': 125052}]}
+E     
+E     Omitting 1 identical items, use -vv to show
+E     Differing items:
+E     {'flux_balance_measurements': [{'page': {'filter_unknown_row_count': 0, 'filtered_row_count': 9, 'has_more': False, 'm... {'evaluated_reaction_bound_count': 6, 'expected_reaction_count': 3, 'violated_reaction_bound_count': 0}}, ...], ...}]} != {'flux_balance_measurements': [{'page': {'filter_unknown_row_count': 0, 'filtered_row_count': 3, 'has_more': True, 'ma...UT', ...}, {'availability': 'present', 'existence': 'present', 'filter_match': None, 'reaction_id': 'IN', ...}], ...}]}
+E     {'flux_balance_failures': [{'code...
+E     
+E     ...Full output truncated (2 lines hidden), use '-vv' to show
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_flux_balance_workflow_716.py::test_selected_native_model_numbers_reach_requested_scientific_receiver
+FAILED source_snapshot/tests/test_flux_balance_workflow_716.py::test_received_sheet_alone_recalculates_without_new_native_acquisition
+FAILED source_snapshot/tests/test_flux_balance_workflow_716.py::test_public_results_are_exact_views_of_retained_private_receipts
+3 failed, 6 passed in 42034.28s (11:40:34)

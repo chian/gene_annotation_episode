@@ -1,0 +1,13 @@
+{
+  "provenance": "Synthetic input cases corresponding to accepted PLAN_001 examples 1 through 8; invented energies are arithmetic fixture data, not native measurements.",
+  "examples": [
+    {"number": 1, "baseline_sequence": "GGGAAACCC", "variant_sequence": "GGGAAAUCC", "baseline_structure": "(((...)))", "variant_structure": "(((...)))", "energies": [-3.0, -2.0]},
+    {"number": 2, "baseline_sequence": "GGGAAAACCC", "variant_sequence": "GGGAAAACCC", "baseline_structure": "((....))..", "variant_structure": ".((....)).", "selected_positions": [0, 1, 2, 6, 7, 8]},
+    {"number": 3, "baseline_sequence": "GGGAAACCC", "variant_sequence": "UGGGAAACCC", "baseline_structure": "(((...)))", "variant_structure": ".(((...)))"},
+    {"number": 4, "baseline_sequence": "GGGAAACCC", "variant_sequence": "GGGAACCC", "baseline_structure": "(((...)))", "variant_structure": "(((..)))", "selected_positions": [2, 3, 6]},
+    {"number": 5, "members": ["WT", "A", "B", "C", "D", "AliasA"], "energies": [-4.0, -5.0, -4.0, -3.0], "failure_member": "D", "alias": {"member_id": "AliasA", "canonical_member_id": "A"}},
+    {"number": 6, "baseline_sequence": "GGGAAACCC", "variant_sequence": "GGGAAAUCC", "baseline_structure": "(((...)))", "variant_structure": "(((...)))", "energies": [-4.0, -6.0], "temperatures": [37.0, 25.0]},
+    {"number": 7, "baseline_sequence": "GGGAAACCC", "variant_sequence": "GGGAAAUCC", "baseline_structure": "(((...)))", "variant_structure": "(((...)))", "matches": [{"baseline_index": 0, "variant_index": 0}], "selected_positions": [0]},
+    {"number": 8, "members": ["WT", "A", "B"], "energies": [0.0, 0.06, 0.12], "tolerance": 0.1}
+  ]
+}

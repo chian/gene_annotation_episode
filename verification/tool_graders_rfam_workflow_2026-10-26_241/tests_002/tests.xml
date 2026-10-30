@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="11" time="46.461" timestamp="2026-10-25T23:01:44.196032-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_rfam_composed_workflow" name="test_three_slots_selected_tools_and_actual_child_owners[retained_single]" time="12.135" /><testcase classname="tests.test_rfam_composed_workflow" name="test_requested_rows_population_and_original_bytes_cross_both_boundaries[retained_single]" time="0.069" /><testcase classname="tests.test_rfam_composed_workflow" name="test_numerical_answers_and_original_occurrence_associations[retained_single]" time="0.000" /><testcase classname="tests.test_rfam_composed_workflow" name="test_exact_action_observations_and_production_practical_terminal_zero[retained_single]" time="0.068" /><testcase classname="tests.test_rfam_composed_workflow" name="test_saved_recalculation_and_reopened_workflow_preserve_completed_history[retained_single]" time="4.105" /><testcase classname="tests.test_rfam_composed_workflow" name="test_three_slots_selected_tools_and_actual_child_owners[complete_empty]" time="19.566" /><testcase classname="tests.test_rfam_composed_workflow" name="test_requested_rows_population_and_original_bytes_cross_both_boundaries[complete_empty]" time="0.040" /><testcase classname="tests.test_rfam_composed_workflow" name="test_numerical_answers_and_original_occurrence_associations[complete_empty]" time="0.000" /><testcase classname="tests.test_rfam_composed_workflow" name="test_exact_action_observations_and_production_practical_terminal_zero[complete_empty]" time="0.040" /><testcase classname="tests.test_rfam_composed_workflow" name="test_saved_recalculation_and_reopened_workflow_preserve_completed_history[complete_empty]" time="6.932" /><testcase classname="tests.test_rfam_composed_workflow" name="test_three_slots_selected_tools_and_actual_child_owners[selected_batch]" time="3.011"><error message="failed on setup with &quot;ValueError: too many values to unpack (expected 1)&quot;">request = &lt;SubRequest 'composed_rfam_run' for &lt;Function test_three_slots_selected_tools_and_actual_child_owners[selected_batch]&gt;&gt;
+
+    @pytest.fixture(scope="module", params=("retained_single", "complete_empty", "selected_batch"))
+    def composed_rfam_run(request):
+        (EVIDENCE / "runs").mkdir(parents=True, exist_ok=True)
+        directory = Path(tempfile.mkdtemp(prefix=request.param + "-", dir=EVIDENCE / "runs"))
+        provenance = {"case": request.param, "status": "started", "live_api": False,
+            "configured_model": False, "native_program_executed": False, "hpc": False,
+            "fixture_overrides": ["scripted model choices", "root/scientific continuation only", "controlled Rfam HTTP responses"],
+            "production_overrides": [], "retained_native_sha256": hashlib.sha256(NATIVE_FILE.read_bytes()).hexdigest(),
+            "native_fixture": str(NATIVE_FILE.relative_to(ROOT)),
+            "qualification": "The retained single body is byte-exact; new request/submission custody is controlled. Empty and generated-header batch bodies are synthetic. No remote call occurs."}
+        _write(directory / "PROVENANCE.json", provenance)
+        native = ControlledRfam(request.param, directory)
+        with pytest.MonkeyPatch.context() as patch, Store(directory / "state") as store:
+            def forbidden(*args, **kwargs):
+                raise AssertionError("Composed Rfam verification attempted live transport, subprocess or hidden wait")
+            for name in ("socket.create_connection", "socket.socket.connect", "socket.socket.connect_ex",
+                         "urllib.request.OpenerDirector.open", "subprocess.run", "subprocess.Popen", "time.sleep"):
+                patch.setattr(name, forbidden)
+            tools = ToolRegistry(store, clients=native)
+            if request.param == "selected_batch":
+                supplied = directory / "public-occurrences.fa"
+                supplied.write_text("&gt;original-first\n" + native.sequence + "\n&gt;original-second\n" + native.sequence + "\n")
+                store.create_problem(supplied, molecule="dna")
+&gt;               library_target, = store.targets()
+                ^^^^^^^^^^^^^^^
+E               ValueError: too many values to unpack (expected 1)
+
+../../../tests/test_rfam_composed_workflow.py:173: ValueError</error></testcase></testsuite></testsuites>

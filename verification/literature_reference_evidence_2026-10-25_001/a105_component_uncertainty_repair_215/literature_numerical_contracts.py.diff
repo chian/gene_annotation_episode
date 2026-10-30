@@ -1,0 +1,18 @@
+--- baseline/gene_annotation_episode/literature_numerical_contracts.py
++++ gene_annotation_episode/literature_numerical_contracts.py
+@@ -47,6 +47,7 @@
+     'literature_product_partition_cells': ('literature_product_partition_storage', 'product_partition_cells_schema'),
+     'literature_channel_cells': ('literature_channel_storage', 'channel_cells_schema'),
+     'literature_compiled_assay_cells': ('literature_compiled_assay_storage', 'compiled_assay_cells_schema'),
++    'literature_compiled_assay_v2_cells': ('literature_compiled_assay_storage', 'compiled_assay_v2_cells_schema'),
+     'literature_ion_discrimination_cells': ('literature_ion_discrimination_storage', 'ion_discrimination_cells_schema'),
+     'literature_controlled_response_component_cells': ('literature_controlled_response_storage', 'controlled_response_cells_schema'),
+     'literature_gel_component_cells': ('literature_gel_native_contracts', 'gel_cells_schema'),
+@@ -83,6 +84,7 @@
+     'literature_product_partition_cells': 'Reported product-composition fractions and dependent partition or closure comparisons, retaining actual species, preparation, endpoint, denominator, measurement basis, stage and unresolved relationships.',
+     'literature_channel_cells': 'Source electrical measurements and conditional comparisons with actual molecular arrangement, current/voltage/conductance meanings, reversal applicability, measurement dependencies and uncertainty qualifications.',
+     'literature_compiled_assay_cells': 'Within-assay source numerical sections with actual subject, endpoint, correction stages, amount normalization, controls, shared measurement dependencies, covariance and applicability qualifications.',
++    'literature_compiled_assay_v2_cells': 'Versioned within-assay numerical sections with estimand-scoped joint covariance, physical operand ownership and signed first-order propagation. Operand-propagated uncertainty stays separate from total corrected-activity uncertainty and additional residual variability.',
+     'literature_ion_discrimination_cells': 'Source ion-discrimination comparisons with actual biological, ion and construct meanings, source scope, distinct reported/estimator/nominal/conditional physical domains, dependencies and uncertainty qualifications.',
+     'literature_controlled_response_component_cells': 'Requested controlled-response comparisons with actual alternative meanings, source origins, controls, covariance scope, uncertainty and partial support. Conditional graph-reading domains remain distinct from sampling uncertainty.',
+     'literature_gel_component_cells': 'Requested gel display measurements and comparisons with actual experiment/lane meanings, coherent ROI alternatives, methods, dependence and available-only sensitivity. Preserve the distinction between display darkness and calibrated molecular occupancy.',

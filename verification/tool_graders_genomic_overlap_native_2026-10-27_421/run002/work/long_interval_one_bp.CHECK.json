@@ -1,0 +1,25 @@
+{
+  "case": "long_interval_one_bp",
+  "argv": [
+    "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/installation/usr/bin/bedtools",
+    "intersect",
+    "-a",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_native_2026-10-27_421/run002/work/long_interval_one_bp.A.bed",
+    "-b",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_native_2026-10-27_421/run002/work/long_interval_one_bp.B.bed",
+    "-wo",
+    "-sorted"
+  ],
+  "returncode": 0,
+  "subprocess_wall_seconds": 0.0012000220594927669,
+  "expected_lines": [
+    "chr1\t0\t2000000000\tA1\tchr1\t1999999999\t2000000000\tB1\t1"
+  ],
+  "actual_lines": [
+    "chr1\t0\t2000000000\tA1\tchr1\t1999999999\t2000000000\tB1\t1"
+  ],
+  "exact_match": true,
+  "native_pair_count": 1,
+  "native_pairwise_width_sum": 1,
+  "stdout_sha256": "f8c7855a39fd242df58460d15b5aac6646df2335ff65fd4a45d876fd45aed8ba"
+}

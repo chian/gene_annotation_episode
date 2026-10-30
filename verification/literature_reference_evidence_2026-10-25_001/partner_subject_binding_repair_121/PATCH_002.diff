@@ -1,0 +1,265 @@
+--- literature_partner_storage.py.before
++++ gene_annotation_episode/literature_partner_storage.py
+@@ -240,6 +240,127 @@
+         and (entry := extraction["literals"][literal]) is not None]
+ 
+ 
++_NATIVE_BINDING_VERSION = "partner_native_operand_bindings_v1"
++_NATIVE_IDENTITY_FIELDS = ("subject", "partner", "endpoint", "normalization")
++_COMPONENT_ROLES = {
++    "reference_rate": ("reference",), "omitted_rate": ("omitted",),
++    "addback_rate": ("addback",), "partner_loss": ("reference", "omitted"),
++    "partner_loss_fraction": ("reference", "omitted"),
++    "addback_gain": ("addback", "omitted"),
++    "addback_fraction": _ROLES, "restored_reference_fraction": _ROLES,
++}
++
++
++def _native_operand_projection(extraction):
++    """Build scientific bindings from frozen arm operands, without source IO.
++
++    Global literals describe the selected scope. They do not relabel measured
++    arms. Equality here follows the reader's existing operand identities; it
++    introduces no additional synonym or source-interpretation requirement.
++    """
++    evidence = extraction["native_evidence"]
++    core = extraction["recipe"]["inputs"]["arms"]
++    records, arm_bindings, condition_refs = {}, {}, {}
++
++    def remember(kind, record):
++        reference = identity(kind, {"origin": "tool", "record": record})
++        records[reference] = (kind, record)
++        return reference
++
++    def entry(witness):
++        return None if witness is None else {"value": witness["quote"], "witness": witness}
++
++    def literal_binding(field, witness, *, unit=False):
++        if witness is None:
++            return None
++        kind = "reference" if field in ("subject", "partner") else "term"
++        record = _binding_record(field, kind, entry(witness))
++        if unit:
++            record["term_type"] = "unit"
++        return remember(kind, record)
++
++    for role in _ROLES:
++        arm = evidence[role]
++        arm_bindings[role] = {field + "_ref": literal_binding(field, arm[field])
++            if arm is not None else None for field in _NATIVE_IDENTITY_FIELDS}
++        if arm is None or arm["conditions"]["coverage"] == "unreported":
++            condition_refs[role + "_condition_ref"] = None
++            continue
++        factors = []
++        for selected, normalized in zip(arm["conditions"]["factors"], core[role]["conditions"]["factors"]):
++            name, level = selected["factor"], selected["level"]
++            factor_ref = remember("term", _factor_record(extraction["arguments"]["data_source_ref"], name))
++            attributes, source_ref = [], extraction["arguments"]["data_source_ref"]
++            if level is not None:
++                if level["kind"] == "literal":
++                    witness = level["witness"]
++                    value_ref = literal_binding("condition_value_" + name, witness)
++                    value = {"type": "term_ref", "ref": value_ref}
++                else:
++                    witness = level["selector"]["selector"]["witness"]
++                    unit_ref = literal_binding("condition_unit_" + name, level["unit_witness"], unit=True)
++                    value = {"type": "number", "value": normalized["level"], "unit_ref": unit_ref}
++                source_ref = witness["source_ref"]
++                attributes.append({"name": "assay_outcome", "value": value})
++            factors.append(remember("context", {"context_type": "assay_condition",
++                "name": "condition factor " + name + " level", "source_ref": source_ref, "attributes": attributes,
++                "related_refs": [factor_ref]}))
++        condition_refs[role + "_condition_ref"] = remember("context", {
++            "context_type": "assay_condition", "name": role + " arm selected conditions ("
++                + arm["conditions"]["coverage"] + ")",
++            "source_ref": extraction["arguments"]["data_source_ref"], "attributes": [],
++            "related_refs": list(dict.fromkeys([*factors,
++                *(ref for ref in arm_bindings[role].values() if ref)]))})
++
++    def common(roles):
++        result = {}
++        for field in _NATIVE_IDENTITY_FIELDS:
++            keys = [core[role][field + "_ref"] if core[role] is not None else None for role in roles]
++            result[field + "_ref"] = (arm_bindings[roles[0]][field + "_ref"]
++                if keys and keys[0] is not None and all(key == keys[0] for key in keys) else None)
++        return result
++
++    components = {name: common(roles) for name, roles in _COMPONENT_ROLES.items()}
++    present = tuple(role for role in _ROLES if core[role] is not None)
++    shared = common(present)
++    interpretation = deepcopy(extraction["literals"])
++    for field in _NATIVE_IDENTITY_FIELDS:
++        reference = shared[field + "_ref"]
++        selected = next((entry(evidence[role][field]) for role in present
++            if arm_bindings[role][field + "_ref"] == reference), None) if reference else None
++        interpretation[field] = selected
++        if selected != extraction["literals"][field] and extraction["literals"][field] is not None:
++            interpretation["selected_scope_" + field] = deepcopy(extraction["literals"][field])
++        if reference is None:
++            for role in _ROLES:
++                interpretation[role + "_" + field] = entry(evidence[role][field]) if evidence[role] else None
++    for role in _ROLES:
++        name, arm = role + "_condition", evidence[role]
++        witnesses, descriptions = [], []
++        if arm is not None and arm["conditions"]["coverage"] != "unreported":
++            for selected, normalized in zip(arm["conditions"]["factors"], core[role]["conditions"]["factors"]):
++                level = selected["level"]
++                if level is None:
++                    description = "unknown"
++                elif level["kind"] == "literal":
++                    witnesses.append(level["witness"])
++                    description = level["witness"]["quote"]
++                else:
++                    witnesses.append(level["selector"]["selector"]["witness"])
++                    if level["unit_witness"] is not None:
++                        witnesses.append(level["unit_witness"])
++                    description = str(normalized["level"]) + " " + normalized["unit"]
++                descriptions.append(selected["factor"] + "=" + description)
++            interpretation[name] = {"value": "; ".join(descriptions), "witnesses": witnesses}
++        else:
++            interpretation[name] = None
++        if extraction["literals"][name] is not None:
++            interpretation["selected_scope_" + name] = deepcopy(extraction["literals"][name])
++    projection = {"version": _NATIVE_BINDING_VERSION, "arm_bindings": arm_bindings,
++        "component_bindings": components, "condition_refs": condition_refs}
++    return projection, records, {**shared, **condition_refs}, interpretation
++
++
+ class LiteraturePartnerRepository(LiteratureRateRepository):
+     provider = PROVIDER
+     components = COMPONENTS
+@@ -352,7 +473,17 @@
+                 return row["id"]
+ 
+             bindings = {}
++            native_projection = native_records = None
++            native_common, interpretation = {}, extraction["literals"]
++            if args.get("input_mode") == "native_source_spans":
++                native_projection, native_records, native_common, interpretation = _native_operand_projection(extraction)
++                for kind, record in native_records.values():
++                    publish(kind, record)
++                payload["native_operand_bindings"] = native_projection
+             for field, (literal, kind) in BINDINGS.items():
++                if field in native_common:
++                    bindings[field] = native_common[field]
++                    continue
+                 entry = extraction["literals"][literal]
+                 if entry and kind == "context":
+                     publish("reference", _condition_role(literal, entry))
+@@ -371,10 +502,12 @@
+             outcome = {"status": "completed", "operation_ref": identity("operation", {
+                 "run_id": self.run_id, "episode_id": context.episode_id, "key": operation_key}),
+                 "record_refs": list(dict.fromkeys([sheet_ref, *parents,
+-                    *(reference for reference in bindings.values() if reference), *_condition_refs(extraction), *(factor_bindings[name] for name in sorted(factor_bindings))])),
++                    *(reference for reference in bindings.values() if reference),
++                    *(native_records if native_records is not None else _condition_refs(extraction)),
++                    *(factor_bindings[name] for name in sorted(factor_bindings))])),
+                 "changed_record_refs": created,
+                 "result": {"sheet_ref": sheet_ref, "cells": deepcopy(extraction["cells"]),
+-                    "assay_interpretation": deepcopy(extraction["literals"]), **_metadata(extraction, factor_bindings)},
++                    "assay_interpretation": deepcopy(interpretation), **_metadata(extraction, factor_bindings)},
+                 "feedback": None}
+             self.store.db.execute(f"INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)",
+                 (*parameters, signature, canonical(outcome)))
+@@ -411,8 +544,10 @@
+             (self.run_id, request["episode_id"], request["operation_key"])).fetchone()
+         require(operation is not None and operation["signature"] == canonical({
+             "arguments": args, "scope": request["scope"]}))
++        marked = "native_operand_bindings" in saved
+         require(set(saved) == {"version", "input_source_ref", "input_artifact_ref", "input_source_refs",
+-            "direct_input_source_refs", "data_source_ref", "extraction", "experimental_bindings", "factor_bindings", "sheet"})
++            "direct_input_source_refs", "data_source_ref", "extraction", "experimental_bindings", "factor_bindings", "sheet"}
++            | ({"native_operand_bindings"} if marked else set()))
+         require(source["version"] == self.record_version and source["text_ref"] == source["artifact_ref"])
+         native = args.get("input_mode") == "native_source_spans"
+         require(extraction["version"] == (_native_version(args) if native
+@@ -450,9 +585,21 @@
+             expected = {"value": selected["quote"], "witness": witness(selected)} if selected else None
+             require(extraction["literals"][literal] == expected)
+         require(extraction["interpretations"] == [witness(entry) for entry in args["interpretation_witnesses"]])
++        native_records = None
++        native_common, interpretation = {}, extraction["literals"]
++        if marked:
++            require(native)
++            projection, native_records, native_common, interpretation = _native_operand_projection(extraction)
++            require(saved["native_operand_bindings"] == projection)
++            for reference, (kind, record) in native_records.items():
++                require(self.store.get(reference) == {"id": reference, "record_type": kind,
++                    "origin": "tool", **record})
+         require(set(saved["experimental_bindings"]) == set(BINDINGS))
+         for field, (literal, kind) in BINDINGS.items():
+             entry, reference = extraction["literals"][literal], saved["experimental_bindings"][field]
++            if field in native_common:
++                require(reference == native_common[field])
++                continue
+             if entry is None:
+                 require(reference is None)
+             else:
+@@ -484,10 +631,11 @@
+             "episode_id": request["episode_id"], "key": request["operation_key"]}))
+         require(outcome["record_refs"] == list(dict.fromkeys([sheet_ref, *saved["input_source_refs"],
+             *(saved["experimental_bindings"][field] for field in BINDINGS
+-                if saved["experimental_bindings"][field]), *_condition_refs(extraction),
++                if saved["experimental_bindings"][field]),
++            *(native_records if native_records is not None else _condition_refs(extraction)),
+             *(factors[name] for name in sorted(factors))])))
+         require(outcome["result"] == {"sheet_ref": sheet_ref, "cells": extraction["cells"],
+-            "assay_interpretation": extraction["literals"], **_metadata(extraction, factors)})
++            "assay_interpretation": interpretation, **_metadata(extraction, factors)})
+ 
+     def _validate_native_saved(self, args, evidence, inputs, *, version=None):
+         """Check frozen native-selector relationships without parsing again.
+@@ -771,8 +919,11 @@
+                 raise ContractError("literature_sheet_not_received")
+             saved = self.read(reference)
+             for name in components:
++                bindings = deepcopy(saved["experimental_bindings"])
++                if "native_operand_bindings" in saved:
++                    bindings.update(saved["native_operand_bindings"]["component_bindings"][name])
+                 rows.append({"sheet_ref": reference, "evidence_source_ref": saved["input_source_ref"],
+-                    "data_source_ref": saved["data_source_ref"], **deepcopy(saved["experimental_bindings"]),
++                    "data_source_ref": saved["data_source_ref"], **bindings,
+                     "component": name, **deepcopy(saved["sheet"]["cells"][name]),
+                     "formula_code": FORMULA_CODES[name], **_metadata(saved["extraction"], saved["factor_bindings"])})
+         validate_schema(rows, partner_cells_schema())
+--- literature_experimental_prompt.py.before
++++ gene_annotation_episode/literature_experimental_prompt.py
+@@ -883,18 +883,26 @@
+             "second_subject_ref", "second_partner_ref", "experiment_ref", "endpoint_ref",
+             "first_condition_ref", "second_condition_ref", "normalization_ref", "function_ref"))))
+     for sheet_ref, rows in partners.items():
+-        first = rows[0]
+-        cell_fields = ("value", "lower", "upper", "unit", "origin", "bound_kind",
+-                       "status", "unavailable_reason", "formula_code")
+-        metadata = {key: value for key, value in first.items()
+-                    if key not in ("component", *cell_fields)}
+-        cells = {row["component"]: _pick(row, cell_fields) for row in rows}
+-        _source_result(parts, {"result": {**metadata, "cells": cells}},
+-                       "Admitted requested partner components")
+-        _section(parts, "Received experimental partner bindings", values(_pick(first, (
+-            "sheet_ref", "evidence_source_ref", "data_source_ref", "subject_ref", "partner_ref",
+-            "experiment_ref", "endpoint_ref", "normalization_ref", "reference_condition_ref",
+-            "omitted_condition_ref", "addback_condition_ref", "function_ref"))))
++        groups = {}
++        for row in rows:
++            key = tuple(row.get(field) for field in ("subject_ref", "partner_ref", "endpoint_ref", "normalization_ref"))
++            groups.setdefault(key, []).append(row)
++        if len(groups) > 1:
++            _section(parts, "Partner operand meaning groups",
++                "These groups retain different operand meanings within one returned sheet; they are not independent experiments.")
++        for group in groups.values():
++            first = group[0]
++            cell_fields = ("value", "lower", "upper", "unit", "origin", "bound_kind",
++                           "status", "unavailable_reason", "formula_code")
++            metadata = {key: value for key, value in first.items()
++                        if key not in ("component", *cell_fields)}
++            cells = {row["component"]: _pick(row, cell_fields) for row in group}
++            _source_result(parts, {"result": {**metadata, "cells": cells}},
++                           "Admitted requested partner components")
++            _section(parts, "Received experimental partner bindings", values(_pick(first, (
++                "sheet_ref", "evidence_source_ref", "data_source_ref", "subject_ref", "partner_ref",
++                "experiment_ref", "endpoint_ref", "normalization_ref", "reference_condition_ref",
++                "omitted_condition_ref", "addback_condition_ref", "function_ref"))))
+     for sheet_ref, rows in amounts.items():
+         parts.extend(["", "Admitted requested amount components"])
+         first = rows[0]

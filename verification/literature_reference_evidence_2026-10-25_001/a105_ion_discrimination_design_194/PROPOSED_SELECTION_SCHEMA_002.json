@@ -1,0 +1,1035 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "route": {
+          "const": "compiled_activity_pair"
+        },
+        "activities": {
+          "type": "object",
+          "properties": {
+            "preferred": {
+              "$ref": "#/$defs/ActivitySelector"
+            },
+            "alternative": {
+              "$ref": "#/$defs/ActivitySelector"
+            }
+          },
+          "required": [
+            "preferred",
+            "alternative"
+          ],
+          "additionalProperties": false
+        },
+        "activity_covariance_source_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "reference",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "variance_status": {
+          "type": "string",
+          "enum": [
+            "known",
+            "estimated",
+            "unknown"
+          ]
+        },
+        "variance_witnesses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Witness"
+          }
+        }
+      },
+      "required": [
+        "route",
+        "activities",
+        "activity_covariance_source_ref",
+        "variance_status",
+        "variance_witnesses"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "route": {
+          "const": "reported_ratio"
+        },
+        "reported_ratio": {
+          "$ref": "#/$defs/SourceQuantity"
+        }
+      },
+      "required": [
+        "route",
+        "reported_ratio"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "route": {
+          "const": "reported_threshold_pair"
+        },
+        "thresholds": {
+          "type": "object",
+          "properties": {
+            "preferred": {
+              "$ref": "#/$defs/SourceQuantity"
+            },
+            "alternative": {
+              "$ref": "#/$defs/SourceQuantity"
+            }
+          },
+          "required": [
+            "preferred",
+            "alternative"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "route",
+        "thresholds"
+      ]
+    }
+  ],
+  "$defs": {
+    "Witness": {
+      "type": "object",
+      "properties": {
+        "source_ref": {
+          "type": "string",
+          "format": "reference",
+          "minLength": 1
+        },
+        "representation": {
+          "type": "string",
+          "enum": [
+            "original",
+            "text"
+          ]
+        },
+        "start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "quote": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "source_ref",
+        "representation",
+        "start",
+        "end",
+        "quote"
+      ],
+      "additionalProperties": false
+    },
+    "Context": {
+      "type": "object",
+      "properties": {
+        "preferred": {
+          "type": "object",
+          "properties": {
+            "organism": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "genotype": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "molecule": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "construct": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "preparation": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "membrane": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "ionic_conditions": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "voltage": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "pH": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "detector": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "normalization": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "molecular_unit": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "time_window": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "dead_time": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "asserted_function": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "organism",
+            "genotype",
+            "molecule",
+            "construct",
+            "preparation",
+            "membrane",
+            "ionic_conditions",
+            "voltage",
+            "pH",
+            "detector",
+            "normalization",
+            "molecular_unit",
+            "time_window",
+            "dead_time",
+            "asserted_function"
+          ],
+          "additionalProperties": false
+        },
+        "alternative": {
+          "type": "object",
+          "properties": {
+            "organism": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "genotype": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "molecule": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "construct": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "preparation": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "membrane": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "ionic_conditions": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "voltage": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "pH": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "detector": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "normalization": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "molecular_unit": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "time_window": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "dead_time": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "asserted_function": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Witness"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "organism",
+            "genotype",
+            "molecule",
+            "construct",
+            "preparation",
+            "membrane",
+            "ionic_conditions",
+            "voltage",
+            "pH",
+            "detector",
+            "normalization",
+            "molecular_unit",
+            "time_window",
+            "dead_time",
+            "asserted_function"
+          ],
+          "additionalProperties": false
+        },
+        "preferred_ion": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Witness"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "alternative_ion": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Witness"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "intended_change": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Witness"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "assertion": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Witness"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "preferred",
+        "alternative",
+        "preferred_ion",
+        "alternative_ion",
+        "intended_change",
+        "assertion"
+      ],
+      "additionalProperties": false
+    },
+    "Relationships": {
+      "type": "object",
+      "properties": {
+        "subject_construct": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "enum": [
+                "same_construct",
+                "different_construct",
+                "paper_summary_unresolved",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "quantity": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "enum": [
+                "same_ion_specific_rate_kind",
+                "different_physical_quantity",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "normalization": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "enum": [
+                "same_molecular_basis",
+                "common_unresolved_molecular_unit",
+                "different_molecular_basis",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "nonintended_conditions": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "enum": [
+                "matched",
+                "source_supported_adjustment",
+                "different",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "preferred_ion_attribution": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "enum": [
+                "intended_protein_and_ion_supported",
+                "mixed_contributors_unresolved",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "alternative_ion_attribution": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "enum": [
+                "intended_protein_and_ion_supported",
+                "mixed_contributors_unresolved",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "preparations": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "enum": [
+                "same_preparation",
+                "different_preparations",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "intended_ions": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "enum": [
+                "different_ions",
+                "same_ion",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "subject_construct",
+        "quantity",
+        "normalization",
+        "nonintended_conditions",
+        "preferred_ion_attribution",
+        "alternative_ion_attribution",
+        "preparations",
+        "intended_ions"
+      ],
+      "additionalProperties": false
+    },
+    "ActivitySelector": {
+      "type": "object",
+      "properties": {
+        "namespace": {
+          "const": "literature_compiled_assay_cells"
+        },
+        "sheet_ref": {
+          "type": "string",
+          "format": "reference",
+          "minLength": 1
+        },
+        "component": {
+          "const": "corrected_activity"
+        }
+      },
+      "required": [
+        "namespace",
+        "sheet_ref",
+        "component"
+      ],
+      "additionalProperties": false
+    },
+    "NumberSelection": {
+      "type": "object",
+      "properties": {
+        "witness": {
+          "$ref": "#/$defs/Witness"
+        },
+        "number_start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "number_end": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "witness",
+        "number_start",
+        "number_end"
+      ],
+      "additionalProperties": false
+    },
+    "SourceQuantity": {
+      "type": "object",
+      "properties": {
+        "number": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NumberSelection"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Witness"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "meaning": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "enum": [
+                "per_unit_ion_efflux_rate",
+                "author_inferred_per_unit_ion_efflux_rate",
+                "reported_permeability_ratio",
+                "reported_transport_selectivity_ratio",
+                "reported_cross_assay_summary_ratio",
+                "signed_reporter_estimator",
+                "charge_equivalent_rate",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "derivation": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "enum": [
+                "direct_reported_estimator",
+                "author_inferred_dead_time_and_geometry",
+                "author_inferred_electrical_model",
+                "author_summary_inference",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "qualification": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "enum": [
+                "source_qualified_approximate",
+                "no_additional_source_qualification_selected",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "quantity_scope": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "enum": [
+                "specific_construct",
+                "paper_summary_unresolved",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "domain_bearer": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "enum": [
+                "measured_estimator",
+                "author_estimate",
+                "physical_parameter",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        },
+        "physical_domain_support": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "enum": [
+                "explicit_nonnegative_parameter_limit_supported",
+                "reported_estimate_only",
+                "approximation_model_missing",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Witness"
+              }
+            }
+          },
+          "required": [
+            "value",
+            "witnesses"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "number",
+        "unit",
+        "meaning",
+        "derivation",
+        "qualification",
+        "quantity_scope",
+        "domain_bearer",
+        "physical_domain_support"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "a105_ion_discrimination_selection_v1"
+    },
+    "source_ref": {
+      "type": "string",
+      "format": "reference",
+      "minLength": 1
+    },
+    "source_kind": {
+      "type": "string",
+      "enum": [
+        "primary_source",
+        "retained_extraction",
+        "synthetic_fixture"
+      ]
+    },
+    "context": {
+      "$ref": "#/$defs/Context"
+    },
+    "relationships": {
+      "$ref": "#/$defs/Relationships"
+    }
+  },
+  "required": [
+    "version",
+    "source_ref",
+    "source_kind",
+    "context",
+    "relationships"
+  ],
+  "unevaluatedProperties": false
+}

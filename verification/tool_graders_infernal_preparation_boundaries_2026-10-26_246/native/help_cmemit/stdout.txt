@@ -1,0 +1,37 @@
+# cmemit :: sample sequences from a covariance model
+# INFERNAL 1.1.5 (Sep 2023)
+# Copyright (C) 2023 Howard Hughes Medical Institute.
+# Freely distributed under the BSD open source license.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Usage: cmemit [-options] <cmfile>
+
+Basic options:
+  -h     : show brief help on version and usage
+  -o <f> : send sequence output to file <f>, not stdout
+  -N <n> : generate <n> sequences  [10]
+  -u     : write generated sequences as unaligned FASTA  [default]
+  -a     : write generated sequences as an alignment
+  -c     : generate a single "consensus" sequence only
+  -e <n> : embed emitted sequences within larger random sequences of length <n>
+  -l     : local; emit from a locally configured model [default: global]
+
+Options for truncating sequences:
+  --u5p     : truncate unaligned sequences 5', choosing a random start posn
+  --u3p     : truncate unaligned sequences 3', choosing a random end   posn
+  --a5p <n> : truncate aln 5', start at match column <n> (use 0 for random posn)
+  --a3p <n> : truncate aln 3', end   at match column <n> (use 0 for random posn)
+
+Other options:
+  --seed <n>      : set RNG seed to <n> [default: one-time arbitrary seed]  [0]
+  --iid           : with -e, generate larger sequences as 25% ACGU (iid) 
+  --rna           : output as RNA sequence data  [default]
+  --dna           : output as DNA sequence data
+  --idx <n>       : start sequence numbering at <n>  [1]
+  --outformat <s> : w/-a output alignment in format <s>  [Stockholm]
+  --tfile <f>     : dump parsetrees to file <f>
+  --exp <x>       : exponentiate CM probabilities by <x> before emitting
+  --hmmonly       : emit from filter HMM, not from CM
+  --nohmmonly     : always emit from CM, even for models with 0 basepairs
+
+Alignment output formats (-a) include: Stockholm, Pfam, AFA (aligned FASTA), A2M, Clustal, PHYLIP
+

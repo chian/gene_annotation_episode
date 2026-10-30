@@ -1,0 +1,63 @@
+Blast-db-mask-info ::= {
+  algo-id 0,
+  algo-program dust,
+  algo-options "supplied lowercase; no detector run; fixture 636",
+  masks {
+    masks {
+      packed-int {
+        {
+          from 2,
+          to 3,
+          id local str "mask_a"
+        },
+        {
+          from 6,
+          to 7,
+          id local str "mask_a"
+        },
+        {
+          from 11,
+          to 11,
+          id local str "mask_a"
+        }
+      },
+      packed-int {
+        {
+          from 0,
+          to 1,
+          id other {
+            accession "NM_999999999",
+            version 7
+          }
+        },
+        {
+          from 4,
+          to 5,
+          id other {
+            accession "NM_999999999",
+            version 7
+          }
+        }
+      },
+      packed-int {
+        {
+          from 2,
+          to 3,
+          id general {
+            db "fixture636",
+            tag str "mask_general"
+          }
+        },
+        {
+          from 6,
+          to 6,
+          id general {
+            db "fixture636",
+            tag str "mask_general"
+          }
+        }
+      }
+    },
+    more FALSE
+  }
+}

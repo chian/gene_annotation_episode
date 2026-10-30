@@ -1,0 +1,161 @@
+--- before/gene_annotation_episode/literature_episodes.py
++++ after/gene_annotation_episode/literature_episodes.py
+@@ -62,6 +62,68 @@
+     "literature_ordered": "Investigate the source in document order as useful for the assigned question. Use returned UTF-8 byte continuations and retain representation identity. Decide whether to continue, reread, change the examined window or interpret obtained evidence from actual outcomes.",
+     "literature_targeted": "Investigate the supplied source-bound passages for the assigned question. Read neighboring context, qualifications or alternative passages as needed and revise the interpretation from actual outcomes. Separate spans remain separate; never concatenate them into a fabricated quotation.",
+ }
++
++
++def _population_catalog():
++    """Actual child population operations, independent of episode identity."""
++    result = []
++    from .literature_rate_storage import rate_population_schema
++    result.append({"name": "literature.rate.populate",
++        "description": "Populate source-preparation rate cells from a selected already acquired CSV/TSV summary. Preserve actual subjects, conditions, units, uncertainty and missingness. This finite table route does not read arbitrary prose/figures or calculate target transfer/annotation credit. Select a statistical model only when supported; otherwise use none and unknown dependence.",
++        "input_schema": rate_population_schema()})
++    from .literature_quantity_storage import quantity_population_schema
++    result.append({"name": "literature.quantity.populate",
++        "description": "Read one literal specific activity or apparent Km from selected original JATS prose, or apparent Km from selected original HTML prose. Select quantity role and analyte, not numbers. HTML paragraphs without IDs use the explicit direct_paragraph:N selector within the selected section. Preserve untyped plus-minus spread. Subject-token presence does not establish experimental attribution; inspect the assay context separately. No comparison arms, conditions, product identity or missing correction score are invented.",
++        "input_schema": quantity_population_schema()})
++    from .literature_assay_inputs import assay_arguments_schema
++    result.append({"name": "literature.assay.populate",
++        "description": "Interpret the source assay's actual subject, conditions, endpoint and molecular arrangement with exact source witnesses. Select reported numerical spans only when they have the stated correction-operand meanings. Deterministically parse and correct the interpreted source endpoint, preserving full covariance, conditional assumptions and unknowns. Exact quotes validate custody, not interpretation; no target transfer or annotation probability.",
++        "input_schema": assay_arguments_schema()})
++    from .literature_ratio_storage import ratio_population_schema
++    result.append({"name": "literature.ratio.populate",
++        "description": "Read reported relative-signal percentages from selected JATS prose and optionally compare retained visual transcriptions with original image custody. Preserve the actual denominator/arrangement and conflicting candidate values. Signal is not calibrated molar amount or an isolated functional effect; no source reliability or target-transfer score is fabricated.",
++        "input_schema": ratio_population_schema()})
++    from .literature_binding_storage import binding_population_schema
++    result.append({"name": "literature.binding.populate",
++        "description": "Populate source binding-parameter components from an already received table or explicitly retained visual transcription. Keep IC50 distinct from reported Hill-fit Kd, actual protein/state/ligand identities, reported fit-spread basis and point/limit arithmetic. Original image custody is validated; no OCR, sampling confidence, intrinsic-affinity conversion or target credit is inferred.",
++        "input_schema": binding_population_schema()})
++    from .literature_binding_model_storage import binding_model_population_schema
++    result.append({"name": "literature.binding.model.populate",
++        "description": "Evaluate the ordered parameter contrast in an actually received committed binding sheet using an explicitly supplied source model. Preserve full log-covariance measurement ownership, known versus estimated variance, and the stated threshold-reporting mechanism. Missing model source retains usable native contrast and explicit unknown likelihood cells. No inference of covariance from fit spreads or counts, limit-as-point calculation, intrinsic-affinity conversion, target transfer or annotation credit.",
++        "input_schema": binding_model_population_schema()})
++    from .literature_transport_storage import transport_response_population_schema
++    result.append({"name": "literature.transport.response.populate",
++        "description": "Calculate a conditional source substrate-response correction from exact concentration spans and a received saved apparent-Km quantity. Preserve actual molecule, preparation, analyte, endpoint and fitted-curve contexts. Different or unknown curves leave the comparison unavailable. Full covariance retains physical owners and shared Km once; no sampling variance from untyped spread, target transfer or annotation credit is inferred.",
++        "input_schema": transport_response_population_schema()})
++    from .literature_perturbation_storage import perturbation_population_schema
++    result.append({"name": "literature.perturbation.populate",
++        "description": "Populate reference perturbation/restoration components from source-bound design interpretations and optional received quantitative data. Keep actual recipient, changed component, partner, endpoint calibration and real restoration arms distinct. Qualitative-only outcomes cannot supply numerical rates. Preserve nuisance comparability separately from effect isolation and leave missing inputs/uncertainty unknown. No target transfer, necessity inference from an unmeasured catalytic knockout, or final annotation credit.",
++        "input_schema": perturbation_population_schema()})
++    from .literature_structure_storage import structure_population_schema
++    result.append({"name": "literature.structure.populate",
++        "description": "Populate source-model geometry and local residue RSCC components from received coordinates and optional matching deposited validation. Select exact model/author atom groups and fixed physical criteria. Preserve missing endpoints, validation entry/revision mismatch and unreported coordinate uncertainty. The explicit scope is conditional deposited-model geometry; it does not establish population occupancy, causal mechanism, target correspondence or annotation credit.",
++        "input_schema": structure_population_schema()})
++    from .literature_reaction_storage import reaction_population_schema
++    result.append({"name": "literature.reaction.populate",
++        "description": "Populate reported reference reaction-ratio residuals, named-prediction comparisons and simple resource-budget components from an explicitly retained received dataset. Preserve unknown replication, missing alternatives and incomplete resource constraints. Product-pair ratios, supplied reagent budgets and usable capacity have distinct meanings. This route does not parse NMR spectra, establish measured oxygen coupling, apply missing corrections or calculate target transfer/annotation credit.",
++        "input_schema": reaction_population_schema()})
++    from .literature_context_storage import context_population_schema
++    result.append({"name": "literature.context.populate",
++        "description": "Populate biological context compatibility from source-bound retained observations and domain/route meanings. Keep organism capability distinct from fixed-sample coverage; preserve physical unit bases, missing local mapping, unexamined states, sample weights, pairing and conditional sampling design. Logical domain bounds are not confidence intervals or intuitive quality grades. Purified-enzyme assays are not automatically organism witnesses or habitat samples. No target correspondence or annotation credit is calculated.",
++        "input_schema": context_population_schema()})
++    from .literature_figure_storage import figure_population_schema
++    result.append({"name": "literature.figure.populate",
++        "description": "Read native experimental mean-bar ordinates from received original images using a retained linear-axis selection recipe. Preserve both subject/partner arms, endpoint and normalization meanings, source representation relationships, reported repeat/spread meanings and conditional digitization bounds. Return raw ordinates and a signed difference; pixel extraction does not supply SD, statistical significance, molar calibration, partner necessity or target credit.",
++        "input_schema": figure_population_schema()})
++    from .literature_partner_storage import partner_population_schema
++    result.append({"name": "literature.partner.populate",
++        "description": "Populate source experimental partner-removal and addback components from received retained measurements and exact source witnesses. Preserve directed molecule/partner roles, nitrogen and other nonpartner conditions, normalization identity, physical measurement identity and reported spread meanings. Incompatible or incomplete comparisons keep native values and explicit unknown components. Censor domains are not confidence intervals; chemical bypass and partner swaps do not establish universal partner necessity, genomic presence, target transfer or annotation credit.",
++        "input_schema": partner_population_schema()})
++    from .literature_partner_storage import partner_source_population_schema
++    result.append({"name": "literature.partner.source.populate",
++        "description": "Populate the same experimental partner components directly from selected literal source spans. Select complete rate/limit tokens, native units, spread meanings and source-bound entity/physical-measurement identities; do not supply scientific numbers or a prepared numeric JSON dataset. For source-defined activity units such as U/mg, select the endpoint-specific definition, quantity, molecular entity and time basis; no universal U conversion is assumed. Deterministic readers preserve original tokens, convert supported rate units and retain unknown normalization, conditions or observation identity. A repeated representation is not a new measurement. No sampling uncertainty, universal necessity, target correspondence or annotation credit is inferred.",
++        "input_schema": partner_source_population_schema()})
++    return result
+ 
+ 
+ class LiteratureEpisodes:
+@@ -306,7 +368,10 @@
+             custody.append({"source_ref": reference, **{name: source.get(name) for name in (
+                 "artifact_ref", "text_ref", "version", "parent_source_refs")}})
+         return {"reference_evidence_parent": {"version": "reference_evidence_parent_v1",
+-                    "source_refs": list(self.reference_parent_sources), "source_custody": custody},
++                    "source_refs": list(self.reference_parent_sources), "source_custody": custody,
++                    "child_population_operations": [
++                        {name: entry[name] for name in ("name", "description")}
++                        for entry in _population_catalog()]},
+                 "literature_experimental_work": {"version": "literature_experimental_task_v1",
+                     "aspect": "reference_evidence_parent"}}
+ 
+@@ -352,62 +417,7 @@
+                 entry["input_schema"] = {"anyOf": branches}
+             result.append(entry)
+         if self.rate_population:
+-            from .literature_rate_storage import rate_population_schema
+-            result.append({"name": "literature.rate.populate",
+-                "description": "Populate source-preparation rate cells from a selected already acquired CSV/TSV summary. Preserve actual subjects, conditions, units, uncertainty and missingness. This finite table route does not read arbitrary prose/figures or calculate target transfer/annotation credit. Select a statistical model only when supported; otherwise use none and unknown dependence.",
+-                "input_schema": rate_population_schema()})
+-            from .literature_quantity_storage import quantity_population_schema
+-            result.append({"name": "literature.quantity.populate",
+-                "description": "Read one literal specific activity or apparent Km from selected original JATS prose, or apparent Km from selected original HTML prose. Select quantity role and analyte, not numbers. HTML paragraphs without IDs use the explicit direct_paragraph:N selector within the selected section. Preserve untyped plus-minus spread. Subject-token presence does not establish experimental attribution; inspect the assay context separately. No comparison arms, conditions, product identity or missing correction score are invented.",
+-                "input_schema": quantity_population_schema()})
+-            from .literature_assay_inputs import assay_arguments_schema
+-            result.append({"name": "literature.assay.populate",
+-                "description": "Interpret the source assay's actual subject, conditions, endpoint and molecular arrangement with exact source witnesses. Select reported numerical spans only when they have the stated correction-operand meanings. Deterministically parse and correct the interpreted source endpoint, preserving full covariance, conditional assumptions and unknowns. Exact quotes validate custody, not interpretation; no target transfer or annotation probability.",
+-                "input_schema": assay_arguments_schema()})
+-            from .literature_ratio_storage import ratio_population_schema
+-            result.append({"name": "literature.ratio.populate",
+-                "description": "Read reported relative-signal percentages from selected JATS prose and optionally compare retained visual transcriptions with original image custody. Preserve the actual denominator/arrangement and conflicting candidate values. Signal is not calibrated molar amount or an isolated functional effect; no source reliability or target-transfer score is fabricated.",
+-                "input_schema": ratio_population_schema()})
+-            from .literature_binding_storage import binding_population_schema
+-            result.append({"name": "literature.binding.populate",
+-                "description": "Populate source binding-parameter components from an already received table or explicitly retained visual transcription. Keep IC50 distinct from reported Hill-fit Kd, actual protein/state/ligand identities, reported fit-spread basis and point/limit arithmetic. Original image custody is validated; no OCR, sampling confidence, intrinsic-affinity conversion or target credit is inferred.",
+-                "input_schema": binding_population_schema()})
+-            from .literature_binding_model_storage import binding_model_population_schema
+-            result.append({"name": "literature.binding.model.populate",
+-                "description": "Evaluate the ordered parameter contrast in an actually received committed binding sheet using an explicitly supplied source model. Preserve full log-covariance measurement ownership, known versus estimated variance, and the stated threshold-reporting mechanism. Missing model source retains usable native contrast and explicit unknown likelihood cells. No inference of covariance from fit spreads or counts, limit-as-point calculation, intrinsic-affinity conversion, target transfer or annotation credit.",
+-                "input_schema": binding_model_population_schema()})
+-            from .literature_transport_storage import transport_response_population_schema
+-            result.append({"name": "literature.transport.response.populate",
+-                "description": "Calculate a conditional source substrate-response correction from exact concentration spans and a received saved apparent-Km quantity. Preserve actual molecule, preparation, analyte, endpoint and fitted-curve contexts. Different or unknown curves leave the comparison unavailable. Full covariance retains physical owners and shared Km once; no sampling variance from untyped spread, target transfer or annotation credit is inferred.",
+-                "input_schema": transport_response_population_schema()})
+-            from .literature_perturbation_storage import perturbation_population_schema
+-            result.append({"name": "literature.perturbation.populate",
+-                "description": "Populate reference perturbation/restoration components from source-bound design interpretations and optional received quantitative data. Keep actual recipient, changed component, partner, endpoint calibration and real restoration arms distinct. Qualitative-only outcomes cannot supply numerical rates. Preserve nuisance comparability separately from effect isolation and leave missing inputs/uncertainty unknown. No target transfer, necessity inference from an unmeasured catalytic knockout, or final annotation credit.",
+-                "input_schema": perturbation_population_schema()})
+-            from .literature_structure_storage import structure_population_schema
+-            result.append({"name": "literature.structure.populate",
+-                "description": "Populate source-model geometry and local residue RSCC components from received coordinates and optional matching deposited validation. Select exact model/author atom groups and fixed physical criteria. Preserve missing endpoints, validation entry/revision mismatch and unreported coordinate uncertainty. The explicit scope is conditional deposited-model geometry; it does not establish population occupancy, causal mechanism, target correspondence or annotation credit.",
+-                "input_schema": structure_population_schema()})
+-            from .literature_reaction_storage import reaction_population_schema
+-            result.append({"name": "literature.reaction.populate",
+-                "description": "Populate reported reference reaction-ratio residuals, named-prediction comparisons and simple resource-budget components from an explicitly retained received dataset. Preserve unknown replication, missing alternatives and incomplete resource constraints. Product-pair ratios, supplied reagent budgets and usable capacity have distinct meanings. This route does not parse NMR spectra, establish measured oxygen coupling, apply missing corrections or calculate target transfer/annotation credit.",
+-                "input_schema": reaction_population_schema()})
+-            from .literature_context_storage import context_population_schema
+-            result.append({"name": "literature.context.populate",
+-                "description": "Populate biological context compatibility from source-bound retained observations and domain/route meanings. Keep organism capability distinct from fixed-sample coverage; preserve physical unit bases, missing local mapping, unexamined states, sample weights, pairing and conditional sampling design. Logical domain bounds are not confidence intervals or intuitive quality grades. Purified-enzyme assays are not automatically organism witnesses or habitat samples. No target correspondence or annotation credit is calculated.",
+-                "input_schema": context_population_schema()})
+-            from .literature_figure_storage import figure_population_schema
+-            result.append({"name": "literature.figure.populate",
+-                "description": "Read native experimental mean-bar ordinates from received original images using a retained linear-axis selection recipe. Preserve both subject/partner arms, endpoint and normalization meanings, source representation relationships, reported repeat/spread meanings and conditional digitization bounds. Return raw ordinates and a signed difference; pixel extraction does not supply SD, statistical significance, molar calibration, partner necessity or target credit.",
+-                "input_schema": figure_population_schema()})
+-            from .literature_partner_storage import partner_population_schema
+-            result.append({"name": "literature.partner.populate",
+-                "description": "Populate source experimental partner-removal and addback components from received retained measurements and exact source witnesses. Preserve directed molecule/partner roles, nitrogen and other nonpartner conditions, normalization identity, physical measurement identity and reported spread meanings. Incompatible or incomplete comparisons keep native values and explicit unknown components. Censor domains are not confidence intervals; chemical bypass and partner swaps do not establish universal partner necessity, genomic presence, target transfer or annotation credit.",
+-                "input_schema": partner_population_schema()})
+-            from .literature_partner_storage import partner_source_population_schema
+-            result.append({"name": "literature.partner.source.populate",
+-                "description": "Populate the same experimental partner components directly from selected literal source spans. Select complete rate/limit tokens, native units, spread meanings and source-bound entity/physical-measurement identities; do not supply scientific numbers or a prepared numeric JSON dataset. For source-defined activity units such as U/mg, select the endpoint-specific definition, quantity, molecular entity and time basis; no universal U conversion is assumed. Deterministic readers preserve original tokens, convert supported rate units and retain unknown normalization, conditions or observation identity. A repeated representation is not a new measurement. No sampling uncertainty, universal necessity, target correspondence or annotation credit is inferred.",
+-                "input_schema": partner_source_population_schema()})
++            result.extend(_population_catalog())
+         return result
+ 
+     def _within_source(self, reference, root, scope):
+--- before/gene_annotation_episode/literature_reference_parent_prompt.py
++++ after/gene_annotation_episode/literature_reference_parent_prompt.py
+@@ -86,6 +86,11 @@
+         for row in tools:
+             if "input_schema" in row:
+                 _section(parts, "Operands for " + row["name"], _schema(row["input_schema"], "arguments"))
++    populations = descriptor.get("child_population_operations", ())
++    if populations:
++        _section(parts, "Population operations available within literature children",
++            _table(("Child operation", "Input capability and meaning"),
++                ((row["name"], row["description"]) for row in populations)))
+     _section(parts, "Permitted child investigations and their construction", _text_or_values(state.get("child_options")))
+     _section(parts, "Information requested from this parent", _text_or_values(state.get("requested_report_purpose")))
+     requested = state.get("requested_form")

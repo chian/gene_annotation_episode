@@ -1,0 +1,16 @@
+--- baseline/gene_annotation_episode/communication.py
++++ gene_annotation_episode/communication.py
+@@ -201,11 +201,11 @@
+                     != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                 raise ReportBoundaryError(f"{path}: channel fact schema must match its registered source", code="invalid_schema")
+             return
+-        if source == "literature_compiled_assay_cells":
++        if source in {"literature_compiled_assay_cells", "literature_compiled_assay_v2_cells"}:
+             if depth != 1:
+                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+             from .literature_compiled_assay_storage import compiled_assay_cells_schema
+-            expected = compiled_assay_cells_schema()
++            expected = compiled_assay_cells_schema(2 if source == "literature_compiled_assay_v2_cells" else 1)
+             if (not _schema_cacheable(node)
+                     or json.dumps(node, sort_keys=True, allow_nan=False)
+                     != json.dumps(expected, sort_keys=True, allow_nan=False)):

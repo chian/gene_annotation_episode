@@ -1,0 +1,657 @@
+# Copyright (C) 2023 Roberto Rossini <roberros@uio.no>
+# SPDX-License-Identifier: MIT
+
+name: Run Codecov
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/.codecov.yml"
+      - ".github/workflows/codecov.yml"
+      - "cmake/**"
+      - "examples/**"
+      - "src/**"
+      - "test/integration/**"
+      - "test/units/**"
+      - "test/utils/devel/collect_coverage_data.py"
+      - "utils/devel/build_dependencies.py"
+      - "CMakeLists.txt"
+      - "conanfile.py"
+
+  pull_request:
+    paths:
+      - ".github/.codecov.yml"
+      - ".github/workflows/codecov.yml"
+      - "cmake/**"
+      - "examples/**"
+      - "src/**"
+      - "test/integration/**"
+      - "test/units/**"
+      - "test/utils/devel/collect_coverage_data.py"
+      - "utils/devel/build_dependencies.py"
+      - "CMakeLists.txt"
+      - "conanfile.py"
+
+# https://stackoverflow.com/a/72408109
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  contents: read
+
+jobs:
+  cache-test-dataset:
+    name: Cache test dataset
+    uses: paulsengroup/hictk/.github/workflows/cache-test-dataset.yml@ec6c8c43e445043aa05d189aa2799c949166cf27
+
+  build-deps:
+    name: Build dependencies
+    uses: paulsengroup/hictk/.github/workflows/build-conan-deps-linux.yml@40293429314b8a380c0ed0108f60b865ff96609b
+    with:
+      build-type: RelWithDebInfo
+      conan-version: "2.21.*"
+      cppstd: 17
+      image: "ghcr.io/paulsengroup/ci-docker-images/ubuntu-20.04-cxx-clang-21"
+      ref: main
+
+  build-project:
+    name: Build project
+    needs: build-deps
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/paulsengroup/ci-docker-images/ubuntu-24.04-cxx-clang-21
+      options: "--user=root"
+
+    env:
+      CCACHE_DIR: "/opt/ccache-cache"
+      CCACHE_COMPILERCHECK: "content"
+      CCACHE_COMPRESSLEVEL: "1"
+      CCACHE_MAXSIZE: "10G"
+      TMPDIR: "/tmp/"
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Fix permissions
+        run: chown -R "$(id -u):$(id -g)" "$PWD"
+
+      - name: Generate cache key
+        id: cache-key
+        run: |
+          deps_hash="$(echo '${{ needs.build-deps.outputs.cache-key }}' | sha256sum | cut -f 1 -d ' ')"
+
+          # This can be used by to always update a cache entry (useful e.g. for ccache)
+          current_date="$(date '+%Y-%m-%d-%H:%M:%S')"
+
+          ccache_key_prefix="ccache-codecov-$deps_hash"
+          ccache_key_prefix="$(echo "$ccache_key_prefix" |
+                               tr -c '[:alnum:]._-' '-' |
+                               sed 's/-\+/-/g' |
+                               sed 's/-$//' |
+                               tr '[:upper:]' '[:lower:]'
+                             )"
+
+          {
+            echo "ccache-key=${ccache_key_prefix}-$GITHUB_REF-${current_date}"
+            echo "ccache-restore-key-1=$ccache_key_prefix-$GITHUB_REF"
+            echo "ccache-restore-key-2=$ccache_key_prefix"
+          } | tee -a "$GITHUB_OUTPUT"
+
+      - name: Restore cached dependencies
+        uses: actions/cache/restore@v4
+        with:
+          key: ${{ needs.build-deps.outputs.cache-key }}
+          path: ${{ needs.build-deps.outputs.tar }}
+          fail-on-cache-miss: true
+
+      - name: Unpack dependencies
+        run: tar -C "$TMPDIR" -xf '${{ needs.build-deps.outputs.tar }}'
+
+      - name: Configure project (w/ telemetry)
+        run: |
+          cov_flags='-fprofile-instr-generate -fcoverage-mapping -fcoverage-mcdc'
+
+          if ! lld -v &> /dev/null; then
+            LINKER=SYSTEM
+          else
+            LINKER=LLD
+          fi
+
+          cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo                  \
+                -DCMAKE_C_STANDARD=17                              \
+                -DCMAKE_CXX_STANDARD=17                            \
+                -DCMAKE_PREFIX_PATH="$TMPDIR/deps/cmake/"          \
+                -DENABLE_DEVELOPER_MODE=ON                         \
+                -DHICTK_ENABLE_TELEMETRY=ON                        \
+                -DOPT_ENABLE_INTERPROCEDURAL_OPTIMIZATION=OFF      \
+                -DOPT_ENABLE_SANITIZER_ADDRESS=OFF                 \
+                -DOPT_ENABLE_SANITIZER_LEAK=OFF                    \
+                -DOPT_ENABLE_SANITIZER_POINTER_COMPARE=OFF         \
+                -DOPT_ENABLE_SANITIZER_POINTER_SUBTRACT=OFF        \
+                -DOPT_ENABLE_SANITIZER_UNDEFINED_BEHAVIOR=OFF      \
+                -DOPT_ENABLE_CPPCHECK=OFF                          \
+                -DOPT_ENABLE_CLANG_TIDY=OFF                        \
+                -DHICTK_BUILD_EXAMPLES=OFF                         \
+                -DHICTK_ENABLE_TESTING=ON                          \
+                -DHICTK_ENABLE_FUZZY_TESTING=OFF                   \
+                -DHICTK_DOWNLOAD_TEST_DATASET=OFF                  \
+                -DHICTK_ENABLE_GIT_VERSION_TRACKING=OFF            \
+                -DHICTK_EXPORTER_OTLP_ENDPOINT=https://localhost:9 \
+                -DCMAKE_C_FLAGS="$cov_flags"                       \
+                -DCMAKE_CXX_FLAGS="$cov_flags"                     \
+                -DCMAKE_LINKER_TYPE="$LINKER"                      \
+                -S .                                               \
+                -B build
+
+      - name: Configure project (wo/ telemetry)
+        run: |
+          cov_flags='-fprofile-instr-generate -fcoverage-mapping -fcoverage-mcdc'
+
+          cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo             \
+                -DCMAKE_CXX_STANDARD=17                       \
+                -DCMAKE_PREFIX_PATH="$TMPDIR/deps/cmake/"     \
+                -DENABLE_DEVELOPER_MODE=ON                    \
+                -DHICTK_ENABLE_TELEMETRY=OFF                  \
+                -DOPT_ENABLE_INTERPROCEDURAL_OPTIMIZATION=OFF \
+                -DOPT_ENABLE_SANITIZER_ADDRESS=OFF            \
+                -DOPT_ENABLE_SANITIZER_LEAK=OFF               \
+                -DOPT_ENABLE_SANITIZER_POINTER_COMPARE=OFF    \
+                -DOPT_ENABLE_SANITIZER_POINTER_SUBTRACT=OFF   \
+                -DOPT_ENABLE_SANITIZER_UNDEFINED_BEHAVIOR=OFF \
+                -DOPT_ENABLE_CPPCHECK=OFF                     \
+                -DOPT_ENABLE_CLANG_TIDY=OFF                   \
+                -DHICTK_BUILD_EXAMPLES=OFF                    \
+                -DHICTK_ENABLE_TESTING=ON                     \
+                -DHICTK_ENABLE_FUZZY_TESTING=OFF              \
+                -DHICTK_DOWNLOAD_TEST_DATASET=OFF             \
+                -DHICTK_ENABLE_GIT_VERSION_TRACKING=OFF       \
+                -DCMAKE_C_FLAGS="$cov_flags"                  \
+                -DCMAKE_CXX_FLAGS="$cov_flags"                \
+                -DCMAKE_LINKER_TYPE=LLD                       \
+                -S .                                          \
+                -B build-no-telem
+
+      - name: Restore Ccache folder
+        id: cache-ccache
+        uses: actions/cache/restore@v4
+        with:
+          key: ${{ steps.cache-key.outputs.ccache-restore-key-1 }}
+          restore-keys: ${{ steps.cache-key.outputs.ccache-restore-key-2 }}
+          path: ${{ env.CCACHE_DIR }}
+
+      - name: Reset Ccache stats
+        run: ccache --zero-stats
+
+      - name: Build project (w/ telemetry)
+        id: cmake-build
+        run: |
+          echo "start=$(date +%s)" >> "$GITHUB_OUTPUT"
+          cmake --build build -j "$(nproc)"
+
+      - name: Build project (wo/ telemetry)
+        run: cmake --build build-no-telem -j "$(nproc)" -t hictk
+
+      - name: Package build folder
+        run: tar --exclude='*.o' -cf - build*/ | zstd -T0 -13 -o build.tar.zst
+
+      - name: Upload build folder
+        uses: actions/upload-artifact@v5
+        with:
+          name: "build-codecov"
+          path: build.tar.zst
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Print Ccache statistics (pre-cleanup)
+        run: |
+          ccache --show-stats \
+                 --show-compression \
+                 --verbose
+
+      - name: Cleanup Ccache folder
+        run: |
+          timestamp="$(date +%s)"
+          time_delta="$(( timestamp - ${{ steps.cmake-build.outputs.start }} + 60 ))"
+          ccache --evict-older-than="${time_delta}s"
+          ccache --recompress=19 --recompress-threads="$(nproc)"
+          ccache --cleanup --max-size 1G
+
+      - name: Print Ccache statistics (post-cleanup)
+        run: |
+          ccache --show-stats \
+                 --show-compression \
+                 --verbose
+
+      - name: Save Ccache folder
+        uses: actions/cache/save@v4
+        with:
+          key: ${{ steps.cache-key.outputs.ccache-key }}
+          path: ${{ env.CCACHE_DIR }}
+        env:
+          ZSTD_CLEVEL: 1
+
+      - name: Generate list of stale cache entries
+        id: stale-cache
+        if: steps.cache-ccache.outputs.cache-matched-key != ''
+        run: |
+          fname='stale-cache-codecov.txt'
+          echo '${{ steps.cache-ccache.outputs.cache-matched-key }}' > "$fname"
+
+          echo "name=$fname" | tee -a "$GITHUB_OUTPUT"
+
+      - name: Upload stale cache entries
+        if: steps.cache-ccache.outputs.cache-matched-key != ''
+        uses: actions/upload-artifact@v5
+        with:
+          name: ${{ steps.stale-cache.outputs.name }}
+          path: "${{ steps.stale-cache.outputs.name }}"
+          if-no-files-found: error
+          retention-days: 1
+
+  purge-stale-ccache-entries:
+    name: Purge stale CCache entries
+    needs: [build-project]
+    uses: paulsengroup/hictk/.github/workflows/purge-stale-ccache-entries.yml@18f6815c7416feef4b4bd9ceffe69baae7fefabb
+    permissions:
+      contents: read
+      actions: write
+
+  run-unit-tests:
+    name: Run unit tests
+    needs: [cache-test-dataset, build-project]
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/paulsengroup/ci-docker-images/ubuntu-24.04-cxx-clang-21
+      options: "--user=root"
+
+    env:
+      HICTK_CI: "1"
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+
+      - name: Restore test dataset
+        uses: actions/cache/restore@v4
+        with:
+          key: ${{ needs.cache-test-dataset.outputs.cache-key }}
+          path: test/data/hictk_test_data.tar.zst
+          fail-on-cache-miss: true
+
+      - name: Download unit tests artifact
+        uses: actions/download-artifact@v6
+        with:
+          name: "build-codecov"
+
+      - name: Extract binaries and test dataset
+        run: |
+          tar -xf build.tar.zst
+          tar -xf test/data/hictk_test_data.tar.zst
+
+      - name: Add test user
+        run: useradd devel
+
+      - name: Fix permissions
+        run: |
+          chown -R devel:devel build*/
+
+      - name: Setup dependencies
+        run: |
+          apt-get update
+          apt-get install -q -y --no-install-recommends \
+            curl \
+            gpg \
+            gpg-agent \
+            sudo \
+            tar
+
+      - name: Run unit tests
+        run: |
+          readarray -t -d '' binaries < <(find build/test/units/ -type f -executable | xargs printf '%q\0')
+
+          mkdir profiles
+          chown devel:devel profiles
+
+          for bin in "${binaries[@]}"; do
+            hash="$(sha256sum "$bin" | cut -f1 -d ' ')"
+            LLVM_PROFILE_FILE="$PWD/profiles/$hash.profraw"
+
+            if ! sudo -u devel                                      \
+                      -E env "LLVM_PROFILE_FILE=$LLVM_PROFILE_FILE" \
+                      "$bin"; \
+            then
+              exit 1
+            fi
+          done
+
+      - name: Collect coverage data
+        run: |
+          readarray -t -d '' binaries < <(find build/test/units/ -type f -executable | xargs printf '%q\0')
+
+          utils/devel/collect_coverage_data.py   \
+            --output-dir coverage/               \
+            --prefix=profiles/                   \
+            --format lcov                        \
+            --llvm-cov-bin llvm-cov-21           \
+            --llvm-profdata-bin llvm-profdata-21 \
+            "${binaries[@]}"
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
+        with:
+          flags: "tests | unittests"
+          fail_ci_if_error: true
+          handle_no_reports_found: true
+          directory: coverage
+          os: linux
+          token: ${{ secrets.CODECOV_TOKEN }}
+          verbose: true
+
+  run-integration-tests:
+    name: Run integration tests
+    needs: [cache-test-dataset, build-project]
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/paulsengroup/ci-docker-images/ubuntu-24.04-cxx-clang-21
+      options: "--user=root"
+
+    env:
+      HICTK_CI: "1"
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+
+      - name: Restore test dataset
+        uses: actions/cache/restore@v4
+        with:
+          key: ${{ needs.cache-test-dataset.outputs.cache-key }}
+          path: test/data/hictk_test_data.tar.zst
+          fail-on-cache-miss: true
+
+      - name: Download binaries artifact
+        uses: actions/download-artifact@v6
+        with:
+          name: "build-codecov"
+
+      - name: Extract binaries and test dataset
+        run: |
+          tar -xf build.tar.zst
+          tar -xf test/data/hictk_test_data.tar.zst
+
+      - name: Install test suite
+        run: |
+          python3.12 -m venv venv --upgrade
+          venv/bin/pip install test/integration
+
+      - name: Add test user
+        run: useradd devel
+
+      - name: Fix permissions
+        run: |
+          chown -R devel:devel build/
+
+      - name: Setup dependencies
+        run: |
+          apt-get update
+          apt-get install -q -y --no-install-recommends \
+            curl \
+            gpg \
+            gpg-agent \
+            sudo \
+            tar
+
+      - name: Test hictk main (w/ telemetry)
+        run: |
+          LLVM_PROFILE_FILE="$PWD/hictk.main.%id.profraw"
+
+          sudo -u devel                                        \
+          -E env "PATH=$PATH"                                  \
+                 "LLVM_PROFILE_FILE=$LLVM_PROFILE_FILE"        \
+          venv/bin/hictk_integration_suite                     \
+            build/src/hictk/hictk                              \
+            test/integration/config.toml                       \
+            --do-not-copy-binary                               \
+            --enable-telemetry                                 \
+            --data-dir test/data                               \
+            --threads "$(nproc)"                               \
+            --result-file integration-test-report.main.json    \
+            --suites=main
+
+      - name: Test hictk main (wo/ telemetry)
+        run: |
+          LLVM_PROFILE_FILE="$PWD/hictk-no-telem.main.%id.profraw"
+
+          sudo -u devel                                              \
+          -E env "PATH=$PATH"                                        \
+                 "LLVM_PROFILE_FILE=$LLVM_PROFILE_FILE"              \
+          venv/bin/hictk_integration_suite                           \
+            build-no-telem/src/hictk/hictk                           \
+            test/integration/config.toml                             \
+            --do-not-copy-binary                                     \
+            --enable-telemetry                                       \
+            --data-dir test/data                                     \
+            --threads "$(nproc)"                                     \
+            --result-file integration-test-report.main-no-telem.json \
+            --suites=main
+
+      - name: Test hictk balance
+        run: |
+          LLVM_PROFILE_FILE="$PWD/hictk.balance.%id.profraw"
+
+          sudo -u devel                                        \
+          -E env "PATH=$PATH"                                  \
+                 "LLVM_PROFILE_FILE=$LLVM_PROFILE_FILE"        \
+          venv/bin/hictk_integration_suite                     \
+            build/src/hictk/hictk                              \
+            test/integration/config.toml                       \
+            --do-not-copy-binary                               \
+            --enable-telemetry                                 \
+            --data-dir test/data                               \
+            --threads "$(nproc)"                               \
+            --result-file integration-test-report.balance.json \
+            --suites=balance
+
+      - name: Test hictk convert
+        run: |
+          LLVM_PROFILE_FILE="$PWD/hictk.convert.%id.profraw"
+
+          sudo -u devel                                        \
+          -E env "PATH=$PATH"                                  \
+                 "LLVM_PROFILE_FILE=$LLVM_PROFILE_FILE"        \
+          venv/bin/hictk_integration_suite                     \
+            build/src/hictk/hictk                              \
+            test/integration/config.toml                       \
+            --do-not-copy-binary                               \
+            --enable-telemetry                                 \
+            --data-dir test/data                               \
+            --threads "$(nproc)"                               \
+            --result-file integration-test-report.convert.json \
+            --suites=convert
+
+      - name: Test hictk dump
+        run: |
+          LLVM_PROFILE_FILE="$PWD/hictk.dump.%id.profraw"
+
+          sudo -u devel                                        \
+          -E env "PATH=$PATH"                                  \
+                 "LLVM_PROFILE_FILE=$LLVM_PROFILE_FILE"        \
+          venv/bin/hictk_integration_suite                     \
+            build/src/hictk/hictk                              \
+            test/integration/config.toml                       \
+            --do-not-copy-binary                               \
+            --enable-telemetry                                 \
+            --data-dir test/data                               \
+            --threads "$(nproc)"                               \
+            --result-file integration-test-report.dump.json    \
+            --suites=dump
+
+      - name: Test hictk fix-mcool
+        run: |
+          LLVM_PROFILE_FILE="$PWD/hictk.fix-mcool.%id.profraw"
+
+          sudo -u devel                                          \
+          -E env "PATH=$PATH"                                    \
+                 "LLVM_PROFILE_FILE=$LLVM_PROFILE_FILE"          \
+          venv/bin/hictk_integration_suite                       \
+            build/src/hictk/hictk                                \
+            test/integration/config.toml                         \
+            --do-not-copy-binary                                 \
+            --enable-telemetry                                   \
+            --data-dir test/data                                 \
+            --threads "$(nproc)"                                 \
+            --result-file integration-test-report.fix-mcool.json \
+            --suites=fix-mcool
+
+      - name: Test hictk load
+        run: |
+          LLVM_PROFILE_FILE="$PWD/hictk.load.%id.profraw"
+
+          sudo -u devel                                     \
+          -E env "PATH=$PATH"                               \
+                 "LLVM_PROFILE_FILE=$LLVM_PROFILE_FILE"     \
+          venv/bin/hictk_integration_suite                  \
+            build/src/hictk/hictk                           \
+            test/integration/config.toml                    \
+            --do-not-copy-binary                            \
+            --enable-telemetry                              \
+            --data-dir test/data                            \
+            --threads "$(nproc)"                            \
+            --result-file integration-test-report.load.json \
+            --suites=load
+
+      - name: Test hictk merge
+        run: |
+          LLVM_PROFILE_FILE="$PWD/hictk.merge.%id.profraw"
+
+          sudo -u devel                                      \
+          -E env "PATH=$PATH"                                \
+                 "LLVM_PROFILE_FILE=$LLVM_PROFILE_FILE"      \
+          venv/bin/hictk_integration_suite                   \
+            build/src/hictk/hictk                            \
+            test/integration/config.toml                     \
+            --do-not-copy-binary                             \
+            --enable-telemetry                               \
+            --data-dir test/data                             \
+            --threads "$(nproc)"                             \
+            --result-file integration-test-report.merge.json \
+            --suites=merge
+
+      - name: Test hictk metadata
+        run: |
+          LLVM_PROFILE_FILE="$PWD/hictk.metadata.%id.profraw"
+          sudo -u devel                                         \
+          -E env "PATH=$PATH"                                   \
+                 "LLVM_PROFILE_FILE=$LLVM_PROFILE_FILE"         \
+          venv/bin/hictk_integration_suite                      \
+            build/src/hictk/hictk                               \
+            test/integration/config.toml                        \
+            --do-not-copy-binary                                \
+            --enable-telemetry                                  \
+            --data-dir test/data                                \
+            --threads "$(nproc)"                                \
+            --result-file integration-test-report.metadata.json \
+            --suites=metadata
+
+      - name: Test hictk rename-chromosomes
+        run: |
+          LLVM_PROFILE_FILE="$PWD/hictk.rename-chromosomes.%id.profraw"
+
+          sudo -u devel                                                   \
+          -E env "PATH=$PATH"                                             \
+                 "LLVM_PROFILE_FILE=$LLVM_PROFILE_FILE"                   \
+          venv/bin/hictk_integration_suite                                \
+            build/src/hictk/hictk                                         \
+            test/integration/config.toml                                  \
+            --do-not-copy-binary                                          \
+            --enable-telemetry                                            \
+            --data-dir test/data                                          \
+            --threads "$(nproc)"                                          \
+            --result-file integration-test-report.rename-chromosomes.json \
+            --suites=rename-chromosomes
+
+      - name: Test hictk validate
+        run: |
+          LLVM_PROFILE_FILE="$PWD/hictk.validate.%id.profraw"
+
+          sudo -u devel                                         \
+          -E env "PATH=$PATH"                                   \
+                 "LLVM_PROFILE_FILE=$LLVM_PROFILE_FILE"         \
+          venv/bin/hictk_integration_suite                      \
+            build/src/hictk/hictk                               \
+            test/integration/config.toml                        \
+            --do-not-copy-binary                                \
+            --enable-telemetry                                  \
+            --data-dir test/data                                \
+            --threads "$(nproc)"                                \
+            --result-file integration-test-report.validate.json \
+            --suites=validate
+
+      - name: Test hictk zoomify
+        run: |
+          LLVM_PROFILE_FILE="$PWD/hictk.zoomify.%id.profraw"
+
+          sudo -u devel                                        \
+          -E env "PATH=$PATH"                                  \
+                 "LLVM_PROFILE_FILE=$LLVM_PROFILE_FILE"        \
+          venv/bin/hictk_integration_suite                     \
+            build/src/hictk/hictk                              \
+            test/integration/config.toml                       \
+            --do-not-copy-binary                               \
+            --enable-telemetry                                 \
+            --data-dir test/data                               \
+            --threads "$(nproc)"                               \
+            --result-file integration-test-report.zoomify.json \
+            --suites=zoomify
+
+      - name: Collect coverage data
+        run: |
+          utils/devel/collect_coverage_data.py   \
+            --output-dir coverage/               \
+            --prefix="$PWD/hictk."               \
+            --format lcov                        \
+            --llvm-cov-bin llvm-cov-21           \
+            --llvm-profdata-bin llvm-profdata-21 \
+            build/src/hictk/hictk
+
+          utils/devel/collect_coverage_data.py   \
+            --output-dir coverage/               \
+            --prefix="$PWD/hictk-no-telem."      \
+            --format lcov                        \
+            --llvm-cov-bin llvm-cov-21           \
+            --llvm-profdata-bin llvm-profdata-21 \
+            build-no-telem/src/hictk/hictk
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
+        with:
+          flags: "tests | integration"
+          fail_ci_if_error: true
+          handle_no_reports_found: true
+          directory: coverage
+          os: linux
+          token: ${{ secrets.CODECOV_TOKEN }}
+          verbose: true
+
+  codecov-status-check:
+    name: Status Check (Codecov)
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    needs:
+      - build-project
+      - run-unit-tests
+      - run-integration-tests
+
+    steps:
+      - name: Collect job results
+        if: |
+          needs.build-project.result != 'success'      ||
+          needs.run-unit-tests.result != 'success'     ||
+          needs.run-integration-tests.result != 'success'
+        run: exit 1

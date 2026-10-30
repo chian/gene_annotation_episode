@@ -1,0 +1,22 @@
+....F
+=================================== FAILURES ===================================
+_____ test_actual_provider_task_truthfully_requests_one_retained_structure _____
+
+one_case = namespace(store=<gene_annotation_episode.state.Store object at 0x7b2dcbbc7530>, flow=<gene_annotation_episode.runtime....episode/verification/tool_graders_rna_one_structure_workflow_2026-10-27_385/check002/temporary/pytest/one-structure0'))
+
+    def test_actual_provider_task_truthfully_requests_one_retained_structure(one_case):
+        case = one_case
+        call, = case.evidence.calls
+        turn, = case.evidence.wire.turns_sent()
+        task, steering = parts(turn['input'][0]['text'])
+        assert F.OPENING in task
+        assert "Compare the retained RNA inputs against" not in task
+        assert '0 baseline-to-canonical-variant comparisons' in task
+>       assert 'original sequence' in task and 'dot bracket' in task
+E       AssertionError: assert ('original sequence' in 'TASK\n\nReturn the requested sequence or structure information for the parent’s single selected RNA input supplied-RN...tion timing\n\nInterpretations are the last actual reasoning basis; later tool outcomes are facts, not a new judgment.' and 'dot bracket' in 'TASK\n\nReturn the requested sequence or structure information for the parent’s single selected RNA input supplied-RN...tion timing\n\nInterpretations are the last actual reasoning basis; later tool outcomes are facts, not a new judgment.')
+
+source_snapshot/tests/test_rna_one_structure_workflow.py:166: AssertionError
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_rna_one_structure_workflow.py::test_actual_provider_task_truthfully_requests_one_retained_structure
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 4 passed in 154.46s (0:02:34)

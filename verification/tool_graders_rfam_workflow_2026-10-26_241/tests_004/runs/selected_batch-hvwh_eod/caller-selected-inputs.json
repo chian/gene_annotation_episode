@@ -1,0 +1,141 @@
+{
+  "inventory": {
+    "feedback": null,
+    "operation_ref": "operation_757a7cbfb84d3c775a5c597d",
+    "record_refs": [],
+    "result": {
+      "library_ref": "input_7e51136483c7ce18f0b1305c",
+      "limit": 50,
+      "members": [
+        {
+          "binding_version": "fixed_original_read_position_measure_v1",
+          "collection_ref": "collection_1d7d22aaf911bf0beb7394d6",
+          "description_preview": {
+            "characters": 0,
+            "complete": true,
+            "text": "",
+            "utf8_bytes": 0
+          },
+          "header": {
+            "read_with": {
+              "limit": 12000,
+              "member_ref": "member_dc01c954b5fbf1831d61ab54",
+              "offset": 0
+            },
+            "representation": "parser_returned_title",
+            "utf8_bytes": 14
+          },
+          "id": "read_subject_7e51136483c7ce18f0b1305cdc01c954b5fbf1831d61ab54",
+          "length": 119,
+          "library_ref": "input_7e51136483c7ce18f0b1305c",
+          "material_ref": "material_826b8761c6ce0330c8e75428",
+          "member_ref": "member_dc01c954b5fbf1831d61ab54",
+          "metadata_preview_characters": 256,
+          "molecule": "dna",
+          "name_preview": {
+            "characters": 14,
+            "complete": true,
+            "text": "original-first",
+            "utf8_bytes": 14
+          },
+          "ordinal": 0,
+          "origin": "caller",
+          "quality_encoding": "unspecified",
+          "quality_present": true,
+          "record_type": "read_subject",
+          "role": "read",
+          "sequence_ref": null,
+          "source_ordinal": 0,
+          "source_ref": "source_7c258fa181506f145678b468",
+          "unit": "nt"
+        },
+        {
+          "binding_version": "fixed_original_read_position_measure_v1",
+          "collection_ref": "collection_1d7d22aaf911bf0beb7394d6",
+          "description_preview": {
+            "characters": 0,
+            "complete": true,
+            "text": "",
+            "utf8_bytes": 0
+          },
+          "header": {
+            "read_with": {
+              "limit": 12000,
+              "member_ref": "member_20acbc9f9e7663e8507cdf87",
+              "offset": 0
+            },
+            "representation": "parser_returned_title",
+            "utf8_bytes": 15
+          },
+          "id": "read_subject_7e51136483c7ce18f0b1305c20acbc9f9e7663e8507cdf87",
+          "length": 119,
+          "library_ref": "input_7e51136483c7ce18f0b1305c",
+          "material_ref": "material_826b8761c6ce0330c8e75428",
+          "member_ref": "member_20acbc9f9e7663e8507cdf87",
+          "metadata_preview_characters": 256,
+          "molecule": "dna",
+          "name_preview": {
+            "characters": 15,
+            "complete": true,
+            "text": "original-second",
+            "utf8_bytes": 15
+          },
+          "ordinal": 1,
+          "origin": "caller",
+          "quality_encoding": "unspecified",
+          "quality_present": true,
+          "record_type": "read_subject",
+          "role": "read",
+          "sequence_ref": null,
+          "source_ordinal": 1,
+          "source_ref": "source_7c258fa181506f145678b468",
+          "unit": "nt"
+        }
+      ],
+      "next_offset": null,
+      "next_query": null,
+      "offset": 0,
+      "selection_ref": null,
+      "total": 2
+    },
+    "status": "completed"
+  },
+  "request": {
+    "mode": "sequence_batch",
+    "subject_refs": [
+      "read_subject_7e51136483c7ce18f0b1305c20acbc9f9e7663e8507cdf87",
+      "read_subject_7e51136483c7ce18f0b1305cdc01c954b5fbf1831d61ab54",
+      "read_subject_7e51136483c7ce18f0b1305c20acbc9f9e7663e8507cdf87",
+      "read_subject_7e51136483c7ce18f0b1305cdc01c954b5fbf1831d61ab54"
+    ],
+    "version": "rfam_batch_request_v2"
+  },
+  "selection": {
+    "feedback": null,
+    "operation_ref": "operation_605741d82bc9bbe6c651dca6",
+    "record_refs": [
+      "read_selection_52bf4bbbcaab3790ce26540a"
+    ],
+    "result": {
+      "scope": {
+        "read_selection_refs": [
+          "read_selection_52bf4bbbcaab3790ce26540a"
+        ],
+        "subject_refs": [
+          "input_7e51136483c7ce18f0b1305c"
+        ]
+      },
+      "selection": {
+        "binding_version": "fixed_original_read_position_measure_v1",
+        "id": "read_selection_52bf4bbbcaab3790ce26540a",
+        "library_ref": "input_7e51136483c7ce18f0b1305c",
+        "member_count": 2,
+        "membership_sha256": "c5308ea458beabfc1b0eb1f6d8304d230dc64a59c262a078f275eb8b9738caee",
+        "origin": "tool",
+        "position_mass": 238,
+        "record_type": "read_selection"
+      }
+    },
+    "status": "completed"
+  }
+}

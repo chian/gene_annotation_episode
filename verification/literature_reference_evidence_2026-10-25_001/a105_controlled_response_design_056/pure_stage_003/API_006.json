@@ -1,0 +1,179 @@
+{
+  "input_version": "controlled_response_inputs_v1",
+  "output_version": "controlled_response_sheet_v1",
+  "signatures": {
+    "validate_controlled_response_inputs": "(inputs)",
+    "populate_controlled_response": "(inputs)"
+  },
+  "input_fields": [
+    "version",
+    "arms",
+    "relationships",
+    "covariance",
+    "variance_status",
+    "model_kind"
+  ],
+  "primitive_order": [
+    "protein_condition1",
+    "empty_condition1",
+    "protein_condition0",
+    "empty_condition0"
+  ],
+  "arm_fields": [
+    "value",
+    "threshold",
+    "relation",
+    "approximate",
+    "unit",
+    "status",
+    "endpoint_id",
+    "normalization_id",
+    "subject_construct_id",
+    "condition_id",
+    "physical_observation_id",
+    "source_observation_id",
+    "origin",
+    "digitization_interval",
+    "protein_arrangement",
+    "meaning_statuses"
+  ],
+  "relationship_fields": [
+    "condition1_target",
+    "condition0_target",
+    "condition_levels_relation",
+    "condition1_control_application",
+    "condition0_control_application",
+    "subject_construct_across_conditions",
+    "control_reference_reuse",
+    "nonintended_conditions",
+    "intended_factor"
+  ],
+  "cell_fields": [
+    "value",
+    "lower",
+    "upper",
+    "relation",
+    "approximate",
+    "unit",
+    "status",
+    "origin",
+    "unavailable_reason",
+    "formula_code",
+    "conditional_on",
+    "bound_kind",
+    "bound_state"
+  ],
+  "formula_codes": {
+    "protein_condition1_response": "source_response",
+    "empty_condition1_response": "source_response",
+    "protein_condition0_response": "source_response",
+    "empty_condition0_response": "source_response",
+    "condition1_controlled_response": "condition_control_difference",
+    "condition0_controlled_response": "condition_control_difference",
+    "controlled_response_difference": "four_arm_condition_difference",
+    "contrast_variance": "linear_joint_covariance",
+    "contrast_standard_uncertainty": "square_root_variance",
+    "contrast_precision": "inverse_variance",
+    "source_profile_log_ratio": "signed_known_normal_profile",
+    "source_signed_index": "tanh_half_signed_profile"
+  },
+  "finite_reason_codes": [
+    "missing_arm",
+    "unknown_unit",
+    "incompatible_unit_dimension",
+    "unknown_endpoint",
+    "different_endpoint",
+    "conflicting_endpoint",
+    "unknown_normalization",
+    "different_normalization",
+    "conflicting_normalization",
+    "unknown_subject_correspondence",
+    "different_subject_correspondence",
+    "conflicting_subject_correspondence",
+    "unknown_control_application",
+    "conflicting_control_application",
+    "unknown_protein_arrangement",
+    "conflicting_protein_arrangement",
+    "incompatible_control_arrangement",
+    "unknown_condition_correspondence",
+    "different_condition_correspondence",
+    "conflicting_condition_correspondence",
+    "condition_levels_not_distinct",
+    "missing_intended_factor",
+    "conflicting_control_reuse",
+    "unsupported_source_expression",
+    "ambiguous_source_literal",
+    "conflicting_source_literal",
+    "unavailable_source_dependency",
+    "unknown_covariance",
+    "estimated_covariance",
+    "nonpositive_variance_for_model",
+    "observation_model_unselected",
+    "unresolved_censoring_model",
+    "unresolved_reading_model",
+    "numeric_range_failure",
+    "uninformative_bounds"
+  ],
+  "origin_values": [
+    "reported",
+    "graph_derived",
+    "synthetic",
+    "calculated"
+  ],
+  "cell_status_values": [
+    "available",
+    "bounded",
+    "partial",
+    "unavailable",
+    "conflicting",
+    "unsupported"
+  ],
+  "bound_state_values": [
+    "not_applicable",
+    "unbounded",
+    "available",
+    "numeric_range_failure",
+    "unknown"
+  ],
+  "units": {
+    "umol/min": [
+      "amount_rate",
+      1.0
+    ],
+    "nmol/min": [
+      "amount_rate",
+      0.001
+    ],
+    "mmol/min": [
+      "amount_rate",
+      1000.0
+    ],
+    "uM/min": [
+      "concentration_rate",
+      1.0
+    ],
+    "nM/min": [
+      "concentration_rate",
+      0.001
+    ],
+    "per_min": [
+      "turnover_rate",
+      1.0
+    ],
+    "per_s": [
+      "turnover_rate",
+      60.0
+    ],
+    "umol/min/mg": [
+      "specific_amount_rate",
+      1.0
+    ],
+    "nmol/min/mg": [
+      "specific_amount_rate",
+      0.001
+    ]
+  },
+  "frozen_test_example_matches": true,
+  "selected_source_interface": false,
+  "actual_scientific_measurements": false
+}

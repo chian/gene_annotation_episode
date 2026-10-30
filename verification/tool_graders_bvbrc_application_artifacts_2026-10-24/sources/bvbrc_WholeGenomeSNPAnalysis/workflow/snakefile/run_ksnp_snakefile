@@ -1,0 +1,258 @@
+import json
+import os
+
+def read_k_value(file_path):
+    try:
+        with open(file_path, "r") as file:
+            value = file.read().strip()
+            return int(value) if value.isdigit() else None
+    except:
+        print("An exception occurred")
+        return None  # Return None if file is missing or doesn't contain a valid number
+        # this will crash the job
+
+msg = 'Checkpoint 5: snakefile command recieved - kSNP4 analysis \n'
+sys.stderr.write(msg)
+
+current_directory = os.getcwd()
+
+# Load the JSON data
+with open("{}/config.json".format(current_directory)) as f:
+    data = json.load(f)
+clean_fasta_dir = data["clean_data_dir"]
+work_data_dir = data["work_data_dir"]
+majority_threshold = data["params"]["majority-threshold"]
+
+
+rule_all_list = [
+                # "{}/annotated_genome_list.txt".format(current_directory),
+                "{}/kSNP_command_touchpoint.txt".format(work_data_dir),
+                # "{}/kSNP_annotation_command_touchpoint.txt".format(current_directory),
+                "{}/phylo_xml_trees_touchpoint.txt".format(work_data_dir),
+                "{}/core_kSNPdist.report".format(work_data_dir),
+                "{}/all_kSNPdist.report".format(work_data_dir),
+                "{}/majority_kSNPdist.report".format(work_data_dir),  
+                "{}/organize_files_touchpoint.txt".format(work_data_dir),
+                "{}/WholeGenomeSNP_Report.html".format(data["output_data_dir"]),
+                ]
+
+rule all:
+    input:
+        rule_all_list
+
+
+# rule create_genome_list:
+#     input:
+#         ksnp_in_file = "{}/clean_fastas/ksnp4_input_file.txt".format(clean_fasta_dir)
+#     output:
+#         annotated_genome_list = "{}/annotated_genome_list.txt".format(current_directory),
+#     shell:
+#         """
+#         genomeNames4 {input.ksnp_in_file} {output.annotated_genome_list}
+#         """
+
+rule run_kSNP4:
+    input:
+        ksnp_in_file = "{}/ksnp4_input_file.txt".format(clean_fasta_dir)
+    params:
+        optimum_k = read_k_value("{}/optimum_k.txt".format(work_data_dir)),
+        out_dir = data["work_data_dir"],
+        majority_threshold = data["params"]["majority-threshold"]
+    output:
+        touchpoint = "{}/kSNP_command_touchpoint.txt".format(work_data_dir),
+        all_SNPs_matrix = "{}/SNPs_all_matrix.fasta".format(work_data_dir),
+        core_SNPs_matrix = "{}/core_SNPs_matrix.fasta".format(work_data_dir)
+
+    shell:
+        """
+        echo {params.optimum_k}
+
+        kSNP4 \
+            -in {input.ksnp_in_file}\
+            -outdir {params.out_dir} \
+            -k {params.optimum_k} \
+            -min_frac {params.majority_threshold} \
+            -core \
+            -NJ \
+            -ML \
+            -vcf \
+            -debug \
+            -CPU 7
+
+        touch {output.touchpoint}
+        """
+
+# rule run_kSNP4_with_annotation:
+#     input:
+#         annotated_genome_list = "{}/annotated_genome_list.txt".format(current_directory),
+#         ksnp_in_file = "{}/clean_fastas/ksnp4_input_file.txt".format(current_directory)
+#     params:
+#         optimum_k = read_k_value("{}/optimum_k.txt".format(current_directory)),
+#         out_dir = '/annotation_run'.format(data["output_data_dir"])
+#     output:
+#         touchpoint = "{}/kSNP_annotation_command_touchpoint.txt".format(current_directory)
+
+#     shell:
+#         """
+#         echo {params.optimum_k}
+
+#         kSNP4 \
+#             -in {input.ksnp_in_file}\
+#             -outdir {params.out_dir} \
+#             -k {params.optimum_k} \
+#             -annotate {input.annotated_genome_list} \
+#             -core \
+#             -NJ \
+#             -ML \
+#             -vcf \
+#             -debug \
+#             -CPU 7
+
+#         touch {output.touchpoint}
+#         """
+
+rule convert_trees_to_phyloxml:
+    input:
+        touchpoint = "{}/kSNP_command_touchpoint.txt".format(work_data_dir),
+        config = "{}/config.json".format(current_directory)
+    output:
+        touchpoint = "{}/phylo_xml_trees_touchpoint.txt".format(work_data_dir)
+    shell:
+        """
+        whole_genome_snp_utils convert-to-phyloxml-trees {input.config}
+
+        touch {output.touchpoint}
+        """
+
+rule run_kdist_core:
+    input:
+        "{}/kSNP_command_touchpoint.txt".format(work_data_dir),
+        core_SNPs_matrix = "{}/core_SNPs_matrix.fasta".format(work_data_dir),
+        config = "{}/config.json".format(current_directory),
+        metadata = "{}/genome_metadata.json".format(current_directory)
+    params:
+        tmp_dist_matrix ="{}/core_distance_dir/kSNPdist.matrix".format(current_directory),
+        tmp_dist_report ="{}/core_distance_dir/kSNPdist.report".format(current_directory),
+    output:
+        dist_matrix = "{}/core_kSNPdist.matrix".format(work_data_dir),
+        dist_report = "{}/core_kSNPdist.report".format(work_data_dir),
+        out_dist_matrix = "{}/Core_SNPs/core_kSNPdist.matrix".format(data["output_data_dir"]),
+        out_dist_report = "{}/Core_SNPs/core_kSNPdist.report".format(data["output_data_dir"]),
+    shell:
+        """
+        mkdir -p core_distance_dir 
+
+        cd core_distance_dir
+
+        kSNPdist {input.core_SNPs_matrix}
+
+        cd ../
+
+        cp {params.tmp_dist_matrix} {output.dist_matrix}
+
+        cp  {params.tmp_dist_report} {output.dist_report}
+
+        cp {output.dist_matrix} {output.out_dist_matrix}
+        
+        cp {output.dist_report} {output.out_dist_report}
+        """
+
+rule run_kdist_all:
+    input:
+        "{}/kSNP_command_touchpoint.txt".format(work_data_dir),
+        all_SNPs_matrix = "{}/SNPs_all_matrix.fasta".format(work_data_dir),
+        config = "{}/config.json".format(current_directory),
+        metadata = "{}/genome_metadata.json".format(current_directory)
+    params:
+        tmp_dist_matrix ="{}/all_distance_dir/kSNPdist.matrix".format(current_directory),
+        tmp_dist_report ="{}/all_distance_dir/kSNPdist.report".format(current_directory),
+    output:
+        dist_matrix = "{}/all_kSNPdist.matrix".format(work_data_dir),
+        dist_report = "{}/all_kSNPdist.report".format(work_data_dir),
+        out_dist_matrix = "{}/All_SNPs/all_kSNPdist.matrix".format(data["output_data_dir"]),
+        out_dist_report = "{}/All_SNPs/all_kSNPdist.report".format(data["output_data_dir"]),
+    shell:
+        """
+        mkdir -p all_distance_dir 
+
+        cd all_distance_dir
+
+        kSNPdist {input.all_SNPs_matrix}
+
+        cd ../
+
+        cp {params.tmp_dist_report} {output.dist_report}
+
+        cp {params.tmp_dist_matrix} {output.dist_matrix}
+
+        cp {output.dist_matrix} {output.out_dist_matrix}
+        
+        cp {output.dist_report} {output.out_dist_report}
+        
+        """
+
+# params uses because Majority makes it difficult to expect the path
+rule run_kdist_majority:
+    input:
+        "{}/kSNP_command_touchpoint.txt".format(work_data_dir),
+        config = "{}/config.json".format(current_directory),
+        metadata = "{}/genome_metadata.json".format(current_directory)
+    params:
+        majority_SNPs_matrix = "{}/SNPs_in_majority{}_matrix.fasta".format(work_data_dir, majority_threshold),
+        tmp_dist_matrix ="{}/majority_distance_dir/kSNPdist.matrix".format(current_directory),
+        tmp_dist_report ="{}/majority_distance_dir/kSNPdist.report".format(current_directory),
+    output:
+        dist_matrix = "{}/majority_kSNPdist.matrix".format(work_data_dir),
+        dist_report = "{}/majority_kSNPdist.report".format(work_data_dir),   
+        out_dist_matrix = "{}/Majority_SNPs/majority_kSNPdist.matrix".format(data["output_data_dir"]),
+        out_dist_report = "{}/Majority_SNPs/majority_kSNPdist.report".format(data["output_data_dir"]),   
+    shell:
+        """
+        mkdir -p majority_distance_dir 
+
+        cd majority_distance_dir
+
+        kSNPdist {params.majority_SNPs_matrix}
+
+        cd ../
+
+        cp {params.tmp_dist_report} {output.dist_report}
+
+        cp {params.tmp_dist_matrix} {output.dist_matrix}
+
+        cp {output.dist_matrix} {output.out_dist_matrix}
+        
+        cp {output.dist_report} {output.out_dist_report}
+
+        """
+
+rule organize_files:
+    input:
+        all_dist_report = "{}/all_kSNPdist.report".format(work_data_dir),
+        core_dist_report = "{}/core_kSNPdist.report".format(work_data_dir),
+        majority_dist_report = "{}/majority_kSNPdist.report".format(work_data_dir),
+        ksnp_touchpoint = "{}/kSNP_command_touchpoint.txt".format(work_data_dir),  
+        phylo_xml_touchpoint = "{}/phylo_xml_trees_touchpoint.txt".format(work_data_dir),
+        config = "{}/config.json".format(current_directory)
+    output:
+        touchpoint = "{}/organize_files_touchpoint.txt".format(work_data_dir)
+    shell:
+        """
+        whole_genome_snp_utils organize-output-files {input.config}
+
+        whole_genome_snp_utils fix-ksnpdist-outputs {input.config}
+
+        whole_genome_snp_utils run-tree-to-svg {input.config}
+
+        touch {output.touchpoint}
+        """
+rule write_report:
+    input:
+        config = "{}/config.json".format(current_directory),
+        input_touchpoint = "{}/organize_files_touchpoint.txt".format(work_data_dir)
+    output:
+        html_out = "{}/WholeGenomeSNP_Report.html".format(data["output_data_dir"])
+    shell:
+        """
+        whole_genome_snp_utils write-html-report {input.config} {output.html_out}
+        """

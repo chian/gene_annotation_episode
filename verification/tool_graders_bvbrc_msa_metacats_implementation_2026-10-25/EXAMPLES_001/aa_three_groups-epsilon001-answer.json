@@ -1,0 +1,2708 @@
+{
+  "statistics": {
+    "status": "ok",
+    "analysis_id": "aa_three_groups",
+    "category_id": "comparison",
+    "method_parameters": {
+      "alphabet": "aa",
+      "epsilon": 0.01,
+      "nucleotide_padding": "ACGT_at_variable_sites",
+      "omnibus_continuity": "r_default_2x2_min_delta",
+      "pair_df_policy": "native_source",
+      "pair_zero_policy": "retain_math_and_native_zero_to_one",
+      "selected_pairs": [
+        [
+          "A",
+          "B"
+        ],
+        [
+          "A",
+          "C"
+        ],
+        [
+          "B",
+          "C"
+        ]
+      ],
+      "distribution_backend": {
+        "name": "scipy_chi2_integer_df_logtail_v1",
+        "version": "1.18.1"
+      }
+    },
+    "omnibus": [
+      {
+        "test_id": "metacats_test:b5bd98034dd8f32dffc7d19b34580260a6a18db3ac9c59c43b3a4486890201a8",
+        "kind": "omnibus",
+        "category_id": "comparison",
+        "column_0based": 1,
+        "group_ids": [
+          "A",
+          "B",
+          "C"
+        ],
+        "raw_table_id": "metacats_counts:4871f739150a3896f624137dbb33b4fac8dcb19f192b5dc49ac7102603dea705",
+        "raw_symbols": [
+          "A",
+          "C",
+          "D"
+        ],
+        "augmented_symbols": [
+          "A",
+          "C",
+          "D"
+        ],
+        "r_table_group_count": 3,
+        "epsilon": {
+          "value": 0.01,
+          "state": "available",
+          "unit": "pseudocount_per_cell",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:b5bd98034dd8f32dffc7d19b34580260a6a18db3ac9c59c43b3a4486890201a8",
+          "method_id": "metacats_omnibus_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "augmented_counts": [
+          [
+            6.01,
+            0.01,
+            0.01
+          ],
+          [
+            0.01,
+            6.01,
+            0.01
+          ],
+          [
+            0.01,
+            0.01,
+            6.01
+          ]
+        ],
+        "expected_counts": [
+          [
+            2.0100000000000002,
+            2.0100000000000002,
+            2.0100000000000002
+          ],
+          [
+            2.0100000000000002,
+            2.0100000000000002,
+            2.0100000000000002
+          ],
+          [
+            2.0100000000000002,
+            2.0100000000000002,
+            2.0100000000000002
+          ]
+        ],
+        "augmented_total": {
+          "value": 18.089999999999996,
+          "state": "available",
+          "unit": "augmented_observations",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:b5bd98034dd8f32dffc7d19b34580260a6a18db3ac9c59c43b3a4486890201a8",
+          "method_id": "metacats_omnibus_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "continuity_delta": {
+          "value": 0.0,
+          "state": "available",
+          "unit": "augmented_observations",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:b5bd98034dd8f32dffc7d19b34580260a6a18db3ac9c59c43b3a4486890201a8",
+          "method_id": "metacats_omnibus_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "chi_square": {
+          "value": 35.82089552238805,
+          "state": "available",
+          "unit": "chi_square",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:b5bd98034dd8f32dffc7d19b34580260a6a18db3ac9c59c43b3a4486890201a8",
+          "method_id": "metacats_omnibus_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "df": {
+          "value": 4,
+          "state": "available",
+          "unit": "degrees_of_freedom",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:b5bd98034dd8f32dffc7d19b34580260a6a18db3ac9c59c43b3a4486890201a8",
+          "method_id": "metacats_omnibus_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "mathematical_p": {
+          "value": 3.149873995769552e-07,
+          "state": "available",
+          "unit": "probability",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:b5bd98034dd8f32dffc7d19b34580260a6a18db3ac9c59c43b3a4486890201a8",
+          "method_id": "metacats_omnibus_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "log_p": {
+          "value": -14.970733200263853,
+          "state": "available",
+          "unit": "natural_log_probability",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:b5bd98034dd8f32dffc7d19b34580260a6a18db3ac9c59c43b3a4486890201a8",
+          "method_id": "metacats_omnibus_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "native_zero_rule_p": {
+          "value": null,
+          "state": "not_measured",
+          "unit": "probability",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:b5bd98034dd8f32dffc7d19b34580260a6a18db3ac9c59c43b3a4486890201a8",
+          "method_id": "metacats_omnibus_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "numerical_state": "finite",
+        "method_id": "metacats_omnibus_aa_native_source_v1",
+        "native_observation_ids": [],
+        "requirements": []
+      }
+    ],
+    "pairs": [
+      {
+        "test_id": "metacats_test:a1baab47fa289942b262296a1d6afb5b44f6c6963e956af44fe86ea91ab7e9ba",
+        "kind": "pairwise",
+        "category_id": "comparison",
+        "column_0based": 1,
+        "group_ids": [
+          "A",
+          "B"
+        ],
+        "raw_table_id": "metacats_counts:4871f739150a3896f624137dbb33b4fac8dcb19f192b5dc49ac7102603dea705",
+        "raw_symbols": [
+          "A",
+          "C",
+          "D"
+        ],
+        "augmented_symbols": [
+          "A",
+          "C",
+          "D"
+        ],
+        "r_table_group_count": 3,
+        "epsilon": {
+          "value": 0.01,
+          "state": "available",
+          "unit": "pseudocount_per_cell",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:a1baab47fa289942b262296a1d6afb5b44f6c6963e956af44fe86ea91ab7e9ba",
+          "method_id": "metacats_pairwise_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "augmented_counts": [
+          [
+            6.01,
+            0.01
+          ],
+          [
+            0.01,
+            6.01
+          ],
+          [
+            0.01,
+            0.01
+          ]
+        ],
+        "expected_counts": [
+          [
+            3.01,
+            3.01
+          ],
+          [
+            3.01,
+            3.01
+          ],
+          [
+            0.01,
+            0.01
+          ]
+        ],
+        "augmented_total": {
+          "value": 12.059999999999999,
+          "state": "available",
+          "unit": "augmented_observations",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:a1baab47fa289942b262296a1d6afb5b44f6c6963e956af44fe86ea91ab7e9ba",
+          "method_id": "metacats_pairwise_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "continuity_delta": {
+          "value": 0.0,
+          "state": "available",
+          "unit": "augmented_observations",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:a1baab47fa289942b262296a1d6afb5b44f6c6963e956af44fe86ea91ab7e9ba",
+          "method_id": "metacats_pairwise_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "chi_square": {
+          "value": 11.96013289036545,
+          "state": "available",
+          "unit": "chi_square",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:a1baab47fa289942b262296a1d6afb5b44f6c6963e956af44fe86ea91ab7e9ba",
+          "method_id": "metacats_pairwise_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "df": {
+          "value": 4,
+          "state": "available",
+          "unit": "degrees_of_freedom",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:a1baab47fa289942b262296a1d6afb5b44f6c6963e956af44fe86ea91ab7e9ba",
+          "method_id": "metacats_pairwise_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "mathematical_p": {
+          "value": 0.01765020273817585,
+          "state": "available",
+          "unit": "probability",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:a1baab47fa289942b262296a1d6afb5b44f6c6963e956af44fe86ea91ab7e9ba",
+          "method_id": "metacats_pairwise_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "log_p": {
+          "value": -4.0370080090866,
+          "state": "available",
+          "unit": "natural_log_probability",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:a1baab47fa289942b262296a1d6afb5b44f6c6963e956af44fe86ea91ab7e9ba",
+          "method_id": "metacats_pairwise_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "native_zero_rule_p": {
+          "value": 0.01765020273817585,
+          "state": "available",
+          "unit": "probability",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:a1baab47fa289942b262296a1d6afb5b44f6c6963e956af44fe86ea91ab7e9ba",
+          "method_id": "metacats_pairwise_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "numerical_state": "finite",
+        "method_id": "metacats_pairwise_aa_native_source_v1",
+        "native_observation_ids": [],
+        "requirements": []
+      },
+      {
+        "test_id": "metacats_test:6a30f2b4ff28db257d0aef772610cc21f19229f0a9b52e9ee9801d20ae875e4c",
+        "kind": "pairwise",
+        "category_id": "comparison",
+        "column_0based": 1,
+        "group_ids": [
+          "A",
+          "C"
+        ],
+        "raw_table_id": "metacats_counts:4871f739150a3896f624137dbb33b4fac8dcb19f192b5dc49ac7102603dea705",
+        "raw_symbols": [
+          "A",
+          "C",
+          "D"
+        ],
+        "augmented_symbols": [
+          "A",
+          "C",
+          "D"
+        ],
+        "r_table_group_count": 3,
+        "epsilon": {
+          "value": 0.01,
+          "state": "available",
+          "unit": "pseudocount_per_cell",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:6a30f2b4ff28db257d0aef772610cc21f19229f0a9b52e9ee9801d20ae875e4c",
+          "method_id": "metacats_pairwise_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "augmented_counts": [
+          [
+            6.01,
+            0.01
+          ],
+          [
+            0.01,
+            0.01
+          ],
+          [
+            0.01,
+            6.01
+          ]
+        ],
+        "expected_counts": [
+          [
+            3.01,
+            3.01
+          ],
+          [
+            0.01,
+            0.01
+          ],
+          [
+            3.01,
+            3.01
+          ]
+        ],
+        "augmented_total": {
+          "value": 12.059999999999999,
+          "state": "available",
+          "unit": "augmented_observations",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:6a30f2b4ff28db257d0aef772610cc21f19229f0a9b52e9ee9801d20ae875e4c",
+          "method_id": "metacats_pairwise_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "continuity_delta": {
+          "value": 0.0,
+          "state": "available",
+          "unit": "augmented_observations",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:6a30f2b4ff28db257d0aef772610cc21f19229f0a9b52e9ee9801d20ae875e4c",
+          "method_id": "metacats_pairwise_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "chi_square": {
+          "value": 11.96013289036545,
+          "state": "available",
+          "unit": "chi_square",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:6a30f2b4ff28db257d0aef772610cc21f19229f0a9b52e9ee9801d20ae875e4c",
+          "method_id": "metacats_pairwise_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "df": {
+          "value": 4,
+          "state": "available",
+          "unit": "degrees_of_freedom",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:6a30f2b4ff28db257d0aef772610cc21f19229f0a9b52e9ee9801d20ae875e4c",
+          "method_id": "metacats_pairwise_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "mathematical_p": {
+          "value": 0.01765020273817585,
+          "state": "available",
+          "unit": "probability",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:6a30f2b4ff28db257d0aef772610cc21f19229f0a9b52e9ee9801d20ae875e4c",
+          "method_id": "metacats_pairwise_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "log_p": {
+          "value": -4.0370080090866,
+          "state": "available",
+          "unit": "natural_log_probability",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:6a30f2b4ff28db257d0aef772610cc21f19229f0a9b52e9ee9801d20ae875e4c",
+          "method_id": "metacats_pairwise_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "native_zero_rule_p": {
+          "value": 0.01765020273817585,
+          "state": "available",
+          "unit": "probability",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:6a30f2b4ff28db257d0aef772610cc21f19229f0a9b52e9ee9801d20ae875e4c",
+          "method_id": "metacats_pairwise_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "numerical_state": "finite",
+        "method_id": "metacats_pairwise_aa_native_source_v1",
+        "native_observation_ids": [],
+        "requirements": []
+      },
+      {
+        "test_id": "metacats_test:2059e551fa116a79f367fc6e0877498c5a62c7e386338e33a835f43cba204fa7",
+        "kind": "pairwise",
+        "category_id": "comparison",
+        "column_0based": 1,
+        "group_ids": [
+          "B",
+          "C"
+        ],
+        "raw_table_id": "metacats_counts:4871f739150a3896f624137dbb33b4fac8dcb19f192b5dc49ac7102603dea705",
+        "raw_symbols": [
+          "A",
+          "C",
+          "D"
+        ],
+        "augmented_symbols": [
+          "A",
+          "C",
+          "D"
+        ],
+        "r_table_group_count": 3,
+        "epsilon": {
+          "value": 0.01,
+          "state": "available",
+          "unit": "pseudocount_per_cell",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:2059e551fa116a79f367fc6e0877498c5a62c7e386338e33a835f43cba204fa7",
+          "method_id": "metacats_pairwise_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "augmented_counts": [
+          [
+            0.01,
+            0.01
+          ],
+          [
+            6.01,
+            0.01
+          ],
+          [
+            0.01,
+            6.01
+          ]
+        ],
+        "expected_counts": [
+          [
+            0.01,
+            0.01
+          ],
+          [
+            3.01,
+            3.01
+          ],
+          [
+            3.01,
+            3.01
+          ]
+        ],
+        "augmented_total": {
+          "value": 12.059999999999999,
+          "state": "available",
+          "unit": "augmented_observations",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:2059e551fa116a79f367fc6e0877498c5a62c7e386338e33a835f43cba204fa7",
+          "method_id": "metacats_pairwise_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "continuity_delta": {
+          "value": 0.0,
+          "state": "available",
+          "unit": "augmented_observations",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:2059e551fa116a79f367fc6e0877498c5a62c7e386338e33a835f43cba204fa7",
+          "method_id": "metacats_pairwise_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "chi_square": {
+          "value": 11.96013289036545,
+          "state": "available",
+          "unit": "chi_square",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:2059e551fa116a79f367fc6e0877498c5a62c7e386338e33a835f43cba204fa7",
+          "method_id": "metacats_pairwise_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "df": {
+          "value": 4,
+          "state": "available",
+          "unit": "degrees_of_freedom",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:2059e551fa116a79f367fc6e0877498c5a62c7e386338e33a835f43cba204fa7",
+          "method_id": "metacats_pairwise_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "mathematical_p": {
+          "value": 0.01765020273817585,
+          "state": "available",
+          "unit": "probability",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:2059e551fa116a79f367fc6e0877498c5a62c7e386338e33a835f43cba204fa7",
+          "method_id": "metacats_pairwise_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "log_p": {
+          "value": -4.0370080090866,
+          "state": "available",
+          "unit": "natural_log_probability",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:2059e551fa116a79f367fc6e0877498c5a62c7e386338e33a835f43cba204fa7",
+          "method_id": "metacats_pairwise_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "native_zero_rule_p": {
+          "value": 0.01765020273817585,
+          "state": "available",
+          "unit": "probability",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:2059e551fa116a79f367fc6e0877498c5a62c7e386338e33a835f43cba204fa7",
+          "method_id": "metacats_pairwise_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "numerical_state": "finite",
+        "method_id": "metacats_pairwise_aa_native_source_v1",
+        "native_observation_ids": [],
+        "requirements": []
+      }
+    ],
+    "exclusions": [
+      {
+        "column_0based": 0,
+        "test_kind": "omnibus",
+        "group_pair": null,
+        "reason": "conserved_placeholder"
+      },
+      {
+        "column_0based": 0,
+        "test_kind": "pairwise",
+        "group_pair": [
+          "A",
+          "B"
+        ],
+        "reason": "conserved_placeholder"
+      },
+      {
+        "column_0based": 0,
+        "test_kind": "pairwise",
+        "group_pair": [
+          "A",
+          "C"
+        ],
+        "reason": "conserved_placeholder"
+      },
+      {
+        "column_0based": 0,
+        "test_kind": "pairwise",
+        "group_pair": [
+          "B",
+          "C"
+        ],
+        "reason": "conserved_placeholder"
+      },
+      {
+        "column_0based": 2,
+        "test_kind": "omnibus",
+        "group_pair": null,
+        "reason": "conserved_placeholder"
+      },
+      {
+        "column_0based": 2,
+        "test_kind": "pairwise",
+        "group_pair": [
+          "A",
+          "B"
+        ],
+        "reason": "conserved_placeholder"
+      },
+      {
+        "column_0based": 2,
+        "test_kind": "pairwise",
+        "group_pair": [
+          "A",
+          "C"
+        ],
+        "reason": "conserved_placeholder"
+      },
+      {
+        "column_0based": 2,
+        "test_kind": "pairwise",
+        "group_pair": [
+          "B",
+          "C"
+        ],
+        "reason": "conserved_placeholder"
+      },
+      {
+        "column_0based": 3,
+        "test_kind": "omnibus",
+        "group_pair": null,
+        "reason": "all_missing"
+      },
+      {
+        "column_0based": 3,
+        "test_kind": "pairwise",
+        "group_pair": [
+          "A",
+          "B"
+        ],
+        "reason": "all_missing"
+      },
+      {
+        "column_0based": 3,
+        "test_kind": "pairwise",
+        "group_pair": [
+          "A",
+          "C"
+        ],
+        "reason": "all_missing"
+      },
+      {
+        "column_0based": 3,
+        "test_kind": "pairwise",
+        "group_pair": [
+          "B",
+          "C"
+        ],
+        "reason": "all_missing"
+      }
+    ],
+    "requirements": [],
+    "diagnostics": []
+  },
+  "effects": {
+    "status": "partial",
+    "analysis_id": "aa_three_groups",
+    "category_id": "comparison",
+    "zero_margin_policy": "drop_for_raw_effect_only",
+    "sites": [
+      {
+        "raw_table_id": "metacats_counts:ba9384e0d0228035792350cc379ef608c37f9610c63d28ce68845e3e024c020e",
+        "column_0based": 0,
+        "raw_chi_square": {
+          "value": null,
+          "state": "missing",
+          "unit": "chi_square",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_counts:ba9384e0d0228035792350cc379ef608c37f9610c63d28ce68845e3e024c020e",
+          "method_id": "metacats_raw_descriptive_effect_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "cramers_v": {
+          "value": null,
+          "state": "missing",
+          "unit": "fraction",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": 0.0,
+          "population_id": "metacats_counts:ba9384e0d0228035792350cc379ef608c37f9610c63d28ce68845e3e024c020e",
+          "method_id": "metacats_raw_descriptive_effect_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "effective_symbol_count": 1,
+        "effective_group_count": 3,
+        "raw_expected": [
+          [
+            6.0,
+            6.0,
+            6.0
+          ]
+        ],
+        "augmented_adequacy": null,
+        "raw_adequacy": {
+          "table_id": "metacats_counts:ba9384e0d0228035792350cc379ef608c37f9610c63d28ce68845e3e024c020e",
+          "minimum_expected": {
+            "value": 6.0,
+            "state": "available",
+            "unit": "expected_observations",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "metacats_counts:ba9384e0d0228035792350cc379ef608c37f9610c63d28ce68845e3e024c020e",
+            "method_id": "metacats_raw_descriptive_effect_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                  "byte_count": 180
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "cells_below_5": {
+            "value": 0,
+            "state": "available",
+            "unit": "cells",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "metacats_counts:ba9384e0d0228035792350cc379ef608c37f9610c63d28ce68845e3e024c020e",
+            "method_id": "metacats_raw_descriptive_effect_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                  "byte_count": 180
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "cells_below_1": {
+            "value": 0,
+            "state": "available",
+            "unit": "cells",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "metacats_counts:ba9384e0d0228035792350cc379ef608c37f9610c63d28ce68845e3e024c020e",
+            "method_id": "metacats_raw_descriptive_effect_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                  "byte_count": 180
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "cell_denominator": {
+            "value": 3,
+            "state": "available",
+            "unit": "cells",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "metacats_counts:ba9384e0d0228035792350cc379ef608c37f9610c63d28ce68845e3e024c020e",
+            "method_id": "metacats_raw_descriptive_effect_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                  "byte_count": 180
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": []
+          }
+        },
+        "positive_observed_cells_below_5": 0,
+        "native_fewer_5_recalculated": "N",
+        "pairs": [
+          {
+            "group_ids": [
+              "A",
+              "B"
+            ],
+            "frequency_deltas": [
+              {
+                "symbol": "A",
+                "value": {
+                  "value": 0.0,
+                  "state": "available",
+                  "unit": "signed_fraction",
+                  "origin": "calculated",
+                  "numerator": null,
+                  "denominator": null,
+                  "population_id": "metacats_counts:ba9384e0d0228035792350cc379ef608c37f9610c63d28ce68845e3e024c020e",
+                  "method_id": "metacats_raw_descriptive_effect_v1",
+                  "evidence": [
+                    {
+                      "content": {
+                        "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "artifact_field": "artifact_ref",
+                        "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                        "byte_count": 180
+                      },
+                      "pointer": ""
+                    }
+                  ],
+                  "uncertainty": null,
+                  "requirement_ids": []
+                }
+              }
+            ],
+            "total_variation": {
+              "value": 0.0,
+              "state": "available",
+              "unit": "fraction",
+              "origin": "calculated",
+              "numerator": null,
+              "denominator": null,
+              "population_id": "metacats_counts:ba9384e0d0228035792350cc379ef608c37f9610c63d28ce68845e3e024c020e",
+              "method_id": "metacats_raw_descriptive_effect_v1",
+              "evidence": [
+                {
+                  "content": {
+                    "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                    "artifact_field": "artifact_ref",
+                    "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                    "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                    "byte_count": 180
+                  },
+                  "pointer": ""
+                }
+              ],
+              "uncertainty": null,
+              "requirement_ids": []
+            }
+          },
+          {
+            "group_ids": [
+              "A",
+              "C"
+            ],
+            "frequency_deltas": [
+              {
+                "symbol": "A",
+                "value": {
+                  "value": 0.0,
+                  "state": "available",
+                  "unit": "signed_fraction",
+                  "origin": "calculated",
+                  "numerator": null,
+                  "denominator": null,
+                  "population_id": "metacats_counts:ba9384e0d0228035792350cc379ef608c37f9610c63d28ce68845e3e024c020e",
+                  "method_id": "metacats_raw_descriptive_effect_v1",
+                  "evidence": [
+                    {
+                      "content": {
+                        "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "artifact_field": "artifact_ref",
+                        "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                        "byte_count": 180
+                      },
+                      "pointer": ""
+                    }
+                  ],
+                  "uncertainty": null,
+                  "requirement_ids": []
+                }
+              }
+            ],
+            "total_variation": {
+              "value": 0.0,
+              "state": "available",
+              "unit": "fraction",
+              "origin": "calculated",
+              "numerator": null,
+              "denominator": null,
+              "population_id": "metacats_counts:ba9384e0d0228035792350cc379ef608c37f9610c63d28ce68845e3e024c020e",
+              "method_id": "metacats_raw_descriptive_effect_v1",
+              "evidence": [
+                {
+                  "content": {
+                    "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                    "artifact_field": "artifact_ref",
+                    "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                    "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                    "byte_count": 180
+                  },
+                  "pointer": ""
+                }
+              ],
+              "uncertainty": null,
+              "requirement_ids": []
+            }
+          },
+          {
+            "group_ids": [
+              "B",
+              "C"
+            ],
+            "frequency_deltas": [
+              {
+                "symbol": "A",
+                "value": {
+                  "value": 0.0,
+                  "state": "available",
+                  "unit": "signed_fraction",
+                  "origin": "calculated",
+                  "numerator": null,
+                  "denominator": null,
+                  "population_id": "metacats_counts:ba9384e0d0228035792350cc379ef608c37f9610c63d28ce68845e3e024c020e",
+                  "method_id": "metacats_raw_descriptive_effect_v1",
+                  "evidence": [
+                    {
+                      "content": {
+                        "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "artifact_field": "artifact_ref",
+                        "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                        "byte_count": 180
+                      },
+                      "pointer": ""
+                    }
+                  ],
+                  "uncertainty": null,
+                  "requirement_ids": []
+                }
+              }
+            ],
+            "total_variation": {
+              "value": 0.0,
+              "state": "available",
+              "unit": "fraction",
+              "origin": "calculated",
+              "numerator": null,
+              "denominator": null,
+              "population_id": "metacats_counts:ba9384e0d0228035792350cc379ef608c37f9610c63d28ce68845e3e024c020e",
+              "method_id": "metacats_raw_descriptive_effect_v1",
+              "evidence": [
+                {
+                  "content": {
+                    "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                    "artifact_field": "artifact_ref",
+                    "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                    "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                    "byte_count": 180
+                  },
+                  "pointer": ""
+                }
+              ],
+              "uncertainty": null,
+              "requirement_ids": []
+            }
+          }
+        ]
+      },
+      {
+        "raw_table_id": "metacats_counts:4871f739150a3896f624137dbb33b4fac8dcb19f192b5dc49ac7102603dea705",
+        "column_0based": 1,
+        "raw_chi_square": {
+          "value": 35.99999999999999,
+          "state": "available",
+          "unit": "chi_square",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_counts:4871f739150a3896f624137dbb33b4fac8dcb19f192b5dc49ac7102603dea705",
+          "method_id": "metacats_raw_descriptive_effect_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "cramers_v": {
+          "value": 0.9999999999999999,
+          "state": "available",
+          "unit": "fraction",
+          "origin": "calculated",
+          "numerator": 35.99999999999999,
+          "denominator": 36.0,
+          "population_id": "metacats_counts:4871f739150a3896f624137dbb33b4fac8dcb19f192b5dc49ac7102603dea705",
+          "method_id": "metacats_raw_descriptive_effect_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "effective_symbol_count": 3,
+        "effective_group_count": 3,
+        "raw_expected": [
+          [
+            2.0,
+            2.0,
+            2.0
+          ],
+          [
+            2.0,
+            2.0,
+            2.0
+          ],
+          [
+            2.0,
+            2.0,
+            2.0
+          ]
+        ],
+        "augmented_adequacy": null,
+        "raw_adequacy": {
+          "table_id": "metacats_counts:4871f739150a3896f624137dbb33b4fac8dcb19f192b5dc49ac7102603dea705",
+          "minimum_expected": {
+            "value": 2.0,
+            "state": "available",
+            "unit": "expected_observations",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "metacats_counts:4871f739150a3896f624137dbb33b4fac8dcb19f192b5dc49ac7102603dea705",
+            "method_id": "metacats_raw_descriptive_effect_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                  "byte_count": 180
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "cells_below_5": {
+            "value": 9,
+            "state": "available",
+            "unit": "cells",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "metacats_counts:4871f739150a3896f624137dbb33b4fac8dcb19f192b5dc49ac7102603dea705",
+            "method_id": "metacats_raw_descriptive_effect_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                  "byte_count": 180
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "cells_below_1": {
+            "value": 0,
+            "state": "available",
+            "unit": "cells",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "metacats_counts:4871f739150a3896f624137dbb33b4fac8dcb19f192b5dc49ac7102603dea705",
+            "method_id": "metacats_raw_descriptive_effect_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                  "byte_count": 180
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "cell_denominator": {
+            "value": 9,
+            "state": "available",
+            "unit": "cells",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "metacats_counts:4871f739150a3896f624137dbb33b4fac8dcb19f192b5dc49ac7102603dea705",
+            "method_id": "metacats_raw_descriptive_effect_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                  "byte_count": 180
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": []
+          }
+        },
+        "positive_observed_cells_below_5": 0,
+        "native_fewer_5_recalculated": "N",
+        "pairs": [
+          {
+            "group_ids": [
+              "A",
+              "B"
+            ],
+            "frequency_deltas": [
+              {
+                "symbol": "A",
+                "value": {
+                  "value": 1.0,
+                  "state": "available",
+                  "unit": "signed_fraction",
+                  "origin": "calculated",
+                  "numerator": null,
+                  "denominator": null,
+                  "population_id": "metacats_counts:4871f739150a3896f624137dbb33b4fac8dcb19f192b5dc49ac7102603dea705",
+                  "method_id": "metacats_raw_descriptive_effect_v1",
+                  "evidence": [
+                    {
+                      "content": {
+                        "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "artifact_field": "artifact_ref",
+                        "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                        "byte_count": 180
+                      },
+                      "pointer": ""
+                    }
+                  ],
+                  "uncertainty": null,
+                  "requirement_ids": []
+                }
+              },
+              {
+                "symbol": "C",
+                "value": {
+                  "value": -1.0,
+                  "state": "available",
+                  "unit": "signed_fraction",
+                  "origin": "calculated",
+                  "numerator": null,
+                  "denominator": null,
+                  "population_id": "metacats_counts:4871f739150a3896f624137dbb33b4fac8dcb19f192b5dc49ac7102603dea705",
+                  "method_id": "metacats_raw_descriptive_effect_v1",
+                  "evidence": [
+                    {
+                      "content": {
+                        "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "artifact_field": "artifact_ref",
+                        "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                        "byte_count": 180
+                      },
+                      "pointer": ""
+                    }
+                  ],
+                  "uncertainty": null,
+                  "requirement_ids": []
+                }
+              },
+              {
+                "symbol": "D",
+                "value": {
+                  "value": 0.0,
+                  "state": "available",
+                  "unit": "signed_fraction",
+                  "origin": "calculated",
+                  "numerator": null,
+                  "denominator": null,
+                  "population_id": "metacats_counts:4871f739150a3896f624137dbb33b4fac8dcb19f192b5dc49ac7102603dea705",
+                  "method_id": "metacats_raw_descriptive_effect_v1",
+                  "evidence": [
+                    {
+                      "content": {
+                        "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "artifact_field": "artifact_ref",
+                        "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                        "byte_count": 180
+                      },
+                      "pointer": ""
+                    }
+                  ],
+                  "uncertainty": null,
+                  "requirement_ids": []
+                }
+              }
+            ],
+            "total_variation": {
+              "value": 1.0,
+              "state": "available",
+              "unit": "fraction",
+              "origin": "calculated",
+              "numerator": null,
+              "denominator": null,
+              "population_id": "metacats_counts:4871f739150a3896f624137dbb33b4fac8dcb19f192b5dc49ac7102603dea705",
+              "method_id": "metacats_raw_descriptive_effect_v1",
+              "evidence": [
+                {
+                  "content": {
+                    "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                    "artifact_field": "artifact_ref",
+                    "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                    "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                    "byte_count": 180
+                  },
+                  "pointer": ""
+                }
+              ],
+              "uncertainty": null,
+              "requirement_ids": []
+            }
+          },
+          {
+            "group_ids": [
+              "A",
+              "C"
+            ],
+            "frequency_deltas": [
+              {
+                "symbol": "A",
+                "value": {
+                  "value": 1.0,
+                  "state": "available",
+                  "unit": "signed_fraction",
+                  "origin": "calculated",
+                  "numerator": null,
+                  "denominator": null,
+                  "population_id": "metacats_counts:4871f739150a3896f624137dbb33b4fac8dcb19f192b5dc49ac7102603dea705",
+                  "method_id": "metacats_raw_descriptive_effect_v1",
+                  "evidence": [
+                    {
+                      "content": {
+                        "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "artifact_field": "artifact_ref",
+                        "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                        "byte_count": 180
+                      },
+                      "pointer": ""
+                    }
+                  ],
+                  "uncertainty": null,
+                  "requirement_ids": []
+                }
+              },
+              {
+                "symbol": "C",
+                "value": {
+                  "value": 0.0,
+                  "state": "available",
+                  "unit": "signed_fraction",
+                  "origin": "calculated",
+                  "numerator": null,
+                  "denominator": null,
+                  "population_id": "metacats_counts:4871f739150a3896f624137dbb33b4fac8dcb19f192b5dc49ac7102603dea705",
+                  "method_id": "metacats_raw_descriptive_effect_v1",
+                  "evidence": [
+                    {
+                      "content": {
+                        "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "artifact_field": "artifact_ref",
+                        "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                        "byte_count": 180
+                      },
+                      "pointer": ""
+                    }
+                  ],
+                  "uncertainty": null,
+                  "requirement_ids": []
+                }
+              },
+              {
+                "symbol": "D",
+                "value": {
+                  "value": -1.0,
+                  "state": "available",
+                  "unit": "signed_fraction",
+                  "origin": "calculated",
+                  "numerator": null,
+                  "denominator": null,
+                  "population_id": "metacats_counts:4871f739150a3896f624137dbb33b4fac8dcb19f192b5dc49ac7102603dea705",
+                  "method_id": "metacats_raw_descriptive_effect_v1",
+                  "evidence": [
+                    {
+                      "content": {
+                        "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "artifact_field": "artifact_ref",
+                        "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                        "byte_count": 180
+                      },
+                      "pointer": ""
+                    }
+                  ],
+                  "uncertainty": null,
+                  "requirement_ids": []
+                }
+              }
+            ],
+            "total_variation": {
+              "value": 1.0,
+              "state": "available",
+              "unit": "fraction",
+              "origin": "calculated",
+              "numerator": null,
+              "denominator": null,
+              "population_id": "metacats_counts:4871f739150a3896f624137dbb33b4fac8dcb19f192b5dc49ac7102603dea705",
+              "method_id": "metacats_raw_descriptive_effect_v1",
+              "evidence": [
+                {
+                  "content": {
+                    "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                    "artifact_field": "artifact_ref",
+                    "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                    "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                    "byte_count": 180
+                  },
+                  "pointer": ""
+                }
+              ],
+              "uncertainty": null,
+              "requirement_ids": []
+            }
+          },
+          {
+            "group_ids": [
+              "B",
+              "C"
+            ],
+            "frequency_deltas": [
+              {
+                "symbol": "A",
+                "value": {
+                  "value": 0.0,
+                  "state": "available",
+                  "unit": "signed_fraction",
+                  "origin": "calculated",
+                  "numerator": null,
+                  "denominator": null,
+                  "population_id": "metacats_counts:4871f739150a3896f624137dbb33b4fac8dcb19f192b5dc49ac7102603dea705",
+                  "method_id": "metacats_raw_descriptive_effect_v1",
+                  "evidence": [
+                    {
+                      "content": {
+                        "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "artifact_field": "artifact_ref",
+                        "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                        "byte_count": 180
+                      },
+                      "pointer": ""
+                    }
+                  ],
+                  "uncertainty": null,
+                  "requirement_ids": []
+                }
+              },
+              {
+                "symbol": "C",
+                "value": {
+                  "value": 1.0,
+                  "state": "available",
+                  "unit": "signed_fraction",
+                  "origin": "calculated",
+                  "numerator": null,
+                  "denominator": null,
+                  "population_id": "metacats_counts:4871f739150a3896f624137dbb33b4fac8dcb19f192b5dc49ac7102603dea705",
+                  "method_id": "metacats_raw_descriptive_effect_v1",
+                  "evidence": [
+                    {
+                      "content": {
+                        "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "artifact_field": "artifact_ref",
+                        "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                        "byte_count": 180
+                      },
+                      "pointer": ""
+                    }
+                  ],
+                  "uncertainty": null,
+                  "requirement_ids": []
+                }
+              },
+              {
+                "symbol": "D",
+                "value": {
+                  "value": -1.0,
+                  "state": "available",
+                  "unit": "signed_fraction",
+                  "origin": "calculated",
+                  "numerator": null,
+                  "denominator": null,
+                  "population_id": "metacats_counts:4871f739150a3896f624137dbb33b4fac8dcb19f192b5dc49ac7102603dea705",
+                  "method_id": "metacats_raw_descriptive_effect_v1",
+                  "evidence": [
+                    {
+                      "content": {
+                        "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "artifact_field": "artifact_ref",
+                        "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                        "byte_count": 180
+                      },
+                      "pointer": ""
+                    }
+                  ],
+                  "uncertainty": null,
+                  "requirement_ids": []
+                }
+              }
+            ],
+            "total_variation": {
+              "value": 1.0,
+              "state": "available",
+              "unit": "fraction",
+              "origin": "calculated",
+              "numerator": null,
+              "denominator": null,
+              "population_id": "metacats_counts:4871f739150a3896f624137dbb33b4fac8dcb19f192b5dc49ac7102603dea705",
+              "method_id": "metacats_raw_descriptive_effect_v1",
+              "evidence": [
+                {
+                  "content": {
+                    "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                    "artifact_field": "artifact_ref",
+                    "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                    "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                    "byte_count": 180
+                  },
+                  "pointer": ""
+                }
+              ],
+              "uncertainty": null,
+              "requirement_ids": []
+            }
+          }
+        ]
+      },
+      {
+        "raw_table_id": "metacats_counts:273cfeb6ad8d7b79a795835822860415e9477606392596054f4f1bfd145e6b43",
+        "column_0based": 2,
+        "raw_chi_square": {
+          "value": null,
+          "state": "missing",
+          "unit": "chi_square",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_counts:273cfeb6ad8d7b79a795835822860415e9477606392596054f4f1bfd145e6b43",
+          "method_id": "metacats_raw_descriptive_effect_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "cramers_v": {
+          "value": null,
+          "state": "missing",
+          "unit": "fraction",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": 0.0,
+          "population_id": "metacats_counts:273cfeb6ad8d7b79a795835822860415e9477606392596054f4f1bfd145e6b43",
+          "method_id": "metacats_raw_descriptive_effect_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "effective_symbol_count": 1,
+        "effective_group_count": 3,
+        "raw_expected": [
+          [
+            6.0,
+            6.0,
+            6.0
+          ]
+        ],
+        "augmented_adequacy": null,
+        "raw_adequacy": {
+          "table_id": "metacats_counts:273cfeb6ad8d7b79a795835822860415e9477606392596054f4f1bfd145e6b43",
+          "minimum_expected": {
+            "value": 6.0,
+            "state": "available",
+            "unit": "expected_observations",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "metacats_counts:273cfeb6ad8d7b79a795835822860415e9477606392596054f4f1bfd145e6b43",
+            "method_id": "metacats_raw_descriptive_effect_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                  "byte_count": 180
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "cells_below_5": {
+            "value": 0,
+            "state": "available",
+            "unit": "cells",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "metacats_counts:273cfeb6ad8d7b79a795835822860415e9477606392596054f4f1bfd145e6b43",
+            "method_id": "metacats_raw_descriptive_effect_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                  "byte_count": 180
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "cells_below_1": {
+            "value": 0,
+            "state": "available",
+            "unit": "cells",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "metacats_counts:273cfeb6ad8d7b79a795835822860415e9477606392596054f4f1bfd145e6b43",
+            "method_id": "metacats_raw_descriptive_effect_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                  "byte_count": 180
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "cell_denominator": {
+            "value": 3,
+            "state": "available",
+            "unit": "cells",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "metacats_counts:273cfeb6ad8d7b79a795835822860415e9477606392596054f4f1bfd145e6b43",
+            "method_id": "metacats_raw_descriptive_effect_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                  "byte_count": 180
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": []
+          }
+        },
+        "positive_observed_cells_below_5": 0,
+        "native_fewer_5_recalculated": "N",
+        "pairs": [
+          {
+            "group_ids": [
+              "A",
+              "B"
+            ],
+            "frequency_deltas": [
+              {
+                "symbol": "C",
+                "value": {
+                  "value": 0.0,
+                  "state": "available",
+                  "unit": "signed_fraction",
+                  "origin": "calculated",
+                  "numerator": null,
+                  "denominator": null,
+                  "population_id": "metacats_counts:273cfeb6ad8d7b79a795835822860415e9477606392596054f4f1bfd145e6b43",
+                  "method_id": "metacats_raw_descriptive_effect_v1",
+                  "evidence": [
+                    {
+                      "content": {
+                        "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "artifact_field": "artifact_ref",
+                        "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                        "byte_count": 180
+                      },
+                      "pointer": ""
+                    }
+                  ],
+                  "uncertainty": null,
+                  "requirement_ids": []
+                }
+              }
+            ],
+            "total_variation": {
+              "value": 0.0,
+              "state": "available",
+              "unit": "fraction",
+              "origin": "calculated",
+              "numerator": null,
+              "denominator": null,
+              "population_id": "metacats_counts:273cfeb6ad8d7b79a795835822860415e9477606392596054f4f1bfd145e6b43",
+              "method_id": "metacats_raw_descriptive_effect_v1",
+              "evidence": [
+                {
+                  "content": {
+                    "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                    "artifact_field": "artifact_ref",
+                    "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                    "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                    "byte_count": 180
+                  },
+                  "pointer": ""
+                }
+              ],
+              "uncertainty": null,
+              "requirement_ids": []
+            }
+          },
+          {
+            "group_ids": [
+              "A",
+              "C"
+            ],
+            "frequency_deltas": [
+              {
+                "symbol": "C",
+                "value": {
+                  "value": 0.0,
+                  "state": "available",
+                  "unit": "signed_fraction",
+                  "origin": "calculated",
+                  "numerator": null,
+                  "denominator": null,
+                  "population_id": "metacats_counts:273cfeb6ad8d7b79a795835822860415e9477606392596054f4f1bfd145e6b43",
+                  "method_id": "metacats_raw_descriptive_effect_v1",
+                  "evidence": [
+                    {
+                      "content": {
+                        "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "artifact_field": "artifact_ref",
+                        "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                        "byte_count": 180
+                      },
+                      "pointer": ""
+                    }
+                  ],
+                  "uncertainty": null,
+                  "requirement_ids": []
+                }
+              }
+            ],
+            "total_variation": {
+              "value": 0.0,
+              "state": "available",
+              "unit": "fraction",
+              "origin": "calculated",
+              "numerator": null,
+              "denominator": null,
+              "population_id": "metacats_counts:273cfeb6ad8d7b79a795835822860415e9477606392596054f4f1bfd145e6b43",
+              "method_id": "metacats_raw_descriptive_effect_v1",
+              "evidence": [
+                {
+                  "content": {
+                    "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                    "artifact_field": "artifact_ref",
+                    "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                    "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                    "byte_count": 180
+                  },
+                  "pointer": ""
+                }
+              ],
+              "uncertainty": null,
+              "requirement_ids": []
+            }
+          },
+          {
+            "group_ids": [
+              "B",
+              "C"
+            ],
+            "frequency_deltas": [
+              {
+                "symbol": "C",
+                "value": {
+                  "value": 0.0,
+                  "state": "available",
+                  "unit": "signed_fraction",
+                  "origin": "calculated",
+                  "numerator": null,
+                  "denominator": null,
+                  "population_id": "metacats_counts:273cfeb6ad8d7b79a795835822860415e9477606392596054f4f1bfd145e6b43",
+                  "method_id": "metacats_raw_descriptive_effect_v1",
+                  "evidence": [
+                    {
+                      "content": {
+                        "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "artifact_field": "artifact_ref",
+                        "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                        "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                        "byte_count": 180
+                      },
+                      "pointer": ""
+                    }
+                  ],
+                  "uncertainty": null,
+                  "requirement_ids": []
+                }
+              }
+            ],
+            "total_variation": {
+              "value": 0.0,
+              "state": "available",
+              "unit": "fraction",
+              "origin": "calculated",
+              "numerator": null,
+              "denominator": null,
+              "population_id": "metacats_counts:273cfeb6ad8d7b79a795835822860415e9477606392596054f4f1bfd145e6b43",
+              "method_id": "metacats_raw_descriptive_effect_v1",
+              "evidence": [
+                {
+                  "content": {
+                    "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                    "artifact_field": "artifact_ref",
+                    "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                    "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                    "byte_count": 180
+                  },
+                  "pointer": ""
+                }
+              ],
+              "uncertainty": null,
+              "requirement_ids": []
+            }
+          }
+        ]
+      },
+      {
+        "raw_table_id": "metacats_counts:57580f1ac89f6f6e642b01c24025d16727035a6caeb57f40300b437126320f25",
+        "column_0based": 3,
+        "raw_chi_square": {
+          "value": null,
+          "state": "missing",
+          "unit": "chi_square",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_counts:57580f1ac89f6f6e642b01c24025d16727035a6caeb57f40300b437126320f25",
+          "method_id": "metacats_raw_descriptive_effect_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "cramers_v": {
+          "value": null,
+          "state": "missing",
+          "unit": "fraction",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": 0,
+          "population_id": "metacats_counts:57580f1ac89f6f6e642b01c24025d16727035a6caeb57f40300b437126320f25",
+          "method_id": "metacats_raw_descriptive_effect_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "effective_symbol_count": 0,
+        "effective_group_count": 0,
+        "raw_expected": [],
+        "augmented_adequacy": null,
+        "raw_adequacy": {
+          "table_id": "metacats_counts:57580f1ac89f6f6e642b01c24025d16727035a6caeb57f40300b437126320f25",
+          "minimum_expected": {
+            "value": null,
+            "state": "missing",
+            "unit": "expected_observations",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "metacats_counts:57580f1ac89f6f6e642b01c24025d16727035a6caeb57f40300b437126320f25",
+            "method_id": "metacats_raw_descriptive_effect_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                  "byte_count": 180
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "cells_below_5": {
+            "value": 0,
+            "state": "available",
+            "unit": "cells",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "metacats_counts:57580f1ac89f6f6e642b01c24025d16727035a6caeb57f40300b437126320f25",
+            "method_id": "metacats_raw_descriptive_effect_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                  "byte_count": 180
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "cells_below_1": {
+            "value": 0,
+            "state": "available",
+            "unit": "cells",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "metacats_counts:57580f1ac89f6f6e642b01c24025d16727035a6caeb57f40300b437126320f25",
+            "method_id": "metacats_raw_descriptive_effect_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                  "byte_count": 180
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": []
+          },
+          "cell_denominator": {
+            "value": 0,
+            "state": "available",
+            "unit": "cells",
+            "origin": "calculated",
+            "numerator": null,
+            "denominator": null,
+            "population_id": "metacats_counts:57580f1ac89f6f6e642b01c24025d16727035a6caeb57f40300b437126320f25",
+            "method_id": "metacats_raw_descriptive_effect_v1",
+            "evidence": [
+              {
+                "content": {
+                  "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                  "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                  "byte_count": 180
+                },
+                "pointer": ""
+              }
+            ],
+            "uncertainty": null,
+            "requirement_ids": []
+          }
+        },
+        "positive_observed_cells_below_5": 0,
+        "native_fewer_5_recalculated": "N",
+        "pairs": [
+          {
+            "group_ids": [
+              "A",
+              "B"
+            ],
+            "frequency_deltas": [],
+            "total_variation": {
+              "value": null,
+              "state": "missing",
+              "unit": "fraction",
+              "origin": "calculated",
+              "numerator": null,
+              "denominator": null,
+              "population_id": "metacats_counts:57580f1ac89f6f6e642b01c24025d16727035a6caeb57f40300b437126320f25",
+              "method_id": "metacats_raw_descriptive_effect_v1",
+              "evidence": [
+                {
+                  "content": {
+                    "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                    "artifact_field": "artifact_ref",
+                    "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                    "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                    "byte_count": 180
+                  },
+                  "pointer": ""
+                }
+              ],
+              "uncertainty": null,
+              "requirement_ids": []
+            }
+          },
+          {
+            "group_ids": [
+              "A",
+              "C"
+            ],
+            "frequency_deltas": [],
+            "total_variation": {
+              "value": null,
+              "state": "missing",
+              "unit": "fraction",
+              "origin": "calculated",
+              "numerator": null,
+              "denominator": null,
+              "population_id": "metacats_counts:57580f1ac89f6f6e642b01c24025d16727035a6caeb57f40300b437126320f25",
+              "method_id": "metacats_raw_descriptive_effect_v1",
+              "evidence": [
+                {
+                  "content": {
+                    "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                    "artifact_field": "artifact_ref",
+                    "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                    "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                    "byte_count": 180
+                  },
+                  "pointer": ""
+                }
+              ],
+              "uncertainty": null,
+              "requirement_ids": []
+            }
+          },
+          {
+            "group_ids": [
+              "B",
+              "C"
+            ],
+            "frequency_deltas": [],
+            "total_variation": {
+              "value": null,
+              "state": "missing",
+              "unit": "fraction",
+              "origin": "calculated",
+              "numerator": null,
+              "denominator": null,
+              "population_id": "metacats_counts:57580f1ac89f6f6e642b01c24025d16727035a6caeb57f40300b437126320f25",
+              "method_id": "metacats_raw_descriptive_effect_v1",
+              "evidence": [
+                {
+                  "content": {
+                    "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                    "artifact_field": "artifact_ref",
+                    "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                    "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                    "byte_count": 180
+                  },
+                  "pointer": ""
+                }
+              ],
+              "uncertainty": null,
+              "requirement_ids": []
+            }
+          }
+        ]
+      }
+    ],
+    "requirements": [
+      {
+        "requirement_id": "metacats_counts:ba9384e0d0228035792350cc379ef608c37f9610c63d28ce68845e3e024c020e/nondegenerate_raw_effect_required",
+        "kind": "scientific_metadata",
+        "role": "metacats_population",
+        "source_refs": [],
+        "reason_code": "nondegenerate_raw_effect_required"
+      },
+      {
+        "requirement_id": "metacats_counts:273cfeb6ad8d7b79a795835822860415e9477606392596054f4f1bfd145e6b43/nondegenerate_raw_effect_required",
+        "kind": "scientific_metadata",
+        "role": "metacats_population",
+        "source_refs": [],
+        "reason_code": "nondegenerate_raw_effect_required"
+      },
+      {
+        "requirement_id": "metacats_counts:57580f1ac89f6f6e642b01c24025d16727035a6caeb57f40300b437126320f25/nondegenerate_raw_effect_required",
+        "kind": "scientific_metadata",
+        "role": "metacats_population",
+        "source_refs": [],
+        "reason_code": "nondegenerate_raw_effect_required"
+      }
+    ],
+    "diagnostics": []
+  },
+  "holm": {
+    "status": "ok",
+    "family": {
+      "family_id": "aa_three_groups/all_variable_omnibus",
+      "analysis_ids": [
+        "aa_three_groups"
+      ],
+      "category_ids": [
+        "comparison"
+      ],
+      "test_kind": "omnibus",
+      "test_ids": [
+        "metacats_test:b5bd98034dd8f32dffc7d19b34580260a6a18db3ac9c59c43b3a4486890201a8"
+      ],
+      "eligibility": "variable_site_positive_df",
+      "population_state": "complete",
+      "total_test_count": 1,
+      "assumption": null,
+      "p_value_basis": "source_mathematical_recalculation",
+      "evidence": [
+        {
+          "content": {
+            "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+            "artifact_field": "artifact_ref",
+            "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+            "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+            "byte_count": 180
+          },
+          "pointer": ""
+        }
+      ]
+    },
+    "method": "holm",
+    "alpha": 0.05,
+    "dependence_assumption": "none_required_between_tests",
+    "observed_p_count": 1,
+    "total_test_count": 1,
+    "harmonic_factor": null,
+    "results": [
+      {
+        "test_id": "metacats_test:b5bd98034dd8f32dffc7d19b34580260a6a18db3ac9c59c43b3a4486890201a8",
+        "input_p": {
+          "value": 3.149873995769552e-07,
+          "state": "available",
+          "unit": "probability",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "metacats_test:b5bd98034dd8f32dffc7d19b34580260a6a18db3ac9c59c43b3a4486890201a8",
+          "method_id": "metacats_omnibus_aa_native_source_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "adjusted_p": {
+          "value": 3.149873995769552e-07,
+          "state": "available",
+          "unit": "probability",
+          "origin": "calculated",
+          "numerator": null,
+          "denominator": null,
+          "population_id": "aa_three_groups/all_variable_omnibus",
+          "method_id": "metacats_holm_v1",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases/aa_three_groups/original.fasta",
+                "sha256": "74759fd5d2b5ded1b26f707d4db426f269d4a33a37bf5fc2c1e0abb047e5acce",
+                "byte_count": 180
+              },
+              "pointer": ""
+            }
+          ],
+          "uncertainty": null,
+          "requirement_ids": []
+        },
+        "rejected_at_alpha": true
+      }
+    ],
+    "requirements": [],
+    "diagnostics": []
+  }
+}

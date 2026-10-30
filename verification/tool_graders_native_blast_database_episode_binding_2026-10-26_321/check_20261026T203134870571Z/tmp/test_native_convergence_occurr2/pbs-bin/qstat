@@ -1,0 +1,7 @@
+#!/home/chia/repos/gene_annotation_episode/.venv/bin/python
+import json,os,pathlib,sys
+root=pathlib.Path(os.environ['FAKE_PBS_ROOT']);record=json.loads((root/(sys.argv[-1]+'.json')).read_text())
+if (root/'status-unavailable').exists():sys.exit(153)
+if (root/'finished').exists():record.update(job_state='F',Exit_status=0,stime=110,obittime=120)
+if (root/'wrong-token').exists():record['Variable_List']['EPISODE_SUBMISSION_TOKEN']='wrong'
+print(json.dumps({'Jobs':{sys.argv[-1]:record}}))

@@ -1,0 +1,5 @@
+The initial diagnostic preparation stopped before cProfile was entered: `deepcopy(root.scope)` rejected the immutable `mappingproxy` used by `BindingContext`. The probe now uses the production `plain` conversion for serialization.
+
+The next attempted call stopped in less than one second when the audit guard rejected `SelectedAPIEffects._locked` opening the copied, pre-existing zero-byte `.lock` in append mode. This was an aborted diagnostic setup attempt, not a complete profile. No profile result is claimed from it. The process exited, releasing its copied read-only SQLite connection and leaving the original fixture untouched.
+
+The root task owner explicitly authorized one complete-call profile after inspection of `SelectedAPIEffects._locked`, `read`, `_all`, `_intent`, and `_state`, allowing only the copied pre-existing zero-byte lock open. Those functions acquire the lock and read retained effect states on this path. All other prohibitions remain: no native science, network, subprocess, model, data writes, original-store writes, or workflow rerun. The completed probe checks the original and copied file manifests and all database counts after the call.

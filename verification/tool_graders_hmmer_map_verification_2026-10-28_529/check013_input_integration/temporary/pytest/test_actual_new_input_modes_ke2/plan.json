@@ -1,0 +1,76 @@
+{
+  "version": "native_hmmer_preparation_run_plan_v1",
+  "identity": {
+    "run_id": "producer267-test",
+    "episode_id": "selected-local-child",
+    "resource_id": "local",
+    "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/temporary/pytest/test_actual_new_input_modes_ke2/native.json",
+    "operation_key": "selected-command",
+    "attempt_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e",
+    "requested_job_sha256": "449106f296a0ffe0b286cf678323932341fd72b2897204b477910d2fe3a5bd30"
+  },
+  "requested_job": {
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/source_snapshot/resources/software/infernal-1.1.5/hmmer/src/alimask",
+      "--dna",
+      "--fast",
+      "--wnone",
+      "--model2ali",
+      "1-2",
+      "--informat",
+      "AFA",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/source_snapshot/verification/tool_graders_hmmer_input_native_oracle_2026-10-28_539/fixtures/afa_auto_dna.input"
+    ],
+    "environment": {},
+    "native_hmmer_preparation": {
+      "version": "native_hmmer_preparation_job_v1",
+      "program": "alimask",
+      "mode": "model_to_alignment",
+      "software": {
+        "executable": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/source_snapshot/resources/software/infernal-1.1.5/hmmer/src/alimask",
+        "sha256": "4cf273b7b4b52363468b758a39bedf8f00540b01983bf6641ffd36140afad547",
+        "engine_version": "3.4"
+      },
+      "environment": {},
+      "operands": [
+        {
+          "role": "alignment",
+          "ordinal": 0,
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/source_snapshot/verification/tool_graders_hmmer_input_native_oracle_2026-10-28_539/fixtures/afa_auto_dna.input",
+          "format": "afa",
+          "sha256": "824a8ce36203927eafe75d6c6b8be163c47c07f3423f588d5f434bd0b89af645",
+          "size_bytes": 32,
+          "artifact_ref": "fixture267:alignment:0"
+        }
+      ],
+      "options": [
+        "--dna",
+        "--fast",
+        "--wnone",
+        "--model2ali",
+        "1-2"
+      ],
+      "outputs": [
+        {
+          "role": "stdout",
+          "format": "hmmer_stdout",
+          "relative_path": "outputs/stdout"
+        },
+        {
+          "role": "stderr",
+          "format": "hmmer_stderr",
+          "relative_path": "outputs/stderr"
+        }
+      ],
+      "key": null,
+      "input_metadata": {},
+      "grading_parameters": {}
+    }
+  },
+  "attempt_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration/temporary/pytest/test_actual_new_input_modes_ke2/hmmer-preparation-attempt",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  }
+}

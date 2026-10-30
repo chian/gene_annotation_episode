@@ -1,0 +1,125 @@
+{
+  "version": "native_blast_run_plan_v1",
+  "identity": {
+    "run_id": "verification294",
+    "episode_id": "explicit-example-selection",
+    "resource_id": "local",
+    "execution_id": "blastn_no_hits_json15",
+    "attempt_id": "blastn_no_hits_json15",
+    "operation_key": "selected:blastn_no_hits_json15",
+    "requested_job_sha256": "72e801a339cb7418a2b9fec0106ca77e24dba427a05104474b8caaa8a1ab0329"
+  },
+  "requested_job": {
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastn",
+      "-task",
+      "blastn",
+      "-dust",
+      "no",
+      "-strand",
+      "plus",
+      "-num_threads",
+      "1",
+      "-query",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_no_hits_json15/query_sequence.fa",
+      "-subject",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_no_hits_json15/subject_sequence.fa",
+      "-outfmt",
+      "15",
+      "-out",
+      "report.json"
+    ],
+    "environment": {},
+    "native_blast": {
+      "version": "native_blast_job_v1",
+      "program": "blastn",
+      "mode": "pairwise",
+      "software": {
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/ncbi-blast-2.17.0+/bin/blastn",
+        "sha256": "33b64bc67d3149cee2459b2f7766b363323df632cf12c099546de00aea9698b5",
+        "engine_version": "2.17.0+"
+      },
+      "environment": {},
+      "operands": [
+        {
+          "role": "query_sequence",
+          "format": "fasta",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_no_hits_json15/query_sequence.fa",
+          "sha256": "2b487608210420fcdfe1024ee2206f781aeabf2e4a21fe85777a22827f62783e",
+          "size_bytes": 83,
+          "artifact_ref": null
+        },
+        {
+          "role": "subject_sequence",
+          "format": "fasta",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_no_hits_json15/subject_sequence.fa",
+          "sha256": "25b7d32ccdae717a73aab47133ae8c5268bd277b8af46cc748bd10eeb6567264",
+          "size_bytes": 85,
+          "artifact_ref": null
+        }
+      ],
+      "operand_bindings": [
+        {
+          "operand_role": "query_sequence",
+          "record_ordinal": 0,
+          "native_name": "query_blastn_no_hits",
+          "native_accession": null,
+          "subject_ref": "query_subject",
+          "reference_ref": null
+        },
+        {
+          "operand_role": "subject_sequence",
+          "record_ordinal": 0,
+          "native_name": "subject_blastn_no_hits",
+          "native_accession": null,
+          "subject_ref": null,
+          "reference_ref": "paired_reference"
+        }
+      ],
+      "options": [
+        "-task",
+        "blastn",
+        "-dust",
+        "no",
+        "-strand",
+        "plus",
+        "-num_threads",
+        "1"
+      ],
+      "outputs": [
+        {
+          "role": "stdout",
+          "format": "text",
+          "relative_path": "stdout.txt",
+          "fields": null,
+          "delimiter": null
+        },
+        {
+          "role": "stderr",
+          "format": "text",
+          "relative_path": "stderr.txt",
+          "fields": null,
+          "delimiter": null
+        },
+        {
+          "role": "primary_report",
+          "format": "json15",
+          "relative_path": "report.json",
+          "fields": null,
+          "delimiter": null
+        }
+      ],
+      "metadata": {
+        "engineering_example": "blastn_no_hits_json15",
+        "input_kind": "synthetic_derivative_of_retained_public_sequence"
+      },
+      "grading_parameters": {}
+    }
+  },
+  "attempt_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples/blastn_no_hits_json15/attempt",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  }
+}

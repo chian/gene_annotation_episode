@@ -1,0 +1,78 @@
+# nhmmer :: search a DNA model, alignment, or sequence against a DNA database
+# HMMER 3.4 (Aug 2023); http://hmmer.org/
+# Copyright (C) 2023 Howard Hughes Medical Institute.
+# Freely distributed under the BSD open source license.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query file:                      /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmer_sequence_ordinary/attempt/inputs/query_sequence.fa
+# target sequence database:        /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmer_sequence_ordinary/attempt/inputs/sequence_database.fa
+# MSA of all hits saved to file:   /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmer_sequence_ordinary/attempt/outputs/included_msa
+# hits tabular output:             /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmer_sequence_ordinary/attempt/outputs/tblout
+# max ASCII text line length:      unlimited
+# query format asserted:           fasta
+# query contains individual seqs:  on
+# target format asserted:          fasta
+# number of worker threads:        1
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       query  [M=100]
+Scores for complete hits:
+    E-value  score  bias  Sequence  start    end  Description
+    ------- ------ -----  --------  -----  -----  -----------
+    1.4e-30   92.2   0.9  forward      11    110 
+    1.4e-30   92.2   0.9  reverse     110     11 
+      3e-26   78.7   0.7  gapped       11    111 
+
+
+Annotation for each hit  (and alignments):
+>> forward  
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to       sq len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ !   92.2   0.9   1.4e-30         1       100 []        11       110 ..        11       110 ..       120    0.98
+
+  Alignment:
+  score: 92.2 bits
+    query   1 ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg 100
+              ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg
+  forward  11 GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG 110
+              689*********************************************************************************************9985 PP
+
+>> reverse  
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to       sq len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ !   92.2   0.9   1.4e-30         1       100 []       110        11 ..       110        11 ..       120    0.98
+
+  Alignment:
+  score: 92.2 bits
+    query   1 ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg 100
+              ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg
+  reverse 110 GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG 11 
+              689*********************************************************************************************9985 PP
+
+>> gapped  
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to       sq len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ !   78.7   0.7     3e-26         1       100 []        11       111 ..        11       111 ..       121    0.93
+
+  Alignment:
+  score: 78.7 bits
+   query   1 ggcagtggcgtgtcaacctccctttacgataagtccatca...ctaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg 100
+             ggcagtggcgtgtcaacctccctttacgataagtccatca   ctaacagtaagcctgacgggggcaagatct  ctttttggcagactcactcttcccattg
+  gapped  11 GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCAgtaCTAACAGTAAGCCTGACGGGGGCAAGATCT--CTTTTTGGCAGACTCACTCTTCCCATTG 111
+             689*********************************9985333889************************988..58999*******************9985 PP
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query model(s):                            1  (100 nodes)
+Target sequences:                          3  (722 residues searched)
+Residues passing SSV filter:             361  (0.5); expected (0.02)
+Residues passing bias filter:            361  (0.5); expected (0.02)
+Residues passing Vit filter:             361  (0.5); expected (0.003)
+Residues passing Fwd filter:             361  (0.5); expected (3e-05)
+Total number of hits:                      3  (0.417)
+# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00
+# Mc/sec: 68.17
+//
+# Alignment of 3 hits satisfying inclusion thresholds saved to: /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmer_sequence_ordinary/attempt/outputs/included_msa
+[ok]

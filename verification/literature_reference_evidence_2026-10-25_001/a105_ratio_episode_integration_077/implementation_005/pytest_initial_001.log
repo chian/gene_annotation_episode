@@ -1,0 +1,110 @@
+.F
+=================================== FAILURES ===================================
+_ test_actual_selected_view_population_typed_subset_parent_decision_and_observations[point] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1707/test_actual_selected_view_popu0')
+mode = 'point'
+
+    @pytest.mark.parametrize('mode',['point','conflict','unreadable','different','unknown'])
+    def test_actual_selected_view_population_typed_subset_parent_decision_and_observations(tmp_path,mode):
+        store,case=make_case(tmp_path/'state')
+        try:
+>           result,provider,controllers=asyncio.run(run_case(store,case,tmp_path/'run',mode=mode))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_ratio_source_episode_integration.py:50: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/literature_ratio_source_worker_fixture_077.py:208: in run_case
+    result=await run_workflow(store,ToolRegistry(store),provider=provider,run_dir=directory,
+gene_annotation_episode/runtime.py:4132: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4454: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1560: in _run_loop_async
+    step = await self._acquire_unit_async(ctx, scope, records, item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:516: in _acquire_unit_async
+    return await super()._acquire_unit_async(ctx, scope, records, item,
+method_loop/episode.py:1602: in _acquire_unit_async
+    acquired = await acquired
+               ^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:381: in acquire_async
+    result = await super().acquire_async(ctx)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1757: in acquire_async
+    acquired = await self._finish_async(await self.child.run_async(ctx))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1354: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:920: in call
+    return await self.exchange_decision(context, schema, index, saved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1196: in exchange_decision
+    response = await self.workflow.provider.complete(self.episode_id, 'REASONING',
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <literature_ratio_source_worker_fixture_077.Provider object at 0x7066ebb6c560>
+episode_id = 'episode_f98e901deaecb779eb7e1ec1e6ad7b2badf509ffd1316050568c7a0344acb3f7'
+role = 'REASONING'
+instructions = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within t...mpts have no completed-action gain.\nUse recorded inputs and result references to distinguish specific prior attempts.'
+context = {'base_revision': 'fde00805f7cecfb6ebf60cebfd2f4a4978f9c7b4209f004fdb32a7fe8a84e0b3', 'fields': {'action_yields': {'be...3+00:00', 'items': [], 'version': 'pending_work_v1'}, ...}, ...}, 'kind': 'decision_update', 'removed_fields': [], ...}
+output_schema = {'additionalProperties': False, 'properties': {'response': {'anyOf': [{'additionalProperties': False, 'properties': {'...ed': ['report_update', 'response_type', 'selection'], 'type': 'object'}]}}, 'required': ['response'], 'type': 'object'}
+
+    async def complete(self, episode_id, role, instructions, context, output_schema):
+        text,_=self.presenter._presentation(episode_id,role,instructions,context)
+        state=deepcopy(self.presenter.scientific_prompt_states[(episode_id,role)])
+        self.contexts.append(deepcopy(state));self.presented.append(text)
+        if 'literature_assignment' not in state:
+            if state['child_reports']:
+                return action('state.query',{'refs':[]})
+            if state.get('pending_work',{}).get('items'):
+                handle=state['pending_work']['items'][0]['handle']
+                return {'response':{'response_type':'select_action','selection':{'kind':'wait','condition':{
+                    'version':'event_condition_v1','events':[{'handle':handle,'event':'returned','after_cursor':0}],
+                    'reconsider_at':None}},'report_update':{}}}
+            stage=self.states.get(episode_id,0);self.states[episode_id]=stage+1
+            if stage==0:return lookup('episode.return_contract',{'role':'literature','source':'literature_ratio_source_cells'})
+            return commission(self.case)
+        stage=self.states.get(episode_id,0);self.states[episode_id]=stage+1
+        if stage==0:
+            if self.durable_child:
+                # Test synchronization only: no scientific selection is made
+                # here. Wait for the parent's actually selected durable wait.
+                deadline=asyncio.get_running_loop().time()+30
+                while not self.store.db.execute('SELECT 1 FROM episode_waits WHERE outcome IS NULL').fetchone():
+                    if asyncio.get_running_loop().time()>deadline:raise AssertionError('fixture parent never selected wait')
+                    await asyncio.sleep(.01)
+            return action('image.view',{'source_ref':self.case['figure'],'frame':1,'colour_conversion':'preserve'})
+        if stage==1:return lookup('episode.operation_contract',{'operation':'literature.ratio.source.populate'})
+        result=state['last_local_outcome']['result']
+>       return action('literature.ratio.source.populate',selection(self.store,self.case,result['view_ref'],
+                                                                                        ^^^^^^^^^^^^^^^^^^
+            mode=self.mode,broad_label=self.broad_label))
+E       TypeError: 'NoneType' object is not subscriptable
+
+tests/literature_ratio_source_worker_fixture_077.py:180: TypeError
+=========================== short test summary info ============================
+FAILED tests/test_literature_ratio_source_episode_integration.py::test_actual_selected_view_population_typed_subset_parent_decision_and_observations[point]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 1 passed in 17.59s

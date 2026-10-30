@@ -1,0 +1,13 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_______________________ test_selected_native_observation _______________________
+source_snapshot/tests/test_blast_vdb_native_observation_661.py:234: in test_selected_native_observation
+    evidence = (trace_evidence(trace.read_bytes(), selection, returncode, stderr_bytes)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+source_snapshot/tests/test_blast_vdb_native_observation_661.py:81: in trace_evidence
+    result=match[3], result_integer=int(result[1], 0) if result else None,
+                                    ^^^^^^^^^^^^^^^^^
+E   ValueError: invalid literal for int() with base 0: '002'
+=========================== short test summary info ============================
+FAILED source_snapshot/tests/test_blast_vdb_native_observation_661.py::test_selected_native_observation
+1 failed in 0.55s

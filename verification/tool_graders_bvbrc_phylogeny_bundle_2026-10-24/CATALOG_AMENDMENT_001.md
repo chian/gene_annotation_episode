@@ -1,0 +1,1 @@
+Root accepted the complete catalog and codec. At root direction, SCALAR_CATALOG_002 changes only selector names literal_literal_nongap_sum_squared_frequency → literal_sum_squared_frequency and literal_literal_nongap_mean_squared_frequency → literal_mean_squared_frequency. Stored Quantity fields and arithmetic remain unchanged. The historical 001 catalog remains intact.

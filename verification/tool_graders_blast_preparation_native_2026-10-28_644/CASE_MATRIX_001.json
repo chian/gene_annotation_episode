@@ -1,0 +1,349 @@
+{
+  "version": "explicit_native_evidence_matrix_644_v1",
+  "runner_attempt": "check102_blast_preparation_native",
+  "scope": "retained native fixture evidence only; no production or episode integration",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "swap_bytes": 0,
+    "wall_seconds": null
+  },
+  "database_source": "exact original096 manifest and all original named retained files; original integrity unverified",
+  "profile_source": "retained genuine NCBI upstream pssm_freq_ratios.asn, no search repeated",
+  "selected_helpers": [
+    "07_subset_inspection",
+    "16_profile_inspection"
+  ],
+  "cases": [
+    {
+      "id": "01_gi_convert",
+      "program": "blastdb_aliastool",
+      "arguments": [
+        "-gi_file_in",
+        "gi.txt",
+        "-gi_file_out",
+        "ids.bgl"
+      ],
+      "workspace": "gi",
+      "purpose": "GI conversion preserves malformed-line warning and native handling of duplicates/order",
+      "text_inputs": {
+        "gi.txt": "# engineering\n9\n3\n9\nnot-a-gi\n\n"
+      }
+    },
+    {
+      "id": "02_seqid_unbound",
+      "program": "blastdb_aliastool",
+      "arguments": [
+        "-seqid_file_in",
+        "ids.txt",
+        "-seqid_file_out",
+        "unbound.bsl",
+        "-seqid_title",
+        "644-unbound"
+      ],
+      "workspace": "seqid_unbound",
+      "purpose": "Sequence-ID conversion without DB filtering",
+      "text_inputs": {
+        "ids.txt": "# engineering selection; duplicates and missing ID retained\nlcl|KEEP_B\nlcl|MISSING_644\nlcl|KEEP_B\n"
+      }
+    },
+    {
+      "id": "03_seqid_unbound_info",
+      "program": "blastdb_aliastool",
+      "arguments": [
+        "-seqid_file_info",
+        "unbound.bsl"
+      ],
+      "workspace": "seqid_unbound",
+      "purpose": "Independently selected native list metadata inspection"
+    },
+    {
+      "id": "04_seqid_bound",
+      "program": "blastdb_aliastool",
+      "arguments": [
+        "-seqid_file_in",
+        "ids.txt",
+        "-seqid_file_out",
+        "bound.bsl",
+        "-seqid_title",
+        "644-bound",
+        "-seqid_db",
+        "db/tiny",
+        "-seqid_dbtype",
+        "nucl"
+      ],
+      "workspace": "seqid_bound",
+      "purpose": "Sequence-ID conversion with exact retained tiny v5 DB dependency",
+      "database_directories": [
+        "db"
+      ],
+      "text_inputs": {
+        "ids.txt": "# engineering selection; duplicates and missing ID retained\nlcl|KEEP_B\nlcl|MISSING_644\nlcl|KEEP_B\n"
+      }
+    },
+    {
+      "id": "05_seqid_bound_info",
+      "program": "blastdb_aliastool",
+      "arguments": [
+        "-seqid_file_info",
+        "bound.bsl"
+      ],
+      "workspace": "seqid_bound",
+      "purpose": "Independently selected native metadata of DB-bound sequence-ID list"
+    },
+    {
+      "id": "06_subset_alias",
+      "program": "blastdb_aliastool",
+      "arguments": [
+        "-db",
+        "db/tiny",
+        "-dbtype",
+        "nucl",
+        "-seqidlist",
+        "ids.txt",
+        "-out",
+        "subset",
+        "-title",
+        "644 subset"
+      ],
+      "workspace": "subset",
+      "purpose": "Text sequence-ID restriction, duplicate and missing occurrence behavior",
+      "database_directories": [
+        "db"
+      ],
+      "text_inputs": {
+        "ids.txt": "# engineering selection; duplicates and missing ID retained\nlcl|KEEP_B\nlcl|MISSING_644\nlcl|KEEP_B\n"
+      }
+    },
+    {
+      "id": "07_subset_inspection",
+      "program": "blastdbcmd",
+      "arguments": [
+        "-db",
+        "subset",
+        "-dbtype",
+        "nucl",
+        "-entry",
+        "all",
+        "-outfmt",
+        "%o\t%i\t%l\t%s"
+      ],
+      "workspace": "subset",
+      "purpose": "Explicit verification helper observes actual subset records; not an implicit production followup",
+      "verification_helper": true
+    },
+    {
+      "id": "08_alias_inline",
+      "program": "blastdb_aliastool",
+      "arguments": [
+        "-dblist",
+        "db_a/tiny db_b/tiny",
+        "-dbtype",
+        "nucl",
+        "-out",
+        "aggregate",
+        "-title",
+        "644 identical retained copies"
+      ],
+      "workspace": "aggregate_inline",
+      "purpose": "Direct ordered list maps two named copies of same original DB",
+      "database_directories": [
+        "db_a",
+        "db_b"
+      ]
+    },
+    {
+      "id": "09_alias_file",
+      "program": "blastdb_aliastool",
+      "arguments": [
+        "-dblist_file",
+        "dblist.txt",
+        "-dbtype",
+        "nucl",
+        "-out",
+        "aggregate",
+        "-title",
+        "644 identical retained copies"
+      ],
+      "workspace": "aggregate_file",
+      "purpose": "Original file order/blank/outer spaces retained; no invented independent populations",
+      "database_directories": [
+        "db_a",
+        "db_b"
+      ],
+      "text_inputs": {
+        "dblist.txt": "  db_b/tiny  \n\ndb_a/tiny\n"
+      }
+    },
+    {
+      "id": "10_new_index",
+      "program": "makembindex",
+      "arguments": [
+        "-input",
+        "db/tiny",
+        "-iformat",
+        "blastdb",
+        "-old_style_index",
+        "false",
+        "-legacy",
+        "false",
+        "-nmer",
+        "8",
+        "-stride",
+        "3",
+        "-ws_hint",
+        "8",
+        "-volsize",
+        "1",
+        "-verbosity",
+        "verbose",
+        "-output",
+        "ignored"
+      ],
+      "workspace": "index_new",
+      "purpose": "Writable exact DB closure; ignored output prefix, effective clamp and full new-file inventory",
+      "database_directories": [
+        "db"
+      ]
+    },
+    {
+      "id": "11_old_index",
+      "program": "makembindex",
+      "arguments": [
+        "-input",
+        "original096.fa",
+        "-iformat",
+        "fasta",
+        "-old_style_index",
+        "true",
+        "-legacy",
+        "true",
+        "-nmer",
+        "8",
+        "-stride",
+        "3",
+        "-ws_hint",
+        "8",
+        "-volsize",
+        "1",
+        "-idmap",
+        "true",
+        "-output",
+        "old"
+      ],
+      "workspace": "index_old",
+      "purpose": "Old-style FASTA with distinct legacy flag; original FASTA unchanged",
+      "reuse_original_fasta": true
+    },
+    {
+      "id": "12_index_filters",
+      "program": "makembindex",
+      "arguments": [
+        "-input",
+        "db/tiny",
+        "-show_filters"
+      ],
+      "workspace": "index_filters",
+      "purpose": "Independent native filter-inspection operation; no inferred mask information",
+      "database_directories": [
+        "db"
+      ]
+    },
+    {
+      "id": "13_profile_rps",
+      "program": "makeprofiledb",
+      "arguments": [
+        "-in",
+        "profiles.list",
+        "-dbtype",
+        "rps",
+        "-out",
+        "profiles",
+        "-blastdb_version",
+        "5",
+        "-index",
+        "true",
+        "-threshold",
+        "9.82",
+        "-force",
+        "-max_smp_vol",
+        "2500"
+      ],
+      "workspace": "profile_rps",
+      "purpose": "Genuine retained upstream PSSM; RPS preparation and full output inventory",
+      "reuse_original_pssm": true,
+      "text_inputs": {
+        "profiles.list": "profiles/pssm_freq_ratios.asn\n"
+      }
+    },
+    {
+      "id": "14_profile_delta",
+      "program": "makeprofiledb",
+      "arguments": [
+        "-in",
+        "profiles.list",
+        "-dbtype",
+        "delta",
+        "-out",
+        "profiles",
+        "-blastdb_version",
+        "5",
+        "-index",
+        "true",
+        "-threshold",
+        "9.82",
+        "-force",
+        "-max_smp_vol",
+        "2500"
+      ],
+      "workspace": "profile_delta",
+      "purpose": "Genuine retained upstream PSSM; explicit missing-required-input boundary; no invented fields",
+      "reuse_original_pssm": true,
+      "text_inputs": {
+        "profiles.list": "profiles/pssm_freq_ratios.asn\n"
+      }
+    },
+    {
+      "id": "15_profile_cobalt",
+      "program": "makeprofiledb",
+      "arguments": [
+        "-in",
+        "profiles.list",
+        "-dbtype",
+        "cobalt",
+        "-out",
+        "profiles",
+        "-blastdb_version",
+        "5",
+        "-index",
+        "true",
+        "-threshold",
+        "9.82",
+        "-force",
+        "-max_smp_vol",
+        "2500"
+      ],
+      "workspace": "profile_cobalt",
+      "purpose": "Genuine retained upstream PSSM; explicit missing-required-input boundary; no invented fields",
+      "reuse_original_pssm": true,
+      "text_inputs": {
+        "profiles.list": "profiles/pssm_freq_ratios.asn\n"
+      }
+    },
+    {
+      "id": "16_profile_inspection",
+      "program": "blastdbcmd",
+      "arguments": [
+        "-db",
+        "profiles",
+        "-dbtype",
+        "prot",
+        "-info",
+        "-exact_length"
+      ],
+      "workspace": "profile_rps",
+      "purpose": "Explicit verification helper observes actual RPS sequence/count metadata; not a search or implicit production followup",
+      "verification_helper": true
+    }
+  ]
+}

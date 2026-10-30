@@ -1,0 +1,66 @@
+[
+  [
+    "rpc",
+    {
+      "id": "bvbrc_rpc_aa0326666d7273bb553e701732f0db67e3bfd528f31019a50d9e1c36bb80e79c",
+      "method": "AppService.start_app2",
+      "params": [
+        "GeneTree",
+        {
+          "alphabet": "Protein",
+          "output_file": "tree",
+          "output_path": "/synthetic/output",
+          "recipe": "RAxML",
+          "sequences": [
+            {
+              "filename": "/synthetic/input/locusA.fa",
+              "type": "aligned_protein_fasta"
+            }
+          ]
+        },
+        {}
+      ],
+      "version": "1.1"
+    }
+  ],
+  [
+    "rpc",
+    {
+      "id": "bvbrc_rpc_a619482a40adcc95100a029404d6b834dc02f3738a540c193d5351a08543e293",
+      "method": "Workspace.get_download_url",
+      "params": [
+        {
+          "objects": [
+            "/synthetic/output/native-0"
+          ]
+        }
+      ],
+      "version": "1.1"
+    }
+  ],
+  [
+    "download",
+    "https://fixture.invalid/native-0",
+    null
+  ],
+  [
+    "rpc",
+    {
+      "id": "bvbrc_rpc_7902df84dcc8dc98985cc93876b6ac44ae193b0ba1442eed8bed4b029a58c95a",
+      "method": "Workspace.get_download_url",
+      "params": [
+        {
+          "objects": [
+            "/synthetic/output/native-1"
+          ]
+        }
+      ],
+      "version": "1.1"
+    }
+  ],
+  [
+    "download",
+    "https://fixture.invalid/native-1",
+    null
+  ]
+]

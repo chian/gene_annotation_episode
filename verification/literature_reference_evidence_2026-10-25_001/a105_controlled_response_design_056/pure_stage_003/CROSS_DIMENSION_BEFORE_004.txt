@@ -1,0 +1,21 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+__ test_cross_pair_dimensions_must_agree_even_when_local_pairs_and_ids_agree ___
+
+    def test_cross_pair_dimensions_must_agree_even_when_local_pairs_and_ids_agree():
+        inputs = no_covariance(example())
+        for index, unit in enumerate(("umol/min", "umol/min", "uM/min", "uM/min")):
+            inputs["arms"][PRIMITIVE_ORDER[index]]["unit"] = unit
+        result = cells(inputs)
+        assert result[COMPONENTS[4]]["value"] == 10
+        assert result[COMPONENTS[4]]["unit"] == "umol/min"
+        assert result[COMPONENTS[5]]["value"] == 4
+        assert result[COMPONENTS[5]]["unit"] == "uM/min"
+        for name in COMPONENTS[6:]:
+>           assert result[name]["value"] is None
+E           assert 6.0 is None
+
+tests/test_literature_controlled_response_calculations.py:198: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_literature_controlled_response_calculations.py::test_cross_pair_dimensions_must_agree_even_when_local_pairs_and_ids_agree
+1 failed in 0.16s

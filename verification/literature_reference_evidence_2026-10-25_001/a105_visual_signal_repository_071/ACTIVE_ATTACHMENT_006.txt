@@ -1,0 +1,203 @@
+# Goal: Implement literature evaluation of experimental reference evidence
+
+Build and verify a literature workflow that examines experimental papers, extracts the measurements and experimental relationships supporting reference annotations, and populates the appropriate numerical evidence components.
+
+Develop literature extraction fields and scoring-sheet definitions together through concrete annotation examples. Revise the existing sheet proposals when experimental cases expose missing distinctions or inappropriate calculations.
+
+Deliver executable readers, aspect-specific interpretation instructions, deterministic calculators, populated examples and integration through the existing LiteratureEpisodes.
+
+## Scope
+
+The larger annotation system retains ten axes: A101–A108, A110 and A111. This goal does not build ten literature graders.
+
+The principal literature responsibilities are:
+
+| Area | Literature responsibility |
+|---|---|
+| A105 — Molecular activity | Evaluate experiments establishing a reference molecule’s activity, specificity and functional distinctions. Populate numerical components describing that experimental evidence. |
+| A106 — Perturbation/restoration | Evaluate what selective perturbation and restoration establish about the studied molecule’s contribution, including controls, amounts, comparability and effect isolation. |
+| A111 — Experimental structure | Evaluate what an experimental structure establishes about the studied molecule, ligand, site or molecular arrangement, including measurement limitations. |
+| A108 — Organism/sample plausibility | Extract and interpret evidence answering specific biological compatibility questions about the organism or sample. Avoid an overall intuitive plausibility grade. |
+| A110 — Biochemical/pathway consistency | Extract experimentally supported reaction, substrate/product, stoichiometric, resource and pathway requirements. Distinguish measured outcomes from assumptions about the surrounding system. |
+| Supporting partner knowledge | Extract experiments establishing which partners are required and under which conditions. Supply those facts for later A107 use; do not perform genomic-presence or coexpression grading. |
+
+Exclude from this literature implementation:
+
+- A101: sequence alignment, homology scoring, coverage and target-to-reference matching.
+- A102: structural alignment and target-to-reference structural correspondence calculations.
+- A103: genomic-neighborhood analysis and association scoring.
+- A104: phylogenetic reconstruction, placement and tree-comparison scoring.
+- A107 computational measurements: genomic partner searches and coexpression analysis.
+
+A paper may report information relevant to those excluded analyses. Preserve necessary source facts without creating literature implementations of their graders.
+
+A109 remains removed. A110 remains separate from A108.
+
+## Keep reference evidence and target correspondence separate
+
+The literature workflow must establish:
+
+1. Which molecule and experimental system were studied.
+2. What was measured.
+3. Which functional assertion those measurements support.
+4. How well the experimental design isolates and substantiates that assertion.
+5. Which limitations, contradictions and uncertainties remain.
+
+It must not calculate how sequence or structural similarity transfers that finding to another protein.
+
+For example:
+
+- A101 supplies the target-to-reference alignment evidence.
+- A105 supplies the experimental evidence supporting the reference’s asserted function.
+- Later work determines how those contributions combine into annotation credit.
+
+Preserve reference identity, construct boundaries, functional resolution and experimental conditions so later consumers can connect the evidence correctly. Do not multiply alignment scores into literature reliability, invent a target-transfer weight or implement combined A101/A105 credit.
+
+## Workflow: examine cases, then develop extraction and scoring together
+
+Use relevant examples from the retained 142 case groups, applying their corrections. Search additional original papers or datasets when a concrete unresolved question requires them.
+
+For each selected experimental case:
+
+### 1. Establish the experiment
+
+Identify the actual organism, genotype, molecule, construct, experimental system, conditions, intended changed variable, reference arm and controls.
+
+Determine whether molecules replace one another or coexist. Identify the endpoint, units, normalization, comparison denominators, uncertainty and repetition basis.
+
+Separate what the experiment measured from what the authors inferred.
+
+### 2. Explain its bearing on annotation quality
+
+Determine which functional assertion the experiment substantiates and at what specificity.
+
+Distinguish:
+
+- Comparability outside the intended experimental change.
+- Isolation of the observed effect.
+- Relevance of the endpoint to the asserted function.
+- Method validity and specific weaknesses.
+- Signal magnitude and uncertainty.
+- Independent replication, shared measurements and complementary experiments.
+- Contradictions and unresolved alternative explanations.
+
+Explain why each distinction matters. Do not substitute a generic quality label.
+
+### 3. Define paired extraction fields and numerical components
+
+For every useful contribution, specify together:
+
+- The exact information the reader must extract.
+- Its source location and experimental relationships.
+- The numerical sheet cells it populates.
+- Their operands, units, denominators and calculations.
+- What each number evaluates.
+- How components combine through explicit sums or multipliers.
+- Missing-input, uncertainty and dependence behavior.
+
+The existing sheets are revisable proposals. Preserve useful components; revise inappropriate ones through additive, explained changes.
+
+Print concrete examples, proposed extraction/judgment instructions and populated numerical cells in chat before broad replication. Do not stop at tables of claims or provenance.
+
+### 4. Implement and integrate
+
+Define shared interfaces and file ownership before parallel coding.
+
+Implement targeted readers and deterministic calculators, then connect them to selected work inside the existing LiteratureEpisodes. Verify persistence and delivery through the ordinary typed child-to-parent boundary.
+
+Continue using contrasting cases to test and refine both extraction fields and sheet definitions.
+
+## Three separate responsibilities
+
+Keep separate:
+
+1. Investigation instructions: what to examine and which scientific distinctions matter.
+2. Numerical scoring sheets: actual numerical components and their defined meanings.
+3. Readers, graders and calculators: functions populating those components.
+
+A source-claim table is supporting recordkeeping, not a numerical scoring sheet. Prose calculation rules are not executable calculators. Do not insert complete sheets into investigation prompts.
+
+The controlling principles remain:
+
+> “Graders/readers are what POPULATE the scoring rubric”
+
+> “THE PAPERS DO NOT OVERRIDE THE TEMPLATE. THEY GET CONVERTED THOUGHTFULLY”
+
+> “These individual scores need to be multipliers or sum in some way.”
+
+## Measurement and calculation requirements
+
+Retain each measurement’s actual subject, endpoint, conditions, value, unit, normalization, uncertainty, origin and exact source location.
+
+Distinguish reported, graph-derived, calculated, proposed and synthetic values.
+
+Do not:
+
+- Convert missing values to zero or one.
+- Treat nondetection as exact zero.
+- Interchange SD, SEM, confidence intervals and detection limits.
+- Treat technical repetitions as independent biological experiments.
+- Treat repeated representations as independent evidence.
+- Convert citation counts or publication reputation into experimental validity.
+- Substitute numerical categories for available measurements.
+
+Use deterministic parsing, validation, unit conversion and arithmetic wherever possible.
+
+Where interpretation requires a model, define a concrete aspect-specific question, supporting source material, allowed output meanings and unknown/conflicting conditions. Models identify experimental meanings and operands; calculators perform arithmetic.
+
+Preserve useful partial results. Missing scientific information is acceptable when returned correctly. Unimplemented required functions remain unfinished work.
+
+## Episode architecture
+
+Use existing LiteratureEpisodes and shared method_loop. Preserve their permitted child relationships without imposing a mandatory itinerary.
+
+Do not introduce per-axis episode types, private extraction loops, LibraryEpisodes or computational launch/monitor branches inside literature.
+
+Parents define the assignment, scope, constraints and requested typed return. Children own iterative source-search, reading and interpretation decisions.
+
+Every decision prompt separately constructs:
+
+- TASK: complete recurring assignment and scientific instructions.
+- STEERING: concise factual information affecting the next decision.
+
+Preserve source custody, typed communication and reconstruction. Do not add a second model call merely to compose a report.
+
+## Boundaries
+
+The other session owns tool-grader implementation. This session owns the literature extraction and experimental-evidence sheet components developed here.
+
+W05 and later credit work own combining experimental reference evidence with target correspondence and other axes. Do not change final annotation aggregation, hypervolume policy or historical scores.
+
+Keep annotation support, investigation progress, monitoring information and timing separate. Preserve ordinary observation accounting and the configured controller’s continuation authority.
+
+## Required post-paper reset
+
+After every paper or retained paper-specific packet, before interpreting it into components or opening another paper:
+
+1. Reread this complete goal.
+2. Reread the complete applicable authority set specified by research/experimental_scoring_review_2026-10-23/AGENTS.md.
+3. Reread the relevant current sheet and extraction contract.
+4. Read the latest user instructions last.
+5. Explain the extraction fields, numerical components, necessary revisions and limitations.
+
+Do not substitute summaries or truncated reads.
+
+## Completion criteria
+
+Demonstrate:
+
+- Case-grounded extraction fields paired with appropriate numerical components.
+- Working readers, necessary interpretation prompts and deterministic calculators.
+- Populated primary-source examples, including contrasting experimental arrangements.
+- Validation of subjects, controls, endpoints, denominators, uncertainty and dependence.
+- Correct handling of missing, censored, conflicting and duplicate evidence.
+- Selected execution through LiteratureEpisodes.
+- Typed returns preserving scientific meaning.
+- Reconstruction without hidden reacquisition or reinterpretation.
+- No synthetic controller observations from internal extraction, calculation or reporting.
+- An explicit handoff for later target-correspondence and annotation-credit work.
+
+Distinguish fixtures, controlled model responses and actual model-backed literature execution. Report implemented scope and remaining limitations precisely.
+
+Begin with A105 reference-function experiments. Establish how their experimental evidence should be extracted and scored before expanding to the other appropriate literature responsibilities.
+Begin with A105 reference-function experiments. Establish how their experimental evidence should be extracted and scored before expanding to the other appropriate literature responsibilities.

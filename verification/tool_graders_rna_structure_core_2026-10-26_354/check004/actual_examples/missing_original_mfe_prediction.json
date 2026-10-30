@@ -1,0 +1,110 @@
+{
+  "native": {
+    "expected_mode": "mfe_prediction",
+    "format": "rna_native_record_json_v1",
+    "issues": [
+      {
+        "artifact_role": "native_result",
+        "code": "rna_native_result_missing",
+        "field": null,
+        "index": null,
+        "record_key": "actual-job-key",
+        "stage": "parse"
+      }
+    ],
+    "raw_byte_count": null,
+    "raw_sha256": null,
+    "record": null,
+    "schema": "rna_native_parse_v1",
+    "status": "invalid"
+  },
+  "sheet": {
+    "analysis_sequence": null,
+    "coordinate_system": "zero_based_sequence_indices_and_half_open_intervals",
+    "issues": [
+      {
+        "artifact_role": "native_result",
+        "code": "rna_native_result_missing",
+        "field": null,
+        "index": null,
+        "record_key": "actual-job-key",
+        "stage": "parse"
+      },
+      {
+        "artifact_role": null,
+        "code": "rna_invalid_input_schema",
+        "field": "/original_input",
+        "index": null,
+        "record_key": "actual-job-key",
+        "stage": "input"
+      }
+    ],
+    "legacy_quantities": null,
+    "mode": "mfe_prediction",
+    "model": null,
+    "native_evaluation": {
+      "engine": null,
+      "engine_version": null,
+      "model_key": null,
+      "numeric_text": null,
+      "reason": "not_requested",
+      "state": "not_requested",
+      "structure_key": null,
+      "unit": "kcal/mol",
+      "value": null
+    },
+    "native_input": null,
+    "native_mfe": {
+      "engine": null,
+      "engine_version": null,
+      "model_key": null,
+      "numeric_text": null,
+      "reason": "rna_invalid_input_schema",
+      "state": "invalid_input",
+      "structure_key": null,
+      "unit": "kcal/mol",
+      "value": null
+    },
+    "native_uncertainty": {
+      "energy_interval": {
+        "reason": "selected_algorithm_does_not_produce_uncertainty",
+        "state": "not_produced",
+        "value": null
+      },
+      "energy_standard_error": {
+        "reason": "selected_algorithm_does_not_produce_uncertainty",
+        "state": "not_produced",
+        "value": null
+      },
+      "ensemble_diversity": {
+        "reason": "selected_algorithm_does_not_produce_uncertainty",
+        "state": "not_produced",
+        "value": null
+      },
+      "ensemble_free_energy_kcal_mol": {
+        "reason": "selected_algorithm_does_not_produce_uncertainty",
+        "state": "not_produced",
+        "value": null
+      },
+      "mfe_frequency": {
+        "reason": "selected_algorithm_does_not_produce_uncertainty",
+        "state": "not_produced",
+        "value": null
+      },
+      "pair_probabilities": {
+        "reason": "selected_algorithm_does_not_produce_uncertainty",
+        "state": "not_produced",
+        "value": null
+      }
+    },
+    "operation": "predict_rna_secondary_structure",
+    "original_input": null,
+    "record_key": "actual-job-key",
+    "schema": "rna_mfe_prediction_sheet_v1",
+    "sequence_pairs": null,
+    "status": "invalid",
+    "structure": null,
+    "subject_binding": null,
+    "topology": null
+  }
+}

@@ -1,0 +1,291 @@
+{
+  "artifacts": [
+    {
+      "format": "hmmer_stdout",
+      "relative_path": "outputs/stdout",
+      "role": "stdout",
+      "sha256": "54bd69bab4c671880b73688840597d5234318a0d91deea547147388f5e38295b",
+      "size_bytes": 57
+    },
+    {
+      "format": "hmmer_stderr",
+      "relative_path": "outputs/stderr",
+      "role": "stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "format": "hmmsim_summary",
+      "relative_path": "outputs/summary",
+      "role": "summary",
+      "sha256": "644fd9772a69cc736d6fe6407a4f2d154c8d4969e9f5dc651b1b6d1ac22e9535",
+      "size_bytes": 139
+    },
+    {
+      "format": "native_float64_vector",
+      "relative_path": "outputs/scores",
+      "role": "scores",
+      "sha256": "e97323be3855f68cad8c9baaa497c7638eab1435d835d540d9f0864163085aa8",
+      "size_bytes": 8000
+    },
+    {
+      "format": "hmmsim_filter",
+      "relative_path": "outputs/filter",
+      "role": "filter",
+      "sha256": "b95b9beda6aa35cea7b6d9735e9155c3efd22d8f08ef686979a53a0992ea272b",
+      "size_bytes": 20
+    },
+    {
+      "format": "hmmsim_xy",
+      "relative_path": "outputs/survival",
+      "role": "survival",
+      "sha256": "a3944b52c71d72e5222f90e24346dee090a545e1ce034f37ea1cacce2b7d3b66",
+      "size_bytes": 14040
+    },
+    {
+      "format": "hmmsim_xy",
+      "relative_path": "outputs/expected_counts",
+      "role": "expected_counts",
+      "sha256": "aada1ae5f0dcf732b07e97b4cd8b90caac87b8dd7c95afe9e632e5a3a995d596",
+      "size_bytes": 11794
+    },
+    {
+      "format": "hmmsim_alignments",
+      "relative_path": "outputs/alignments",
+      "role": "alignments",
+      "sha256": "6b418171bf7b3dcc6c2919fe368380528c42ea5c3fb9d6d0fe915ddcec7bc7ad",
+      "size_bytes": 10986
+    }
+  ],
+  "environment": {
+    "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_simulation_styles_12/hmmer-preparation-attempt/tmp",
+    "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_simulation_styles_12/hmmer-preparation-attempt/tmp",
+    "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_simulation_styles_12/hmmer-preparation-attempt/tmp",
+    "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_simulation_styles_12/hmmer-preparation-attempt/cache"
+  },
+  "failures": [],
+  "finished_at": "2026-10-26T09:18:14.790155+00:00",
+  "identity": {
+    "attempt_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e",
+    "episode_id": "selected-local-child",
+    "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_simulation_styles_12/native.json",
+    "operation_key": "selected-command",
+    "requested_job_sha256": "8c44dcc7f04b5475237eb2a15ded559f0cb7cf4e7c55748775c7fa25c3289f23",
+    "resource_id": "local",
+    "run_id": "producer267-test"
+  },
+  "inputs": [
+    {
+      "artifact_ref": "fixture267:models:0",
+      "expected_sha256": "c75e9e7e1da3f9d609e768634493e0ee13ea48cd532025610c2aa7d2f6964cab",
+      "expected_size_bytes": 2727,
+      "final_sha256": "c75e9e7e1da3f9d609e768634493e0ee13ea48cd532025610c2aa7d2f6964cab",
+      "final_size_bytes": 2727,
+      "format": "hmmer3_ascii",
+      "ordinal": 0,
+      "original_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_dna/profile.hmm",
+      "relative_path": "inputs/models.hmm",
+      "role": "models",
+      "staged_sha256": "c75e9e7e1da3f9d609e768634493e0ee13ea48cd532025610c2aa7d2f6964cab",
+      "staged_size_bytes": 2727
+    }
+  ],
+  "mode": "viterbi",
+  "native_abi": {
+    "byte_order": "little",
+    "bytes_per_float": 8,
+    "c_float_bytes": 4,
+    "c_int_bytes": 4,
+    "c_long_bytes": 8,
+    "float_format": "ieee754_binary64",
+    "int32_bytes": 4,
+    "uint16_bytes": 2,
+    "uint32_bytes": 4,
+    "uint64_bytes": 8,
+    "uint8_bytes": 1
+  },
+  "operation": {
+    "engine_version": "3.4",
+    "mode": "viterbi",
+    "program": "hmmsim",
+    "settings": {
+      "--EfL": 100,
+      "--EfN": 200,
+      "--Eft": 0.04,
+      "--EmL": 200,
+      "--EmN": 200,
+      "--EvL": 200,
+      "--EvN": 200,
+      "--nu": 2.0,
+      "--pthresh": 0.1,
+      "--s": true,
+      "--seed": 42,
+      "--tmax": 0.1,
+      "--tmin": 0.1,
+      "--tpoints": 1,
+      "--vit": true,
+      "-L": 30,
+      "-N": 1000,
+      "-a": true
+    }
+  },
+  "program": "hmmsim",
+  "realized_argv": [
+    "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmsim",
+    "--seed",
+    "42",
+    "-N",
+    "1000",
+    "-L",
+    "30",
+    "--s",
+    "--tmin",
+    ".1",
+    "--tmax",
+    ".1",
+    "--pthresh",
+    ".1",
+    "-a",
+    "--vit",
+    "-o",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_simulation_styles_12/hmmer-preparation-attempt/outputs/summary",
+    "--xfile",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_simulation_styles_12/hmmer-preparation-attempt/outputs/scores",
+    "--afile",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_simulation_styles_12/hmmer-preparation-attempt/outputs/alignments",
+    "--ffile",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_simulation_styles_12/hmmer-preparation-attempt/outputs/filter",
+    "--pfile",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_simulation_styles_12/hmmer-preparation-attempt/outputs/survival",
+    "--efile",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_simulation_styles_12/hmmer-preparation-attempt/outputs/expected_counts",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_simulation_styles_12/hmmer-preparation-attempt/inputs/models.hmm"
+  ],
+  "requested_job": {
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmsim",
+      "--seed",
+      "42",
+      "-N",
+      "1000",
+      "-L",
+      "30",
+      "--s",
+      "--tmin",
+      ".1",
+      "--tmax",
+      ".1",
+      "--pthresh",
+      ".1",
+      "-a",
+      "--vit",
+      "-o",
+      "outputs/summary",
+      "--xfile",
+      "outputs/scores",
+      "--afile",
+      "outputs/alignments",
+      "--ffile",
+      "outputs/filter",
+      "--pfile",
+      "outputs/survival",
+      "--efile",
+      "outputs/expected_counts",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_dna/profile.hmm"
+    ],
+    "environment": {},
+    "native_hmmer_preparation": {
+      "environment": {},
+      "grading_parameters": {},
+      "input_metadata": {},
+      "key": null,
+      "mode": "viterbi",
+      "operands": [
+        {
+          "artifact_ref": "fixture267:models:0",
+          "format": "hmmer3_ascii",
+          "ordinal": 0,
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/native/hmmbuild_dna/profile.hmm",
+          "role": "models",
+          "sha256": "c75e9e7e1da3f9d609e768634493e0ee13ea48cd532025610c2aa7d2f6964cab",
+          "size_bytes": 2727
+        }
+      ],
+      "options": [
+        "--seed",
+        "42",
+        "-N",
+        "1000",
+        "-L",
+        "30",
+        "--s",
+        "--tmin",
+        ".1",
+        "--tmax",
+        ".1",
+        "--pthresh",
+        ".1",
+        "-a"
+      ],
+      "outputs": [
+        {
+          "format": "hmmer_stdout",
+          "relative_path": "outputs/stdout",
+          "role": "stdout"
+        },
+        {
+          "format": "hmmer_stderr",
+          "relative_path": "outputs/stderr",
+          "role": "stderr"
+        },
+        {
+          "format": "hmmsim_summary",
+          "relative_path": "outputs/summary",
+          "role": "summary"
+        },
+        {
+          "format": "native_float64_vector",
+          "relative_path": "outputs/scores",
+          "role": "scores"
+        },
+        {
+          "format": "hmmsim_filter",
+          "relative_path": "outputs/filter",
+          "role": "filter"
+        },
+        {
+          "format": "hmmsim_xy",
+          "relative_path": "outputs/survival",
+          "role": "survival"
+        },
+        {
+          "format": "hmmsim_xy",
+          "relative_path": "outputs/expected_counts",
+          "role": "expected_counts"
+        },
+        {
+          "format": "hmmsim_alignments",
+          "relative_path": "outputs/alignments",
+          "role": "alignments"
+        }
+      ],
+      "program": "hmmsim",
+      "software": {
+        "engine_version": "3.4",
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmsim",
+        "sha256": "41d4221d2fc21986dda573b2a9dbe645ac48fc5cbdd1e856a4e605770c3fb700"
+      },
+      "version": "native_hmmer_preparation_job_v1"
+    }
+  },
+  "returncode": 0,
+  "software": {
+    "actual_sha256": "41d4221d2fc21986dda573b2a9dbe645ac48fc5cbdd1e856a4e605770c3fb700",
+    "declared_engine_version": "3.4",
+    "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmsim",
+    "expected_sha256": "41d4221d2fc21986dda573b2a9dbe645ac48fc5cbdd1e856a4e605770c3fb700"
+  },
+  "started_at": "2026-10-26T09:18:14.745397+00:00",
+  "version": "native_hmmer_preparation_bundle_v1",
+  "working_copies": []
+}

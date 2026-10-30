@@ -1,0 +1,30 @@
+..F....                                                                  [100%]
+=================================== FAILURES ===================================
+_ test_actual_scientific_concentrations_and_ph_remain_visible_in_requested_meanings _
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/gel_episode_integration_107/draft_tests_002/test_actual_scientific_concent0')
+
+    def test_actual_scientific_concentrations_and_ph_remain_visible_in_requested_meanings(tmp_path):
+        def alter(selected,comparison,sources):
+            original=sources[('source_caption','text')]['content']
+            protein='50 mM NaCl, pH 7.5'
+            competitor='50 mM NaCl, pH 7.5, 20 uM competitor'
+            content=original+b' Protein condition: '+protein.encode()+b'; competitor condition: '+competitor.encode()+b'.'
+            sources[('source_caption','text')]['content']=content
+            for index,value in [(1,protein),(2,competitor)]:
+                start=content.index(value.encode(),len(original)) if index==1 else content.rindex(value.encode())
+                selected['lanes'][index]['condition']={'state':'known','value':value,'witnesses':[{
+                    'source_ref':'source_caption','representation':'text','start':start,'end':start+len(value.encode()),'quote':value}]}
+        store,case=make_case(tmp_path/'state',alter_fixture=alter)
+        try:
+            _,provider,_=asyncio.run(run_case(store,case,tmp_path/'run',child_actions=3))
+            for text in _own_and_parent_texts(provider):
+                steering=text.split('\n\nSTEERING\n',1)[1]
+                assert '| condition | known | 50 mM NaCl, pH 7.5 |' in steering
+>               assert '| condition | known | 50 mM NaCl, pH 7.5, 20 uM competitor |' in steering
+E               AssertionError: assert '| condition | known | 50 mM NaCl, pH 7.5, 20 uM competitor |' in '\nOwn action yields\n\n| Category | Completed | Total signed yield | Expected next yield | Uncertainty or unavailable...servation_likelihood |\n\nApplicable background statistic\n\n| Field | Supplied value |\n| --- | --- |\n| [0] | mean |'
+
+tests/test_literature_gel_prompt.py:139: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_literature_gel_prompt.py::test_actual_scientific_concentrations_and_ph_remain_visible_in_requested_meanings
+1 failed, 6 passed, 17 deselected in 405.22s (0:06:45)

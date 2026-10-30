@@ -1,0 +1,918 @@
+{
+  "version": "blast_masking_native_oracle_plan_v1",
+  "attempt": "check064_blast_masking_native_oracle",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "swap_bytes": 0,
+    "wall_seconds": null
+  },
+  "software": [
+    {
+      "program": "dustmasker",
+      "source_path": "resources/software/ncbi-blast-2.17.0+/bin/dustmasker",
+      "sha256": "e74463ca67080c1503ad23f75f1ff8543aaa4d016d4083b7ff92234f1a874201",
+      "size_bytes": 21874864,
+      "version_status": "to_be_observed_inside_bounded_runner"
+    },
+    {
+      "program": "segmasker",
+      "source_path": "resources/software/ncbi-blast-2.17.0+/bin/segmasker",
+      "sha256": "1e09855a376c3c25ebdec32d84facd4da0c050744bfe80a02c506eb3f328328f",
+      "size_bytes": 22428016,
+      "version_status": "to_be_observed_inside_bounded_runner"
+    },
+    {
+      "program": "windowmasker",
+      "source_path": "resources/software/ncbi-blast-2.17.0+/bin/windowmasker",
+      "sha256": "5616c62ea44c7167857a38813e5b0cf92a45eb31cea65fe942f2d433d741ad29",
+      "size_bytes": 27537368,
+      "version_status": "to_be_observed_inside_bounded_runner"
+    }
+  ],
+  "inputs": [
+    {
+      "input_id": "dna.fa",
+      "path": "inputs/dna.fa",
+      "sha256": "1e4d9c2749a951878cfeca7b9ddf125c3800dacc1d8954f094a8b0f30677b587",
+      "size_bytes": 301,
+      "content_origin": "explicit_synthetic_fixture",
+      "records": [
+        {
+          "ordinal": 0,
+          "header": "dup synthetic duplicate DNA header",
+          "sequence": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "length": 80
+        },
+        {
+          "ordinal": 1,
+          "header": "dup synthetic duplicate DNA header",
+          "sequence": "acgttgcaagtcgatctgaccatggtacgcat",
+          "length": 32
+        },
+        {
+          "ordinal": 2,
+          "header": "lcl|ambiguous_n synthetic pre-existing N",
+          "sequence": "NNNNAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANNNN",
+          "length": 72
+        }
+      ]
+    },
+    {
+      "input_id": "protein.fa",
+      "path": "inputs/protein.fa",
+      "sha256": "8140242f56048e4faf80c8dc3f73e6ed465bebc3a5d27938823fe2e12de2d1a9",
+      "size_bytes": 277,
+      "content_origin": "explicit_synthetic_fixture",
+      "records": [
+        {
+          "ordinal": 0,
+          "header": "dup synthetic duplicate protein header",
+          "sequence": "KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK",
+          "length": 64
+        },
+        {
+          "ordinal": 1,
+          "header": "dup synthetic duplicate protein header",
+          "sequence": "acdefghiklmnpqrstvwy",
+          "length": 20
+        },
+        {
+          "ordinal": 2,
+          "header": "lcl|protein_tail synthetic SEG flank",
+          "sequence": "ACDEFGHIKLMNPQRSTVWYQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQACDEFGHIKLMNPQRSTVWY",
+          "length": 72
+        }
+      ]
+    },
+    {
+      "input_id": "window_reference.fa",
+      "path": "inputs/window_reference.fa",
+      "sha256": "a09ccb13cdd2fdad4bc7b6e4decd235acedd0dabb7416e4b21402d36d0995b2f",
+      "size_bytes": 418,
+      "content_origin": "explicit_synthetic_fixture",
+      "records": [
+        {
+          "ordinal": 0,
+          "header": "wm_ref_poly_a synthetic counts reference",
+          "sequence": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "length": 128
+        },
+        {
+          "ordinal": 1,
+          "header": "wm_ref_poly_c synthetic counts reference",
+          "sequence": "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+          "length": 128
+        },
+        {
+          "ordinal": 2,
+          "header": "wm_ref_diverse synthetic counts reference",
+          "sequence": "GTCAGTTCGATACCTGAGCATGTCAGATCGTA",
+          "length": 32
+        }
+      ]
+    },
+    {
+      "input_id": "window_target.fa",
+      "path": "inputs/window_target.fa",
+      "sha256": "c59ca6cbca58498d6d7107202275d4fe944fd3df050932963b09702c522e5fde",
+      "size_bytes": 253,
+      "content_origin": "explicit_synthetic_fixture",
+      "records": [
+        {
+          "ordinal": 0,
+          "header": "dup synthetic duplicate WindowMasker header",
+          "sequence": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "length": 80
+        },
+        {
+          "ordinal": 1,
+          "header": "dup synthetic duplicate WindowMasker header",
+          "sequence": "acgttgcaagtcgatctgaccatggtacgcat",
+          "length": 32
+        },
+        {
+          "ordinal": 2,
+          "header": "lcl|wm_short synthetic below-window record",
+          "sequence": "ACGT",
+          "length": 4
+        }
+      ]
+    },
+    {
+      "input_id": "empty.fa",
+      "path": "inputs/empty.fa",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "content_origin": "empty_input",
+      "records": null
+    },
+    {
+      "input_id": "malformed.fa",
+      "path": "inputs/malformed.fa",
+      "sha256": "ffd24596088f756527ae2f37a33e73254b56ba6f5287049eb61f93d399e5793d",
+      "size_bytes": 32,
+      "content_origin": "malformed_input",
+      "records": null
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "dustmasker_help",
+      "program": "dustmasker",
+      "argv": [
+        "{exe:dustmasker}",
+        "-help"
+      ],
+      "mode": "inspection",
+      "purpose": "retain_native_help",
+      "output": null,
+      "input_id": null,
+      "parse_seqids": null,
+      "selected_parameters": {},
+      "omitted_parameter_policy": "native defaults; no invented effective values"
+    },
+    {
+      "case_id": "dustmasker_version",
+      "program": "dustmasker",
+      "argv": [
+        "{exe:dustmasker}",
+        "-version"
+      ],
+      "mode": "inspection",
+      "purpose": "retain_native_version",
+      "output": null,
+      "input_id": null,
+      "parse_seqids": null,
+      "selected_parameters": {},
+      "omitted_parameter_policy": "native defaults; no invented effective values"
+    },
+    {
+      "case_id": "segmasker_help",
+      "program": "segmasker",
+      "argv": [
+        "{exe:segmasker}",
+        "-help"
+      ],
+      "mode": "inspection",
+      "purpose": "retain_native_help",
+      "output": null,
+      "input_id": null,
+      "parse_seqids": null,
+      "selected_parameters": {},
+      "omitted_parameter_policy": "native defaults; no invented effective values"
+    },
+    {
+      "case_id": "segmasker_version",
+      "program": "segmasker",
+      "argv": [
+        "{exe:segmasker}",
+        "-version"
+      ],
+      "mode": "inspection",
+      "purpose": "retain_native_version",
+      "output": null,
+      "input_id": null,
+      "parse_seqids": null,
+      "selected_parameters": {},
+      "omitted_parameter_policy": "native defaults; no invented effective values"
+    },
+    {
+      "case_id": "windowmasker_help",
+      "program": "windowmasker",
+      "argv": [
+        "{exe:windowmasker}",
+        "-help"
+      ],
+      "mode": "inspection",
+      "purpose": "retain_native_help",
+      "output": null,
+      "input_id": null,
+      "parse_seqids": null,
+      "selected_parameters": {},
+      "omitted_parameter_policy": "native defaults; no invented effective values"
+    },
+    {
+      "case_id": "windowmasker_version",
+      "program": "windowmasker",
+      "argv": [
+        "{exe:windowmasker}",
+        "-version"
+      ],
+      "mode": "inspection",
+      "purpose": "retain_native_version",
+      "output": null,
+      "input_id": null,
+      "parse_seqids": null,
+      "selected_parameters": {},
+      "omitted_parameter_policy": "native defaults; no invented effective values"
+    },
+    {
+      "case_id": "dustmasker_interval",
+      "program": "dustmasker",
+      "argv": [
+        "{exe:dustmasker}",
+        "-in",
+        "{input:dna.fa}",
+        "-infmt",
+        "fasta",
+        "-outfmt",
+        "interval",
+        "-window",
+        "64",
+        "-level",
+        "20",
+        "-linker",
+        "1",
+        "-out",
+        "{oracle}/outputs/dustmasker_interval.txt"
+      ],
+      "mode": "mask",
+      "purpose": "compare_native_intervals_and_soft_masked_FASTA",
+      "output": "outputs/dustmasker_interval.txt",
+      "input_id": "dna.fa",
+      "parse_seqids": false,
+      "selected_parameters": {
+        "-window": "64",
+        "-level": "20",
+        "-linker": "1"
+      },
+      "omitted_parameter_policy": "native defaults; parse_seqids omitted means native default false when not selected"
+    },
+    {
+      "case_id": "dustmasker_soft",
+      "program": "dustmasker",
+      "argv": [
+        "{exe:dustmasker}",
+        "-in",
+        "{input:dna.fa}",
+        "-infmt",
+        "fasta",
+        "-outfmt",
+        "fasta",
+        "-window",
+        "64",
+        "-level",
+        "20",
+        "-linker",
+        "1",
+        "-out",
+        "{oracle}/outputs/dustmasker_soft.fa"
+      ],
+      "mode": "mask",
+      "purpose": "compare_native_intervals_and_soft_masked_FASTA",
+      "output": "outputs/dustmasker_soft.fa",
+      "input_id": "dna.fa",
+      "parse_seqids": false,
+      "selected_parameters": {
+        "-window": "64",
+        "-level": "20",
+        "-linker": "1"
+      },
+      "omitted_parameter_policy": "native defaults; parse_seqids omitted means native default false when not selected"
+    },
+    {
+      "case_id": "dustmasker_parsed_interval",
+      "program": "dustmasker",
+      "argv": [
+        "{exe:dustmasker}",
+        "-in",
+        "{input:dna.fa}",
+        "-infmt",
+        "fasta",
+        "-outfmt",
+        "interval",
+        "-window",
+        "64",
+        "-level",
+        "20",
+        "-linker",
+        "1",
+        "-parse_seqids",
+        "-out",
+        "{oracle}/outputs/dustmasker_parsed_interval.txt"
+      ],
+      "mode": "mask",
+      "purpose": "compare_native_intervals_and_soft_masked_FASTA",
+      "output": "outputs/dustmasker_parsed_interval.txt",
+      "input_id": "dna.fa",
+      "parse_seqids": true,
+      "selected_parameters": {
+        "-window": "64",
+        "-level": "20",
+        "-linker": "1"
+      },
+      "omitted_parameter_policy": "native defaults; parse_seqids omitted means native default false when not selected"
+    },
+    {
+      "case_id": "dustmasker_parsed_soft",
+      "program": "dustmasker",
+      "argv": [
+        "{exe:dustmasker}",
+        "-in",
+        "{input:dna.fa}",
+        "-infmt",
+        "fasta",
+        "-outfmt",
+        "fasta",
+        "-window",
+        "64",
+        "-level",
+        "20",
+        "-linker",
+        "1",
+        "-parse_seqids",
+        "-out",
+        "{oracle}/outputs/dustmasker_parsed_soft.fa"
+      ],
+      "mode": "mask",
+      "purpose": "compare_native_intervals_and_soft_masked_FASTA",
+      "output": "outputs/dustmasker_parsed_soft.fa",
+      "input_id": "dna.fa",
+      "parse_seqids": true,
+      "selected_parameters": {
+        "-window": "64",
+        "-level": "20",
+        "-linker": "1"
+      },
+      "omitted_parameter_policy": "native defaults; parse_seqids omitted means native default false when not selected"
+    },
+    {
+      "case_id": "segmasker_interval",
+      "program": "segmasker",
+      "argv": [
+        "{exe:segmasker}",
+        "-in",
+        "{input:protein.fa}",
+        "-infmt",
+        "fasta",
+        "-outfmt",
+        "interval",
+        "-window",
+        "12",
+        "-locut",
+        "2.2",
+        "-hicut",
+        "2.5",
+        "-out",
+        "{oracle}/outputs/segmasker_interval.txt"
+      ],
+      "mode": "mask",
+      "purpose": "compare_native_intervals_and_soft_masked_FASTA",
+      "output": "outputs/segmasker_interval.txt",
+      "input_id": "protein.fa",
+      "parse_seqids": false,
+      "selected_parameters": {
+        "-window": "12",
+        "-locut": "2.2",
+        "-hicut": "2.5"
+      },
+      "omitted_parameter_policy": "native defaults; parse_seqids omitted means native default false when not selected"
+    },
+    {
+      "case_id": "segmasker_soft",
+      "program": "segmasker",
+      "argv": [
+        "{exe:segmasker}",
+        "-in",
+        "{input:protein.fa}",
+        "-infmt",
+        "fasta",
+        "-outfmt",
+        "fasta",
+        "-window",
+        "12",
+        "-locut",
+        "2.2",
+        "-hicut",
+        "2.5",
+        "-out",
+        "{oracle}/outputs/segmasker_soft.fa"
+      ],
+      "mode": "mask",
+      "purpose": "compare_native_intervals_and_soft_masked_FASTA",
+      "output": "outputs/segmasker_soft.fa",
+      "input_id": "protein.fa",
+      "parse_seqids": false,
+      "selected_parameters": {
+        "-window": "12",
+        "-locut": "2.2",
+        "-hicut": "2.5"
+      },
+      "omitted_parameter_policy": "native defaults; parse_seqids omitted means native default false when not selected"
+    },
+    {
+      "case_id": "segmasker_parsed_interval",
+      "program": "segmasker",
+      "argv": [
+        "{exe:segmasker}",
+        "-in",
+        "{input:protein.fa}",
+        "-infmt",
+        "fasta",
+        "-outfmt",
+        "interval",
+        "-window",
+        "12",
+        "-locut",
+        "2.2",
+        "-hicut",
+        "2.5",
+        "-parse_seqids",
+        "-out",
+        "{oracle}/outputs/segmasker_parsed_interval.txt"
+      ],
+      "mode": "mask",
+      "purpose": "compare_native_intervals_and_soft_masked_FASTA",
+      "output": "outputs/segmasker_parsed_interval.txt",
+      "input_id": "protein.fa",
+      "parse_seqids": true,
+      "selected_parameters": {
+        "-window": "12",
+        "-locut": "2.2",
+        "-hicut": "2.5"
+      },
+      "omitted_parameter_policy": "native defaults; parse_seqids omitted means native default false when not selected"
+    },
+    {
+      "case_id": "segmasker_parsed_soft",
+      "program": "segmasker",
+      "argv": [
+        "{exe:segmasker}",
+        "-in",
+        "{input:protein.fa}",
+        "-infmt",
+        "fasta",
+        "-outfmt",
+        "fasta",
+        "-window",
+        "12",
+        "-locut",
+        "2.2",
+        "-hicut",
+        "2.5",
+        "-parse_seqids",
+        "-out",
+        "{oracle}/outputs/segmasker_parsed_soft.fa"
+      ],
+      "mode": "mask",
+      "purpose": "compare_native_intervals_and_soft_masked_FASTA",
+      "output": "outputs/segmasker_parsed_soft.fa",
+      "input_id": "protein.fa",
+      "parse_seqids": true,
+      "selected_parameters": {
+        "-window": "12",
+        "-locut": "2.2",
+        "-hicut": "2.5"
+      },
+      "omitted_parameter_policy": "native defaults; parse_seqids omitted means native default false when not selected"
+    },
+    {
+      "case_id": "dustmasker_hard",
+      "program": "dustmasker",
+      "argv": [
+        "{exe:dustmasker}",
+        "-in",
+        "{input:dna.fa}",
+        "-infmt",
+        "fasta",
+        "-outfmt",
+        "fasta",
+        "-window",
+        "64",
+        "-level",
+        "20",
+        "-linker",
+        "1",
+        "-hard_masking",
+        "-out",
+        "{oracle}/outputs/dustmasker_hard.txt"
+      ],
+      "mode": "mask",
+      "purpose": "hard_N_ambiguity",
+      "output": "outputs/dustmasker_hard.txt",
+      "input_id": "dna.fa",
+      "parse_seqids": false,
+      "selected_parameters": {
+        "window": 64,
+        "level": 20,
+        "linker": 1,
+        "hard_masking": true
+      },
+      "omitted_parameter_policy": "native defaults; no invented effective values"
+    },
+    {
+      "case_id": "dustmasker_acclist",
+      "program": "dustmasker",
+      "argv": [
+        "{exe:dustmasker}",
+        "-in",
+        "{input:dna.fa}",
+        "-infmt",
+        "fasta",
+        "-outfmt",
+        "acclist",
+        "-window",
+        "64",
+        "-level",
+        "20",
+        "-linker",
+        "1",
+        "-out",
+        "{oracle}/outputs/dustmasker_acclist.txt"
+      ],
+      "mode": "mask",
+      "purpose": "native_acclist_format_not_a_producer_binding",
+      "output": "outputs/dustmasker_acclist.txt",
+      "input_id": "dna.fa",
+      "parse_seqids": false,
+      "selected_parameters": {
+        "window": 64,
+        "level": 20,
+        "linker": 1,
+        "hard_masking": false
+      },
+      "omitted_parameter_policy": "native defaults; no invented effective values"
+    },
+    {
+      "case_id": "windowmasker_counts",
+      "program": "windowmasker",
+      "argv": [
+        "{exe:windowmasker}",
+        "-mk_counts",
+        "-in",
+        "{input:window_reference.fa}",
+        "-infmt",
+        "fasta",
+        "-sformat",
+        "ascii",
+        "-unit",
+        "3",
+        "-mem",
+        "16",
+        "-t_low",
+        "1",
+        "-t_high",
+        "64",
+        "-checkdup",
+        "false",
+        "-fa_list",
+        "false",
+        "-out",
+        "{oracle}/outputs/windowmasker_counts.ascii"
+      ],
+      "mode": "create_counts",
+      "purpose": "explicit_small_separate_reference_counts",
+      "output": "outputs/windowmasker_counts.ascii",
+      "input_id": "window_reference.fa",
+      "parse_seqids": null,
+      "selected_parameters": {
+        "unit": 3,
+        "mem": 16,
+        "t_low": 1,
+        "t_high": 64,
+        "checkdup": false,
+        "fa_list": false,
+        "sformat": "ascii"
+      },
+      "omitted_parameter_policy": "native defaults; genome_size and percentile thresholds not supplied"
+    },
+    {
+      "case_id": "windowmasker_interval",
+      "program": "windowmasker",
+      "argv": [
+        "{exe:windowmasker}",
+        "-ustat",
+        "{oracle}/outputs/windowmasker_counts.ascii",
+        "-in",
+        "{input:window_target.fa}",
+        "-infmt",
+        "fasta",
+        "-outfmt",
+        "interval",
+        "-window",
+        "7",
+        "-t_low",
+        "1",
+        "-t_high",
+        "64",
+        "-t_extend",
+        "4",
+        "-t_thres",
+        "8",
+        "-set_t_low",
+        "1",
+        "-set_t_high",
+        "64",
+        "-dust",
+        "false",
+        "-out",
+        "{oracle}/outputs/windowmasker_interval.txt"
+      ],
+      "mode": "mask",
+      "purpose": "mask_distinct_target_using_exact_selected_counts",
+      "output": "outputs/windowmasker_interval.txt",
+      "input_id": "window_target.fa",
+      "statistics_from_case": "windowmasker_counts",
+      "parse_seqids": false,
+      "selected_parameters": {
+        "-window": "7",
+        "-t_low": "1",
+        "-t_high": "64",
+        "-t_extend": "4",
+        "-t_thres": "8",
+        "-set_t_low": "1",
+        "-set_t_high": "64",
+        "-dust": "false"
+      },
+      "omitted_parameter_policy": "native defaults; no percentile overrides selected"
+    },
+    {
+      "case_id": "windowmasker_soft",
+      "program": "windowmasker",
+      "argv": [
+        "{exe:windowmasker}",
+        "-ustat",
+        "{oracle}/outputs/windowmasker_counts.ascii",
+        "-in",
+        "{input:window_target.fa}",
+        "-infmt",
+        "fasta",
+        "-outfmt",
+        "fasta",
+        "-window",
+        "7",
+        "-t_low",
+        "1",
+        "-t_high",
+        "64",
+        "-t_extend",
+        "4",
+        "-t_thres",
+        "8",
+        "-set_t_low",
+        "1",
+        "-set_t_high",
+        "64",
+        "-dust",
+        "false",
+        "-out",
+        "{oracle}/outputs/windowmasker_soft.fa"
+      ],
+      "mode": "mask",
+      "purpose": "mask_distinct_target_using_exact_selected_counts",
+      "output": "outputs/windowmasker_soft.fa",
+      "input_id": "window_target.fa",
+      "statistics_from_case": "windowmasker_counts",
+      "parse_seqids": false,
+      "selected_parameters": {
+        "-window": "7",
+        "-t_low": "1",
+        "-t_high": "64",
+        "-t_extend": "4",
+        "-t_thres": "8",
+        "-set_t_low": "1",
+        "-set_t_high": "64",
+        "-dust": "false"
+      },
+      "omitted_parameter_policy": "native defaults; no percentile overrides selected"
+    },
+    {
+      "case_id": "windowmasker_parsed_interval",
+      "program": "windowmasker",
+      "argv": [
+        "{exe:windowmasker}",
+        "-ustat",
+        "{oracle}/outputs/windowmasker_counts.ascii",
+        "-in",
+        "{input:window_target.fa}",
+        "-infmt",
+        "fasta",
+        "-outfmt",
+        "interval",
+        "-window",
+        "7",
+        "-t_low",
+        "1",
+        "-t_high",
+        "64",
+        "-t_extend",
+        "4",
+        "-t_thres",
+        "8",
+        "-set_t_low",
+        "1",
+        "-set_t_high",
+        "64",
+        "-dust",
+        "false",
+        "-parse_seqids",
+        "-out",
+        "{oracle}/outputs/windowmasker_parsed_interval.txt"
+      ],
+      "mode": "mask",
+      "purpose": "mask_distinct_target_using_exact_selected_counts",
+      "output": "outputs/windowmasker_parsed_interval.txt",
+      "input_id": "window_target.fa",
+      "statistics_from_case": "windowmasker_counts",
+      "parse_seqids": true,
+      "selected_parameters": {
+        "-window": "7",
+        "-t_low": "1",
+        "-t_high": "64",
+        "-t_extend": "4",
+        "-t_thres": "8",
+        "-set_t_low": "1",
+        "-set_t_high": "64",
+        "-dust": "false"
+      },
+      "omitted_parameter_policy": "native defaults; no percentile overrides selected"
+    },
+    {
+      "case_id": "windowmasker_parsed_soft",
+      "program": "windowmasker",
+      "argv": [
+        "{exe:windowmasker}",
+        "-ustat",
+        "{oracle}/outputs/windowmasker_counts.ascii",
+        "-in",
+        "{input:window_target.fa}",
+        "-infmt",
+        "fasta",
+        "-outfmt",
+        "fasta",
+        "-window",
+        "7",
+        "-t_low",
+        "1",
+        "-t_high",
+        "64",
+        "-t_extend",
+        "4",
+        "-t_thres",
+        "8",
+        "-set_t_low",
+        "1",
+        "-set_t_high",
+        "64",
+        "-dust",
+        "false",
+        "-parse_seqids",
+        "-out",
+        "{oracle}/outputs/windowmasker_parsed_soft.fa"
+      ],
+      "mode": "mask",
+      "purpose": "mask_distinct_target_using_exact_selected_counts",
+      "output": "outputs/windowmasker_parsed_soft.fa",
+      "input_id": "window_target.fa",
+      "statistics_from_case": "windowmasker_counts",
+      "parse_seqids": true,
+      "selected_parameters": {
+        "-window": "7",
+        "-t_low": "1",
+        "-t_high": "64",
+        "-t_extend": "4",
+        "-t_thres": "8",
+        "-set_t_low": "1",
+        "-set_t_high": "64",
+        "-dust": "false"
+      },
+      "omitted_parameter_policy": "native defaults; no percentile overrides selected"
+    },
+    {
+      "case_id": "dustmasker_empty",
+      "program": "dustmasker",
+      "argv": [
+        "{exe:dustmasker}",
+        "-in",
+        "{input:empty.fa}",
+        "-infmt",
+        "fasta",
+        "-outfmt",
+        "interval",
+        "-window",
+        "64",
+        "-level",
+        "20",
+        "-linker",
+        "1",
+        "-out",
+        "{oracle}/outputs/dustmasker_empty.txt"
+      ],
+      "mode": "negative_input",
+      "purpose": "preserve_empty_or_failed_state_without_zero_mask_claim",
+      "output": "outputs/dustmasker_empty.txt",
+      "input_id": "empty.fa",
+      "parse_seqids": false,
+      "selected_parameters": {
+        "window": 64,
+        "level": 20,
+        "linker": 1
+      },
+      "omitted_parameter_policy": "native defaults"
+    },
+    {
+      "case_id": "dustmasker_malformed",
+      "program": "dustmasker",
+      "argv": [
+        "{exe:dustmasker}",
+        "-in",
+        "{input:malformed.fa}",
+        "-infmt",
+        "fasta",
+        "-outfmt",
+        "interval",
+        "-window",
+        "64",
+        "-level",
+        "20",
+        "-linker",
+        "1",
+        "-out",
+        "{oracle}/outputs/dustmasker_malformed.txt"
+      ],
+      "mode": "negative_input",
+      "purpose": "preserve_empty_or_failed_state_without_zero_mask_claim",
+      "output": "outputs/dustmasker_malformed.txt",
+      "input_id": "malformed.fa",
+      "parse_seqids": false,
+      "selected_parameters": {
+        "window": 64,
+        "level": 20,
+        "linker": 1
+      },
+      "omitted_parameter_policy": "native defaults"
+    },
+    {
+      "case_id": "windowmasker_missing_statistics",
+      "program": "windowmasker",
+      "argv": [
+        "{exe:windowmasker}",
+        "-ustat",
+        "{oracle}/deliberately_absent_statistics.ascii",
+        "-in",
+        "{input:window_target.fa}",
+        "-infmt",
+        "fasta",
+        "-outfmt",
+        "interval",
+        "-out",
+        "{oracle}/outputs/windowmasker_missing_statistics.txt"
+      ],
+      "mode": "negative_input",
+      "purpose": "missing_selected_statistics_does_not_generate_fallback",
+      "output": "outputs/windowmasker_missing_statistics.txt",
+      "input_id": "window_target.fa",
+      "parse_seqids": false,
+      "selected_parameters": {},
+      "omitted_parameter_policy": "native defaults"
+    }
+  ],
+  "source_record": "verification/tool_graders_blast_masking_boundaries_2026-10-28_610/OFFICIAL_SOURCES_001.json",
+  "limitations": [
+    "No annotation confidence is defined",
+    "No production parser/calculator or episode integration is exercised",
+    "No local database search or reference database building",
+    "Unsuccessful statistics creation leaves dependent selected cases not run; no fallback"
+  ]
+}

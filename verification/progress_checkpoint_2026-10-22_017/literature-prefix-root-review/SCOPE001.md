@@ -1,0 +1,5 @@
+# Independent offline review of the actual literature prefix
+
+Input is exclusively the sealed 25-file prefix at /tmp/configured-literature-commission-prefix-20261022-001-1HuZX6bk, manifest e7dbac56e54de4ad0d1b3ccab6a6684ecb83661420e7bdc11955ebe762622cfc. No live or original DB, source module, provider log or service is opened. The verifier imports stdlib only and writes only this new review directory.
+
+Check exact file membership, bytes, modes and stable input witnesses; compare original C1 bytes with captured journal/worker selection and goal/scope/form ownership; check independently recorded parent/child call overlaps and parent wait actions/observations; compare original saved v3 frames with their v6 completed-action pairs; distinguish a present empty C3 table from an absent C4 table and unreceived typed records. Do not recompute scientific scores or call runtime validators. Facts absent from this finite capture stay unverified. Recorded worker identity is not a present liveness claim. The result proves consistency of captured evidence, not unrestricted correctness, scientific validity or a later return.

@@ -1,0 +1,112 @@
+[
+  {
+    "body_sha256": "412485e0d03860974122f11aecc65b2e606a7423b36f3ea4aa9b48f245887529",
+    "method": "POST",
+    "path": "/app",
+    "rpc": {
+      "id": "bvbrc_rpc_a7bfdd4d7c5d73689acf112d5b3ae7e567cf5a1b1ac45fb22508b6ce2b457eb4",
+      "method": "AppService.start_app2",
+      "params": [
+        "GenomeAlignment",
+        {
+          "genome_ids": [
+            "123.1",
+            "456.2"
+          ],
+          "maxGappedAlignerLength": 10000,
+          "output_file": "selected",
+          "output_path": "/controlled/genome-alignment",
+          "recipe": "mauveAligner",
+          "seedWeight": 15
+        },
+        {}
+      ],
+      "version": "1.1"
+    }
+  },
+  {
+    "body_sha256": "75eb9aa92e1c4b0dde8814549fbff4502e59de11ccd2719463cb69e64032719e",
+    "method": "POST",
+    "path": "/app",
+    "rpc": {
+      "id": "bvbrc_rpc_dce7e0768b8a206798e6cb539b4ad5d1b8d0b7b6e0e11f696aab8ebe751894cb",
+      "method": "AppService.query_tasks",
+      "params": [
+        [
+          "123"
+        ]
+      ],
+      "version": "1.1"
+    }
+  },
+  {
+    "byte_count": 37,
+    "method": "GET",
+    "path": "/app/task_info/123/job_result_id",
+    "sha256": "5caf165609eb77899c259a1c528b11dd99c04b323ff8e6bc709aeb4d054378ff"
+  },
+  {
+    "body_sha256": "536314f140c6ac924d3fcd72904d19963ff51801041e654f35abc0f23be9d6db",
+    "method": "POST",
+    "path": "/workspace",
+    "rpc": {
+      "id": "bvbrc_rpc_3eca671128a462c62a3fcef423b84861451b917955415796a5c7e46c029984e8",
+      "method": "Workspace.get",
+      "params": [
+        {
+          "metadata_only": 1,
+          "objects": [
+            "11111111-1111-1111-1111-111111111111"
+          ]
+        }
+      ],
+      "version": "1.1"
+    }
+  },
+  {
+    "body_sha256": "c4c22b9b719718bb838ff14577906f6030e1ece90f455672a5e7027c0039e9c9",
+    "method": "POST",
+    "path": "/workspace",
+    "rpc": {
+      "id": "bvbrc_rpc_b2d1c8e909050d53dba502e36d021b6710e22572c476d72372944d86f18bf44d",
+      "method": "Workspace.get_download_url",
+      "params": [
+        {
+          "objects": [
+            "/controlled/genome-alignment/manifest"
+          ]
+        }
+      ],
+      "version": "1.1"
+    }
+  },
+  {
+    "byte_count": 338,
+    "method": "GET",
+    "path": "/download/manifest",
+    "sha256": "7590a5af22ff780406db47d0f7000a39c0dab824f643ff7eb5d9eb6c6d4f2f80"
+  },
+  {
+    "body_sha256": "2769cdb19ef1db02cbfd1bedc72ecc2f3a80999628a565568fe4c1bc0ede51da",
+    "method": "POST",
+    "path": "/workspace",
+    "rpc": {
+      "id": "bvbrc_rpc_7b8dcde6dc0c7c9ec53444cab227c256fae85e919ba3ee6ab20a55e258c6b12f",
+      "method": "Workspace.get_download_url",
+      "params": [
+        {
+          "objects": [
+            "/controlled/genome-alignment/native"
+          ]
+        }
+      ],
+      "version": "1.1"
+    }
+  },
+  {
+    "byte_count": 1007,
+    "method": "GET",
+    "path": "/download/native",
+    "sha256": "a0e700b702070ebd061f6ca5c5b0d9338ad8c330ad16b94c9a0090041cd8cd88"
+  }
+]

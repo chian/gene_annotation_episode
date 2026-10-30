@@ -1,0 +1,15 @@
+# Additive218projection correction
+
+This corrects the first218display policy without replacing its snapshot, state, forms or earlier verification facts. Root independently reproduced two concrete defects in pin001: attached statistics such as `mean 5mM` or `mean5mM` escaped the general numeric guard; the chemical locant in `5-exo-hydroxycamphor` was redacted. Selected P/H/percent artifact-coordinate masking was unaffected.
+
+Fresh populations now save the host-only `projection_version: product_coupling_projection_v2`. The public input/request, source record version and complete typed row shape remain unchanged. There is no caller switch to select an old policy. The marker is absent from ordinary selected outcomes and TASK/STEERING.
+
+The new display helper recognizes bounded statistical-label/number forms and concentration/percent-unit-adjacent numbers. It also preserves the explicitly bounded position/stereochemical hydroxy/oxo/amino/deoxy camphor-name grammar relevant to the retained207case. Alphanumeric protein/construct labels remain available; `5-fold` and `5-10` receive no chemical exemption. The separately selected condition and validated canonical-unit exceptions retain their previous restricted scope. This is no universal chemical-name, prose, PDF or OCR claim.
+
+Markerless saved payloads dispatch the exact original pin001helper. PROJECTION_COMPATIBILITY_002.json records an AST body comparison with that original helper. The original artifact/request/operation/source/outcome authentication still runs. Unknown markers and changed saved display outcomes fail. There is no fallback accepting an untrusted outcome, retrospective new display or migration.
+
+The actual original pin001positive and nondetection forms/states are reopened mode=ro&immutable=1/query_only through the current repository and fact reader. The new display helper, original source/covariance bytes, parsers, numerical validator/calculator, model completion and receive method are blocked before constructing that repository. The original typed schema, exact rows/form and state-file hashes stay unchanged with zero writes. This proves current data-reader compatibility. The original runtime descriptor still requires its original code pin; it is not rewritten or represented as equal to a new descriptor. Original cold-composition evidence remains with pin001. New current-descriptor cold-composition evidence is separately produced by pin002.
+
+Pin002 starts from all original pin001files and overlays only the nine218owned files. Only storage and the218test changed. It keeps the pre221compiled implementations and accepted215repair. The added local pytest.ini is a test-harness configuration, not production behavior. No concurrent221WIP is swept into this cohort.
+
+Sixteen additional tests cover native/derived attached statistics, camphor locants, construct names, independent settings, actual old positive/NDreadonly compatibility, unsupported host generation and changed display rejection. The final218suite contains67cases. The earlier51case contract and tests remain represented by pin001.

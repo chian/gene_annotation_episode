@@ -1,0 +1,49 @@
+{
+  "status": "proposed_prerequisite_examples_not_new_calculator_execution",
+  "source": {
+    "source_physical_n": 2,
+    "source_assessments": {
+      "row_footnote_applicability": "source_supported",
+      "statistical_count_matches_sd": "unknown",
+      "one_estimate_per_preparation": "unknown",
+      "equal_weight_arithmetic_mean": "unknown",
+      "sample_sd_n_minus_one": "unknown",
+      "iid_common_mean_finite_variance": "unknown",
+      "normal_sampling_units": "unknown",
+      "reported_sd_summarizes_counted_preparation_estimates": "unknown"
+    },
+    "source_statistical_n": null
+  },
+  "cases": [
+    {
+      "scenario_count_rule": "one_per_physical_preparation",
+      "stipulated_assumptions": [
+        "one_estimate_per_preparation",
+        "equal_weight_arithmetic_mean",
+        "sample_sd_n_minus_one",
+        "iid_common_mean_finite_variance",
+        "normal_sampling_units"
+      ],
+      "expected_statistical_n": null,
+      "expected_mean_se": null,
+      "expected_reason": "sd_preparation_estimator_ownership_unknown"
+    },
+    {
+      "scenario_count_rule": "one_per_physical_preparation",
+      "stipulated_assumptions": [
+        "one_estimate_per_preparation",
+        "reported_sd_summarizes_counted_preparation_estimates",
+        "equal_weight_arithmetic_mean",
+        "sample_sd_n_minus_one",
+        "iid_common_mean_finite_variance",
+        "normal_sampling_units"
+      ],
+      "expected_statistical_n": 2,
+      "expected_mean_variance_native": 0.005,
+      "expected_mean_se_native": 0.07071067811865475,
+      "expected_statistical_count_matches_sd_assessment": "unknown",
+      "expected_new_sd_roster_assessment": "unknown",
+      "expected_qualification": "conditional_on_stipulated_assumptions"
+    }
+  ]
+}

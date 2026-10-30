@@ -1,0 +1,591 @@
+{
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "controlled_response_owner_inputs_v2"
+    },
+    "arms": {
+      "type": "object",
+      "properties": {
+        "protein_condition1": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Arm"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "empty_condition1": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Arm"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "protein_condition0": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Arm"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "empty_condition0": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Arm"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "protein_condition1",
+        "empty_condition1",
+        "protein_condition0",
+        "empty_condition0"
+      ],
+      "additionalProperties": false
+    },
+    "relationships": {
+      "$ref": "#/$defs/Relationships"
+    },
+    "covariance": {
+      "anyOf": [
+        {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/RoleCovariance"
+            },
+            {
+              "$ref": "#/$defs/OwnerCovariance"
+            }
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "variance_status": {
+      "enum": [
+        "known",
+        "estimated",
+        "unknown"
+      ]
+    },
+    "model_kind": {
+      "enum": [
+        "none",
+        "known_joint_normal_source_means"
+      ]
+    }
+  },
+  "required": [
+    "version",
+    "arms",
+    "relationships",
+    "covariance",
+    "variance_status",
+    "model_kind"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "Arm": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "threshold": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "relation": {
+          "enum": [
+            "eq",
+            "lt",
+            "le",
+            "gt",
+            "ge",
+            "interval",
+            "none"
+          ]
+        },
+        "approximate": {
+          "type": "boolean"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "enum": [
+                "umol/min",
+                "nmol/min",
+                "mmol/min",
+                "uM/min",
+                "nM/min",
+                "per_min",
+                "per_s",
+                "umol/min/mg",
+                "nmol/min/mg"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "enum": [
+            "point",
+            "bound",
+            "missing",
+            "ambiguous",
+            "conflicting",
+            "unsupported"
+          ]
+        },
+        "endpoint_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "normalization_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "subject_construct_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "condition_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "physical_observation_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_observation_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "origin": {
+          "enum": [
+            "reported",
+            "graph_derived",
+            "synthetic"
+          ]
+        },
+        "digitization_interval": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "lower": {
+                  "type": "number"
+                },
+                "upper": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "lower",
+                "upper"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "protein_arrangement": {
+          "enum": [
+            "protein_present",
+            "protein_free_control",
+            "empty_vector_control",
+            "other_specified",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "meaning_statuses": {
+          "type": "object",
+          "properties": {
+            "endpoint": {
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "normalization": {
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "subject_construct": {
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "condition": {
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "physical_observation": {
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            }
+          },
+          "required": [
+            "endpoint",
+            "normalization",
+            "subject_construct",
+            "condition",
+            "physical_observation"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "value",
+        "threshold",
+        "relation",
+        "approximate",
+        "unit",
+        "status",
+        "endpoint_id",
+        "normalization_id",
+        "subject_construct_id",
+        "condition_id",
+        "physical_observation_id",
+        "source_observation_id",
+        "origin",
+        "digitization_interval",
+        "protein_arrangement",
+        "meaning_statuses"
+      ],
+      "additionalProperties": false
+    },
+    "Relationships": {
+      "type": "object",
+      "properties": {
+        "condition1_target": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "canonical_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "status",
+            "canonical_id"
+          ],
+          "additionalProperties": false
+        },
+        "condition0_target": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": [
+                "known",
+                "unknown",
+                "conflicting"
+              ]
+            },
+            "canonical_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "status",
+            "canonical_id"
+          ],
+          "additionalProperties": false
+        },
+        "condition_levels_relation": {
+          "enum": [
+            "same",
+            "different",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "subject_construct_across_conditions": {
+          "enum": [
+            "same",
+            "different",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "condition1_control_application": {
+          "enum": [
+            "matched_condition_control",
+            "shared_reference_assumption",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "condition0_control_application": {
+          "enum": [
+            "matched_condition_control",
+            "shared_reference_assumption",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "control_reference_reuse": {
+          "enum": [
+            "distinct_observations",
+            "same_reference_with_stated_invariance",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "nonintended_conditions": {
+          "enum": [
+            "matched",
+            "different",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "intended_factor": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "condition1_target",
+        "condition0_target",
+        "condition_levels_relation",
+        "subject_construct_across_conditions",
+        "condition1_control_application",
+        "condition0_control_application",
+        "control_reference_reuse",
+        "nonintended_conditions",
+        "intended_factor"
+      ],
+      "additionalProperties": false
+    },
+    "RoleCovariance": {
+      "type": "object",
+      "properties": {
+        "primitive_order": {
+          "const": [
+            "protein_condition1",
+            "empty_condition1",
+            "protein_condition0",
+            "empty_condition0"
+          ]
+        },
+        "physical_observation_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "units": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "umol/min",
+              "nmol/min",
+              "mmol/min",
+              "uM/min",
+              "nM/min",
+              "per_min",
+              "per_s",
+              "umol/min/mg",
+              "nmol/min/mg"
+            ]
+          },
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "matrix": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 4,
+            "maxItems": 4
+          },
+          "minItems": 4,
+          "maxItems": 4
+        }
+      },
+      "required": [
+        "primitive_order",
+        "physical_observation_ids",
+        "units",
+        "matrix"
+      ],
+      "additionalProperties": false
+    },
+    "OwnerCovariance": {
+      "type": "object",
+      "properties": {
+        "physical_observation_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "maxItems": 4,
+          "uniqueItems": true
+        },
+        "units": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "umol/min",
+              "nmol/min",
+              "mmol/min",
+              "uM/min",
+              "nM/min",
+              "per_min",
+              "per_s",
+              "umol/min/mg",
+              "nmol/min/mg"
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 4
+        },
+        "matrix": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 1,
+            "maxItems": 4
+          },
+          "minItems": 1,
+          "maxItems": 4
+        }
+      },
+      "required": [
+        "physical_observation_ids",
+        "units",
+        "matrix"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

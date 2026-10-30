@@ -1,0 +1,118 @@
+{
+  "artifact_ref": "artifact_8e6bf28e2e95b3ff2ab47bb2b23d00c5f3914eef80988a70a7eff582a779dd47",
+  "calculation_ref": "artifact_e37e4570b5f1c782fed168de66aefa67cba711d465a62690b3b977110640b04f",
+  "format": "rfam_cmscan_single_json_v1",
+  "input_identity": {
+    "expected_job_id": "infernal_cmscan-R20261026-031913-0510-39226191-p1m",
+    "input_coordinate_mapping_ref": null,
+    "input_to_submitted_transform": "unchanged",
+    "original_header": null,
+    "original_input_ref": "input_41a0aea9df3ff00b5c2f368b",
+    "original_record_ordinal": null,
+    "query_occurrence_key": "rfam_query_70f432514ee3ebd689d23765d5e4f42d0d2bda100e2b7c79c40c6cd0dfe10640",
+    "subject_ref": "input_41a0aea9df3ff00b5c2f368b",
+    "submission_source_ref": "source_d5f1f4cbb9f65ac786999585",
+    "submitted_length_nt": 119,
+    "submitted_sequence": "AGTTACGGCCATACCTCAGAGAATATACCGTATCCCGTTCGATCTGCGAAGTTAAGCTCTGAAGGGCGTCGTCAGTACTATAGTGGGTGACCATATGGGAATACGACGTGCTGTAGCTT",
+    "submitted_sequence_sha256": "af9f4de00e14ab119b18199ef3d9a4eaeb9a5e1cdebf7e028cc9b1b16c3689eb",
+    "version": "rfam_batch_input_identity_v1"
+  },
+  "parse_ref": "artifact_ab234c62c57e401b9209b0cab0543ed658de2d84826044d93a9bb1b4ad8b8aa9",
+  "projection": {
+    "available_row_count": 1,
+    "calculation_ref": "artifact_e37e4570b5f1c782fed168de66aefa67cba711d465a62690b3b977110640b04f",
+    "family": "hit",
+    "more_rows": false,
+    "population_complete": true,
+    "rows": [
+      {
+        "family_accession": "RF00001",
+        "measured": [
+          {
+            "name": "native_score_bits",
+            "unit": "bits",
+            "value": 104.6
+          },
+          {
+            "name": "native_evalue",
+            "unit": "expected_hits",
+            "value": 1.4e-24
+          },
+          {
+            "name": "native_gc_fraction",
+            "unit": "fraction",
+            "value": 0.49
+          },
+          {
+            "name": "query_span_nt",
+            "unit": "nt",
+            "value": 119
+          },
+          {
+            "name": "query_span_fraction",
+            "unit": "fraction",
+            "value": 1.0
+          }
+        ],
+        "query_occurrence_key": "rfam_query_70f432514ee3ebd689d23765d5e4f42d0d2bda100e2b7c79c40c6cd0dfe10640",
+        "record_key": "artifact_8e6bf28e2e95b3ff2ab47bb2b23d00c5f3914eef80988a70a7eff582a779dd47/hits/5S_rRNA/0",
+        "strand": "+",
+        "unavailable": [
+          {
+            "name": "model_coverage_fraction",
+            "reason": "model_length_unavailable"
+          }
+        ]
+      }
+    ],
+    "selected_row_count": 1,
+    "selection": {
+      "family": "hit",
+      "metrics": [
+        "native_score_bits",
+        "native_evalue",
+        "native_gc_fraction",
+        "query_span_nt",
+        "query_span_fraction",
+        "model_coverage_fraction"
+      ],
+      "rows": {
+        "limit": 2,
+        "offset": 0
+      }
+    },
+    "sheet_ref": "artifact_09b7a0c03a97ae23c54b5b191376ce29681b820265646cf5eaa2d71a197fd476",
+    "source_ref": "source_c244746491574e3853828cac",
+    "version": "rfam_selected_projection_v1"
+  },
+  "projection_errors": [],
+  "request": {
+    "mode": "single_sequence",
+    "subject_ref": "input_41a0aea9df3ff00b5c2f368b",
+    "version": "rfam_batch_request_v1"
+  },
+  "selector": {
+    "model_metadata_ref": null,
+    "projection": {
+      "family": "hit",
+      "metrics": [
+        "native_score_bits",
+        "native_evalue",
+        "native_gc_fraction",
+        "query_span_nt",
+        "query_span_fraction",
+        "model_coverage_fraction"
+      ],
+      "rows": {
+        "limit": 2,
+        "offset": 0
+      }
+    },
+    "representation": "json",
+    "version": "rfam_batch_result_selector_v1"
+  },
+  "sheet_ref": "artifact_09b7a0c03a97ae23c54b5b191376ce29681b820265646cf5eaa2d71a197fd476",
+  "source_ref": "source_c244746491574e3853828cac",
+  "submission_source_ref": "source_d5f1f4cbb9f65ac786999585",
+  "version": "rfam_batch_retained_grading_v1"
+}

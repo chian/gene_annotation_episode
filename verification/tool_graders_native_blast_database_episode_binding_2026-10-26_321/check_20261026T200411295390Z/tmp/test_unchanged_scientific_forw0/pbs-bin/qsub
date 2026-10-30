@@ -1,0 +1,19 @@
+#!/home/chia/repos/gene_annotation_episode/.venv/bin/python
+import json,os,pathlib,subprocess,sys
+root=pathlib.Path(os.environ['FAKE_PBS_ROOT']);args=sys.argv[1:]
+count=root/'submissions';count.write_text(str(int(count.read_text())+1) if count.exists() else '1')
+job_id=str(12344+int(count.read_text()))+'.aurora'
+def arg(key):return args[args.index(key)+1]
+record={'Job_Name':arg('-N'),'Account_Name':arg('-A'),'queue':arg('-q'),'Priority':812,
+    'base_score':23.5,'project_priority':61,
+    'Variable_List':{'EPISODE_SUBMISSION_TOKEN':arg('-v').split('=',1)[1]},
+    'job_state':'Q','qtime':100,'ctime':99,'Resource_List':{'walltime':'00:01:00'}}
+(root/'job.json').write_text(json.dumps(record));(root/'qsub-argv.json').write_text(json.dumps(args))
+(root/(job_id+'.json')).write_text(json.dumps(record))
+if os.environ.get('FAKE_PBS_EXECUTE')=='1':
+    env=dict(os.environ,PBS_JOBID=job_id)
+    with open(arg('-o'),'wb') as out,open(arg('-e'),'wb') as err:
+        subprocess.run(['/bin/bash',args[-1]],env=env,stdout=out,stderr=err)
+print('accepted without a job identifier' if os.environ.get('FAKE_PBS_BAD_REPLY')=='1' else job_id)
+if os.environ.get('FAKE_PBS_NONZERO_AFTER_ACCEPT')=='1':
+    print('submission client lost the server reply',file=sys.stderr);sys.exit(1)

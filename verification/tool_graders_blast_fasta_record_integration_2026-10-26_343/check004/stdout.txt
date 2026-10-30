@@ -1,0 +1,53 @@
+F
+=================================== FAILURES ===================================
+________ test_retained339_exact_wire_real_standard_worker_and_saved_T2 _________
+
+tmp_path = PosixPath('/home/chia/repos/gene_annotation_episode/verification/tool_graders_blast_fasta_record_integration_2026-10-26_343/check004/temporary/pytest/test_retained339_exact_wire_re0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x77961bd8b5c0>
+
+    def test_retained339_exact_wire_real_standard_worker_and_saved_T2(tmp_path, monkeypatch):
+        retained = ROOT / 'verification/tool_graders_blast_fasta_record_metadata_2026-10-26_340/check003/temporary/pytest/test_record_v2_retained337_byt0'
+        original = json.loads((retained / 'supplied_inputs.json').read_bytes())
+        inputs = original['inputs']
+        inputs.update(contents={k: bytes.fromhex(v) for k, v in original['contents_hex'].items()},
+            subject_contents={k: bytes.fromhex(v) for k, v in original['subject_contents_hex'].items()})
+        public = ROOT / 'verification/tool_graders_blast_fasta_record_public_associations_2026-10-26_339/check008'
+        descriptor = json.loads((public/'new_descriptor_v2.json').read_bytes())
+        supplied = next(r for r in inputs['metadata_payloads'] if r['descriptor']['schema_id'] == V2)
+        assert supplied['descriptor'] == descriptor
+        assert inputs['contents'][descriptor['artifact_ref']] == (public/'new_wire_payload_v2.json').read_bytes()
+        request = sr.request_for(tmp_path, inputs=inputs)
+        manifest, diagnostics = sr.invoke(request)
+        assert manifest['status'] != 'failed', diagnostics
+        actual = rows(request)
+        assert [values(r)['native_score_bits'] for r in actual if r['family'] == 'hsp'] == [20, 18]
+        functions = {r['identity']['function']: values(r) for r in actual if r['family'] == 'sequence_function'}
+        assert {k: v['function_mass'] for k, v in functions.items()} == {'F': 1, 'G': .25}
+        assert {k: v['unadjusted_probability'] for k, v in functions.items()} == {'F': .8, 'G': .2}
+        before = {p.name: p.read_bytes() for p in Path(request['output_directory']).iterdir()}
+        revised = sr.reuse(request, manifest, tmp_path/'generation-2')
+        with monkeypatch.context() as blocked:
+>           forbid_reparse(blocked)
+
+../../../tests/test_blast_fasta_record_identity_integration.py:125: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7795f9848110>
+
+    def forbid_reparse(monkeypatch):
+        def forbidden(*a, **kw):
+            pytest.fail('saved reuse attempted parsing, population, acquisition or execution')
+        for module, names in [(fasta, ('parse_blast_fasta_source_records', 'parse_sequences')),
+                (sm, ('parse_blast_fasta_source_records', 'parse_sequences', 'prepare_standard_blast_database_inputs', 'populate_standard_blast_database_sheets')),
+                (nm, ('parse_blast_fasta_source_records', 'parse_sequences', 'prepare_native_blast_database_inputs', 'populate_native_blast_database_sheets')),
+                (sw, ('parse_blast_report_collection',)), (nw, ('parse_blast_report_collection',)),
+                (socket, ('socket', 'getaddrinfo')), (subprocess, ('run', 'Popen'))]:
+            for name in names:
+>               monkeypatch.setattr(module, name, forbidden)
+E               AttributeError: <module 'gene_annotation_episode.native_blast_standard_database_metadata' from '/home/chia/repos/gene_annotation_episode/gene_annotation_episode/native_blast_standard_database_metadata.py'> has no attribute 'parse_blast_fasta_source_records'
+
+../../../tests/test_blast_fasta_record_identity_integration.py:100: AttributeError
+=========================== short test summary info ============================
+FAILED ../../../tests/test_blast_fasta_record_identity_integration.py::test_retained339_exact_wire_real_standard_worker_and_saved_T2
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 2.03s

@@ -1,0 +1,780 @@
+{
+  "scope": "065 proposed closed v2 interface; shared-stage implementation and graph saved checks unimplemented",
+  "version": "controlled_response_source_extraction_v2",
+  "root_fields": {
+    "version": "constant controlled_response_source_extraction_v2",
+    "selection": "exact selected request matching SELECTION_SCHEMA_001.json",
+    "sources": "array SourceRecord",
+    "images": "array frozen049 ImageRecord",
+    "arms": {
+      "protein_condition1": "null|ArmExtraction",
+      "empty_condition1": "null|ArmExtraction",
+      "protein_condition0": "null|ArmExtraction",
+      "empty_condition0": "null|ArmExtraction"
+    },
+    "relationships": "RelationshipExtraction",
+    "covariance": "null|CovarianceExtraction",
+    "requested_model": "RequestedModel",
+    "effective_model": "EffectiveModel",
+    "calculation_inputs": "exact frozen controlled_response_inputs_v1, never selected arguments",
+    "diagnostics": "array Diagnostic",
+    "implementation_dependencies": "DependencyRecord",
+    "representation_reconciliations": "array ReconciliationRecord"
+  },
+  "types": {
+    "Diagnostic": {
+      "code": "one finite diagnostic code",
+      "field": "actual deterministic field path",
+      "domain": [
+        "source_representation",
+        "source_binding",
+        "reader_capability",
+        "source_interpretation",
+        "dependency"
+      ],
+      "source_refs": "unique actual selected source references"
+    },
+    "SourceRecord": {
+      "source_ref": "persistent reference",
+      "representation": [
+        "original",
+        "text"
+      ],
+      "artifact_ref": "null|string",
+      "byte_sha256": "null|sha256",
+      "state": [
+        "available",
+        "unavailable"
+      ],
+      "diagnostics": "array Diagnostic"
+    },
+    "WitnessRecord": {
+      "selection": "exact selected tagged Witness",
+      "artifact_ref": "null|string",
+      "byte_sha256": "null|sha256",
+      "canonical_locator": "null|TextLocator|ImageLocator",
+      "authentication": [
+        "exact_utf8_byte_span",
+        "image_bytes_and_geometry_only",
+        "unavailable"
+      ],
+      "attribution": [
+        "literal_source_record",
+        "investigating_episode_interpretation"
+      ],
+      "diagnostics": "array Diagnostic"
+    },
+    "TextLocator": {
+      "kind": "text",
+      "source_ref": "persistent reference",
+      "artifact_ref": "string",
+      "byte_sha256": "sha256",
+      "start": "UTF8 integer",
+      "end": "UTF8 integer"
+    },
+    "ImageLocator": {
+      "kind": "image",
+      "original_source_ref": "persistent reference",
+      "original_artifact_ref": "string",
+      "original_byte_sha256": "sha256",
+      "region": "mapped integer box"
+    },
+    "InterpretationExtraction": {
+      "selection": "original finite interpretation",
+      "witnesses": "array WitnessRecord",
+      "effective_value": "original enum value or unknown/conflicting if dependency unresolved",
+      "diagnostics": "array Diagnostic"
+    },
+    "MeaningExtraction": {
+      "selection": "original Meaning",
+      "witnesses": "array WitnessRecord",
+      "canonical_witness": "null|WitnessRecord",
+      "canonical_correspondence": "InterpretationExtraction",
+      "resolved_state": [
+        "known",
+        "unknown",
+        "conflicting"
+      ],
+      "canonical_id": "null|generated meaning ID",
+      "diagnostics": "array Diagnostic"
+    },
+    "NumberCandidate": {
+      "selection": "original native NumberSelector",
+      "witness": "WitnessRecord",
+      "raw_expression": "null when dependency_unavailable; otherwise actual exact authenticated selected string",
+      "native_value": "null|finite number",
+      "relation": [
+        "point",
+        "lt",
+        "le",
+        "gt",
+        "ge",
+        "unresolved"
+      ],
+      "approximate": "null|boolean",
+      "source_locator": "null when dependency_unavailable; otherwise actual TextLocator",
+      "status": [
+        "parsed",
+        "unsupported",
+        "numeric_range",
+        "dependency_unavailable"
+      ],
+      "diagnostics": "array Diagnostic"
+    },
+    "UnitRecord": {
+      "selection": "original nullable UnitSelection",
+      "witness": "null|WitnessRecord",
+      "raw_unit": "null|exact string",
+      "canonical_unit": "null|rate canonical unit",
+      "exact_scale": "null|Rational",
+      "native_registry_unit": "null|RATE_UNITS key",
+      "definition_witnesses": "null|exact source-defined bridge/clause/amount/amount_unit/time_unit/endpoint/endpoint_entity/definition_entity records",
+      "status": [
+        "supported",
+        "unknown",
+        "unsupported",
+        "numeric_range",
+        "dependency_unavailable",
+        "endpoint_correspondence_unknown"
+      ],
+      "diagnostics": "array Diagnostic"
+    },
+    "Rational": {
+      "numerator": "signed integer decimal string",
+      "denominator": "positive integer decimal string"
+    },
+    "CanonicalDisplay": {
+      "value": "null|finite number",
+      "threshold": "null|finite number",
+      "unit": "null|canonical rate unit",
+      "relation": [
+        "eq",
+        "lt",
+        "le",
+        "gt",
+        "ge",
+        "none"
+      ],
+      "approximate": "boolean",
+      "diagnostics": "array Diagnostic"
+    },
+    "MeasurementExtraction": {
+      "selection": "original nullable measurement",
+      "candidates": "array NumberCandidate",
+      "fragments": "array WitnessRecord",
+      "unit": "null|UnitRecord|GraphUnitRecord (tagged by measurement selection.kind)",
+      "graph_witnesses": "array WitnessRecord",
+      "reading_status": "old v1 statuses plus exact063 reading_status alternatives",
+      "source_observation_id": "null|actual source token/recipe generated ID",
+      "canonical_display": "CanonicalDisplay",
+      "pixel_result": "null|PixelResult063",
+      "diagnostics": "array Diagnostic"
+    },
+    "UncertaintyExtraction": {
+      "selection": "original Uncertainty",
+      "meanings": "exact statistic/unit_relationship/repetition_basis/estimate_basis InterpretationExtraction records",
+      "magnitude": "null|NumberCandidate",
+      "interval": "null|IntervalRecord",
+      "unit": "null|UnitRecord",
+      "effective_unit": "null|UnitRecord",
+      "confidence_level": "null|ConfidenceRecord",
+      "count": "null|CountRecord",
+      "canonical": "UncertaintyCanonical",
+      "diagnostics": "array Diagnostic"
+    },
+    "IntervalRecord": {
+      "selection": "original CISelector",
+      "witness": "WitnessRecord",
+      "raw_values": "null|two exact strings",
+      "values": "null|two finite native numbers",
+      "status": [
+        "parsed",
+        "unsupported",
+        "numeric_range",
+        "dependency_unavailable"
+      ],
+      "diagnostics": "array Diagnostic"
+    },
+    "ConfidenceRecord": {
+      "selection": "original native text witness",
+      "witness": "WitnessRecord",
+      "value": "null|finite fraction strictly0..1",
+      "status": [
+        "parsed",
+        "unsupported",
+        "numeric_range",
+        "dependency_unavailable"
+      ],
+      "diagnostics": "array Diagnostic"
+    },
+    "CountRecord": {
+      "selection": "original NumberSelector",
+      "witness": "WitnessRecord",
+      "reading": "null|exact released055 count reading (selector,raw_number,value,notation,relation,approximate,status,unavailable_reason)",
+      "diagnostics": "array Diagnostic"
+    },
+    "UncertaintyCanonical": {
+      "statistic": "finite selected statistic enum or conflicting",
+      "magnitude": "null|finite nonnegative",
+      "interval": "null|two finite canonical values",
+      "confidence_level": "null|finite0..1",
+      "count": "null|positive exact count only",
+      "repetition_basis": "actual finite enum",
+      "estimate_basis": "actual finite enum"
+    },
+    "ArmExtraction": {
+      "selection": "original arm",
+      "context": "exact six nullable WitnessRecord fields",
+      "protein_arrangement": "InterpretationExtraction",
+      "meanings": "exact five MeaningExtraction fields",
+      "intended_factor_level": "null|WitnessRecord",
+      "measurement": "MeasurementExtraction",
+      "reported_uncertainty": "UncertaintyExtraction",
+      "calculation_operand": "exact frozen nullable arm contract",
+      "diagnostics": "array Diagnostic",
+      "graph_details": "null|GraphDetails"
+    },
+    "RelationshipExtraction": {
+      "condition1_target": "MeaningExtraction",
+      "condition0_target": "MeaningExtraction",
+      "condition_levels_relation": "InterpretationExtraction",
+      "subject_construct_across_conditions": "InterpretationExtraction",
+      "condition1_control_application": "InterpretationExtraction",
+      "condition0_control_application": "InterpretationExtraction",
+      "control_reference_reuse": "InterpretationExtraction",
+      "nonintended_conditions": "InterpretationExtraction",
+      "intended_factor": "null|WitnessRecord"
+    },
+    "CovarianceBindingExtraction": {
+      "selection": "original nullable binding",
+      "label_witness": "null|WitnessRecord",
+      "owner_witness": "null|WitnessRecord",
+      "correspondence": "null|InterpretationExtraction",
+      "source_variable_index": "null|integer",
+      "resolved_owner_id": "null|actual generated physical ID",
+      "state": [
+        "known",
+        "unknown",
+        "conflicting"
+      ],
+      "diagnostics": "array Diagnostic"
+    },
+    "CovarianceSourceVariable": {
+      "index": "actual zero-based integer",
+      "label": "decoded string",
+      "label_witness": "WitnessRecord",
+      "unit": "decoded string",
+      "unit_witness": "WitnessRecord",
+      "description": "decoded source string",
+      "description_witness": "WitnessRecord",
+      "native_registry_unit": "null|RATE_UNITS key",
+      "exact_scale": "null|Rational",
+      "diagnostics": "array Diagnostic"
+    },
+    "CovarianceExtraction": {
+      "selection": "original covariance nomination",
+      "source_ref": "persistent reference",
+      "artifact_ref": "null|string",
+      "byte_sha256": "null|sha256",
+      "raw_text": "null|actual UTF8 JSON source",
+      "variables": "array CovarianceSourceVariable",
+      "matrix_tokens": "null|full NxN exact source number token strings",
+      "exact_matrix": "null|full NxN Rational records",
+      "source_model": "null|literal actual origin/variance_status/model_kind",
+      "bindings": {
+        "protein_condition1": "CovarianceBindingExtraction",
+        "empty_condition1": "CovarianceBindingExtraction",
+        "protein_condition0": "CovarianceBindingExtraction",
+        "empty_condition0": "CovarianceBindingExtraction"
+      },
+      "projection_indices": "null|exact four source indices",
+      "projected_exact_matrix": "null|4x4 Rational",
+      "calculation_covariance": "null|exact frozen parsed covariance structure",
+      "source_validation": [
+        "valid",
+        "invalid",
+        "unassessed"
+      ],
+      "projection_state": [
+        "available",
+        "unavailable",
+        "numeric_range",
+        "precision_invalid",
+        "source_invalid",
+        "binding_unresolved",
+        "binding_conflicting",
+        "unsupported_format"
+      ],
+      "diagnostics": "array Diagnostic"
+    },
+    "RequestedModel": {
+      "variance_status": "InterpretationExtraction",
+      "model_kind": "InterpretationExtraction"
+    },
+    "EffectiveModel": {
+      "variance_status": [
+        "known",
+        "estimated",
+        "unknown"
+      ],
+      "model_kind": [
+        "none",
+        "known_joint_normal_source_means"
+      ],
+      "diagnostics": "array Diagnostic"
+    },
+    "DependencyRecord": {
+      "reader_contract_version": "controlled_response_source_extraction_v1",
+      "calculator_contract_version": "controlled_response_inputs_v1",
+      "expected_module_fingerprints": {
+        "literature_assay_inputs.py": "52069b7d974556631a18d132eaa8bd79b23efc5b7dc2a583b1fff73df4758b6e",
+        "literature_rate_native_inputs.py": "55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500",
+        "literature_partner_source_fields.py": "20fd7866318fff00d80dcf3109c3a2589c36a38e35329d1b63ca954f2c035a17",
+        "literature_partner_defined_units.py": "cc6733d763ba494e3c4016a9a3be98ea6b7b6076b97dc8ef1aad5f43a8f856ca",
+        "literature_kinetic_inputs.py": "78e0c0094bbffa8306c26a6d134eec74f291c34177a87656ec09f925c2dd1960",
+        "literature_binding_visual_inputs.py": "8153f555699cd9b1dea63bd8ccc29869c70e127c205bdb10fd26c979b202b718",
+        "literature_binding_reader.py": "e117105486773280edf1dba796ab2be10c61feb6a9c0ad407ba876e2332714a1",
+        "literature_controlled_response_calculations.py": "a75b8f8ef4905d805be24e86236ef8303c97b5e4761acf0d849ca01aadaec023"
+      }
+    },
+    "GraphUnitRecord": {
+      "closed_field_schema": {
+        "selection": {
+          "$ref": "#/$defs/AxisLiteral"
+        },
+        "witness": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WitnessRecord"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "raw_unit": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "canonical_unit": {
+          "anyOf": [
+            {
+              "enum": [
+                "umol/min",
+                "uM/min",
+                "per_min",
+                "umol/min/mg"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "exact_scale": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Rational"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "native_registry_unit": {
+          "anyOf": [
+            {
+              "enum": [
+                "umol/min",
+                "nmol/min",
+                "mmol/min",
+                "uM/min",
+                "nM/min",
+                "per_min",
+                "per_s",
+                "umol/min/mg",
+                "nmol/min/mg"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "definition_witnesses": {
+          "type": "null"
+        },
+        "status": {
+          "enum": [
+            "supported",
+            "unknown",
+            "unsupported",
+            "numeric_range",
+            "dependency_unavailable",
+            "endpoint_correspondence_unknown"
+          ]
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Diagnostic"
+          }
+        }
+      },
+      "namespace": "063 graph schema; nested references retain that document namespace"
+    },
+    "PixelResult063": {
+      "closed_field_schema": {
+        "version": {
+          "const": "controlled_response_rate_pixels_v1"
+        },
+        "status": {
+          "enum": [
+            "measured",
+            "unreadable",
+            "ambiguous",
+            "unsupported",
+            "dependency_unavailable"
+          ]
+        },
+        "image_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "image_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "original_image_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "mapped_roi": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ImageLocator"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "recipe": {
+          "$ref": "#/$defs/BarSelection"
+        },
+        "terminal_edge": {
+          "enum": [
+            "upper",
+            "lower"
+          ]
+        },
+        "image_size": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "width": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "height": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "width",
+                "height"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "qualifying_runs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Run"
+          }
+        },
+        "pixel_edge": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ExactPixelEdge"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "axis": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ExactAxis"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "native_ordinate": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Rational"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "native_bounds": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ExactBounds"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bound_kind": {
+          "const": "conditional_digitization_not_confidence_interval"
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Diagnostic"
+          }
+        },
+        "counter_version": {
+          "const": "controlled_response_bar_runs_v1"
+        },
+        "counter_module_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "namespace": "063 graph schema; nested references retain that document namespace"
+    },
+    "AxisScaleRecord063": {
+      "closed_field_schema": {
+        "selection": {
+          "$ref": "#/$defs/AxisScale"
+        },
+        "witnesses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/WitnessRecord"
+          }
+        },
+        "effective_kind": {
+          "enum": [
+            "linear",
+            "logarithmic",
+            "nonlinear",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "support": {
+          "enum": [
+            "literal_source_text",
+            "episode_image_interpretation",
+            "unavailable",
+            "unresolved"
+          ]
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Diagnostic"
+          }
+        }
+      },
+      "namespace": "063 graph schema; nested references retain that document namespace"
+    },
+    "AxisLiteralRecord063": {
+      "closed_field_schema": {
+        "selection": {
+          "$ref": "#/$defs/AxisLiteral"
+        },
+        "candidates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/WitnessRecord"
+          }
+        },
+        "fragments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/WitnessRecord"
+          }
+        },
+        "raw_literal": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "exact_value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Rational"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "qualification": {
+          "enum": [
+            "source_text_literal",
+            "episode_image_transcription",
+            "unresolved"
+          ]
+        },
+        "status": {
+          "enum": [
+            "parsed",
+            "ambiguous",
+            "unreadable",
+            "conflicting",
+            "unsupported",
+            "dependency_unavailable"
+          ]
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Diagnostic"
+          }
+        }
+      },
+      "namespace": "063 graph schema; nested references retain that document namespace"
+    },
+    "GraphDetails": {
+      "axis_scale": "AxisScaleRecord063",
+      "axis_literals": {
+        "first": "AxisLiteralRecord063",
+        "second": "AxisLiteralRecord063",
+        "unit": "AxisLiteralRecord063"
+      }
+    },
+    "ReconciliationRecord": {
+      "physical_observation_id": "known owner id or null",
+      "roles": "unique subset of four primitive roles",
+      "source_reading_ids": "retained source reading identities",
+      "method": [
+        "identical_reading",
+        "reported_point_graph_check",
+        "conditional_domain_intersection",
+        "unresolved"
+      ],
+      "state": [
+        "identical",
+        "compatible",
+        "conflicting_reported_points",
+        "incompatible_domains",
+        "unresolved_meaning",
+        "unsupported_model"
+      ],
+      "exact_domain": "null|{point:null|Rational,lower:null|Rational,upper:null|Rational,unit:string}",
+      "canonical_source_reading_id": "null|string",
+      "canonical_operand": "null|frozen006 ARM_FIELDS",
+      "qualifications": "unique declared conditional reading qualifiers, never sampling precision",
+      "diagnostics": "Diagnostic[]"
+    }
+  },
+  "diagnostic_codes": [
+    "measurement_not_selected",
+    "source_literal_unreadable",
+    "source_literal_ambiguous",
+    "source_literal_conflicting",
+    "unsupported_complete_source_expression",
+    "source_numeric_range",
+    "numeric_projection_rounding",
+    "source_rate_unit_unknown",
+    "source_rate_unit_unsupported",
+    "source_defined_unit_definition_not_selected",
+    "unit_endpoint_correspondence_unknown",
+    "custom_unit_projection_unrepresentable",
+    "source_dependency_unavailable",
+    "source_text_encoding_unsupported",
+    "source_image_format_unsupported",
+    "source_image_decode_failed",
+    "source_uncertainty_meaning_conflict",
+    "source_uncertainty_piece_unsupported",
+    "source_uncertainty_unit_unknown",
+    "source_uncertainty_unit_conflicting",
+    "qualified_confidence_unsupported",
+    "source_confidence_sentence_stop_unsupported",
+    "unsupported_covariance_representation",
+    "source_json_duplicate_key",
+    "source_json_nonfinite",
+    "source_covariance_shape_invalid",
+    "source_covariance_asymmetric",
+    "source_covariance_not_psd",
+    "source_covariance_origin_invalid",
+    "covariance_owner_unresolved",
+    "covariance_owner_conflicting",
+    "covariance_shared_values_conflicting",
+    "covariance_shared_rows_conflicting",
+    "source_covariance_unit_unsupported",
+    "covariance_projection_numeric_range",
+    "covariance_projection_precision_invalid",
+    "variance_status_not_selected",
+    "source_variance_status_unknown",
+    "requested_source_variance_status_conflict",
+    "normal_model_not_selected",
+    "source_normal_model_unsupported",
+    "source_model_witness_unavailable",
+    "source_model_projection_rounding",
+    "synthetic_covariance_with_reported_operands",
+    "graph_rate_reader_unimplemented"
+  ],
+  "structural_checks_beyond_schema": [
+    "known/conflicting witness cardinality after actual canonical locator deduplication",
+    "actual source roster preauthorization and all image ID references",
+    "positive box ordering and actual crop/region identity",
+    "complete scalar/unit token guards and exact source-defined endpoint associations",
+    "literal candidate state/cardinality",
+    "covariance exact NxN shape, numeric lexical validity, all full-matrix PSD and owner/model interpretation relationships",
+    "covariance label nomination is exact corresponding structural JSON token, not only equal decoded label",
+    "effective parsed inputs match frozen calculator contract; no calculator call inside reader",
+    "One authoritative shared science validator; tagged graph unit carrier preserves reported spread before C projection. No source/decoder/graph recounter during saved validation."
+  ],
+  "not_implemented": true,
+  "semantic_conventions": {
+    "numeric_projection_rounding": "Compare the exact source-decimal rational, with actual source unit factors, against Fraction(str(projected_float)) with actual frozen pure-unit factors; never Fraction.from_float. Preserve original lexemes and exact source rationals. Ordinary source0.1 versus float0.1 is equal; source0.10000000000000000001 versus float0.1 loses digits.",
+    "saved_validation": "Saved consistency only; original authoritative runtime custody must bind selected request, admitted sources, operation and immutable extraction/output. Self-consistent hashes or quotes do not independently authenticate source evidence or authorize access."
+  },
+  "reconciliation_status": "001 point/domain alternatives are proposals.002 owner cancellation is prioritized for zero-coefficient owners; full owner-input v2 schema remains to be declared before coding."
+}

@@ -1,0 +1,187 @@
+{
+  "schema": "blast_explicit_associations_verification_v1",
+  "workload": "H1",
+  "source_scope": [
+    "gene_annotation_episode/blast_database_grader.py",
+    "tests/test_blast_explicit_associations.py",
+    "verification/tool_graders_blast_explicit_associations_2026-10-24/"
+  ],
+  "prechange_module_sha256": "cb023aff2d9acde35587cb50773b14ba18203557452d1af0fa9d085b21fa0da8",
+  "current_module_sha256": "89d9baee34c457263d42b1e521994da37518038020b4ddd8c034e35dbb744fcb",
+  "prechange_reconstruction": "Separate copy formed by reversing only H1 edits; exact originally captured SHA256 matched before writing and again before canonical import in a fresh pytest process. Production file never replaced.",
+  "legacy_output_snapshot_case_count": 10,
+  "focused_test_count": 84,
+  "current_affected_regression": {
+    "tests": 218,
+    "failures": 0,
+    "errors": 0,
+    "log": "current_callers.log",
+    "junit": "current_callers.junit.xml"
+  },
+  "historical_callers": {
+    "prechange": {
+      "passed": 11,
+      "failed": 15,
+      "log": "prechange_historical.log"
+    },
+    "after_change": {
+      "passed": 11,
+      "failed": 15,
+      "log": "regression.log"
+    },
+    "failure_identities_and_messages_equal": true,
+    "failures": [
+      {
+        "test": "tests.test_blast_binding::test_accepted_cancelled_search_resumes_one_handle_and_one_runtime_action",
+        "message": "RuntimeError: coroutine raised StopIteration"
+      },
+      {
+        "test": "tests.test_blast_binding::test_cli_selects_shared_access_directory_once_and_exposes_effective_path[False]",
+        "message": "AttributeError: <module 'gene_annotation_episode.cli' from '/home/chia/repos/gene_annotation_episode/gene_annotation_episode/cli.py'> has no attribute 'ToolRegistry'"
+      },
+      {
+        "test": "tests.test_blast_binding::test_cli_selects_shared_access_directory_once_and_exposes_effective_path[True]",
+        "message": "AttributeError: <module 'gene_annotation_episode.cli' from '/home/chia/repos/gene_annotation_episode/gene_annotation_episode/cli.py'> has no attribute 'ToolRegistry'"
+      },
+      {
+        "test": "tests.test_blast_binding::test_explicit_empty_hits_and_absent_hits_stay_distinct[False]",
+        "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+      },
+      {
+        "test": "tests.test_blast_binding::test_explicit_empty_hits_and_absent_hits_stay_distinct[True]",
+        "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+      },
+      {
+        "test": "tests.test_blast_binding::test_inferred_transfer_keeps_source_without_sequence_and_runtime_credit_read_works",
+        "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+      },
+      {
+        "test": "tests.test_blast_binding::test_program_native_intervals_zero_metrics_and_source_only_reference[blastn]",
+        "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+      },
+      {
+        "test": "tests.test_blast_binding::test_program_native_intervals_zero_metrics_and_source_only_reference[blastp]",
+        "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+      },
+      {
+        "test": "tests.test_blast_binding::test_program_native_intervals_zero_metrics_and_source_only_reference[blastx]",
+        "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+      },
+      {
+        "test": "tests.test_blast_binding::test_program_native_intervals_zero_metrics_and_source_only_reference[tblastn]",
+        "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+      },
+      {
+        "test": "tests.test_blast_binding::test_program_native_intervals_zero_metrics_and_source_only_reference[tblastx]",
+        "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+      },
+      {
+        "test": "tests.test_blast_binding::test_reasoned_native_hsp_uses_exact_original_member_extent_and_existing_parent_form",
+        "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+      },
+      {
+        "test": "tests.test_blast_binding::test_selected_search_with_protocol_wait_is_exactly_one_shared_runtime_observation",
+        "message": "RuntimeError: coroutine raised StopIteration"
+      },
+      {
+        "test": "tests.test_blast_binding::test_uninterpretable_native_shape_retains_bytes_and_same_handle_feedback[PK\\x03\\x04broken native archive]",
+        "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+      },
+      {
+        "test": "tests.test_blast_binding::test_uninterpretable_native_shape_retains_bytes_and_same_handle_feedback[{\"BlastOutput2\":[{\"report\":{\"program\":\"blastn\",\"results\":{\"iterations\":[]}}}]}]",
+        "message": "gene_annotation_episode.credit.AnnotationScoringUnavailable: categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+      }
+    ]
+  },
+  "initial_wider_run": {
+    "passed": 228,
+    "failed": 16,
+    "qualification": "Includes one subsequently corrected H1 test fixture that reused a sequence source pointer; final affected run includes the corrected test."
+  },
+  "numerical_example": {
+    "input_kind": "synthetic",
+    "bit_scores": [
+      20,
+      18
+    ],
+    "paired_positions": [
+      5,
+      5
+    ],
+    "query_lengths": [
+      10,
+      10
+    ],
+    "reference_lengths": [
+      10,
+      10
+    ],
+    "paired_coverage": [
+      0.5,
+      0.5
+    ],
+    "temperature_2_weights": {
+      "F": 0.6666666666666666,
+      "G": 0.3333333333333333
+    },
+    "temperature_1_weights": {
+      "F": 0.8,
+      "G": 0.2
+    },
+    "representation_adjustment": null
+  },
+  "saved_sheet_recalculation": {
+    "script": "recalculate.py",
+    "result": "recalculated.json",
+    "network_subprocess_parsers_and_sheet_builder_prohibited": true,
+    "saved_sheet_unchanged": true
+  },
+  "verification_qualifications": {
+    "new_binding_inputs": "synthetic",
+    "retained_native_formats": "Existing recorded pairwise BLAST JSON and tabular regression fixtures; no new native program run.",
+    "episode_communication": "Existing offline API/typed-return regression only; new BV-BRC path belongs to H2/host work.",
+    "live_execution": "not run",
+    "completed_ncbi_rid_verification": "outside workload; untouched"
+  },
+  "limitations": [
+    "Artifact custody/authentication and full-sequence-to-hit linkage proof remain caller responsibilities.",
+    "New explicit BV-BRC path not claimed live or episode-integrated by H1 alone.",
+    "15 historical caller tests remain failing identically with the original module; no credit/runtime/CLI changes made."
+  ],
+  "commands": {
+    "current_affected_regression": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_blast_explicit_associations.py",
+      "tests/test_blast_database_grader.py",
+      "tests/test_blast_graders_integration.py",
+      "tests/test_blast_grading_inputs.py",
+      "tests/test_blast_pairwise_grader.py",
+      "tests/test_blast_reference_metadata.py",
+      "tests/test_api_blast_service.py",
+      "tests/test_blast_result_views.py",
+      "tests/test_blast_typed_return_integration.py",
+      "tests/test_tool_grading_child_returns.py::test_offline_api_blast_full_grading_and_original_hsp_typed_return_are_retained",
+      "tests/test_tool_grading_publication.py::test_offline_api_blast_grading_rejection_retains_native_hsp_and_explicit_failure",
+      "--junitxml=verification/tool_graders_blast_explicit_associations_2026-10-24/current_callers.junit.xml"
+    ],
+    "focused": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_blast_explicit_associations.py"
+    ],
+    "prechange_historical": [
+      ".venv/bin/python",
+      "verification/tool_graders_blast_explicit_associations_2026-10-24/run_prechange_callers.py"
+    ],
+    "saved_recalculation": [
+      ".venv/bin/python",
+      "verification/tool_graders_blast_explicit_associations_2026-10-24/recalculate.py"
+    ]
+  },
+  "authority_reset": "Read the immutable authority in full before study, again after substantial source study, and again before final handoff; then reread the H1 agreed contract. No scope/design changes were taken from mutable work records."
+}

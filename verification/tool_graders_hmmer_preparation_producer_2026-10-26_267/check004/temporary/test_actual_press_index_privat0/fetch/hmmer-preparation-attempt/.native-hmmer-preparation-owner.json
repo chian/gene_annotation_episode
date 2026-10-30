@@ -1,0 +1,90 @@
+{
+  "attempt_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check004/temporary/test_actual_press_index_privat0/fetch/hmmer-preparation-attempt",
+  "identity": {
+    "attempt_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e",
+    "episode_id": "selected-local-child",
+    "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check004/temporary/test_actual_press_index_privat0/fetch/native.json",
+    "operation_key": "selected-command",
+    "requested_job_sha256": "d69b9a7283245927f70a61ef55f79d99ecc70ca18d82e2c22e5aec3fe522f00a",
+    "resource_id": "local",
+    "run_id": "producer267-test"
+  },
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "requested_job": {
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmfetch",
+      "-f",
+      "-o",
+      "outputs/fetched_models",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check004/temporary/test_actual_press_index_privat0/index/hmmer-preparation-attempt/work/models.hmm",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/keys_missing.txt"
+    ],
+    "environment": {},
+    "native_hmmer_preparation": {
+      "environment": {},
+      "grading_parameters": {},
+      "input_metadata": {},
+      "key": null,
+      "mode": "key_file",
+      "operands": [
+        {
+          "artifact_ref": "fixture267:models:0",
+          "format": "hmmer3_ascii",
+          "ordinal": 0,
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check004/temporary/test_actual_press_index_privat0/index/hmmer-preparation-attempt/work/models.hmm",
+          "role": "models",
+          "sha256": "f744b16d69df05ddf8239af3bc4a68d36a6e2764f31ad1b8274507e958056ea5",
+          "size_bytes": 6670
+        },
+        {
+          "artifact_ref": "fixture267:ssi:0",
+          "format": "hmmer_ssi",
+          "ordinal": 0,
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check004/temporary/test_actual_press_index_privat0/index/hmmer-preparation-attempt/work/models.hmm.ssi",
+          "role": "ssi",
+          "sha256": "ff26f53d75e8d83160ded771ce9dcf67e8c48456dcdbc85bccbdc4033fe67d5d",
+          "size_bytes": 362
+        },
+        {
+          "artifact_ref": "fixture267:keys:0",
+          "format": "key_file",
+          "ordinal": 0,
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/keys_missing.txt",
+          "role": "keys",
+          "sha256": "1099e63d6d5c96f941b6b4491ad9ac67711268a04bc64b27d49189b8f439ceff",
+          "size_bytes": 21
+        }
+      ],
+      "options": [],
+      "outputs": [
+        {
+          "format": "hmmer_stdout",
+          "relative_path": "outputs/stdout",
+          "role": "stdout"
+        },
+        {
+          "format": "hmmer_stderr",
+          "relative_path": "outputs/stderr",
+          "role": "stderr"
+        },
+        {
+          "format": "hmmer3_ascii",
+          "relative_path": "outputs/fetched_models",
+          "role": "fetched_models"
+        }
+      ],
+      "program": "hmmfetch",
+      "software": {
+        "engine_version": "3.4",
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmfetch",
+        "sha256": "87a57888d9bb60fd4be66dc382c7f72d29f0fa1f87e10d012703e6b66da0afb0"
+      },
+      "version": "native_hmmer_preparation_job_v1"
+    }
+  },
+  "version": "native_hmmer_preparation_run_plan_v1"
+}

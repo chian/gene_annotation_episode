@@ -1,0 +1,1 @@
+Initial writer verified prior044 and059 manifest entries, then stopped before producing any checkpoint because061 files is a list of records rather than a mapping. Revision002 iterates that declared list using each path field. The failed writer is preserved; no manifest/proposal/implementation is changed.

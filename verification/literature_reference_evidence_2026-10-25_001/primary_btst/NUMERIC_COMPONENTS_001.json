@@ -1,0 +1,92 @@
+{
+  "version": "btst_source_component_proposal_v1",
+  "created_utc": "2026-10-26T02:59:28.145153+00:00",
+  "status": "research_only_not_implemented_or_adopted",
+  "cells": [
+    {
+      "name": "reported_rate_ratio",
+      "value": 6,
+      "origin": "reported",
+      "approximation": "coarse author-reported fold"
+    },
+    {
+      "name": "excess_relative_to_control",
+      "value": 5,
+      "origin": "derived",
+      "formula": "R-1"
+    },
+    {
+      "name": "fraction_above_control",
+      "value": 0.8333333333333334,
+      "origin": "derived",
+      "formula": "(R-1)/R",
+      "meaning": "increment above empty-vector uptake divided by complemented uptake; not molecular attribution certainty"
+    },
+    {
+      "name": "graph_amount_difference_40s",
+      "value": 0.42,
+      "unit": "nmol/mg_total_cell_protein",
+      "origin": "derived_from_graph",
+      "formula": "0.60-0.18",
+      "manual_reading_bounds": [
+        0.4,
+        0.44
+      ],
+      "bound_kind": "manual_reading_range_not_ci"
+    },
+    {
+      "name": "graph_amount_ratio_40s",
+      "value": 3.3333333333333335,
+      "origin": "derived_from_graph",
+      "formula": "0.60/0.18"
+    },
+    {
+      "name": "competitor_tracer_concentration_ratio",
+      "value": 100.0,
+      "origin": "derived",
+      "formula": "1000uM/10uM"
+    },
+    {
+      "name": "km_relative_reported_spread",
+      "value": 0.3878787878787879,
+      "origin": "derived",
+      "formula": "6.4/16.5",
+      "meaning": "relative printed spread; unspecified uncertainty type"
+    },
+    {
+      "name": "preload_cold_carryover",
+      "value": 50.0,
+      "unit": "uM",
+      "origin": "derived",
+      "formula": "10000uM/200"
+    },
+    {
+      "name": "pyruvate_preload_total_external_pyruvate",
+      "value": 54.7,
+      "unit": "uM",
+      "origin": "derived",
+      "formula": "10000uM/200+4.7uM",
+      "applies_to": "pyruvate-preloaded arm only unless matched external composition is shown"
+    },
+    {
+      "name": "wt_referenced_restoration_fraction",
+      "value": null,
+      "unavailable_reason": "matched_wt_arm_missing"
+    },
+    {
+      "name": "source_profile_log_ratio",
+      "value": null,
+      "unavailable_reason": "supported_joint_sampling_model_and_variance_missing"
+    },
+    {
+      "name": "source_signed_index",
+      "value": null,
+      "unavailable_reason": "source_profile_log_ratio_unavailable"
+    }
+  ],
+  "arithmetic_check": "Five explicit assertions passed; computations only, no production tests/episode execution.",
+  "annotation_credit": null,
+  "target_correspondence": null,
+  "weights": null,
+  "independence_assumed": false
+}

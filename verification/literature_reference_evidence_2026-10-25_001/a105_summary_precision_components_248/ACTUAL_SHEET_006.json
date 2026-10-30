@@ -1,0 +1,739 @@
+{
+  "version": "a105_kinetic_summary_precision_sheet_v1",
+  "axis": "A105",
+  "evaluation_scope": "source_kinetic_summary_precision",
+  "inputs": {
+    "version": "a105_kinetic_summary_precision_inputs_v1",
+    "source_kind": "primary_source",
+    "parameter_kind": "catalytic_efficiency",
+    "source_origin": "reported",
+    "source_parameter_status": "point",
+    "source_parameter_reason": null,
+    "parameter_approximate": false,
+    "parameter_native_exact": {
+      "numerator": "31",
+      "denominator": "10"
+    },
+    "sd_native_exact": {
+      "numerator": "1",
+      "denominator": "10"
+    },
+    "canonical_scale_exact": {
+      "numerator": "3",
+      "denominator": "50000"
+    },
+    "canonical_unit": "uM^-1min^-1",
+    "sd_scale_exact": {
+      "numerator": "3",
+      "denominator": "50000"
+    },
+    "sd_canonical_unit": "uM^-1min^-1",
+    "sd_unit_basis": "inherited_parameter_unit",
+    "uncertainty_statistic": "sd",
+    "uncertainty_reason": null,
+    "source_count": {
+      "selector": {
+        "witness": {
+          "source_ref": "@elife2015AP",
+          "representation": "text",
+          "start": 32165,
+          "end": 32353,
+          "quote": "#The mutant was expressed in two independent enzyme preparations and standard deviations are from activity\n                                   measurements for the independent preparations.",
+          "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924"
+        },
+        "number_start": 29,
+        "number_end": 32
+      },
+      "raw_number": "two",
+      "value": 2,
+      "notation": "english_cardinal",
+      "relation": "point",
+      "approximate": false,
+      "status": "exact",
+      "unavailable_reason": null
+    },
+    "source_statistical_count": null,
+    "source_count_meaning": "physical_preparation_count",
+    "repetition_basis": "biological_preparations",
+    "estimate_basis": "unknown",
+    "assessments": {
+      "row_footnote_applicability": "source_supported",
+      "statistical_count_matches_sd": "unknown",
+      "one_estimate_per_preparation": "unknown",
+      "reported_sd_summarizes_counted_preparation_estimates": "unknown",
+      "equal_weight_arithmetic_mean": "unknown",
+      "sample_sd_n_minus_one": "unknown",
+      "iid_common_mean_finite_variance": "unknown",
+      "normal_sampling_units": "unknown"
+    },
+    "scenario": {
+      "version": "a105_summary_precision_scenario_v1",
+      "count_rule": "one_per_physical_preparation",
+      "stipulated_assumptions": [
+        "one_estimate_per_preparation",
+        "reported_sd_summarizes_counted_preparation_estimates",
+        "equal_weight_arithmetic_mean",
+        "sample_sd_n_minus_one",
+        "iid_common_mean_finite_variance",
+        "normal_sampling_units"
+      ]
+    },
+    "interval_request": "student_t_95",
+    "dependencies": {
+      "parameter_source": {
+        "source_ref": "@elife2015AP",
+        "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+        "representation": "text",
+        "start": 24116,
+        "end": 24119
+      },
+      "spread_source": {
+        "source_ref": "@elife2015AP",
+        "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+        "representation": "text",
+        "start": 24121,
+        "end": 24124
+      },
+      "count_source": {
+        "source_ref": "@elife2015AP",
+        "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+        "representation": "text",
+        "start": 32194,
+        "end": 32197
+      },
+      "statistical_count_source": null,
+      "physical_measurement_id": null,
+      "parameter_unit_source": {
+        "source_ref": "@elife2015AP",
+        "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+        "representation": "text",
+        "start": 22176,
+        "end": 22186
+      },
+      "spread_unit_source": {
+        "source_ref": "@elife2015AP",
+        "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+        "representation": "text",
+        "start": 22176,
+        "end": 22186
+      }
+    }
+  },
+  "source_cells": {
+    "reported_parameter": {
+      "value": 0.000186,
+      "unit": "uM^-1min^-1",
+      "status": "populated",
+      "qualification": "source_reported",
+      "formula_code": "summary_precision_reported_parameter",
+      "origin": "derived",
+      "approximate": false,
+      "source_exact_value": {
+        "numerator": "93",
+        "denominator": "500000"
+      },
+      "conditional_on": [],
+      "stipulated_assumptions": [],
+      "unavailable_reason": null
+    },
+    "reported_sd": {
+      "value": 6e-06,
+      "unit": "uM^-1min^-1",
+      "status": "populated",
+      "qualification": "source_reported",
+      "formula_code": "summary_precision_reported_sd",
+      "origin": "derived",
+      "approximate": false,
+      "source_exact_value": {
+        "numerator": "3",
+        "denominator": "500000"
+      },
+      "conditional_on": [],
+      "stipulated_assumptions": [],
+      "unavailable_reason": null
+    },
+    "source_summary_count": {
+      "value": 2,
+      "unit": "count",
+      "status": "populated",
+      "qualification": "source_reported",
+      "formula_code": "summary_precision_source_summary_count",
+      "origin": "reported",
+      "approximate": false,
+      "source_exact_value": {
+        "numerator": "2",
+        "denominator": "1"
+      },
+      "conditional_on": [],
+      "stipulated_assumptions": [],
+      "unavailable_reason": null
+    },
+    "independent_preparation_count": {
+      "value": 2,
+      "unit": "count",
+      "status": "populated",
+      "qualification": "source_reported",
+      "formula_code": "summary_precision_independent_preparation_count",
+      "origin": "reported",
+      "approximate": false,
+      "source_exact_value": {
+        "numerator": "2",
+        "denominator": "1"
+      },
+      "conditional_on": [],
+      "stipulated_assumptions": [],
+      "unavailable_reason": null
+    },
+    "statistical_estimator_count": {
+      "value": null,
+      "unit": "count",
+      "status": "unavailable",
+      "qualification": "unavailable",
+      "formula_code": "summary_precision_statistical_estimator_count",
+      "origin": "reported",
+      "approximate": false,
+      "source_exact_value": null,
+      "conditional_on": [],
+      "stipulated_assumptions": [],
+      "unavailable_reason": "statistical_estimator_count_unknown"
+    },
+    "relative_reported_sd": {
+      "value": 0.03225806451612903,
+      "unit": "dimensionless",
+      "status": "populated",
+      "qualification": "derived_source_supported_conditions",
+      "formula_code": "summary_precision_relative_reported_sd",
+      "origin": "derived",
+      "approximate": false,
+      "source_exact_value": {
+        "numerator": "1",
+        "denominator": "31"
+      },
+      "conditional_on": [],
+      "stipulated_assumptions": [],
+      "unavailable_reason": null
+    },
+    "mean_variance": {
+      "value": null,
+      "unit": "uM_inverse_squared_min_inverse_squared",
+      "status": "unavailable",
+      "qualification": "unavailable",
+      "formula_code": "summary_precision_mean_variance",
+      "origin": "derived",
+      "approximate": false,
+      "source_exact_value": null,
+      "conditional_on": [
+        "sample_sd_n_minus_one",
+        "iid_common_mean_finite_variance"
+      ],
+      "stipulated_assumptions": [],
+      "unavailable_reason": "statistical_estimator_count_unknown"
+    },
+    "mean_standard_error": {
+      "value": null,
+      "unit": "uM^-1min^-1",
+      "status": "unavailable",
+      "qualification": "unavailable",
+      "formula_code": "summary_precision_mean_standard_error",
+      "origin": "derived",
+      "approximate": false,
+      "source_exact_value": null,
+      "conditional_on": [
+        "sample_sd_n_minus_one",
+        "iid_common_mean_finite_variance"
+      ],
+      "stipulated_assumptions": [],
+      "unavailable_reason": "statistical_estimator_count_unknown"
+    },
+    "relative_mean_standard_error": {
+      "value": null,
+      "unit": "dimensionless",
+      "status": "unavailable",
+      "qualification": "unavailable",
+      "formula_code": "summary_precision_relative_mean_standard_error",
+      "origin": "derived",
+      "approximate": false,
+      "source_exact_value": null,
+      "conditional_on": [
+        "sample_sd_n_minus_one",
+        "iid_common_mean_finite_variance",
+        "equal_weight_arithmetic_mean"
+      ],
+      "stipulated_assumptions": [],
+      "unavailable_reason": "statistical_estimator_count_unknown"
+    },
+    "mean_interval_confidence_level": {
+      "value": 0.95,
+      "unit": "dimensionless",
+      "status": "populated",
+      "qualification": "derived_source_supported_conditions",
+      "formula_code": "summary_precision_mean_interval_confidence_level",
+      "origin": "proposed",
+      "approximate": false,
+      "source_exact_value": {
+        "numerator": "19",
+        "denominator": "20"
+      },
+      "conditional_on": [],
+      "stipulated_assumptions": [],
+      "unavailable_reason": null
+    },
+    "mean_interval_df": {
+      "value": null,
+      "unit": "count",
+      "status": "unavailable",
+      "qualification": "unavailable",
+      "formula_code": "summary_precision_mean_interval_df",
+      "origin": "derived",
+      "approximate": false,
+      "source_exact_value": null,
+      "conditional_on": [
+        "sample_sd_n_minus_one"
+      ],
+      "stipulated_assumptions": [],
+      "unavailable_reason": "statistical_estimator_count_unknown"
+    },
+    "mean_interval_t_multiplier": {
+      "value": null,
+      "unit": "dimensionless",
+      "status": "unavailable",
+      "qualification": "unavailable",
+      "formula_code": "summary_precision_mean_interval_t_multiplier",
+      "origin": "derived",
+      "approximate": false,
+      "source_exact_value": null,
+      "conditional_on": [
+        "sample_sd_n_minus_one",
+        "iid_common_mean_finite_variance",
+        "normal_sampling_units"
+      ],
+      "stipulated_assumptions": [],
+      "unavailable_reason": "statistical_estimator_count_unknown"
+    },
+    "mean_interval_halfwidth": {
+      "value": null,
+      "unit": "uM^-1min^-1",
+      "status": "unavailable",
+      "qualification": "unavailable",
+      "formula_code": "summary_precision_mean_interval_halfwidth",
+      "origin": "derived",
+      "approximate": false,
+      "source_exact_value": null,
+      "conditional_on": [
+        "sample_sd_n_minus_one",
+        "iid_common_mean_finite_variance",
+        "normal_sampling_units"
+      ],
+      "stipulated_assumptions": [],
+      "unavailable_reason": "statistical_estimator_count_unknown"
+    },
+    "mean_interval_lower": {
+      "value": null,
+      "unit": "uM^-1min^-1",
+      "status": "unavailable",
+      "qualification": "unavailable",
+      "formula_code": "summary_precision_mean_interval_lower",
+      "origin": "derived",
+      "approximate": false,
+      "source_exact_value": null,
+      "conditional_on": [
+        "sample_sd_n_minus_one",
+        "iid_common_mean_finite_variance",
+        "normal_sampling_units",
+        "equal_weight_arithmetic_mean"
+      ],
+      "stipulated_assumptions": [],
+      "unavailable_reason": "statistical_estimator_count_unknown"
+    },
+    "mean_interval_upper": {
+      "value": null,
+      "unit": "uM^-1min^-1",
+      "status": "unavailable",
+      "qualification": "unavailable",
+      "formula_code": "summary_precision_mean_interval_upper",
+      "origin": "derived",
+      "approximate": false,
+      "source_exact_value": null,
+      "conditional_on": [
+        "sample_sd_n_minus_one",
+        "iid_common_mean_finite_variance",
+        "normal_sampling_units",
+        "equal_weight_arithmetic_mean"
+      ],
+      "stipulated_assumptions": [],
+      "unavailable_reason": "statistical_estimator_count_unknown"
+    }
+  },
+  "scenario_cells": {
+    "reported_parameter": {
+      "value": 0.000186,
+      "unit": "uM^-1min^-1",
+      "status": "populated",
+      "qualification": "source_reported",
+      "formula_code": "summary_precision_reported_parameter",
+      "origin": "derived",
+      "approximate": false,
+      "source_exact_value": {
+        "numerator": "93",
+        "denominator": "500000"
+      },
+      "conditional_on": [],
+      "stipulated_assumptions": [],
+      "unavailable_reason": null
+    },
+    "reported_sd": {
+      "value": 6e-06,
+      "unit": "uM^-1min^-1",
+      "status": "populated",
+      "qualification": "source_reported",
+      "formula_code": "summary_precision_reported_sd",
+      "origin": "derived",
+      "approximate": false,
+      "source_exact_value": {
+        "numerator": "3",
+        "denominator": "500000"
+      },
+      "conditional_on": [],
+      "stipulated_assumptions": [],
+      "unavailable_reason": null
+    },
+    "source_summary_count": {
+      "value": 2,
+      "unit": "count",
+      "status": "populated",
+      "qualification": "source_reported",
+      "formula_code": "summary_precision_source_summary_count",
+      "origin": "reported",
+      "approximate": false,
+      "source_exact_value": {
+        "numerator": "2",
+        "denominator": "1"
+      },
+      "conditional_on": [],
+      "stipulated_assumptions": [],
+      "unavailable_reason": null
+    },
+    "independent_preparation_count": {
+      "value": 2,
+      "unit": "count",
+      "status": "populated",
+      "qualification": "source_reported",
+      "formula_code": "summary_precision_independent_preparation_count",
+      "origin": "reported",
+      "approximate": false,
+      "source_exact_value": {
+        "numerator": "2",
+        "denominator": "1"
+      },
+      "conditional_on": [],
+      "stipulated_assumptions": [],
+      "unavailable_reason": null
+    },
+    "statistical_estimator_count": {
+      "value": 2,
+      "unit": "count",
+      "status": "populated",
+      "qualification": "conditional_on_stipulated_assumptions",
+      "formula_code": "summary_precision_statistical_estimator_count",
+      "origin": "derived",
+      "approximate": false,
+      "source_exact_value": {
+        "numerator": "2",
+        "denominator": "1"
+      },
+      "conditional_on": [
+        "one_estimate_per_preparation",
+        "reported_sd_summarizes_counted_preparation_estimates"
+      ],
+      "stipulated_assumptions": [
+        "one_estimate_per_preparation",
+        "reported_sd_summarizes_counted_preparation_estimates"
+      ],
+      "unavailable_reason": null
+    },
+    "relative_reported_sd": {
+      "value": 0.03225806451612903,
+      "unit": "dimensionless",
+      "status": "populated",
+      "qualification": "derived_source_supported_conditions",
+      "formula_code": "summary_precision_relative_reported_sd",
+      "origin": "derived",
+      "approximate": false,
+      "source_exact_value": {
+        "numerator": "1",
+        "denominator": "31"
+      },
+      "conditional_on": [],
+      "stipulated_assumptions": [],
+      "unavailable_reason": null
+    },
+    "mean_variance": {
+      "value": 1.8e-11,
+      "unit": "uM_inverse_squared_min_inverse_squared",
+      "status": "populated",
+      "qualification": "conditional_on_stipulated_assumptions",
+      "formula_code": "summary_precision_mean_variance",
+      "origin": "derived",
+      "approximate": false,
+      "source_exact_value": {
+        "numerator": "9",
+        "denominator": "500000000000"
+      },
+      "conditional_on": [
+        "one_estimate_per_preparation",
+        "reported_sd_summarizes_counted_preparation_estimates",
+        "sample_sd_n_minus_one",
+        "iid_common_mean_finite_variance"
+      ],
+      "stipulated_assumptions": [
+        "one_estimate_per_preparation",
+        "reported_sd_summarizes_counted_preparation_estimates",
+        "sample_sd_n_minus_one",
+        "iid_common_mean_finite_variance"
+      ],
+      "unavailable_reason": null
+    },
+    "mean_standard_error": {
+      "value": 4.242640687119285e-06,
+      "unit": "uM^-1min^-1",
+      "status": "populated",
+      "qualification": "conditional_on_stipulated_assumptions",
+      "formula_code": "summary_precision_mean_standard_error",
+      "origin": "derived",
+      "approximate": false,
+      "source_exact_value": null,
+      "conditional_on": [
+        "one_estimate_per_preparation",
+        "reported_sd_summarizes_counted_preparation_estimates",
+        "sample_sd_n_minus_one",
+        "iid_common_mean_finite_variance"
+      ],
+      "stipulated_assumptions": [
+        "one_estimate_per_preparation",
+        "reported_sd_summarizes_counted_preparation_estimates",
+        "sample_sd_n_minus_one",
+        "iid_common_mean_finite_variance"
+      ],
+      "unavailable_reason": null
+    },
+    "relative_mean_standard_error": {
+      "value": 0.022809896167307983,
+      "unit": "dimensionless",
+      "status": "populated",
+      "qualification": "conditional_on_stipulated_assumptions",
+      "formula_code": "summary_precision_relative_mean_standard_error",
+      "origin": "derived",
+      "approximate": false,
+      "source_exact_value": null,
+      "conditional_on": [
+        "one_estimate_per_preparation",
+        "reported_sd_summarizes_counted_preparation_estimates",
+        "sample_sd_n_minus_one",
+        "iid_common_mean_finite_variance",
+        "equal_weight_arithmetic_mean"
+      ],
+      "stipulated_assumptions": [
+        "one_estimate_per_preparation",
+        "reported_sd_summarizes_counted_preparation_estimates",
+        "sample_sd_n_minus_one",
+        "iid_common_mean_finite_variance",
+        "equal_weight_arithmetic_mean"
+      ],
+      "unavailable_reason": null
+    },
+    "mean_interval_confidence_level": {
+      "value": 0.95,
+      "unit": "dimensionless",
+      "status": "populated",
+      "qualification": "derived_source_supported_conditions",
+      "formula_code": "summary_precision_mean_interval_confidence_level",
+      "origin": "proposed",
+      "approximate": false,
+      "source_exact_value": {
+        "numerator": "19",
+        "denominator": "20"
+      },
+      "conditional_on": [],
+      "stipulated_assumptions": [],
+      "unavailable_reason": null
+    },
+    "mean_interval_df": {
+      "value": 1,
+      "unit": "count",
+      "status": "populated",
+      "qualification": "conditional_on_stipulated_assumptions",
+      "formula_code": "summary_precision_mean_interval_df",
+      "origin": "derived",
+      "approximate": false,
+      "source_exact_value": {
+        "numerator": "1",
+        "denominator": "1"
+      },
+      "conditional_on": [
+        "one_estimate_per_preparation",
+        "reported_sd_summarizes_counted_preparation_estimates",
+        "sample_sd_n_minus_one"
+      ],
+      "stipulated_assumptions": [
+        "one_estimate_per_preparation",
+        "reported_sd_summarizes_counted_preparation_estimates",
+        "sample_sd_n_minus_one"
+      ],
+      "unavailable_reason": null
+    },
+    "mean_interval_t_multiplier": {
+      "value": 12.706204736174694,
+      "unit": "dimensionless",
+      "status": "populated",
+      "qualification": "conditional_on_stipulated_assumptions",
+      "formula_code": "summary_precision_mean_interval_t_multiplier",
+      "origin": "derived",
+      "approximate": false,
+      "source_exact_value": null,
+      "conditional_on": [
+        "one_estimate_per_preparation",
+        "reported_sd_summarizes_counted_preparation_estimates",
+        "sample_sd_n_minus_one",
+        "iid_common_mean_finite_variance",
+        "normal_sampling_units"
+      ],
+      "stipulated_assumptions": [
+        "one_estimate_per_preparation",
+        "reported_sd_summarizes_counted_preparation_estimates",
+        "sample_sd_n_minus_one",
+        "iid_common_mean_finite_variance",
+        "normal_sampling_units"
+      ],
+      "unavailable_reason": null
+    },
+    "mean_interval_halfwidth": {
+      "value": 5.390786119256252e-05,
+      "unit": "uM^-1min^-1",
+      "status": "populated",
+      "qualification": "conditional_on_stipulated_assumptions",
+      "formula_code": "summary_precision_mean_interval_halfwidth",
+      "origin": "derived",
+      "approximate": false,
+      "source_exact_value": null,
+      "conditional_on": [
+        "one_estimate_per_preparation",
+        "reported_sd_summarizes_counted_preparation_estimates",
+        "sample_sd_n_minus_one",
+        "iid_common_mean_finite_variance",
+        "normal_sampling_units"
+      ],
+      "stipulated_assumptions": [
+        "one_estimate_per_preparation",
+        "reported_sd_summarizes_counted_preparation_estimates",
+        "sample_sd_n_minus_one",
+        "iid_common_mean_finite_variance",
+        "normal_sampling_units"
+      ],
+      "unavailable_reason": null
+    },
+    "mean_interval_lower": {
+      "value": 0.0001320921388074375,
+      "unit": "uM^-1min^-1",
+      "status": "populated",
+      "qualification": "conditional_on_stipulated_assumptions",
+      "formula_code": "summary_precision_mean_interval_lower",
+      "origin": "derived",
+      "approximate": false,
+      "source_exact_value": null,
+      "conditional_on": [
+        "one_estimate_per_preparation",
+        "reported_sd_summarizes_counted_preparation_estimates",
+        "sample_sd_n_minus_one",
+        "iid_common_mean_finite_variance",
+        "normal_sampling_units",
+        "equal_weight_arithmetic_mean"
+      ],
+      "stipulated_assumptions": [
+        "one_estimate_per_preparation",
+        "reported_sd_summarizes_counted_preparation_estimates",
+        "sample_sd_n_minus_one",
+        "iid_common_mean_finite_variance",
+        "normal_sampling_units",
+        "equal_weight_arithmetic_mean"
+      ],
+      "unavailable_reason": null
+    },
+    "mean_interval_upper": {
+      "value": 0.00023990786119256253,
+      "unit": "uM^-1min^-1",
+      "status": "populated",
+      "qualification": "conditional_on_stipulated_assumptions",
+      "formula_code": "summary_precision_mean_interval_upper",
+      "origin": "derived",
+      "approximate": false,
+      "source_exact_value": null,
+      "conditional_on": [
+        "one_estimate_per_preparation",
+        "reported_sd_summarizes_counted_preparation_estimates",
+        "sample_sd_n_minus_one",
+        "iid_common_mean_finite_variance",
+        "normal_sampling_units",
+        "equal_weight_arithmetic_mean"
+      ],
+      "stipulated_assumptions": [
+        "one_estimate_per_preparation",
+        "reported_sd_summarizes_counted_preparation_estimates",
+        "sample_sd_n_minus_one",
+        "iid_common_mean_finite_variance",
+        "normal_sampling_units",
+        "equal_weight_arithmetic_mean"
+      ],
+      "unavailable_reason": null
+    }
+  },
+  "contribution": {
+    "kind": "one_summary_precision_contribution",
+    "dependency_sources": [
+      {
+        "source_ref": "@elife2015AP",
+        "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+        "representation": "text",
+        "start": 24116,
+        "end": 24119
+      },
+      {
+        "source_ref": "@elife2015AP",
+        "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+        "representation": "text",
+        "start": 24121,
+        "end": 24124
+      },
+      {
+        "source_ref": "@elife2015AP",
+        "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+        "representation": "text",
+        "start": 32194,
+        "end": 32197
+      },
+      {
+        "source_ref": "@elife2015AP",
+        "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+        "representation": "text",
+        "start": 22176,
+        "end": 22186
+      }
+    ],
+    "physical_measurement_id": null,
+    "independence_inferred": false
+  },
+  "limits": [
+    "source_summaries_do_not_reconstruct_raw_measurements",
+    "physical_count_does_not_define_statistical_count",
+    "source_conditions_and_stipulations_distinct",
+    "random_precision_does_not_include_unknown_systematics",
+    "shared_calibration_does_not_shrink_with_preparation_count",
+    "dependent_precision_representations_not_independent_assays",
+    "measurement_repeatability_does_not_establish_physiological_specificity",
+    "no_cross_construct_contrast",
+    "no_assay_error_probability",
+    "no_target_transfer_or_annotation_credit"
+  ],
+  "total_uncertainty": null,
+  "assay_error_probability": null,
+  "annotation_credit": null
+}

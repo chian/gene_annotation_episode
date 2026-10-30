@@ -1,0 +1,37 @@
+# Owner043 complete single-paper handoff
+
+Read this file together with FINDINGS.md, NUMERICAL_CASE.json, SOURCE_LOCATORS.json and PROVENANCE.md as one packet; perform the required parent post-packet reset before component interpretation. One retained primary transport study: DOI10.1128/JB.00599-17/PMC5738728. No other selected paper or retained transport findings packet was read. The accidental unrelated index exposure and initial BtsT truncation are fully disclosed in PROVENANCE, with two fresh completed36-chunk reset receipts. Full relevant current696-line sheet was included twice, not summarized.
+
+## What this contrast contributes
+
+This study contains whole-cell radiotracer timecourses, tracer competition, concentration-response kinetics, purified-protein reconstitution under imposed gradients and counterflow. A future ordinary literature investigation can select several relevant component readers after seeing those experiments. It cannot select one generic “transport grader” merely because a title says transporter.
+
+Definitions matter: MG1655 ΔbtsT plus BtsT-6His does not retain native BtsT, but does retain other uptake/metabolic functions. YYC202 has a different genotype and no listed btsT deletion. Purified protein is expressed in LMG194 and then assayed in artificial E. coli-lipid vesicles. Whole cells and vesicles are different physical preparations even in the same paper. Total cell protein is not a BtsT-abundance denominator. Protonophore inhibition, competition and accumulation supply distinct scientific meanings.
+
+Concrete filled cells include reported whole-cell initial-rate fold6, derived comparator-associated incremental fraction5/6=.833333 (not proven molecular attribution); reported approximatelyfourfold accumulated plateau with .5nmol/mg implies comparator.125 and increment.375nmol/mg, which are amounts, not rates. Approximate Figure4B tracer rates .80control,.06coldpyruvate,.04Br-pyruvate yield reduction fractions.925,.95; both share the same control, no background correction, and the inputs are manually graph-derived. Their finite visual-reading ranges are not SD/SEM or confidence bounds. The competitors were1mM against10µM tracer; their effect does not measure transport of alternative substrates or binding affinity.
+
+Reported apparent whole-cellKm16.5±6.4µM supplies point/spread and relative printedspread.3878788. It does not supply a Kd or known covariance. The existing pure transport-response calculator gives conditionalh=.533018867925 for declared10versus40µM under the same whole-cell curve; it rejects using the vesicle40µM condition with this Km because the curve keys differ. This check ran directly on the purecalculator, not a selected source-native LiteratureEpisode or repository path.
+
+The reconstituted-system gradient comparison supplies reported27.7nmol/mg/min from the initial-rate panel, nominalΔpH1.8, nominalH+ratio63.0957 and stock-to-assayprotein.02mg/mL. These are signal/context components, not quality weights. The published “twofold”/“half” narrative predicts≈13.85nmol/mg/min for individualgradient uptake; the Figure5BΔpHbar is visually nearer16.5, so its coarse narrative and graph representations remain separate. Actual maintained gradient magnitudes and numeric matched protein-free controls were not extracted. Counterflow10000/200+4.7=54.7µM preserves the total-versus-labeled exposure distinction. The prose.28rate versus graph accumulatedamount/nonzerointercept is not silently made an initialflux.
+
+## Numerical compilation and limits
+
+FINDINGS section4 proposes precise transport extensions of the current reference-evidence sheet: fit an intercept and justified initial slope per actual preparation; form matched BtsT-versus-emptyvector differences; use protein/emptyliposome×gradient differences of differences e=[1,−1,−1,1]x and Ve=lClᵀ; calculate tracer competition net-rate logcontrasts with shared-control covariance; apply a measured nonintended-condition response once where justified. These are explicit sums/multipliers of measurements. Intended gradient effects are not comparability penalties.
+
+Source statistical S/B cells remain null because preparation relationships, numeric controls and supported uncertainty are missing/conflicting. Fig3/4 captions identifySD/3biologicalreplicates; Fig5 identifiesSD/3technicalreplicates; globalMethods saysSEM and independentlypreparedsamples repeated≥3. Do not infer a chosen SD/SEM,3purifications,nineindependentreplicates or zero uncertainty. The paper's complementary experiments address whole-cell metabolism, broad protonophore action, passive acid entry and substrateexchange; they are not multiple independent repeats of one endpoint.
+
+The current sheet can retain several useful numerical components but does not authorize multiplying foldincrement×competitionreduction×gradientratio×Kmprecision into an overallquality grade. Final annotation credit and target transfer stay outside this packet. Its historical source-pooling and target-correspondence sections were not adopted.
+
+## What still needs implementation
+
+The fully read current transport calculator/input/storage implement a same-curve conditional response operand with optional fullcovariance, plus sourcecustody and savedreturns. They do not implement transport experimental validity, preparation-specific attribution, initial-rate selection/fitting, isotope dilution, gradient comparisons or counterflow scoring. The HTMLquantityreader supports the reportedKm sentence and leaves its ±kind unspecified; literal token custody does not establish molecular attribution.
+
+FINDINGS section6 pairs exact requiredinput/outputcells with six future targeted responsibilities: radiotracer accumulation/rate, matchedwholecellcontrast, tracercompetition, reconstitutiongradient, counterflowexposure/endpoint and error/replicationassembly. These are proposed function responsibilities, not six newly completed graders or six additional sheets. All new transport scientific reader/scoring functions remain UNIMPLEMENTED by this packet. Existing generalrate/ratio infrastructure may be reusable only after its full actualconsumer audit; this owner read the complete directtransport paths and contracts, not the full episodic/service assembly. Owner041 independently audits current code and received no paperfindings.
+
+FINDINGS section7 gives draft aspect-specific scientific questions, constrained meanings and unknown/conflicting behavior for laterfeedback. It is not a new wiredTASK, settledprompt, paperclassifier, dispatcher, axis or episode. No sheet was copied into an investigationprompt.
+
+## Verification and delivery status
+
+`check_arithmetic.py` ran successfully and wrote NUMERICAL_CASE.json plus exactsource byte/Unicode locators. Checks cover source-derived arithmetic and currentpurecalculator same-curve acceptance/different-preparation rejection. No scientificmeasurement was synthesized; only explicitly proposed formulas and declaredconditionalcalculation were introduced. No productionrepo/test/library/sheet/TASK/run/pin/modelscientificexecution changed. NoA105orwhole-goalcompletionclaim is made.
+
+Read limits: retainedmaintext entirety andFigures3–5 inspected; no supplementPDF/S-figure data/workbook inspected, no originalinstrumentdata or independentpurification hierarchy recovered; livePMCchallenge andEuropePMCerror prevented freshfulltextfetch. Primarysourcebytes here are retainedcopies with manifesthashes. Sourceclaim scope is exactly what wasread, not every paper cited in this paper.

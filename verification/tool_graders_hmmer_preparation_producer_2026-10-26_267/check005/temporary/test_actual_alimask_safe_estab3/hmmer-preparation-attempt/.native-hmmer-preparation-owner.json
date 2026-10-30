@@ -1,0 +1,74 @@
+{
+  "attempt_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_safe_estab3/hmmer-preparation-attempt",
+  "identity": {
+    "attempt_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e",
+    "episode_id": "selected-local-child",
+    "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary/test_actual_alimask_safe_estab3/native.json",
+    "operation_key": "selected-command",
+    "requested_job_sha256": "7418671a34adabe6bb1d7296bbb1c2b0588a18f32ea7b6c10d8856cfa1d12c15",
+    "resource_id": "local",
+    "run_id": "producer267-test"
+  },
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "requested_job": {
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/alimask",
+      "--amino",
+      "--fast",
+      "--ali2model",
+      "2-4",
+      "--informat",
+      "Stockholm",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/protein.sto"
+    ],
+    "environment": {},
+    "native_hmmer_preparation": {
+      "environment": {},
+      "grading_parameters": {},
+      "input_metadata": {},
+      "key": null,
+      "mode": "alignment_to_model",
+      "operands": [
+        {
+          "artifact_ref": "fixture267:alignment:0",
+          "format": "stockholm",
+          "ordinal": 0,
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259/inputs/protein.sto",
+          "role": "alignment",
+          "sha256": "5d73b1b066d2f453de0e98cf371a5328bb18874f36a611a8b95c1e6b8c0fc260",
+          "size_bytes": 202
+        }
+      ],
+      "options": [
+        "--amino",
+        "--fast",
+        "--ali2model",
+        "2-4"
+      ],
+      "outputs": [
+        {
+          "format": "hmmer_stdout",
+          "relative_path": "outputs/stdout",
+          "role": "stdout"
+        },
+        {
+          "format": "hmmer_stderr",
+          "relative_path": "outputs/stderr",
+          "role": "stderr"
+        }
+      ],
+      "program": "alimask",
+      "software": {
+        "engine_version": "3.4",
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/alimask",
+        "sha256": "4cf273b7b4b52363468b758a39bedf8f00540b01983bf6641ffd36140afad547"
+      },
+      "version": "native_hmmer_preparation_job_v1"
+    }
+  },
+  "version": "native_hmmer_preparation_run_plan_v1"
+}

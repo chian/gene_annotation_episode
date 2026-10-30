@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="1.203" timestamp="2026-10-28T01:11:55.846503-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_literature_experimental_prompt_delivery" name="test_only_enabled_literature_binding_supplies_experimental_marker" time="0.699"><failure message="AttributeError: 'EmptyServices' object has no attribute 'workflow'">def test_only_enabled_literature_binding_supplies_experimental_marker():
+        class EmptyServices:
+            def own_outcomes(self, *_args, **_kwargs):
+                return {"records": [], "offset": 0, "limit": 8, "next_offset": None}
+    
+            def literature_rate_repository(self):
+                return self
+    
+            def source_projection(self):
+                return self
+    
+            def source_domain_projection(self):
+                return self
+    
+            def received_cells(self, context):
+                return []
+    
+        assignment = {"version": "literature_assignment_v1", "question_context_refs": [], "source_refs": []}
+        context = BindingContext("run", "episode", "literature", (("literature", "case"),),
+            {"subject_refs": ["input_fixture"]}, assignment, {})
+        enabled = LiteratureEpisodes(EmptyServices(), rate_population=True)
+        disabled = LiteratureEpisodes(EmptyServices())
+&gt;       assert enabled.decision_context(context, None)["literature_experimental_work"] == {
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            "version": "literature_experimental_task_v1", "aspect": "source_experimental_evidence"}
+
+tests/test_literature_experimental_prompt_delivery.py:261: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_episodes.py:835: in decision_context
+    if assignment.get("requested_product_coupling_components") or self._product_coupling_repository().has_work(context):
+                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.literature_episodes.LiteratureEpisodes object at 0x7c13a9fc00b0&gt;
+
+    def _product_coupling_repository(self):
+        """Lazy selected product/cofactor adapter; discovery creates no state."""
+        from .literature_product_coupling_storage import LiteratureProductCouplingRepository
+        if not hasattr(self, "_product_coupling_repo"):
+            self._product_coupling_repo = LiteratureProductCouplingRepository(
+&gt;               self.services.workflow.store, self.services.workflow.run_id)
+                ^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'EmptyServices' object has no attribute 'workflow'
+
+gene_annotation_episode/literature_episodes.py:1062: AttributeError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,598 @@
+{
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "type": [
+          "number",
+          "null"
+        ]
+      },
+      "value_candidates": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "uniqueItems": true
+      },
+      "reported_domains": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "lower": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "lower_infinite": {
+              "type": "boolean"
+            },
+            "lower_closed": {
+              "type": "boolean"
+            },
+            "upper": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "upper_infinite": {
+              "type": "boolean"
+            },
+            "upper_closed": {
+              "type": "boolean"
+            },
+            "meaning": {
+              "const": "reported_estimate_domain",
+              "type": "string"
+            }
+          },
+          "required": [
+            "lower",
+            "lower_infinite",
+            "lower_closed",
+            "upper",
+            "upper_infinite",
+            "upper_closed",
+            "meaning"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "unit": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "fraction",
+          "dimensionless",
+          null
+        ]
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "populated",
+          "conflicting",
+          "unavailable"
+        ]
+      },
+      "origin": {
+        "type": "string",
+        "enum": [
+          "reported",
+          "visual_transcription",
+          "derived",
+          "proposed"
+        ]
+      },
+      "unavailable_reason": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "no_selected_representations",
+          "source_dependency_unavailable",
+          "unreadable_transcription",
+          "ambiguous_transcription",
+          "source_representation_conflict",
+          "incomplete_conflicting_representations",
+          "comparison_association_unresolved",
+          "signal_scale_unresolved",
+          "unsupported_expression",
+          "negative_reported_signal_unsupported",
+          "reported_limit_not_point",
+          "positive_denominator_not_established",
+          "zero_reported_ratio",
+          "numerical_model_range",
+          "jats_expression_capability_partial",
+          "calibrated_amount_conversion_unimplemented",
+          "functional_response_conversion_unimplemented",
+          "observation_model_unimplemented",
+          "different_reported_quantities",
+          "signal_scales_differ",
+          null
+        ]
+      },
+      "conditional_on": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "source_comparison_interpretation",
+            "nominated_printed_signal_pair"
+          ]
+        },
+        "uniqueItems": true
+      },
+      "sheet_ref": {
+        "type": "string",
+        "format": "reference",
+        "x-reference-namespace": "source"
+      },
+      "evidence_source_ref": {
+        "type": "string",
+        "format": "reference",
+        "x-reference-namespace": "source"
+      },
+      "component": {
+        "type": "string",
+        "enum": [
+          "reported_ratio",
+          "difference_from_reference",
+          "log_reported_ratio",
+          "calibrated_amount_ratio",
+          "amount_adjusted_effect",
+          "source_profile_log_ratio",
+          "source_signed_index"
+        ]
+      },
+      "selected_roster_resolved": {
+        "type": "boolean"
+      },
+      "point_candidate_set_complete": {
+        "type": "boolean"
+      },
+      "known_source_conflict": {
+        "type": "boolean"
+      },
+      "independent_preparation_count": {
+        "type": "null"
+      },
+      "candidate_basis": {
+        "const": "selected_received_source_representations",
+        "type": "string"
+      },
+      "uncertainty_kind": {
+        "const": "unknown",
+        "type": "string"
+      },
+      "interpretation_kind": {
+        "const": "episode_source_interpretation",
+        "type": "string"
+      },
+      "source_origins": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "reported",
+            "visual_transcription"
+          ]
+        },
+        "uniqueItems": true
+      },
+      "representation_reading_states": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "exact",
+            "ambiguous",
+            "unreadable",
+            "conflicting",
+            "not_applicable"
+          ]
+        },
+        "uniqueItems": true
+      },
+      "signal_kind": {
+        "type": "string",
+        "enum": [
+          "protein_band",
+          "transcript_signal",
+          "other_reported_signal",
+          "unknown",
+          "conflicting"
+        ]
+      },
+      "reference_role": {
+        "type": "string",
+        "enum": [
+          "tagged_wt_complementation",
+          "endogenous_wt",
+          "other_reported_reference",
+          "unknown",
+          "conflicting"
+        ]
+      },
+      "arrangement": {
+        "type": "string",
+        "enum": [
+          "single_preparation",
+          "replacement",
+          "coexistence",
+          "not_applicable",
+          "unknown",
+          "conflicting"
+        ]
+      },
+      "subject_ref": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "reference",
+        "x-reference-namespace": "reference"
+      },
+      "variant_ref": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "reference",
+        "x-reference-namespace": "reference"
+      },
+      "reference_ref": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "reference",
+        "x-reference-namespace": "reference"
+      },
+      "organism_ref": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "reference",
+        "x-reference-namespace": "reference"
+      },
+      "genotype_ref": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "reference",
+        "x-reference-namespace": "reference"
+      },
+      "construct_variant_ref": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "reference",
+        "x-reference-namespace": "reference"
+      },
+      "construct_reference_ref": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "reference",
+        "x-reference-namespace": "reference"
+      },
+      "preparation_variant_ref": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "reference",
+        "x-reference-namespace": "reference"
+      },
+      "preparation_reference_ref": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "reference",
+        "x-reference-namespace": "reference"
+      },
+      "experiment_ref": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "reference",
+        "x-reference-namespace": "reference"
+      },
+      "condition_ref": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "reference",
+        "x-reference-namespace": "context"
+      },
+      "endpoint_ref": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "reference",
+        "x-reference-namespace": "reference"
+      },
+      "normalization_ref": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "reference",
+        "x-reference-namespace": "reference"
+      },
+      "input_measurement_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "reference",
+          "x-reference-namespace": "reference"
+        },
+        "uniqueItems": true
+      },
+      "reference_measurement_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "reference",
+          "x-reference-namespace": "reference"
+        },
+        "uniqueItems": true
+      },
+      "comparison_relation_states": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "supported",
+            "different",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "uniqueItems": true
+      },
+      "signal_scale_states": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "supported",
+            "different",
+            "unknown",
+            "conflicting",
+            "not_applicable"
+          ]
+        },
+        "uniqueItems": true
+      },
+      "signal_use": {
+        "type": "string",
+        "enum": [
+          "experimental_comparability",
+          "measured_endpoint",
+          "other",
+          "unknown",
+          "conflicting"
+        ]
+      },
+      "meaning_statuses": {
+        "type": "object",
+        "properties": {
+          "subject": {
+            "type": "string",
+            "enum": [
+              "known",
+              "unknown",
+              "conflicting"
+            ]
+          },
+          "variant": {
+            "type": "string",
+            "enum": [
+              "known",
+              "unknown",
+              "conflicting"
+            ]
+          },
+          "reference": {
+            "type": "string",
+            "enum": [
+              "known",
+              "unknown",
+              "conflicting"
+            ]
+          },
+          "organism": {
+            "type": "string",
+            "enum": [
+              "known",
+              "unknown",
+              "conflicting"
+            ]
+          },
+          "genotype": {
+            "type": "string",
+            "enum": [
+              "known",
+              "unknown",
+              "conflicting"
+            ]
+          },
+          "construct_variant": {
+            "type": "string",
+            "enum": [
+              "known",
+              "unknown",
+              "conflicting"
+            ]
+          },
+          "construct_reference": {
+            "type": "string",
+            "enum": [
+              "known",
+              "unknown",
+              "conflicting"
+            ]
+          },
+          "preparation_variant": {
+            "type": "string",
+            "enum": [
+              "known",
+              "unknown",
+              "conflicting"
+            ]
+          },
+          "preparation_reference": {
+            "type": "string",
+            "enum": [
+              "known",
+              "unknown",
+              "conflicting"
+            ]
+          },
+          "experiment": {
+            "type": "string",
+            "enum": [
+              "known",
+              "unknown",
+              "conflicting"
+            ]
+          },
+          "condition": {
+            "type": "string",
+            "enum": [
+              "known",
+              "unknown",
+              "conflicting"
+            ]
+          },
+          "endpoint": {
+            "type": "string",
+            "enum": [
+              "known",
+              "unknown",
+              "conflicting"
+            ]
+          },
+          "normalization": {
+            "type": "string",
+            "enum": [
+              "known",
+              "unknown",
+              "conflicting"
+            ]
+          }
+        },
+        "required": [
+          "subject",
+          "variant",
+          "reference",
+          "organism",
+          "genotype",
+          "construct_variant",
+          "construct_reference",
+          "preparation_variant",
+          "preparation_reference",
+          "experiment",
+          "condition",
+          "endpoint",
+          "normalization"
+        ],
+        "additionalProperties": false
+      },
+      "physical_identity_states": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "known",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "uniqueItems": true
+      },
+      "reference_identity_states": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "known",
+            "unknown",
+            "conflicting"
+          ]
+        },
+        "uniqueItems": true
+      },
+      "uncertainty_evaluation": {
+        "const": "numeric_uncertainty_reader_unimplemented",
+        "type": "string"
+      }
+    },
+    "required": [
+      "value",
+      "value_candidates",
+      "reported_domains",
+      "unit",
+      "status",
+      "origin",
+      "unavailable_reason",
+      "conditional_on",
+      "sheet_ref",
+      "evidence_source_ref",
+      "component",
+      "selected_roster_resolved",
+      "point_candidate_set_complete",
+      "known_source_conflict",
+      "independent_preparation_count",
+      "candidate_basis",
+      "uncertainty_kind",
+      "interpretation_kind",
+      "source_origins",
+      "representation_reading_states",
+      "signal_kind",
+      "reference_role",
+      "arrangement",
+      "subject_ref",
+      "variant_ref",
+      "reference_ref",
+      "organism_ref",
+      "genotype_ref",
+      "construct_variant_ref",
+      "construct_reference_ref",
+      "preparation_variant_ref",
+      "preparation_reference_ref",
+      "experiment_ref",
+      "condition_ref",
+      "endpoint_ref",
+      "normalization_ref",
+      "input_measurement_refs",
+      "reference_measurement_refs",
+      "comparison_relation_states",
+      "signal_scale_states",
+      "signal_use",
+      "meaning_statuses",
+      "physical_identity_states",
+      "reference_identity_states",
+      "uncertainty_evaluation"
+    ],
+    "additionalProperties": false
+  },
+  "x-source": "literature_ratio_source_cells"
+}

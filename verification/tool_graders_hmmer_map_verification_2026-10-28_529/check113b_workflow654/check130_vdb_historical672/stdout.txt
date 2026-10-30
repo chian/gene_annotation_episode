@@ -1,0 +1,10 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_______________________ test_exact_original_schema_audit _______________________
+check130_vdb_historical672/source_snapshot/tests/test_blast_vdb_historical_returns_672.py:125: in test_exact_original_schema_audit
+    assert not missing, {source: list(nodes) for source, nodes in missing.items()}
+E   AssertionError: {'execution.blast_utility_database_fields': ['c53cdb73800a6b44efc66d911f26e69247a866773280969e74791491cdcdbc95'], 'exe...517417fc1'], 'execution.blast_utility_artifacts': ['fc1af08156e6cd6c062567fe32508e045e4a0789e7e7dc3536e5545e9f11e9f8']}
+E   assert not {'execution.blast_utility_database_fields': {'c53cdb73800a6b44efc66d911f26e69247a866773280969e74791491cdcdbc95': {'ite...'ordinal', 'artifact_ref', ...], 'type': 'object'}, 'type': 'array', 'x-source': 'execution.blast_utility_artifacts'}}}
+=========================== short test summary info ============================
+FAILED check130_vdb_historical672/source_snapshot/tests/test_blast_vdb_historical_returns_672.py::test_exact_original_schema_audit
+1 failed in 6.69s

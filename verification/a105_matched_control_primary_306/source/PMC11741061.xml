@@ -1,0 +1,1118 @@
+
+<!DOCTYPE article
+  PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Archiving and Interchange DTD with MathML3 v1.4 20241031//EN" "JATS-archivearticle1-4-mathml3.dtd">
+<article xml:lang="EN" article-type="research-article" dtd-version="1.4"><processing-meta base-tagset="archiving" mathml-version="3.0" table-model="xhtml" tagset-family="jats"><restricted-by>pmc</restricted-by></processing-meta><front><journal-meta><journal-id journal-id-type="nlm-ta">ACS Environ Au</journal-id><journal-id journal-id-type="iso-abbrev">ACS Environ Au</journal-id><journal-id journal-id-type="pmc-domain-id">4427</journal-id><journal-id journal-id-type="pmc-domain">acsenvau</journal-id><journal-id journal-id-type="nlm-id">9918300984206676</journal-id><journal-id journal-id-type="publisher-id">vg</journal-id><journal-title-group><journal-title>ACS Environmental Au</journal-title></journal-title-group><issn pub-type="epub">2694-2518</issn><?publisher_abbrev acs?><publisher><publisher-name>American Chemical Society</publisher-name></publisher></journal-meta><article-meta><article-id pub-id-type="pmcid">PMC11741061</article-id><article-id pub-id-type="pmcid-ver">PMC11741061.1</article-id><article-id pub-id-type="pmcaid">11741061</article-id><article-id pub-id-type="pmcaiid">11741061</article-id><article-id pub-id-type="pmid">39830714</article-id><article-id pub-id-type="doi">10.1021/acsenvironau.4c00066</article-id><article-version article-version-type="pmc-version">1</article-version><article-categories><subj-group><subject>Article</subject></subj-group></article-categories><title-group><article-title>Machine Learning
+Reveals Signatures of Promiscuous
+Microbial Amidases for Micropollutant Biotransformations</article-title></title-group><contrib-group><contrib contrib-type="author" id="ath1"><contrib-id contrib-id-type="orcid" authenticated="true">https://orcid.org/0009-0008-3063-7105</contrib-id><name name-style="western"><surname>Marti</surname><given-names initials="TD">Thierry
+D.</given-names></name><xref rid="aff1" ref-type="aff">†</xref><xref rid="aff2" ref-type="aff">‡</xref></contrib><contrib contrib-type="author" id="ath2"><contrib-id contrib-id-type="orcid" authenticated="true">https://orcid.org/0009-0007-4880-6694</contrib-id><name name-style="western"><surname>Schweizer</surname><given-names initials="D">Diana</given-names></name><xref rid="aff1" ref-type="aff">†</xref><xref rid="aff3" ref-type="aff">§</xref></contrib><contrib contrib-type="author" id="ath3"><contrib-id contrib-id-type="orcid" authenticated="true">https://orcid.org/0000-0001-9231-6026</contrib-id><name name-style="western"><surname>Yu</surname><given-names initials="Y">Yaochun</given-names></name><xref rid="aff1" ref-type="aff">†</xref></contrib><contrib contrib-type="author" id="ath4"><contrib-id contrib-id-type="orcid" authenticated="true">https://orcid.org/0000-0002-8703-0303</contrib-id><name name-style="western"><surname>Schärer</surname><given-names initials="MR">Milo R.</given-names></name><xref rid="aff1" ref-type="aff">†</xref><xref rid="aff4" ref-type="aff">∥</xref></contrib><contrib contrib-type="author" id="ath5"><name name-style="western"><surname>Probst</surname><given-names initials="SI">Silke I.</given-names></name><xref rid="aff1" ref-type="aff">†</xref></contrib><contrib contrib-type="author" corresp="yes" id="ath6"><contrib-id contrib-id-type="orcid" authenticated="true">https://orcid.org/0000-0001-6947-7913</contrib-id><name name-style="western"><surname>Robinson</surname><given-names initials="SL">Serina L.</given-names></name><xref rid="cor1" ref-type="other">*</xref><xref rid="aff1" ref-type="aff">†</xref></contrib><aff id="aff1"><label>†</label><institution>Eawag,
+Swiss Federal Institute of Aquatic Science and Technology</institution>, 8600 Dübendorf, <country>Switzerland</country></aff><aff id="aff2"><label>‡</label>Institute
+of Biogeochemistry and Pollutant Dynamics, <institution>ETH Zürich</institution>, 8092 Zürich, <country>Switzerland</country></aff><aff id="aff3"><label>§</label>Institute
+for Ecopreneurship, <institution>University of Applied
+Sciences and Arts Northwestern Switzerland</institution>, 4132 Muttenz, <country>Switzerland</country></aff><aff id="aff4"><label>∥</label>Institute
+of Food, Nutrition and Health, <institution>ETH Zürich</institution>, 8092 Zürich, <country>Switzerland</country></aff></contrib-group><author-notes><corresp id="cor1"><label>*</label>Email: <email>serina.robinson@eawag.ch</email>.</corresp></author-notes><pub-date pub-type="epub"><day>04</day><month>12</month><year>2024</year></pub-date><pub-date pub-type="collection"><day>15</day><month>01</month><year>2025</year></pub-date><volume>5</volume><issue>1</issue><issue-id pub-id-type="pmc-issue-id">479828</issue-id><fpage>114</fpage><lpage>127</lpage><history><date date-type="received"><day>30</day><month>07</month><year>2024</year></date><date date-type="accepted"><day>15</day><month>11</month><year>2024</year></date><date date-type="rev-recd"><day>15</day><month>11</month><year>2024</year></date></history><pub-history><event event-type="pmc-release"><date><day>04</day><month>12</month><year>2024</year></date></event><event event-type="pmc-live"><date><day>18</day><month>01</month><year>2025</year></date></event><event event-type="pmc-last-change"><date iso-8601-date="2026-06-01 03:25:17.490"><day>01</day><month>06</month><year>2026</year></date></event></pub-history><permissions><copyright-statement>© 2024 The Authors. Published by American Chemical Society</copyright-statement><copyright-year>2024</copyright-year><copyright-holder>The Authors</copyright-holder><license><ali:license_ref xmlns:ali="http://www.niso.org/schemas/ali/1.0/" specific-use="textmining" content-type="ccbylicense">https://creativecommons.org/licenses/by/4.0/</ali:license_ref><license-p>Permits the broadest form of re-use including for commercial purposes, provided that author attribution and integrity are maintained (<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="uri" xlink:href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</ext-link>).</license-p></license></permissions><self-uri xmlns:xlink="http://www.w3.org/1999/xlink" content-type="pmc-pdf" xlink:href="vg4c00066.pdf"><?pdf-name vg4c00066.pdf?><?pdf-size 9987771?><?pdf-md5 fe789c7b071f0220f9a50db34974f961?><?pdf-image-server-status NEVER_LOAD?><?pdf-cloudpmc-urn urn:app:2d94/11741061/fe789c7b071f/vg4c00066.pdf?></self-uri><abstract><p content-type="toc-graphic"><graphic xmlns:xlink="http://www.w3.org/1999/xlink" id="ab-tgr1" position="float" orientation="portrait" xlink:href="vg4c00066_0007.jpg"><?image-name vg4c00066_0007.jpg?><?image-size 90292?><?image-md5 0bcfb7a1ae6a91d1fe0a12a393768de4?><?image-image-server-status LOAD_COMPLETED?><?image-original-height 514?><?image-original-width 992?><?image-scaled-height 342?><?image-scaled-width 661?><?image-cloudpmc-urn urn:cdn:blobs/2d94/11741061/0bcfb7a1ae6a/vg4c00066_0007.jpg?><?thumb-name vg4c00066_0007.gif?><?thumb-size 16496?><?thumb-md5 3d1242a9178f270a6f02bfeffd0309ae?><?thumb-image-server-status NEVER_LOAD?><?thumb-scaled-height 80?><?thumb-scaled-width 154?><?thumb-cloudpmc-urn urn:cdn:blobs/2d94/11741061/3d1242a9178f/vg4c00066_0007.gif?></graphic></p><p>Organic micropollutants, including pharmaceuticals, personal
+care
+products, pesticides, and food additives, are widespread in the environment,
+causing potentially toxic effects. Human waste is a direct source
+of micropollutants, with the majority of pharmaceuticals being excreted
+through urine. Urine contains its own microbiota with the potential
+to catalyze micropollutant biotransformations. Amidase signature (AS)
+enzymes are known for their promiscuous activity in micropollutant
+biotransformations, but the potential for AS enzymes from the urinary
+microbiota to transform micropollutants is not known. Moreover, the
+characterization of AS enzymes to identify key chemical and enzymatic
+features associated with biotransformation profiles is critical for
+developing benign-by-design chemicals and micropollutant removal strategies.
+Here, to uncover the signatures of AS enzyme–substrate specificity,
+we tested 17 structurally diverse compounds against a targeted enzyme
+library consisting of 40 AS enzyme homologues from diverse urine microbial
+isolates. The most promiscuous enzymes were active on nine different
+substrates, while 16 enzymes had activity on at least one substrate
+and exhibited diverse substrate specificities. Using an interpretable
+gradient boosting machine learning model, we identified chemical and
+amino acid features associated with AS enzyme biotransformations.
+Key chemical features from our substrates included the molecular weight
+of the amide carbonyl substituent and the number of formal charges
+in the molecule. Four of the identified amino acid features were located
+in close proximity to the substrate tunnel entrance. Overall, this
+work highlights the understudied potential of urine-derived microbial
+AS enzymes for micropollutant biotransformation and offers insights
+into substrate and protein features associated with micropollutant
+biotransformations for future environmental applications.</p></abstract><kwd-group><kwd>micropollutant biotransformations</kwd><kwd>amidase signature
+enzymes</kwd><kwd>urinary microbiota</kwd><kwd>paracetamol</kwd><kwd>acetylsulfamethoxazole</kwd><kwd>capecitabine</kwd><kwd>machine learning</kwd></kwd-group><funding-group><award-group><funding-source><institution-wrap><institution>Schweizerischer Nationalfonds zur FÃ¶rderung der Wissenschaftlichen Forschung</institution><institution-id institution-id-type="doi">10.13039/501100001711</institution-id></institution-wrap></funding-source><award-id>200021L_201006</award-id></award-group></funding-group><funding-group><award-group><funding-source><institution-wrap><institution>Fondation Pierre Mercier pour la Science</institution><institution-id institution-id-type="doi">10.13039/501100023177</institution-id></institution-wrap></funding-source><award-id>NA</award-id></award-group></funding-group><funding-group><award-group><funding-source><institution-wrap><institution>Helmut Horten Stiftung</institution><institution-id institution-id-type="doi">10.13039/501100013850</institution-id></institution-wrap></funding-source><award-id>2022-YIG-090</award-id></award-group></funding-group><funding-group><award-group><funding-source><institution-wrap><institution>Vontobel-Stiftung</institution><institution-id institution-id-type="doi">10.13039/501100008494</institution-id></institution-wrap></funding-source><award-id>NA</award-id></award-group></funding-group><funding-group><award-group><funding-source><institution-wrap><institution>Schweizerischer Nationalfonds zur FÃ¶rderung der Wissenschaftlichen Forschung</institution><institution-id institution-id-type="doi">10.13039/501100001711</institution-id></institution-wrap></funding-source><award-id>501100001711-209124</award-id></award-group></funding-group><custom-meta-group><custom-meta><meta-name>pmc-status-qastatus</meta-name><meta-value>0</meta-value></custom-meta><custom-meta><meta-name>pmc-status-live</meta-name><meta-value>yes</meta-value></custom-meta><custom-meta><meta-name>pmc-status-embargo</meta-name><meta-value>no</meta-value></custom-meta><custom-meta><meta-name>pmc-status-released</meta-name><meta-value>yes</meta-value></custom-meta><custom-meta><meta-name>pmc-prop-open-access</meta-name><meta-value>yes</meta-value></custom-meta><custom-meta><meta-name>pmc-prop-olf</meta-name><meta-value>no</meta-value></custom-meta><custom-meta><meta-name>pmc-prop-manuscript</meta-name><meta-value>no</meta-value></custom-meta><custom-meta><meta-name>pmc-prop-legally-suppressed</meta-name><meta-value>no</meta-value></custom-meta><custom-meta><meta-name>pmc-prop-has-pdf</meta-name><meta-value>yes</meta-value></custom-meta><custom-meta><meta-name>pmc-prop-has-supplement</meta-name><meta-value>yes</meta-value></custom-meta><custom-meta><meta-name>pmc-prop-pdf-only</meta-name><meta-value>no</meta-value></custom-meta><custom-meta><meta-name>pmc-prop-suppress-copyright</meta-name><meta-value>no</meta-value></custom-meta><custom-meta><meta-name>pmc-prop-is-real-version</meta-name><meta-value>no</meta-value></custom-meta><custom-meta><meta-name>pmc-prop-is-scanned-article</meta-name><meta-value>no</meta-value></custom-meta><custom-meta><meta-name>pmc-prop-preprint</meta-name><meta-value>no</meta-value></custom-meta><custom-meta><meta-name>pmc-prop-in-epmc</meta-name><meta-value>yes</meta-value></custom-meta><custom-meta><meta-name>pmc-license-ref</meta-name><meta-value>CC BY</meta-value></custom-meta><custom-meta><meta-name>document-id-old-9</meta-name><meta-value>vg4c00066</meta-value></custom-meta><custom-meta><meta-name>document-id-new-14</meta-name><meta-value>vg4c00066</meta-value></custom-meta><custom-meta><meta-name>ccc-price</meta-name><meta-value/></custom-meta></custom-meta-group></article-meta><notes id="spn1"><title>Special Issue</title><p>Published
+as part of
+the <italic toggle="yes">ACS Environmental Au</italic><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="uri" xlink:href="https://pubs.acs.org/curated-content?journal=aeacc4&amp;ref=feature">special issue</ext-link> “2024 Rising Stars in Environmental
+Research”.</p></notes></front><body><sec id="sec1"><title>Introduction</title><p>Micropollutants are environmental contaminants
+occurring at low
+concentrations, including pesticides, personal care products, industrial
+chemicals and pharmaceuticals. Two thirds of pharmaceuticals are excreted
+in urine, thus it is a major contributor of micropollutants in wastewater
+streams.<sup><xref ref-type="bibr" rid="ref1">1</xref></sup> Urine supplies the majority of
+nitrogen and phosphorus to wastewater streams<sup><xref ref-type="bibr" rid="ref2">2</xref>−<xref ref-type="bibr" rid="ref4">4</xref></sup> and therefore
+has potential uses for resource recovery.<sup><xref ref-type="bibr" rid="ref5">5</xref>,<xref ref-type="bibr" rid="ref6">6</xref></sup> However,
+many micropollutants have limited biodegradability and are therefore
+not effectively removed from urine through common procedures such
+as anaerobic storage<sup><xref ref-type="bibr" rid="ref7">7</xref>−<xref ref-type="bibr" rid="ref9">9</xref></sup> or standard biological treatments,<sup><xref ref-type="bibr" rid="ref10">10</xref></sup> thereby hampering the applications of urine due to micropollutant
+contamination. Contrary to previous belief, urine itself is not sterile,
+and has its own native microbiota.<sup><xref ref-type="bibr" rid="ref11">11</xref>−<xref ref-type="bibr" rid="ref13">13</xref></sup> Microbial biotransformations
+are considered as one of the dominant pathways for organic micropollutant
+removal,<sup><xref ref-type="bibr" rid="ref14">14</xref></sup> however, we lack knowledge of
+the capabilities of the urinary microbiota to biotransform micropollutants.</p><p>The nutrient-limited environment of the urinary tract, along with
+the significant exposure to micropollutants excreted in urine, may
+select for bacteria with the ability to degrade these micropollutants
+to use them as a carbon or energy source.<sup><xref ref-type="bibr" rid="ref15">15</xref></sup> Previously, we showed that urinary bacterial genomes encode homologues
+of enzymes involved in micropollutant biotransformations.<sup><xref ref-type="bibr" rid="ref15">15</xref></sup> Among 20 different enzyme classes investigated,
+the most prevalent enzyme class encoded in urinary bacterial genomes
+belonged to the amidase signature (AS) family. AS enzymes are of high
+relevance for micropollutant removal since they hydrolyze compounds
+such as propanil, chlorpropham, propham and paracetamol,<sup><xref ref-type="bibr" rid="ref16">16</xref></sup> the latter being one of the most abundant pharmaceuticals
+found in urine.<sup><xref ref-type="bibr" rid="ref17">17</xref></sup> AS enzymes are veritable
+“Swiss army knives” capable of hydrolyzing multiple
+micropollutants including aliphatic, aromatic and branched amides
+and esters.<sup><xref ref-type="bibr" rid="ref18">18</xref></sup> However, fine-grained prediction
+capabilities for micropollutant biotransformations by AS enzymes are
+limited, even with the use of state-of-the-art enzyme–substrate
+prediction tools.<sup><xref ref-type="bibr" rid="ref19">19</xref>,<xref ref-type="bibr" rid="ref20">20</xref></sup></p><p>AS enzymes are defined
+by a conserved stretch of ∼160 amino
+acids, termed the “amidase signature region” that includes
+the catalytic triad composed of two serine and one lysine residue,
+and a glycine-serine-rich motif.<sup><xref ref-type="bibr" rid="ref21">21</xref></sup> A distinct
+subset of AS enzymes investigated here are the aryl acylamidases (assigned
+to the Enzyme Commission number 3.5.1.13) which hydrolyze nonpeptidic
+amide bonds typically producing aniline and a carboxylic acid anion.<sup><xref ref-type="bibr" rid="ref22">22</xref>,<xref ref-type="bibr" rid="ref23">23</xref></sup> Under specific reaction conditions, aryl acylamidases can also catalyze
+the reverse reaction for amide bond formation,<sup><xref ref-type="bibr" rid="ref22">22</xref></sup> e.g., for the biomanufacturing of paracetamol (acetaminophen).
+Microbial biocatalysis has been employed for paracetamol production
+at the gram scale.<sup><xref ref-type="bibr" rid="ref24">24</xref></sup></p><p>Despite their
+medical and environmental relevance, acyl arylamidases
+from the urinary microbiota have not been biochemically characterized.
+Additionally, this study experimentally validated AS enzymes mined
+from genomic data to address the current challenge of predicting AS
+enzyme activity and promiscuity from sequencing data alone. Specifically,
+we performed chemical analysis of biotransformations catalyzed by
+a library of 40 urine-derived aryl acylamidases. We trained interpretable
+machine learning models to extract physicochemical enzyme and substrate
+features to uncover new micropollutant biotransformation relationships.
+More broadly, this work aims to inform enzyme engineering strategies,
+green chemical design, and biotransformation prediction.</p></sec><sec id="sec2"><title>Methods</title><sec id="sec2.1"><title>Construction of Amidase Expression Vectors for Initial Screening</title><p>Previous analyses<sup><xref ref-type="bibr" rid="ref15">15</xref></sup> revealed urinary
+bacterial genomes encode homologues to the paracetamol amidase from <italic toggle="yes">Ochrobactrum</italic> PP-2 mah (<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmc:entrez-protein" xlink:href="ANS81375.1">ANS81375.1</ext-link>)<sup><xref ref-type="bibr" rid="ref15">15</xref>,<xref ref-type="bibr" rid="ref16">16</xref></sup> To experimentally test these homologues for paracetamol amidase
+activity, we selected three homologues here termed P203 = NCBI accession
+<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmc:entrez-protein" xlink:href="PKZ25206.1">PKZ25206.1</ext-link>, P204 = NCBI accession <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmc:entrez-protein" xlink:href="PKZ66103.1">PKZ66103.1</ext-link>, and P205 = NCBI accession
+<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmc:entrez-protein" xlink:href="PLA55254.1">PLA55254.1</ext-link>. P204 was chosen for having the highest protein identity
+with the query enzyme, while P203 and P205 were selected because of
+urinary microbiota representativity of the bacterial host (<italic toggle="yes">Lacticaseibacillus</italic> and <italic toggle="yes">Corynebacterium</italic>,
+respectively). The gene sequences were codon-optimized for expression
+in <italic toggle="yes">Escherichia coli</italic> using the Integrated
+DNA Technologies (IDT) codon optimization tool and synthesized as
+gBlocks (IDT). A C-terminal tobacco etch virus (TEV) site and 6x-His
+tag along with homology arms to the MCS1 site of pCDFDuet-1 for Gibson
+assembly were added to the sequence. The amidases were cloned into
+MCS1 of pCDFDuet-1 using Gibson assembly kit (New England Biolabs)
+after linearization of the vector with NcoI and <italic toggle="yes">Hin</italic>dIII (Fermentas). The assembled plasmids were transformed in BL21(DE3)
+and T7 Express <italic toggle="yes">E. coli</italic> cells (New England
+Biolabs) by chemical transformation. Subsequently, 37 additional homologues
+of P205 were codon-optimized for <italic toggle="yes">E. coli</italic> using the build optimization software tool, BOOST,<sup><xref ref-type="bibr" rid="ref25">25</xref></sup> and cloned by the U.S. Department of Energy Joint Genome
+Institute with C-terminal 6x-His tags, a TEV cleavage site, and additional
+flexible linker into the first multiple cloning site of pCDF-Duet
+vectors retaining the NdeI and <italic toggle="yes">Hin</italic>dIII restriction
+sites. Sequence-verified constructs were transformed into T7 Express <italic toggle="yes">E. coli</italic> cells. See the <xref rid="sec2.7" ref-type="other">Bioinformatics</xref> methods section for more details on the significance cutoffs used
+in the selection of the 37 additional homologues.</p></sec><sec id="sec2.2"><title>Purification of Amidases P203, P204, and P205</title><p>Production
+of P203, P204, P205 was performed as previously described.<sup><xref ref-type="bibr" rid="ref26">26</xref></sup> Candidate substrates were obtained commercially
+from suppliers as specific in <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="uri" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsenvironau.4c00066/suppl_file/vg4c00066_si_001.pdf">Table S1</ext-link>.
+Solutions used for protein purification are described in <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="uri" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsenvironau.4c00066/suppl_file/vg4c00066_si_001.pdf">Table S2</ext-link>. In short, <italic toggle="yes">E. coli</italic> BL21 was induced in exponential phase (OD ∼ 0.5) using 0.1
+mM isopropyl β-<sc>d</sc>-1-thiogalactopyranoside and grown
+for 2 days at 16 °C and 250 rpm with 50 μg/mL spectinomycin.
+The cell cultures (50 mL) were pelleted, resuspended in lysis buffer
+and sonicated. The lysate was loaded onto a pre-equilibrated column
+packed with Ni-NTA agarose beads (Qiagen), subsequently washed twice
+with wash buffer, and the his-tagged amidases eluted with elution
+buffer. The purified protein fractions were desalted using a PD-10
+column (Cytiva) and eluted in SGT buffer. The protein concentration
+of the eluate was determined using the Coomassie (Bradford) protein
+assay (Thermo Fisher Scientific) with comparison to a bovine serum
+albumin standard curve. The protein eluate purity and size was assessed
+using SDS-PAGE with Mini-Protean TGX Precast Gels (Bio-Rad) and the
+Page Ruler Plus Prestained Protein Ladder (Thermo Fisher Scientific).</p></sec><sec id="sec2.3"><title>Catalytic Inactivation of P205 by Site-Directed Mutagenesis</title><p>To create a catalytically inactive variant of the paracetamol amidase
+homologue P205, serine 146 in the catalytic triad (Ser146-Ser170-Lys71)
+was substituted with alanine based on Shin et al. 2003.<sup><xref ref-type="bibr" rid="ref27">27</xref></sup> Site-directed mutagenesis introduced point mutations
+at residue 146 (GCT instead of TCT) using primers Lb AS S146A fw (CAG
+TCC TGG TGG GGC TTC GG) and Lb AS S146A rev (TAG GCC AGG TTC CAG GGA
+TTG CG). Mutagenesis involved PCR amplification with Q5 high fidelity
+Mastermix (New England Biolags), kinase-ligase-DpnI (New England Biolabs)
+ligation of vector and removal of template DNA, and transformation
+into <italic toggle="yes">E. coli</italic> DH5α (New England
+Biolabs), followed by plasmid isolation (Qiagen Plasmid Miniprep),
+and sequencing to confirm the correct clones by Sanger sequencing
+(Microsynth, Switzerland)</p></sec><sec id="sec2.4"><title>Paracetamol In Vitro Biotransformation by P205</title><p>A solution
+of 50 mg/L paracetamol in 50 mM Tris-HCl (pH 8) was mixed with purified
+P205 protein (0.022 mg/mL) and the catalytically inactive P205-S146A
+variant (0.058 mg/mL) as a negative control. The positive control
+was paracetamol amidase <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmc:entrez-protein" xlink:href="ANS81375.1">ANS81375.1</ext-link> (0.087 mg/mL). Reactions were incubated
+at 37 °C and 225 rpm, with samples taken at various times, stopped
+with 1:1 dilution with acetonitrile, and centrifuged. Supernatants
+were diluted 1:10 with Milli-Q water and stored at 4 °C until
+HPLC analysis. Twenty μL samples were separated using a Nucleosil
+RP 18 HD column (Macherey-Nagel) with a gradient elution of buffer
+A (20 mM phosphate buffer, 0.04% phosphoric acid, pH 3.0) and buffer
+B (90% acetonitrile, 0.04% phosphoric acid, pH 3.0). The elution gradient
+was set as follows: 2–100% buffer B over 10 min, followed by
+5 min isocratic elution at 2% buffer B, at a flow rate of 0.8 mL/min.
+Paracetamol was detected at 250 nm with a retention time of 6.6 min.</p></sec><sec id="sec2.5"><title>Biochemical Characterization of P205</title><p>Biochemical characterization
+of P205 was performed using established colorimetric protocols for
+esterase activity.<sup><xref ref-type="bibr" rid="ref28">28</xref></sup> In short, to determine
+the pH optimum of P205, the standard esterase substrate 4-NP trimethyl
+acetate was used, adjusting for background hydrolysis rates at different
+pH levels. Measurements of 4-nitrophenol (4-NP) were taken at its
+isosbestic point wavelength of 347 nm for robust pH assay results,
+as demonstrated by Peng et al.<sup><xref ref-type="bibr" rid="ref29">29</xref></sup> In a 96-well
+plate, 200-μL reactions were prepared using 100 mM citrate buffer
+at pH 4, 5, and 6, and 100 mM Tris-HCl buffer at pH 7, 8, and 8.5,
+with measurements taken every 2 min. The substrate 4-NP trimethyl
+acetate was used and standard curves of 4-NP generated for each pH.
+To determine the temperature optimum of P205, absorbance of 4-NP at
+410 nm in Tris-HCl buffer (pH 8) was measured at different temperatures
+using 4NP-trimethyl acetate as substrate. The thermal stability of
+P205 was assessed by measuring 4-NP absorbance at 410 nm in Tris-HCl
+buffer (pH 8) after incubating the enzyme at various temperatures
+(37, 39.5, 51.5, 60.5, 70.0, 81.2, 90.0 °C) for 1 h using 4NP-butyrate
+as substrate. The experiments were conducted using purified P205 at
+concentrations of 0.022 mg/mL (pH and heat stability) and 0.0022 mg/mL
+(temperature optimum), and the catalytically inactivated variant,
+P205-S146A, was used as negative control.</p></sec><sec id="sec2.6"><title>Substrate Specificity Screening of P205 Using Micropollutants</title><p>Substrate specificity screening of P205 on a collection of 183
+micropollutants, including commonly used pesticides, artificial sweeteners,
+and pharmaceuticals, was done as previously described.<sup><xref ref-type="bibr" rid="ref30">30</xref></sup> A detailed description is available in the <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="uri" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsenvironau.4c00066/suppl_file/vg4c00066_si_001.pdf">Supporting Information</ext-link>. In short, a total of
+183 micropollutants were divided into 14 submixtures and added to
+a 96-well plate, achieving a final working concentration of 200 μM
+for each micropollutant in 100 mM Tris-HCl buffer (pH 8). Purified
+P205 enzyme was added to reach a final concentration of ∼190
+nM. P205-S146A served as a negative control. Samples were collected
+at 0, 6, and 24 h, and the reactions were quenched using methanol.
+After centrifugation, the supernatant was collected and stored for
+subsequent measurement using ultrahigh-performance liquid chromatography
+coupled with high-resolution tandem mass spectrometry (UHPLC-HRMS/MS).
+Details on LC-HRMS can be found in the <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="uri" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsenvironau.4c00066/suppl_file/vg4c00066_si_001.pdf">Supporting Information</ext-link>.</p></sec><sec id="sec2.7"><title>Bioinformatic Analysis of Amidase Signature Family Enzyme Sequences</title><p>The genomes of microbial isolates from the catheterized urine of
+female patients previously described by Thomas-White et al. were used
+in this analysis.<sup><xref ref-type="bibr" rid="ref11">11</xref></sup> Of the 149 bacterial
+isolates retrieved,<sup><xref ref-type="bibr" rid="ref11">11</xref></sup> 129 genome assemblies
+with matching strain classifications could be retrieved from NCBI
+and were used in the study. Sequence alignments of the amidase P205
+and <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmc:entrez-protein" xlink:href="ANS81375.1">ANS81375.1</ext-link> sequence<sup><xref ref-type="bibr" rid="ref16">16</xref></sup> to reference
+genomes were achieved by a reverse protein alignment search with BLAST+.<sup><xref ref-type="bibr" rid="ref31">31</xref></sup> Homologues of query enzymes were identified
+using significance cutoffs of an <italic toggle="yes">e</italic>-value ≤0.1,
+query cover ≥20% and bitscore ≥50. IQ-TREE was used
+to estimate the phylogenetic relationship of the 157 protein sequences.<sup><xref ref-type="bibr" rid="ref32">32</xref></sup> A maximum-likelihood phylogenetic tree of paracetamol
+amidase homologues of urinary bacteria was constructed using IQ-TREE
+with amino acid substitution model LG+F+I+G4 based on 1000 ultrafast
+bootstraps.<sup><xref ref-type="bibr" rid="ref33">33</xref>,<xref ref-type="bibr" rid="ref34">34</xref></sup> The function of the amidase homologues
+was predicted using a contrastive learning method for enzyme function
+prediction (CLEAN).<sup><xref ref-type="bibr" rid="ref20">20</xref></sup> If multiple EC numbers
+were predicted, only the highest confidence EC is shown in the figure.
+A subsequent maximum-likelihood phylogenetic tree of 16 active amidases
+was constructed using IQ-TREE with amino acid substitution model LG+I+G4
+based on 1000 ultrafast bootstraps.<sup><xref ref-type="bibr" rid="ref33">33</xref>,<xref ref-type="bibr" rid="ref34">34</xref></sup></p></sec><sec id="sec2.8"><title>Amidase Signature Family Enzyme Library Construction</title><p>The 157 unique proteins were clustered at a 60% amino acid identity
+threshold using CD-HIT v4.8.1 with default parameters.<sup><xref ref-type="bibr" rid="ref35">35</xref></sup> Sequences with over 90% amino acid identity
+to the query sequence and sequences without a “GSS”
+motif characteristic of the amidase signature family<sup><xref ref-type="bibr" rid="ref18">18</xref>,<xref ref-type="bibr" rid="ref36">36</xref></sup> were excluded. Cluster sizes were reduced using the Hamming distance
+to maximize sequence diversity while retaining a maximum of 50% of
+the sequences per cluster. Within each cluster, for sequences originating
+from the same genus, only the sequence with the highest percentage
+identity to the query sequence was retained. After aggregating remaining
+sequences of all clusters, we further removed all predicted EC 6.3.5.7
+sequences (glutamyl-tRNA synthetases) and kept a maximum of three
+sequences for a given genus (retaining those with highest similarity
+to the query sequence). We further removed sequences that were similar
+to previously characterized sequences using PaperBLAST<sup><xref ref-type="bibr" rid="ref37">37</xref></sup> e.g., such as previously characterized colibactin
+amidase of <italic toggle="yes">E. coli</italic>,<sup><xref ref-type="bibr" rid="ref38">38</xref></sup> to obtain a final set of 37 new predicted aryl acylamidase
+proteins to test for activity (<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="uri" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsenvironau.4c00066/suppl_file/vg4c00066_si_001.pdf">Table S3</ext-link>).</p></sec><sec id="sec2.9"><title>Substrate Specificity Screening of the Urinary Microbiota Amidase
+Library</title><p>Based on the results obtained from the substrate
+specificity screening with P205, we observed that accepted substrates
+had aryl amide substructures. However, several other amides in the
+xenobiotic library (e.g., rufinamide, mirabegron, benserazide) were
+not hydrolyzed. To understand which structural/chemical properties
+of the substrate influence the activity of the amidases, we selected
+an additional set of 17 low-molecular weight organic compounds with
+different aromatic ring substituents and hydrolyzable moieties (<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="uri" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsenvironau.4c00066/suppl_file/vg4c00066_si_001.pdf">Figure S1</ext-link>). The library (<italic toggle="yes">n</italic> =
+40) consisted of the three enzymes included in the first screening
+(P203, P204 and P205) and additional 37 AS enzymes (see paragraph
+above).</p></sec><sec id="sec2.10"><title>HPLC-Based Enzyme Assays</title><p>To screen 17 organic compounds
+for biotransformation with the AS enzyme library consisting of 40
+candidate aryl acylamidases (<italic toggle="yes">n</italic> = 680 candidate enzyme–substrate
+combinations), the substrates were pooled to control the number of
+samples and enable experiments to be run in triplicates. Twelve substrates
+were analyzed by HPLC, split into two pools which maximized the retention
+time and baseline separation of the substrates. Pool 1 consisted of
+acesulfame, atenolol, capecitabine, chlorpropham, diuron, vorinostat,
+and pool 2 consisted of acetylsulfamethoxazole, atorvastatin, dasatinib,
+metoclopramide, propanil, rufinamide. Stock solutions of individual
+compounds were prepared in DMSO at a concentration of 10 mM. The final
+working concentration for each compound was 100 μM (see <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="uri" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsenvironau.4c00066/suppl_file/vg4c00066_si_001.pdf">Table S1</ext-link> for supplier list).</p><p>Induced cells
+(1 mL volumes) were lysed using the BugBuster Protein Extraction Reagent
+(Sigma-Aldrich) according to the manufacturer’s instructions
+without use of any optional steps. The obtained lysate was then diluted
+with 250 μL Tris-Hcl pH 8. 150 μL lysate was added to
+1350 μL 50 mM Tris-HCl pH 8 containing pool compounds at final
+concentration of 100 μM each in a 2 mL Eppendorf tube. The tubes
+were incubated at 37 °C with no agitation for 24 h. Time point
+t0 and t24 were taken by mixing 500 μL samples and stopping
+the reaction by addition of 500 μL acetonitrile. The obtained
+samples were run on the HPLC.</p><p>Reaction substrates and products
+were quantified using HPLC coupled
+to a UV–vis detection unit (Dionex Ultimate 3000 Systems, Thermo
+Scientific). Twenty microliters sample were injected from an autosampler
+cooled to 10 °C into a Nucleoshell RP 18plus column (particle
+size 5 μm, 150 × 3 mm, Macherey-Nagel) and eluted with
+20 mM phosphate, 0.04% phosphoric acid (A), and 90% acetonitrile,
+0.04% phosphoric acid (B) at a flow rate of 0.8 mL/min. The elution
+gradient was set as follows: 100% A: 0–5 min, 0–80%
+B: 5–25 min, and 100% A: 25–30 min. The UV–vis
+detector measured at wavelengths 210, 225, 252, and 305 nm. Retention
+times for the first pool of substrates were as follows: acesulfame
+(3.8 min), atenolol (9.2 min), capecitabine (14.9 min), chlorpropham
+(21.3 min), diuron (17.7 min), and vorinostat (13.4 min). For the
+second pool of substrates, the retention times were: acetylsulfamethoxazole
+(14.0 min), atorvastatin (21.2 min), dasatinib (14.8 min), metoclopramide
+(11.8 min), propanil (19.2 min), and rufinamide (13.0 min).</p></sec><sec id="sec2.11"><title>Colorimetric Enzyme Assays</title><p>Biotransformation of 4NP-butyrate,
+4NP-trimethyl acetate, flutamide, and nitroacetanilide was performed
+in diluted crude lysate (using the BugBuster lysis procedure). The
+procedure is adapted from established colorimetric assay as previously
+described.<sup><xref ref-type="bibr" rid="ref28">28</xref></sup> Briefly, 20 μL of crude
+lysate was added to 180 μL of 50 mM Tris-HCl (pH 8) buffer containing
+200 μM substrate in a 96-well microtiter plate. The P205-S146A
+mutant was used as a negative control. A solution of 200 μM
+nitrophenol, 4-nitro-3-(trifluoromethyl)aniline, and nitroaniline
+in 50 mM Tris-HCl (pH 8) served as complete substrate turnover reference.
+The plates were incubated at 37 °C in a BioTek Synergy H1 (Agilent)
+plate reader with linear shaking, and the optical density (OD) was
+measured at 410 nm. The incubation times were approximately 12 h for
+4NP-butyrate and 4NP-trimethyl acetate, and approximately 24 h for
+flutamide and nitroacetanilide.</p><p>For paracetamol, a whole-cell
+biotransformation assay was performed. Single colonies of each member
+of the amidase expression library were grown at 37 °C in LB with
+50 μg/mL spectinomycin and induced in exponential phase with
+0.1 mM IPTG, followed by overnight incubation at 25 °C. Each
+well in a 96-well microtiter plate was filled with 180 μL of
+PBS containing 10% LB, 50 μg/mL spectinomycin, and 500 μM
+paracetamol. Subsequently, 20 μL of the induced bacterial culture
+was added to each well in technical duplicates. <italic toggle="yes">E.
+coli</italic> T7 Express P205 was used as the positive control,
+and <italic toggle="yes">E. coli</italic> T7 Express P205-S146A served
+as the negative control. The plates were incubated at 37 °C in
+a BioTek Synergy H1 (Agilent) plate reader with linear shaking, and
+the OD was measured at 400 nm over approximately 24 h. Additionally,
+a standard curve with the paracetamol hydrolysis product, 4-aminophenol,
+ranging from 4 mM to 62.5 μM, was prepared in PBS with 10% LB
+and 50 μg/mL spectinomycin.</p><p>Biotransformation of substrates
+4NP-butyrate, 4NP-trimethyl acetate,
+flutamide, nitroacetanilide, and paracetamol was assessed by measuring
+the absorbance of the transformation products. Specifically, the chromophore
+4NP was measured at 410 nm for both 4NP-butyrate and 4NP-trimethyl
+acetate, 4-nitro-3-(trifluoromethyl)aniline at 410 nm for flutamide,
+4-nitroaniline at 410 nm for nitroacetanilide, and oxidation products
+of 4-aminophenol at 400 nm for paracetamol.<sup><xref ref-type="bibr" rid="ref39">39</xref></sup></p></sec><sec id="sec2.12"><title>Confirmation of Amide Hydrolysis of Novel AS Enzyme Substrates</title><p>Confirmation of amide hydrolysis was performed for the biotransformations
+of acetylsulfamethoxazole, capecitabine and flutamide. Individual
+reactions mixtures were made incubating 150 μL purified P131
+(0.4 mg/mL) with 1350 μL 50 mM Tris-HCl pH 8 containing substrate
+at final concentration of 500 μM in a 2 mL Eppendorf tube. The
+tubes were incubated at 37 °C with no agitation for 8h. Time
+point t0h and t8h were taken by mixing 500 μL samples and stopping
+the reaction by addition of 500 μL acetonitrile. For t8h samples
+with P131, a transformation product coinjection sample was prepared
+by adding 250 μM of the expected transformation product to the
+remaining 500 μL reaction mixture. The obtained samples were
+run on the HPLC. Negative controls included heat-inactivated P131
+(100 °C for 20 min) and abiotic (no enzyme) controls.</p><p>Reaction
+substrates and products were quantified using HPLC coupled to a UV–vis
+detection unit (Summit HPLC system, Dionex). Twenty microliters sample
+were injected from an autosampler cooled to 10 °C into a Nucleoshell
+RP 18plus column (particle size 5 μm, 150 × 3 mm, Macherey-Nagel)
+and eluted with 20 mM phosphate, 0.04% phosphoric acid (A), and 90%
+acetonitrile, 0.04% phosphoric acid (B) at a flow rate of 0.8 mL/min.
+For acetylsulfamethoxazole, and flutamide, the elution gradient was
+set as follows: 100% A: 0–5 min, 0–80% B: 5–25
+min, and 100% A: 25–30 min. For capecitabine, the elution gradient
+was set as follows: 100% A: 0–2 min, 30% B: 2–10 min,
+100% A: 10–12 min. The UV–vis detector measured at wavelengths
+263 nm (acetylsulfamethoxazole and sulfamethoxazole) 305 nm (flutamide,
+4-nitro-3(trifluoromethyl)aniline, capecitabine and 5′-deoxy-5-fluorocytidine).
+The retention times were: flutamide (21.5 min), 4-nitro-3(trifluoromethyl)aniline
+(18.4 min), acetylsulfamethoxazole (14.8 min), sulfamethoxazole (13.9
+min), capecitabine (7.6 min) and 5′-deoxy-5-fluorocytidine
+(4.6 min). The retention times and absorbance spectra of transformation
+products and authentic standards were compared.</p></sec><sec id="sec2.13"><title>Data Analysis</title><p>The HPLC and plate reader data were processed
+using R v4.4.0 and RStudio v2024.04.2 + 764. Chromeleon 7.2.10 ES
+(Thermo Scientific) was used to integrate the peaks and obtain the
+peak absorption areas of samples measured by HPLC. Compound area chosen
+based on best absorption at the measured wavelengths 225 nm (acesulfame,
+atenolol, chlorpropham, rufinamide), 252 nm (propanil, diuron, atorvastatin,
+acetylsulfamethoxazole, vorinostat) and 305 nm (dasatinib, metoclopramide,
+capecitabine). Statistical outliers outside of the 1.5 interquartile
+range (IQR) for P205-S146A were removed. The relative removal of each
+sample was calculated using the following formula<disp-formula id="ueq1"><graphic xmlns:xlink="http://www.w3.org/1999/xlink" position="anchor" orientation="portrait" xlink:href="vg4c00066_m001.jpg"><?image-name vg4c00066_m001.jpg?><?image-size 3212?><?image-md5 1a41e68b8b59fb5bad37e7e2d82809eb?><?image-image-server-status NEVER_LOAD?><?image-original-height 38?><?image-original-width 253?><?image-scaled-height 38?><?image-scaled-width 253?><?image-cloudpmc-urn urn:cdn:blobs/2d94/11741061/1a41e68b8b59/vg4c00066_m001.jpg?><?thumb-name vg4c00066_m001.gif?><?thumb-size 2366?><?thumb-md5 57f8381018c78d4ffabb3c811d6bfda0?><?thumb-image-server-status NEVER_LOAD?><?thumb-scaled-height 30?><?thumb-scaled-width 200?><?thumb-cloudpmc-urn urn:cdn:blobs/2d94/11741061/57f8381018c7/vg4c00066_m001.gif?></graphic></disp-formula>For hit calling of substrates analyzed by
+HPLC two conditions needed to be met: (1) median removal higher than
+the median +1.5 x IQR of P205-S146A, and (2) relative removal over
+50%. The hit calling for substrates analyzed by the plate reader was
+conducted at specific times depending on the substrate to account
+for substrate self-hydrolysis and differential enzymatic reaction
+rates: 100 min for 4NP-butyrate, 600 min for 4NP-trimethyl acetate,
+1250 min for nitroacetanilide, 1250 min for flutamide, and 2600 min
+for paracetamol. Hits were identified if the mean yield (OD at specified
+time) was at least 2 standard deviations higher than that of P205-S146A,
+and for 4NP-butyrate and 4NP-trimethyl acetate, the yield had to be
+over 30%, with yield calculated as<disp-formula id="ueq2"><graphic xmlns:xlink="http://www.w3.org/1999/xlink" position="anchor" orientation="portrait" xlink:href="vg4c00066_m002.jpg"><?image-name vg4c00066_m002.jpg?><?image-size 2639?><?image-md5 b9af61e107faebcb18a65ee43b043cce?><?image-image-server-status NEVER_LOAD?><?image-original-height 38?><?image-original-width 168?><?image-scaled-height 38?><?image-scaled-width 168?><?image-cloudpmc-urn urn:cdn:blobs/2d94/11741061/b9af61e107fa/vg4c00066_m002.jpg?><?thumb-name vg4c00066_m002.gif?><?thumb-size 1134?><?thumb-md5 a1ffd40679781aa6487e833551c84432?><?thumb-image-server-status NEVER_LOAD?><?thumb-scaled-height 38?><?thumb-scaled-width 168?><?thumb-cloudpmc-urn urn:cdn:blobs/2d94/11741061/a1ffd4067978/vg4c00066_m002.gif?></graphic></disp-formula>The amino acid sequences of the 16 enzyme
+hits were queried in the Global Microbial Gene Catalog (GMGC) in September
+2023 retrieving the top 100 homologues, filtering by habitat and <italic toggle="yes">e</italic>-value &lt;0.1. AlphaFold3 models<sup><xref ref-type="bibr" rid="ref40">40</xref></sup> of the 16 enzyme hits were generated using the AlphaFold Server
+in May and June 2024. AlphaFold3 structures were visualized in PyMol
+(v2.5.4).</p></sec><sec id="sec2.14"><title>Machine Learning</title><p>The data set consisted of 16 enzymes
+and 17 substrates for a total of 272 enzyme–substrate combinations.
+The inclusion criteria for the data set in addition to the above-mentioned
+statistical inclusion criteria was that enzymes included must be active
+with at least one substrate in the data set. This was to prevent inclusion
+of enzymes which were not active due to potential other factors (e.g.,
+misfolding, improper pH or temperature conditions). For the generation
+of enzyme features, the multiple sequence alignment of the 16 enzymes
+that were active on at least one substrate was trimmed to the 160
+amino acids of the amidase signature region.<sup><xref ref-type="bibr" rid="ref21">21</xref></sup> The amino acids in the alignment were then encoded using the first
+four indices derived from the factor analysis in Atchley et al.,<sup><xref ref-type="bibr" rid="ref41">41</xref></sup> which parametrize key physiochemical properties
+of amino acids. The first four indices correspond to the polarity,
+secondary structure, molecular size, and codon diversity of an amino
+acid. For the generation of chemical features, SDF files were generated
+from isomeric SMILES, and the atomcountMA function from the ChemmineR
+package was used to calculate the frequency of atoms, formal charges
+and functional groups. Additionally, the following features were manually
+engineered (in parentheses the name used in the text): ANILIDE (aryl
+amide), MW_bond (amide tail mass, representing the molecular weight
+of the amide carbonyl substituents), MW_ring (aryl mass, molecular
+weight of the aryl ring with all substituents), and MW (molecule mass,
+molecular weight of the molecule). Special cases for nonanilides included
+acesulfame (MW_ring and MW_bond are each half of the MW), atenolol
+and rufinamide (MW_bond is a primary amine hydrogen, MW_ring includes
+the methyl group attached to the amide for atenolol), esters (4NP-butyrate
+and 4NP-trimethyl acetate, were treated as if the ester was an amide
+moiety), and metoclopramide (treated as if it was an anilide). Low
+variance features were removed using the nozerovar function, resulting
+in 429 features. The data was split into training and testing subsets
+using stratification for enzyme–substrate activity (1: active,
+0: inactive), with the training set consisting of 80% and the testing
+set 20% of the data. Ten individual XGBoost models were trained, and
+a final model was trained using features present in at least 70% of
+the individual models to assess feature importance. The model performance
+was also evaluated using leave-one-chemical-out and leave-one-enzyme-out
+validation.</p></sec></sec><sec id="sec3"><title>Results and Discussion</title><sec id="sec3.1"><title>Biochemical Characterization of the Aryl Acylamidase P205</title><p>Previously, we found that genomes from the urinary microbiota encode
+sequence homologues of enzymes involved in various micropollutant
+biotransformations.<sup><xref ref-type="bibr" rid="ref15">15</xref></sup> In particular, we
+identified the widespread conservation of homologues of paracetamol
+amidases<sup><xref ref-type="bibr" rid="ref15">15</xref></sup> belonging to the AS enzyme family
+in urinary bacteria. Here, we selected three different AS enzymes
+(here denoted P203, P204 and P205) from three different urinary bacterial
+taxa (<italic toggle="yes">Corynebacterium, Gordonia</italic>, and <italic toggle="yes">Lacticaseibacillus</italic>, respectively) and cloned the respective genes into inducible expression
+vectors in <italic toggle="yes">E. coli</italic>. Among these, P203
+and P204 could not be purified, however the gene encoding P205 from <italic toggle="yes">Lacticaseibacillus rhamnosus</italic> expressed well and could
+be purified (<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="uri" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsenvironau.4c00066/suppl_file/vg4c00066_si_001.pdf">Figure S2</ext-link>). We biochemically
+characterized P205 and measured an enzymatic activity temperature
+optimum of 40 °C, a pH optimum of 8, and heat stability up to
+60 °C (<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="uri" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsenvironau.4c00066/suppl_file/vg4c00066_si_001.pdf">Figure S3</ext-link>). The temperature
+and pH optima of P205 were similar to previously reported AS enzymes
+AmpA<sup><xref ref-type="bibr" rid="ref42">42</xref>,<xref ref-type="bibr" rid="ref43">43</xref></sup> and TccA,<sup><xref ref-type="bibr" rid="ref42">42</xref>,<xref ref-type="bibr" rid="ref43">43</xref></sup> but P205 retained
+almost complete activity after 1 h at 60 °C, unlike the significant
+activity reduction observed in AmpA and TccA. We next incubated purified
+P205 with paracetamol and observed paracetamol amidase activity (<xref rid="fig1" ref-type="fig">Figure <xref rid="fig1" ref-type="fig">1</xref></xref>A) confirmed by ultrahigh-performance
+liquid chromatography tandem mass spectrometry (UHPLC-HRMS/MS, <xref rid="fig1" ref-type="fig">Figure <xref rid="fig1" ref-type="fig">1</xref></xref>B). To assess the
+substrate range beyond paracetamol, we used an established 96-well
+UHPLC-HRMS/MS screening assay<sup><xref ref-type="bibr" rid="ref30">30</xref></sup> to test
+P205 for activity with 183 wastewater-relevant micropollutants. In
+order to account for potential nonspecific effects such as substrate
+sorption, we generated a catalytically inactivated enzyme variant
+of P205 by exchanging the catalytic serine 146 with alanine. This
+method for catalytic inactivation was reported previously for AS enzymes<sup><xref ref-type="bibr" rid="ref23">23</xref>,<xref ref-type="bibr" rid="ref27">27</xref></sup> and we confirmed here that it yielded an inactive enzyme. Through
+comparison to our inactivated enzyme control, we detected biotransformation
+(&gt;40% removal of substrate) by P205 for two pharmaceuticals in
+addition
+to paracetamol: vorinostat and capecitabine (<xref rid="fig1" ref-type="fig">Figure <xref rid="fig1" ref-type="fig">1</xref></xref>B). The stringent removal threshold was chosen
+to exclude false positives, such as compounds without hydrolyzable
+moieties or those with high removal variability (<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="uri" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsenvironau.4c00066/suppl_file/vg4c00066_si_001.pdf">Figure S4</ext-link>). Based on the results obtained from the substrate
+specificity screening with P205, we observed that accepted substrates
+had aryl amide substructures. However, several other amides in the
+xenobiotic library (e.g., rufinamide, mirabegron, benserazide) were
+not hydrolyzed.</p><fig id="fig1" position="float" orientation="portrait"><label>Figure 1</label><caption><p>(A) Paracetamol removal curve using purified P205 (0.022
+mg/mL),
+(B) P205 (blue) substrate specificity screening hits after 24 h incubation
+with a collection of a library of 183 micropollutants. The inactive
+enzyme control (gray) is the catalytically inactivated variant P205-S146A.</p></caption><graphic xmlns:xlink="http://www.w3.org/1999/xlink" id="gr1" position="float" orientation="portrait" xlink:href="vg4c00066_0001.jpg"><?image-name vg4c00066_0001.jpg?><?image-size 53255?><?image-md5 14d7dbc1f7a17387367351cdd8d7b36d?><?image-image-server-status LOAD_COMPLETED?><?image-original-height 775?><?image-original-width 2100?><?image-scaled-height 258?><?image-scaled-width 700?><?image-cloudpmc-urn urn:cdn:blobs/2d94/11741061/14d7dbc1f7a1/vg4c00066_0001.jpg?><?thumb-name vg4c00066_0001.gif?><?thumb-size 11587?><?thumb-md5 e545c93a3814f4e4a9f804104f366823?><?thumb-image-server-status NEVER_LOAD?><?thumb-scaled-height 74?><?thumb-scaled-width 200?><?thumb-cloudpmc-urn urn:cdn:blobs/2d94/11741061/e545c93a3814/vg4c00066_0001.gif?></graphic></fig><p>Overall, based on these results, we identified
+aryl amide moieties
+to be a common feature of the three P205 substrates.</p></sec><sec id="sec3.2"><title>Urine-Derived Microbial Amidase Library Selection</title><p>These
+findings prompted us to investigate whether other urine-derived microbial
+AS enzymes exhibited an expanded substrate specificity beyond paracetamol
+including different pharmaceuticals and other micropollutants. To
+systematically sample AS enzyme diversity, we expanded our analysis
+to a larger panel of bacterial isolates from urine including isolates
+from patients with diagnosed urinary tract infections,<sup><xref ref-type="bibr" rid="ref11">11</xref></sup> whose urinary microbiota might be exposed to
+higher pharmaceutical loads. To select candidate enzymes, we used
+the active AS enzyme from <italic toggle="yes">L. rhamnosus</italic> P205 as a query sequence (see <xref rid="sec2" ref-type="other">Methods</xref> for
+more detail on the selection procedure). A homologue of P205 was found
+in 123 out of 128 (96%) genomes queried.</p><p>A phylogenetic tree
+of the unique hits (<italic toggle="yes">n</italic> = 157) revealed two main clades
+(<xref rid="fig2" ref-type="fig">Figure <xref rid="fig2" ref-type="fig">2</xref></xref>) which correspond
+to two different predicted enzyme functions.<sup><xref ref-type="bibr" rid="ref20">20</xref></sup> Over half of AS enzyme homologues were predicted to be glutamyl-tRNA
+transferase subunit A enzymes (EC 6.3.5.7)<sup><xref ref-type="bibr" rid="ref21">21</xref></sup> while 40% were predicted to be C–N hydrolases (EC 3.5). Given
+our focus on amide bond hydrolysis, we selected and synthesized 37
+of the predicted C–N hydrolases to construct a diverse AS enzyme
+library spanning 22 different bacterial genera.</p><fig id="fig2" position="float" orientation="portrait"><label>Figure 2</label><caption><p>Phylogenetic tree of
+AS enzyme homologues from the urinary microbiome.
+Circles are colored by predicted EC number. Black labels: homologues
+selected for the AS enzyme library. Purple labels: AS enzymes from
+literature.<sup><xref ref-type="bibr" rid="ref16">16</xref>,<xref ref-type="bibr" rid="ref22">22</xref>,<xref ref-type="bibr" rid="ref42">42</xref>,<xref ref-type="bibr" rid="ref43">43</xref></sup></p></caption><graphic xmlns:xlink="http://www.w3.org/1999/xlink" id="gr2" position="float" orientation="portrait" xlink:href="vg4c00066_0002.jpg"><?image-name vg4c00066_0002.jpg?><?image-size 94388?><?image-md5 2f697952761e7bf94b273e6760863c6a?><?image-image-server-status LOAD_COMPLETED?><?image-original-height 1104?><?image-original-width 1750?><?image-scaled-height 442?><?image-scaled-width 700?><?image-cloudpmc-urn urn:cdn:blobs/2d94/11741061/2f697952761e/vg4c00066_0002.jpg?><?thumb-name vg4c00066_0002.gif?><?thumb-size 13727?><?thumb-md5 f2b7fdf1645c0aa41d5cb5466049f0b1?><?thumb-image-server-status NEVER_LOAD?><?thumb-scaled-height 79?><?thumb-scaled-width 126?><?thumb-cloudpmc-urn urn:cdn:blobs/2d94/11741061/f2b7fdf1645c/vg4c00066_0002.gif?></graphic></fig></sec><sec id="sec3.3"><title>Urine-derived Microbial AS Enzymes Have Variable Substrate Specificities</title><p>To profile substrate specificity of the urinary AS enzyme library
+(<italic toggle="yes">n</italic> = 40 enzymes), we selected a set of 17 structurally
+diverse compounds with hydrolyzable moieties, primarily amides and
+esters including a subset of the 183 wastewater-relevant micropollutants
+previously tested with P205 (see <xref rid="sec2" ref-type="other">Methods</xref> for
+selection criteria). We expressed each AS enzyme in our library (including
+P203, P204, P205) individually in <italic toggle="yes">E. coli</italic> strains and prepared crude lysate extracts for high-throughput substrate
+screening<sup><xref ref-type="bibr" rid="ref30">30</xref></sup> for a total of 680 distinct
+enzyme–substrate combinations. A limitation of this study is
+the focus on parent compound removal, which was necessary to screen
+due to the low-throughput chromatography and transformation product
+identification steps. Enzyme sorption is often a factor limiting parent
+compound removal studies, therefore we included catalytically inactivated
+enzyme control (P205-S146A) to account for potential enzyme sorption
+effects.<sup><xref ref-type="bibr" rid="ref44">44</xref></sup></p><p>Of the 40 AS enzymes tested,
+16 enzymes were active on at least one substrate and are further analyzed
+here (<xref rid="fig3" ref-type="fig">Figure <xref rid="fig3" ref-type="fig">3</xref></xref>). The
+most active AS enzymes in our library were the phylogenetically related
+P131 and P148 from <italic toggle="yes">Streptococcus salivarius</italic> and <italic toggle="yes">Aerococcus sanguinicola</italic>, respectively,
+which transformed 9 out of 17 substrates tested (<xref rid="fig3" ref-type="fig">Figure <xref rid="fig3" ref-type="fig">3</xref></xref>A,B). In comparison to the
+rest of the AS enzyme library, P205 showed weak activity in crude
+lysate (<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="uri" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsenvironau.4c00066/suppl_file/vg4c00066_si_001.pdf">Figures S5–S6</ext-link>). It did not
+meet the stringent activity thresholds (see <xref rid="sec2" ref-type="other">Methods</xref>) set to limit false positives for downstream analysis and modeling.
+Apart from the 4-nitrophenyl (4NP) compounds included as standard
+hydrolase substrates, the micropollutants biotransformed by the highest
+number of enzymes were paracetamol and the herbicide propanil (<xref rid="fig3" ref-type="fig">Figure <xref rid="fig3" ref-type="fig">3</xref></xref>B). Activity on these
+compounds has also been reported by other microbial AS arylamidases.<sup><xref ref-type="bibr" rid="ref16">16</xref>,<xref ref-type="bibr" rid="ref22">22</xref>,<xref ref-type="bibr" rid="ref42">42</xref>,<xref ref-type="bibr" rid="ref43">43</xref>,<xref ref-type="bibr" rid="ref45">45</xref></sup> In contrast to the previously characterized
+enzymes, AS enzymes in the library did not biotransform chlorpropham.
+Additional compounds not transformed by any AS enzymes in the library
+included acesulfame, atenolol, atorvastatin, dasatinib, diuron, metoclopramide
+and rufinamide. In addition to known substrates, we also discovered
+new AS enzyme family substrates. To our knowledge, no AS family enzymes
+have previously been reported to biotransform capecitabine, flutamide
+or acetylsulfamethoxazole. To evaluate if the observed biotransformation
+of these compounds was due to hydrolysis at the amide bond, each was
+incubated individually with purified P131. Enzymatic transformation
+products were verified by comparing their retention times and absorbance
+spectra to those of analytical standards for the expected amide hydrolysis
+products (<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="uri" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsenvironau.4c00066/suppl_file/vg4c00066_si_001.pdf">Figures S7–S9</ext-link>). Coinjection
+of these standards with the final time point samples containing P131
+further corroborated transformation products identities.</p><fig id="fig3" position="float" orientation="portrait"><label>Figure 3</label><caption><p>(A) Maximum-likelihood
+phylogenetic tree of 16 microbial urine-derived
+AS enzymes active on at least one tested substrate. Bootstrap confidence
+levels are shown in grayscale from 1000 bootstrap replicates. (B)
+Heatmap of enzyme–substrate hits. Barplots show the number
+of enzymes active on a given compound (<italic toggle="yes">x</italic>-axis) and
+number of substrates of a given enzyme (<italic toggle="yes">y</italic>-axis).
+(C) Pearson correlation plot of substrates accepted by at least one
+enzyme. (D) PCA biplot of enzyme–substrate matrix. Pink arrows
+visualize the principal component 1 and 2 loadings and group roughly
+based on conserved chemical moieties e.g., 4-nitrophenyl esters, short
+and long aliphatic chains. Points are colored by the number of accepted
+substrates of the enzymes.</p></caption><graphic xmlns:xlink="http://www.w3.org/1999/xlink" id="gr3" position="float" orientation="portrait" xlink:href="vg4c00066_0003.jpg"><?image-name vg4c00066_0003.jpg?><?image-size 139758?><?image-md5 719298f2850ced6f8d6d186279c853c1?><?image-image-server-status LOAD_COMPLETED?><?image-original-height 2058?><?image-original-width 2088?><?image-scaled-height 686?><?image-scaled-width 696?><?image-cloudpmc-urn urn:cdn:blobs/2d94/11741061/719298f2850c/vg4c00066_0003.jpg?><?thumb-name vg4c00066_0003.gif?><?thumb-size 16855?><?thumb-md5 bfffa71d18fce1a1ad11503238d67d08?><?thumb-image-server-status NEVER_LOAD?><?thumb-scaled-height 99?><?thumb-scaled-width 100?><?thumb-cloudpmc-urn urn:cdn:blobs/2d94/11741061/bfffa71d18fc/vg4c00066_0003.gif?></graphic></fig><p>A substrate specificity dendrogram, based on the
+Jaccard similarity
+index (excluding substrates not biotransformed by any enzyme), revealed
+three distinct clades for AS enzymes that are active on at least four
+substrates (<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="uri" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsenvironau.4c00066/suppl_file/vg4c00066_si_001.pdf">Figure S10</ext-link>). Interestingly,
+not only phylogenetically related enzymes like P156 and P161 (68%
+amino acid sequence identity) share similar substrate specificities,
+but also distantly related enzymes P168 and P162 (26% amino acid sequence
+identity). Substrate specificity only partially correlates with protein
+phylogeny, suggesting convergent evolution of biotransformation capabilities.
+The average sequence identity between all of the 16 active enzymes
+is only 29% (±8%) (<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="uri" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsenvironau.4c00066/suppl_file/vg4c00066_si_001.pdf">Figure S11</ext-link>), indicating
+that AS enzymes with diverse sequences are also capable of catalyzing
+similar reactions.</p><p>A Pearson correlation matrix of substrates
+accepted by at least
+one enzyme (<xref rid="fig3" ref-type="fig">Figure <xref rid="fig3" ref-type="fig">3</xref></xref>C) reveals correlated substrate preferences for e.g., low-molecular
+weight substrates (flutamide, nitroacetanilide, paracetamol) and substrates
+with long aliphatic tails (capecitabine, vorinostat). Similarly, three
+groupings for the loadings of the principal component (PC) analysis
+of the accepted substrates (<xref rid="fig3" ref-type="fig">Figure <xref rid="fig3" ref-type="fig">3</xref></xref>D) also suggest that these AS enzymes have preferences
+for key structural and chemical moieties in accepted substrates (e.g.,
+aliphatic chain length, type of hydrolyzable bond).</p></sec><sec id="sec3.4"><title>Machine Learning Model Identifies 24 Features Associated with
+AS Enzyme–Substrate Relationships</title><p>To gain additional
+insights into the physicochemical features underlying enzyme–substrate
+specificity, we trained machine learning models on enzymes active
+with at least one substrate (<italic toggle="yes">n</italic> = 272 enzyme–substrate
+combinations). Among the models tested, we selected an extreme gradient
+boosting decision tree algorithm (XGBoost) for selection of 429 features
+of physicochemical properties from enzymes and substrates (see <xref rid="sec2" ref-type="other">Methods</xref>).</p><p>We trained a final XGBoost model
+using 24 top selected enzyme and chemical features to assess feature
+importance. The top ten features included a balanced mixture of chemical
+and enzyme features, suggesting their combination played a role in
+enzyme–substrate specificity (<xref rid="fig4" ref-type="fig">Figure <xref rid="fig4" ref-type="fig">4</xref></xref>). To understand the biases of training set
+on the model prediction performance we performed a leave-one-chemical-out
+validation (<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="uri" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsenvironau.4c00066/suppl_file/vg4c00066_si_001.pdf">Table S4</ext-link>) and a leave-one-enzyme-out-validation
+(<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="uri" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsenvironau.4c00066/suppl_file/vg4c00066_si_001.pdf">Table S5</ext-link>). The leave-one-chemical-out
+models performed between 1 and 0.5 F1 score, and between 95% and 50%
+balanced accuracy, depending on the chemical left out. The leave-one-enzyme-out
+models performed between 1 and 0.67 F1 score, and balanced accuracy
+between 100 and 41%, depending on the enzyme left out. Despite the
+variability in prediction performance, the top features identified
+across leave-one-out models are consistent with those of the final
+model (<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="uri" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsenvironau.4c00066/suppl_file/vg4c00066_si_001.pdf">Figure S12</ext-link>).</p><fig id="fig4" position="float" orientation="portrait"><label>Figure 4</label><caption><p>Chemical and amino acid
+scaled feature importance in a XGBoost
+model trained using the most represented features derived from ten
+individual models. Amino acid numbers refer to positions in the protein
+alignment of 16 AS enzyme hits. The chemical structure inset depicts
+two custom labels used for chemical featurization which were found
+to have high feature importance weighting (see <xref rid="sec2" ref-type="other">Methods</xref> for details on chemical featurization).</p></caption><graphic xmlns:xlink="http://www.w3.org/1999/xlink" id="gr4" position="float" orientation="portrait" xlink:href="vg4c00066_0004.jpg"><?image-name vg4c00066_0004.jpg?><?image-size 99510?><?image-md5 22fc89940d9b52e00246c1de75243713?><?image-image-server-status LOAD_COMPLETED?><?image-original-height 993?><?image-original-width 1500?><?image-scaled-height 497?><?image-scaled-width 750?><?image-cloudpmc-urn urn:cdn:blobs/2d94/11741061/22fc89940d9b/vg4c00066_0004.jpg?><?thumb-name vg4c00066_0004.gif?><?thumb-size 13748?><?thumb-md5 7056daa493cb70be2fd671d5ae3fadad?><?thumb-image-server-status NEVER_LOAD?><?thumb-scaled-height 79?><?thumb-scaled-width 120?><?thumb-cloudpmc-urn urn:cdn:blobs/2d94/11741061/7056daa493cb/vg4c00066_0004.gif?></graphic></fig><p>As the model was limited to the narrow set of substrates
+and AS
+enzymes included in our library, our goal was not to optimize the
+model to improve generalizability to predict on unseen chemicals and
+enzymes, but rather to extract interpretable (bio)chemical features
+driving enzyme–substrate specificity in our data set. While
+acknowledging the constraints, we viewed this as an informative pilot
+study toward training more generalizable models to predict enzymatic
+micropollutant biotransformations across enzyme classes.</p></sec><sec id="sec3.5"><title>Amide Tail and Aryl Substituent Formal Charges Associate with
+Enzymatic Activity</title><p>The molecular weight of the amide carbonyl
+group substituent (referred to here as the “amide tail”)
+was the most important feature that was predictive of enzyme–substrate
+activity (<xref rid="fig4" ref-type="fig">Figure <xref rid="fig4" ref-type="fig">4</xref></xref>).
+Indeed, the amide-containing compounds which were the most widely
+biotransformed (paracetamol, propanil, nitroacetanilide, flutamide)
+contained smaller amide carbonyl group substituents compared to compounds
+which were not biotransformed (e.g., atorvastatin and dasatinib).
+Vorinostat and capecitabine were still biotransformed suggesting that
+even large substituents were accepted, with an apparent preference
+for linear saturated aliphatic chains. In comparison with X-ray crystallography
+data from a bacterial acyl arylamidase cocrystallized with its substrate
+paracetamol (Protein Data Bank ID: 4YJI), the substrate was cocrystallized
+with the amide carbonyl substituent oriented toward the interior of
+the binding pocket.<sup><xref ref-type="bibr" rid="ref23">23</xref></sup> The authors identified
+a substrate tunnel capable of accommodating compounds with <italic toggle="yes">N</italic>-acyl groups up to C<sub>10</sub> in length<sup><xref ref-type="bibr" rid="ref23">23</xref></sup> (similar carbon chain lengths to vorinostat
+and capecitabine). Higher molecular weight substituents, such as those
+found in dasatinib and atorvastatin, were not accepted by AS enzymes,
+suggesting that these may not fit into the substrate tunnel.</p><p>The molecular weight of the substrates was also a predictive feature
+consistent with the relatively low molecular weight of most preferred
+AS enzyme substrates including paracetamol and propanil. The formal
+charges of several favored substrates including 4NP-butyrate, 4NP-trimethyl
+acetate, flutamide, and nitroacetanilide was also an important feature.
+These compounds all bear electron-withdrawing nitro groups in the <italic toggle="yes">para</italic>-position on their phenyl rings, increasing susceptibility
+to nucleophilic attack at the carbonyl carbon. For example, Ko et
+al. observed 4 orders of magnitude higher <italic toggle="yes">V</italic><sub>max</sub>/<italic toggle="yes">K</italic><sub>M</sub> for the reaction with 4-nitroacetanilide
+compared to acetanilide with an AS family enzyme.<sup><xref ref-type="bibr" rid="ref22">22</xref></sup> The susceptibility of 4-nitrophenyl compounds to hydrolysis
+is evident in their use as activity probes for various enzyme families.<sup><xref ref-type="bibr" rid="ref28">28</xref>,<xref ref-type="bibr" rid="ref47">47</xref>−<xref ref-type="bibr" rid="ref50">50</xref></sup></p><p>These findings can be used to inform the development of so-called
+benign-by-design chemicals which are readily biodegradable in the
+environment. Recent works on quinolone<sup><xref ref-type="bibr" rid="ref100">100</xref></sup> and flavonoid<sup><xref ref-type="bibr" rid="ref101">101</xref></sup> compounds highlight
+how identification of readily biotransformable scaffolds and substitutions
+can be leveraged in the development of benign-by-design chemicals.
+Our findings suggest that a small amide tail (or long but linear)
+together with electron-withdrawing groups on the aryl moiety contribute
+to enhanced biotransformation potential by AS enzymes.</p></sec><sec id="sec3.6"><title>Identified Residues Are Located on the Enzyme Surface</title><p>The size and secondary structure of amino acid position 300 in the
+alignment of the 16 active amidases was important for AS enzyme–substrate
+specificity (<xref rid="fig5" ref-type="fig">Figure <xref rid="fig5" ref-type="fig">5</xref></xref>A). Other amino acid features relevant for model prediction included
+the size and polarity of amino acid 226, the size of amino acid 266,
+and the size of amino acid 366. To identify whether certain amino
+acids were associated with the number of substrates accepted, we classified
+the substrate specificity of our AS enzymes as “promiscuous”
+(eight or more substrates) or “narrow” (two or fewer
+substrates). We then visualized the amino acid sequence logos for
+“promiscuous” (P131, P148 and P162) and “narrow”
+enzymes (P109, P117, P118, P140, P167, P182, P197 and P198) of the
+eight alignment positions identified by our gradient boosting model
+to be important (<xref rid="fig5" ref-type="fig">Figure <xref rid="fig5" ref-type="fig">5</xref></xref>B). Asparagine (N) in position 269 was present in all three enzymes
+of the highly promiscuous set, while in positions 368 there was a
+conservation of aromatic residues, and 329 for hydrophobic residues.
+Conversely, the seven narrow substrate range enzymes had no clear
+representation of a specific residue or biochemical property type
+at the identified positions. However, these results should be interpreted
+with caution given the low and unbalanced sample size of the two sets.
+Moreover, the positions identified by the gradient boosting model
+seem to show generally lower conservation compared to other positions
+in the alignment of all 16 enzyme sequences (<xref rid="fig5" ref-type="fig">Figure <xref rid="fig5" ref-type="fig">5</xref></xref>A). This emphasized the limitations of our
+model for interpreting some identified features which do not have
+a readily apparent biological or chemical role yet correlated well
+with enzyme–substrate patterns.</p><fig id="fig5" position="float" orientation="portrait"><label>Figure 5</label><caption><p>(A) Multiple sequence
+alignment of the amidase signature region
+of library enzymes active with at least one substrate. The sequences
+are ordered based on the phylogenetic tree shown in <xref rid="fig3" ref-type="fig">Figure <xref rid="fig3" ref-type="fig">3</xref></xref>. The numbered positions correspond
+to those with high feature importance scores shown by XGBoost. Red
+triangles mark the catalytic triad residues and the violet box marks
+the Gly/Ser-rich motif. Black stars indicate “promiscuous”
+enzymes and orange stars are for “narrow” substrate
+range enzymes. Residues are colored according to the ClustalX color
+scheme.<sup><xref ref-type="bibr" rid="ref51">51</xref></sup> (B) Sequence logos of amino acids
+positions (in the alignment) with high feature importance by XGBoost.
+Amino acids are colored based on their physicochemical properties
+according to the Zappo color scheme.<sup><xref ref-type="bibr" rid="ref52">52</xref></sup> (C)
+AlphaFold3 structures of P131 (green) and P167 (blue) with view on
+the pocket entrance. Orange: residues corresponding to those with
+high feature importance scores shown by XGBoost. Residue numbers refer
+to positions within the <xref rid="fig3" ref-type="fig">Figure <xref rid="fig3" ref-type="fig">3</xref></xref> sequence alignment.</p></caption><graphic xmlns:xlink="http://www.w3.org/1999/xlink" id="gr5" position="float" orientation="portrait" xlink:href="vg4c00066_0005.jpg"><?image-name vg4c00066_0005.jpg?><?image-size 354015?><?image-md5 301a7641d81c57aaac899395cf4ed1ab?><?image-image-server-status LOAD_COMPLETED?><?image-original-height 2499?><?image-original-width 2088?><?image-scaled-height 833?><?image-scaled-width 696?><?image-cloudpmc-urn urn:cdn:blobs/2d94/11741061/301a7641d81c/vg4c00066_0005.jpg?><?thumb-name vg4c00066_0005.gif?><?thumb-size 24860?><?thumb-md5 7523ef52e58d69b74565631a3c9a505b?><?thumb-image-server-status NEVER_LOAD?><?thumb-scaled-height 120?><?thumb-scaled-width 100?><?thumb-cloudpmc-urn urn:cdn:blobs/2d94/11741061/7523ef52e58d/vg4c00066_0005.gif?></graphic></fig><p>Next, we visualized important amino acids in AlphaFold3
+protein
+structural models to identify their localization and infer potential
+biochemical relevance (<xref rid="fig5" ref-type="fig">Figure <xref rid="fig5" ref-type="fig">5</xref></xref>C). With the exception of amino acid 329, all residues were
+situated on the surface of the proteins. In order to identify the
+predicted substrate tunnels, we structurally aligned AlphaFold3 models
+of the 16 active amidases (average RMSD 2.275 ± 1.901 Å)
+with 4YJI. Residues 266, 269, 366, and 368 mapped near the probable
+substrate tunnel entrance.</p><p>Previously, Lee et al. identified
+residues forming a hydrophobic
+cavity around the acyl group of paracetamol to the substrate through
+hydrophobic interactions. They localized residues influencing substrate
+binding and stabilization through hydrogen bonds.<sup><xref ref-type="bibr" rid="ref23">23</xref></sup> Zhang et al. additionally identified Tyr138 as an important
+residue in the binding pocket that determines substrate specificity.<sup><xref ref-type="bibr" rid="ref45">45</xref></sup> These previous studies did not investigate residues
+on the surface of the protein.</p><p>While four of the identified
+amino acid positions are located in
+proximity to the substrate tunnel and may influence substrate interactions,
+our understanding remains limited and warrants further inquiry. Experimental
+validation of machine learning informed findings will advance our
+knowledge of how key amino acids influence-AS substrate specificity.
+This ability would guide future rational engineering of AS enzymes
+e.g., for enhanced biotransformation purposes.<sup><xref ref-type="bibr" rid="ref102">102</xref></sup> Recent advancements in enhancing the catalytic activity
+and stability of polyethylene terephthalate hydrolases demonstrate
+the utility of machine learning to identify key amino acids for rational
+enzyme engineering.<sup><xref ref-type="bibr" rid="ref103">103</xref></sup> To uncover the potential
+biological roles of the identified amino acid features in this study,
+future research could employ site-directed mutagenesis to swap residues
+between promiscuous and narrow specificity AS enzymes.</p></sec></sec><sec id="sec4"><title>Environmental Relevance</title><p>Having established the promiscuity
+of AS enzymes in micropollutant
+biotransformations, we next investigated how widespread and conserved
+AS enzymes were across different microbiomes. We queried the amino
+acid sequences of our 16 AS enzymes in the Global Microbial Gene Catalog
+(GMGC).<sup><xref ref-type="bibr" rid="ref53">53</xref></sup> The majority of GMGC homologues
+(see <xref rid="sec2" ref-type="other">Methods</xref>) were detected in human-associated
+samples (including gut, oral, skin) reflecting the urinary sampling
+locations of our sequences and overall greater sequencing efforts
+toward human-associated habitats (<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="uri" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsenvironau.4c00066/suppl_file/vg4c00066_si_001.pdf">Figure S13A</ext-link>). About 20% of homologues are represented in microbiomes from the
+built environment, soil, and wastewater. When only considering these
+ecosystems, most enzyme homologues were found in soil and the built
+environment (<xref rid="fig6" ref-type="fig">Figure <xref rid="fig6" ref-type="fig">6</xref></xref>).</p><fig id="fig6" position="float" orientation="portrait"><label>Figure 6</label><caption><p>Distribution of enzyme homologues across environmental microbiomes
+(according to the Global Microbial Gene Catalog<sup><xref ref-type="bibr" rid="ref53">53</xref></sup>). Each stratum represents an enzyme, with the bacterial
+host genus indicated in brackets. The connections between strata represent
+the prevalence of each enzyme in various environments. The labels
+on the strata display both the absolute counts and the relative percentages
+of the enzyme homologues. For clarity, only connections with values
+greater than 3 are shown.</p></caption><graphic xmlns:xlink="http://www.w3.org/1999/xlink" id="gr6" position="float" orientation="portrait" xlink:href="vg4c00066_0006.jpg"><?image-name vg4c00066_0006.jpg?><?image-size 123676?><?image-md5 a6ee24aa9a93789744f26f8534aa4bc1?><?image-image-server-status LOAD_COMPLETED?><?image-original-height 1370?><?image-original-width 2088?><?image-scaled-height 457?><?image-scaled-width 696?><?image-cloudpmc-urn urn:cdn:blobs/2d94/11741061/a6ee24aa9a93/vg4c00066_0006.jpg?><?thumb-name vg4c00066_0006.gif?><?thumb-size 17580?><?thumb-md5 ff803b0d0f861d797086a1a66abfd496?><?thumb-image-server-status NEVER_LOAD?><?thumb-scaled-height 79?><?thumb-scaled-width 121?><?thumb-cloudpmc-urn urn:cdn:blobs/2d94/11741061/ff803b0d0f86/vg4c00066_0006.gif?></graphic></fig><p>Examining the most promiscuous enzymes (P131 and
+P148) in our data
+set, we detected P131 (<italic toggle="yes">Streptococcus</italic>) homologues
+in wastewater, while P148 (<italic toggle="yes">Aerococcus</italic>) homologues
+were predominantly detected in the built environment and soil (<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="uri" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsenvironau.4c00066/suppl_file/vg4c00066_si_001.pdf">Figure S13B</ext-link>). The global abundance distributions
+of both enzymes were nonetheless dominated by human-associated microbiomes.
+Their detection in human-associated contexts warrants future research
+on the potential of AS-mediated microbial biotransformations for modulation
+of anticancer treatment efficacy,<sup><xref ref-type="bibr" rid="ref54">54</xref></sup> since
+P131 and P148 readily biotransformed the anticancer drugs flutamide,
+capecitabine, and vorinostat. Also relevant for human-associated contexts,
+these and six additional AS enzymes also biotransformed the widely
+used analgesic, paracetamol.</p><p>Paracetamol was among the most
+preferred aryl amide substrates
+across all AS enzymes measured in our study. In support of this finding,
+diverse AS enzymes were previously shown to be involved in the biotransformation
+of paracetamol in wastewater.<sup><xref ref-type="bibr" rid="ref55">55</xref></sup> Despite
+the ready biodegradability of paracetamol, this parent compound is
+still often measured in μg/L in concentrations in both wastewater
+effluent<sup><xref ref-type="bibr" rid="ref56">56</xref></sup> and natural surface waters.<sup><xref ref-type="bibr" rid="ref57">57</xref></sup> A 2022 global river survey identified paracetamol
+as the most abundant compound (average 3.1 μg/L) out of 61 different
+pharmaceuticals measured.<sup><xref ref-type="bibr" rid="ref57">57</xref></sup></p><p>Incomplete
+paracetamol removal during wastewater treatment also
+has “downstream” effects as was recently demonstrated
+in agricultural irrigation systems using recycled wastewater effluent.<sup><xref ref-type="bibr" rid="ref58">58</xref></sup> Strikingly, paracetamol concentrations in the
+low μg/L range in wastewater effluent used for irrigation induced
+shifts in phytopathogen- and disease-suppressive soil taxa in agricultural
+soil microbial communities.<sup><xref ref-type="bibr" rid="ref58">58</xref></sup> The authors
+measured paracetamol-induced metabolic activity and proposed these
+shifts were partially driven by some taxa using paracetamol as a nutrient
+source.<sup><xref ref-type="bibr" rid="ref58">58</xref></sup> AS enzymes are known catalyze
+the first biotransformation step of paracetamol,<sup><xref ref-type="bibr" rid="ref59">59</xref></sup> thus inviting future research on the role of AS enzymes
+in wastewater treatment and agricultural dynamics. Within the agricultural
+context, several known AS enzymes also transform the herbicides, chlorpropham<sup><xref ref-type="bibr" rid="ref60">60</xref>,<xref ref-type="bibr" rid="ref61">61</xref></sup> and propanil.<sup><xref ref-type="bibr" rid="ref45">45</xref>,<xref ref-type="bibr" rid="ref61">61</xref></sup> In our study, propanil was likely
+transformed in our study by eight different AS enzymes. Propanil itself
+is primarily microbially transformed into 3,4-dichloroaniline, a more
+toxic and persistent metabolite than the parent compound.<sup><xref ref-type="bibr" rid="ref62">62</xref></sup></p><p>Propanil, paracetamol and other micropollutants
+included in this
+study also are known to induce the production reactive oxygen species.<sup><xref ref-type="bibr" rid="ref63">63</xref>,<xref ref-type="bibr" rid="ref64">64</xref></sup> This stress response from micropollutants promotes the transfer
+of antibiotic resistance genes,<sup><xref ref-type="bibr" rid="ref65">65</xref></sup> giving
+rise to public health concerns.<sup><xref ref-type="bibr" rid="ref66">66</xref></sup> A second
+mechanism promoting antibiotic resistance is the microbial biotransformation
+of antibiotic conjugates, such as acetylsulfamethoxazole (AcSMX).<sup><xref ref-type="bibr" rid="ref67">67</xref></sup> Both sulfamethoxazole (SMX) and AcSMX are readily
+biotransformed in anaerobic urine storage tanks<sup><xref ref-type="bibr" rid="ref10">10</xref></sup> and wastewater treatment plants.<sup><xref ref-type="bibr" rid="ref67">67</xref></sup> Four AS enzymes in our study hydrolyzed AcSMX to SMX, reactivating
+the antibiotic which could lead to inhibitory effects or promotion
+of antibiotic resistance in wastewater or aquatic microbial communities.<sup><xref ref-type="bibr" rid="ref68">68</xref></sup></p><p>Collectively, these findings suggest AS
+enzymes may contribute
+to relevant processes such as microbial community dynamics, contaminant
+persistence, drug reactivation, and antibiotic resistance. Their global
+distribution and conservation highlights their relevance in micropollutant
+biotransformations for agricultural, human, and environmental health.</p></sec><sec id="sec5"><title>Conclusions</title><p>In summary, we biochemically characterized
+a novel AS arylamidase
+from a <italic toggle="yes">L. rhamnosus</italic> urinary isolate
+and expanded our analysis to 16 additional urine-derived microbial
+AS enzymes. We identified previously unreported micropollutants as
+substrates for AS arylamidases, namely the pharmaceuticals flutamide
+and capecitabine, and the antibiotic metabolite acetylsulfamethoxazole.
+Using a gradient boosting machine learning model, we identified chemical
+properties as well as surface residues in proximity to the substrate
+tunnel associated with enzyme–substrate specificity. Future
+studies on these features are warranted to understand their potential
+in rationally engineering AS enzymes e.g., for thermostability or
+immobilization for environmental applications, and for the development
+of more readily biotransformable pharmaceuticals and pesticides.</p></sec></body><back><notes notes-type="data-availability" id="notes-1"><title>Data Availability Statement</title><p>Scripts and
+data associated with this analysis are available at: <uri xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://github.com/MSM-group/amidase-paper">https://github.com/MSM-group/amidase-paper</uri>.</p></notes><notes id="notes-3" notes-type="si"><title>Supporting Information Available</title><p>The Supporting Information
+is available free of charge at <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="uri" xlink:href="https://pubs.acs.org/doi/10.1021/acsenvironau.4c00066?goto=supporting-info">https://pubs.acs.org/doi/10.1021/acsenvironau.4c00066</ext-link>.<list id="silist" list-type="simple"><list-item><p>Methods for substrate specificity screening of P205
+with a 183-micropollutant library; chemical supplier list; protein
+purification buffer compositions; AS library accession number and
+host organism; model performances of leave-one-out validation models;
+chemical structures of 17 compounds tested against the AS library;
+SDS-PAGE gels of protein purification; biochemical characterization
+of P205; additional micropollutant substrates of P205; results of
+the entire AS library activity screening against 17 compounds; transformation
+product verification for flutamide, acetylsulfamethoxazole, and capecitabine;
+substrate specificity dendrograms; protein identity matrix of the
+16 active enzymes; feature importance of leave-one-out validation
+models; and additional results of environmental distribution of enzyme
+homologues (<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="uri" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsenvironau.4c00066/suppl_file/vg4c00066_si_001.pdf">PDF</ext-link>)</p></list-item></list></p></notes><sec sec-type="supplementary-material"><title>Supplementary Material</title><supplementary-material content-type="local-data" id="sifile1" position="float" orientation="portrait"><media xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="vg4c00066_si_001.pdf" position="float" orientation="portrait"><?suppdata-name vg4c00066_si_001.pdf?><?suppdata-size 6067002?><?suppdata-md5 e0544943ebb122c43b1c1248957a21c3?><?suppdata-image-server-status NEVER_LOAD?><?suppdata-mime-type application?><?suppdata-mime-sub-type pdf?><?suppdata-cloudpmc-urn urn:app:2d94/11741061/e0544943ebb1/vg4c00066_si_001.pdf?><caption><p>vg4c00066_si_001.pdf</p></caption></media></supplementary-material></sec><notes notes-type="" id="notes-295"><title>Author Contributions</title><p>CRediT: <bold>Thierry Dominique
+Marti</bold> conceptualization, data curation,
+formal analysis, investigation, methodology, validation, visualization,
+writing - original draft, writing - review &amp; editing; <bold>Diana
+Schweizer</bold> formal analysis, investigation, methodology, writing
+- review &amp; editing; <bold>Yaochun Yu</bold> data curation, formal
+analysis, investigation, methodology, writing - review &amp; editing; <bold>Milo Schaerer</bold> data curation, formal analysis, investigation,
+software, validation, visualization, writing - review &amp; editing; <bold>Silke I. Probst</bold> formal analysis, investigation, methodology,
+supervision, writing - review &amp; editing; <bold>Serina L. Robinson</bold> conceptualization, data curation, formal analysis, funding acquisition,
+investigation, methodology, resources, software, supervision, validation,
+visualization, writing - original draft, writing - review &amp; editing.</p></notes><notes notes-type="funding-statement" id="notes-2"><p>S.L.R. acknowledges
+funding from the Swiss National Science Foundation (grant no. 501100001711–209124,
+applicant no. PZPGP2_209124) and the Pierre Mercier Foundation. S.I.P.
+was supported by the Helmut Horten Foundation (project no. 2022-YIG-090).
+T.D.M. was supported by the Vontobel Foundation. Y.Y. was supported
+by the Swiss National Science Foundation (project no. 200021L_201006).
+The work (proposal: 10.46936/10.25585/60008420) conducted by the U.S.
+Department of Energy Joint Genome Institute (<uri xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://ror.org/04xm1d337">https://ror.org/04xm1d337</uri>),
+a DOE Office of Science User Facility, is supported by the Office
+of Science of the U.S. Department of Energy operated under Contract
+No. DE-AC02-05CH11231.</p></notes><notes notes-type="COI-statement" id="NOTES-d14e1045-autogenerated"><p>The
+authors declare no
+competing financial interest.</p></notes><ack><title>Acknowledgments</title><p>We thank the entire Joint Genome Institute team
+including
+Miranda Harmon-Smith, Yasuo Yoshikuni, Ritesh Mewalal, and Ian Blaby.
+Victoria Poltorak is acknowledged for insightful discussions on machine
+learning. We thank René Gall for his technical support and
+Isabelle Teufer and Sophie Kuhn for their experimental assistance.
+We acknowledge Olga Schubert for idea generation and discussions.
+The TOC art was created in BioRender. Marti, T. (2024) <uri xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://BioRender.com/m52e575">https://BioRender.com/m52e575</uri>.</p></ack><ref-list><title>References</title><ref id="ref1"><mixed-citation publication-type="journal" id="cit1"><name name-style="western"><surname>Lienert</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Bürki</surname><given-names>T.</given-names></name>; <name name-style="western"><surname>Escher</surname><given-names>B. I.</given-names></name>
+<article-title>Reducing Micropollutants with Source
+Control: Substance Flow Analysis of 212 Pharmaceuticals in Faeces
+and Urine</article-title>. <source>Water Sci. Technol.</source>
+<year>2007</year>, <volume>56</volume> (<issue>5</issue>), <fpage>87</fpage>–<lpage>96</lpage>. <pub-id pub-id-type="doi">10.2166/wst.2007.560</pub-id>.<pub-id pub-id-type="pmid">17881841</pub-id></mixed-citation></ref><ref id="ref2"><mixed-citation publication-type="book" id="cit2"><person-group person-group-type="allauthors"><name name-style="western"><surname>Larsen</surname><given-names>T. A.</given-names></name>; <name name-style="western"><surname>Udert</surname><given-names>K. M.</given-names></name>; <name name-style="western"><surname>Lienert</surname><given-names>J.</given-names></name></person-group><source>Source Separation and
+Decentralization for Wastewater Management</source>; <publisher-name>IWA Publishing</publisher-name>, <year>2013</year>.</mixed-citation></ref><ref id="ref3"><mixed-citation publication-type="journal" id="cit3"><name name-style="western"><surname>Karak</surname><given-names>T.</given-names></name>; <name name-style="western"><surname>Bhattacharyya</surname><given-names>P.</given-names></name>
+<article-title>Human Urine as a Source of Alternative Natural Fertilizer
+in Agriculture: A Flight of Fancy or an Achievable Reality</article-title>. <source>Resour. Conserv. Recycl.</source>
+<year>2011</year>, <volume>55</volume> (<issue>4</issue>), <fpage>400</fpage>–<lpage>408</lpage>. <pub-id pub-id-type="doi">10.1016/j.resconrec.2010.12.008</pub-id>.</mixed-citation></ref><ref id="ref4"><mixed-citation publication-type="journal" id="cit4"><name name-style="western"><surname>Larsen</surname><given-names>T. A.</given-names></name>; <name name-style="western"><surname>Gujer</surname><given-names>W.</given-names></name>
+<article-title>Separate Management
+of Anthropogenic Nutrient Solutions (human Urine)</article-title>. <source>Water Sci. Technol.</source>
+<year>1996</year>, <volume>34</volume> (<issue>3–4</issue>), <fpage>87</fpage>–<lpage>94</lpage>. <pub-id pub-id-type="doi">10.1016/0273-1223(96)00560-4</pub-id>.</mixed-citation></ref><ref id="ref5"><mixed-citation publication-type="journal" id="cit5"><name name-style="western"><surname>Fumasoli</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Etter</surname><given-names>B.</given-names></name>; <name name-style="western"><surname>Sterkele</surname><given-names>B.</given-names></name>; <name name-style="western"><surname>Morgenroth</surname><given-names>E.</given-names></name>; <name name-style="western"><surname>Udert</surname><given-names>K. M.</given-names></name>
+<article-title>Operating a Pilot-Scale Nitrification/distillation
+Plant for Complete Nutrient Recovery from Urine</article-title>. <source>Water Sci. Technol.</source>
+<year>2016</year>, <volume>73</volume> (<issue>1</issue>), <fpage>215</fpage>–<lpage>222</lpage>. <pub-id pub-id-type="doi">10.2166/wst.2015.485</pub-id>.<pub-id pub-id-type="pmid">26744953</pub-id>
+</mixed-citation></ref><ref id="ref6"><mixed-citation publication-type="journal" id="cit6"><name name-style="western"><surname>Kogler</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Sharma</surname><given-names>N.</given-names></name>; <name name-style="western"><surname>Tiburcio</surname><given-names>D.</given-names></name>; <name name-style="western"><surname>Gong</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Miller</surname><given-names>D. M.</given-names></name>; <name name-style="western"><surname>Williams</surname><given-names>K. S.</given-names></name>; <name name-style="western"><surname>Chen</surname><given-names>X.</given-names></name>; <name name-style="western"><surname>Tarpeh</surname><given-names>W. A.</given-names></name>
+<article-title>Long-Term Robustness
+and Failure Mechanisms of Electrochemical Stripping for Wastewater
+Ammonia Recovery</article-title>. <source>ACS Environ. Au</source>
+<year>2024</year>, <volume>4</volume> (<issue>2</issue>), <fpage>89</fpage>–<lpage>105</lpage>. <pub-id pub-id-type="doi">10.1021/acsenvironau.3c00058</pub-id>.<pub-id pub-id-type="pmid">38525023</pub-id>
+<pub-id pub-id-type="pmcid">PMC10958661</pub-id></mixed-citation></ref><ref id="ref7"><mixed-citation publication-type="journal" id="cit7"><name name-style="western"><surname>Schürmann</surname><given-names>B.</given-names></name>; <name name-style="western"><surname>Everding</surname><given-names>W.</given-names></name>; <name name-style="western"><surname>Montag</surname><given-names>D.</given-names></name>; <name name-style="western"><surname>Pinnekamp</surname><given-names>J.</given-names></name>
+<article-title>Fate of Pharmaceuticals
+and Bacteria in Stored Urine during Precipitation and Drying of Struvite</article-title>. <source>Water Sci. Technol.</source>
+<year>2012</year>, <volume>65</volume> (<issue>10</issue>), <fpage>1774</fpage>–<lpage>1780</lpage>. <pub-id pub-id-type="doi">10.2166/wst.2012.041</pub-id>.<pub-id pub-id-type="pmid">22546791</pub-id>
+</mixed-citation></ref><ref id="ref8"><mixed-citation publication-type="journal" id="cit8"><name name-style="western"><surname>Monetti</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Nieradzik</surname><given-names>L.</given-names></name>; <name name-style="western"><surname>Freguia</surname><given-names>S.</given-names></name>; <name name-style="western"><surname>Choi</surname><given-names>P. M.</given-names></name>; <name name-style="western"><surname>O’Brien</surname><given-names>J. W.</given-names></name>; <name name-style="western"><surname>Thomas</surname><given-names>K. V.</given-names></name>; <name name-style="western"><surname>Ledezma</surname><given-names>P.</given-names></name>
+<article-title>Urea Hydrolysis and Long-Term Storage
+of Source-Separated Urine for Reuse as Fertiliser Is Insufficient
+for the Removal of Anthropogenic Micropollutants</article-title>. <source>Water Res.</source>
+<year>2022</year>, <volume>222</volume>, <elocation-id>118891</elocation-id><pub-id pub-id-type="doi">10.1016/j.watres.2022.118891</pub-id>.<pub-id pub-id-type="pmid">35907300</pub-id>
+</mixed-citation></ref><ref id="ref9"><mixed-citation publication-type="journal" id="cit9"><name name-style="western"><surname>Jaatinen</surname><given-names>S. T.</given-names></name>; <name name-style="western"><surname>Palmroth</surname><given-names>M. R. T.</given-names></name>; <name name-style="western"><surname>Rintala</surname><given-names>J. A.</given-names></name>; <name name-style="western"><surname>Tuhkanen</surname><given-names>T. A.</given-names></name>
+<article-title>The Effect of Urine
+Storage on Antiviral and Antibiotic Compounds in the Liquid Phase
+of Source-Separated Urine</article-title>. <source>Environ. Technol.</source>
+<year>2016</year>, <volume>37</volume> (<issue>17</issue>), <fpage>2189</fpage>–<lpage>2198</lpage>. <pub-id pub-id-type="doi">10.1080/09593330.2016.1144799</pub-id>.<pub-id pub-id-type="pmid">26804243</pub-id>
+</mixed-citation></ref><ref id="ref10"><mixed-citation publication-type="journal" id="cit10"><name name-style="western"><surname>Özel
+Duygan</surname><given-names>B. D.</given-names></name>; <name name-style="western"><surname>Udert</surname><given-names>K. M.</given-names></name>; <name name-style="western"><surname>Remmele</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>McArdell</surname><given-names>C. S.</given-names></name>
+<article-title>Removal
+of Pharmaceuticals from Human Urine during Storage, Aerobic Biological
+Treatment, and Activated Carbon Adsorption to Produce a Safe Fertilizer</article-title>. <source>Resour. Conserv. Recycl.</source>
+<year>2021</year>, <volume>166</volume> (<issue>105341</issue>), <elocation-id>105341</elocation-id><pub-id pub-id-type="doi">10.1016/j.resconrec.2020.105341</pub-id>.</mixed-citation></ref><ref id="ref11"><mixed-citation publication-type="journal" id="cit11"><name name-style="western"><surname>Thomas-White</surname><given-names>K.</given-names></name>; <name name-style="western"><surname>Forster</surname><given-names>S. C.</given-names></name>; <name name-style="western"><surname>Kumar</surname><given-names>N.</given-names></name>; <name name-style="western"><surname>Van Kuiken</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Putonti</surname><given-names>C.</given-names></name>; <name name-style="western"><surname>Stares</surname><given-names>M. D.</given-names></name>; <name name-style="western"><surname>Hilt</surname><given-names>E. E.</given-names></name>; <name name-style="western"><surname>Price</surname><given-names>T. K.</given-names></name>; <name name-style="western"><surname>Wolfe</surname><given-names>A. J.</given-names></name>; <name name-style="western"><surname>Lawley</surname><given-names>T. D.</given-names></name>
+<article-title>Culturing of Female
+Bladder Bacteria
+Reveals an Interconnected Urogenital Microbiota</article-title>. <source>Nat. Commun.</source>
+<year>2018</year>, <volume>9</volume> (<issue>1</issue>), <elocation-id>1557</elocation-id><pub-id pub-id-type="doi">10.1038/s41467-018-03968-5</pub-id>.<pub-id pub-id-type="pmid">29674608</pub-id>
+<pub-id pub-id-type="pmcid">PMC5908796</pub-id></mixed-citation></ref><ref id="ref12"><mixed-citation publication-type="journal" id="cit12"><name name-style="western"><surname>Hilt</surname><given-names>E. E.</given-names></name>; <name name-style="western"><surname>McKinley</surname><given-names>K.</given-names></name>; <name name-style="western"><surname>Pearce</surname><given-names>M. M.</given-names></name>; <name name-style="western"><surname>Rosenfeld</surname><given-names>A. B.</given-names></name>; <name name-style="western"><surname>Zilliox</surname><given-names>M. J.</given-names></name>; <name name-style="western"><surname>Mueller</surname><given-names>E. R.</given-names></name>; <name name-style="western"><surname>Brubaker</surname><given-names>L.</given-names></name>; <name name-style="western"><surname>Gai</surname><given-names>X.</given-names></name>; <name name-style="western"><surname>Wolfe</surname><given-names>A. J.</given-names></name>; <name name-style="western"><surname>Schreckenberger</surname><given-names>P. C.</given-names></name>
+<article-title>Urine Is Not Sterile: Use of Enhanced
+Urine Culture Techniques To Detect Resident Bacterial Flora in the
+Adult Female Bladder</article-title>. <source>J. Clin. Microbiol.</source>
+<year>2014</year>, <volume>52</volume> (<issue>3</issue>), <fpage>871</fpage>–<lpage>876</lpage>. <pub-id pub-id-type="doi">10.1128/jcm.02876-13</pub-id>.<pub-id pub-id-type="pmid">24371246</pub-id>
+<pub-id pub-id-type="pmcid">PMC3957746</pub-id></mixed-citation></ref><ref id="ref13"><mixed-citation publication-type="journal" id="cit13"><name name-style="western"><surname>Morand</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Cornu</surname><given-names>F.</given-names></name>; <name name-style="western"><surname>Dufour</surname><given-names>J.-C.</given-names></name>; <name name-style="western"><surname>Tsimaratos</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Lagier</surname><given-names>J.-C.</given-names></name>; <name name-style="western"><surname>Raoult</surname><given-names>D.</given-names></name>
+<article-title>Human Bacterial Repertoire
+of the
+Urinary Tract: A Potential Paradigm Shift</article-title>. <source>J.
+Clin. Microbiol.</source>
+<year>2019</year>, <volume>57</volume> (<issue>3</issue>), <elocation-id>e00675-18</elocation-id><pub-id pub-id-type="doi">10.1128/JCM.00675-18</pub-id>.<pub-id pub-id-type="pmid">30404941</pub-id>
+<pub-id pub-id-type="pmcid">PMC6425171</pub-id></mixed-citation></ref><ref id="ref14"><mixed-citation publication-type="journal" id="cit14"><name name-style="western"><surname>Fenner</surname><given-names>K.</given-names></name>; <name name-style="western"><surname>Canonica</surname><given-names>S.</given-names></name>; <name name-style="western"><surname>Wackett</surname><given-names>L. P.</given-names></name>; <name name-style="western"><surname>Elsner</surname><given-names>M.</given-names></name>
+<article-title>Evaluating Pesticide
+Degradation in the Environment: Blind Spots and Emerging Opportunities</article-title>. <source>Science</source>
+<year>2013</year>, <volume>341</volume> (<issue>6147</issue>), <fpage>752</fpage>–<lpage>758</lpage>. <pub-id pub-id-type="doi">10.1126/science.1236281</pub-id>.<pub-id pub-id-type="pmid">23950532</pub-id>
+</mixed-citation></ref><ref id="ref15"><mixed-citation publication-type="journal" id="cit15"><name name-style="western"><surname>Marti</surname><given-names>T. D.</given-names></name>; <name name-style="western"><surname>Schärer</surname><given-names>M. R.</given-names></name>; <name name-style="western"><surname>Robinson</surname><given-names>S. L.</given-names></name>
+<article-title>Microbial Biocatalysis within Us:
+The Underexplored Xenobiotic Biotransformation Potential of the Urinary
+Tract Microbiota</article-title>. <source>Chimia</source>
+<year>2023</year>, <volume>77</volume> (<issue>6</issue>), <fpage>424</fpage>–<lpage>431</lpage>. <pub-id pub-id-type="doi">10.2533/chimia.2023.424</pub-id>.<pub-id pub-id-type="pmid">38047782</pub-id>
+</mixed-citation></ref><ref id="ref16"><mixed-citation publication-type="journal" id="cit16"><name name-style="western"><surname>Zhang</surname><given-names>L.</given-names></name>; <name name-style="western"><surname>Hu</surname><given-names>Q.</given-names></name>; <name name-style="western"><surname>Hang</surname><given-names>P.</given-names></name>; <name name-style="western"><surname>Zhou</surname><given-names>X.</given-names></name>; <name name-style="western"><surname>Jiang</surname><given-names>J.</given-names></name>
+<article-title>Characterization of
+an Arylamidase from a Newly Isolated Propanil-Transforming Strain
+of <italic toggle="yes">Ochrobactrum</italic> Sp. PP-2</article-title>. <source>Ecotoxicol.
+Environ. Saf.</source>
+<year>2019</year>, <volume>167</volume>, <fpage>122</fpage>–<lpage>129</lpage>. <pub-id pub-id-type="doi">10.1016/j.ecoenv.2018.09.127</pub-id>.<pub-id pub-id-type="pmid">30317116</pub-id>
+</mixed-citation></ref><ref id="ref17"><mixed-citation publication-type="journal" id="cit17"><name name-style="western"><surname>Bouatra</surname><given-names>S.</given-names></name>; <name name-style="western"><surname>Aziat</surname><given-names>F.</given-names></name>; <name name-style="western"><surname>Mandal</surname><given-names>R.</given-names></name>; <name name-style="western"><surname>Guo</surname><given-names>A. C.</given-names></name>; <name name-style="western"><surname>Wilson</surname><given-names>M. R.</given-names></name>; <name name-style="western"><surname>Knox</surname><given-names>C.</given-names></name>; <name name-style="western"><surname>Bjorndahl</surname><given-names>T. C.</given-names></name>; <name name-style="western"><surname>Krishnamurthy</surname><given-names>R.</given-names></name>; <name name-style="western"><surname>Saleem</surname><given-names>F.</given-names></name>; <name name-style="western"><surname>Liu</surname><given-names>P.</given-names></name>; <name name-style="western"><surname>Dame</surname><given-names>Z. T.</given-names></name>; <name name-style="western"><surname>Poelzer</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Huynh</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Yallou</surname><given-names>F. S.</given-names></name>; <name name-style="western"><surname>Psychogios</surname><given-names>N.</given-names></name>; <name name-style="western"><surname>Dong</surname><given-names>E.</given-names></name>; <name name-style="western"><surname>Bogumil</surname><given-names>R.</given-names></name>; <name name-style="western"><surname>Roehring</surname><given-names>C.</given-names></name>; <name name-style="western"><surname>Wishart</surname><given-names>D. S.</given-names></name>
+<article-title>The Human
+Urine Metabolome</article-title>. <source>PLoS One</source>
+<year>2013</year>, <volume>8</volume> (<issue>9</issue>), <elocation-id>e73076</elocation-id><pub-id pub-id-type="doi">10.1371/journal.pone.0073076</pub-id>.<pub-id pub-id-type="pmid">24023812</pub-id>
+<pub-id pub-id-type="pmcid">PMC3762851</pub-id></mixed-citation></ref><ref id="ref18"><mixed-citation publication-type="journal" id="cit18"><name name-style="western"><surname>Wu</surname><given-names>Z.</given-names></name>; <name name-style="western"><surname>Liu</surname><given-names>C.</given-names></name>; <name name-style="western"><surname>Zhang</surname><given-names>Z.</given-names></name>; <name name-style="western"><surname>Zheng</surname><given-names>R.</given-names></name>; <name name-style="western"><surname>Zheng</surname><given-names>Y.</given-names></name>
+<article-title>Amidase as a Versatile
+Tool in Amide-Bond Cleavage: From Molecular Features to Biotechnological
+Applications</article-title>. <source>Biotechnol. Adv.</source>
+<year>2020</year>, <volume>43</volume>, <elocation-id>107574</elocation-id><pub-id pub-id-type="doi">10.1016/j.biotechadv.2020.107574</pub-id>.<pub-id pub-id-type="pmid">32512219</pub-id>
+</mixed-citation></ref><ref id="ref19"><mixed-citation publication-type="journal" id="cit19"><name name-style="western"><surname>Zhang</surname><given-names>D.</given-names></name>; <name name-style="western"><surname>Xing</surname><given-names>H.</given-names></name>; <name name-style="western"><surname>Liu</surname><given-names>D.</given-names></name>; <name name-style="western"><surname>Han</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Cai</surname><given-names>P.</given-names></name>; <name name-style="western"><surname>Lin</surname><given-names>H.</given-names></name>; <name name-style="western"><surname>Tian</surname><given-names>Y.</given-names></name>; <name name-style="western"><surname>Guo</surname><given-names>Y.</given-names></name>; <name name-style="western"><surname>Sun</surname><given-names>B.</given-names></name>; <name name-style="western"><surname>Le</surname><given-names>Y.</given-names></name>; <name name-style="western"><surname>Tian</surname><given-names>Y.</given-names></name>; <name name-style="western"><surname>Wu</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Hu</surname><given-names>Q.-N.</given-names></name>
+<article-title>Discovery
+of Toxin-Degrading
+Enzymes with Positive Unlabeled Deep Learning</article-title>. <source>ACS Catal.</source>
+<year>2024</year>, <volume>14</volume> (<issue>5</issue>), <fpage>3336</fpage>–<lpage>3348</lpage>. <pub-id pub-id-type="doi">10.1021/acscatal.3c04461</pub-id>.</mixed-citation></ref><ref id="ref20"><mixed-citation publication-type="journal" id="cit20"><name name-style="western"><surname>Yu</surname><given-names>T.</given-names></name>; <name name-style="western"><surname>Cui</surname><given-names>H.</given-names></name>; <name name-style="western"><surname>Li</surname><given-names>J. C.</given-names></name>; <name name-style="western"><surname>Luo</surname><given-names>Y.</given-names></name>; <name name-style="western"><surname>Jiang</surname><given-names>G.</given-names></name>; <name name-style="western"><surname>Zhao</surname><given-names>H.</given-names></name>
+<article-title>Enzyme Function
+Prediction Using Contrastive Learning</article-title>. <source>Science</source>
+<year>2023</year>, <volume>379</volume> (<issue>6639</issue>), <fpage>1358</fpage>–<lpage>1363</lpage>. <pub-id pub-id-type="doi">10.1126/science.adf2465</pub-id>.<pub-id pub-id-type="pmid">36996195</pub-id>
+</mixed-citation></ref><ref id="ref21"><mixed-citation publication-type="journal" id="cit21"><name name-style="western"><surname>Shin</surname><given-names>S.</given-names></name>; <name name-style="western"><surname>Lee</surname><given-names>T.</given-names></name>; <name name-style="western"><surname>Ha</surname><given-names>N.</given-names></name>; <name name-style="western"><surname>Koo</surname><given-names>H. M.</given-names></name>; <name name-style="western"><surname>Kim</surname><given-names>S.</given-names></name>; <name name-style="western"><surname>Lee</surname><given-names>H.</given-names></name>; <name name-style="western"><surname>Kim</surname><given-names>Y. S.</given-names></name>; <name name-style="western"><surname>Oh</surname><given-names>B.</given-names></name>
+<article-title>Structure of Malonamidase E2 Reveals
+a Novel Ser-cisSer-Lys Catalytic Triad in a New Serine Hydrolase Fold
+That Is Prevalent in Nature</article-title>. <source>EMBO J.</source>
+<year>2002</year>, <volume>21</volume> (<issue>11</issue>), <fpage>2509</fpage>–<lpage>2516</lpage>. <pub-id pub-id-type="doi">10.1093/emboj/21.11.2509</pub-id>.<pub-id pub-id-type="pmid">12032064</pub-id>
+<pub-id pub-id-type="pmcid">PMC126024</pub-id></mixed-citation></ref><ref id="ref22"><mixed-citation publication-type="journal" id="cit22"><name name-style="western"><surname>Ko</surname><given-names>H.-J.</given-names></name>; <name name-style="western"><surname>Lee</surname><given-names>E. W.</given-names></name>; <name name-style="western"><surname>Bang</surname><given-names>W.-G.</given-names></name>; <name name-style="western"><surname>Lee</surname><given-names>C.-K.</given-names></name>; <name name-style="western"><surname>Kim</surname><given-names>K. H.</given-names></name>; <name name-style="western"><surname>Choi</surname><given-names>I.-G.</given-names></name>
+<article-title>Molecular
+Characterization of a Novel Bacterial Aryl
+Acylamidase Belonging to the Amidase Signature Enzyme Family</article-title>. <source>Mol. Cells</source>
+<year>2010</year>, <volume>29</volume> (<issue>5</issue>), <fpage>485</fpage>–<lpage>492</lpage>. <pub-id pub-id-type="doi">10.1007/s10059-010-0060-9</pub-id>.<pub-id pub-id-type="pmid">20396964</pub-id>
+</mixed-citation></ref><ref id="ref23"><mixed-citation publication-type="journal" id="cit23"><name name-style="western"><surname>Lee</surname><given-names>S.</given-names></name>; <name name-style="western"><surname>Park</surname><given-names>E.-H.</given-names></name>; <name name-style="western"><surname>Ko</surname><given-names>H.-J.</given-names></name>; <name name-style="western"><surname>Bang</surname><given-names>W. G.</given-names></name>; <name name-style="western"><surname>Kim</surname><given-names>H.-Y.</given-names></name>; <name name-style="western"><surname>Kim</surname><given-names>K. H.</given-names></name>; <name name-style="western"><surname>Choi</surname><given-names>I.-G.</given-names></name>
+<article-title>Crystal Structure Analysis of a Bacterial
+Aryl Acylamidase Belonging to the Amidase Signature Enzyme Family</article-title>. <source>Biochem. Biophys. Res. Commun.</source>
+<year>2015</year>, <volume>467</volume> (<issue>2</issue>), <fpage>268</fpage>–<lpage>274</lpage>. <pub-id pub-id-type="doi">10.1016/j.bbrc.2015.09.177</pub-id>.<pub-id pub-id-type="pmid">26454172</pub-id>
+</mixed-citation></ref><ref id="ref24"><mixed-citation publication-type="journal" id="cit24"><name name-style="western"><surname>Hou</surname><given-names>F.</given-names></name>; <name name-style="western"><surname>Xian</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Huang</surname><given-names>W.</given-names></name>
+<article-title>De Novo Biosynthesis
+and Whole-Cell
+Catalytic Production of Paracetamol on a Gram Scale in <italic toggle="yes">Escherichia Coli</italic></article-title>. <source>Green Chem.</source>
+<year>2021</year>, <volume>23</volume> (<issue>20</issue>), <fpage>8280</fpage>–<lpage>8289</lpage>. <pub-id pub-id-type="doi">10.1039/D1GC02591K</pub-id>.</mixed-citation></ref><ref id="ref25"><mixed-citation publication-type="journal" id="cit25"><name name-style="western"><surname>Oberortner</surname><given-names>E.</given-names></name>; <name name-style="western"><surname>Cheng</surname><given-names>J.-F.</given-names></name>; <name name-style="western"><surname>Hillson</surname><given-names>N. J.</given-names></name>; <name name-style="western"><surname>Deutsch</surname><given-names>S.</given-names></name>
+<article-title>Streamlining the Design-to-Build
+Transition with Build-Optimization Software Tools</article-title>. <source>ACS Synth. Biol.</source>
+<year>2017</year>, <volume>6</volume> (<issue>3</issue>), <fpage>485</fpage>–<lpage>496</lpage>. <pub-id pub-id-type="doi">10.1021/acssynbio.6b00200</pub-id>.<pub-id pub-id-type="pmid">28004921</pub-id>
+</mixed-citation></ref><ref id="ref26"><mixed-citation publication-type="undeclared" id="cit26"><person-group person-group-type="allauthors"><name name-style="western"><surname>Probst</surname><given-names>S. I.</given-names></name>; <name name-style="western"><surname>Felder</surname><given-names>F. D.</given-names></name>; <name name-style="western"><surname>Poltorak</surname><given-names>V.</given-names></name>; <name name-style="western"><surname>Mewalal</surname><given-names>R.</given-names></name>; <name name-style="western"><surname>Blaby</surname><given-names>I.
+K.</given-names></name>; <name name-style="western"><surname>Robinson</surname><given-names>S. L.</given-names></name></person-group><article-title>Enzymatic Carbon-Fluorine
+Bond Cleavage by Human Gut Microbes</article-title><source>bioRxiv</source><year>2024</year>, <comment>2024.07.15.601322</comment><pub-id pub-id-type="doi">10.1101/2024.07.15.601322</pub-id>.</mixed-citation></ref><ref id="ref27"><mixed-citation publication-type="journal" id="cit27"><name name-style="western"><surname>Shin</surname><given-names>S.</given-names></name>; <name name-style="western"><surname>Yun</surname><given-names>Y. S.</given-names></name>; <name name-style="western"><surname>Koo</surname><given-names>H. M.</given-names></name>; <name name-style="western"><surname>Kim</surname><given-names>Y. S.</given-names></name>; <name name-style="western"><surname>Choi</surname><given-names>K. Y.</given-names></name>; <name name-style="western"><surname>Oh</surname><given-names>B.-H.</given-names></name>
+<article-title>Characterization
+of a Novel Ser-cisSer-Lys Catalytic Triad in Comparison
+with the Classical Ser-His-Asp Triad</article-title>. <source>J. Biol.
+Chem.</source>
+<year>2003</year>, <volume>278</volume> (<issue>27</issue>), <fpage>24937</fpage>–<lpage>24943</lpage>. <pub-id pub-id-type="doi">10.1074/jbc.M302156200</pub-id>.<pub-id pub-id-type="pmid">12711609</pub-id>
+</mixed-citation></ref><ref id="ref28"><mixed-citation publication-type="journal" id="cit28"><name name-style="western"><surname>Robinson</surname><given-names>S. L.</given-names></name>; <name name-style="western"><surname>Smith</surname><given-names>M. D.</given-names></name>; <name name-style="western"><surname>Richman</surname><given-names>J. E.</given-names></name>; <name name-style="western"><surname>Aukema</surname><given-names>K. G.</given-names></name>; <name name-style="western"><surname>Wackett</surname><given-names>L. P.</given-names></name>
+<article-title>Machine
+Learning-Based Prediction of Activity and Substrate Specificity for
+OleA Enzymes in the Thiolase Superfamily</article-title>. <source>Synth.
+Biol.</source>
+<year>2020</year>, <volume>5</volume> (<issue>1</issue>), <elocation-id>ysaa004</elocation-id><pub-id pub-id-type="doi">10.1093/synbio/ysaa004</pub-id>.</mixed-citation></ref><ref id="ref29"><mixed-citation publication-type="journal" id="cit29"><name name-style="western"><surname>Peng</surname><given-names>Y.</given-names></name>; <name name-style="western"><surname>Fu</surname><given-names>S.</given-names></name>; <name name-style="western"><surname>Liu</surname><given-names>H.</given-names></name>; <name name-style="western"><surname>Lucia</surname><given-names>L. A.</given-names></name>
+<article-title>Accurately Determining Esterase Activity
+via the Isosbestic Point of P-Nitrophenol</article-title>. <source>BioResources</source>
+<year>2016</year>, <volume>11</volume> (<issue>4</issue>), <elocation-id>10099–10111</elocation-id><pub-id pub-id-type="doi">10.15376/biores.11.4.10099-10111</pub-id>.</mixed-citation></ref><ref id="ref30"><mixed-citation publication-type="journal" id="cit30"><name name-style="western"><surname>Yu</surname><given-names>Y.</given-names></name>; <name name-style="western"><surname>Trottmann</surname><given-names>N. F.</given-names></name>; <name name-style="western"><surname>Schärer</surname><given-names>M. R.</given-names></name>; <name name-style="western"><surname>Fenner</surname><given-names>K.</given-names></name>; <name name-style="western"><surname>Robinson</surname><given-names>S. L.</given-names></name>
+<article-title>Substrate
+Promiscuity of Xenobiotic-Transforming Hydrolases from Stream Biofilms
+Impacted by Treated Wastewater</article-title>. <source>Water Res.</source>
+<year>2024</year>, <volume>256</volume>, <elocation-id>121593</elocation-id><pub-id pub-id-type="doi">10.1016/j.watres.2024.121593</pub-id>.<pub-id pub-id-type="pmid">38631239</pub-id>
+</mixed-citation></ref><ref id="ref31"><mixed-citation publication-type="journal" id="cit31"><name name-style="western"><surname>Camacho</surname><given-names>C.</given-names></name>; <name name-style="western"><surname>Coulouris</surname><given-names>G.</given-names></name>; <name name-style="western"><surname>Avagyan</surname><given-names>V.</given-names></name>; <name name-style="western"><surname>Ma</surname><given-names>N.</given-names></name>; <name name-style="western"><surname>Papadopoulos</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Bealer</surname><given-names>K.</given-names></name>; <name name-style="western"><surname>Madden</surname><given-names>T. L.</given-names></name>
+<article-title>BLAST+: Architecture and Applications</article-title>. <source>BMC Bioinf.</source>
+<year>2009</year>, <volume>10</volume>, <elocation-id>421</elocation-id><pub-id pub-id-type="doi">10.1186/1471-2105-10-421</pub-id>.<pub-id pub-id-type="pmcid">PMC2803857</pub-id><pub-id pub-id-type="pmid">20003500</pub-id></mixed-citation></ref><ref id="ref32"><mixed-citation publication-type="journal" id="cit32"><name name-style="western"><surname>Trifinopoulos</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Nguyen</surname><given-names>L.-T.</given-names></name>; <name name-style="western"><surname>von Haeseler</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Minh</surname><given-names>B. Q.</given-names></name>
+<article-title>W-IQ-TREE: A Fast
+Online Phylogenetic Tool for Maximum Likelihood Analysis</article-title>. <source>Nucleic Acids Res.</source>
+<year>2016</year>, <volume>44</volume> (<issue>W1</issue>), <fpage>W232</fpage>–<lpage>W235</lpage>. <pub-id pub-id-type="doi">10.1093/nar/gkw256</pub-id>.<pub-id pub-id-type="pmid">27084950</pub-id>
+<pub-id pub-id-type="pmcid">PMC4987875</pub-id></mixed-citation></ref><ref id="ref33"><mixed-citation publication-type="journal" id="cit33"><name name-style="western"><surname>Nguyen</surname><given-names>L.-T.</given-names></name>; <name name-style="western"><surname>Schmidt</surname><given-names>H. A.</given-names></name>; <name name-style="western"><surname>von Haeseler</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Minh</surname><given-names>B. Q.</given-names></name>
+<article-title>IQ-TREE: A Fast
+and Effective Stochastic Algorithm for Estimating Maximum-Likelihood
+Phylogenies</article-title>. <source>Mol. Biol. Evol.</source>
+<year>2015</year>, <volume>32</volume> (<issue>1</issue>), <fpage>268</fpage>–<lpage>274</lpage>. <pub-id pub-id-type="doi">10.1093/molbev/msu300</pub-id>.<pub-id pub-id-type="pmid">25371430</pub-id>
+<pub-id pub-id-type="pmcid">PMC4271533</pub-id></mixed-citation></ref><ref id="ref34"><mixed-citation publication-type="journal" id="cit34"><name name-style="western"><surname>Hoang</surname><given-names>D. T.</given-names></name>; <name name-style="western"><surname>Chernomor</surname><given-names>O.</given-names></name>; <name name-style="western"><surname>von Haeseler</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Minh</surname><given-names>B. Q.</given-names></name>; <name name-style="western"><surname>Vinh</surname><given-names>L. S.</given-names></name>
+<article-title>UFBoot2:
+Improving the Ultrafast Bootstrap Approximation</article-title>. <source>Mol. Biol. Evol.</source>
+<year>2018</year>, <volume>35</volume> (<issue>2</issue>), <fpage>518</fpage>–<lpage>522</lpage>. <pub-id pub-id-type="doi">10.1093/molbev/msx281</pub-id>.<pub-id pub-id-type="pmid">29077904</pub-id>
+<pub-id pub-id-type="pmcid">PMC5850222</pub-id></mixed-citation></ref><ref id="ref35"><mixed-citation publication-type="journal" id="cit35"><name name-style="western"><surname>Fu</surname><given-names>L.</given-names></name>; <name name-style="western"><surname>Niu</surname><given-names>B.</given-names></name>; <name name-style="western"><surname>Zhu</surname><given-names>Z.</given-names></name>; <name name-style="western"><surname>Wu</surname><given-names>S.</given-names></name>; <name name-style="western"><surname>Li</surname><given-names>W.</given-names></name>
+<article-title>CD-HIT: Accelerated
+for Clustering the next-Generation Sequencing Data</article-title>. <source>Bioinformatics</source>
+<year>2012</year>, <volume>28</volume> (<issue>23</issue>), <fpage>3150</fpage>–<lpage>3152</lpage>. <pub-id pub-id-type="doi">10.1093/bioinformatics/bts565</pub-id>.<pub-id pub-id-type="pmid">23060610</pub-id>
+<pub-id pub-id-type="pmcid">PMC3516142</pub-id></mixed-citation></ref><ref id="ref36"><mixed-citation publication-type="journal" id="cit36"><name name-style="western"><surname>Mayaux</surname><given-names>J. F.</given-names></name>; <name name-style="western"><surname>Cerbelaud</surname><given-names>E.</given-names></name>; <name name-style="western"><surname>Soubrier</surname><given-names>F.</given-names></name>; <name name-style="western"><surname>Yeh</surname><given-names>P.</given-names></name>; <name name-style="western"><surname>Blanche</surname><given-names>F.</given-names></name>; <name name-style="western"><surname>Pétré</surname><given-names>D.</given-names></name>
+<article-title>Purification,
+Cloning, and Primary Structure of a New
+Enantiomer-Selective Amidase from a <italic toggle="yes">Rhodococcus</italic> Strain:
+Structural Evidence for a Conserved Genetic Coupling with Nitrile
+Hydratase</article-title>. <source>J. Bacteriol.</source>
+<year>1991</year>, <volume>173</volume> (<issue>21</issue>), <fpage>6694</fpage>–<lpage>6704</lpage>. <pub-id pub-id-type="doi">10.1128/jb.173.21.6694-6704.1991</pub-id>.<pub-id pub-id-type="pmid">1938876</pub-id>
+<pub-id pub-id-type="pmcid">PMC209017</pub-id></mixed-citation></ref><ref id="ref37"><mixed-citation publication-type="journal" id="cit37"><name name-style="western"><surname>Price</surname><given-names>M. N.</given-names></name>; <name name-style="western"><surname>Arkin</surname><given-names>A. P.</given-names></name>
+<article-title>PaperBLAST: Text
+Mining Papers for Information about
+Homologs</article-title>. <source>mSystems</source>
+<year>2017</year>, <volume>2</volume> (<issue>4</issue>), <elocation-id>e00039-17</elocation-id><pub-id pub-id-type="doi">10.1128/mSystems.00039-17</pub-id>.<pub-id pub-id-type="pmid">28845458</pub-id>
+<pub-id pub-id-type="pmcid">PMC5557654</pub-id></mixed-citation></ref><ref id="ref38"><mixed-citation publication-type="journal" id="cit38"><name name-style="western"><surname>Jiang</surname><given-names>Y.</given-names></name>; <name name-style="western"><surname>Stornetta</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Villalta</surname><given-names>P. W.</given-names></name>; <name name-style="western"><surname>Wilson</surname><given-names>M. R.</given-names></name>; <name name-style="western"><surname>Boudreau</surname><given-names>P. D.</given-names></name>; <name name-style="western"><surname>Zha</surname><given-names>L.</given-names></name>; <name name-style="western"><surname>Balbo</surname><given-names>S.</given-names></name>; <name name-style="western"><surname>Balskus</surname><given-names>E. P.</given-names></name>
+<article-title>Reactivity of an Unusual Amidase
+May Explain Colibactin’s DNA Cross-Linking Activity</article-title>. <source>J. Am. Chem. Soc.</source>
+<year>2019</year>, <volume>141</volume> (<issue>29</issue>), <fpage>11489</fpage>–<lpage>11496</lpage>. <pub-id pub-id-type="doi">10.1021/jacs.9b02453</pub-id>.<pub-id pub-id-type="pmid">31251062</pub-id>
+<pub-id pub-id-type="pmcid">PMC6728428</pub-id></mixed-citation></ref><ref id="ref39"><mixed-citation publication-type="journal" id="cit39"><name name-style="western"><surname>Brown</surname><given-names>K. C.</given-names></name>; <name name-style="western"><surname>Corbett</surname><given-names>J. F.</given-names></name>
+<article-title>Benzoquinone Imines.
+Part 16. Oxidation of P-Aminophenol
+in Aqueous Solution</article-title>. <source>J. Chem. Soc., Perkin Trans.
+2</source>
+<year>1979</year>, <volume>3</volume>, <fpage>308</fpage>–<lpage>311</lpage>. <pub-id pub-id-type="doi">10.1039/p29790000308</pub-id>.</mixed-citation></ref><ref id="ref40"><mixed-citation publication-type="journal" id="cit40"><name name-style="western"><surname>Abramson</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Adler</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Dunger</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Evans</surname><given-names>R.</given-names></name>; <name name-style="western"><surname>Green</surname><given-names>T.</given-names></name>; <name name-style="western"><surname>Pritzel</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Ronneberger</surname><given-names>O.</given-names></name>; <name name-style="western"><surname>Willmore</surname><given-names>L.</given-names></name>; <name name-style="western"><surname>Ballard</surname><given-names>A. J.</given-names></name>; <name name-style="western"><surname>Bambrick</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Bodenstein</surname><given-names>S. W.</given-names></name>; <name name-style="western"><surname>Evans</surname><given-names>D. A.</given-names></name>; <name name-style="western"><surname>Hung</surname><given-names>C.-C.</given-names></name>; <name name-style="western"><surname>O’Neill</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Reiman</surname><given-names>D.</given-names></name>; <name name-style="western"><surname>Tunyasuvunakool</surname><given-names>K.</given-names></name>; <name name-style="western"><surname>Wu</surname><given-names>Z.</given-names></name>; <name name-style="western"><surname>Žemgulytė</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Arvaniti</surname><given-names>E.</given-names></name>; <name name-style="western"><surname>Beattie</surname><given-names>C.</given-names></name>; <name name-style="western"><surname>Bertolli</surname><given-names>O.</given-names></name>; <name name-style="western"><surname>Bridgland</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Cherepanov</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Congreve</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Cowen-Rivers</surname><given-names>A. I.</given-names></name>; <name name-style="western"><surname>Cowie</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Figurnov</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Fuchs</surname><given-names>F. B.</given-names></name>; <name name-style="western"><surname>Gladman</surname><given-names>H.</given-names></name>; <name name-style="western"><surname>Jain</surname><given-names>R.</given-names></name>; <name name-style="western"><surname>Khan</surname><given-names>Y. A.</given-names></name>; <name name-style="western"><surname>Low</surname><given-names>C. M. R.</given-names></name>; <name name-style="western"><surname>Perlin</surname><given-names>K.</given-names></name>; <name name-style="western"><surname>Potapenko</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Savy</surname><given-names>P.</given-names></name>; <name name-style="western"><surname>Singh</surname><given-names>S.</given-names></name>; <name name-style="western"><surname>Stecula</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Thillaisundaram</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Tong</surname><given-names>C.</given-names></name>; <name name-style="western"><surname>Yakneen</surname><given-names>S.</given-names></name>; <name name-style="western"><surname>Zhong</surname><given-names>E. D.</given-names></name>; <name name-style="western"><surname>Zielinski</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Žídek</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Bapst</surname><given-names>V.</given-names></name>; <name name-style="western"><surname>Kohli</surname><given-names>P.</given-names></name>; <name name-style="western"><surname>Jaderberg</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Hassabis</surname><given-names>D.</given-names></name>; <name name-style="western"><surname>Jumper</surname><given-names>J. M.</given-names></name>
+<article-title>Accurate Structure
+Prediction of
+Biomolecular Interactions with AlphaFold 3</article-title>. <source>Nature</source>
+<year>2024</year>, <volume>630</volume> (<issue>8016</issue>), <fpage>493</fpage>–<lpage>500</lpage>. <pub-id pub-id-type="doi">10.1038/s41586-024-07487-w</pub-id>.<pub-id pub-id-type="pmid">38718835</pub-id>
+<pub-id pub-id-type="pmcid">PMC11168924</pub-id></mixed-citation></ref><ref id="ref41"><mixed-citation publication-type="journal" id="cit41"><name name-style="western"><surname>Atchley</surname><given-names>W. R.</given-names></name>; <name name-style="western"><surname>Zhao</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Fernandes</surname><given-names>A. D.</given-names></name>; <name name-style="western"><surname>Drüke</surname><given-names>T.</given-names></name>
+<article-title>Solving the
+Protein Sequence Metric Problem</article-title>. <source>Proc. Natl.
+Acad. Sci. U.S.A.</source>
+<year>2005</year>, <volume>102</volume> (<issue>18</issue>), <fpage>6395</fpage>–<lpage>6400</lpage>. <pub-id pub-id-type="doi">10.1073/pnas.0408677102</pub-id>.<pub-id pub-id-type="pmid">15851683</pub-id>
+<pub-id pub-id-type="pmcid">PMC1088356</pub-id></mixed-citation></ref><ref id="ref42"><mixed-citation publication-type="journal" id="cit42"><name name-style="western"><surname>Zhang</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Yin</surname><given-names>J.-G.</given-names></name>; <name name-style="western"><surname>Hang</surname><given-names>B.-J.</given-names></name>; <name name-style="western"><surname>Cai</surname><given-names>S.</given-names></name>; <name name-style="western"><surname>He</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Zhou</surname><given-names>S.-G.</given-names></name>; <name name-style="western"><surname>Li</surname><given-names>S.-P.</given-names></name>
+<article-title>Cloning of a Novel
+Arylamidase Gene
+from <italic toggle="yes">Paracoccus</italic> sp. Strain FLN-7 That Hydrolyzes
+Amide Pesticides</article-title>. <source>Appl. Environ. Microbiol.</source>
+<year>2012</year>, <volume>78</volume> (<issue>14</issue>), <fpage>4848</fpage>–<lpage>4855</lpage>. <pub-id pub-id-type="doi">10.1128/AEM.00320-12</pub-id>.<pub-id pub-id-type="pmid">22544249</pub-id>
+<pub-id pub-id-type="pmcid">PMC3416369</pub-id></mixed-citation></ref><ref id="ref43"><mixed-citation publication-type="journal" id="cit43"><name name-style="western"><surname>Yun</surname><given-names>H.</given-names></name>; <name name-style="western"><surname>Liang</surname><given-names>B.</given-names></name>; <name name-style="western"><surname>Qiu</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Zhang</surname><given-names>L.</given-names></name>; <name name-style="western"><surname>Zhao</surname><given-names>Y.</given-names></name>; <name name-style="western"><surname>Jiang</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Wang</surname><given-names>A.</given-names></name>
+<article-title>Functional
+Characterization of a
+Novel Amidase Involved in Biotransformation of Triclocarban and Its
+Dehalogenated Congeners in <italic toggle="yes">Ochrobactrum</italic> sp. TCC-2</article-title>. <source>Environ. Sci. Technol.</source>
+<year>2017</year>, <volume>51</volume> (<issue>1</issue>), <fpage>291</fpage>–<lpage>300</lpage>. <pub-id pub-id-type="doi">10.1021/acs.est.6b04885</pub-id>.<pub-id pub-id-type="pmid">27966913</pub-id>
+</mixed-citation></ref><ref id="ref44"><mixed-citation publication-type="journal" id="cit44"><name name-style="western"><surname>Steffens</surname><given-names>S. D.</given-names></name>; <name name-style="western"><surname>Antell</surname><given-names>E. H.</given-names></name>; <name name-style="western"><surname>Cook</surname><given-names>E. K.</given-names></name>; <name name-style="western"><surname>Rao</surname><given-names>G.</given-names></name>; <name name-style="western"><surname>David Britt</surname><given-names>R.</given-names></name>; <name name-style="western"><surname>Sedlak</surname><given-names>D. L.</given-names></name>; <name name-style="western"><surname>Alvarez-Cohen</surname><given-names>L.</given-names></name>
+<article-title>An Artifact
+of Perfluoroalkyl Acid
+(PFAA) Removal Attributed to Sorption Processes in a Laccase Mediator
+System</article-title>. <source>Environ. Sci. Technol. Lett.</source>
+<year>2023</year>, <volume>10</volume> (<issue>10</issue>), <fpage>337</fpage>–<lpage>342</lpage>. <pub-id pub-id-type="doi">10.1021/acs.estlett.3c00173</pub-id>.<pub-id pub-id-type="pmid">37064824</pub-id>
+<pub-id pub-id-type="pmcid">PMC10100556</pub-id></mixed-citation></ref><ref id="ref45"><mixed-citation publication-type="journal" id="cit45"><name name-style="western"><surname>Zhang</surname><given-names>L.</given-names></name>; <name name-style="western"><surname>Yao</surname><given-names>G.</given-names></name>; <name name-style="western"><surname>Mao</surname><given-names>Z.</given-names></name>; <name name-style="western"><surname>Song</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Zhao</surname><given-names>R.</given-names></name>; <name name-style="western"><surname>Zhang</surname><given-names>X.</given-names></name>; <name name-style="western"><surname>Chen</surname><given-names>C.</given-names></name>; <name name-style="western"><surname>Zhang</surname><given-names>H.</given-names></name>; <name name-style="western"><surname>Liu</surname><given-names>Y.</given-names></name>; <name name-style="western"><surname>Wang</surname><given-names>G.</given-names></name>; <name name-style="western"><surname>Li</surname><given-names>F.</given-names></name>; <name name-style="western"><surname>Wu</surname><given-names>X.</given-names></name>
+<article-title>Experimental and Computational Approaches to Characterize
+a Novel Amidase That Initiates the Biodegradation of the Herbicide
+Propanil in <italic toggle="yes">Bosea</italic> sp. P5</article-title>. <source>J.
+Hazard. Mater.</source>
+<year>2023</year>, <volume>451</volume>, <elocation-id>131155</elocation-id><pub-id pub-id-type="doi">10.1016/j.jhazmat.2023.131155</pub-id>.<pub-id pub-id-type="pmid">36893600</pub-id>
+</mixed-citation></ref><ref id="ref47"><mixed-citation publication-type="journal" id="cit47"><name name-style="western"><surname>Smith</surname><given-names>M. D.</given-names></name>; <name name-style="western"><surname>Robinson</surname><given-names>S. L.</given-names></name>; <name name-style="western"><surname>Molomjamts</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Wackett</surname><given-names>L. P.</given-names></name>
+<article-title>Assay Reveals Microbial
+OleA Thiolases Initiating Hydrocarbon and β-Lactone Biosynthesis</article-title>. <source>MBio</source>
+<year>2020</year>, <volume>11</volume> (<issue>2</issue>), <elocation-id>e00111–20</elocation-id><pub-id pub-id-type="doi">10.1128/mBio.00111-20</pub-id>.<pub-id pub-id-type="pmid">32156808</pub-id>
+<pub-id pub-id-type="pmcid">PMC7064751</pub-id></mixed-citation></ref><ref id="ref48"><mixed-citation publication-type="journal" id="cit48"><name name-style="western"><surname>Bornscheuer</surname><given-names>U. T.</given-names></name>
+<article-title>Microbial
+Carboxyl Esterases: Classification, Properties and Application in
+Biocatalysis</article-title>. <source>FEMS Microbiol. Rev.</source>
+<year>2002</year>, <volume>26</volume> (<issue>1</issue>), <fpage>73</fpage>–<lpage>81</lpage>. <pub-id pub-id-type="doi">10.1111/j.1574-6976.2002.tb00599.x</pub-id>.<pub-id pub-id-type="pmid">12007643</pub-id>
+</mixed-citation></ref><ref id="ref49"><mixed-citation publication-type="journal" id="cit49"><name name-style="western"><surname>Bell</surname><given-names>E. L.</given-names></name>; <name name-style="western"><surname>Rosetto</surname><given-names>G.</given-names></name>; <name name-style="western"><surname>Ingraham</surname><given-names>M. A.</given-names></name>; <name name-style="western"><surname>Ramirez</surname><given-names>K. J.</given-names></name>; <name name-style="western"><surname>Lincoln</surname><given-names>C.</given-names></name>; <name name-style="western"><surname>Clarke</surname><given-names>R. W.</given-names></name>; <name name-style="western"><surname>Gado</surname><given-names>J. E.</given-names></name>; <name name-style="western"><surname>Lilly</surname><given-names>J. L.</given-names></name>; <name name-style="western"><surname>Kucharzyk</surname><given-names>K. H.</given-names></name>; <name name-style="western"><surname>Erickson</surname><given-names>E.</given-names></name>; <name name-style="western"><surname>Beckham</surname><given-names>G. T.</given-names></name>
+<article-title>Natural
+Diversity Screening, Assay
+Development, and Characterization of Nylon-6 Enzymatic Depolymerization</article-title>. <source>Nat. Commun.</source>
+<year>2024</year>, <volume>15</volume> (<issue>1</issue>), <elocation-id>1217</elocation-id><pub-id pub-id-type="doi">10.1038/s41467-024-45523-5</pub-id>.<pub-id pub-id-type="pmid">38336849</pub-id>
+<pub-id pub-id-type="pmcid">PMC10858056</pub-id></mixed-citation></ref><ref id="ref50"><mixed-citation publication-type="journal" id="cit50"><name name-style="western"><surname>Jones</surname><given-names>B. J.</given-names></name>; <name name-style="western"><surname>Evans</surname><given-names>R. L.</given-names><suffix>III</suffix></name>; <name name-style="western"><surname>Mylrea</surname><given-names>N. J.</given-names></name>; <name name-style="western"><surname>Chaudhury</surname><given-names>D.</given-names></name>; <name name-style="western"><surname>Luo</surname><given-names>C.</given-names></name>; <name name-style="western"><surname>Guan</surname><given-names>B.</given-names></name>; <name name-style="western"><surname>Pierce</surname><given-names>C. T.</given-names></name>; <name name-style="western"><surname>Gordon</surname><given-names>W. R.</given-names></name>; <name name-style="western"><surname>Wilmot</surname><given-names>C. M.</given-names></name>; <name name-style="western"><surname>Kazlauskas</surname><given-names>R. J.</given-names></name>
+<article-title>Larger
+Active Site in an Ancestral Hydroxynitrile Lyase
+Increases Catalytically Promiscuous Esterase Activity</article-title>. <source>PLoS One</source>
+<year>2020</year>, <volume>15</volume> (<issue>6</issue>), <elocation-id>e0235341</elocation-id><pub-id pub-id-type="doi">10.1371/journal.pone.0235341</pub-id>.<pub-id pub-id-type="pmid">32603354</pub-id>
+<pub-id pub-id-type="pmcid">PMC7326234</pub-id></mixed-citation></ref><ref id="ref100"><mixed-citation publication-type="journal" id="cit100"><name name-style="western"><surname>Suk</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Lorenz</surname><given-names>S.</given-names></name>; <name name-style="western"><surname>Kummerer</surname><given-names>K.</given-names></name>
+<article-title>Identification
+of Environmentally
+Biodegradable Scaffolds for the Benign Design of Quinolones and Related
+Substances</article-title>. <source>Sustain. Chem. Pharm.</source>
+<year>2023</year>, <volume>31</volume>, <fpage>100947</fpage><pub-id pub-id-type="doi">10.1016/j.scp.2022.100947</pub-id>.</mixed-citation></ref><ref id="ref101"><mixed-citation publication-type="journal" id="cit101"><name name-style="western"><surname>Schnarr</surname><given-names>L.</given-names></name>; <name name-style="western"><surname>Olsson</surname><given-names>O.</given-names></name>; <name name-style="western"><surname>Ohls</surname><given-names>S.</given-names></name>; <name name-style="western"><surname>Webersinn</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Mauch</surname><given-names>T.</given-names></name>; <name name-style="western"><surname>Kummerer</surname><given-names>K.</given-names></name>
+<article-title>Flavonoids as Benign
+Substitutes
+for More Harmful Synthetic Chemicals - Effects of Flavonoids and Their
+Transformation Products on Algae</article-title>. <source>Sustain. Chem.
+Pharm.</source>
+<year>2024</year>, <volume>38</volume>, <fpage>101473</fpage><pub-id pub-id-type="doi">10.1016/j.scp.2024.101473</pub-id>.</mixed-citation></ref><ref id="ref51"><mixed-citation publication-type="journal" id="cit51"><name name-style="western"><surname>Larkin</surname><given-names>M. A.</given-names></name>; <name name-style="western"><surname>Blackshields</surname><given-names>G.</given-names></name>; <name name-style="western"><surname>Brown</surname><given-names>N. P.</given-names></name>; <name name-style="western"><surname>Chenna</surname><given-names>R.</given-names></name>; <name name-style="western"><surname>McGettigan</surname><given-names>P. A.</given-names></name>; <name name-style="western"><surname>McWilliam</surname><given-names>H.</given-names></name>; <name name-style="western"><surname>Valentin</surname><given-names>F.</given-names></name>; <name name-style="western"><surname>Wallace</surname><given-names>I. M.</given-names></name>; <name name-style="western"><surname>Wilm</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Lopez</surname><given-names>R.</given-names></name>; <name name-style="western"><surname>Thompson</surname><given-names>J. D.</given-names></name>; <name name-style="western"><surname>Gibson</surname><given-names>T. J.</given-names></name>; <name name-style="western"><surname>Higgins</surname><given-names>D. G.</given-names></name>
+<article-title>Clustal
+W and Clustal X Version 2.0</article-title>. <source>Bioinformatics</source>
+<year>2007</year>, <volume>23</volume> (<issue>21</issue>), <fpage>2947</fpage>–<lpage>2948</lpage>. <pub-id pub-id-type="doi">10.1093/bioinformatics/btm404</pub-id>.<pub-id pub-id-type="pmid">17846036</pub-id>
+</mixed-citation></ref><ref id="ref52"><mixed-citation publication-type="journal" id="cit52"><name name-style="western"><surname>Waterhouse</surname><given-names>A. M.</given-names></name>; <name name-style="western"><surname>Procter</surname><given-names>J. B.</given-names></name>; <name name-style="western"><surname>Martin</surname><given-names>D. M. A.</given-names></name>; <name name-style="western"><surname>Clamp</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Barton</surname><given-names>G. J.</given-names></name>
+<article-title>Jalview
+Version 2--a Multiple Sequence Alignment Editor and Analysis Workbench</article-title>. <source>Bioinformatics</source>
+<year>2009</year>, <volume>25</volume> (<issue>9</issue>), <fpage>1189</fpage>–<lpage>1191</lpage>. <pub-id pub-id-type="doi">10.1093/bioinformatics/btp033</pub-id>.<pub-id pub-id-type="pmid">19151095</pub-id>
+<pub-id pub-id-type="pmcid">PMC2672624</pub-id></mixed-citation></ref><ref id="ref102"><mixed-citation publication-type="journal" id="cit102"><name name-style="western"><surname>Kouba</surname><given-names>P.</given-names></name>; <name name-style="western"><surname>Kohout</surname><given-names>P.</given-names></name>; <name name-style="western"><surname>Haddadi</surname><given-names>F.</given-names></name>; <name name-style="western"><surname>Bushuiev</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Samusevich</surname><given-names>R.</given-names></name>; <name name-style="western"><surname>Sedlar</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Damborsky</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Pluskal</surname><given-names>T.</given-names></name>; <name name-style="western"><surname>Sivic</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Mazurenko</surname><given-names>S.</given-names></name>
+<article-title>Machine Learning-Guided
+Protein Engineering</article-title>. <source>ACS Catal.</source>
+<year>2023</year>, <volume>13</volume> (<issue>21</issue>), <fpage>13863</fpage>–<lpage>13895</lpage>. <pub-id pub-id-type="doi">10.1021/acscatal.3c02743</pub-id>.<pub-id pub-id-type="pmid">37942269</pub-id>
+<pub-id pub-id-type="pmcid">PMC10629210</pub-id></mixed-citation></ref><ref id="ref103"><mixed-citation publication-type="journal" id="cit103"><name name-style="western"><surname>Lu</surname><given-names>H.</given-names></name>; <name name-style="western"><surname>Diaz</surname><given-names>D. J.</given-names></name>; <name name-style="western"><surname>Czarnecki</surname><given-names>N. J.</given-names></name>; <name name-style="western"><surname>Zhu</surname><given-names>C.</given-names></name>; <name name-style="western"><surname>Kim</surname><given-names>W.</given-names></name>; <name name-style="western"><surname>Shroff</surname><given-names>R.</given-names></name>; <name name-style="western"><surname>Acosta</surname><given-names>D. J.</given-names></name>; <name name-style="western"><surname>Alexander</surname><given-names>B. R.</given-names></name>; <name name-style="western"><surname>Cole</surname><given-names>H. O.</given-names></name>; <name name-style="western"><surname>Zhang</surname><given-names>Y.</given-names></name>; <name name-style="western"><surname>Lynd</surname><given-names>N. A.</given-names></name>; <name name-style="western"><surname>Ellington</surname><given-names>A. D.</given-names></name>; <name name-style="western"><surname>Alper</surname><given-names>H. S.</given-names></name>
+<article-title>Machine Learning-Aided
+Engineering of Hydrolases for
+PET Depolymerization</article-title>. <source>Nature</source>
+<year>2022</year>, <volume>604</volume> (<issue>7907</issue>), <fpage>662</fpage>–<lpage>667</lpage>. <pub-id pub-id-type="doi">10.1038/s41586-022-04599-z</pub-id>.<pub-id pub-id-type="pmid">35478237</pub-id>
+</mixed-citation></ref><ref id="ref53"><mixed-citation publication-type="journal" id="cit53"><name name-style="western"><surname>Coelho</surname><given-names>L. P.</given-names></name>; <name name-style="western"><surname>Alves</surname><given-names>R.</given-names></name>; <name name-style="western"><surname>Del Río</surname><given-names>Á.
+R.</given-names></name>; <name name-style="western"><surname>Myers</surname><given-names>P. N.</given-names></name>; <name name-style="western"><surname>Cantalapiedra</surname><given-names>C. P.</given-names></name>; <name name-style="western"><surname>Giner-Lamia</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Schmidt</surname><given-names>T. S.</given-names></name>; <name name-style="western"><surname>Mende</surname><given-names>D. R.</given-names></name>; <name name-style="western"><surname>Orakov</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Letunic</surname><given-names>I.</given-names></name>; <name name-style="western"><surname>Hildebrand</surname><given-names>F.</given-names></name>; <name name-style="western"><surname>Van Rossum</surname><given-names>T.</given-names></name>; <name name-style="western"><surname>Forslund</surname><given-names>S. K.</given-names></name>; <name name-style="western"><surname>Khedkar</surname><given-names>S.</given-names></name>; <name name-style="western"><surname>Maistrenko</surname><given-names>O. M.</given-names></name>; <name name-style="western"><surname>Pan</surname><given-names>S.</given-names></name>; <name name-style="western"><surname>Jia</surname><given-names>L.</given-names></name>; <name name-style="western"><surname>Ferretti</surname><given-names>P.</given-names></name>; <name name-style="western"><surname>Sunagawa</surname><given-names>S.</given-names></name>; <name name-style="western"><surname>Zhao</surname><given-names>X.-M.</given-names></name>; <name name-style="western"><surname>Nielsen</surname><given-names>H. B.</given-names></name>; <name name-style="western"><surname>Huerta-Cepas</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Bork</surname><given-names>P.</given-names></name>
+<article-title>Towards the Biogeography
+of Prokaryotic Genes</article-title>. <source>Nature</source>
+<year>2022</year>, <volume>601</volume> (<issue>7892</issue>), <fpage>252</fpage>–<lpage>256</lpage>. <pub-id pub-id-type="doi">10.1038/s41586-021-04233-4</pub-id>.<pub-id pub-id-type="pmid">34912116</pub-id>
+<pub-id pub-id-type="pmcid">PMC7613196</pub-id></mixed-citation></ref><ref id="ref54"><mixed-citation publication-type="journal" id="cit54"><name name-style="western"><surname>Spanogiannopoulos</surname><given-names>P.</given-names></name>; <name name-style="western"><surname>Kyaw</surname><given-names>T. S.</given-names></name>; <name name-style="western"><surname>Guthrie</surname><given-names>B. G. H.</given-names></name>; <name name-style="western"><surname>Bradley</surname><given-names>P. H.</given-names></name>; <name name-style="western"><surname>Lee</surname><given-names>J. V.</given-names></name>; <name name-style="western"><surname>Melamed</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Malig</surname><given-names>Y. N. A.</given-names></name>; <name name-style="western"><surname>Lam</surname><given-names>K. N.</given-names></name>; <name name-style="western"><surname>Gempis</surname><given-names>D.</given-names></name>; <name name-style="western"><surname>Sandy</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Kidder</surname><given-names>W.</given-names></name>; <name name-style="western"><surname>Van Blarigan</surname><given-names>E. L.</given-names></name>; <name name-style="western"><surname>Atreya</surname><given-names>C. E.</given-names></name>; <name name-style="western"><surname>Venook</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Gerona</surname><given-names>R. R.</given-names></name>; <name name-style="western"><surname>Goga</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Pollard</surname><given-names>K. S.</given-names></name>; <name name-style="western"><surname>Turnbaugh</surname><given-names>P. J.</given-names></name>
+<article-title>Host and
+Gut Bacteria Share Metabolic
+Pathways for Anti-Cancer Drug Metabolism</article-title>. <source>Nat.
+Microbiol</source>
+<year>2022</year>, <volume>7</volume> (<issue>10</issue>), <fpage>1605</fpage>–<lpage>1620</lpage>. <pub-id pub-id-type="doi">10.1038/s41564-022-01226-5</pub-id>.<pub-id pub-id-type="pmid">36138165</pub-id>
+<pub-id pub-id-type="pmcid">PMC9530025</pub-id></mixed-citation></ref><ref id="ref55"><mixed-citation publication-type="journal" id="cit55"><name name-style="western"><surname>Rios-Miguel</surname><given-names>A. B.</given-names></name>; <name name-style="western"><surname>Smith</surname><given-names>G. J.</given-names></name>; <name name-style="western"><surname>Cremers</surname><given-names>G.</given-names></name>; <name name-style="western"><surname>van Alen</surname><given-names>T.</given-names></name>; <name name-style="western"><surname>Jetten</surname><given-names>M. S. M.</given-names></name>; <name name-style="western"><surname>Op den Camp</surname><given-names>H. J. M.</given-names></name>; <name name-style="western"><surname>Welte</surname><given-names>C. U.</given-names></name>
+<article-title>Microbial Paracetamol
+Degradation Involves a High Diversity of Novel Amidase Enzyme Candidates</article-title>. <source>Water Res. X</source>
+<year>2022</year>, <volume>16</volume>, <elocation-id>100152</elocation-id><pub-id pub-id-type="doi">10.1016/j.wroa.2022.100152</pub-id>.<pub-id pub-id-type="pmid">36042984</pub-id>
+<pub-id pub-id-type="pmcid">PMC9420511</pub-id></mixed-citation></ref><ref id="ref56"><mixed-citation publication-type="journal" id="cit56"><name name-style="western"><surname>Phong
+Vo</surname><given-names>H. N.</given-names></name>; <name name-style="western"><surname>Le</surname><given-names>G. K.</given-names></name>; <name name-style="western"><surname>Hong Nguyen</surname><given-names>T. M.</given-names></name>; <name name-style="western"><surname>Bui</surname><given-names>X.-T.</given-names></name>; <name name-style="western"><surname>Nguyen</surname><given-names>K. H.</given-names></name>; <name name-style="western"><surname>Rene</surname><given-names>E. R.</given-names></name>; <name name-style="western"><surname>Vo</surname><given-names>T. D. H.</given-names></name>; <name name-style="western"><surname>Thanh Cao</surname><given-names>N.-D.</given-names></name>; <name name-style="western"><surname>Mohan</surname><given-names>R.</given-names></name>
+<article-title>Acetaminophen Micropollutant: Historical
+and Current Occurrences, Toxicity, Removal Strategies and Transformation
+Pathways in Different Environments</article-title>. <source>Chemosphere</source>
+<year>2019</year>, <volume>236</volume>, <elocation-id>124391</elocation-id><pub-id pub-id-type="doi">10.1016/j.chemosphere.2019.124391</pub-id>.<pub-id pub-id-type="pmid">31545194</pub-id>
+</mixed-citation></ref><ref id="ref57"><mixed-citation publication-type="journal" id="cit57"><name name-style="western"><surname>Wilkinson</surname><given-names>J. L.</given-names></name>; <name name-style="western"><surname>Boxall</surname><given-names>A. B. A.</given-names></name>; <name name-style="western"><surname>Kolpin</surname><given-names>D. W.</given-names></name>; <name name-style="western"><surname>Leung</surname><given-names>K. M. Y.</given-names></name>; <name name-style="western"><surname>Lai</surname><given-names>R. W. S.</given-names></name>; <name name-style="western"><surname>Galbán-Malagón</surname><given-names>C.</given-names></name>; <name name-style="western"><surname>Adell</surname><given-names>A. D.</given-names></name>; <name name-style="western"><surname>Mondon</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Metian</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Marchant</surname><given-names>R. A.</given-names></name>; <name name-style="western"><surname>Bouzas-Monroy</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Cuni-Sanchez</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Coors</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Carriquiriborde</surname><given-names>P.</given-names></name>; <name name-style="western"><surname>Rojo</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Gordon</surname><given-names>C.</given-names></name>; <name name-style="western"><surname>Cara</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Moermond</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Luarte</surname><given-names>T.</given-names></name>; <name name-style="western"><surname>Petrosyan</surname><given-names>V.</given-names></name>; <name name-style="western"><surname>Perikhanyan</surname><given-names>Y.</given-names></name>; <name name-style="western"><surname>Mahon</surname><given-names>C. S.</given-names></name>; <name name-style="western"><surname>McGurk</surname><given-names>C. J.</given-names></name>; <name name-style="western"><surname>Hofmann</surname><given-names>T.</given-names></name>; <name name-style="western"><surname>Kormoker</surname><given-names>T.</given-names></name>; <name name-style="western"><surname>Iniguez</surname><given-names>V.</given-names></name>; <name name-style="western"><surname>Guzman-Otazo</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Tavares</surname><given-names>J. L.</given-names></name>; <name name-style="western"><surname>Gildasio
+De Figueiredo</surname><given-names>F.</given-names></name>; <name name-style="western"><surname>Razzolini</surname><given-names>M. T. P.</given-names></name>; <name name-style="western"><surname>Dougnon</surname><given-names>V.</given-names></name>; <name name-style="western"><surname>Gbaguidi</surname><given-names>G.</given-names></name>; <name name-style="western"><surname>Traoré</surname><given-names>O.</given-names></name>; <name name-style="western"><surname>Blais</surname><given-names>J. M.</given-names></name>; <name name-style="western"><surname>Kimpe</surname><given-names>L. E.</given-names></name>; <name name-style="western"><surname>Wong</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Wong</surname><given-names>D.</given-names></name>; <name name-style="western"><surname>Ntchantcho</surname><given-names>R.</given-names></name>; <name name-style="western"><surname>Pizarro</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Ying</surname><given-names>G.-G.</given-names></name>; <name name-style="western"><surname>Chen</surname><given-names>C.-E.</given-names></name>; <name name-style="western"><surname>Páez</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Martínez-Lara</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Otamonga</surname><given-names>J.-P.</given-names></name>; <name name-style="western"><surname>Poté</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Ifo</surname><given-names>S. A.</given-names></name>; <name name-style="western"><surname>Wilson</surname><given-names>P.</given-names></name>; <name name-style="western"><surname>Echeverría-Sáenz</surname><given-names>S.</given-names></name>; <name name-style="western"><surname>Udikovic-Kolic</surname><given-names>N.</given-names></name>; <name name-style="western"><surname>Milakovic</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Fatta-Kassinos</surname><given-names>D.</given-names></name>; <name name-style="western"><surname>Ioannou-Ttofa</surname><given-names>L.</given-names></name>; <name name-style="western"><surname>Belušová</surname><given-names>V.</given-names></name>; <name name-style="western"><surname>Vymazal</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Cárdenas-Bustamante</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Kassa</surname><given-names>B. A.</given-names></name>; <name name-style="western"><surname>Garric</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Chaumot</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Gibba</surname><given-names>P.</given-names></name>; <name name-style="western"><surname>Kunchulia</surname><given-names>I.</given-names></name>; <name name-style="western"><surname>Seidensticker</surname><given-names>S.</given-names></name>; <name name-style="western"><surname>Lyberatos</surname><given-names>G.</given-names></name>; <name name-style="western"><surname>Halldórsson</surname><given-names>H. P.</given-names></name>; <name name-style="western"><surname>Melling</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Shashidhar</surname><given-names>T.</given-names></name>; <name name-style="western"><surname>Lamba</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Nastiti</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Supriatin</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Pourang</surname><given-names>N.</given-names></name>; <name name-style="western"><surname>Abedini</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Abdullah</surname><given-names>O.</given-names></name>; <name name-style="western"><surname>Gharbia</surname><given-names>S. S.</given-names></name>; <name name-style="western"><surname>Pilla</surname><given-names>F.</given-names></name>; <name name-style="western"><surname>Chefetz</surname><given-names>B.</given-names></name>; <name name-style="western"><surname>Topaz</surname><given-names>T.</given-names></name>; <name name-style="western"><surname>Yao</surname><given-names>K. M.</given-names></name>; <name name-style="western"><surname>Aubakirova</surname><given-names>B.</given-names></name>; <name name-style="western"><surname>Beisenova</surname><given-names>R.</given-names></name>; <name name-style="western"><surname>Olaka</surname><given-names>L.</given-names></name>; <name name-style="western"><surname>Mulu</surname><given-names>J. K.</given-names></name>; <name name-style="western"><surname>Chatanga</surname><given-names>P.</given-names></name>; <name name-style="western"><surname>Ntuli</surname><given-names>V.</given-names></name>; <name name-style="western"><surname>Blama</surname><given-names>N. T.</given-names></name>; <name name-style="western"><surname>Sherif</surname><given-names>S.</given-names></name>; <name name-style="western"><surname>Aris</surname><given-names>A. Z.</given-names></name>; <name name-style="western"><surname>Looi</surname><given-names>L. J.</given-names></name>; <name name-style="western"><surname>Niang</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Traore</surname><given-names>S. T.</given-names></name>; <name name-style="western"><surname>Oldenkamp</surname><given-names>R.</given-names></name>; <name name-style="western"><surname>Ogunbanwo</surname><given-names>O.</given-names></name>; <name name-style="western"><surname>Ashfaq</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Iqbal</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Abdeen</surname><given-names>Z.</given-names></name>; <name name-style="western"><surname>O’Dea</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Morales-Saldaña</surname><given-names>J. M.</given-names></name>; <name name-style="western"><surname>Custodio</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>de la Cruz</surname><given-names>H.</given-names></name>; <name name-style="western"><surname>Navarrete</surname><given-names>I.</given-names></name>; <name name-style="western"><surname>Carvalho</surname><given-names>F.</given-names></name>; <name name-style="western"><surname>Gogra</surname><given-names>A. B.</given-names></name>; <name name-style="western"><surname>Koroma</surname><given-names>B. M.</given-names></name>; <name name-style="western"><surname>Cerkvenik-Flajs</surname><given-names>V.</given-names></name>; <name name-style="western"><surname>Gombač</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Thwala</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Choi</surname><given-names>K.</given-names></name>; <name name-style="western"><surname>Kang</surname><given-names>H.</given-names></name>; <name name-style="western"><surname>Ladu</surname><given-names>J. L. C.</given-names></name>; <name name-style="western"><surname>Rico</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Amerasinghe</surname><given-names>P.</given-names></name>; <name name-style="western"><surname>Sobek</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Horlitz</surname><given-names>G.</given-names></name>; <name name-style="western"><surname>Zenker</surname><given-names>A. K.</given-names></name>; <name name-style="western"><surname>King</surname><given-names>A. C.</given-names></name>; <name name-style="western"><surname>Jiang</surname><given-names>J.-J.</given-names></name>; <name name-style="western"><surname>Kariuki</surname><given-names>R.</given-names></name>; <name name-style="western"><surname>Tumbo</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Tezel</surname><given-names>U.</given-names></name>; <name name-style="western"><surname>Onay</surname><given-names>T. T.</given-names></name>; <name name-style="western"><surname>Lejju</surname><given-names>J. B.</given-names></name>; <name name-style="western"><surname>Vystavna</surname><given-names>Y.</given-names></name>; <name name-style="western"><surname>Vergeles</surname><given-names>Y.</given-names></name>; <name name-style="western"><surname>Heinzen</surname><given-names>H.</given-names></name>; <name name-style="western"><surname>Pérez-Parada</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Sims</surname><given-names>D. B.</given-names></name>; <name name-style="western"><surname>Figy</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Good</surname><given-names>D.</given-names></name>; <name name-style="western"><surname>Teta</surname><given-names>C.</given-names></name>
+<article-title>Pharmaceutical Pollution of the World’s
+Rivers</article-title>. <source>Proc. Natl. Acad. Sci. U.S.A.</source>
+<year>2022</year>, <volume>119</volume> (<issue>8</issue>), <elocation-id>e2113947119</elocation-id><pub-id pub-id-type="doi">10.1073/pnas.2113947119</pub-id>.<pub-id pub-id-type="pmid">35165193</pub-id>
+<pub-id pub-id-type="pmcid">PMC8872717</pub-id></mixed-citation></ref><ref id="ref58"><mixed-citation publication-type="journal" id="cit58"><name name-style="western"><surname>McLain</surname><given-names>N. K.</given-names></name>; <name name-style="western"><surname>Gomez</surname><given-names>M. Y.</given-names></name>; <name name-style="western"><surname>Gachomo</surname><given-names>E. W.</given-names></name>
+<article-title>Acetaminophen Levels Found in Recycled
+Wastewater Alter Soil Microbial Community Structure and Functional
+Diversity</article-title>. <source>Microb. Ecol.</source>
+<year>2023</year>, <volume>85</volume> (<issue>4</issue>), <fpage>1448</fpage>–<lpage>1462</lpage>. <pub-id pub-id-type="doi">10.1007/s00248-022-02022-8</pub-id>.<pub-id pub-id-type="pmid">35507048</pub-id>
+<pub-id pub-id-type="pmcid">PMC10167187</pub-id></mixed-citation></ref><ref id="ref59"><mixed-citation publication-type="journal" id="cit59"><name name-style="western"><surname>Li</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Ye</surname><given-names>Q.</given-names></name>; <name name-style="western"><surname>Gan</surname><given-names>J.</given-names></name>
+<article-title>Degradation
+and Transformation Products of Acetaminophen
+in Soil</article-title>. <source>Water Res.</source>
+<year>2014</year>, <volume>49</volume>, <fpage>44</fpage>–<lpage>52</lpage>. <pub-id pub-id-type="doi">10.1016/j.watres.2013.11.008</pub-id>.<pub-id pub-id-type="pmid">24316789</pub-id>
+</mixed-citation></ref><ref id="ref60"><mixed-citation publication-type="journal" id="cit60"><name name-style="western"><surname>Zhang</surname><given-names>L.</given-names></name>; <name name-style="western"><surname>Hang</surname><given-names>P.</given-names></name>; <name name-style="western"><surname>Zhou</surname><given-names>X.</given-names></name>; <name name-style="western"><surname>Dai</surname><given-names>C.</given-names></name>; <name name-style="western"><surname>He</surname><given-names>Z.</given-names></name>; <name name-style="western"><surname>Jiang</surname><given-names>J.</given-names></name>
+<article-title>Mineralization of the Herbicide Swep by a Two-Strain
+Consortium and
+Characterization of a New Amidase for Hydrolyzing Swep</article-title>. <source>Microb. Cell Fact.</source>
+<year>2020</year>, <volume>19</volume> (<issue>1</issue>), <elocation-id>4</elocation-id><pub-id pub-id-type="doi">10.1186/s12934-020-1276-9</pub-id>.<pub-id pub-id-type="pmid">31910844</pub-id>
+<pub-id pub-id-type="pmcid">PMC6945715</pub-id></mixed-citation></ref><ref id="ref61"><mixed-citation publication-type="journal" id="cit61"><name name-style="western"><surname>Sun</surname><given-names>L.</given-names></name>; <name name-style="western"><surname>Gao</surname><given-names>X.</given-names></name>; <name name-style="western"><surname>Chen</surname><given-names>W.</given-names></name>; <name name-style="western"><surname>Huang</surname><given-names>K.</given-names></name>; <name name-style="western"><surname>Bai</surname><given-names>N.</given-names></name>; <name name-style="western"><surname>Lyu</surname><given-names>W.</given-names></name>; <name name-style="western"><surname>Liu</surname><given-names>H.</given-names></name>
+<article-title>Characterization of the Propham Biodegradation Pathway
+in <italic toggle="yes">Starkeya</italic> sp. Strain YW6 and Cloning of a Novel
+Amidase Gene
+mmH</article-title>. <source>J. Agric. Food Chem.</source>
+<year>2019</year>, <volume>67</volume> (<issue>15</issue>), <fpage>4193</fpage>–<lpage>4199</lpage>. <pub-id pub-id-type="doi">10.1021/acs.jafc.8b06928</pub-id>.<pub-id pub-id-type="pmid">30864436</pub-id>
+</mixed-citation></ref><ref id="ref62"><mixed-citation publication-type="journal" id="cit62"><name name-style="western"><surname>Zeyer</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Kearney</surname><given-names>P. C.</given-names></name>
+<article-title>Microbial Metabolism
+of Propanil and 3,4-Dichloroaniline</article-title>. <source>Pestic.
+Biochem. Physiol.</source>
+<year>1982</year>, <volume>17</volume> (<issue>3</issue>), <fpage>224</fpage>–<lpage>231</lpage>. <pub-id pub-id-type="doi">10.1016/0048-3575(82)90133-X</pub-id>.</mixed-citation></ref><ref id="ref63"><mixed-citation publication-type="journal" id="cit63"><name name-style="western"><surname>Sule</surname><given-names>R. O.</given-names></name>; <name name-style="western"><surname>Condon</surname><given-names>L.</given-names></name>; <name name-style="western"><surname>Gomes</surname><given-names>A. V.</given-names></name>
+<article-title>A Common Feature
+of Pesticides: Oxidative
+Stress-The Role of Oxidative Stress in Pesticide-Induced Toxicity</article-title>. <source>Oxid. Med. Cell. Longevity</source>
+<year>2022</year>, <volume>2022</volume>, <elocation-id>5563759</elocation-id><pub-id pub-id-type="doi">10.1155/2022/5563759</pub-id>.<pub-id pub-id-type="pmcid">PMC8791758</pub-id><pub-id pub-id-type="pmid">35096268</pub-id></mixed-citation></ref><ref id="ref64"><mixed-citation publication-type="journal" id="cit64"><name name-style="western"><surname>Cui</surname><given-names>Y.</given-names></name>; <name name-style="western"><surname>Gao</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Guo</surname><given-names>Y.</given-names></name>; <name name-style="western"><surname>Li</surname><given-names>Z.</given-names></name>; <name name-style="western"><surname>Wang</surname><given-names>Z.</given-names></name>; <name name-style="western"><surname>Zhao</surname><given-names>Y.</given-names></name>
+<article-title>Unraveling
+the Impact and Mechanism of Antipyretic Paracetamol on Intergenera
+Conjugative Plasmid Transfer</article-title>. <source>Environ. Res.</source>
+<year>2022</year>, <volume>215</volume> (<issue>Pt 1</issue>), <elocation-id>114263</elocation-id><pub-id pub-id-type="doi">10.1016/j.envres.2022.114263</pub-id>.<pub-id pub-id-type="pmid">36075475</pub-id>
+</mixed-citation></ref><ref id="ref65"><mixed-citation publication-type="journal" id="cit65"><name name-style="western"><surname>Murray</surname><given-names>L. M.</given-names></name>; <name name-style="western"><surname>Hayes</surname><given-names>A.</given-names></name>; <name name-style="western"><surname>Snape</surname><given-names>J.</given-names></name>; et al. <article-title>Co-selection for antibiotic
+resistance by environmental contaminants</article-title>. <source>npj
+Antimicrob. Resist.</source>
+<year>2024</year>, <volume>2</volume>, <elocation-id>9</elocation-id><pub-id pub-id-type="doi">10.1038/s44259-024-00026-7</pub-id>.<pub-id pub-id-type="pmcid">PMC11721650</pub-id><pub-id pub-id-type="pmid">39843965</pub-id></mixed-citation></ref><ref id="ref66"><mixed-citation publication-type="book" id="cit66"><person-group person-group-type="allauthors"><name name-style="western"><surname>Khan</surname><given-names>M. M. T.</given-names></name>; <name name-style="western"><surname>Mickols</surname><given-names>W. E.</given-names></name>; <name name-style="western"><surname>Sklar</surname><given-names>L.</given-names></name></person-group><source>Environmental Contaminants
+in Aquatic Systems and Chemical Safety for Environmental and Human
+Health, Vol. II</source>; <publisher-name>Frontiers Media SA</publisher-name>, <year>2023</year>.<pub-id pub-id-type="doi" assigning-authority="pmc">10.3389/fpubh.2023.1157834</pub-id><pub-id pub-id-type="pmcid">PMC10299172</pub-id><pub-id pub-id-type="pmid">37383263</pub-id></mixed-citation></ref><ref id="ref67"><mixed-citation publication-type="journal" id="cit67"><name name-style="western"><surname>Achermann</surname><given-names>S.</given-names></name>; <name name-style="western"><surname>Bianco</surname><given-names>V.</given-names></name>; <name name-style="western"><surname>Mansfeldt</surname><given-names>C. B.</given-names></name>; <name name-style="western"><surname>Vogler</surname><given-names>B.</given-names></name>; <name name-style="western"><surname>Kolvenbach</surname><given-names>B. A.</given-names></name>; <name name-style="western"><surname>Corvini</surname><given-names>P. F. X.</given-names></name>; <name name-style="western"><surname>Fenner</surname><given-names>K.</given-names></name>
+<article-title>Biotransformation of Sulfonamide
+Antibiotics in Activated Sludge: The Formation of Pterin-Conjugates
+Leads to Sustained Risk</article-title>. <source>Environ. Sci. Technol.</source>
+<year>2018</year>, <volume>52</volume> (<issue>11</issue>), <fpage>6265</fpage>–<lpage>6274</lpage>. <pub-id pub-id-type="doi">10.1021/acs.est.7b06716</pub-id>.<pub-id pub-id-type="pmid">29706069</pub-id>
+</mixed-citation></ref><ref id="ref68"><mixed-citation publication-type="journal" id="cit68"><person-group><name name-style="western"><surname>Attrah</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Scharer</surname><given-names>M. R.</given-names></name>; <name name-style="western"><surname>Esposito</surname><given-names>M.</given-names></name>; <name name-style="western"><surname>Gionchetta</surname><given-names>G.</given-names></name>; <name name-style="western"><surname>Burgmann</surname><given-names>H.</given-names></name>; <name name-style="western"><surname>Lens</surname><given-names>P. N. L.</given-names></name>; <name name-style="western"><surname>Fenner</surname><given-names>K.</given-names></name>; <name name-style="western"><surname>van de Vossenberg</surname><given-names>J.</given-names></name>; <name name-style="western"><surname>Robinson</surname><given-names>S. L.</given-names></name></person-group><article-title>Disentangling Abiotic and Biotic Effects
+of Treated Wastewater on Stream Biofilm Resistomes Enables the Discovery
+of a New Planctomycete Beta-Lactamase</article-title>. <source>Microbiome</source><year>2024</year>, <volume>12</volume> ( (<issue>1</issue>), ), <pub-id pub-id-type="doi">10.1186/s40168-024-01879-w</pub-id>.<pub-id pub-id-type="pmcid">PMC11380404</pub-id><pub-id pub-id-type="pmid">39242535</pub-id></mixed-citation></ref></ref-list></back></article>

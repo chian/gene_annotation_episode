@@ -1,0 +1,31 @@
+{
+  "case": "duplicate_occurrences",
+  "argv": [
+    "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/installation/usr/bin/bedtools",
+    "intersect",
+    "-a",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_native_2026-10-27_421/run002/work/duplicate_occurrences.A.bed",
+    "-b",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_genomic_overlap_native_2026-10-27_421/run002/work/duplicate_occurrences.B.bed",
+    "-wo",
+    "-sorted"
+  ],
+  "returncode": 0,
+  "subprocess_wall_seconds": 0.0012780310353264213,
+  "expected_lines": [
+    "chr1\t0\t10\tA1\tchr1\t5\t15\tB1\t5",
+    "chr1\t0\t10\tA1\tchr1\t5\t15\tB2\t5",
+    "chr1\t0\t10\tA2\tchr1\t5\t15\tB1\t5",
+    "chr1\t0\t10\tA2\tchr1\t5\t15\tB2\t5"
+  ],
+  "actual_lines": [
+    "chr1\t0\t10\tA1\tchr1\t5\t15\tB1\t5",
+    "chr1\t0\t10\tA1\tchr1\t5\t15\tB2\t5",
+    "chr1\t0\t10\tA2\tchr1\t5\t15\tB1\t5",
+    "chr1\t0\t10\tA2\tchr1\t5\t15\tB2\t5"
+  ],
+  "exact_match": true,
+  "native_pair_count": 4,
+  "native_pairwise_width_sum": 20,
+  "stdout_sha256": "0e845140e74b9db0a6444548e5f8a6910c40e3e875892c7e8a0e3ea1b4d57748"
+}

@@ -1,0 +1,65 @@
+{
+  "service": "ncbi_blast",
+  "url": "https://blast.ncbi.nlm.nih.gov/Blast.cgi",
+  "request": {
+    "action": "status",
+    "rid": "DTKE1D4G016",
+    "program": "blastp",
+    "database": "swissprot",
+    "hitlist_size": 50,
+    "query_sha256": null
+  },
+  "retrieved_at": "2026-10-24T16:00:29.892377+00:00",
+  "media_type": "text/html",
+  "transport": {
+    "status": 200,
+    "effective_url": "https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Get&FORMAT_OBJECT=SearchInfo&RID=DTKE1D4G016&tool=gene-annotation-episode&email=chia%40anl.gov",
+    "headers": {
+      "Date": "Sat, 24 Oct 2026 16:00:29 GMT",
+      "Server": "Apache",
+      "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload",
+      "Referrer-Policy": "origin-when-cross-origin",
+      "Content-Security-Policy": "upgrade-insecure-requests",
+      "Access-Control-Allow-Headers": "ncbi-phid,ncbi-sid",
+      "Cache-Control": "private",
+      "NCBI-PHID": "2196DC7AADCD61D10000000000000001.m_1",
+      "NCBI-SID": "2196DC7AADCD61D1_0000SID",
+      "Content-Type": "text/html",
+      "Set-Cookie": "BlastCubbyImported=passive; domain=ncbi.nlm.nih.gov, MyBlastUser=12SGBLTd3KZfRCPEH5F367D308; domain=.ncbi.nlm.nih.gov; path=/, ncbi_sid=2196DC7AADCD61D1_0000SID; domain=.nih.gov; path=/; expires=Sun, 24 Oct 2027 16:00:29 GMT",
+      "X-UA-Compatible": "IE=Edge",
+      "X-XSS-Protection": "1; mode=block",
+      "Vary": "Origin",
+      "Keep-Alive": "timeout=1, max=10",
+      "Connection": "Keep-Alive",
+      "Transfer-Encoding": "chunked"
+    },
+    "request": {
+      "method": "GET",
+      "url": "https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Get&FORMAT_OBJECT=SearchInfo&RID=DTKE1D4G016&tool=gene-annotation-episode&email=chia%40anl.gov",
+      "headers": {
+        "User-Agent": "ncbi-blast-skill/1.0 (+requests) tool=gene-annotation-episode email=chia@anl.gov",
+        "Accept-Encoding": "gzip, deflate",
+        "Accept": "*/*",
+        "Connection": "keep-alive"
+      },
+      "body_base64": "",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "script": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/ncbi-blast-skill/scripts/ncbi_blast.py",
+    "script_sha256": "74970756e0a03edaa8ed92328a41c173e50f976829ea8918e6ca973823f1bc1a",
+    "representation": "http_entity_bytes_via_installed_blast_client",
+    "client_envelope": {
+      "ok": true,
+      "source": "ncbi-blast",
+      "action": "status",
+      "rid": "DTKE1D4G016",
+      "status": "WAITING",
+      "has_hits": false,
+      "warnings": []
+    },
+    "provider_access_dir": "/home/chia/.cache/gene_annotation_episode/provider_access",
+    "spacing_scope": "cooperating_clients_using_configured_directory",
+    "rate_clock_meaning": "conservative_worker_completion_or_failure",
+    "automatic_redirects": false
+  }
+}

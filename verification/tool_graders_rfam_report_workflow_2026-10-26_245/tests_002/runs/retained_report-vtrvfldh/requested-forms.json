@@ -1,0 +1,641 @@
+{
+  "handoff": {
+    "additionalProperties": false,
+    "properties": {
+      "completed": {
+        "type": "boolean",
+        "x-source": "execution_completed"
+      },
+      "references": {
+        "items": {
+          "format": "reference",
+          "type": "string",
+          "x-reference-namespace": "execution_handoff"
+        },
+        "type": "array",
+        "uniqueItems": true,
+        "x-source": "execution_handoff_refs"
+      },
+      "yield": {
+        "additionalProperties": false,
+        "properties": {
+          "completed_actions": {
+            "description": "Completed own actions at this child's level; an investigation commissioned by it counts once.",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "continuation_cost": {
+            "description": "The actual child's decision threshold in its configured controller units.",
+            "minimum": 0,
+            "type": "number"
+          },
+          "expected_next_gain": {
+            "additionalProperties": false,
+            "properties": {
+              "alpha": {
+                "description": "Original band parameter: -1 unavailable; 0 exact; otherwise the configured tail parameter.",
+                "type": "number"
+              },
+              "lower": {
+                "description": "The original band's lower coordinate; read status_code before interpreting it.",
+                "type": "number"
+              },
+              "status_code": {
+                "description": "0 normal; -1 insufficient observations; -2 unidentifiable. Coded coordinates are not negative forecasts.",
+                "enum": [
+                  0,
+                  -1,
+                  -2
+                ],
+                "type": "integer"
+              },
+              "uncertainty_code": {
+                "description": "-1 unavailable; 0 exact; 1 Chebyshev; 2 Laplace approximation. The code does not establish calibrated coverage.",
+                "enum": [
+                  -1,
+                  0,
+                  1,
+                  2
+                ],
+                "type": "integer"
+              },
+              "upper": {
+                "description": "The original band's upper coordinate; read status_code before interpreting it.",
+                "type": "number"
+              },
+              "value": {
+                "description": "The original band point in this child's configured controller units.",
+                "type": "number"
+              }
+            },
+            "required": [
+              "value",
+              "lower",
+              "upper",
+              "status_code",
+              "uncertainty_code",
+              "alpha"
+            ],
+            "type": "object"
+          },
+          "stop_requested": {
+            "description": "The child's controller decision, not a parent instruction, job cancellation or scientific completion.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "completed_actions",
+          "expected_next_gain",
+          "continuation_cost",
+          "stop_requested"
+        ],
+        "type": [
+          "object",
+          "null"
+        ],
+        "x-source": "episode_yield"
+      }
+    },
+    "required": [
+      "completed",
+      "references",
+      "yield"
+    ],
+    "type": "object"
+  },
+  "results": {
+    "additionalProperties": false,
+    "properties": {
+      "completed": {
+        "type": "boolean",
+        "x-source": "execution_completed"
+      },
+      "measurements": {
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "family_accession": {
+              "format": "identifier",
+              "type": [
+                "string",
+                "null"
+              ],
+              "x-reference-namespace": "rfam_family"
+            },
+            "measured": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "enum": [
+                      "native_score_bits",
+                      "native_evalue",
+                      "native_gc_fraction",
+                      "native_start_1i",
+                      "native_end_1i",
+                      "query_length_nt",
+                      "query_span_nt",
+                      "query_span_fraction",
+                      "display_model_from",
+                      "display_model_to",
+                      "represented_model_positions",
+                      "model_length_positions",
+                      "model_coverage_fraction",
+                      "model_consensus_equal_count",
+                      "model_consensus_compared_count",
+                      "model_consensus_equal_fraction",
+                      "selected_row_count",
+                      "valid_interval_row_count",
+                      "query_strand_sum_span_nt",
+                      "query_strand_union_span_nt",
+                      "query_strand_union_fraction",
+                      "query_strand_overlap_excess_nt",
+                      "native_bias_bits",
+                      "native_alignment_accuracy",
+                      "native_rank",
+                      "native_model_from_1i",
+                      "native_model_to_1i",
+                      "native_model_span_positions",
+                      "represented_query_positions",
+                      "query_insert_count",
+                      "model_delete_count",
+                      "truncated_model_count_5p",
+                      "truncated_model_count_3p",
+                      "local_end_model_omitted_count",
+                      "local_end_query_count"
+                    ],
+                    "type": "string"
+                  },
+                  "unit": {
+                    "enum": [
+                      "bits",
+                      "comparisons",
+                      "expected_hits",
+                      "fraction",
+                      "model_position_1i",
+                      "model_positions",
+                      "nt",
+                      "nt_position_1i",
+                      "rank",
+                      "rows"
+                    ],
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "name",
+                  "value",
+                  "unit"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "model_name": {
+              "format": "identifier",
+              "type": [
+                "string",
+                "null"
+              ],
+              "x-reference-namespace": "rfam_model"
+            },
+            "population_complete": {
+              "type": "boolean"
+            },
+            "query_occurrence_key": {
+              "format": "identifier",
+              "type": [
+                "string",
+                "null"
+              ],
+              "x-reference-namespace": "rfam_query"
+            },
+            "record_key": {
+              "format": "identifier",
+              "type": "string",
+              "x-reference-namespace": "rfam_record"
+            },
+            "source_ref": {
+              "format": "reference",
+              "type": "string",
+              "x-reference-namespace": "execution_result"
+            },
+            "strand": {
+              "format": "alignment_strand",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "unavailable": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "enum": [
+                      "native_score_bits",
+                      "native_evalue",
+                      "native_gc_fraction",
+                      "native_start_1i",
+                      "native_end_1i",
+                      "query_length_nt",
+                      "query_span_nt",
+                      "query_span_fraction",
+                      "display_model_from",
+                      "display_model_to",
+                      "represented_model_positions",
+                      "model_length_positions",
+                      "model_coverage_fraction",
+                      "model_consensus_equal_count",
+                      "model_consensus_compared_count",
+                      "model_consensus_equal_fraction",
+                      "selected_row_count",
+                      "valid_interval_row_count",
+                      "query_strand_sum_span_nt",
+                      "query_strand_union_span_nt",
+                      "query_strand_union_fraction",
+                      "query_strand_overlap_excess_nt",
+                      "native_bias_bits",
+                      "native_alignment_accuracy",
+                      "native_rank",
+                      "native_model_from_1i",
+                      "native_model_to_1i",
+                      "native_model_span_positions",
+                      "represented_query_positions",
+                      "query_insert_count",
+                      "model_delete_count",
+                      "truncated_model_count_5p",
+                      "truncated_model_count_3p",
+                      "local_end_model_omitted_count",
+                      "local_end_query_count"
+                    ],
+                    "type": "string"
+                  },
+                  "reason": {
+                    "enum": [
+                      "alignment_conflict",
+                      "alignment_missing",
+                      "alignment_not_parsed",
+                      "alignment_unsupported",
+                      "ambiguous_rank",
+                      "coordinates_invalid",
+                      "format_unverified",
+                      "identity_rejected",
+                      "invalid_native_value",
+                      "model_binding_unverified",
+                      "model_length_unavailable",
+                      "model_metadata_conflict",
+                      "native_cell_conflict",
+                      "no_determinate_pairs",
+                      "not_reported",
+                      "partial_body"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name",
+                  "reason"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "source_ref",
+            "record_key",
+            "query_occurrence_key",
+            "family_accession",
+            "strand",
+            "measured",
+            "unavailable",
+            "population_complete",
+            "model_name"
+          ],
+          "type": "object"
+        },
+        "type": "array",
+        "x-source": "rfam_report_rows"
+      },
+      "populations": {
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "available_row_count": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "family": {
+              "enum": [
+                "hit",
+                "query_strand"
+              ],
+              "type": "string"
+            },
+            "more_rows": {
+              "type": "boolean"
+            },
+            "population_complete": {
+              "type": "boolean"
+            },
+            "selected_row_count": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "source_ref": {
+              "format": "reference",
+              "type": "string",
+              "x-reference-namespace": "execution_result"
+            }
+          },
+          "required": [
+            "source_ref",
+            "family",
+            "available_row_count",
+            "selected_row_count",
+            "more_rows",
+            "population_complete"
+          ],
+          "type": "object"
+        },
+        "type": "array",
+        "x-source": "rfam_result_populations"
+      }
+    },
+    "required": [
+      "measurements",
+      "populations",
+      "completed"
+    ],
+    "type": "object"
+  },
+  "scientific": {
+    "additionalProperties": false,
+    "properties": {
+      "measurements": {
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "family_accession": {
+              "format": "identifier",
+              "type": [
+                "string",
+                "null"
+              ],
+              "x-reference-namespace": "rfam_family"
+            },
+            "measured": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "enum": [
+                      "native_score_bits",
+                      "native_evalue",
+                      "native_gc_fraction",
+                      "native_start_1i",
+                      "native_end_1i",
+                      "query_length_nt",
+                      "query_span_nt",
+                      "query_span_fraction",
+                      "display_model_from",
+                      "display_model_to",
+                      "represented_model_positions",
+                      "model_length_positions",
+                      "model_coverage_fraction",
+                      "model_consensus_equal_count",
+                      "model_consensus_compared_count",
+                      "model_consensus_equal_fraction",
+                      "selected_row_count",
+                      "valid_interval_row_count",
+                      "query_strand_sum_span_nt",
+                      "query_strand_union_span_nt",
+                      "query_strand_union_fraction",
+                      "query_strand_overlap_excess_nt",
+                      "native_bias_bits",
+                      "native_alignment_accuracy",
+                      "native_rank",
+                      "native_model_from_1i",
+                      "native_model_to_1i",
+                      "native_model_span_positions",
+                      "represented_query_positions",
+                      "query_insert_count",
+                      "model_delete_count",
+                      "truncated_model_count_5p",
+                      "truncated_model_count_3p",
+                      "local_end_model_omitted_count",
+                      "local_end_query_count"
+                    ],
+                    "type": "string"
+                  },
+                  "unit": {
+                    "enum": [
+                      "bits",
+                      "comparisons",
+                      "expected_hits",
+                      "fraction",
+                      "model_position_1i",
+                      "model_positions",
+                      "nt",
+                      "nt_position_1i",
+                      "rank",
+                      "rows"
+                    ],
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "name",
+                  "value",
+                  "unit"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "model_name": {
+              "format": "identifier",
+              "type": [
+                "string",
+                "null"
+              ],
+              "x-reference-namespace": "rfam_model"
+            },
+            "population_complete": {
+              "type": "boolean"
+            },
+            "query_occurrence_key": {
+              "format": "identifier",
+              "type": [
+                "string",
+                "null"
+              ],
+              "x-reference-namespace": "rfam_query"
+            },
+            "record_key": {
+              "format": "identifier",
+              "type": "string",
+              "x-reference-namespace": "rfam_record"
+            },
+            "source_ref": {
+              "format": "reference",
+              "type": "string",
+              "x-reference-namespace": "execution_result"
+            },
+            "strand": {
+              "format": "alignment_strand",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "unavailable": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "enum": [
+                      "native_score_bits",
+                      "native_evalue",
+                      "native_gc_fraction",
+                      "native_start_1i",
+                      "native_end_1i",
+                      "query_length_nt",
+                      "query_span_nt",
+                      "query_span_fraction",
+                      "display_model_from",
+                      "display_model_to",
+                      "represented_model_positions",
+                      "model_length_positions",
+                      "model_coverage_fraction",
+                      "model_consensus_equal_count",
+                      "model_consensus_compared_count",
+                      "model_consensus_equal_fraction",
+                      "selected_row_count",
+                      "valid_interval_row_count",
+                      "query_strand_sum_span_nt",
+                      "query_strand_union_span_nt",
+                      "query_strand_union_fraction",
+                      "query_strand_overlap_excess_nt",
+                      "native_bias_bits",
+                      "native_alignment_accuracy",
+                      "native_rank",
+                      "native_model_from_1i",
+                      "native_model_to_1i",
+                      "native_model_span_positions",
+                      "represented_query_positions",
+                      "query_insert_count",
+                      "model_delete_count",
+                      "truncated_model_count_5p",
+                      "truncated_model_count_3p",
+                      "local_end_model_omitted_count",
+                      "local_end_query_count"
+                    ],
+                    "type": "string"
+                  },
+                  "reason": {
+                    "enum": [
+                      "alignment_conflict",
+                      "alignment_missing",
+                      "alignment_not_parsed",
+                      "alignment_unsupported",
+                      "ambiguous_rank",
+                      "coordinates_invalid",
+                      "format_unverified",
+                      "identity_rejected",
+                      "invalid_native_value",
+                      "model_binding_unverified",
+                      "model_length_unavailable",
+                      "model_metadata_conflict",
+                      "native_cell_conflict",
+                      "no_determinate_pairs",
+                      "not_reported",
+                      "partial_body"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name",
+                  "reason"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "source_ref",
+            "record_key",
+            "query_occurrence_key",
+            "family_accession",
+            "strand",
+            "measured",
+            "unavailable",
+            "population_complete",
+            "model_name"
+          ],
+          "type": "object"
+        },
+        "type": "array",
+        "x-source": "rfam_report_rows"
+      },
+      "populations": {
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "available_row_count": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "family": {
+              "enum": [
+                "hit",
+                "query_strand"
+              ],
+              "type": "string"
+            },
+            "more_rows": {
+              "type": "boolean"
+            },
+            "population_complete": {
+              "type": "boolean"
+            },
+            "selected_row_count": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "source_ref": {
+              "format": "reference",
+              "type": "string",
+              "x-reference-namespace": "execution_result"
+            }
+          },
+          "required": [
+            "source_ref",
+            "family",
+            "available_row_count",
+            "selected_row_count",
+            "more_rows",
+            "population_complete"
+          ],
+          "type": "object"
+        },
+        "type": "array",
+        "x-source": "rfam_result_populations"
+      }
+    },
+    "required": [
+      "measurements",
+      "populations"
+    ],
+    "type": "object"
+  }
+}

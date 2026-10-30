@@ -1,0 +1,558 @@
+--- gene_annotation_episode/literature_episodes.py
++++ gene_annotation_episode/literature_episodes.py
+@@ -65,7 +65,7 @@
+ }
+ 
+ 
+-def _population_catalog(*, ratio_source_population=False, controlled_response_population=False):
++def _population_catalog(*, ratio_source_population=False, controlled_response_population=False, gel_population=False):
+     """Actual child population operations, independent of episode identity."""
+     result = []
+     from .literature_rate_storage import rate_population_schema
+@@ -156,6 +156,12 @@
+         result.append({"name": "literature.controlled_response.source_v3.populate",
+             "description": CONTROLLED_RESPONSE_OPERATION_DESCRIPTION,
+             "input_schema": controlled_response_population_schema()})
++    if gel_population:
++        from .literature_gel_storage import gel_population_schema
++        from .literature_gel_prompt import GEL_OPERATION_DESCRIPTION
++        result.append({"name": "literature.gel.populate",
++            "description": GEL_OPERATION_DESCRIPTION,
++            "input_schema": gel_population_schema()})
+     return result
+ 
+ 
+@@ -168,7 +174,8 @@
+     def __init__(self, services, *, outcome_page_size=8, rate_population=False, reference_parent_sources=None,
+                  contract_information_profile=None, ratio_source_population=False,
+                  ratio_source_evidence_origin="reported_source", controlled_response_population=False,
+-                 controlled_response_descriptor=None, controlled_response_evidence_origin="reported_source"):
++                 controlled_response_descriptor=None, controlled_response_evidence_origin="reported_source",
++                 gel_population=False, gel_descriptor=None, gel_evidence_origin="reported_source"):
+         if type(outcome_page_size) is not int or outcome_page_size < 1:
+             raise ValueError("positive_literature_outcome_page_size_required")
+         self.services = services
+@@ -203,6 +210,24 @@
+             if controlled_response_descriptor is not None and controlled_response_descriptor != current:
+                 raise ValueError("controlled_response_implementation_binding_mismatch")
+             self._controlled_response_descriptor = deepcopy(current)
++        if type(gel_population) is not bool:
++            raise ValueError("boolean_gel_population_binding_required")
++        if gel_population and not rate_population:
++            raise ValueError("gel_population_requires_rate_population")
++        if not gel_population and gel_descriptor is not None:
++            raise ValueError("gel_descriptor_requires_population")
++        self.gel_population = gel_population
++        if (gel_evidence_origin not in ("reported_source", "synthetic_fixture")
++                or not gel_population and gel_evidence_origin != "reported_source"):
++            raise ValueError("invalid_gel_evidence_origin_binding")
++        self.gel_evidence_origin = gel_evidence_origin
++        self._gel_descriptor = None
++        if gel_population:
++            from .literature_gel_storage import implementation_descriptor
++            current = implementation_descriptor(evidence_origin=gel_evidence_origin)
++            if gel_descriptor is not None and gel_descriptor != current:
++                raise ValueError("gel_implementation_binding_mismatch")
++            self._gel_descriptor = deepcopy(current)
+         from .composition_information import CONTRACT_INFORMATION_PROFILE
+         if contract_information_profile is not None and (
+                 contract_information_profile != CONTRACT_INFORMATION_PROFILE or not rate_population):
+@@ -279,6 +304,14 @@
+             implementation += json.dumps(self._controlled_response_descriptor, sort_keys=True,
+                 separators=(",", ":"), allow_nan=False).encode("utf8")
+             for name in ("literature_controlled_response_prompt.py", "literature_controlled_response_render.py"):
++                implementation += Path(__file__).with_name(name).read_bytes()
++        if self.gel_population:
++            configuration.update(gel_population=True,
++                gel_descriptor=deepcopy(self._gel_descriptor),
++                gel_evidence_origin=self.gel_evidence_origin)
++            implementation += json.dumps(self._gel_descriptor, sort_keys=True,
++                separators=(",", ":"), allow_nan=False).encode("utf8")
++            for name in ("literature_gel_prompt.py", "literature_gel_render.py"):
+                 implementation += Path(__file__).with_name(name).read_bytes()
+         if self._contract_information_profile is not None:
+             configuration['contract_information_profile'] = self._contract_information_profile
+@@ -391,6 +424,15 @@
+                     "items": {"enum": list(VIEWS)}},
+                 "requested_controlled_response_component_keys": {"type": "array", "uniqueItems": True,
+                     "items": dict(_TEXT)}})
++        if self.gel_population:
++            from .literature_gel_storage import COMPONENTS as GEL_COMPONENTS, VIEWS
++            schema["properties"].update({
++                "requested_gel_components": {"type": "array", "uniqueItems": True,
++                    "items": {"enum": list(GEL_COMPONENTS)}},
++                "requested_gel_views": {"type": "array", "uniqueItems": True,
++                    "items": {"enum": list(VIEWS)}},
++                "requested_gel_component_keys": {"type": "array", "uniqueItems": True,
++                    "items": dict(_TEXT)}})
+         return schema
+ 
+     def permitted_common_actions(self, context):
+@@ -505,7 +547,7 @@
+                     "child_population_operations": [
+                         {name: entry[name] for name in ("name", "description")}
+                         for entry in _population_catalog(ratio_source_population=self.ratio_source_population,
+-                            controlled_response_population=self.controlled_response_population)]},
++                            controlled_response_population=self.controlled_response_population, gel_population=self.gel_population)]},
+                 "literature_experimental_work": {"version": "literature_experimental_task_v1",
+                     "aspect": "reference_evidence_parent"}}
+         if self.ratio_source_population:
+@@ -514,6 +556,8 @@
+                 context, self._ratio_source_repository())
+         if self.controlled_response_population:
+             result["literature_controlled_response_return_bindings"] = self._controlled_response_bindings(context)
++        if self.gel_population:
++            result.update(self._gel_display_context(context))
+         return result
+ 
+     def decision_context(self, context, current_view):
+@@ -540,6 +584,9 @@
+         if self.controlled_response_population:
+             result["literature_controlled_response_work"] = {"version": "literature_controlled_response_task_v1"}
+             result["literature_controlled_response_return_bindings"] = self._controlled_response_bindings(context)
++        if self.gel_population:
++            result["literature_gel_work"] = {"version": "literature_gel_task_v1"}
++            result.update(self._gel_display_context(context))
+         return result
+ 
+     def catalog(self, context):
+@@ -567,7 +614,7 @@
+             result.append(entry)
+         if self.rate_population:
+             populations = _population_catalog(ratio_source_population=self.ratio_source_population,
+-                            controlled_response_population=self.controlled_response_population)
++                            controlled_response_population=self.controlled_response_population, gel_population=self.gel_population)
+             if self._contract_information_profile is not None:
+                 from .composition_information import CONTRACT_ARGUMENT_TRANSPORT
+                 populations = [{**row, 'argument_transport': CONTRACT_ARGUMENT_TRANSPORT} for row in populations]
+@@ -607,7 +654,7 @@
+                     and "sheet_key" in assignment["selection"]):
+                 if arguments["sheet_key"] != assignment["selection"]["sheet_key"]:
+                     raise ContractError("literature_table_sheet_mismatch")
+-            if tool_name in {"literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.binding.interaction.populate", "literature.controlled_response.source_v3.populate"}:
++            if tool_name in {"literature.rate.source.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.binding.interaction.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
+                 def sources(value):
+                     if isinstance(value, dict):
+                         for key, child in value.items():
+@@ -637,7 +684,7 @@
+                 "record_refs": [], "changed_record_refs": [], "result": None,
+                 "feedback": {"category": "arguments_or_reference", "code": str(error),
+                     **({"detail": error.detail} if error.detail else {})}}
+-        if tool_name in {"literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.binding.interaction.populate", "literature.controlled_response.source_v3.populate"}:
++        if tool_name in {"literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.perturbation.populate", "literature.structure.populate", "literature.reaction.populate", "literature.context.populate", "literature.figure.populate", "literature.partner.populate", "literature.partner.source.populate", "literature.amount.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.binding.interaction.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate"}:
+             from .literature_experimental_contracts import ExperimentalContractError
+             try:
+                 repo = {"literature.rate.populate": self.services.literature_rate_repository,
+@@ -651,6 +698,7 @@
+                         "literature.ratio.populate": self.services.literature_ratio_repository,
+                         "literature.ratio.source.populate": self._ratio_source_repository,
+                         "literature.controlled_response.source_v3.populate": self._controlled_response_repository,
++                        "literature.gel.populate": self._gel_repository,
+                         "literature.binding.populate": self.services.literature_binding_repository,
+                         "literature.binding.model.populate": self.services.literature_binding_model_repository,
+                         "literature.transport.response.populate": self.services.literature_transport_repository,
+@@ -701,6 +749,10 @@
+         return self.services.literature_controlled_response_repository(
+             expected_descriptor=self._controlled_response_descriptor,
+             evidence_origin=self.controlled_response_evidence_origin)
++    def _gel_repository(self):
++        return self.services.literature_gel_repository(
++            expected_descriptor=self._gel_descriptor,
++            evidence_origin=self.gel_evidence_origin)
+ 
+     def _controlled_response_bindings(self, context):
+         """Host-only selected label locations, limited to this episode's possession."""
+@@ -724,6 +776,44 @@
+                 raise ContractError("controlled_response_possession_conflict")
+             unique[key] = row
+         return repository.semantic_bindings(list(unique.values()))
++    def _gel_bindings(self, context):
++        """Host-only selected label locations, limited to this episode's possession."""
++        from .literature_gel_storage import PROVIDER, COMPONENTS, VIEWS
++        repository = self._gel_repository()
++        rows = list(repository.received_cells(context))
++        for reference in context.received_record_refs:
++            record = self.services.read_record(reference)
++            if record.get("record_type") == "source" and record.get("provider") == PROVIDER:
++                # Explicit host inspection of the owned/admitted roster is not
++                # a default scientific return request. fact_cells enforces the
++                # original owner or the receiver's exact admitted subset.
++                keys = repository.requested_component_keys(reference, {
++                    "requested_gel_components": list(COMPONENTS),
++                    "requested_gel_views": list(VIEWS)})
++                rows.extend(repository.fact_cells(context, [reference], components=keys))
++        unique = {}
++        for row in rows:
++            key = (row["sheet_ref"], row["component_key"])
++            if key in unique and unique[key] != row:
++                raise ContractError("gel_possession_conflict")
++            unique[key] = row
++        return repository.semantic_bindings(list(unique.values()))
++
++    def _gel_display_context(self, context):
++        """Actual possessed meaning records, outside generic working-state pagination."""
++        bindings = self._gel_bindings(context)
++        records = {}
++        for entries in bindings.values():
++            for reference, binding in entries.items():
++                if binding["category"] != "scientific_meaning":
++                    continue
++                if binding["record_ref"] != reference or reference not in context.received_record_refs:
++                    raise ContractError("gel_semantic_display_record_not_received")
++                record = self._require(reference, context.scope, "reference")
++                if record.get("id") != reference or record.get("record_type") != "reference":
++                    raise ContractError("gel_semantic_display_record_mismatch")
++                records[reference] = record
++        return {"literature_gel_return_bindings": bindings, "literature_gel_return_records": records}
+ 
+     def _rate_fact_sources(self):
+         from .literature_rate_storage import rate_cells_schema, rate_source_cells_schema
+@@ -807,6 +897,11 @@
+             result["literature_controlled_response_component_cells"] = {"type": "array", "meaning":
+                 "Exact saved controlled-response component keys and views, preserving each alternative's scientific meaning, source origins, uncertainty, controls and partial support. Conditional graph-reading bounds are not sampling uncertainty. Derived views do not grant possession of raw operands or covariance. Dependent representations do not create independent evidence, target transfer or annotation credit.",
+                 "report_schema": controlled_response_cells_schema()}
++        if self.gel_population:
++            from .literature_gel_storage import gel_cells_schema
++            result["literature_gel_component_cells"] = {"type": "array", "meaning":
++                "Exact saved gel display components and coherent ROI alternatives with source-backed experiment/lane meanings, actual origin, exact arithmetic, units, method, dependence and partial available-only sensitivity. Image darkness is not calibrated molecular occupancy; ROI ranges are not sampling confidence intervals. Derived returns grant no unrequested raw operands, target transfer or annotation credit.",
++                "report_schema": gel_cells_schema()}
+         return result
+ 
+     def _population_routes(self):
+@@ -904,6 +999,18 @@
+                     keys = adapter.requested_component_keys(reference, context.assignment)
+                     rows.extend(adapter.fact_cells(context, [reference], components=keys))
+             result["literature_controlled_response_component_cells"] = rows
++        if self.gel_population:
++            from .literature_gel_storage import PROVIDER
++            adapter = self._gel_repository()
++            rows = []
++            for reference in dict.fromkeys(references):
++                if reference not in context.received_record_refs:
++                    continue
++                record = self.services.read_record(reference)
++                if record.get("record_type") == "source" and record.get("provider") == PROVIDER:
++                    keys = adapter.requested_component_keys(reference, context.assignment)
++                    rows.extend(adapter.fact_cells(context, [reference], components=keys))
++            result["literature_gel_component_cells"] = rows
+         return result
+ 
+     def received_report_sources(self, role):
+@@ -921,6 +1028,10 @@
+             cells = self._controlled_response_repository().received_cells(context)
+             if cells:
+                 result["literature_controlled_response_component_cells"] = cells
++        if self.gel_population:
++            cells = self._gel_repository().received_cells(context)
++            if cells:
++                result["literature_gel_component_cells"] = cells
+         return result
+ 
+     def received_form_references(self, context, form, schema, operation_key):
+@@ -938,6 +1049,14 @@
+             adapter = self._controlled_response_repository()
+             cells = [row for name, node in schema.get("properties", {}).items()
+                 if node.get("x-source") == "literature_controlled_response_component_cells"
++                for row in form[name]]
++            if cells:
++                adapter.receive_cells(context, cells, operation_key)
++                references.extend(adapter.cell_record_refs(cells))
++        if self.gel_population:
++            adapter = self._gel_repository()
++            cells = [row for name, node in schema.get("properties", {}).items()
++                if node.get("x-source") == "literature_gel_component_cells"
+                 for row in form[name]]
+             if cells:
+                 adapter.receive_cells(context, cells, operation_key)
+@@ -998,6 +1117,29 @@
+                         raise ContractError("unrequested_literature_controlled_response_component")
+                 except ContractError as error:
+                     raise ReportBoundaryError(str(error), code=str(error), field=name) from error
++        if self.gel_population:
++            adapter = self._gel_repository()
++            for name, node in schema.get("properties", {}).items():
++                if node.get("x-source") != "literature_gel_component_cells":
++                    continue
++                rows = form[name]
++                permitted = set(context.received_record_refs)
++                if any(row["sheet_ref"] not in permitted for row in rows):
++                    selection = self.services.record_selection(context)
++                    if (selection.get("run_id") != context.run_id
++                            or selection.get("episode_id") != context.episode_id):
++                        raise ReportBoundaryError("Literature return receiver differs",
++                            code="literature_gel_receiver_mismatch", field=name)
++                    permitted.update(selection["known_record_refs"])
++                try:
++                    reporting = replace(context, received_record_refs=tuple(permitted))
++                    adapter.validate_fact_values(reporting, rows)
++                    allowed = {reference: set(adapter.requested_component_keys(reference, context.assignment))
++                        for reference in dict.fromkeys(row["sheet_ref"] for row in rows)}
++                    if any(row["component_key"] not in allowed[row["sheet_ref"]] for row in rows):
++                        raise ContractError("unrequested_literature_gel_component")
++                except ContractError as error:
++                    raise ReportBoundaryError(str(error), code=str(error), field=name) from error
+ 
+     def resolve(self, context, reference, namespace):
+         self._role(context.role)
+--- gene_annotation_episode/episode_services.py
++++ gene_annotation_episode/episode_services.py
+@@ -147,6 +147,17 @@
+                 self.workflow.store, self.workflow.run_id, expected_descriptor=expected_descriptor,
+                 evidence_origin=evidence_origin)
+         return self._literature_controlled_response_repositories[key]
++    def literature_gel_repository(self, *, expected_descriptor=None, evidence_origin="reported_source"):
++        """Access the caller-bound gel repository; choose no work."""
++        from .literature_gel_storage import LiteratureGelRepository
++        key = json.dumps([expected_descriptor, evidence_origin], sort_keys=True, allow_nan=False)
++        if not hasattr(self, '_literature_gel_repositories'):
++            self._literature_gel_repositories = {}
++        if key not in self._literature_gel_repositories:
++            self._literature_gel_repositories[key] = LiteratureGelRepository(
++                self.workflow.store, self.workflow.run_id, expected_descriptor=expected_descriptor,
++                evidence_origin=evidence_origin)
++        return self._literature_gel_repositories[key]
+ 
+     def literature_binding_repository(self):
+         """Access saved source binding parameters without choosing work."""
+--- gene_annotation_episode/communication.py
++++ gene_annotation_episode/communication.py
+@@ -138,6 +138,16 @@
+                     or json.dumps(node, sort_keys=True, allow_nan=False)
+                     != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                 raise ReportBoundaryError(f"{path}: controlled response fact schema must match its registered source", code="invalid_schema")
++            return
++        if source == "literature_gel_component_cells":
++            if depth != 1:
++                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
++            from .literature_gel_storage import gel_cells_schema
++            expected = gel_cells_schema()
++            if (not _schema_cacheable(node)
++                    or json.dumps(node, sort_keys=True, allow_nan=False)
++                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
++                raise ReportBoundaryError(f"{path}: gel fact schema must match its registered source", code="invalid_schema")
+             return
+         if isinstance(source, str) and source.startswith("execution_rna_structure_"):
+             if depth != 1:
+@@ -245,7 +255,7 @@
+     # uses a placeholder. Original contracts and returned rows remain exact.
+     parent_schema = schema
+     native = {name: node for name, node in schema["properties"].items()
+-        if node.get("x-source") == "literature_controlled_response_component_cells"}
++        if node.get("x-source") in {"literature_controlled_response_component_cells", "literature_gel_component_cells"}}
+     if native:
+         parent_schema = {**schema, "properties": dict(schema["properties"])}
+         for name, node in native.items():
+@@ -270,7 +280,7 @@
+     def visit(value, node, path, resource=None):
+         if value is None or not isinstance(node, dict):
+             return
+-        if node.get("x-source") == "literature_controlled_response_component_cells":
++        if node.get("x-source") in {"literature_controlled_response_component_cells", "literature_gel_component_cells"}:
+             resource = node
+         if resource is not None and "$ref" in node:
+             pointer = node["$ref"]
+--- gene_annotation_episode/literature_experimental_prompt.py
++++ gene_annotation_episode/literature_experimental_prompt.py
+@@ -12,6 +12,7 @@
+     render_received as _ratio_source_received, render_own_result as _ratio_source_own,
+     is_row as _ratio_source_row, rows_from_reports as _ratio_source_rows)
+ from .literature_controlled_response_prompt import CONTROLLED_RESPONSE_TASK
++from .literature_gel_prompt import GEL_TASK
+ 
+ from collections.abc import Mapping
+ 
+@@ -74,6 +75,7 @@
+     "curve_keys", "measurement_keys", "primitive_measurement_keys",
+     "report_contract_declaration", "contract_information_profile",
+     "requested_controlled_response_component_keys", "literature_controlled_response_return_bindings",
++    "requested_gel_component_keys", "literature_gel_return_bindings", "literature_gel_return_records",
+ })
+ 
+ 
+@@ -177,9 +179,16 @@
+         controlled_reports.append({"own_controlled_components": own["cells"]})
+     hidden_controlled = controlled_hidden_records(controlled_reports, records,
+         bindings=state.get("literature_controlled_response_return_bindings"))
++    from .literature_gel_render import hidden_records as gel_hidden_records, is_row as gel_row
++    gel_reports = list(state.get("child_reports", ()))
++    own = (state.get("last_local_outcome") or {}).get("result", {})
++    if isinstance(own, Mapping) and isinstance(own.get("cells"), (tuple, list)) and all(gel_row(row) for row in own["cells"]):
++        gel_reports.append({"own_gel_components": own["cells"]})
++    hidden_gel = gel_hidden_records(gel_reports, records,
++        bindings=state.get("literature_gel_return_bindings"))
+     selected = {}
+     for reference in pending:
+-        if reference in selected or reference not in records or reference in hidden_amount_measurements or reference in hidden_optical or reference in hidden_kinetic or reference in hidden_interaction or reference in hidden_ratio_source or reference in hidden_controlled:
++        if reference in selected or reference not in records or reference in hidden_amount_measurements or reference in hidden_optical or reference in hidden_kinetic or reference in hidden_interaction or reference in hidden_ratio_source or reference in hidden_controlled or reference in hidden_gel:
+             continue
+         row = records[reference]
+         selected[reference] = _safe(row)
+@@ -257,6 +266,8 @@
+         parts.extend(["", SOURCE_RATIO_TASK])
+     if state.get("literature_controlled_response_work", {}).get("version") == "literature_controlled_response_task_v1":
+         parts.extend(["", CONTROLLED_RESPONSE_TASK])
++    if state.get("literature_gel_work", {}).get("version") == "literature_gel_task_v1":
++        parts.extend(["", GEL_TASK])
+     profile = state.get('contract_information_profile') == CONTRACT_INFORMATION_PROFILE
+     if profile:
+         parts.extend(['', CONTRACT_INFORMATION_TASK])
+@@ -271,7 +282,7 @@
+     assignment = _pick(state.get("literature_assignment", {}), (
+         "question_context_refs", "source_refs", "prior_search_refs", "search_result_refs",
+         "source_ref", "representation", "artifact_ref", "page", "selection",
+-        "requested_rate_components", "requested_quantity_components", "requested_assay_components", "requested_ratio_components", "requested_ratio_source_components", "requested_binding_components", "requested_binding_model_components", "requested_transport_components", "requested_perturbation_components", "requested_structure_components", "requested_reaction_components", "requested_context_components", "requested_figure_components", "requested_partner_components", "requested_amount_components", "requested_optical_components", "requested_kinetic_components", "requested_binding_interaction_components", "requested_controlled_response_components", "requested_controlled_response_views", "requested_controlled_response_component_keys", "constraints", "context"))
++        "requested_rate_components", "requested_quantity_components", "requested_assay_components", "requested_ratio_components", "requested_ratio_source_components", "requested_binding_components", "requested_binding_model_components", "requested_transport_components", "requested_perturbation_components", "requested_structure_components", "requested_reaction_components", "requested_context_components", "requested_figure_components", "requested_partner_components", "requested_amount_components", "requested_optical_components", "requested_kinetic_components", "requested_binding_interaction_components", "requested_controlled_response_components", "requested_controlled_response_views", "requested_controlled_response_component_keys", "requested_gel_components", "requested_gel_views", "requested_gel_component_keys", "constraints", "context"))
+     # Version labels identify host assignment schemas, not source science.
+     if isinstance(assignment.get("page"), Mapping):
+         assignment["page"] = {key: value for key, value in assignment["page"].items() if key != "version"}
+@@ -320,7 +331,7 @@
+ 
+ 
+ def _source_result(parts, value, title, *, controlled_records=None, controlled_bindings=None,
+-        controlled_assignment=None):
++        controlled_assignment=None, gel_bindings=None, gel_assignment=None, gel_records=None):
+     if not isinstance(value, Mapping):
+         _section(parts, title, _values(value))
+         return
+@@ -338,6 +349,20 @@
+         _section(parts, title, _values(_pick(value, ("status", "selected_tool", "feedback"))))
+         controlled_own(parts, {"cells": rows, "component_keys": []}, section=_section, table=_table, values=_values,
+             records=controlled_records, bindings=controlled_bindings)
++        return
++    from .literature_gel_render import render_own_result as gel_own, is_row as gel_row
++    if (isinstance(content, Mapping) and isinstance(content.get("cells"), (tuple, list))
++            and all(gel_row(row) for row in content["cells"])
++            and (content["cells"] or "component_keys" in content)):
++        assignment = gel_assignment or {}
++        names = assignment.get("requested_gel_components", ())
++        views = assignment.get("requested_gel_views", ())
++        keys = assignment.get("requested_gel_component_keys")
++        rows = [row for row in content["cells"] if row["component"] in names and row["view"] in views
++            and (keys is None or row["component_key"] in keys)]
++        _section(parts, title, _values(_pick(value, ("status", "selected_tool", "feedback"))))
++        gel_own(parts, {"cells": rows, "component_keys": []}, section=_section, table=_table, values=_values,
++            records=gel_records, bindings=gel_bindings)
+         return
+     metadata = _pick(value, ("status", "selected_tool", "record_refs", "changed_record_refs", "feedback"))
+     if metadata:
+@@ -661,12 +686,14 @@
+         ((r.get("component"), definitions.get(r.get("formula_code"), "unknown")) for r in rows)))
+ 
+ 
+-def _received_returns(parts, reports, *, records=None, ratio_source_meanings=None, controlled_bindings=None):
++def _received_returns(parts, reports, *, records=None, ratio_source_meanings=None, controlled_bindings=None, gel_bindings=None, gel_records=None):
+     """Show received scientific definitions once alongside requested cells."""
+     ordinary, grouped, reactions, contexts, figures, partners, amounts, optical, kinetic, interaction = [], {}, {}, {}, {}, {}, {}, {}, {}, {}
+     ratio_source = {}
+     controlled = {}
++    gel = {}
+     from .literature_controlled_response_render import is_row as controlled_row, render_received as controlled_received
++    from .literature_gel_render import is_row as gel_row, render_received as gel_received
+     for report in reports:
+         remainder = {}
+         if not isinstance(report, Mapping):
+@@ -676,6 +703,9 @@
+             if isinstance(value, (list, tuple)) and value and all(controlled_row(row) for row in value):
+                 for row in value:
+                     controlled.setdefault(row["sheet_ref"], []).append(row)
++            elif isinstance(value, (list, tuple)) and value and all(gel_row(row) for row in value):
++                for row in value:
++                    gel.setdefault(row["sheet_ref"], []).append(row)
+             elif (isinstance(value, (list, tuple)) and value and all(isinstance(row, Mapping)
+                     and row.get("evaluation_scope") == "conditional_deposited_model_geometry"
+                     and "component" in row and "geometry_definition" in row for row in value)):
+@@ -813,6 +843,9 @@
+     for rows in controlled.values():
+         controlled_received(parts, rows, records or {}, section=_section, table=_table, values=_values,
+             bindings=controlled_bindings)
++    for rows in gel.values():
++        gel_received(parts, rows, gel_records or records or {}, section=_section, table=_table, values=_values,
++            bindings=gel_bindings)
+ 
+ 
+ def _steering(state, lookup_results):
+@@ -842,6 +875,8 @@
+     controlled_records = {row["id"]: row for field in ("terms", "references", "contexts", "observations", "hypotheses", "assessments")
+         for row in working.get(field, ()) if isinstance(row, Mapping) and isinstance(row.get("id"), str)}
+     controlled_bindings = state.get("literature_controlled_response_return_bindings")
++    gel_bindings = state.get("literature_gel_return_bindings")
++    gel_records = {**controlled_records, **state.get("literature_gel_return_records", {})}
+     if selected:
+         _section(parts, "Relevant received experimental facts", _values(selected))
+     outcome = state.get("last_local_outcome")
+@@ -849,14 +884,17 @@
+         received_ratio_sheets = {row['sheet_ref'] for row in _ratio_source_rows(state.get('child_reports', ()))}
+         from .literature_controlled_response_render import rows_from_reports as controlled_rows
+         received_controlled_sheets = {row['sheet_ref'] for row in controlled_rows(state.get('child_reports', ()))}
++        from .literature_gel_render import rows_from_reports as gel_rows
++        received_gel_sheets = {row['sheet_ref'] for row in gel_rows(state.get('child_reports', ()))}
+         if (isinstance(outcome, Mapping) and 'result' not in outcome
+-                and (received_ratio_sheets | received_controlled_sheets).intersection(outcome.get('record_refs', ()))):
++                and (received_ratio_sheets | received_controlled_sheets | received_gel_sheets).intersection(outcome.get('record_refs', ()))):
+             # The original child return's host receipt refs are not an extra
+             # scientific return. Its exact admitted rows are rendered below.
+             _section(parts, 'Last selected action outcome', _values(_pick(outcome, ('status', 'feedback'))))
+         else:
+             _source_result(parts, outcome, "Last selected action outcome", controlled_records=controlled_records,
+-                controlled_bindings=controlled_bindings, controlled_assignment=state.get("literature_assignment"))
++                controlled_bindings=controlled_bindings, controlled_assignment=state.get("literature_assignment"),
++                gel_bindings=gel_bindings, gel_assignment=state.get("literature_assignment"), gel_records=gel_records)
+     if state.get("feedback") is not None and state["feedback"] != (outcome or {}).get("feedback"):
+         _section(parts, "Actionable feedback", _values(state["feedback"]))
+     if state.get("current_report_update"):
+@@ -867,7 +905,7 @@
+             for row in working.get(field, ()) if isinstance(row, Mapping) and isinstance(row.get("id"), str)}
+         _received_returns(parts, state["child_reports"], records=records,
+             ratio_source_meanings=state.get("literature_ratio_source_return_meanings"),
+-            controlled_bindings=controlled_bindings)
++            controlled_bindings=controlled_bindings, gel_bindings=gel_bindings, gel_records=gel_records)
+     pending = state.get("pending_work", {})
+     if pending.get("items"):
+         _section(parts, "Pending assigned work", _values([_pick(row, (
+@@ -875,7 +913,8 @@
+             "latest_progress_ref", "return_available")) for row in pending["items"]]))
+     for result in lookup_results:
+         _source_result(parts, result, "Requested information; continue this decision", controlled_records=controlled_records,
+-            controlled_bindings=controlled_bindings, controlled_assignment=state.get("literature_assignment"))
++            controlled_bindings=controlled_bindings, controlled_assignment=state.get("literature_assignment"),
++                gel_bindings=gel_bindings, gel_assignment=state.get("literature_assignment"), gel_records=gel_records)
+     return "\n".join(parts)
+ 
+ 
+--- gene_annotation_episode/literature_reference_parent_prompt.py
++++ gene_annotation_episode/literature_reference_parent_prompt.py
+@@ -130,7 +130,8 @@
+     # admitted forms. Do not seed it with a child's assignment or task/history.
+     steering_fields = ("action_yields", "controller", "working_state", "last_local_outcome",
+         "feedback", "current_report_update", "child_reports", "pending_work", "current_report_basis_refs",
+-        "literature_ratio_source_return_meanings", "literature_controlled_response_return_bindings")
++        "literature_ratio_source_return_meanings", "literature_controlled_response_return_bindings",
++        "literature_gel_return_bindings", "literature_gel_return_records")
+     steering_state = {name: state[name] for name in steering_fields if name in state}
+     if state.get('contract_information_profile') == CONTRACT_INFORMATION_PROFILE:
+         return _requested_contract_task(_task(state, instructions, descriptor), lookup_results) + '\n\n' + _steering(
+--- gene_annotation_episode/literature_gel_prompt.py
++++ gene_annotation_episode/literature_gel_prompt.py
+@@ -0,0 +1,22 @@
++"""Gel experimental guidance, separate from numerical contracts and readers."""
++
++GEL_TASK = """Examine what the assigned gel experiment establishes about the studied molecule. Identify the organism, construct, experimental system and measured species, and establish each lane's actual composition and conditions. Distinguish the intended change from other differences and identify the controls relevant to the requested inference.
++
++Use the original figure and its Methods and legend to identify the relevant bands, lane regions and background. Record ambiguous bands and unavailable details. If numerical tables or raw measurements are available, extract and summarize them using the appropriate readers and calculations. Preserve negative background-corrected signals and distinguish displayed image intensity from calibrated molecular amounts.
++
++For binding and competition, establish which labeled and unlabeled species were tested, their concentrations and whether the competitor has the same or a different sequence. Distinguish displacement, sequence specificity and attribution to the intended molecule. Identify which complementary measurements address unresolved alternatives.
++
++Keep repeated displays, alternative region choices, multiple bands and independent preparations distinct. Use readers and calculators for the requested numerical components; return their scientific meanings, uncertainty, dependence and limitations through the parent's typed form."""
++
++GEL_OPERATION_DESCRIPTION = (
++    "Quantify explicitly selected lane, band, background and whole-lane regions from received original "
++    "8-bit grayscale PNG/JPEG images. Preserve source-backed experimental/lane meanings, unknowns and "
++    "conflicts. The v1 definition uses mean background; v2 requires each lane's explicit mean or median "
++    "choice. Populate exact raw pixel summaries, background-corrected darkness, lane display fractions, "
++    "competition contrasts and available-only sensitivity across nominated coherent ROI alternatives. "
++    "Negative corrected signals remain negative; a direct contrast can survive an unavailable baseline. "
++    "No OCR, image classification or graph-axis extraction is performed. Image darkness is not calibrated "
++    "molecular occupancy; ROI-choice ranges are not sampling confidence intervals, and dependent "
++    "representations are not independent experiments. No target transfer or annotation credit is calculated.")
++
++__all__ = ["GEL_TASK", "GEL_OPERATION_DESCRIPTION"]

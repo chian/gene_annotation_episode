@@ -1,0 +1,13 @@
+# Root A105 work, current bounded increment
+
+The persistent whole literature goal remains active and unchanged. A105 is not declared adequate and A106 has not been expanded. GOAL.md was neither read nor created.
+
+Root independently read the complete retained original XML article body, abstract and title of PMC12051542; original figures/supplement images were not inspected. Exact source/render hashes and successful post-paper reset reads are retained separately. Agent145 proposal was not independently read/adopted; root scientific conversion follows its own source read and reset.
+
+Source-grounded conversions printed in the conversation: HFP/IMP nominal one-pot concentration8.4/8.8=.954545 (amount comparability); approximate target/total protein5/7=.714286 and conditional reciprocal1.4 for that stock only; selected equilibrium fractions .603 and .397; cleanup/original positive completion-time ratio strictly>108. Neither fraction nor completion time isolates HFP activity. The NMR preparation and earlier mass-estimate stock are distinct. Missing contaminant/recovery/same-endpoint nuisance controls and covariance do not become zero,one or known variance. Full molecule-specific activity correction remains unavailable under(q-g)*v/(k*E*u).
+
+Fresh coding workloads147 and148 own distinct optional completion-time and product-partition readers/sheets/calculators/interpretation instructions. Both are source-reading/basic-analysis work, with no computational-biology suite. Root printed concrete fields/calculations/scientific instructions before implementation. Agent147 currently owns serialized narrow shared integration;148 owns only new prefix files and will supply later shared integration instructions. Existing default catalogs are to remain unchanged through opt-in bindings; no framework or component count is an assay-specific grader count.
+
+The existing configured investigation006 remains running under original exec session97191 and durable executionhandle execution_b1a4fa43429e014703e8823fd920344d8aaeff1c7329b005018283ba4187e839. At public state check5629a6/4985ed,2episodes,14actions,8observations,16model-call rows,0report attempts; child completed8source.read/source.locate actions after4unavailable PDF attempts. No scientific return or closure yet. Requests/responses/provider logs/private model conversations were not read. This run keeps its original frozen141/pin006 implementation; new code cannot change it.
+
+No new goal amendment or final annotation-credit change was made. Completion requires scientific adequacy, actual selected integration, exact typed delivery/reconstruction and later handoff across appropriate literature responsibilities. Source examples and passing engineering checks alone do not establish that.

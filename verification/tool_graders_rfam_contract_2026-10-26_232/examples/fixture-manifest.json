@@ -1,0 +1,93 @@
+[
+  {
+    "file": "official-single-result.json",
+    "kind": "official_documentation_example",
+    "source_file": "../source_evidence/rfam-docs-api.rst",
+    "source_url": "https://docs.rfam.org/en/latest/api.html#retrieve-results",
+    "extraction": "Exact UTF-8 JSON object bytes beginning with searchSequence; no reserialization",
+    "byte_length": 1797,
+    "sha256": "1396240ef8eb2073f3e307915814ca418a6f6bae29088e27c76ee375882362ab",
+    "successful_live_capture": false
+  },
+  {
+    "file": "synthetic-empty.json",
+    "kind": "synthetic_contract_case",
+    "derived_from": "official-single-result.json",
+    "change": "Remove all hits, retain exact nonempty submitted query and job identity.",
+    "byte_length": 347,
+    "sha256": "3058f3be2a61cc691b8ac857c4ccea431277c1611ca2f323bc6150dfa1420cdc",
+    "successful_live_capture": false
+  },
+  {
+    "file": "synthetic-partial.json",
+    "kind": "synthetic_contract_case",
+    "derived_from": "official-single-result.json",
+    "change": "Retain complete documented row; append out-of-range row end120; append valid reverse scalar interval 110..10 but deliberately retain incompatible forward alignment display.",
+    "byte_length": 3901,
+    "sha256": "fa27b31bc5d0750268836770b66b42504af40eef292be120985a32801b0a70bd",
+    "successful_live_capture": false
+  },
+  {
+    "file": "synthetic-duplicate-hits.json",
+    "kind": "synthetic_contract_case",
+    "derived_from": "official-single-result.json",
+    "change": "Repeat exact same hit twice; preserve both records and do not count them as independent support.",
+    "byte_length": 2724,
+    "sha256": "b70ee3569a0a0ea315f85cf55d2b44e906bcfe123eb4c09203b8e93f220b354a",
+    "successful_live_capture": false
+  },
+  {
+    "file": "synthetic-conflicting-job.json",
+    "kind": "synthetic_contract_case",
+    "derived_from": "official-single-result.json",
+    "change": "Change body jobId only.",
+    "byte_length": 1523,
+    "sha256": "8c14e842e50ac8c3be445562b0504a003680ba95789071552d4dd467d0665e5b",
+    "successful_live_capture": false
+  },
+  {
+    "file": "synthetic-conflicting-sequence.json",
+    "kind": "synthetic_contract_case",
+    "derived_from": "official-single-result.json",
+    "change": "Change first nucleotide while preserving length.",
+    "byte_length": 1548,
+    "sha256": "a6b88f2474626621301c54c41bc0ad5e32c1a82c96a482160d294ce1bddeba7d",
+    "successful_live_capture": false
+  },
+  {
+    "file": "synthetic-conflicting-count.json",
+    "kind": "synthetic_contract_case",
+    "derived_from": "official-single-result.json",
+    "change": "Declare two hits but supply one.",
+    "byte_length": 1548,
+    "sha256": "8a3317d0742f7d5983ff0551c5938d4936fdd27714093daf8e00a018d962c9a4",
+    "successful_live_capture": false
+  },
+  {
+    "file": "synthetic-conflicting-strand.json",
+    "kind": "synthetic_contract_case",
+    "derived_from": "official-single-result.json",
+    "change": "Declare reverse strand while endpoints increase; neither quietly swap nor reinterpret.",
+    "byte_length": 1548,
+    "sha256": "dc76ae4eba7b3a681a70c693e5434648d00daee26452c946117a1ab4fbf689de",
+    "successful_live_capture": false
+  },
+  {
+    "file": "synthetic-untyped-multiple-envelope.json",
+    "kind": "synthetic_contract_case",
+    "derived_from": "official-single-result.json",
+    "change": "OpenAPI-conforming untyped MultipleSequences shape. Item deliberately arbitrary; NOT a producer example.",
+    "byte_length": 136,
+    "sha256": "c3e25e6585e3d479700978401e2efaee679d637f8307d7913090fd93f8c75e2e",
+    "successful_live_capture": false
+  },
+  {
+    "file": "synthetic-unsupported-display.json",
+    "kind": "synthetic_contract_case",
+    "derived_from": "official-single-result.json",
+    "change": "Deliberately incomplete shorthand-bearing display to verify no guessed correspondence/model length. NOT a valid full native alignment example.",
+    "byte_length": 1440,
+    "sha256": "8967041b45acbea015b5e2d04d2bbfc09bd3077d14e9296d8c06e933948104fd",
+    "successful_live_capture": false
+  }
+]

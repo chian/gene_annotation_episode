@@ -1,0 +1,27 @@
+# Independent review of the sealed scientific-support draft
+
+The sealed draft at `/tmp/scientific-support-slot-draft-20261022-001` passes the independent structure/provenance checks in `verification.json`. The checker never runs the draft's mutating validator and writes only beside this report. The draft's 33 files remain byte-for-byte unchanged.
+
+All 32 output-manifest entries match their hashes and byte sizes; there are no extra files or symlinks. All 36 input hashes match. All 11 entry bodies pass the existing closed schema and catalog hashes. The checker independently verifies all 149 retained original-record hashes, 306 exact retained observation/selected-clause pointers and locators, evidence/table/TSV correspondence, and complete 142-group/163-contrast inventory. Group assignment is 134 assigned plus eight explicitly unassigned groups, with exclusive complete partition coverage. The numerical policy reference exactly matches the retained crosswalk; no score was computed.
+
+The URL evidence is narrower than 306 independently entailed primary-source links: **22 rows resolve an exact single `source_id` to the selected URL; 284 establish declared case/trace URL membership.** All 306 retained strings/clauses match their original records, but this review does not prove that each selected primary URL individually entails each selected clause. No primary source was retrieved. The draft itself preserves this limitation in `source_relation`.
+
+A111 contains an instruction precision issue around structural origin. Its `measured_structural_state` and `structure_derived_comparison` operands allow `prediction_not_measurement` together with `direct` and `observed_extent`; prose also requires actual measured geometry and matching source subject/conditions. That combination alone does not prove an invalid measured record was admitted. The phrases “measured versus modeled” and “deposited or measured” should nevertheless explicitly distinguish experimentally constrained/refined models from wholly predicted coordinates. Deposition does not establish experimental measurement. The qualification itself supplies no measurement, provenance correction or automatic numerical discount.
+
+The retained A111 examples do not demonstrate a wholly predicted state wrongly called measured. TT1927b and FrsA involve experimental density with fitted ligand identities; DUF1537 has ligand complexes plus a separately modeled ternary complex; Cas2 uses experimentally refined deposited models and dependent distance calculations; QueH has a reconstituted experimental metal architecture; LetB has cryo-EM architecture. Rejecting all “modeled” coordinates would incorrectly discard these source-constrained structural observations. Their uncertainty remains material: FrsA's ligand is unknown despite a hexanoate model, and Cas2 geometry is not affinity, energetic necessity or proof of catalytic silence.
+
+A111 should also express its predicate boundary more explicitly. The measured operand lists `transports`, `catalyzes`, `requires`, `partner_dependence` and `uses` alongside direct strengthening, while its instruction specifically supports occupancy/`feature_structure`. LetB's tunnel and lipid-associated crosslinks support conduit compatibility, with net transport, direction and exact physiological lipid identity unresolved. Structural observations and functional interpretations need separate stated propositions. FrsA's unknown bound density does not establish identified `binds(hexanoate)`. The current limitations substantially preserve these distinctions; no erroneous target assessment or numerical projection was executed or demonstrated.
+
+Exact proposed additions D1–D3 are in `scientific_boundary_review.json`, with entry/operand JSON pointers and retained-source locators. They clarify experimental origin, dependent coordinate calculations and predicate relationships in a **new review draft only**. They do not require a schema, route, weight, controller or approval change, and were not applied to the sealed draft.
+
+Other checked retained boundaries are consistent: A105/A106 separate assays from structural geometry; Cas2 acquisition and E9-mutant outcomes are not nuclease-null validation; QueH oQ loss without detected Q is not productive isolated synthesis. A107/A109 preserve YeaG early induction versus recovery lag and prolonged-starvation survival. OarX source strain distinctions, blank FmnO cells and conditional rescue limits remain explicit; the unsupported A109 assignment is absent and its residual relation is flagged.
+
+This is a review of all eleven complete definition bodies and selected relevant retained scientific records, plus exhaustive mechanical verification of the recorded provenance. It is not a complete primary-literature entailment audit of every mapping or a calibration of scientific suitability/thresholds. The existing public loader round-trip claim was inspected but not rerun. No Store, Workflow, model, network, active library, scientific workspace, scientific execution, score, production file or original draft was changed. Nothing was adopted or published by this subtask.
+
+Reproduce the independent checks with:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 /home/chia/repos/gene_annotation_episode/.venv/bin/python /tmp/scientific-support-independent-review-20261022-v5GiMt/independent_check.py
+```
+
+This overwrites only this independent review directory's generated verification files. It never writes the sealed draft or the repository.
