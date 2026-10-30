@@ -1,0 +1,321 @@
+{
+  "created_utc": "2026-10-21T21:06:02.995707+00:00",
+  "task": "Published annotation investigations: bounded spatial access and topology follow-up research",
+  "directory": "/tmp/episode-published-cases/spatial",
+  "known_outcomes": true,
+  "blind_prediction": false,
+  "counting": {
+    "new_distinct_gene_function_problems": 6,
+    "promoted_record_count": 6,
+    "deep_contrasting_investigations": 2,
+    "full_primary_papers_supporting_promoted_records": 8,
+    "counting_rule": "One FtsW/bPBP job across complex members, orthologs and repeat papers; AmiA/AmiC/AmiB are one grouped export/targeting comparison. DsbD topology and CcdA acceptor-range are different gene/function problems within one contrasting trace. Origin cases, screens, structure deposit and Amj are not counted again."
+  },
+  "scope": {
+    "organisms": "Bacterial cases only; no archaeal case verified in this follow-up.",
+    "search_boundary": "Targeted MurJ/FtsW, DsbD/CcdA, relocation of TrxA and Tat amidase investigations; not an exhaustive literature review or a priority claim.",
+    "not_changed": [
+      "Repository code/design/docs",
+      "Target ybhP investigation state",
+      "Existing case files",
+      "Episode execution/credit/controller behavior"
+    ],
+    "not_performed": [
+      "Wet-lab work",
+      "Transport or catalysis experiments",
+      "New localization assay",
+      "Independent structure solution/re-refinement",
+      "Fresh sequence topology prediction",
+      "Code tests"
+    ]
+  },
+  "origin_records_read": [
+    "/tmp/episode-published-cases/organism/cases.jsonl#organism_10_hpnn",
+    "/tmp/episode-published-cases/cellular/verified_cases.jsonl#cellular_letB",
+    "/tmp/episode-published-cases/root/cases.jsonl#yidC_membrane_insertase",
+    "/tmp/episode-published-cases/root/cases.jsonl#yebF_extracellular_location"
+  ],
+  "skills_read": [
+    "research-router-skill",
+    "ncbi-entrez-skill",
+    "rcsb-pdb-skill"
+  ],
+  "retrieval": "Primary web search/open, direct PMC HTML download, package ncbi_entrez.py for Entrez metadata/abstract XML, package rest_request.py for RCSB metadata. Eight raw primary texts support promoted records.",
+  "acquisition_limits": [
+    "Web open sometimes returned PMC browser challenges; direct HTTP PMC HTML contained full articles and was used.",
+    "Several older Europe PMC fullTextXML calls returned HTTP 500; those were not treated as successful full-text retrieval.",
+    "NCBI efetch often returned abstract/metadata only. Full-text claims reference the complete saved HTML or complete 2019 XML.",
+    "No supplemental PDF panel was independently remeasured."
+  ],
+  "artifacts": {
+    "cases": "cases.jsonl",
+    "detailed_traces": "detailed_traces.json",
+    "sources": "sources.json",
+    "leads_not_promoted": "leads_not_promoted.jsonl",
+    "live_probe": "detailed_traces.json#live_read_only_probe",
+    "raw": "raw/"
+  },
+  "raw_files": [
+    {
+      "path": "raw/5T77-core-nonpolymer_entity-5T77-2.json",
+      "bytes": 572,
+      "sha256": "029428585f0fe8bafdc8c1b15955a59157ef910d7eb725e44d38bd8793e635bb"
+    },
+    {
+      "path": "raw/5T77-core-nonpolymer_entity-5T77-3.json",
+      "bytes": 520,
+      "sha256": "92cd5022cc5e4f439636bdca26054b5f03daab5bdc443fe90a21f35d449160f7"
+    },
+    {
+      "path": "raw/5T77-core-nonpolymer_entity-5T77-4.json",
+      "bytes": 547,
+      "sha256": "7006f92d6ff6aac2f06a61be1b0f022d728ec75f8ae185aef0d301986418e2c9"
+    },
+    {
+      "path": "raw/5T77-core-nonpolymer_entity-5T77-5.json",
+      "bytes": 535,
+      "sha256": "2523c39aabf1216e14558ba2294e5b54dd6cb4940e6a9f6800c69e981442410c"
+    },
+    {
+      "path": "raw/5T77-core-nonpolymer_entity-5T77-6.json",
+      "bytes": 569,
+      "sha256": "1ca9a3e7acd82908a103429c343536fcb0e3dc3ee37497965e6bb0bb5b6c98a6"
+    },
+    {
+      "path": "raw/5T77-core-nonpolymer_entity-5T77-7.json",
+      "bytes": 665,
+      "sha256": "42c2d99be27ed209590ee15658430cd21e6bc1166016beaa27159c08fc8d4440"
+    },
+    {
+      "path": "raw/5T77-core-nonpolymer_entity-5T77-8.json",
+      "bytes": 969,
+      "sha256": "d3cd05a8967140692a828beaf4301add9401822f1f16226248cde3b1adf7a11b"
+    },
+    {
+      "path": "raw/5T77-core-polymer_entity-5T77-1.json",
+      "bytes": 49161,
+      "sha256": "67de1f10c902058d6d5d8d5df8b91b060f73eaf31956066b7fe326edd4242b41"
+    },
+    {
+      "path": "raw/5T77-entry.json",
+      "bytes": 19870,
+      "sha256": "ce064a70124e4d9d5f021c4d517d8c990be5eac5805eab561078361ce6df7ef4"
+    },
+    {
+      "path": "raw/5T77-fetch-metadata.json",
+      "bytes": 715,
+      "sha256": "17c33e3025b5584dbed7578dddd800b65fb362efc914a08d54a3391d9f28008e"
+    },
+    {
+      "path": "raw/DsbD-2000-abstract-screens.xml",
+      "bytes": 13290,
+      "sha256": "4db3922a062eab67db7ddbe6ee9fd577bec1e6d3b93e557a9472c21bdd4d0581"
+    },
+    {
+      "path": "raw/DsbD-2000-fetch-metadata.json",
+      "bytes": 283,
+      "sha256": "9aced47afbbe7886586af32eb3741438e8f9e15dfe5ff0cec27ff1b840a00253"
+    },
+    {
+      "path": "raw/MurJ-2017-preview.html",
+      "bytes": 316663,
+      "sha256": "236fed6acf6643f89ec99a4106854156773fbd5f0b8c38e7da12d64a16562f2f"
+    },
+    {
+      "path": "raw/PMC126151-efetch.xml",
+      "bytes": 6847,
+      "sha256": "ab9aacf3784e11e334561e8d620ff5b5c2a65ce62468b344e23eca47f2e766df"
+    },
+    {
+      "path": "raw/PMC126151-fetch-metadata.json",
+      "bytes": 263,
+      "sha256": "a5673021bb42704e24584bbba56f6c1a659b83704513f0de2d00b8054d7fb0f3"
+    },
+    {
+      "path": "raw/PMC126151.full.txt",
+      "bytes": 55941,
+      "sha256": "e037a5f357955097b6fa3bf7c44d9a3e7f54fdf75d55aa0fec77876f53d38211"
+    },
+    {
+      "path": "raw/PMC126151.html",
+      "bytes": 198138,
+      "sha256": "d93bc890efec5ed21597eaf537e4872e37d0ae91a040515a84b631cf0a0a673d"
+    },
+    {
+      "path": "raw/PMC126151.txt",
+      "bytes": 1052,
+      "sha256": "9256a41bdb85b750a80e226af77316cbfb0eef651c7b1e608bb4a8af55d0b05e"
+    },
+    {
+      "path": "raw/PMC193585-efetch.txt",
+      "bytes": 1271,
+      "sha256": "8d833a8781501611938a700d9e3f844de9c5be168c0d475b94ebe8dd0440ea07"
+    },
+    {
+      "path": "raw/PMC193585-efetch.xml",
+      "bytes": 6340,
+      "sha256": "7253cda1cb522a99f222e144728664b3b1057d004814993cf9159e711f6ff524"
+    },
+    {
+      "path": "raw/PMC193585.full.txt",
+      "bytes": 39656,
+      "sha256": "2afa8b0fef7eb05d0093965e6aaa2d947737de4435dfbe95d98d759e16861efe"
+    },
+    {
+      "path": "raw/PMC193585.html",
+      "bytes": 156288,
+      "sha256": "93f5051879350d1c32be3ccf294dfc2c3ee10f2946558ebf230b9c163007b2ce"
+    },
+    {
+      "path": "raw/PMC27967-efetch.xml",
+      "bytes": 7618,
+      "sha256": "8b603ea054130eaeea008c2973864507511079ef93c9cbfbb4b00ea00fcbd035"
+    },
+    {
+      "path": "raw/PMC27967-fetch-metadata.json",
+      "bytes": 262,
+      "sha256": "4baa76a311f33c8c6b6325f963a1c71c8654e30d998b1afefab0ab47757c090e"
+    },
+    {
+      "path": "raw/PMC27967.full.txt",
+      "bytes": 46918,
+      "sha256": "d17974f54fabf4667df69fca97ba26e4405393a122dec5dba386fe293f06f57b"
+    },
+    {
+      "path": "raw/PMC27967.html",
+      "bytes": 184934,
+      "sha256": "a413510bdd37569aca75602667b6b9cd369c15082d5696ca4683d87644cab6e5"
+    },
+    {
+      "path": "raw/PMC27967.txt",
+      "bytes": 1805,
+      "sha256": "e84efd8a607e4b52bc685db3fc560c7a7310452311f44ec0cf607f5fe838ce46"
+    },
+    {
+      "path": "raw/PMC3102273.full.txt",
+      "bytes": 49884,
+      "sha256": "b4e2de7a4fe308af328b2f3af9ea83c94a3a8ef3fc30e9c8d9375cfdaac82bc8"
+    },
+    {
+      "path": "raw/PMC3102273.html",
+      "bytes": 178300,
+      "sha256": "6c14d97d7434720d367440696f77227dfc26a9ebf808c27d2029d7610526b2e7"
+    },
+    {
+      "path": "raw/PMC4163187-efetch.xml",
+      "bytes": 45476,
+      "sha256": "20bb6af7951abc0dfc7dddf54dc455934f3b27f903cd72cea8492d9c7ac6846a"
+    },
+    {
+      "path": "raw/PMC4163187-fetch-metadata.json",
+      "bytes": 264,
+      "sha256": "8f02a51fde595168113166d823e0c2b6dca64d6c7c1eba0026cc05e72fc56cd6"
+    },
+    {
+      "path": "raw/PMC4163187.full.txt",
+      "bytes": 22712,
+      "sha256": "2080fd54c3e8c09e5311763904c818fe32af94c81b86f75ee4312dfb2a268214"
+    },
+    {
+      "path": "raw/PMC4163187.html",
+      "bytes": 143193,
+      "sha256": "946157d2d3f66ca73d64508345e29da96b8723da4106af551cc262054aee6f4b"
+    },
+    {
+      "path": "raw/PMC4163187.txt",
+      "bytes": 17799,
+      "sha256": "b6ada21e6042e4d7247b605cb0eff952bb484014684642419ec0855a32963bc1"
+    },
+    {
+      "path": "raw/PMC4428285-efetch.xml",
+      "bytes": 6799,
+      "sha256": "4e4a76295d3f52acc4217a544075cf138e41ee89950696260104e287656cee5f"
+    },
+    {
+      "path": "raw/PMC4428285-fetch-metadata.json",
+      "bytes": 264,
+      "sha256": "15b734d117ae2fa6caec331e7e4947dff80c18f01d0ff208c724cfb3f0b6d66a"
+    },
+    {
+      "path": "raw/PMC4428285.full.txt",
+      "bytes": 63437,
+      "sha256": "c30ccf9696c7054f5ddbee3d553fa4a3f35747b76977012bcd2ea1ac92870bd4"
+    },
+    {
+      "path": "raw/PMC4428285.html",
+      "bytes": 217098,
+      "sha256": "37e965c54dd0990dea98c5ec711af97c65767fb84a4930fccf40cb1394290c75"
+    },
+    {
+      "path": "raw/PMC4428285.txt",
+      "bytes": 1444,
+      "sha256": "798147d8516b589abc2d8cf815eb841dac8f97d197d627a85f0eb84dd1549d73"
+    },
+    {
+      "path": "raw/PMC4443310-efetch.xml",
+      "bytes": 12593,
+      "sha256": "e0299fc06edc9082ad16034042ab418efd9d31348a2d9729e307a6f819bcceeb"
+    },
+    {
+      "path": "raw/PMC4443310-fetch-metadata.json",
+      "bytes": 264,
+      "sha256": "67ba3afaef0d225e7ce0344a66502700d9cafc9fa8a588d2ebe4901dc0347277"
+    },
+    {
+      "path": "raw/PMC4443310.full.txt",
+      "bytes": 49501,
+      "sha256": "fb8547c2785997469a66d0c89880e588197b3bd6942516b4809779cac66ea743"
+    },
+    {
+      "path": "raw/PMC4443310.html",
+      "bytes": 188154,
+      "sha256": "dabe44041c68d87b8fc6e53a5bd9b1fa99911987234c801c62451f34f99119a2"
+    },
+    {
+      "path": "raw/PMC4443310.txt",
+      "bytes": 2946,
+      "sha256": "30d583945422e9b5b3f238369a49e1e585555b367e8f47f0b51e004892c03d09"
+    },
+    {
+      "path": "raw/PMC6430707.clean.txt",
+      "bytes": 55976,
+      "sha256": "79c648a70e4f193f88d740dfd349afb240e019139c870e84caddb4a90ceb32b1"
+    },
+    {
+      "path": "raw/PMC6430707.txt",
+      "bytes": 78469,
+      "sha256": "1059b9dea471492642e1c8d6c266cb899d9bf06eacbbc2eaa2290629a924818a"
+    },
+    {
+      "path": "raw/PMC6430707.xml",
+      "bytes": 108577,
+      "sha256": "45434d6983f90904b1f0ecf7143b9bf9e1d25ed4486876e87ccccb58124f144e"
+    },
+    {
+      "path": "raw/PMC94335-efetch.xml",
+      "bytes": 6822,
+      "sha256": "152687241f39a6ed919c4b89120330985f7a6298e5a6bc7edf3e206041abfde9"
+    },
+    {
+      "path": "raw/PMC94335-fetch-metadata.json",
+      "bytes": 262,
+      "sha256": "c1eb686b410660ea2c511a199a80ba7963445f4924c7507b1d0e253aa48e1917"
+    },
+    {
+      "path": "raw/PMC94335.full.txt",
+      "bytes": 39131,
+      "sha256": "bbe0c287fc830c49d2995eeaadad1bcce24c6b2485baa1727de7f94b87f8d059"
+    },
+    {
+      "path": "raw/PMC94335.html",
+      "bytes": 157167,
+      "sha256": "586cd7fd73b1b29bb5afd9f0d9e9da8c62b6e3eec930ff9b4ed89159ff729515"
+    },
+    {
+      "path": "raw/PMC94335.txt",
+      "bytes": 1894,
+      "sha256": "11b4dd2282bca67fe12bce139bd674b6579e8e3fc6aa71953f6c50c7665fd961"
+    }
+  ],
+  "interpretation_boundary": "This is a pursued research lane suggested by origin cases, not an accepted scoring dimension, fixed design, proposed slot taxonomy or implemented episode behavior."
+}

@@ -1,0 +1,123 @@
+{
+  "kind": "research_arithmetic_receipt",
+  "passed": 17,
+  "checks": [
+    {
+      "check": "target coverage",
+      "passed": true,
+      "value": 0.8293650793650794
+    },
+    {
+      "check": "distance 1 angstrom",
+      "passed": true,
+      "value": 0.2551892551892552
+    },
+    {
+      "check": "distance 2 angstrom",
+      "passed": true,
+      "value": 0.5307936507936508
+    },
+    {
+      "check": "distance 3 angstrom",
+      "passed": true,
+      "value": 0.6634920634920636
+    },
+    {
+      "check": "unit invariance",
+      "passed": true,
+      "value": 0.5307936507936508
+    },
+    {
+      "check": "zero extent",
+      "passed": true,
+      "value": 0.0
+    },
+    {
+      "check": "perfect full extent",
+      "passed": true,
+      "value": 1.0
+    },
+    {
+      "check": "symmetric lengths",
+      "passed": true,
+      "value": 0.44586666666666663
+    },
+    {
+      "check": "Rfree gap 0.215/0.273",
+      "passed": true,
+      "value": 0.058000000000000024
+    },
+    {
+      "check": "Rfree gap 0.188/0.212",
+      "passed": true,
+      "value": 0.023999999999999994
+    },
+    {
+      "check": "Rfree gap 0.201/0.288",
+      "passed": true,
+      "value": 0.08699999999999997
+    },
+    {
+      "check": "Rfree gap 0.213/0.244",
+      "passed": true,
+      "value": 0.031
+    },
+    {
+      "check": "Rfree gap 0.175/0.21",
+      "passed": true,
+      "value": 0.035
+    },
+    {
+      "check": "reject out-of-domain input",
+      "input": [
+        253,
+        252,
+        252,
+        1.5,
+        2
+      ],
+      "passed": true
+    },
+    {
+      "check": "reject out-of-domain input",
+      "input": [
+        209,
+        252,
+        252,
+        -1.5,
+        2
+      ],
+      "passed": true
+    },
+    {
+      "check": "reject out-of-domain input",
+      "input": [
+        209,
+        252,
+        252,
+        1.5,
+        0
+      ],
+      "passed": true
+    },
+    {
+      "check": "reject out-of-domain input",
+      "input": [
+        209,
+        0,
+        252,
+        1.5,
+        2
+      ],
+      "passed": true
+    }
+  ],
+  "missing_factor_example": {
+    "point": null,
+    "bounds": [
+      0,
+      0.5307936507936508
+    ],
+    "meaning": "Conditional bound under an explicitly proposed multiplicative rule; not a confidence interval"
+  }
+}

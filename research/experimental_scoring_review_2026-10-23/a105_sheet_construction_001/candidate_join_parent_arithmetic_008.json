@@ -1,0 +1,90 @@
+{
+  "synthetic": true,
+  "policy_status": "proposal_not_adopted",
+  "scope": "same invented target T and reference condition C, explicitly stipulated here",
+  "input_artifacts": [
+    "a105_sheet_construction_001/parent_joined_check_003.json",
+    "a105_calibrated_contract_007/ARITHMETIC_RESULTS_001.json"
+  ],
+  "activity": {
+    "corrected_rate_per_minute": 0.68,
+    "variance_per_minute_squared": 0.11124225,
+    "source_profile_separation": 2.0783470309167607,
+    "source_index": 0.7775614860794028,
+    "correspondence_components": {
+      "compatible_raw_sequence_scores": 0.7741935483870968,
+      "directional_structure_minimum": 0.85,
+      "predefined_observed_sites": 0.8,
+      "eligible_placement_replicates": 0.85,
+      "declared_system_distance": 0.6907343306373547
+    },
+    "declared_equal_family_mean": 0.7929855758048903,
+    "target_activity_index": 0.6165950427623814
+  },
+  "specificity": {
+    "mapped_log_ratio_estimates": [
+      0.8,
+      0.6,
+      0.9
+    ],
+    "joint_covariance": [
+      [
+        0.23,
+        0.115,
+        0.06
+      ],
+      [
+        0.115,
+        0.3,
+        0.085
+      ],
+      [
+        0.06,
+        0.085,
+        0.4
+      ]
+    ],
+    "pooled_effect": 0.7739130434782608,
+    "pooled_variance": 0.15548163418290856,
+    "profile_separation": 1.9260840742167333,
+    "target_specificity_index": 0.7456307045069298
+  },
+  "candidate": {
+    "expression": {
+      "all_of": [
+        "activity_A_under_C",
+        "activity_A_exceeds_B_under_C"
+      ]
+    },
+    "reducer": "minimum_of_signed_indexes_then_positive_part",
+    "signed_axis_index": 0.6165950427623814,
+    "coordinate": 0.6165950427623814,
+    "coordinate_bounds": [
+      0.6165950427623814,
+      0.6165950427623814
+    ],
+    "status": "complete_synthetic_conventional_point",
+    "full_joint_profile_separation": null,
+    "independent_experiment_count": null
+  },
+  "checks": {
+    "activity": true,
+    "variance": true,
+    "source_index_matches_saved_calculation": true,
+    "activity_index_matches_saved_calculation": true,
+    "mapped_effect_matches_saved_calculation": true,
+    "mapped_variance_matches_saved_calculation": true,
+    "mapped_separation_matches_saved_calculation": true,
+    "mapped_index_matches_saved_calculation": true,
+    "candidate_conjunction": true,
+    "duplicate_activity_statement_invariance": true,
+    "duplicate_specificity_statement_invariance": true,
+    "activity_rate_unit_change_invariance": true
+  },
+  "limits": [
+    "No biological source-to-target fit is supplied by this synthetic composition.",
+    "The two fixture calculations are not counted as additional experiments.",
+    "Minimum is a proposed assertion-combination convention, not joint statistical inference.",
+    "A105 and all ten sheets remain unfinished; this does not implement a reader or scorer."
+  ]
+}

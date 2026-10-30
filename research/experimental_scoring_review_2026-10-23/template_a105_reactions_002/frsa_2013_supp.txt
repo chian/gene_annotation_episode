@@ -1,0 +1,697 @@
+                                      Supporting Information
+
+
+    QM/MM Studies of Pyruvate C-C Bond Cleavage by FrsA are not Consistent with its
+
+            Proposed Function as a Cofactor-Independent Pyruvate Decarboxylase
+
+
+              Whitney F. Kellett,† Elizabeth Brunk, Bijoy J. Desai, Alexander A. Fedorov,
+
+
+             John A. Gerlt, Steven C. Almo, Ursula Rothlisberger, and Nigel G. J. Richards†
+
+
+Contribution from the Department of Chemistry, University of Florida, Gainesville, FL 32611, USA, the
+
+Laboratory of Computational Chemistry and Biochemistry, Ecole Polytechnique Fédérale Lausanne,
+
+CH-1015 Lausanne, Switzerland, the Departments of Chemistry & Biochemistry, Institute for Genomic
+
+Biology, University of Illinois at Urbana-Champaign, Urbana, IL 61801, USA, and the Albert Einstein
+
+College of Medicine, 1300 Morris Park Avenue, Bronx, NY 10461, USA.
+
+
+†
+    Present address: Department of Chemistry & Chemical Biology, 402. N. Blackford. St., Indiana
+
+University Purdue University Indianapolis (IUPUI), Indianapolis, IN 46202, USA
+
+
+Obtaining an initial model of the FrsA/pyruvate complex
+
+
+Coordinates for the free enzyme monomer were obtained from the PDB (entry: 3MVE) and all
+
+crystallographic waters and counter-ions were removed prior to the addition of hydrogen atoms using
+
+the tLEAP module of the AMBER11 software package (1, 2). The resulting structure was placed in a
+
+box of explicit TIP3P water molecules (3) with two chloride ions to yield a system with zero net charge.
+
+After constrained energy minimization, the FrsA structure was carefully equilibrated using a series of
+
+constrained molecular dynamics simulations (NPT ensemble). These calculations all employed the
+
+AMBER99 force field (4, 5), as implemented in the Sander module of the AMBER11 software package
+
+
+                                                                                                      1
+(1), and the Particle-Mesh Ewald algorithm to treat electrostatic interactions (6). Force field parameters
+
+for pyruvate were generated using the Generalized AMBER Force Field (GAFF) (7), and then the
+
+GLIDE tool (8) in the MAESTRO package was used to generate models of the FrsA/pyruvate complex.
+
+The docking calculations employed an active site consisting of the residues (Arg-53, Asp-203, Arg-272,
+
+Phe-273, Phe-303, Tyr-316, Leu-320, Met-338 and Trp-341) proposed in the original description of
+
+FrsA structure and function (9). Subsequent energy minimization of eight FrsA/pyruvate complexes
+
+followed by constrained MD equilibration (over a period of 40 ns in the NPT ensemble) gave the same
+
+final structure, which was then used as the starting point for QM/MM simulations (Figure S1).
+
+Coordinates for this FrsA/pyruvate complex in PDB format (10) are available from the authors on
+
+request.
+
+
+
+Figure S1 Ribbon representation of the FrsA/pyruvate model complex showing the location of the
+
+bound ligand. Pyruvate is rendered as cylinders colored by atom type. Color scheme: C – cyan; H –
+
+white; O – red. The figure was produced with the VMD software package (11).
+
+
+
+
+                                                                                                        2
+CPMD simulations of pyruvate decarboxylation in the FrsA/pyruvate complex
+
+The QM/MM simulations employed an extension of CPMD (12, 13). Atoms in the QM region,
+
+comprising pyruvate, three active site waters, and the Tyr-316 side chain capped at Cα with a
+
+monovalent pseudopotential (13), were described by the BLYP functional (14, 15) and norm-conserving
+
+Martins-Trouiller pseudopotentials (16) with dispersion-corrected atom-centered potentials (17-20).
+
+Wavefunctions were expanded in a plane wave basis set with a 70 Ry cutoff inside an orthorhombic box
+
+(37 Å x 22 Å x 22 Å), and long-range interactions were decoupled using the Martyna-Tuckerman
+
+scheme (21). The remaining protein atoms and explicit solvent water molecules were described by a
+
+classical AMBER99 force field (4, 5). QM/MM simulations were performed at constant pressure and
+
+temperature, using a Nosé Hoover thermostat, after slow heating to 300K over 2-3 ps. In these heating
+
+simulations, however, the Tyr-316 hydroxyl spontaneously transferred a proton to the pyruvate
+
+carboxylate when the temperature exceeded 250 K. Control calculations, using a constraint on the O-H
+
+bond of the Tyr-316 moiety, demonstrated that the proton transfer event was not due to the starting
+
+configuration. Thus, when the constraint on the O-H bond was released at 300K, spontaneous proton
+
+transfer again took place. The resulting system containing neutral pyruvic acid was then equilibrated for
+
+2 ps before constrained MD simulations were performed for thermodynamic integration (22, 23) using a
+
+reaction coordinate chosen to be the bond distance between C1 and C2 of the pyruvate molecule. Hence,
+
+constraints were employed at distances spanning 1.55 to 4.24 Å (in increments of 25 pm) with sampling
+
+at each constrained distance for a period of 1 ps. Although this relatively short time permits only a
+
+limited exploration of phase space, the statistical error in the free energy barrier was estimated to be
+
+about 0.2 kcal/mol on the basis of the standard deviations in the constraint forces. Moreover, taking only
+
+half the sampled points per window gave only a 0.1 kcal/mol change in the calculated barrier, which is
+
+smaller than the accuracy expected for standard GGAs. The free energy profile was obtained by
+
+integrating the constraint forces over the respective distances.
+
+
+
+
+                                                                                                        3
+CPMD simulations of pyruvate decarboxylation in water
+
+Pyruvate monoanion was placed in a box of explicit TIP3P water molecules (3) with a single potassium
+
+ion to yield a system with zero net charge, and the resulting system equilibrated using a series of MD
+
+simulations in the NPT ensemble. These calculations all employed the AMBER99 force field (4, 5), as
+
+implemented in the Sander module of the AMBER11 software package (1), and the Particle-Mesh
+
+Ewald algorithm to treat electrostatic interactions (6). GAFF (7) parameters were employed to describe
+
+pyruvate in these equilibration studies. The equilibrated system was then employed in QM/MM
+
+simulations (12, 13). Atoms in the QM region comprised the pyruvate monoanion and a water molecule,
+
+which was hydrogen bonded to the carboxylate group of pyruvate. These QM atoms were described by
+
+the BLYP functional (14, 15) and norm-conserving Martins-Trouiller pseudopotentials (16) with
+
+dispersion-corrected atom-centered potentials (17-20). Wavefunctions were expanded in a plane wave
+
+basis set with a 70 Ry cutoff inside an orthorhombic box (12 Å x 7 Å x 7 Å), and long-range
+
+interactions were decoupled using the Martyna-Tuckerman scheme (21). The remaining water
+
+molecules were described by a classical AMBER99 force field (4, 5). QM/MM simulations were
+
+performed at constant pressure and temperature, using a Nosé Hoover thermostat, after heating to 300K.
+
+After equilibration, constrained MD simulations were performed for thermodynamic integration (22, 23)
+
+using a reaction coordinate chosen to be the bond distance between C1 and C2 of the pyruvate molecule.
+
+Hence, constraints were employed at distances spanning 1.6 to 4.5 Å (in ten increments) with sampling
+
+at each constrained distance for a period of 1 ps. The free energy profile was obtained by integrating the
+
+constraint forces over the respective distances.
+
+
+
+
+                                                                                                        4
+Figure S2 Free energy profile (kcal/mol) for cleavage of the pyruvate C-C bond in water, as computed
+
+by thermodynamic integration. Error bars show the statistical sum of errors associated with the
+
+calculated free energy.
+
+
+
+
+pKa estimates using Poisson-Boltzmann calculations
+
+
+The protonation state of all protein residues in the X-ray crystal structure of unliganded FrsA (3MVE),
+
+the equilibrated model of the FrsA/pyruvate complex, and several different “frames” from classical MD
+
+trajectories for unliganded FrsA and the FrsA/pyruvate complex were calculated (Table S1) using two
+
+well-established methods, H++ (24, 25) and         Adaptive Poisson-Boltzmann (APB) (26). These
+
+calculations suggest that the pKa of the Tyr-316 side chain is lowered by approximately one unit when
+
+pyruvate is bound to the protein (Table S1). Superimposing different MD snapshots of the active site is
+
+consistent with the view that electrostatic repulsion between the substrate carboxylate and the Asp-203
+
+side chain, and steric interactions with Met-312, positions pyruvate close to Tyr-316 and Arg-273
+
+(Figure S3).
+
+
+
+
+                                                                                                     5
+Table S1 pKa values computed for Tyr-316 in unliganded FrsA (3MVE) and various MD trajectory
+
+“snapshots” of the FrsA/pyruvate complex, and for pyruvate in the final model of the FrsA/pyruvate
+
+complex.
+
+             Residue                  Calculated pKa (Method A)a Calculated pKa (Method B)a
+
+        Tyr-316 (3MVE)                             9.6                              10.5
+Tyr-316 (FrsA/pyruvate: 18.60 ns)                  9.8                               9.9
+Tyr-316 (FrsA/pyruvate: 18.75 ns)                  9.9                               9.9
+Tyr-316 (FrsA/pyruvate: 18.90 ns)                  9.0                              10.1
+Tyr-316 (FrsA/pyruvate: 19.00 ns)                  9.2                               9.2
+
+Pyruvate (FrsA/pyruvate: 19.00 ns)                 n.d.                             3.8
+a
+  H++ (http://biophysics.cs.vt.edu/H++)
+b
+  APBS (ref. 26)
+
+Figure S3 Superimposed snapshots of the active site from the MD trajectory of the equilibrated
+
+FrsA/pyruvate complex. The average distance between pyruvate and the Asp-203 side chain is shown
+
+by the dashed line. Residue coloring reflects the time of the snapshot, ranging from red (early) to blue
+
+(late).
+
+
+
+
+                                                                                                      6
+Protein expression and purification
+
+
+Method A
+
+The gene encoding the FrsA from Vibrio vulnificus in the plasmid pQE-FrsA was generously provided
+
+by Dr. Sun-Shin Cha (Marine Biotechnology Research Center, Korean Ocean Research & Development
+
+Institute) and expressed in Escherichia coli JM109 cells containing the F’ episomal element, as reported
+
+previously (9). F’ is essential for protein expression, and JM109 cells containing this element were
+
+identified by screening on minimal growth media containing proline. After transformation with pQE-
+
+FrsA, starter cultures of JM109 cells were grown overnight in M9 minimal media supplemented with
+
+thiamin (5 µg/mL), L-proline (5 µg/mL) and ampicillin (100 µg/mL). These starter cultures were used to
+
+inoculate 3 L of M9 minimal media supplemented with thiamin, L-proline and ampicillin (100 µg/mL).
+
+The cultures were grown with aeration at 37 °C to mid-log phase (O.D of 0.6) and then heat shocked at
+
+42 °C for 15 min before the addition of IPTG (0.5 mM) to induce protein expression. Cells were
+
+harvested after 6 h, lysed using sonication, and subsequently centrifuged at 5000x g to obtain a clear
+
+lysate that was added to Ni-NTA resin suspended in a phosphate wash buffer (50 mM NaH2PO4
+
+containing 10 mM imidazole and 500 mM KCl, pH 7). After 1 h incubation on ice, FrsA was eluted
+
+from the resin (50 mM NaH2PO4 containing 250 mM imidazole and 500 mM KCl, pH 7) and protein-
+
+containing fractions were pooled and dialyzed into 50 mM NaH2PO4 containing 500 mM KCl and 1
+
+mM DTT, pH 7. The inclusion of DTT in the elution buffer was to prevent formation of the FrsA dimer
+
+by a disulfide bond between the cysteine residues, which had been reported to be inactive (9).
+
+
+Method B
+
+The codon-optimized gene encoding the FrsA from Vibrio vulnificus was synthesized (GenScript,
+
+Piscataway NJ) and ligated into the PUC57 plasmid with NdeI and BamHI restriction sites at the 5’ and
+
+3’ ends, respectively. The resulting plasmid was subjected to digestion with NdeI and BamHI and
+
+ligated into the pET15b expression vector (N-terminal His6-tag). The ligated plasmid was transformed
+
+
+                                                                                                      7
+into Escherichia coli XL1 blue cells, and a single colony was inoculated into 5 mL of LB containing
+
+ampicillin (100μg/mL) and allowed to grow overnight at 37 °C. The plasmid encoding FrsA was then
+
+transformed into Escherichia coli BL21 (DE3) cells and starter cultures prepared from single colonies.
+
+These were used to inoculate 4 L of LB containing ampicillin (100 μg/mL), and resulting cultures were
+
+grown at 37 °C with aeration to mid-log phase (O.D. ~ 0.6) before the addition of IPTG (1 mM final
+
+concentration). Cells were harvested after 4 h, and lysed by sonication. The clarified lysate was then
+
+loaded onto Ni-NTA resin and FrsA eluted using an imidazole gradient. The fractions containing FrsA
+
+(determined by SDS PAGE) were pooled, dialyzed against phosphate buffered saline containing 3 mM
+
+DTT, and the His-tag cleaved using thrombin (Promega, Madison WI). The resulting preparation of
+
+FrsA was dialyzed against storage buffer (20 mM HEPES containing 150 mM NaCl and 3 mM DTT,
+
+pH 7.5). After concentration to ~ 10 mg/mL, the purified FrsA was stored in 20 μL aliquots at -80 °C.
+
+
+Kinetic assays of recombinant, wild type FrsA
+
+
+Method A: Membrane-Inlet Mass Spectrometry (MIMS) for direct detection of CO2
+
+The real-time production of 13CO2 was monitored by MIMS (27) when 1 mM 13C-labeled pyruvate was
+
+incubated with 50 nM recombinant FrsA dissolved in 50 mM NaH2PO4 buffer, pH 7, containing 500
+
+mM KCl and 1 mM DTT, over a period of 12 min at 37°C. No detectable decarboxylase activity was
+
+observed.
+
+
+
+Method B: Spectrophotometric assay for pyruvate decarboxylation. Decarboxylation of pyruvate to
+
+acetaldehyde was measured using a coupled assay with yeast alcohol dehydrogenase (Sigma-Aldrich,
+
+St. Louis MO) by monitoring the decay in NADH absorbance at 340 nm. Assays were carried out in 50
+
+mM sodium phosphate, pH 7.0; containing 1 mM DTT; 5 mM pyruvate; 0.2 mM NADH; 3.7 units of
+
+alcohol dehydrogenase and FrsA ranging from 1 nM to 1 uM. No detectable activity was observed. At
+
+the end of each assay, acetaldehyde was added to ensure that the alcohol dehydrogenase was active.
+
+
+
+
+                                                                                                        8
+Method C: 1H NMR detection of the FrsA-catalyzed pyruvate decarboxylation. 1H NMR spectroscopy
+
+was used to detect acetaldehyde formation when 5 μM FrsA was incubated for 90 min at 20 °C with 10
+
+mM pyruvate in D2O with 50 mM phosphate, pD 7.0, containing 1mM DTT. Although signals
+
+corresponding to the methyl group protons of unhydrated and hydrated pyruvate anion were detected, no
+
+resonance(s) were detected for the protons in acetaldehyde.
+
+
+
+Crystallization, data collection, structure determination and crystallographic refinement
+
+
+Crystals of recombinant, wild type FrsA were grown at room temperature using the “sitting drop”
+
+method. In these experiments, the protein solution contained FrsA (20 mg/mL), 150 mM NaCl and 3
+
+mM DTT dissolved in 20 mM Hepes buffer, pH 7.5 and the precipant was composed of 20% PEG
+
+monomethyl ether 2000 and 200 mM trimethylamine N-oxide in 0.1 M Tris buffer, pH 8.5. Crystals
+
+appeared in 3-4 days and exhibited diffraction consistent with the space group P21, with two
+
+polypeptides per asymmetric unit. Prior to data collection, the crystals of FrsA were transferred to
+
+cryoprotectant solutions, composed of their mother liquids containing 20% glycerol, and flash-cooled in
+
+a nitrogen stream. The X-ray diffraction data set (Table S2) was collected at the NSLS X29A beamline
+
+(Brookhaven National Laboratory) on the 315Q CCD detector. Diffraction intensities were integrated
+
+and scaled with programs DENZO and SCALEPACK (28).
+
+
+
+The FrsA X-ray crystal structure (Figure S4) was solved using only input diffraction and sequence data
+
+by molecular replacement with the fully automated molecular replacement pipeline BALBES (29). The
+
+search model employed by BALBES was that of a previously reported structure for FrsA (3MVE) (9).
+
+After obtaining a partially refined structure from BALBES, several iterative cycles of refinement were
+
+then performed. Thus, model rebuilding was performed with COOT (30) and refined with PHENIX
+
+(31), followed by automatic model rebuilding using the ARP software package (32). The quality of the
+
+final structure was verified with omit maps, and stereochemistry checked with WHATCHECK (33) and
+
+
+
+                                                                                                     9
+MOLPOBITY (34). All loops are well defined in the current FrsA structure, with only the backbone
+
+torsion angles of Asn-108 adopting values in the disallowed region of the Ramachandran plot. The
+
+program LSQKAB 35) was used for structural superposition, and figures with electron density maps
+
+were prepared using PYMOL. Final crystallographic refinement statistics are shown in Table S2.
+
+
+
+
+Table S2 Crystallographic data collection and refinement statistics.a
+
+
+                 Data Collection
+
+               Resolution (Å)                                                  -1.95
+                X-ray Source                                               NSLS X29A
+              Wavelength (Å)                                                   1.075
+                Space Group                                                     P21
+         Molecules in asymmetric unit                                             2
+              Cell dimensions                                 a = 42.66 Å, b = 104.54 Å, c = 82.30 Å,
+                                                                             β = 91.18o
+          Unique reflections observed                                          51363
+              Completeness (%)                                                  97.8
+                    Rmergeb                                                    0.083
+
+                    Refinement
+
+    Protein residues/water atoms per asu                                         6405/274
+            Other ligands per asu                                                    2
+           Reflections (work/free)                                              51363/2608
+                Rcryst/Rfree (%)                                                 17.9/22.7
+               Resolution (Å)                                                   25.00-1.95
+           Average B-factor (Å2)                                                    29.2
+                 Protein (Å2)                                                       29.3
+             Hexanoic acid (Å2)                                                    32.9
+        PEG monomethyl ether (Å2)                                                   47.5
+         RMSDc Bond lengths (Å)                                                    0.008
+           RMSD Bond angles (o)                                                     1.05
+
+a
+  Coordinates are deposited as PDB entry 4I4C.
+b
+  Rmerge = ∑hkl ∑i| Ihkl, i-<Ihkl> I | / ∑hkl∑i | Ihkl, i |, where <Ihkl> is the mean intensity of the multiple Ihkl, i observations for
+symmetry-related reflections.
+c
+  RMSD: root mean square deviation.
+
+
+
+
+                                                                                                                                    10
+Figure S4 Ribbon representation of the FrsA monomer containing putative ligands. The N- (1-165) and
+
+C-terminal (166-415) domains are colored brown and cyan, respectively. Bound PEG monomethyl ether
+
+(H3C[OCH2CH2]5OH) and hexanoic acid (H3CCH2CH2CH2CH2 COOH) ligands are rendered as
+
+cylinders colored yellow and green, respectively, except for oxygen atoms, which are shown in red.
+
+Bound hexanoate is positioned in a very similar manner to pyruvate in the equilibrated computational
+
+model of the FrsA/pyruvate complex (Figure S1). The image was produced with PYMOL (DeLano
+
+Scientific Software LLC, Palo Alto, CA).
+
+
+
+
+                                                                                                 11
+Literature Cited
+
+
+1. Case, D. A., Cheatham, T. E., Darden, T., Gohlke, H., Luo, R., Merz, K.M., Onufriev, A.
+
+   Simmerling, C., Wang, B., and Woods, R. J. (2005) The AMBER biomolecular simulation
+
+   programs, J. Comput. Chem. 26, 1668-1688.
+
+
+2. Pearlman, D. A., Case, D. A., Caldwell, J. W., Ross, W. S., Cheatham, T. E., Debolt, S., Ferguson,
+
+   D., Siebel, G., and Kollman, P. A. (1995) AMBER, a package of computer programs for applying
+
+   molecular mechanics, normal mode analysis, molecular dynamics and free energy calculations to
+
+   simulate the structural and energetic properties of molecules, Computer Phys. Commun. 91, 1-41.
+
+
+3. Jorgensen, W. L., Chandrasekhar, J., Madura, J. D., Impey, R. W., and Klein, M. L. (1983)
+
+   Comparison of simple potential functions for simulating liquid water, J. Chem. Phys. 79, 926-935.
+
+
+4. Hornak, V., Abel, R., Okur, A., Strockbine, B., Roitberg, A., and Simmerling, C. (2006)
+
+   Comparison of multiple AMBER force fields and development of improved backbone parameters,
+
+   Proteins: Struct. Funct. Genet. 65, 712-725.
+
+
+5. Ponder, J. W., and Case, D. A. (2003) Force fields for protein simulations, Adv. Prot. Chem. 66, 27-
+
+   85.
+
+
+6. Darden, T., York, D., and Pedersen, L. (1993) Particle Mesh Ewald. An NlogN method for Ewald
+
+   sums in large systems, J. Chem. Phys. 98, 10089-10092.
+
+
+7. Wang, J. M., Wolf, R. M., Caldwell, J. W., Kollman, P. A., and Case, D. A. (2004) Development
+
+   and testing of a general AMBER force field, J. Comput. Chem. 25, 1157-1174.
+
+
+8. Friesner, R. A., Banks, J. L., Murphy, R. B., Halgren, T. A., Klicic, J. J., Mainz, D. T., Repasky, M.
+
+   P., Knoll, E. H., Shaw, D. E., Shelley, M., Perry, J. K., Francis, P., and Shenkin, P. S. (2004)
+
+   GLIDE: A new approach for rapid, accurate docking and scoring. 1. Method and assessment of
+
+   docking accuracy, J. Med. Chem. 47, 1739-1749.
+
+
+                                                                                                      12
+9. Lee, K.-J., Jeong, C.-S., An, K. J., Lee, H.-J., park, S.-J., Seok, Y.-J., Kim, P., Lee, J.-H., Lee, K.-
+
+   H., and Cha, S.-S. (2011) FrsA functions as a cofactor-independent decarboxylase to control
+
+   metabolic flux, Nat. Chem. Biol. 7, 434-436.
+
+
+10. Berman, H. M., Kleywegt, G. J., Nakamura, H., and Markley, J. L. (2012) The Protein Databank at
+
+   40: Reflecting on the past to prepare for the future, Structure 20, 391-396.
+
+
+11. Humphrey, W., Dalke, A., and Schulten, K. (1996) VMD – Visual Molecular Dynamics, J. Molec.
+
+   Graph. 14, 33-38.
+
+
+12. Car, R., and Parrinello, M. (1985) Unified approach for molecular dynamics and density functional
+
+   theory, Phys. Rev. Lett. 55, 2471-2474.
+
+
+13. Laio, A., VandeVondele, J., and Rothlisberger, U. (2002) A Hamiltonian coupling scheme for
+
+   hybrid Car-Parrinello molecular dynamics simulations, J. Chem. Phys. 116, 6941–6948.
+
+
+14. Becke, A. D. (2008) Density functional exchange energy approximation with correct asymptotic
+
+   behavior, Phys. Rev. A 38, 3098-3100.
+
+
+15. Lee, C., Yang, W., and Parr, R. G. (1988) Development of the Colle-Salvetti correlation energy
+
+   formula into a functional of the electron density, Phys. Rev. B 37, 785-789.
+
+
+16. Trouiller, N., and Martins, J. L. (1991) Efficient pseudopotentials for plane-wave calculations. 2.
+
+   Operators for fast iterative diagonalization, Phys. Rev. B. 43, 8861–8869.
+
+
+17. Lin, I.-C., Seitsonen, A. P., Coutinho-Neto, M. D., Tavernelli, I, and Rothlisberger, U. (2009)
+
+   Importance of van der Waals interactions in liquid water, J. Phys. Chem. B 113, 1127-1131.
+
+
+18. von Lilienfeld, O. A., Tavernelli, I., Rothlisberger, U., and Sebastiani, D. (2007) Optimization of
+
+   effective atom centered potentials for London dispersion forces in density functional theory, Phys.
+
+   Rev. Lett. 93, 153004.
+
+
+
+
+                                                                                                        13
+19. Lin, I.-C., Coutinho-Neto, M. D., Felsenheimer, C., von Lilienfeld, O. A., Tavernelli, I., and
+
+   Rothlisberger, U. (2007) Library of dispersion-corrected atom-centered potentials for generalized
+
+   gradient approximation functionals: Elements H, C, N, O, He, Ne, Ar, and Kr, Phys. Rev. B. 75,
+
+   205131.
+
+
+20. Arey, J. S., Aeberhard, P. C., Lin, I.-C., and Rothlisberger, U. (2009) hydrogen bonding described
+
+   using dispersion-corrected density functional theory, J. Phys. Chem. B 113, 4726-4732.
+
+
+21. Martyna, G. J., and Tuckerman, M. E. (1999) Molecular dynamics algorithms for path integrals at
+
+   constant pressure, J. Chem. Phys. 110, 3275-3290.
+
+
+22. Sprik, M., and Ciccotti, G. (1998) Free energy from constrained molecular dynamics, J. Chem.
+
+   Phys. 109, 7737-7744.
+
+
+23. Kirkwood, J. G. (1935) Statistical mechanics of fluid mixtures, J. Chem. Phys. 3, 300-313.
+
+
+24. Anandakrishnan, R., Aguilar, B., and Onufriev, A. V. (2012) H++ 3.0: Automating pK prediction
+
+   and the preparation of biomolecular structures for atomistic molecular modeling and simulation,
+
+   Nucl. Acids Res. 40, W537-W541.
+
+
+25. Myers, J., Grothaus, G., Narayanan, S., and Onufriev, A. (2006) A simple clustering algorithm can
+
+   be accurate enough for use in calculations of pKs in macromolecules, Proteins: Struct. Funct. Genet.
+
+   63, 928-938.
+
+
+26. Baker, N. A., Sept, D., Joseph, S., Holst, M. J., and McCammon, J. A. (2001) Electrostatics of
+
+   nanosystems: Application to microtubules and the ribosome, Proc. Natl. Acad. Sci., USA 98, 10037-
+
+   10041.
+
+
+27. Moral, M. E. G., Tu, C. K., Richards, N. G. J., and Silverman, D. N. (2011) Membrane inlet for
+
+   mass spectrometric measurement of catalysis by enzymatic decarboxylases, Analyt. Biochem. 418,
+
+   73-77.
+
+
+                                                                                                    14
+28. Otwinowski, Z., and Minor, W. (1997) Processing of X-ray diffraction data collected in oscillation
+
+   mode, Methods Enzymol. 276, 307-326.
+
+
+29. Long, F., Vagin, A., Young, P., and Murshudov, G.N. (2008) BALBES: a molecular replacement
+
+   pipeline, Acta Crystallogr. D 64, 125-132.
+
+
+30. Emsley, P., and Cowtan, K. (2004) Coot: model-building tools for molecular graphics, Acta
+
+   Crystallogr. D 60, 2126-2132.
+
+
+31. Adams, P. D., Afonine, P. V., Bunkoczi, G., Chen V. B., Davis, I. W., Echols, N., Headd, J. J.,
+
+   Hung, L. W., Kapral, G. J., Grosse-Kunstleve, R. W., McCoy, A. J., Moriarty, N. W., Oeffner, R.,
+
+   Read, R. J., Richardson, D. C., Richardson, J. S., Terwilliger, T. C., and Zwart, P. H. (2010)
+
+   PHENIX: a comprehensive Python-based system for macromolecular structure solution, Acta
+
+   Crystallogr. D 66, 213-221.
+
+
+32. Lamzin, V. S., and Wilson, K. S. (1993) Automated refinement of protein models, Acta Crystallogr.
+
+   D 49, 129-147.
+
+33. Hooft, R. W., Vriend, G., Sander, C., and Abola, E. E. (1996) Errors in protein structures, Nature
+
+   381, 272-273.
+
+34. Chen, V. B., Arrendall, W. B., Headd, J. J., Keedy, D. A., Immormino, R. M., Kapral, G. J., Murray,
+
+   L. W., Richardson, J. S., and Richardson, D.C. (2010) MolProbity: all-atom structure validation for
+
+   macromolecular crystallography, Acta Crystallogr. D 66, 12-21.
+
+35. Winn, M. D., Ballard, C. C., Cowtan, K. D., Dodson, E. J., Emsley, P., Evans, P. R., Keegan, R. M.,
+
+   Krissinel, E. B., Leslie, A. G. W., McCoy, A., McNicholas, S. J., Murshudov, G. N., Pannu, N. S.,
+
+   Potterton, E. A., Powell, H. R., Read, R. J., Vagin, A., and Wilson, K. S. (2011) Overview of the
+
+   CCCP4 suite and current developments, Acta Crystallogr. Sect. D 67, 235-242.
+
+
+
+
+                                                                                                         15
+

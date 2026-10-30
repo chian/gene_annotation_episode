@@ -1,0 +1,432 @@
+{
+  "status": "paper-specific proposed interpretation/extraction values, not production schema",
+  "source": {
+    "pmcid": "PMC4786714",
+    "doi": "10.1074/jbc.M115.685321",
+    "primary_artifact": "primary_access_001.bin",
+    "rendered_text": "primary.txt",
+    "figure_artifact": "figure8.jpg",
+    "figure": "8A",
+    "figure_sha256": "d30e38e432492d114610de90c542ee04bffabb990a46c04331c9bae24fd8c0eb"
+  },
+  "assayed_subject": {
+    "organism": "Vibrio vulnificus",
+    "source_strain": "MO6-24/O",
+    "protein": "IscR",
+    "protein_construct": "His-tagged IscR, pJK0928 (pET28a(+), iscR)",
+    "expression_host": "E. coli BL21(DE3)",
+    "sequence_boundaries": null,
+    "active_fraction": null,
+    "purity_fraction": null,
+    "state": "mostly apo inferred from aerobic isolation, purification and assay; measured fraction unknown",
+    "state_basis": "handling_based_inference",
+    "anchors": [
+      "Table1",
+      "Methods Protein Purification and Western Blot Analysis; retained primary.txt283",
+      "Results IscR, CRP, and SmcR Regulate gbpA by Binding Directly to PgbpA; primary.txt338"
+    ]
+  },
+  "ligand": {
+    "name": "gbpA promoter PCR fragment",
+    "span_relative_to_transcription_start": [
+      -301,
+      88
+    ],
+    "reported_length_bp": 390,
+    "probe_nM": 5,
+    "label": "gamma-32P-ATP-labeled GBPA05-F; unlabeled GBPA05-R",
+    "anchor": "Methods Electrophoretic Mobility Shift Assay; primary.txt285"
+  },
+  "conditions": {
+    "volume_uL": 20,
+    "incubation_minutes": 30,
+    "temperature_C": 30,
+    "binding_buffer": "1x, composition referred to prior source43",
+    "nonspecific_competitor": "poly(dI-dC)",
+    "nonspecific_competitor_ug": 0.1,
+    "exposure": null,
+    "detector_linearity": null,
+    "raw_detector_artifact": null,
+    "equilibrium_verified": null,
+    "anchor": "primary.txt285"
+  },
+  "experiment_meanings": {
+    "endpoint": "mobility_shift_of_labeled_DNA",
+    "no_protein_lane": 1,
+    "no_competitor_30nM_lane": 4,
+    "lane_roles": {
+      "1": "no_protein_control",
+      "2": "protein_addition",
+      "3": "protein_addition",
+      "4": "protein_addition_reference",
+      "5": "same_DNA_self_competition",
+      "6": "same_DNA_self_competition",
+      "7": "same_DNA_self_competition",
+      "8": "same_DNA_self_competition"
+    },
+    "self_competitor_identity": "same390-bp fragment, unlabeled; added before IscR",
+    "retarded_species_count_displayed": 2,
+    "retarded_species_stoichiometry": null,
+    "free_species_label": "F",
+    "retarded_species_labels": [
+      "B",
+      "B"
+    ],
+    "signal_scale": "published_display_darkness",
+    "lanes_anchor": "original Figure8A and caption; primary.txt341",
+    "lane_values": [
+      {
+        "lane": 1,
+        "protein_nM": 0,
+        "self_competitor_nM": 0
+      },
+      {
+        "lane": 2,
+        "protein_nM": 10,
+        "self_competitor_nM": 0
+      },
+      {
+        "lane": 3,
+        "protein_nM": 20,
+        "self_competitor_nM": 0
+      },
+      {
+        "lane": 4,
+        "protein_nM": 30,
+        "self_competitor_nM": 0
+      },
+      {
+        "lane": 5,
+        "protein_nM": 30,
+        "self_competitor_nM": 15
+      },
+      {
+        "lane": 6,
+        "protein_nM": 30,
+        "self_competitor_nM": 30
+      },
+      {
+        "lane": 7,
+        "protein_nM": 30,
+        "self_competitor_nM": 60
+      },
+      {
+        "lane": 8,
+        "protein_nM": 30,
+        "self_competitor_nM": 120
+      }
+    ]
+  },
+  "replication": {
+    "general_reported_minimum_independent_experiments": 3,
+    "minimum_statement_scope": "general Data Analyses paragraph, not a specific exact lane count or preparation independence record for Figure8A",
+    "independent_preparation_count": null,
+    "lane_sampling_variance": null,
+    "lane_covariance": null,
+    "anchor": "primary.txt291"
+  },
+  "rois": {
+    "coordinate_system": "native zero-based half-open x0,y0,x1,y1; no scaling/rotation/crop performed",
+    "selection_origin": "analyst-declared after viewing original labeled Figure8A",
+    "baseline_options": {
+      "half_width": 19,
+      "expand_y": 0,
+      "background_y": [
+        151,
+        190
+      ],
+      "median_background": false
+    },
+    "lane_rois": [
+      {
+        "lane": 1,
+        "background": [
+          28,
+          151,
+          66,
+          190
+        ],
+        "bands": {
+          "upper_shifted": [
+            28,
+            197,
+            66,
+            215
+          ],
+          "lower_shifted": [
+            28,
+            219,
+            66,
+            239
+          ],
+          "free": [
+            28,
+            248,
+            66,
+            274
+          ]
+        },
+        "whole_lane": [
+          28,
+          145,
+          66,
+          278
+        ]
+      },
+      {
+        "lane": 2,
+        "background": [
+          74,
+          151,
+          112,
+          190
+        ],
+        "bands": {
+          "upper_shifted": [
+            74,
+            197,
+            112,
+            215
+          ],
+          "lower_shifted": [
+            74,
+            219,
+            112,
+            239
+          ],
+          "free": [
+            74,
+            248,
+            112,
+            274
+          ]
+        },
+        "whole_lane": [
+          74,
+          145,
+          112,
+          278
+        ]
+      },
+      {
+        "lane": 3,
+        "background": [
+          121,
+          151,
+          159,
+          190
+        ],
+        "bands": {
+          "upper_shifted": [
+            121,
+            197,
+            159,
+            215
+          ],
+          "lower_shifted": [
+            121,
+            219,
+            159,
+            239
+          ],
+          "free": [
+            121,
+            248,
+            159,
+            274
+          ]
+        },
+        "whole_lane": [
+          121,
+          145,
+          159,
+          278
+        ]
+      },
+      {
+        "lane": 4,
+        "background": [
+          171,
+          151,
+          209,
+          190
+        ],
+        "bands": {
+          "upper_shifted": [
+            171,
+            197,
+            209,
+            215
+          ],
+          "lower_shifted": [
+            171,
+            219,
+            209,
+            239
+          ],
+          "free": [
+            171,
+            248,
+            209,
+            274
+          ]
+        },
+        "whole_lane": [
+          171,
+          145,
+          209,
+          278
+        ]
+      },
+      {
+        "lane": 5,
+        "background": [
+          223,
+          151,
+          261,
+          190
+        ],
+        "bands": {
+          "upper_shifted": [
+            223,
+            197,
+            261,
+            215
+          ],
+          "lower_shifted": [
+            223,
+            219,
+            261,
+            239
+          ],
+          "free": [
+            223,
+            248,
+            261,
+            274
+          ]
+        },
+        "whole_lane": [
+          223,
+          145,
+          261,
+          278
+        ]
+      },
+      {
+        "lane": 6,
+        "background": [
+          272,
+          151,
+          310,
+          190
+        ],
+        "bands": {
+          "upper_shifted": [
+            272,
+            197,
+            310,
+            215
+          ],
+          "lower_shifted": [
+            272,
+            219,
+            310,
+            239
+          ],
+          "free": [
+            272,
+            248,
+            310,
+            274
+          ]
+        },
+        "whole_lane": [
+          272,
+          145,
+          310,
+          278
+        ]
+      },
+      {
+        "lane": 7,
+        "background": [
+          322,
+          151,
+          360,
+          190
+        ],
+        "bands": {
+          "upper_shifted": [
+            322,
+            197,
+            360,
+            215
+          ],
+          "lower_shifted": [
+            322,
+            219,
+            360,
+            239
+          ],
+          "free": [
+            322,
+            248,
+            360,
+            274
+          ]
+        },
+        "whole_lane": [
+          322,
+          145,
+          360,
+          278
+        ]
+      },
+      {
+        "lane": 8,
+        "background": [
+          373,
+          151,
+          411,
+          190
+        ],
+        "bands": {
+          "upper_shifted": [
+            373,
+            197,
+            411,
+            215
+          ],
+          "lower_shifted": [
+            373,
+            219,
+            411,
+            239
+          ],
+          "free": [
+            373,
+            248,
+            411,
+            274
+          ]
+        },
+        "whole_lane": [
+          373,
+          145,
+          411,
+          278
+        ]
+      }
+    ]
+  },
+  "unresolved": [
+    "published JPEG to native tracer counts response",
+    "molecular bound fraction",
+    "intrinsic affinity or Kd",
+    "sequence discrimination versus unrelated-DNA control",
+    "independent preparation variance",
+    "assay error probabilities",
+    "exact error dependence with complementary footprinting"
+  ]
+}

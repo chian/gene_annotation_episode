@@ -1,0 +1,23 @@
+# Bioinformatics investigation slots
+
+The user specified: “there should be 3 slots from our discussion. 1 related to annotation credit axis, 1 related to thought pattern, and 1 with the tools that the child is scoped to”. The first slot must concern scientific support that gains credit. The old biological claim headings did not fulfill that requirement.
+
+| Slot | Current content and boundary |
+| --- | --- |
+| Related to annotation credit axis | **Unavailable pending scoring-axis review.** No replacement options or numerical changes have been adopted. A01–A10 are excluded from active discovery and preserved only as [background biological claim distinctions](background/biological_claim_distinctions/README.md). |
+| Thought pattern | 19 curated reusable ways of comparing biological explanations. Each entry states live alternatives, informative contrasts, result-dependent interpretations and its boundary from nearby patterns. |
+| Tools that the child episode is scoped to | Multiple relevant **actual callable tools** selected from the caller’s tool map by a retriever for the requested investigation. No fixed T bundles, invented capability descriptions or predefined episode assemblies are supplied by this catalog. Runtime retrieval and execution require their own connected verification. |
+
+The parent supplies the job, scope, constraints and requested typed return form. Slot content helps construct the scoped scientific episode’s decision problem. The episode owns iterative choices. A different thought pattern or scoped tool set is prepared for a separate child through `process.revise`; it does not replace the current episode’s selection or history. Selecting library content earns no credit.
+
+LiteratureEpisodes is separate from this bioinformatics information library. Literature strategy/search/page/table/ordered/targeted-reading processes are not slot entries. Published cases cited here are provenance for biological reasoning options; a citation does not turn an option into a literature workflow. Source inspection and ordinary extraction operations remain actual tools only where their callable implementations exist.
+
+Read the [active option table](OPTIONS.md), [full thought-pattern entries](DETAILS.md) and [curation inventory](CURRENT_SLOT_SOURCES.md). [index.json](index.json) contains P01–P19 only, with an empty first-slot declaration. Each active entry has its own `entries/Pxx.json` body. The machine-readable [thought catalog](thought_options.json) and [empty first-slot catalog](annotation_options.json) are generator inputs. [build_catalog.py](build_catalog.py) cannot regenerate the removed fixed tool bundles or fixed episode assemblies.
+
+The [option-to-source table](OPTION_SOURCES.md) and [structured source rows](option_sources.json) retain the 76 active thought-pattern source links. The 59 original A source relationships remain unchanged in [background provenance](background/biological_claim_distinctions/option_sources.json). [Case coverage](CASE_COVERAGE.md) accounts for every one of the 142 distinct groups, including contextual and limited-inspection relations; it does not label every relevant case as direct support.
+
+The [149 retained case records](case_records.json), [original follow-up lanes](corpus/follow_up_lanes.md), [research corpus](corpus/) and [corpus snapshot manifest](corpus_snapshot_manifest.json) remain unchanged. F01–F05 retain their original names/order and are research groupings, not episode levels or adopted scoring axes. Eight groups have only abstract/summary inspection; published outcomes were known. Reuse of a case or underlying observation does not establish independent evidence.
+
+The thought patterns describe scientific inference from available observations and computations. Author-performed assays, mutants, microscopy and other experiments remain source evidence. Their appearance in an entry does not make new experiments available to an episode. Where the decisive observation is unavailable, preserve the alternatives and the missing evidence rather than inventing an operation or conclusion.
+
+Run `../../.venv/bin/python build_catalog.py` from this directory to regenerate discovery/entry/source/coverage documents and repeat structural and corpus checks. [validation.json](validation.json), [inspection checks](inspection_checks.json) and the [current manifest](catalog_manifest.json) describe content integrity only. Historical [integration_verification.json](integration_verification.json) is untouched and describes the earlier implementation, not the corrected current content. No new configured-model scientific investigation or numerical scoring change is established by this curation.

@@ -1,0 +1,65 @@
+{
+  "scope": "research arithmetic only; all assay inputs synthetic",
+  "axis_complete": false,
+  "unit": "product molecules per assayed-protein molecule per minute",
+  "activity": 0.68,
+  "attributable_activity_fraction": 0.85,
+  "condition_response_ratio": 1.25,
+  "condition_response_similarity_diagnostic": 0.8,
+  "variance_components": {
+    "sample_and_blank_measurement": 0.02560000000000001,
+    "recovery_calibration": 0.0011560000000000001,
+    "condition_response_comparison": 0.0029622500000000005,
+    "contaminating_activity": 0.0144,
+    "assayed_protein_amount": 0.0046240000000000005,
+    "residual_between_preparations": 0.0625
+  },
+  "total_variance": 0.11124225000000001,
+  "standard_uncertainty": 0.3335299836596404,
+  "experimental_precision": 8.989390272131315,
+  "retained_precision_fraction": 0.2301283909665618,
+  "fixed_prediction": 1.0,
+  "fixed_alternative": 0.0,
+  "log_evidence_ratio": 1.6180902489836373,
+  "evidence_ratio": 5.043449381019425,
+  "two_independent_measurements_log_ratio": 4.135119525180406,
+  "two_shared_error_measurements_log_ratio": 2.336395196168312,
+  "shared_covariance": 0.08564225,
+  "contrary_measurement_log_ratio": -3.5957561088525267,
+  "combined_with_contrary_log_ratio": -1.9776658598688894,
+  "nondetection_examples": [
+    {
+      "detection_limit": 0.1,
+      "standard_uncertainty": 0.2,
+      "likelihood_if_one": 3.3976731247300615e-06,
+      "likelihood_if_zero": 0.6914624612740131,
+      "log_evidence_ratio": -12.223473320424421
+    },
+    {
+      "detection_limit": 2.0,
+      "standard_uncertainty": 0.2,
+      "likelihood_if_one": 0.9999997133484281,
+      "likelihood_if_zero": 1.0,
+      "log_evidence_ratio": -2.866516130081049e-07
+    }
+  ],
+  "checks": [
+    "finite-difference derivatives",
+    "filled arithmetic",
+    "unit invariance",
+    "measured contamination correction",
+    "independent likelihood combination",
+    "shared-error combination",
+    "singular covariance rejection",
+    "censored nondetection",
+    "contrary evidence retained"
+  ],
+  "unverified": [
+    "scientific model adequacy",
+    "variance-estimate uncertainty",
+    "non-Gaussian assay behavior",
+    "source-to-target relevance",
+    "final annotation-axis conversion",
+    "production integration"
+  ]
+}

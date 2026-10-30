@@ -1,0 +1,508 @@
+"""Original case164 XLSX plus labelled synthetic workbook engineering cases."""
+from copy import deepcopy
+from dataclasses import replace
+from functools import partial
+import asyncio
+import io
+import json
+from pathlib import Path
+import sqlite3
+from types import SimpleNamespace
+import zipfile
+
+import pytest
+from method_loop.durable import DurableExecutionError
+
+from gene_annotation_episode.communication import ReportBoundaryError, form_with_facts, plain, validate_closed_schema
+from gene_annotation_episode.domain import ContractError, canonical, obj
+from gene_annotation_episode.episode_bindings import BindingContext, EpisodeBindingRegistry
+from gene_annotation_episode.episode_composition import compose_episode_bindings
+from gene_annotation_episode.episode_journal import Journal
+from gene_annotation_episode.episode_services import WorkflowServices
+from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+from gene_annotation_episode.literature_episodes import LiteratureEpisodes
+from gene_annotation_episode.literature_experimental_prompt import render_literature_experimental_prompt
+from gene_annotation_episode.literature_reference_parent_prompt import REFERENCE_PARENT_TASK
+from gene_annotation_episode.literature_rate_observation_inputs import read_rate_observations
+from gene_annotation_episode.literature_rate_observation_calculations import populate_rate_observation_contrast
+from gene_annotation_episode.literature_rate_observation_prompt import RATE_OBSERVATION_TASK
+from gene_annotation_episode.literature_rate_observation_storage import (
+    COMPONENTS, NAMESPACE, REQUESTED, LiteratureRateObservationRepository, rate_observation_cells_schema)
+from gene_annotation_episode.runtime import run_workflow
+from gene_annotation_episode.state import Store
+from gene_annotation_episode.tools import ToolRegistry
+from test_runtime import FixtureController, ScriptedProvider
+
+CASE = Path(__file__).resolve().parents[1] / 'research/experimental_scoring_review_2026-10-23/a105_raw_rate_primary_case_164'
+REQUEST = ['reference_rate', 'test_rate', 'reference_sample_sd', 'test_sample_sd',
+           'reference_cv', 'test_cv', 'rate_difference', 'retained_fraction', 'fractional_decrease']
+FORM = obj({'activity': rate_observation_cells_schema()})
+
+
+def label(cell, expected_text):
+    return {'cell': cell, 'expected_text': expected_text}
+
+
+def source_arguments(reference):
+    return {'source_ref': reference, 'source_kind': 'primary_source', 'worksheet': 'Sheet1',
+        'panel': label('A1', 'Fig 2B. Raw data of catalytic activity of PKs from different species on different substrates'),
+        'subject': label('J3', 'Actinobacteria bifidobacterium'), 'native_unit': label('C2', 'U/mg'),
+        'groups': [{'label': label('C'+str(start-1), name),
+                    'observations': [{'label': label('C'+str(row), 'Parallel '+str(index)), 'value_cell': 'J'+str(row)}
+                        for index, row in enumerate(range(start,start+3),1)]}
+                   for name,start in [('DHA',8),('L-EUS',12),('D-EUS',16)]],
+        'reference_group': 'D-EUS', 'test_group': 'L-EUS'}
+
+
+def setup(path, *, content=None, requested=REQUEST):
+    store = Store(path)
+    manifest = store.path/'empty-manifest.json'
+    manifest.write_text(json.dumps({'schema_version': 1, 'entries': []}))
+    store.create_problem(manifest_path=manifest)
+    artifact = store.artifact((CASE/'originals/S1Data.xlsx').read_bytes() if content is None else content,
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    source = store.put('source', {'provider': 'retained_original_case164' if content is None else 'synthetic_xlsx_fixture',
+        'accession': None, 'uri': None, 'artifact_ref': artifact, 'text_ref': None,
+        'request_ref': None, 'version': None, 'retrieved_at': None}, origin='caller')
+    args = source_arguments(source['id'])
+    assignment = {'version': 'literature_assignment_v1', 'question_context_refs': [],
+        'source_refs': [source['id']], REQUESTED: list(requested)}
+    context = BindingContext('original-xlsx-166', 'source-child', 'literature',
+        (('literature','source-child'),), store.validate_scope(), assignment, {}, (source['id'],))
+    return store,context,args
+
+
+def binding_for(store,context, *, reference_parent=False):
+    host = SimpleNamespace(store=store,run_id=context.run_id,tools=ToolRegistry(store))
+    services = WorkflowServices(host)
+    binding = LiteratureEpisodes(services, rate_population=True,
+        reference_parent_sources=list(context.received_record_refs[:1]) if reference_parent else None)
+    host.episode_bindings = EpisodeBindingRegistry((binding,))
+    return services,binding
+
+
+def populated(store,context,args,key='selected'):
+    repo=LiteratureRateObservationRepository(store,context.run_id)
+    out=repo.populate(context,args,key)
+    return repo,out,replace(context,received_record_refs=(*context.received_record_refs,*out['record_refs']))
+
+
+def synthetic_workbook(cells):
+    """Explicit synthetic OOXML fixture; never a scientific measurement."""
+    from xml.sax.saxutils import escape
+    buffer=io.BytesIO()
+    with zipfile.ZipFile(buffer,'w') as z:
+        z.writestr('_rels/.rels','<Relationships><Relationship Id="root" Type="x/officeDocument" Target="xl/workbook.xml"/></Relationships>')
+        z.writestr('xl/workbook.xml','<workbook xmlns:r="urn:r"><sheets><sheet name="Sheet1" sheetId="1" r:id="s1"/></sheets></workbook>')
+        z.writestr('xl/_rels/workbook.xml.rels','<Relationships><Relationship Id="s1" Type="x/worksheet" Target="worksheets/sheet1.xml"/></Relationships>')
+        entries=[]
+        for address,value in cells.items():
+            if isinstance(value,tuple):
+                entries.append(f'<c r="{address}"><f>{escape(value[0])}</f><v>{value[1]}</v></c>')
+            elif type(value) in (int,float):
+                entries.append(f'<c r="{address}"><v>{value}</v></c>')
+            elif value is not None:
+                entries.append(f'<c r="{address}" t="inlineStr"><is><t>{escape(value)}</t></is></c>')
+        z.writestr('xl/worksheets/sheet1.xml','<worksheet><sheetData><row r="1">'+''.join(entries)+'</row></sheetData></worksheet>')
+    return buffer.getvalue()
+
+
+def synthetic_case(path,values,*,repeated_label=False):
+    cells={'A1':'reported activity panel','J3':'synthetic molecule','C2':'symbolic units',
+           'C7':'other','C11':'test','C15':'reference'}
+    for start in (8,12,16):
+        for index,row in enumerate(range(start,start+3),1):
+            cells['C'+str(row)]='reading '+str(index)
+            cells['J'+str(row)]=values.get(row, float(row))
+    if repeated_label:cells['C17']=cells['C16']
+    store,context,args=setup(path,content=synthetic_workbook(cells),requested=COMPONENTS)
+    args['panel']=label('A1',cells['A1']);args['subject']=label('J3',cells['J3']);args['native_unit']=label('C2',cells['C2'])
+    args['source_kind']='synthetic_fixture'
+    args['reference_group']='reference';args['test_group']='test'
+    for group,name,start in zip(args['groups'],('other','test','reference'),(8,12,16)):
+        group['label']['expected_text']=name
+        for index,observation in enumerate(group['observations'],1):observation['label']['expected_text']='reading '+str(index)
+    if repeated_label:args['groups'][2]['observations'][1]['label']['expected_text']='reading 1'
+    return store,context,args
+
+
+def test_original_workbook_native_arithmetic_exact_lexemes_and_shared_reference(tmp_path):
+    store,context,args=setup(tmp_path)
+    try:
+        repo,out,current=populated(store,context,args)
+        cells={r['component']:r for r in out['result']['cells']}
+        assert [cells[n]['value'] for n in REQUEST] == pytest.approx([
+            .50447333333333342,.18895333333333334,.034036247345048686,.012470787197820887,
+            .06746887317145673,.06599929716942924,.3155200000000001,.37455564218789226,.6254443578121077])
+        assert cells['reference_rate']['unit']=='U/mg'
+        assert all(row['grouping']=='unknown' and row['physical_conversion']=='unknown' for row in cells.values())
+        saved=repo.read(out['result']['sheet_ref'])
+        entries=saved['sheet']['extraction']['entries']
+        j16=next(e for e in entries if e['value_source']['cell']=='J16')
+        assert j16['value_source']['raw_value']=='0.53756666666666675'
+        assert j16['value_source']['formula'] is None
+        assert j16['value_source']['workbook_sha256']=='e6d31a25930fe62cf10dd13c1b3e8193202687e78ed935cb3dfd21fd51ff4a7a'
+        assert j16['value_source']['member_sha256']=='50a15623fb2543e42d1d09c7990f0e18f1428e6f6253ac1832cbfe56dc63224e'
+        assert repo.populate(context,args,'selected')==out
+        other={**args,'test_group':'DHA'}
+        _,out2,_=populated(store,context,other,'second-comparison')
+        first_ids=cells['rate_difference']['groups']['reference']['observed']['observation_labels']
+        assert first_ids==out2['result']['cells'][0]['groups']['reference']['observed']['observation_labels']
+        assert out2['result']['cells'][1]['value']==pytest.approx(.15676666666666665)
+        # The raw DHA mean remains distinct from the separate S1Table H7 central value.
+        assert out2['result']['cells'][1]['value'] != .1569
+        import xml.etree.ElementTree as ET
+        import hashlib
+        summary_bytes=(CASE/'originals/S1Table.xlsx').read_bytes()
+        assert hashlib.sha256(summary_bytes).hexdigest()=='331a7dd5f2f28fb5d538714e9617430e28bc427b8a899183c64f0502105c476b'
+        with zipfile.ZipFile(io.BytesIO(summary_bytes)) as z:
+            ns={'m':'http://schemas.openxmlformats.org/spreadsheetml/2006/main'}
+            strings=[''.join(si.itertext()) for si in ET.fromstring(z.read('xl/sharedStrings.xml'))]
+            h7=next(c for c in ET.fromstring(z.read('xl/worksheets/sheet1.xml')).findall('.//m:c',ns) if c.get('r')=='H7')
+            assert h7.get('t')=='s' and h7.find('m:f',ns) is None
+            assert strings[int(h7.find('m:v',ns).text)]=='0.1569±0.0054'
+        # This separate summary representation supplies no new independent n,
+        # and its untyped ± does not declare a sampling SD or SE.
+        assert store.targets()==[]
+    finally:store.close()
+
+
+@pytest.mark.parametrize('value,status,reason',[(None,'missing','source_measurement_unavailable'),
+    ('ND','not_detected','nondetection_without_point'),('<5','censored','censored_measurement'),
+    (('1+1','2'),'unsupported_cell','formula_measurement_unsupported'),
+    ('14','unsupported_cell','numeric_cell_type_required')])
+def test_incomplete_selected_roster_retains_points_and_synthetic_origins(tmp_path,value,status,reason):
+    store,context,args=synthetic_case(tmp_path,{16:10.,17:value,18:30.})
+    try:
+        repo,out,_=populated(store,context,args)
+        cells={r['component']:r for r in out['result']['cells']}
+        assert cells['reference_rate']['value'] is None
+        assert cells['reference_rate']['unavailable_reason']=='incomplete_selected_roster'
+        assert cells['reference_observed_point_mean']['value']==20
+        assert cells['reference_observed_point_sd']['value']==pytest.approx(2**.5*10)
+        assert cells['test_rate']['value']==13
+        group=cells['reference_rate']['groups']['reference']['observed']
+        assert (group['entry_count'],group['point_entry_count'],group['representation_count'])==(3,2,3)
+        assert group['observation_labels'][1]['status']==status
+        assert group['observation_labels'][1]['unavailable_reason']==reason
+        assert all(c['input_origins']==['synthetic'] and c['origin']=='derived' for c in cells.values())
+        entries=repo.read(out['result']['sheet_ref'])['sheet']['extraction']['entries']
+        assert all(e['origin']=='synthetic' for e in entries)
+        if status=='unsupported_cell' and isinstance(value,tuple):
+            entry=next(e for e in entries if e['value_source']['cell']=='J17')
+            assert entry['value_source']['value_is_formula_cache'] is True
+            assert entry['value_source']['formula']['text']=='1+1'
+            assert entry['exact_value'] is None
+    finally:store.close()
+
+
+def test_duplicate_representations_and_conflicting_source_labels_do_not_invent_experiments(tmp_path):
+    store,context,args=synthetic_case(tmp_path,{16:10.,17:10.,18:30.})
+    try:
+        args['groups'][2]['observations'].append(deepcopy(args['groups'][2]['observations'][0]))
+        repo,out,_=populated(store,context,args)
+        first=out['result']['cells'][0]
+        assert first['value']==pytest.approx(50/3)
+        observed=first['groups']['reference']['observed']
+        assert (observed['entry_count'],observed['representation_count'])==(3,4)
+        # Equal numbers with distinct source labels remain distinct entries.
+        assert observed['observation_labels'][0]['record_identity']!=observed['observation_labels'][1]['record_identity']
+        changed=deepcopy(args)
+        changed['groups'][2]['observations'][-1]['value_cell']='J18'
+        from gene_annotation_episode.literature_experimental_contracts import ExperimentalContractError
+        with pytest.raises(ExperimentalContractError,match='label_value_row_mismatch'):
+            populated(store,context,changed,'misbound')
+        # Equal labels on different source rows remain distinct representations.
+        # Explicitly constructing a conflicting detached record is a synthetic
+        # calculator robustness check, not an accepted source-reader input.
+        data=repo.read(out['result']['sheet_ref'])['sheet']['extraction']
+        extra=deepcopy(data['entries'][-1]);extra['exact_value']={'numerator':'999','denominator':'1'}
+        data['entries'].append(extra)
+        sheet=populate_rate_observation_contrast(data,reference_group='reference',test_group='test')
+        assert sheet['cells']['reference_rate']['unavailable_reason']=='conflicting_reported_entry'
+        assert sheet['cells']['reference_observed_point_mean']['value']==20
+    finally:store.close()
+
+
+def test_requested_absent_group_is_not_a_source_label_omission_or_zero(tmp_path):
+    store,context,args=setup(tmp_path,requested=COMPONENTS)
+    try:
+        args['test_group']='requested but absent'
+        _,out,_=populated(store,context,args)
+        cells={r['component']:r for r in out['result']['cells']}
+        assert cells['reference_rate']['value']==pytest.approx(.5044733333333334)
+        assert cells['test_rate']['value'] is None and cells['rate_difference']['unavailable_reason']=='missing_test_group'
+        assert cells['test_rate']['groups']['test']['status']=='not_observed'
+        assert cells['test_rate']['groups']['test']['observed'] is None
+        assert cells['test_rate']['groups']['test']['requested_label']=='requested but absent'
+    finally:store.close()
+
+
+def test_selected_binding_exact_facts_repairable_label_mismatch_and_custody(tmp_path):
+    store,context,args=setup(tmp_path,requested=['rate_difference','retained_fraction'])
+    try:
+        services,binding=binding_for(store,context)
+        # No selected output has been received; a genuine empty return is valid.
+        binding.validate_report(context,{'activity':[]},FORM)
+        bad=deepcopy(args);bad['subject']['expected_text']='unrelated molecule'
+        failed=asyncio.run(binding.execute(context,'literature.rate.observations.populate',bad,'wrong-label'))
+        assert failed['status']=='invalid' and 'source_label_witness_mismatch' in failed['feedback']['code']
+        bad=deepcopy(args);bad['mean']=99
+        failed=asyncio.run(binding.execute(context,'literature.rate.observations.populate',bad,'invented-value'))
+        assert failed['status']=='invalid'
+        missing=asyncio.run(binding.execute(replace(context,received_record_refs=()),'literature.rate.observations.populate',args,'not-received'))
+        assert missing['feedback']['code']=='literature_source_not_received'
+        out=asyncio.run(binding.execute(context,'literature.rate.observations.populate',args,'selected'))
+        assert out['status']=='completed',out
+        # Publication alone does not deliver the sheet to the old context.
+        binding.validate_report(context,{'activity':[]},FORM)
+        current=replace(context,received_record_refs=(*context.received_record_refs,*out['record_refs']))
+        form=form_with_facts({},FORM,binding.facts(current,{'committed_record_refs':out['record_refs']}))
+        binding.validate_report(current,form,FORM)
+        assert [r['component'] for r in form['activity']]==['rate_difference','retained_fraction']
+        with pytest.raises(ReportBoundaryError,match='requested_subset_mismatch'):
+            binding.validate_report(current,{'activity':[]},FORM)
+        wrong=deepcopy(form);wrong['activity'][0]['value']=9
+        with pytest.raises(ReportBoundaryError,match='differs_from_saved'):binding.validate_report(current,wrong,FORM)
+        omitted=deepcopy(form);omitted['activity'].pop()
+        with pytest.raises(ReportBoundaryError,match='requested_subset_mismatch'):binding.validate_report(current,omitted,FORM)
+        wrong_schema=deepcopy(FORM);wrong_schema['properties']['activity']['items']['properties']['subject']={'type':'string'}
+        with pytest.raises(ReportBoundaryError,match='registered source'):validate_closed_schema(wrong_schema)
+        no_request=replace(current,assignment={k:v for k,v in current.assignment.items() if k!=REQUESTED})
+        assert binding.facts(no_request,{'committed_record_refs':out['record_refs']})[NAMESPACE]==[]
+        with pytest.raises(ReportBoundaryError,match='unrequested'):binding.validate_report(no_request,form,FORM)
+        # Source-sheet ancestry is checked before reading a different received source.
+        other_artifact=store.artifact(b'unrelated fixture')
+        other=store.put('source',{'provider':'unrelated_fixture','accession':None,'uri':None,'artifact_ref':other_artifact,
+            'text_ref':None,'request_ref':None,'version':None,'retrieved_at':None},origin='caller')
+        page=replace(context,role='literature_page',path=(('literature_page','page'),),assignment={'version':'page_assignment_v1',
+            'source_ref':args['source_ref'],'representation':'original','artifact_ref':store.get(args['source_ref'])['artifact_ref'],
+            'question_context_refs':[],'prior_delivery_refs':[],REQUESTED:['rate_difference']},
+            received_record_refs=(*context.received_record_refs,other['id']))
+        failed=asyncio.run(binding.execute(page,'literature.rate.observations.populate',{**args,'source_ref':other['id']},'outside-page'))
+        assert failed['feedback']['code']=='literature_reading_outside_assigned_source'
+    finally:store.close()
+
+
+def test_admitted_subset_shared_reference_and_parent_scientific_display(tmp_path):
+    store,context,args=setup(tmp_path,requested=['rate_difference'])
+    try:
+        repo,first,child=populated(store,context,args)
+        _,second,_=populated(store,context,{**args,'test_group':'DHA'},'second')
+        parent=replace(child,episode_id='parent',role='annotation',path=(('annotation','parent'),),assignment={},
+            received_record_refs=(*child.received_record_refs,*second['record_refs']))
+        repo.receive_cells(parent,first['result']['cells'],'trusted-first')
+        repo.receive_cells(parent,second['result']['cells'],'trusted-second')
+        rows=repo.received_cells(parent)
+        _,binding=binding_for(store,parent)
+        requested_parent=replace(parent,assignment={REQUESTED:['rate_difference']})
+        with pytest.raises(ReportBoundaryError,match='requested_subset_mismatch'):
+            binding.validate_received_report(requested_parent,{'activity':[]},FORM)
+        assert repo.fact_cells(parent,[first['result']['sheet_ref'],second['result']['sheet_ref']],components=COMPONENTS)==rows
+        private=repo.project_cells(first['record_refs'],permitted_record_refs=parent.received_record_refs,components=['reference_rate'])
+        with pytest.raises(ContractError,match='cell_not_received'):repo.validate_fact_values(parent,private)
+        state={'literature_experimental_work':{'version':'literature_experimental_task_v1','aspect':'reference_evidence_parent'},
+            'reference_evidence_parent':{'version':'reference_evidence_parent_v1','source_refs':[args['source_ref']]},
+            'goal':{'objective':'Compare reported BbPK activities without claiming preparations or calibrated product rate.'},
+            'working_state':{},'child_reports':[{'activity':rows}]}
+        prompt=render_literature_experimental_prompt(state,'Keep the source-evidence question.')
+        task,steering=prompt.split('\n\nSTEERING\n')
+        assert REFERENCE_PARENT_TASK in task and RATE_OBSERVATION_TASK not in task
+        assert 'D-EUS' in steering and 'L-EUS' in steering and 'DHA' in steering and 'U/mg' in steering
+        assert steering.count('source entry 1')==2  # shared D-EUS entry retained across two comparisons
+        assert 'preparation' in steering.lower() and 'unknown' in steering
+        assert '| reference_rate |' not in steering and '| test_rate |' not in steering
+        assert 'sha256' not in steering and 'source_reported_entry_' not in steering and 'artifact_' not in steering
+    finally:store.close()
+
+
+def test_recurring_task_survives_delta_lookup_and_cold_transport(tmp_path):
+    from gene_annotation_episode.decision_context import state_frame
+    from gene_annotation_episode.composition_information import CONTRACT_INFORMATION_PROFILE, CONTRACT_ARGUMENT_TRANSPORT
+    from gene_annotation_episode.episode_contract_information import operation_contract_information
+    from gene_annotation_episode.literature_episodes import _population_catalog
+    from test_literature_experimental_prompt_delivery import LiteratureWire, complete, snapshot
+    state=snapshot();state['literature_assignment'][REQUESTED]=REQUEST
+    state['contract_information_profile']=CONTRACT_INFORMATION_PROFILE
+    operation=next(row for row in _population_catalog() if row['name']=='literature.rate.observations.populate')
+    state['tools']=[{**operation,'argument_transport':CONTRACT_ARGUMENT_TRANSPORT}]
+    info=operation_contract_information(catalog=[operation],operation=operation['name'])
+    lookup={'version':'decision_context_v1','kind':'decision_lookup_result','decision_index':1,
+        'exchange_index':1,'result':info,'pending_contract_information':[info]}
+    later=deepcopy(state);later['feedback']={'code':'source_label_witness_mismatch'}
+    cold_state=state_frame(later);cold_state.update(restored_pending_decision_index=1,
+        restored_public_exchanges=[{'lookup_result':info}])
+    wire=LiteratureWire(tmp_path/'wire');cold=LiteratureWire(tmp_path/'cold')
+    async def exercise():
+        await complete(wire,state_frame(state));await complete(wire,state_frame(later,state))
+        await complete(wire,lookup);await complete(cold,cold_state)
+    asyncio.run(exercise())
+    for turn in (*wire.turns_sent(),*cold.turns_sent()):
+        task,steering=turn['input'][0]['text'].split('\n\nSTEERING\n',1)
+        assert task.count(RATE_OBSERVATION_TASK)==1 and RATE_OBSERVATION_TASK not in steering
+        assert info['result']['schema_sha256'] not in task+steering
+    assert info['result']['text'] in wire.turns_sent()[-1]['input'][0]['text']
+    assert info['result']['text'] in cold.turns_sent()[0]['input'][0]['text']
+
+
+def test_original_source_shared_episode_admission_and_cold_readonly_factory(tmp_path,monkeypatch):
+    import os
+    path=Path(os.environ.get('RATE_OBSERVATION_PROOF_DIR',str(tmp_path)))
+    path.mkdir(parents=True,exist_ok=True)
+    store,context,args=setup(path/'state',requested=['rate_difference','retained_fraction','reference_sample_sd'])
+    # Original article supplies a genuine source-subject anchor for the parent's
+    # selected nonempty reasoning action. It is not a new assay or target.
+    article_bytes=(CASE/'originals/article.html').read_bytes()
+    article_artifact=store.artifact(article_bytes,'text/html')
+    article=store.put('source',{'provider':'retained_original_case164_article','accession':None,'uri':None,
+        'artifact_ref':article_artifact,'text_ref':article_artifact,'request_ref':None,'version':None,'retrieved_at':None},origin='caller')
+    known=[*context.received_record_refs,article['id']]
+    received=[];controllers=[];tasks=[];parent_prompts=[]
+    child={'selection':{'kind':'episode_child','role':'literature','assignment':plain(context.assignment),
+        'goal':'Evaluate the original BbPK D-EUS versus L-EUS reported activity entries.',
+        'scope':plain(context.scope),'purpose':'Return requested native reported-entry contrasts and descriptive SD.',
+        'schema_json':json.dumps(FORM),'initial_report_json':'{}'},'report_update':{}}
+    def work(inputs):
+        prompt=render_literature_experimental_prompt(inputs,'Evaluate reported substrate distinctions in the actual source workbook.')
+        tasks.append(prompt.split('\n\nSTEERING\n')[0])
+        return {'selection':{'kind':'tool','tool':'literature.rate.observations.populate','arguments':args},'report_update':{}}
+    def integrate(inputs):
+        form,=inputs['child_reports'];received.append(form)
+        prompt=render_literature_experimental_prompt(inputs,'Evaluate the assigned reference evidence.');parent_prompts.append(prompt)
+        task,steering=prompt.split('\n\nSTEERING\n')
+        assert REFERENCE_PARENT_TASK in task and RATE_OBSERVATION_TASK not in task
+        assert 'D-EUS' in steering and 'L-EUS' in steering and 'U/mg' in steering
+        assert '| reference_rate |' not in steering and '| test_rate |' not in steering
+        commit={field:[] for field in store.reasoning_schema()['required']}
+        quote='Actinobacteria Bifidobacterium';start=article_bytes.index(quote.encode())
+        commit['source_subjects']=[{'alias':'source_subject_BbPK','reference_type':'assay',
+            'source_ref':article['id'],'label':quote,'anchor':{'source_ref':article['id'],
+                'artifact_ref':article_artifact,'start':start,'end':start+len(quote.encode()),'quote':quote}}]
+        return {'selection':{'kind':'reason','commit':commit},'report_update':{}}
+    def controller(path,initial):
+        value=FixtureController(str(path),initial,2 if len(path)==1 else 1);controllers.append(value);return value
+    try:
+        scorer=ScientificFindingProgress(FindingProgressPolicy(1));provider=ScriptedProvider([child,work,integrate])
+        summary=asyncio.run(run_workflow(store,ToolRegistry(store),provider=provider,run_dir=path/'run',
+            controller_factory=controller,project_credit=scorer,initial_known_record_refs=known,
+            episode_binding_factories=(partial(LiteratureEpisodes,rate_population=True,reference_parent_sources=known),),
+            binding_definitions={'credit':scorer.as_record()}))
+        assert len(received)==1 and summary['credit']==0 and store.targets()==[]
+        assert all(RATE_OBSERVATION_TASK in task for task in tasks)
+        assert [c.scores for c in controllers]==[[0,0],[0]]
+        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0]==3
+        assert store.db.execute('SELECT count(*) FROM literature_rate_observation_operations').fetchone()[0]==1
+        assert not store.list('assessment') and not store.list('observation')
+        assert any(r['label']=='Actinobacteria Bifidobacterium' and r.get('anchor') for r in store.list('reference'))
+        receipt,=store.db.execute('SELECT cells FROM literature_rate_observation_received').fetchall()
+        assert json.loads(receipt[0])==received[0]['activity']
+        saved_sheet=LiteratureRateObservationRepository(store,store.db.execute(
+            'SELECT run_id FROM literature_rate_observation_operations').fetchone()[0]).read(received[0]['activity'][0]['sheet_ref'])
+        run_id=store.db.execute('SELECT run_id FROM literature_rate_observation_operations').fetchone()[0]
+        parent_id=store.db.execute('SELECT episode_id FROM literature_rate_observation_received').fetchone()[0]
+        parent=replace(context,run_id=run_id,episode_id=parent_id,role='annotation',path=(('annotation',parent_id),),
+            assignment={},received_record_refs=tuple([*known,received[0]['activity'][0]['sheet_ref']]))
+        services,_=binding_for(store,parent)
+        binding=LiteratureEpisodes(services,rate_population=True,reference_parent_sources=known)
+        descriptor=binding.as_record();journal=Journal(store,run_id)
+        blocked={store.get(ref)['artifact_ref'] for ref in known}
+        original_get=store.get_artifact
+        def guarded(reference):
+            assert reference not in blocked,'original scientific artifacts blocked BEFORE factory'
+            return original_get(reference)
+        def forbidden(*a,**k):raise AssertionError('source reader / calculator / acquisition disabled BEFORE factory')
+        monkeypatch.setattr(store,'get_artifact',guarded)
+        for module,names in {
+            'literature_rate_observation_inputs':['read_rate_observations','Workbook'],
+            'literature_rate_observation_storage':['read_rate_observations','populate_rate_observation_contrast'],
+            'literature_rate_observation_calculations':['populate_rate_observation_contrast','_statistics'],
+            'spreadsheet_tools':['Workbook'],
+        }.items():
+            for name in names:monkeypatch.setattr('gene_annotation_episode.'+module+'.'+name,forbidden)
+        monkeypatch.setattr(services,'execute_tool',forbidden)
+        dbpath=store.path/'state.sqlite'
+        # Use the actual existing SQLite file name, with URI read-only open.
+        dbpath=Path(store.db.execute('PRAGMA database_list').fetchone()[2])
+        checkpoint=tuple(store.db.execute('PRAGMA wal_checkpoint(TRUNCATE)').fetchone())
+        assert checkpoint[0]==0 and checkpoint[1]==checkpoint[2]
+        store.db.close()
+        assert not Path(str(dbpath)+'-wal').exists() or Path(str(dbpath)+'-wal').stat().st_size==0
+        store.db=sqlite3.connect('file:'+str(dbpath)+'?mode=ro&immutable=1',uri=True)
+        store.db.row_factory=sqlite3.Row;store.db.execute('PRAGMA query_only=ON')
+        before={str(p.relative_to(store.path)):p.read_bytes() for p in store.path.rglob('*') if p.is_file()}
+        restored,=compose_episode_bindings(services,store=store,journal=journal,execution_backend=None,
+            descriptors=[descriptor],job_episodes=None,resource_estimator=None,role_credit_bindings={}).bindings
+        assert restored.as_record()==descriptor
+        assert restored.received_report_facts(parent)[NAMESPACE]==received[0]['activity']
+        fresh_services=WorkflowServices(services.workflow)
+        assert fresh_services.literature_rate_observation_repository().fact_cells(parent,
+            [received[0]['activity'][0]['sheet_ref']],components=COMPONENTS)==received[0]['activity']
+        assert store.db.total_changes==0
+        assert {str(p.relative_to(store.path)):p.read_bytes() for p in store.path.rglob('*') if p.is_file()}==before
+        obsolete=deepcopy(descriptor);obsolete['implementation_sha256']='0'*64
+        with pytest.raises(DurableExecutionError,match='identity_conflict'):
+            compose_episode_bindings(services,store=store,journal=journal,execution_backend=None,
+                descriptors=[obsolete],job_episodes=None,resource_estimator=None,role_credit_bindings={})
+        (path/'SAVED_SHEET_001.json').write_text(json.dumps(saved_sheet,indent=2)+'\n')
+        (path/'ADMITTED_ROWS_001.json').write_text(json.dumps(received[0],indent=2)+'\n')
+        (path/'BINDING_DESCRIPTOR_001.json').write_text(json.dumps(descriptor,indent=2)+'\n')
+        (path/'PARENT_PROMPT_001.txt').write_text(parent_prompts[0])
+        (path/'CHILD_TASK_001.txt').write_text(tasks[0])
+        (path/'PROOF_RESULT_001.json').write_text(json.dumps({'source':'retained original case164 S1Data.xlsx and article.html',
+            'provider':'controlled ScriptedProvider; no actual model inference','targets':0,'source_operations':1,
+            'runtime_observations':3,'controller_scores':[c.scores for c in controllers],
+            'nonempty_parent_reasoning':'actual source-subject anchor in original article bytes',
+            'original_typed_admission':True,'source_artifacts_disabled_before_factory':True,
+            'xlsx_reader_and_calculators_disabled_before_factory':True,'sqlite_uri_mode':'ro','query_only':True,
+            'writer_checkpoint_before_readonly_open':checkpoint,'wal_absent_or_empty_before_readonly_open':True,
+            'immutable':True,'restoration_total_changes':store.db.total_changes,'byte_preservation':True,
+            'reconstructed_exact_original_rows':True,'annotation_credit':None,'a105_adequacy_claim':False},indent=2)+'\n')
+    finally:store.close()
+
+
+@pytest.mark.parametrize('mean_values',[(0.,0.,0.),(-2.,-1.,0.)])
+def test_cv_requires_positive_mean_without_discarding_signed_native_values(tmp_path,mean_values):
+    store,context,args=synthetic_case(tmp_path,dict(zip((16,17,18),mean_values)))
+    try:
+        _,out,_=populated(store,context,args)
+        cells={r['component']:r for r in out['result']['cells']}
+        assert cells['reference_rate']['value']==sum(mean_values)/3
+        assert cells['reference_sample_sd']['value'] is not None
+        assert cells['rate_difference']['value']==sum(mean_values)/3-13
+        assert cells['reference_cv']['value'] is None
+        assert cells['reference_cv']['unavailable_reason']=='nonpositive_mean'
+    finally:store.close()
+
+
+@pytest.mark.parametrize('change,reason',[
+    ('wrong_column','observation_subject_column_mismatch'),
+    ('wrong_group','observation_group_row_mismatch'),
+    ('repeated_group_text','ambiguous_group_label_scope'),
+    ('row_gap','contiguous_group_observation_rows_required')])
+def test_finite_row_layout_rejects_misbound_or_ambiguous_selectors(tmp_path,change,reason):
+    from gene_annotation_episode.literature_experimental_contracts import ExperimentalContractError
+    store,context,args=synthetic_case(tmp_path,{})
+    try:
+        if change=='wrong_column':args['groups'][2]['observations'][0]['value_cell']='K16'
+        elif change=='wrong_group':args['groups'][2]['observations'][0]['label']['cell']='B16'
+        elif change=='repeated_group_text':args['groups'][0]['label']['expected_text']='reference'
+        elif change=='row_gap':args['groups'][2]['observations'].pop(1)
+        with pytest.raises(ExperimentalContractError,match=reason):populated(store,context,args)
+    finally:store.close()
+
+
+def test_reused_observation_label_on_different_rows_preserves_unknown_association(tmp_path):
+    store,context,args=synthetic_case(tmp_path,{16:10.,17:10.,18:30.},repeated_label=True)
+    try:
+        repo,out,_=populated(store,context,args)
+        cells={r['component']:r for r in out['result']['cells']}
+        assert cells['reference_rate']['value'] is None
+        assert cells['reference_rate']['unavailable_reason']=='source_entry_association_unresolved'
+        assert cells['reference_observed_point_mean']['value']==30
+        group=cells['reference_rate']['groups']['reference']['observed']
+        assert group['entry_count'] is None and group['selected_row_count']==3
+        assert group['known_entry_count']==group['point_entry_count']==1
+        assert group['association_unresolved']
+        assert [e['association_unresolved'] for e in group['observation_labels']]==[True,True,False]
+        assert len(repo.read(out['result']['sheet_ref'])['sheet']['extraction']['entries'])==9
+    finally:store.close()

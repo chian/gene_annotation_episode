@@ -1,0 +1,54 @@
+{
+  "added_requirement_checks": "Each of A105,A106,A111 has identical numerical results for literature and dataset origins, and the combined same-experiment representations still produce one experiment.",
+  "annotation_aggregate_defined": false,
+  "caller_binding_adopted": false,
+  "checks": [
+    "concrete 0.50/0.75/1.00 ordinal rules on all three axes",
+    "native assay magnitude and Kd do not determine function assurance",
+    "native units and censoring preserved",
+    "paper/dataset same original experiment deduplicates; conflicting values retained as conflict",
+    "homolog correspondence missing is unavailable, not direct target credit",
+    "competent negative separated from missing limits and ordinary nonsignificance",
+    "native q=0.0001 yields log score 4; bounded q produces score bound; zero does not become infinity",
+    "unrelated native test is ineligible; q>1 unavailable",
+    "all 179 original source rows and source file hashes match"
+  ],
+  "command": ".venv/bin/pytest -q tests/test_experimental_evidence_axis_scoring.py",
+  "failed": 0,
+  "files": {
+    "research/slotted_process_library/publications/2026-10-23-002/SCORING_RUBRICS_A105_A106_A111.md": "3c142ce019c4c22b1abbcfabd9e79dbb785ddee3bdefa7ced93116c36bfab39f",
+    "research/slotted_process_library/publications/2026-10-23-002/SOURCE_CROSSWALK_A105_A106_A111.json": "bced447e01de3b5b786c4735f3910205377fe17bda13a73359c8e287000cd029",
+    "research/slotted_process_library/publications/2026-10-23-002/entries/A105.json": "e56db52b200c292acdee9ac2dd33fc261e8ce8fffa23841a12598f1817b5fef9",
+    "research/slotted_process_library/publications/2026-10-23-002/entries/A106.json": "df930cca1a5133de04017bbd71552979666f97f7a66c1dc72764601dc72d0e66",
+    "research/slotted_process_library/publications/2026-10-23-002/entries/A111.json": "1e9739cc76a0ddd8676dc6e63d547b552e91384eaa946b39253015edc72b49f8",
+    "tests/test_experimental_evidence_axis_scoring.py": "69e310de47d21c75dd840f4235a34e77f6175ffc56d013d2dc3a63e5c70e72ba"
+  },
+  "model_calls": 0,
+  "native_requests": 0,
+  "passed": 19,
+  "previous_receipt": "VERIFICATION_A105_A106_A111_SCORING_001.json",
+  "proposal_approved": false,
+  "scientific_runs": 0,
+  "scope": {
+    "A105": {
+      "closed_criteria": 9,
+      "native_measurements": 4,
+      "preserved_source_rows": 84,
+      "scoring_routes": 6
+    },
+    "A106": {
+      "closed_criteria": 10,
+      "native_measurements": 5,
+      "preserved_source_rows": 87,
+      "scoring_routes": 8
+    },
+    "A111": {
+      "closed_criteria": 11,
+      "native_measurements": 4,
+      "preserved_source_rows": 8,
+      "scoring_routes": 7
+    }
+  },
+  "seconds": 12.52,
+  "status": "proposed_per_entry_scoring_implemented_and_tested"
+}

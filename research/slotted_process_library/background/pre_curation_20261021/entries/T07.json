@@ -1,0 +1,160 @@
+{
+  "slot": "tools",
+  "id": "T07",
+  "name": "Assay-specific kinetic and signal comparisons",
+  "description": "Extract matched assay conditions and numeric estimates, calculate declared ratios or bounds, and expose substrate/partner and readout dependencies without relabeling apparent parameters as direct binding or native flux.",
+  "capability_operations": [
+    {
+      "operation": "Tabulate reported assay measurements",
+      "inputs": {
+        "measurements": "identified rates, Km/Kd/IC50, signals and nondetection thresholds",
+        "context": "substrates, partner proteins, concentrations, metal/cofactor, assay direction and units"
+      },
+      "outputs": {
+        "table": "measurement values with censoring, units, conditions and source locations",
+        "comparability": "declared matched dimensions and recorded differences; no automatic scientific verdict"
+      },
+      "implementation_status": "research_script_only",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    },
+    {
+      "operation": "Compute a selected ratio, difference, or simple model prediction",
+      "inputs": {
+        "values": "source-bound numeric estimates, inequalities and units",
+        "expression": "explicit arithmetic or declared one-parameter prediction",
+        "uncertainty": "reported support or unavailable status"
+      },
+      "outputs": {
+        "derived_result": "value or lower/upper bound with expression",
+        "limitations": "censoring and unsupported statistical/kinetic claims"
+      },
+      "implementation_status": "research_script_only",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    },
+    {
+      "operation": "Fit supplied time-course or saturation data",
+      "inputs": {
+        "points": "actual raw/processed values, replicates and units",
+        "model": "declared rate equation/error model and fitting settings"
+      },
+      "outputs": {
+        "fit": "estimates, residuals and uncertainty under that model"
+      },
+      "implementation_status": "capability_specification",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    }
+  ],
+  "availability": {
+    "repository_catalog_defined": [
+      "Existing source readers expose input tables. No general registered kinetic-fitting or assay-comparison callable confirmed."
+    ],
+    "research_operations_performed": [
+      "comparison/counterexample_calculations.json: selected deaminase censoring bounds and HisN source-table rank comparisons.",
+      "specificity/detailed_traces.json: selected YihU mutant apparent-efficiency arithmetic.",
+      "root/regulatory_specificity/raw/iscr_comparison_probe.json: published oligo/affinity/competition arithmetic; no raw-curve refit."
+    ],
+    "capability_specifications_not_confirmed_as_repository_callables": [
+      "New curve fitting requires actual points and an explicit implementation. A Kd/Km/IC50 table does not supply raw observations or statistical support."
+    ],
+    "author_experiments_are_source_evidence_only": [
+      "Substrate screening, binding assays, reconstitution, inhibition and kinetic measurement are author-only experiments here."
+    ],
+    "binding_limit": "A repository catalog definition is confirmed source-code identity, not proof of caller enablement, service availability, installed dependencies or execution in this research. Research scripts are retained operations, not registered runtime tools."
+  },
+  "limits": [
+    "Km is not a bindingKd; competitionIC50 is not automaticallyKd.",
+    "Censored undetected activity is a bound at the actual assay conditions, not zero.",
+    "Coupled-readout specificity can belong to the partner/reporter; noncognate substrate conditions and fixed cosubstrate saturation matter."
+  ],
+  "observed_uses": [
+    {
+      "case_group": "TM0936_Hermann_2007",
+      "use": "Selected contrasting deaminase-table values yielded only censored selectivity bounds, defeating a single-residue specificity transfer.",
+      "execution_scope": "Actual arithmetic; no new kinetics, model fitting or broad classifier benchmark.",
+      "use_status": "research_read_only_operation_performed"
+    },
+    {
+      "case_group": "spec_yihu_native_sulfonate",
+      "use": "Actual mutant comparisons separated sulfosugar substrate effects from a uniform active-protein-loss explanation under its stated model.",
+      "execution_scope": "Apparent efficiencies at fixed cosubstrates; not binding energies, raw fits or native flux.",
+      "use_status": "research_read_only_operation_performed"
+    },
+    {
+      "case_group": "reg_iscR_state_target_specificity",
+      "use": "Actual ratio and oligo calculations separated preserved affinity at one site from expanded target recognition, and retained competition lower bounds.",
+      "execution_scope": "No new affinity assay; rounded central values and IC50 censoring retained.",
+      "use_status": "research_read_only_operation_performed"
+    },
+    {
+      "case_group": "chem_f420_precursor_partner",
+      "use": "Changing the downstream CofD/FbiA partner changed apparent precursor preference despite unchanged upstream enzyme.",
+      "execution_scope": "Author reconstitutions; no new spectra, crystallographic refinement or flux measurements.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "chem_hydabc",
+      "use": "Dithionite carryover and donor-generating enzymes could short-circuit a coupled assay dependence.",
+      "execution_scope": "Authors controls; no new gas-chromatography analysis.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "spec_cysq_pap_not_imp",
+      "use": "Sensitive source assays discriminated PAP hydrolysis from much weaker IMP/FBP activity while retaining substrate-instability limits.",
+      "execution_scope": "Author kinetics; no raw fits or fresh substrate measurements.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    }
+  ],
+  "evidence": [
+    {
+      "case_group": "TM0936_Hermann_2007",
+      "case_id": "TM0936_Hermann_2007",
+      "source_url": "https://doi.org/10.1021/ja4066078",
+      "source_locator": "2013 comparator Table 1; comparison/counterexample_calculations.json",
+      "observation": "Selected contrasting deaminase-table values yielded only censored selectivity bounds, defeating a single-residue specificity transfer.",
+      "limit": "Actual arithmetic; no new kinetics, model fitting or broad classifier benchmark."
+    },
+    {
+      "case_group": "spec_yihu_native_sulfonate",
+      "case_id": "spec_yihu_native_sulfonate",
+      "source_url": "https://doi.org/10.1021/acscatal.9b04427",
+      "source_locator": "Case-record observation; inspected scope: 2009 relevant whole results/discussion and reaction methods; 2014 primary main results, enzyme methods and relevant extended-data legends; 2020 accepted manuscript sequence, kinetics, structure and conclusion sections inspected. Supporting spectra/kinetic fits were not reanalyzed.",
+      "observation": "Actual mutant comparisons separated sulfosugar substrate effects from a uniform active-protein-loss explanation under its stated model.",
+      "limit": "Apparent efficiencies at fixed cosubstrates; not binding energies, raw fits or native flux."
+    },
+    {
+      "case_group": "reg_iscR_state_target_specificity",
+      "case_id": "reg_iscR_state_target_specificity",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3676455/",
+      "source_locator": "Tables 2–3; Figures 4–5; raw/iscr_comparison_probe.json",
+      "observation": "Actual ratio and oligo calculations separated preserved affinity at one site from expanded target recognition, and retained competition lower bounds.",
+      "limit": "No new affinity assay; rounded central values and IC50 censoring retained."
+    },
+    {
+      "case_group": "chem_f420_precursor_partner",
+      "case_id": "chem_f420_precursor_partner",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8764529/",
+      "source_locator": "Case-record observation; inspected scope: Relevant full primary results/discussion and assay/LC-MS/crystallography methods inspected in all three papers. No new flux measurements, crystallographic refinement or spectrum fitting.",
+      "observation": "Changing the downstream CofD/FbiA partner changed apparent precursor preference despite unchanged upstream enzyme.",
+      "limit": "Author reconstitutions; no new spectra, crystallographic refinement or flux measurements."
+    },
+    {
+      "case_group": "chem_hydabc",
+      "case_id": "chem_hydabc",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2698477/",
+      "source_locator": "Case-record observation; inspected scope: Full relevant primary methods, donor/stoichiometry results and discussion inspected; original raw gas-chromatography data not reprocessed.",
+      "observation": "Dithionite carryover and donor-generating enzymes could short-circuit a coupled assay dependence.",
+      "limit": "Authors controls; no new gas-chromatography analysis."
+    },
+    {
+      "case_group": "spec_cysq_pap_not_imp",
+      "case_id": "spec_cysq_pap_not_imp",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2711008/",
+      "source_locator": "Case-record observation; inspected scope: 2008 primary relevant full methods/results/discussion inspected. 2010 CysQ deletion, extract-activity and discussion sections inspected; no genome analysis of putative suppressors.",
+      "observation": "Sensitive source assays discriminated PAP hydrolysis from much weaker IMP/FBP activity while retaining substrate-instability limits.",
+      "limit": "Author kinetics; no raw fits or fresh substrate measurements."
+    }
+  ]
+}

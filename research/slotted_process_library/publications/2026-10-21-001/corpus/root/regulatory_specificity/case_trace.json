@@ -1,0 +1,281 @@
+{
+  "status": "Research-only integrated case and trace; known outcomes disclosed; no accepted additional lane or axis.",
+  "case": {
+    "case_id": "reg_iscR_state_target_specificity",
+    "gene_protein": "IscR (Rrf2-family transcription factor)",
+    "organism": "Escherichia coli K-12",
+    "starting_question": "Does an environmental transcriptional response identify a directly recognized signal, and which regulator-state/target relations actually follow?",
+    "primary_source_urls": [
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC2709974/",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC3447993/",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC4108476/",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC3676455/",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC12594620/"
+    ],
+    "primary_source_DOIs": [
+      "10.1016/j.jmb.2009.01.055",
+      "10.1021/bi3003204",
+      "10.1111/mmi.12052",
+      "10.1038/nsmb.2568",
+      "10.1111/mmi.70021"
+    ],
+    "actual_observations": [
+      {
+        "observation_id": "I1",
+        "source_id": "iscr_type2_2009",
+        "origin": "author_reported",
+        "observation": "Cluster-ligand Cys variants retained activation of sufA/ydiU and repression of hyaA; abundance increased, so stronger effects did not establish stronger per-molecule activity.",
+        "source_location": "Figures 2–3"
+      },
+      {
+        "observation_id": "I2",
+        "source_id": "iscr_type2_2009",
+        "origin": "author_reported",
+        "observation": "Clusterless protein bound hya but not randomized DNA. Selected hya base substitutions impaired both competition and repression while leaving basal promoter output largely intact.",
+        "source_location": "Table 1; Figures 3,6–7"
+      },
+      {
+        "observation_id": "I3",
+        "source_id": "iscr_type2_2009",
+        "origin": "author_reported",
+        "observation": "The same target-site class included activation and repression; a sequence-logo T-rich region partly overlapped promoter elements.",
+        "source_location": "Discussion: Characteristics of a Type 2 site"
+      },
+      {
+        "observation_id": "I4",
+        "source_id": "iscr_homeostasis_2013",
+        "origin": "author_reported",
+        "observation": "iscR sites A/B controlled repression, whereas footprinted site C did not under tested conditions. Clusterless variants lost iscR repression despite increased protein abundance.",
+        "source_location": "Figures 1–4; Table 2"
+      },
+      {
+        "observation_id": "I5",
+        "source_id": "iscr_homeostasis_2013",
+        "origin": "author_reported",
+        "observation": "More total IscR was required for half-maximal repression aerobically. Added FNR demand derepressed iscR aerobically, but not anaerobically.",
+        "source_location": "Cluster occupancy and demand Results; Figure 7"
+      },
+      {
+        "observation_id": "I6",
+        "source_id": "iscr_specificity_2013",
+        "origin": "author_reported",
+        "observation": "E43A preserved hya affinity approximately but expanded apo-protein recognition to a type-1 site. Symmetrizing the type-1 dinucleotide alone did not restore wild-type apo binding.",
+        "source_location": "Tables 2–3; Figures 4–5"
+      },
+      {
+        "observation_id": "I7",
+        "source_id": "iscr_specificity_2013",
+        "origin": "author_reported",
+        "observation": "Solved structures used clusterless variants. Relocation of the specificity determinant upon cluster loading was proposed rather than directly observed.",
+        "source_location": "Online Methods; Discussion"
+      },
+      {
+        "observation_id": "I8",
+        "source_id": "iscr_cluster_2012",
+        "origin": "author_reported",
+        "observation": "Air-exposed protein assayed anaerobically bound iscR DNA similarly with or without dithionite; authors interpreted oxidation as irrelevant to binding.",
+        "source_location": "DNA-binding Methods; Figure 9"
+      },
+      {
+        "observation_id": "I9",
+        "source_id": "iscr_redox_2025",
+        "origin": "author_reported",
+        "observation": "PMS weakened type-1 binding in purified preparations without detected iron release anaerobically; apo-protein/type-2 control binding persisted.",
+        "source_location": "Figures 3–4"
+      },
+      {
+        "observation_id": "I10",
+        "source_id": "iscr_redox_2025",
+        "origin": "author_reported",
+        "observation": "Air-exposed protein bound poorly when assayed in air but recovered binding after chamber return. Authors proposed auto-reduction, revising the earlier interpretation.",
+        "source_location": "Figure 4c; Discussion"
+      },
+      {
+        "observation_id": "I11",
+        "source_id": "iscr_redox_2025",
+        "origin": "author_reported",
+        "observation": "At controlled IscR expression, anaerobic PMS affected type-1 repression but did not reproduce apo-favored type-2 regulation. Aerobic treatment affected both promoter classes.",
+        "source_location": "Figures 1,2,6"
+      },
+      {
+        "observation_id": "I12",
+        "source_id": "iscr_redox_2025",
+        "origin": "author_reported",
+        "observation": "OxyR/Fur controls helped attribute reporter changes; superoxide assays and SOD controls separated cluster destruction from the anaerobic PMS effect.",
+        "source_location": "Figures 1,3,5 and relevant Results"
+      }
+    ],
+    "annotation_consequence": "Supports a cofactor-state-dependent sequence-specific regulator with target-dependent activation/repression. Direct cofactor redox action is distinguishable from indirect assembly-demand feedback; neither implies a demonstrated selective PMS-binding pocket. DNA occupancy alone does not specify productive control or its sign.",
+    "experiment_dependence": "Authors’ promoter and protein mutants, reporter transcription, quantitative protein blots, purified DNA binding, cofactor/iron-release measurements and structural experiments. None were performed here.",
+    "reasoning_reported_vs_reconstructed": "Published outcomes were known. Observations belong to authors; connecting decision problems and comparison with existing lanes are retrospective reconstruction. Historical interpretations are preserved beside their later revision.",
+    "verification_scope": "Five primary papers’ relevant complete paths inspected as itemized in sources. One independent published-table/oligo arithmetic probe was run. No biological experiment, new regulon scan, raw-curve fit or IscR structure computation.",
+    "count_unit": "One regulator/function-allocation question across multiple states, target promoters and papers; not separate cases for target genes, mutants or studies."
+  },
+  "sources": {
+    "iscr_type2_2009": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2709974/",
+      "doi": "10.1016/j.jmb.2009.01.055",
+      "title": "Sequence-specific binding to a subset of IscR-regulated promoters does not require IscR Fe-S cluster ligation",
+      "inspection": "Complete relevant main Results/Discussion and Methods: Cys variants and abundance, hya binding/random DNA, oligo mutation/competition library, native promoter mutations and target-class comparisons. Published Table 1 sequences/central IC50 values were transcribed for the explicit probe. Supplementary files/raw curves were not reanalyzed."
+    },
+    "iscr_cluster_2012": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3447993/",
+      "doi": "10.1021/bi3003204",
+      "title": "Characterization of the [2Fe-2S] cluster of Escherichia coli transcription factor IscR",
+      "inspection": "Complete DNA-binding oxidation-state Results subsection, Figure 9 description, corresponding fluorescence Methods, and relevant cluster characterization/Discussion passages. Spectroscopic raw data and all ligand-mapping experiments were not independently reanalyzed. Its oxidation-independent interpretation is historical and explicitly revisited by the 2025 paper."
+    },
+    "iscr_homeostasis_2013": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4108476/",
+      "doi": "10.1111/mmi.12052",
+      "title": "Regulation of iron-sulphur cluster homeostasis through transcriptional control of the Isc pathway by [2Fe-2S]-IscR in Escherichia coli",
+      "inspection": "Complete main Results and relevant Discussion; promoter-site perturbation, protein abundance, Isc/Suf supply, functional titration and FNR-demand comparisons. Growth, blots, footprinting and anisotropy Methods read. Figure S1 numeric threshold is the main-text report, not a supplementary-data reanalysis."
+    },
+    "iscr_specificity_2013": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3676455/",
+      "doi": "10.1038/nsmb.2568",
+      "title": "Studies of IscR reveal a unique mechanism for metal-dependent regulation of DNA binding specificity",
+      "inspection": "Complete main Results/Discussion and Online Methods: apo/3CA structures, protein and DNA mutations, Tables 2/4, type-1/type-2 discrimination and holo-mechanism limits. No independent IscR coordinate calculation or supplementary curves reanalysis. All solved structures in this study lack the cluster; the proposed holo conformational path is not directly visualized."
+    },
+    "iscr_redox_2025": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12594620/",
+      "doi": "10.1111/mmi.70021",
+      "title": "The Role of the [2Fe-2S] Cluster of Escherichia coli IscR in Responding to Redox-Cycling Agents",
+      "inspection": "Complete main Results, Discussion and relevant Methods: PMS response, OxyR/Fur controls, iron-release/superoxide comparisons, redox-treatment/assay atmosphere, type-1/type-2 reporters at controlled protein expression, and physiological rescue limits. Supplementary document and raw curves not reanalyzed. Intracellular state pools and chamber auto-reduction are source interpretations rather than independently measured here."
+    }
+  },
+  "trace": [
+    {
+      "turn": "recognition_is_not_regulatory_response",
+      "starting_alternatives": [
+        "The environmental variable directly changes IscR.",
+        "It changes cofactor supply or total regulator abundance indirectly.",
+        "Another regulator creates the measured promoter response."
+      ],
+      "observed_evidence_refs": [
+        "I1",
+        "I4",
+        "I5"
+      ],
+      "changed_uncertainty": "A reporter can change while the regulator is more abundant yet less competent at one target. The identity of the changed molecular quantity must be resolved.",
+      "comparison_reported": "Compare cluster-ligand variants across promoter classes, measure protein abundance, perturb assembly machinery and introduce another Fe–S client demand.",
+      "why_this_comparison_reconstructed": "A deletion/expression change alone merges input sensing, abundance and output control. These contrasts separate loss of all protein function from a state-specific target defect and test a competing indirect input route.",
+      "result_boundary": "The demand interpretation gained support; it did not prove that every oxygen/PMS response is exclusively indirect or quantify all intracellular cluster-state fractions."
+    },
+    {
+      "turn": "specificity_and_affinity_can_separate",
+      "starting_alternatives": [
+        "A weaker target response reflects general DNA-binding failure.",
+        "The protein discriminates a different target set with similar affinity at a reference site.",
+        "The promoter mutation changes basal transcription rather than regulator recognition."
+      ],
+      "observed_evidence_refs": [
+        "I2",
+        "I3",
+        "I6",
+        "I7"
+      ],
+      "comparison_reported": "Use randomized competitors, individual DNA substitutions, basal-output controls, protein-side substitutions and a compensating DNA-site change.",
+      "why_this_comparison_reconstructed": "A structure contact or an unchanged reference-site affinity cannot establish conserved target range. Comparing the candidate discriminator on both DNA classes asks whether the property lost is binding energy or exclusion of other sequences.",
+      "revision": "The contact-to-affinity shortcut fails: E43 removal leaves hya binding nearly intact while broadening recognition. The unsuccessful site symmetrization also rejects an explanation resting only on that dinucleotide.",
+      "own_probe_ref": "raw/iscr_comparison_probe.json",
+      "result_boundary": "The source supports sequence discrimination; a motif scan still cannot supply regulatory sign, promoter productivity or an observed holo conformational trajectory."
+    },
+    {
+      "turn": "revisit_the_molecular_state_at_measurement",
+      "starting_alternatives": [
+        "PMS destroys the cluster, forming apo-IscR.",
+        "It changes the cofactor redox state without cluster loss.",
+        "It nonspecifically damages DNA/protein or produces the effect only through another cellular component."
+      ],
+      "observed_evidence_refs": [
+        "I8",
+        "I9",
+        "I10",
+        "I12"
+      ],
+      "comparison_reported": "Under defined assay atmospheres compare PMS, air, iron release, clusterless-protein binding and return of air-treated protein to the chamber.",
+      "why_this_comparison_reconstructed": "The early negative comparison relied on a treatment label standing in for the state present during binding. Replaying the treatment and readout environments tests that assumption before rejecting redox control.",
+      "revision": "The 2025 result adds a redox-responsive state to the occupancy picture and proposes that assay-environment reduction masked the earlier effect. Auto-reduction is the authors’ interpretation, not an independently measured state trajectory here.",
+      "result_boundary": "Direct action on an isolated cofactor-bearing preparation supports a molecular input route. It is not a PMS ligand-binding/selectivity experiment, and it does not remove indirect demand feedback from cells."
+    },
+    {
+      "turn": "binding_does_not_fix_the_control_relation",
+      "starting_alternatives": [
+        "All DNA-bound states produce the same regulatory output.",
+        "Cofactor states can bind yet differ in productive activation/repression.",
+        "Changing IscR abundance or other promoter regulators explains the output difference."
+      ],
+      "observed_evidence_refs": [
+        "I3",
+        "I4",
+        "I11",
+        "I12"
+      ],
+      "comparison_reported": "Inspect target-site classes, sites with and without measured transcriptional consequences, controlled regulator expression and reporters with other regulatory sites removed.",
+      "why_this_comparison_reconstructed": "An occupancy experiment asks where the regulator can bind. A signed control relation requires a promoter-output contrast at comparable regulator expression with alternative regulatory inputs addressed.",
+      "revision": "A footprinted site can lack a detected output effect; the same binding-site class can support opposite signs; oxidation and cluster loss do not reproduce the same target responses.",
+      "result_boundary": "Target sequence, regulator state and promoter architecture constrain the relation. A generic regulator label or binding motif cannot replace those functional claims."
+    }
+  ],
+  "coverage_assessment": {
+    "candidate_annotation_question": "Which input acts on the regulator, through what molecular or indirect route, and which targets does that state productively activate or repress?",
+    "provisional_conclusion": "This is an explicit regulatory relation worth making visible, but this one integrated case does not establish a sixth lane or independent credit axis. It can currently be investigated through F01 recognition specificity and F03 causal control, provided input recognition and productive target relations are actually examined.",
+    "F01_connection": "DNA-site and input/cofactor recognition are molecular specificity questions. I6 shows that preserved affinity for one reference DNA does not preserve the set of recognized targets.",
+    "F03_connection": "The causal contribution is a relation: changing a regulator state may alter binding, productive transcription, indirect assembly demand or total abundance. I4/I11 show why occupying a site is not the same contribution as controlling its output.",
+    "why_not_a_data_type_axis": "Reporter, binding, structural and cofactor measurements can each support different links in the same proposed relation. The question concerns the claimed function, not whether evidence came from RNA-seq, EMSA, ITC or another assay.",
+    "why_not_merely_a_condition_label": "Ordinary observation context must always be preserved. Here state is also part of the function being assigned because target eligibility and productive activation/repression differ. Recording “aerobic” alone does not establish which state or relation caused the effect.",
+    "comparison_with_imported_cases": [
+      {
+        "existing_case_id": "organism_16_malr",
+        "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3911195/",
+        "use": "Existing record supports regulatory/promoter involvement without direct maltose-recognition evidence. Not reinspected as a new primary case."
+      },
+      {
+        "existing_case_id": "pxpT_pxpR_access_and_sensing",
+        "source": "https://journals.asm.org/doi/10.1128/aem.02181-25",
+        "use": "Existing record separates repression from direct 5-OP binding/selectivity. IscR shows that a direct input can instead chemically alter a cofactor; a ligand-binding-pocket test is not universal. Not counted again."
+      }
+    ],
+    "compatibility_limits": [
+      "The reusable decision is to distinguish response, molecular input and productive target control; their assays are not interchangeable.",
+      "PxpR metabolite binding cannot be copied onto IscR redox chemistry, or MalR nutrient dependence onto direct maltose binding.",
+      "Partial cluster occupancy, different oligos/salt concentrations, assay atmosphere and promoter architecture prevent pooling the papers’ apparent affinities into one intrinsic specificity ranking.",
+      "The apo mutants are experimentally useful proxies; they are not a direct quantitative measurement of every physiological state pool.",
+      "The 2013 specificity structures are clusterless. The structural hypothesis for holo-state remodeling remains distinct from its measured binding phenotype.",
+      "No regulatory question, tool, evidence measurement or conditional state is adopted as a new scoring axis."
+    ],
+    "central_table_status": "F01–F05 and the three-slot table were read. No central table/index was edited, no F06 added, and no implementation changed."
+  },
+  "tools_and_experiment_dependencies": {
+    "actually_used_here": [
+      "Read existing comparison/linked case records and exact-word duplicate search.",
+      "Retrieve five primary full texts and inspect complete relevant experimental paths.",
+      "Align seven published hya oligos and calculate within-source ratios while preserving censored and approximate measurements; script and input provenance are saved."
+    ],
+    "possible_computational_evidence": [
+      "Promoter-aware motif discovery/scanning, e.g. MEME/FIMO, with experimental site classes and transcription-start information retained; this can nominate sites rather than determine regulatory sign.",
+      "Compare conserved protein recognition residues and deposited interfaces to nominate specificity tests; clusterless coordinates cannot visualize the missing holo transition.",
+      "Analyze appropriately matched occupancy/expression time courses if suitable data are supplied; no such dataset or raw-curve availability was assumed here."
+    ],
+    "author_wet_lab_dependencies": [
+      "Controlled regulator/cofactor-state preparations and direct chemical input assays.",
+      "Native or controlled-expression promoter reporters with DNA-site/alternative-regulator controls.",
+      "DNA-competition and affinity experiments, protein abundance measurements, cofactor/iron-release assays, and structure-guided mutagenesis."
+    ],
+    "not_done": [
+      "No new motif/genome scan, dataset reprocessing, binding experiment, structural simulation or intracellular-state measurement.",
+      "No extra agents, repository edits, implementation/design changes or scoring changes."
+    ]
+  },
+  "duplicate_check": {
+    "scope": "Before new source retrieval, exact-word case-insensitive IscR search across /tmp/episode-published-cases JSON/JSONL/Markdown records returned no match. Earlier broad substring search also returned words such as discrimination and was discarded as a duplicate test.",
+    "new_questions_count": 1,
+    "reused_prior_questions_counted_again": 0,
+    "prior_records_read": [
+      "/tmp/episode-published-cases/root/regulation_sensing_comparison.json",
+      "/tmp/episode-published-cases/root/cases.jsonl: pxpT_pxpR_access_and_sensing",
+      "/tmp/episode-published-cases/organism/cases.jsonl: organism_16_malr",
+      "/tmp/episode-published-cases/follow_up_lanes.md"
+    ]
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "runs": [
+    {
+      "run": "targeted",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/test_bvbrc_appservice_monitor_handle_resolution.py",
+        "--junitxml=docs/verification/tool_graders_bvbrc_monitor_handle_binding_2026-10-24/targeted-junit.xml"
+      ],
+      "started_at": "2026-10-25T02:06:59.552109+00:00",
+      "elapsed_seconds": 332.50406711397227,
+      "exit_code": 1,
+      "pytest": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "1",
+        "skipped": "0",
+        "tests": "31",
+        "time": "332.299",
+        "timestamp": "2026-10-24T21:06:59.663363-05:00",
+        "hostname": "chia-Z590-UD"
+      },
+      "case_count": 31
+    },
+    {
+      "run": "targeted-corrected-assertion",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/test_bvbrc_appservice_monitor_handle_resolution.py::test_typed_monitor_target_uses_actual_assignment_and_original_handoff",
+        "--junitxml=docs/verification/tool_graders_bvbrc_monitor_handle_binding_2026-10-24/targeted-corrected-assertion-junit.xml"
+      ],
+      "started_at": "2026-10-25T02:13:08.226478+00:00",
+      "elapsed_seconds": 9.598525161040016,
+      "exit_code": 0,
+      "pytest": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "1",
+        "time": "9.354",
+        "timestamp": "2026-10-24T21:13:08.340287-05:00",
+        "hostname": "chia-Z590-UD"
+      },
+      "case_count": 1
+    },
+    {
+      "run": "regression",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/test_bvbrc_appservice_native_monitor.py",
+        "tests/test_bvbrc_appservice_host.py",
+        "--junitxml=docs/verification/tool_graders_bvbrc_monitor_handle_binding_2026-10-24/regression-junit.xml"
+      ],
+      "started_at": "2026-10-25T02:08:56.961728+00:00",
+      "elapsed_seconds": 551.0956322849961,
+      "exit_code": 0,
+      "pytest": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "72",
+        "time": "550.862",
+        "timestamp": "2026-10-24T21:08:57.077195-05:00",
+        "hostname": "chia-Z590-UD"
+      },
+      "case_count": 72
+    }
+  ],
+  "focused_distinct_cases_verified": 31,
+  "focused_initial_failure": "Test asserted the diagnostic code against human exception prose; the implementation correctly rejected missing custody.",
+  "correction": "Assert exact ReportBoundaryError.diagnostic category, code unknown_reference, and field report.target.",
+  "production_changed_after_initial_targeted_run": false,
+  "shared_workflow": {
+    "test": "tests/test_bvbrc_appservice_monitor_workflow.py",
+    "passed": 1,
+    "seconds": 98.04,
+    "log": "verification/tool_graders_bvbrc_appservice_monitor_workflow_2026-10-24/second-run.log",
+    "executor": "separate Workflow test owner",
+    "fixture_native_responses": true,
+    "live_api": false,
+    "configured_model_execution": false,
+    "hpc": false
+  }
+}

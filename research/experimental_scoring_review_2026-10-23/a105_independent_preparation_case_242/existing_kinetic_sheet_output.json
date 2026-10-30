@@ -1,0 +1,217 @@
+{
+  "version": "a105_kinetic_contrast_sheet_v1",
+  "axis": "A105",
+  "evaluation_scope": "source_kinetic_parameter_contrast",
+  "contrast_meaning": "numerator_parameter_exceeds_denominator",
+  "inputs": {
+    "version": "a105_kinetic_contrast_inputs_v1",
+    "subject_relationship": "unknown",
+    "parameter_definition_relationship": "unknown",
+    "substrate_arrangement": "unknown",
+    "comparison_scope": "unknown",
+    "nonintended_conditions_relationship": "unknown",
+    "numerator": {
+      "parameter_kind": "catalytic_efficiency",
+      "unit": "uM^-1min^-1",
+      "value": 0.000186,
+      "status": "point",
+      "relation": "eq",
+      "approximate": false,
+      "origin": "calculated",
+      "measurement_id": "kinetic_source_token_87c5914147e5882fd6a3242e",
+      "physical_measurement_id": null,
+      "subject": {
+        "organism": "E. coli",
+        "genotype": null,
+        "molecule": "AP mutant",
+        "construct": "D101A/E322Y#"
+      },
+      "context": {
+        "substrate": "pNPP",
+        "preparation": "#The mutant was expressed in two independent enzyme preparations and standard deviations are from activity",
+        "experiment": "Table 1. Kinetic constants for WT and mutant AP*,†",
+        "experimental_system": null,
+        "conditions": null,
+        "endpoint": "400 nm",
+        "normalization": "M−1s−1"
+      },
+      "uncertainty": {
+        "statistic": "sd",
+        "magnitude": 6e-06,
+        "interval": null,
+        "confidence_level": null,
+        "count": 2,
+        "repetition_basis": "biological_preparations",
+        "estimate_basis": "unknown"
+      },
+      "source": {
+        "source_ref": "@elife2015AP",
+        "artifact_ref": "sha256_0ca67e2a421f98b12c2ffafd8baf630349b71b6b0082e6ee21de48a88e4aa924",
+        "representation": "text",
+        "start": 24116,
+        "end": 24119
+      },
+      "unavailable_reason": null
+    },
+    "denominator": null
+  },
+  "model": null,
+  "measurement_keys": {
+    "numerator": null,
+    "denominator": null
+  },
+  "physical_measurement_ids": {
+    "numerator": null,
+    "denominator": null
+  },
+  "cells": {
+    "numerator_parameter": {
+      "value": 0.000186,
+      "unit": "uM^-1min^-1",
+      "status": "populated",
+      "formula": "source_numerator_parameter",
+      "origin": "calculated",
+      "unavailable_reason": null,
+      "approximate": false,
+      "conditional_on": [],
+      "threshold": null,
+      "relation": "eq"
+    },
+    "denominator_parameter": {
+      "value": null,
+      "unit": null,
+      "status": "unavailable",
+      "formula": "source_denominator_parameter",
+      "origin": "derived",
+      "unavailable_reason": "denominator_measurement_missing",
+      "approximate": false,
+      "conditional_on": [],
+      "threshold": null,
+      "relation": "none"
+    },
+    "parameter_difference": {
+      "value": null,
+      "unit": null,
+      "status": "unavailable",
+      "formula": "numerator_parameter-denominator_parameter",
+      "origin": "derived",
+      "unavailable_reason": "denominator_measurement_missing",
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "reported_protocol_comparison"
+      ],
+      "threshold": null,
+      "relation": "none"
+    },
+    "parameter_ratio": {
+      "value": null,
+      "unit": "dimensionless",
+      "status": "unavailable",
+      "formula": "numerator_parameter/denominator_parameter",
+      "origin": "derived",
+      "unavailable_reason": "denominator_measurement_missing",
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "reported_protocol_comparison"
+      ],
+      "threshold": null,
+      "relation": "none"
+    },
+    "log_parameter_contrast": {
+      "value": null,
+      "unit": "dimensionless",
+      "status": "unavailable",
+      "formula": "ln(numerator_parameter)-ln(denominator_parameter)",
+      "origin": "derived",
+      "unavailable_reason": "denominator_measurement_missing",
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "reported_protocol_comparison"
+      ],
+      "threshold": null,
+      "relation": "none"
+    },
+    "log_contrast_variance": {
+      "value": null,
+      "unit": "dimensionless_squared",
+      "status": "unavailable",
+      "formula": "Cnn+Cdd-2*Cnd",
+      "origin": "derived",
+      "unavailable_reason": "denominator_measurement_missing",
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "reported_protocol_comparison",
+        "supplied_log_covariance"
+      ],
+      "threshold": null,
+      "relation": "none"
+    },
+    "log_contrast_standard_uncertainty": {
+      "value": null,
+      "unit": "dimensionless",
+      "status": "unavailable",
+      "formula": "sqrt(Cnn+Cdd-2*Cnd)",
+      "origin": "derived",
+      "unavailable_reason": "denominator_measurement_missing",
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "reported_protocol_comparison",
+        "supplied_log_covariance"
+      ],
+      "threshold": null,
+      "relation": "none"
+    },
+    "source_profile_log_ratio": {
+      "value": null,
+      "unit": "dimensionless",
+      "status": "unavailable",
+      "formula": "e*abs(e)/(2*V)",
+      "origin": "derived",
+      "unavailable_reason": "denominator_measurement_missing",
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "reported_protocol_comparison",
+        "supplied_log_covariance",
+        "known_normal_log_parameters"
+      ],
+      "threshold": null,
+      "relation": "none"
+    },
+    "source_signed_index": {
+      "value": null,
+      "unit": "dimensionless",
+      "status": "unavailable",
+      "formula": "tanh(source_profile_log_ratio/2)",
+      "origin": "proposed",
+      "unavailable_reason": "denominator_measurement_missing",
+      "approximate": false,
+      "conditional_on": [
+        "supplied_subject_and_parameter_relationships",
+        "reported_protocol_comparison",
+        "supplied_log_covariance",
+        "known_normal_log_parameters"
+      ],
+      "threshold": null,
+      "relation": "none"
+    }
+  },
+  "variance_status": "not_supplied",
+  "independent_preparation_count": null,
+  "annotation_credit": null,
+  "interpretation_limits": [
+    "parameter_magnitude_is_not_complete_functional_specificity",
+    "higher_Km_is_not_automatically_stronger_affinity_or_activity",
+    "reported_protocol_comparison_is_not_automatically_common_condition_preference",
+    "unknown_preparation_identity_is_not_independent_replication",
+    "reported_spread_and_counts_are_not_log_covariance",
+    "shared_physical_estimates_remain_dependent_across_comparisons",
+    "ratio_log_profile_and_index_are_not_independent_evidence",
+    "no_target_correspondence_or_annotation_credit"
+  ]
+}

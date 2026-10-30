@@ -1,0 +1,215 @@
+{
+  "status": "manual_research_input_specimen_not_implemented_reader",
+  "formula_authority": "../a104_clade_support_completion_025/A104_CURRENT_NUMERICAL_PROPOSAL_004.md",
+  "field_authority": "../a104_clade_support_completion_025/EXACT_READER_FIELDS_004.md",
+  "source": {
+    "doi": "10.1186/1741-7007-3-13",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1173090/",
+    "locations": [
+      "Figure 2 selected TyrA catalytic-core tree",
+      "Table 2 organism/figure-label mappings",
+      "Table 4 Pseudomonas aeruginosa and Pseudomonas stutzeri rows",
+      "Results: The catalytic-core domain of TyrA proteins",
+      "Results: Specificity for the pyridine nucleotide co-substrate within the TyrA superfamily",
+      "Table S1 selected protein identifier rows"
+    ]
+  },
+  "query": null,
+  "assertions": {
+    "f": {
+      "functional_dimension": "joint_cofactor_and_cyclohexadienyl_substrate_profile",
+      "description": "PPA and AGN accepted with NAD+-specific cofactor use",
+      "unresolved_additional_functions": true
+    },
+    "g": {
+      "functional_dimension": "joint_cofactor_and_cyclohexadienyl_substrate_profile",
+      "description": "PPA and AGN accepted with NADP+-specific cofactor use",
+      "unresolved_additional_functions": true
+    },
+    "h": {
+      "functional_dimension": "cyclohexadienyl_substrate_profile_without_cofactor_restriction",
+      "description": "PPA and AGN accepted",
+      "unresolved_additional_functions": true
+    }
+  },
+  "entailment_map": {"f": "h", "g": "h"},
+  "clades": {
+    "P5": {
+      "source_clade": "displayed Pseudomonas/Azotobacter TyrA subgroup",
+      "fixed_intended_inventory": ["Paer", "Pstu", "Pflu", "Pput", "Avin"],
+      "boundary_kind": "source_defined_split_side_no_invented_root",
+      "boundary_source": "Figure 2 and explicit sister-subclade description in the pyridine-nucleotide Results subsection",
+      "outside_side": "remaining displayed Figure 2 reference universe",
+      "restricted_reference_universe": "selected displayed tips only; not a complete natural-family census",
+      "scope_selection_basis": "source-defined subgroup; chosen independently of calculated coverage"
+    },
+    "PA6": {
+      "source_clade": "displayed shared TyrA-AroF fusion lineage including Acinetobacter and its Pseudomonas/Azotobacter sister",
+      "fixed_intended_inventory": ["Paer", "Pstu", "Pflu", "Pput", "Avin", "ACIN"],
+      "boundary_kind": "source_defined_split_side_no_invented_root",
+      "boundary_source": "Figure 2 and explicit common-fusion/sister-subclade description in the pyridine-nucleotide Results subsection",
+      "outside_side": "remaining displayed Figure 2 reference universe",
+      "restricted_reference_universe": "selected displayed tips only; not a complete natural-family census",
+      "scope_selection_basis": "separate source-defined broader comparison, not replacement chosen to maximize P5"
+    }
+  },
+  "reference_rows": [
+    {
+      "source_tip": "Paer",
+      "canonical_source_identity": "Song2005:Paer:TyrA_core",
+      "organism": "Pseudomonas aeruginosa PAO1",
+      "source_protein_id": "GI:15598360",
+      "source_aliases": ["Paer_1"],
+      "natural_reference": true,
+      "reported_class": "f",
+      "assay_to_tip_mapping_variable": "a",
+      "source_locations": ["Table 2", "Table S1 Paer_1", "Table 4 P. aeruginosa"],
+      "original_assay_identity_rechecked": false,
+      "shared_evidence_key": "Song2005:Paer:reported_biochemistry"
+    },
+    {
+      "source_tip": "Pstu",
+      "canonical_source_identity": "Song2005:Pstu:TyrA_core",
+      "organism": "Pseudomonas stutzeri",
+      "source_protein_id": "GI:5712093",
+      "source_aliases": [],
+      "natural_reference": true,
+      "assayed_construct": "engineered isolated core from natural TyrA-AroF fusion; original construct correspondence not rechecked",
+      "reported_class": "f",
+      "assay_to_tip_mapping_variable": "b",
+      "source_locations": ["Table 2", "Table S1 Pstu", "Table 4 P. stutzeri", "Results catalytic-core subsection"],
+      "original_assay_identity_rechecked": false,
+      "shared_evidence_key": "Song2005:Pstu:reported_biochemistry"
+    },
+    {
+      "source_tip": "Pflu",
+      "canonical_source_identity": "Song2005:Pflu:TyrA_core",
+      "organism": "Pseudomonas fluorescens PfO-1",
+      "source_protein_id": "GI:23061127",
+      "source_aliases": [],
+      "natural_reference": true,
+      "reported_class": null,
+      "assay_to_tip_mapping_variable": null,
+      "source_locations": ["Table 2", "Table S1 Pflu"],
+      "function_observation_status": "no_individually_checked_experimental_assignment_not_negative_test"
+    },
+    {
+      "source_tip": "Pput",
+      "canonical_source_identity": "Song2005:Pput:TyrA_core",
+      "organism": "Pseudomonas putida KT2440",
+      "source_protein_id": "GI:26988501",
+      "source_aliases": [],
+      "natural_reference": true,
+      "reported_class": null,
+      "assay_to_tip_mapping_variable": null,
+      "source_locations": ["Table 2", "Table S1 Pput"],
+      "function_observation_status": "no_individually_checked_experimental_assignment_not_negative_test"
+    },
+    {
+      "source_tip": "Avin",
+      "canonical_source_identity": "Song2005:Avin:TyrA_core",
+      "organism": "Azotobacter vinelandii",
+      "source_protein_id": null,
+      "unresolved_source_candidates": ["GI:53612601", "GI:13105295"],
+      "identity_conflict": "displayed number differs from hyperlink target; no candidate silently chosen; neither proved current canonical identity",
+      "source_aliases": [],
+      "natural_reference": true,
+      "reported_class": null,
+      "assay_to_tip_mapping_variable": null,
+      "source_locations": ["Table 2", "Table S1 Avin"],
+      "function_observation_status": "no_individually_checked_experimental_assignment_not_negative_test"
+    },
+    {
+      "source_tip": "ACIN",
+      "canonical_source_identity": "Song2005:ACIN:TyrA_core",
+      "organism": "Acinetobacter sp. ADP1",
+      "source_protein_id": "GI:50085330",
+      "source_aliases": ["ACIN*"],
+      "natural_reference": true,
+      "reported_class": "g",
+      "assay_to_tip_mapping_variable": "c",
+      "source_locations": ["Table 2", "Table S1 ACIN", "Results pyridine-nucleotide specificity subsection"],
+      "original_assay_identity_rechecked": false,
+      "shared_evidence_key": "Song2005:ACIN:reported_biochemistry"
+    }
+  ],
+  "mapping_scenarios": {
+    "variables": ["a", "b", "c"],
+    "allowed_values": [0, 1],
+    "meaning_of_one": "reported experimental assignment corresponds to designated source tree tip/core",
+    "meaning_of_zero": "that connection unavailable in scenario; tip assignment stays unknown; not absence of function",
+    "author_mapped_example": {"a": 1, "b": 1, "c": 1},
+    "native_probability_weights": null,
+    "shared_across_scopes_and_assertions": true,
+    "unresolved_avin_identity_slot_count": 1,
+    "scope_of_bounds": "current received-evidence mapping scenarios only; not future unassayed-member functions"
+  },
+  "experimental_fields_unavailable": [
+    "original assay-to-sequence and construct crosswalk",
+    "matched assay conditions and concentrations",
+    "purification/background controls and detection limits",
+    "independent preparation counts",
+    "quantitative specificity uncertainty"
+  ],
+  "required_phylogenetic_fields_unavailable": [
+    "actual supplied query and intended organism/copy comparison mapping",
+    "independently sourced organismal tree topology",
+    "selected rooted-triplet or unrooted-quartet comparison and induced subsets",
+    "query placement and native ensemble weights",
+    "numeric compatible branch path lengths for b and d"
+  ],
+  "output_cell_specimens": [
+    {
+      "comparison": "P5/f",
+      "point": 0.4,
+      "lower": 0.4,
+      "upper": 0.4,
+      "bound_kind": "exact",
+      "units": "fraction",
+      "status": "conditional",
+      "meaning": "observed_association_coverage",
+      "numerator": 2,
+      "denominator": 5,
+      "assumptions": ["author mappings a=b=1", "fixed P5 displayed reference universe"],
+      "unknown_operands": ["unconditional original assay-to-tip identities"],
+      "native_uncertainty": null,
+      "zero_reason": null
+    },
+    {
+      "comparison": "PA6/f",
+      "point": 0,
+      "lower": 0,
+      "upper": 0,
+      "bound_kind": "exact",
+      "units": "fraction",
+      "status": "conditional",
+      "meaning": "observed_association_coverage",
+      "numerator": 2,
+      "denominator": 6,
+      "known_other_count": 1,
+      "B_f": true,
+      "assumptions": ["author mappings a=b=c=1", "fixed PA6 displayed reference universe"],
+      "unknown_operands": ["unconditional original assay-to-tip identities"],
+      "native_uncertainty": null,
+      "zero_reason": "known_functional_heterogeneity"
+    },
+    {
+      "comparison": "PA6/h",
+      "point": 0.5,
+      "lower": 0.5,
+      "upper": 0.5,
+      "bound_kind": "exact",
+      "units": "fraction",
+      "status": "conditional",
+      "meaning": "observed_association_coverage",
+      "numerator": 3,
+      "denominator": 6,
+      "assumptions": ["author mappings a=b=c=1", "explicit f-to-h and g-to-h entailment", "fixed PA6 displayed reference universe"],
+      "unknown_operands": ["unconditional original assay-to-tip identities"],
+      "native_uncertainty": null,
+      "zero_reason": null
+    }
+  ],
+  "unconditional_canonical_points": {"P5/f": null, "PA6/f": null, "PA6/h": null},
+  "whole_target_A104_point": null
+}

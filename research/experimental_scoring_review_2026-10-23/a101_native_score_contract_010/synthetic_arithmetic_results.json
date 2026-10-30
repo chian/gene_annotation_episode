@@ -1,0 +1,161 @@
+{
+  "all_values_are_synthetic": true,
+  "scientific_programs_executed": [],
+  "arithmetic_assertions": "passed",
+  "blast": {
+    "fixture_status": "synthetic_not_program_output",
+    "target_label": "supplied_sequence_Q",
+    "target_length_aa": 300,
+    "reference_length_aa": 260,
+    "alignment_columns": 240,
+    "identical_columns": 180,
+    "query_gap_columns": 4,
+    "reference_gap_columns": 4,
+    "query_start_1based": 20,
+    "query_end_1based": 255,
+    "reference_start_1based": 5,
+    "reference_end_1based": 240,
+    "substitution_sum_raw_points": 230,
+    "gap_opens": 2,
+    "gap_open_points": 11,
+    "gap_extension_points_per_column": 1,
+    "lambda_inverse_raw_points": 0.267,
+    "K": 0.041,
+    "effective_query_length": 280,
+    "effective_database_length": 1000000,
+    "statistical_regime": "stipulated_simple_single_HSP_Karlin_Altschul",
+    "gap_columns": 8,
+    "residue_pair_columns": 232,
+    "raw_score_points": 200,
+    "bit_score": 81.64814746351466,
+    "effective_search_space": 280000000,
+    "E_from_raw": 7.389525538761887e-17,
+    "E_from_bits": 7.389525538761868e-17,
+    "E_after_tenfold_effective_search_space": 7.389525538761887e-16,
+    "identity_fraction_all_columns": 0.75,
+    "identity_fraction_residue_pairs": 0.7758620689655172,
+    "query_span_aa": 236,
+    "reference_span_aa": 236,
+    "query_span_coverage": 0.7866666666666666,
+    "reference_span_coverage": 0.9076923076923077,
+    "query_paired_residue_coverage": 0.7733333333333333
+  },
+  "hmmer": {
+    "fixture_status": "synthetic_not_program_output",
+    "program_shape": "hmmscan_protein",
+    "target_label": "supplied_sequence_Q",
+    "sequence_length_aa": 300,
+    "profile_match_states": 120,
+    "full_sequence_bit_score": 62.0,
+    "full_sequence_bias_bits": 2.0,
+    "domain_bit_score": 60.0,
+    "domain_bias_bits": 1.0,
+    "profile_forward_tau_bits": 5.0,
+    "profile_forward_lambda_inverse_bits": 0.6931471805599453,
+    "Z_profiles": 20000,
+    "domZ_reported_profiles": 8,
+    "hmm_from_1based": 5,
+    "hmm_to_1based": 112,
+    "ali_from_1based": 21,
+    "ali_to_1based": 128,
+    "env_from_1based": 18,
+    "env_to_1based": 132,
+    "match_states_emitting_sequence_residues": 102,
+    "deleted_match_states_in_span": 6,
+    "inserted_sequence_residues_in_span": 6,
+    "synthetic_GA_sequence_bits": 25.0,
+    "synthetic_GA_domain_bits": 24.0,
+    "sequence_log_tail_P": -39.50938929191688,
+    "sequence_tail_P": 6.93889390390723e-18,
+    "domain_log_tail_P": -38.12309493079699,
+    "domain_tail_P": 2.7755575615629024e-17,
+    "sequence_E": 1.387778780781446e-13,
+    "domain_independent_E": 5.551115123125805e-13,
+    "domain_conditional_E": 2.220446049250322e-16,
+    "independent_to_conditional_ratio": 2500.0,
+    "profile_span_states": 108,
+    "sequence_alignment_span_aa": 108,
+    "sequence_envelope_span_aa": 115,
+    "profile_span_coverage": 0.9,
+    "profile_emission_coverage": 0.85,
+    "sequence_alignment_span_coverage": 0.36,
+    "sequence_envelope_span_coverage": 0.38333333333333336,
+    "sequence_GA_margin_bits": 37.0,
+    "domain_GA_margin_bits": 36.0,
+    "domain_score_before_stated_bias_bits": 61.0
+  },
+  "site_correspondence": {
+    "declared_sites": 5,
+    "assessable_sites": 4,
+    "compatible_sites": 3,
+    "unknown_sites": 1,
+    "assessable_fraction": 0.8,
+    "compatible_fraction_among_assessable": 0.75,
+    "compatible_fraction_lower": 0.6,
+    "compatible_fraction_upper": 0.8
+  },
+  "overlap_and_duplicate": {
+    "query_length_aa": 300,
+    "intervals_1based_inclusive": [
+      [
+        20,
+        255
+      ],
+      [
+        200,
+        280
+      ],
+      [
+        20,
+        255
+      ]
+    ],
+    "unique_aligned_span_aa": 261,
+    "span_union_coverage": 0.87
+  },
+  "raw_self_normalization_boundary": {
+    "pair_raw": 200,
+    "query_self_raw": 600,
+    "reference_self_raw": 520,
+    "illustrative_raw_ratio": 0.35805743701971643,
+    "incorrect_bit_substitution_ratio": 0.37149849737616386
+  },
+  "unadopted_joint_combination_arithmetic": {
+    "status": "synthetic_coefficients_not_calibrated_not_function_probabilities",
+    "coefficients": {
+      "intercept": -3.0,
+      "blast_bits": 0.025,
+      "hmmer_domain_bits": 0.02,
+      "blast_x_hmmer_bits_squared": -0.0002,
+      "blast_query_span_fraction": 0.5,
+      "blast_reference_span_fraction": 0.5,
+      "hmmer_profile_span_fraction": 0.5,
+      "blast_identity_fraction": 0.5,
+      "site_compatible_fraction": 0.5
+    },
+    "summands_excluding_site": {
+      "intercept": -3.0,
+      "blast_bits": 2.0412036865878664,
+      "hmmer_domain_bits": 1.2,
+      "blast_x_hmmer_bits_squared": -0.9797777695621759,
+      "blast_query_span_fraction": 0.3933333333333333,
+      "blast_reference_span_fraction": 0.45384615384615384,
+      "hmmer_profile_span_fraction": 0.45,
+      "blast_identity_fraction": 0.375
+    },
+    "site_summand_bounds": [
+      0.3,
+      0.4
+    ],
+    "linear_index_bounds": [
+      1.2336054042051776,
+      1.3336054042051777
+    ],
+    "logistic_transform_bounds": [
+      0.7744489812924501,
+      0.7914363855679527
+    ],
+    "real_A101_combined_score": null,
+    "real_A101_combined_score_status": "calibration_absent"
+  }
+}

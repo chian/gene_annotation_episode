@@ -1,0 +1,68 @@
+{
+  "version": "standard_scientific_scoring_boundary_verification_v1",
+  "verified_at_utc": "2026-10-21T11:05:26.475854+00:00",
+  "source_sha256": {
+    "gene_annotation_episode/runtime.py": "9ef0a67c08b84422ae05388a26a3823f6d5882738a3367a37725890db2469647",
+    "gene_annotation_episode/default_scientific_binding.py": "186632c73220a91c361d477dd06983f548c22598c1c76d52a4d66faf66793af6",
+    "gene_annotation_episode/defaults.toml": "67f5fbfc9d709c10502693ce03743dd385680dea023cd8e0de70acf6546eb3ca",
+    "tests/test_default_scientific_binding.py": "9e82302aac6566dc68bb6c4cb34d6c0de92e3eaba01aadad1238df5be5357a7f",
+    "tests/test_runtime.py": "f273d4e90ebe2a2a6094a38d6e62690c9c62a7ab3b5017b9161c2dd942fa660f",
+    "tests/test_episode_credit.py": "da935f206c0ee0ac46ee74015f7a05886d07befa353b41a5efa82fd0c15e55cc",
+    "tests/test_episode_receipts.py": "4522289eaaf257dcba1cd9ea7d40435bdcd31683195425e2fad203264b966d27"
+  },
+  "current_checks": [
+    {
+      "test_paths": [
+        "tests/test_default_scientific_binding.py",
+        "tests/test_runtime.py"
+      ],
+      "passed": 38,
+      "failed": 0,
+      "seconds": 150.47
+    },
+    {
+      "test_paths": [
+        "tests/test_episode_credit.py"
+      ],
+      "passed": 5,
+      "failed": 0,
+      "seconds": 22.68
+    },
+    {
+      "test_paths": [
+        "tests/test_episode_receipts.py::test_runtime_credits_only_requested_child_information_and_replay_keeps_history"
+      ],
+      "passed": 2,
+      "failed": 0,
+      "seconds": 14.42
+    },
+    {
+      "test_paths": [
+        "tests/test_annotation_score_separation.py",
+        "tests/test_scientific_child_credit.py",
+        "tests/test_investigation_policy.py",
+        "tests/test_case_execution.py"
+      ],
+      "passed": 33,
+      "failed": 0,
+      "seconds": 98.25
+    }
+  ],
+  "old_snapshot_regression": {
+    "snapshot_manifest_sha256": "b3446e18a00fcfad724d681bb049753cbc4465aa6358849944d3da82cab695f3",
+    "test": "tests/test_default_scientific_binding.py::test_default_finding_credit_needs_no_annotation_and_interrupted_resume_keeps_the_prefix",
+    "result": "expected_failure",
+    "failure": "assert (0.0 == 7)",
+    "seconds": 5.82,
+    "failure_was_import_error": false,
+    "real_workspace_used": false
+  },
+  "live_snapshot_files_reverified": 84,
+  "live_snapshot_changed": false,
+  "new_configured_model_run_launched": false,
+  "private_provider_logs_read": false,
+  "historical_observations_repriced": false,
+  "hypervolume_formula_changed": false,
+  "numerical_controller_rule_changed": false,
+  "audit": "docs/DEFAULT_SCIENTIFIC_BINDING_AUDIT.md"
+}

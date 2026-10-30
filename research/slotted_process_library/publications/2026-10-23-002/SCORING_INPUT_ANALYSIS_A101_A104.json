@@ -1,0 +1,125 @@
+{
+  "axis_source_limits": {
+    "A101": {
+      "calibration_fit_performed": false,
+      "retained_instruction_observation_count": 17
+    },
+    "A102": {
+      "calibration_fit_performed": false,
+      "retained_instruction_observation_count": 14
+    },
+    "A103": {
+      "calibration_fit_performed": false,
+      "retained_instruction_observation_count": 14
+    },
+    "A104": {
+      "calibration_fit_performed": false,
+      "retained_instruction_observation_count": 7
+    }
+  },
+  "derived_arithmetic": [
+    {
+      "meaning": "Identity among actual aligned residue pairs, not whole-protein coverage or function probability.",
+      "name": "hemk_prmb_identity_fraction",
+      "operation": "63/192",
+      "value": 0.328125
+    },
+    {
+      "meaning": "The higher short-match identity does not rank exact function over a wider relevant core.",
+      "name": "hemk_dam_short_alignment_identity_fraction",
+      "operation": "7/19",
+      "value": 0.3684210526315789
+    },
+    {
+      "meaning": "Measured identity under the same declared local alignment setup; no E-value was computed.",
+      "name": "hemk_mtaqi_identity_fraction",
+      "operation": "30/104",
+      "value": 0.28846153846153844
+    },
+    {
+      "meaning": "Score margin within the one actual PrmB/proteome comparison, not a probability or universal threshold.",
+      "name": "prmb_search_first_second_raw_score_difference",
+      "operation": "254-103",
+      "value": 151
+    }
+  ],
+  "method_sources": [
+    {
+      "axis": "A101",
+      "url": "https://www.ncbi.nlm.nih.gov/BLAST/tutorial/Altschul-1.html",
+      "use": "Native score/E-value meaning and comparison scope, not functional calibration."
+    },
+    {
+      "axis": "A102",
+      "url": "https://zhanggroup.org/TM-score/",
+      "use": "TM-score native scale and normalization meaning, not a biochemical annotation confidence."
+    },
+    {
+      "axis": "A102",
+      "url": "https://doi.org/10.1002/pro.3749",
+      "use": "DALI native score interpretation; primary methods source."
+    },
+    {
+      "axis": "A103",
+      "url": "https://string-db.org/help/api/",
+      "use": "Actual neighborhood nscore field distinct from other evidence channels."
+    },
+    {
+      "axis": "A104",
+      "url": "https://iqtree.github.io/doc/Frequently-Asked-Questions",
+      "use": "Native branch-support method distinctions and limitations."
+    }
+  ],
+  "missing_quantitative_tables": {
+    "A102": "Current assigned instruction observations and retained contact data do not supply a native structural alignment score table for fitting structural-to-function calibration.",
+    "A103": "Assigned observations do not supply an exact context test/count table; approximate one-third linkage is not an exact numerator/denominator.",
+    "A104": "Assigned phylogeny observations name actual placements but do not retain a branch-support array, model-conditioned posterior sample or demonstrated HGT training dataset."
+  },
+  "new_numbers_claimed_as_case_measurements": false,
+  "purpose": "Analyze existing retained findings for the numerical scoring proposal; no new scientific query, experiment or score search.",
+  "retained_results": [
+    {
+      "exact_retained_result": "HemK has NPPY at residue 183; Dam has DPPY at residue 181. The best local alignment instead covered only 19 residue pairs, with 7 identities and raw score 38, and did not pair those two motifs.",
+      "explicit_numbers": {
+        "aligned_pairs": 19,
+        "identities": 7,
+        "raw_alignment_score": 38
+      },
+      "json_pointer": "/routes/0/steps/0/actual_result"
+    },
+    {
+      "exact_retained_result": "M.TaqI contains NPPY at residue 105. Its optimal alignment to HemK had 104 aligned residue pairs, 30 identities, 13 gap characters and raw score 47; the shared NPPY aligned at the end of the region.",
+      "explicit_numbers": {
+        "aligned_pairs": 104,
+        "gap_characters": 13,
+        "identities": 30,
+        "raw_alignment_score": 47
+      },
+      "json_pointer": "/routes/0/steps/1/actual_result"
+    },
+    {
+      "exact_retained_result": "There were 4403 FASTA records. HemK P0ACC1 ranked first nonself with raw score 254; next was TrmN6 P31825 at 103, then RsmC P39406 at 92. Three selenoproteins contained U outside BLOSUM62 and were scored after masking U to X; their identities are recorded in the score artifact.",
+      "explicit_numbers": {
+        "hemk_raw_alignment_score": 254,
+        "retrieved_fasta_records": 4403,
+        "rsmc_raw_alignment_score": 92,
+        "trmn6_raw_alignment_score": 103
+      },
+      "json_pointer": "/routes/1/steps/0/actual_result"
+    },
+    {
+      "exact_retained_result": "The alignment spans HemK residues 48-239 and PrmB residues 70-263, with 192 aligned residue pairs, 63 identities, two gap characters and raw score 254. Both NPPY motifs align within a wider shared region.",
+      "explicit_numbers": {
+        "aligned_pairs": 192,
+        "gap_characters": 2,
+        "identities": 63,
+        "raw_alignment_score": 254
+      },
+      "json_pointer": "/routes/1/steps/1/actual_result"
+    }
+  ],
+  "same_formal_input": "Both extracted published findings and experimental dataset findings enter as original experiment/measurement identity plus actual native numeric facts, criteria and witnesses; origin changes no score.",
+  "source_path": "research/slotted_process_library/corpus/sequence/hemk_live_routes.json",
+  "source_sha256": "92d288c0612d283bfa230f469176480cc2849a4b068f75981ac2c3bc7736a94d",
+  "status": "retrospective_known_answer_analysis_not_calibration"
+}

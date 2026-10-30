@@ -1,0 +1,117 @@
+{
+  "slot": "annotation_distinction",
+  "id": "A05",
+  "name": "Regulatory input, target and effect",
+  "description": "Represent which input changes regulator state/abundance, through what route, and which target experiences activation, repression or another effect.",
+  "claim_scope": "A directed relation with input, state, target, sign and condition. Enzyme/protein regulation and transcription are included; occupancy can be recorded without productive control.",
+  "distinctions": [
+    "Environmental response versus direct sensing, cofactor chemistry, feedback or abundance.",
+    "Target binding versus productive regulation.",
+    "Shared DNA-site class versus target-dependent activation/repression.",
+    "Cofactor occupancy/redox versus total protein.",
+    "Reversible activity change versus altered transcription/degradation."
+  ],
+  "example_structured_values": {
+    "status": "illustrative_only_not_an_adopted_schema",
+    "fields": {
+      "input_route": [
+        "direct_ligand_binding",
+        "cofactor_state_change",
+        "indirect_metabolic_or_assembly_feedback",
+        "regulator_abundance_change",
+        "unresolved"
+      ],
+      "regulated_state": [
+        "apo_or_cofactor_ligated",
+        "oxidation_state",
+        "allosteric_state",
+        "abundance",
+        "unresolved"
+      ],
+      "target_relation": [
+        "binding_only",
+        "activation",
+        "repression",
+        "reversible_activity_inhibition",
+        "unresolved"
+      ],
+      "regulatory_level": [
+        "transcription",
+        "protein_activity",
+        "protein_turnover",
+        "unresolved"
+      ]
+    },
+    "required_typed_references": [
+      "input_or_condition_ref",
+      "regulator_ref",
+      "state_measurement_ref",
+      "target_or_promoter_ref",
+      "output_measurement_ref",
+      "observation_refs"
+    ],
+    "meaning": "Finite examples of declared values/reference types, not a complete ontology, numerical credit scale, adopted scoring axis or claim of existing runtime compatibility."
+  },
+  "not_established": [
+    "Motif/footprint does not specify regulatory sign.",
+    "Ligand-responsive phenotype does not establish direct sensing.",
+    "Total protein change does not establish per-molecule activity.",
+    "Assay recovery is not a measured intracellular state trajectory."
+  ],
+  "follow_up_lane_ids": [
+    "F01",
+    "F03",
+    "F05"
+  ],
+  "boundary": "A02 carries DNA/ligand recognition specificity. A05 carries productive input-to-target effect. A06 may establish regulatory participation without resolving the full relation.",
+  "evidence": [
+    {
+      "case_group": "reg_iscR_state_target_specificity",
+      "case_id": "reg_iscR_state_target_specificity",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4108476/",
+      "source_locator": "Figures 1–4 and 7; Table 2; cluster occupancy/demand Results.",
+      "observation": "Footprinted site C lacks the measured regulatory effect of A/B, while cluster state, abundance and demand comparisons resolve different regulatory inputs.",
+      "limit": "Target conditions remain explicit; no intracellular state-pool reconstruction."
+    },
+    {
+      "case_group": "reg_iscR_state_target_specificity",
+      "case_id": "reg_iscR_state_target_specificity",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12594620/",
+      "source_locator": "Figures 1–6; relevant redox, iron-release, reporter and DNA-binding Results/Methods.",
+      "observation": "PMS under anaerobic versus aerobic conditions separates cofactor-state action from cluster destruction, with distinct target-class reporter effects.",
+      "limit": "Direct cofactor action is not selective PMS-pocket recognition; chamber auto-reduction is the authors’ interpretation."
+    },
+    {
+      "case_group": "context_rbkr_regulator_kinase_2017",
+      "case_id": "context_rbkr_regulator_kinase_2017",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5397151/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Complete genomic reconstruction, dual-function results, evolutionary caveats, and relevant bioinformatics/DNA-binding/kinase methods read. Structure section not exhaustively inspected; no motif scan or assay repeated.",
+      "observation": "RibK fusion makes FMN and binds DNA; FMN disrupts binding, but operator position only suggests transcriptional activation.",
+      "limit": "Activation was not directly measured; no new motif scan or assay."
+    },
+    {
+      "case_group": "organism_16_malr",
+      "case_id": "organism_16_malr",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3911195/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Relevant Results including deletion, reporter rescue and sugar-independent DNA binding; growth/deletion/purification Methods inspected.",
+      "observation": "Deletion, reporter rescue and promoter binding establish activation while maltose did not change tested EMSA binding.",
+      "limit": "Maltose-use regulation does not establish direct maltose sensing."
+    },
+    {
+      "case_group": "pxpT_pxpR_access_and_sensing",
+      "case_id": "pxpT_pxpR_access_and_sensing",
+      "source_url": "https://journals.asm.org/doi/10.1128/aem.02181-25",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Indexed complete relevant regulatory Results, transport Discussion, figure descriptions and culture/purification Methods inspected. Direct publisher fetch 403; raw binding data not obtained. Current published 2026 article used, not 2025 preprint.",
+      "observation": "Reporter/motif comparisons support repression and ITC supports direct 5-OP binding with related-ligand negatives.",
+      "limit": "Indexed relevant Results inspected; direct publisher fetch 403; raw binding data not obtained."
+    },
+    {
+      "case_group": "organism_15_nifi",
+      "case_id": "organism_15_nifi",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC94954/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Main complete switch-off/reversibility/physiology Results and culture/assay Methods; no direct protein-interaction work claimed from this paper.",
+      "observation": "NifI loss removes reversible ammonium switch-off without detected nif transcription or NifH modification/degradation explanation.",
+      "limit": "Posttranscriptional control is supported; direct molecular inhibition is not shown."
+    }
+  ]
+}

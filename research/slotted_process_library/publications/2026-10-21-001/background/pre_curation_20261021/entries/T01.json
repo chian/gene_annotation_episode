@@ -1,0 +1,146 @@
+{
+  "slot": "tools",
+  "id": "T01",
+  "name": "Primary-source and retained-material access",
+  "description": "Retrieve identified publications and advertised supplements, expose exact source windows, and extract selected tables or images while preserving source identity and inspection scope.",
+  "capability_operations": [
+    {
+      "operation": "Search a publication collection",
+      "inputs": {
+        "literal_query": "string; chosen Europe PMC syntax",
+        "page": "size plus cursor"
+      },
+      "outputs": {
+        "records": "source IDs, titles, metadata and continuation; no scientific conclusion"
+      },
+      "implementation_status": "repository_catalog_defined",
+      "confirmed_repository_callables": [
+        "public.literature.search"
+      ],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    },
+    {
+      "operation": "Acquire a selected article or advertised supplement",
+      "inputs": {
+        "pmcid": "actual PMC identifier",
+        "version_or_asset_ref": "identifier returned by the corresponding listing"
+      },
+      "outputs": {
+        "source": "retained original bytes, representation identity and digest",
+        "projection": "ordered article text where available; may omit XML tables"
+      },
+      "implementation_status": "repository_catalog_defined",
+      "confirmed_repository_callables": [
+        "public.literature.read",
+        "public.pmc.versions",
+        "public.pmc.files",
+        "public.pmc.asset"
+      ],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    },
+    {
+      "operation": "Expose a selected source representation",
+      "inputs": {
+        "source_ref": "registered source",
+        "selection": "UTF-8 byte window, physical PDF page, image frame, archive member, or XLSX sheet and row window"
+      },
+      "outputs": {
+        "material": "exact selected text, pixels, rows or member bytes",
+        "provenance": "original coordinates and representation-specific identity; formulas and cached values distinguished"
+      },
+      "implementation_status": "repository_catalog_defined",
+      "confirmed_repository_callables": [
+        "source.read",
+        "source.pdf.info",
+        "source.pdf.text",
+        "source.pdf.page",
+        "image.view",
+        "source.archive.members",
+        "source.archive.extract",
+        "source.xlsx.sheets",
+        "source.xlsx.rows"
+      ],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    }
+  ],
+  "availability": {
+    "repository_catalog_defined": [
+      "gene_annotation_episode/tools.py:ToolRegistry.catalog; gene_annotation_episode/knowledge/index.json entries publication-access and source-reading"
+    ],
+    "research_operations_performed": [
+      "All 142 case groups have an explicit source-inspection scope in case_records.json; 134 relevant-primary-section groups and 8 abstract/summary groups. Specific JSON/XML/PDF/XLSX reads are retained in the corpus; they were not all calls through the repository registry."
+    ],
+    "capability_specifications_not_confirmed_as_repository_callables": [
+      "A dedicated source-local scientific passage-ranking tool and dedicated XML-table API were not found in the inspected catalog; existing source windows remain available."
+    ],
+    "author_experiments_are_source_evidence_only": [
+      "All reported biological experiments remain author work; downloading and viewing their records does not repeat them."
+    ],
+    "binding_limit": "A repository catalog definition is confirmed source-code identity, not proof of caller enablement, service availability, installed dependencies or execution in this research. Research scripts are retained operations, not registered runtime tools."
+  },
+  "limits": [
+    "An access failure or projection omission is not biological absence.",
+    "A publication, its XML, PDF and supplement can represent the same observation; access does not create independent evidence.",
+    "PDF extraction has no confirmed OCR in the inspected manual; viewing pixels is separate from rendering."
+  ],
+  "observed_uses": [
+    {
+      "case_group": "context_oarx_thiamin_2024",
+      "use": "Actual XLSX and EMBL retrieval exposed 87 OarX rows, 22 FmnO entries and 65 blanks; row/strain identities remained separate.",
+      "execution_scope": "Read-only retained-source parsing; no new comparative-genome search or assay.",
+      "use_status": "research_read_only_operation_performed"
+    },
+    {
+      "case_group": "cellular_yhcB",
+      "use": "Actual supplement-row extraction distinguished negative rodZ/mrcB transposon fitness from positive fabF and selected suppressor candidates.",
+      "execution_scope": "Processed published rows, not new fitness experiments or raw-read reanalysis.",
+      "use_status": "research_read_only_operation_performed"
+    },
+    {
+      "case_group": "yeag",
+      "use": "The 2021 supplementary workbook retained individual phosphosite ratios, missing values and replicate identities that the article summary did not expose.",
+      "execution_scope": "Six selected source rows were parsed; not a complete raw-MS replication.",
+      "use_status": "research_read_only_operation_performed"
+    },
+    {
+      "case_group": "BC0371_Song_2007",
+      "use": "Primary abstract and deposited 2P88 identity permitted only a bounded account of modeling/assay convergence.",
+      "execution_scope": "Complete primary Methods/Results not inspected; no serial dependence between docking and assays invented.",
+      "use_status": "research_read_only_operation_performed"
+    }
+  ],
+  "evidence": [
+    {
+      "case_group": "context_oarx_thiamin_2024",
+      "case_id": "context_oarx_thiamin_2024",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11223231/",
+      "source_locator": "Case-record observation; inspected scope: Complete primary methods/results read through Europe PMC XML; deposited XLSX parsed; actual ENA genome record retrieved. No annotation run or experiment performed. Table and experimental strains were kept distinct.",
+      "observation": "Actual XLSX and EMBL retrieval exposed 87 OarX rows, 22 FmnO entries and 65 blanks; row/strain identities remained separate.",
+      "limit": "Read-only retained-source parsing; no new comparative-genome search or assay."
+    },
+    {
+      "case_group": "cellular_yhcB",
+      "case_id": "cellular_yhcB",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8163987/",
+      "source_locator": "Case-record observation; inspected scope: 2021 JBC and PLOS full Results/tables inspected; original 2005 indexed primary text inspected; 2006 negative result checked at primary abstract only. Six original PLOS spreadsheets downloaded; S4/S6 rows parsed.",
+      "observation": "Actual supplement-row extraction distinguished negative rodZ/mrcB transposon fitness from positive fabF and selected suppressor candidates.",
+      "limit": "Processed published rows, not new fitness experiments or raw-read reanalysis."
+    },
+    {
+      "case_group": "yeag",
+      "case_id": "cellular_yeaG",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8055822/",
+      "source_locator": "Trace extension organism/yeag/trace.json; Table_1.XLSX sheet 4 Phospho sites table, selected AceA/Hfq/YjhQ rows",
+      "observation": "The 2021 supplementary workbook retained individual phosphosite ratios, missing values and replicate identities that the article summary did not expose.",
+      "limit": "Six selected source rows were parsed; not a complete raw-MS replication."
+    },
+    {
+      "case_group": "BC0371_Song_2007",
+      "case_id": "BC0371_Song_2007",
+      "source_url": "https://doi.org/10.1038/nchembio.2007.11",
+      "source_locator": "Case-record observation; inspected scope: Primary abstract and structural record checked; complete primary methods/results not read.",
+      "observation": "Primary abstract and deposited 2P88 identity permitted only a bounded account of modeling/assay convergence.",
+      "limit": "Complete primary Methods/Results not inspected; no serial dependence between docking and assays invented."
+    }
+  ]
+}

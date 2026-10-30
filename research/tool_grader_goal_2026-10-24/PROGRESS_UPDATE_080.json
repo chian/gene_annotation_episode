@@ -1,0 +1,159 @@
+{
+  "schema": "tool_grader_progress_update_v1",
+  "date": "2026-10-26",
+  "author": "root",
+  "recorded_at": "2026-10-27T00:48:40.988753+00:00",
+  "previous_status_sha256": "f7c54b6f36c84ada4fef80a091bb22caf6cde8d9bad764b622acadc1ccf1e679",
+  "new_status_sha256": "1d88a563b7ffcc8efbd5e2d8fce8d9027d519b67b7a4b5ce94e872a068d0b081",
+  "changes": [],
+  "added_evidence": [
+    {
+      "id": "KNOWN-REGRESSION-FIXTURES-080",
+      "kind": "reviewed_test_correction",
+      "summary": "Nine known regression failures reproduced and corrected in two test modules. Forty targeted tests pass; production code and annotation scoring are unchanged. Censored-value geometry, independent finding progress, full versus request-specific BV-BRC catalogs, and wrong-version rejection remain explicitly verified.",
+      "reports": [
+        {
+          "path": "verification/tool_graders_known_regression_fixtures_2026-10-26_356/SCOPE_001.md",
+          "sha256": "bbb5178d236493e87b84d1001858cc70b94db3040129ff29b2ae9b0fdb58f013"
+        },
+        {
+          "path": "verification/tool_graders_known_regression_fixtures_2026-10-26_356/REVIEW_001.md",
+          "sha256": "55eb6da46afac6148c782ad045ed5e4640fd0f8589caed310979c2ca30fe3d4d"
+        },
+        {
+          "path": "verification/tool_graders_known_regression_fixtures_2026-10-26_356/run_checks.py",
+          "sha256": "ab814cbcb8ade81a9bd12c429582c01189c8963fa4f0d70ecece5d7b6de56d28"
+        },
+        {
+          "path": "verification/tool_graders_known_regression_fixtures_2026-10-26_356/before001/request.json",
+          "sha256": "203f742c6e09fcc3b35fad758c814e728f5ec5b79b4d62d871d102943b94a1cb"
+        },
+        {
+          "path": "verification/tool_graders_known_regression_fixtures_2026-10-26_356/before001/receipt.json",
+          "sha256": "69dac03c508596138fcf86b1614d9df3ab8452e5d8211266b949a75bb1ded1fb"
+        },
+        {
+          "path": "verification/tool_graders_known_regression_fixtures_2026-10-26_356/before001/stdout.txt",
+          "sha256": "f37cd97c49ca5bc7901a476899170d6c2f76dd09bfbd081597bebbb37e3ac9fe"
+        },
+        {
+          "path": "verification/tool_graders_known_regression_fixtures_2026-10-26_356/before001/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "verification/tool_graders_known_regression_fixtures_2026-10-26_356/before001/source-before.json",
+          "sha256": "a66225db983e2af1cd33fb9d70ee50d162af1d919603bdd02933a12432e8ddf9"
+        },
+        {
+          "path": "verification/tool_graders_known_regression_fixtures_2026-10-26_356/before001/source-after.json",
+          "sha256": "a66225db983e2af1cd33fb9d70ee50d162af1d919603bdd02933a12432e8ddf9"
+        },
+        {
+          "path": "verification/tool_graders_known_regression_fixtures_2026-10-26_356/after001/request.json",
+          "sha256": "f04cfe0476c6a8fed6e9f26b76a79aa1124507a0c4a2c9ace0a107224a1a259b"
+        },
+        {
+          "path": "verification/tool_graders_known_regression_fixtures_2026-10-26_356/after001/receipt.json",
+          "sha256": "cb5a2fd8737a0b3d8e3142dc75c18953dafa01fba139a19c8ec7f9c73824d934"
+        },
+        {
+          "path": "verification/tool_graders_known_regression_fixtures_2026-10-26_356/after001/stdout.txt",
+          "sha256": "02324a3c202d74348156eff15da9e3d6596710230739fed0c14f1435fe97e25e"
+        },
+        {
+          "path": "verification/tool_graders_known_regression_fixtures_2026-10-26_356/after001/stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "verification/tool_graders_known_regression_fixtures_2026-10-26_356/after001/source-before.json",
+          "sha256": "75807692df44e588496b35b0351a1e0735c99bb514e56cd046668a10dd268350"
+        },
+        {
+          "path": "verification/tool_graders_known_regression_fixtures_2026-10-26_356/after001/source-after.json",
+          "sha256": "75807692df44e588496b35b0351a1e0735c99bb514e56cd046668a10dd268350"
+        }
+      ],
+      "qualification": "Test-only repair. No native/API/HPC scientific execution, no full-repository pass claim, and no tool tally increase."
+    }
+  ],
+  "numerical_grader_progress_tally": {
+    "before": 108,
+    "after": 108,
+    "added_row_ids": [],
+    "meaning": "Implemented numerical fields/functions/calculators with verified declared episode result paths. Live-resource and further format coverage remain separate fields; this is not full-goal completion."
+  },
+  "verified_bound_local_tool_mode_rows": {
+    "before": 40,
+    "after": 40
+  },
+  "remaining_fixed_rows_outside_tally": 200,
+  "completed_work": [
+    "Nine known regression failures reproduced and corrected in two test modules. Forty targeted tests pass; production code and annotation scoring are unchanged. Censored-value geometry, independent finding progress, full versus request-specific BV-BRC catalogs, and wrong-version rejection remain explicitly verified."
+  ],
+  "findings_requiring_repair": [],
+  "work_item_states": [
+    {
+      "id": "U01",
+      "original_item": "M332 identified a shared303 limitation: multiple FASTA records sharing one original source/pointer lack a distinct original-record identity in the current sequence provenance contract. Preserve the counterexample; do not invent aliases to bypass it.",
+      "status": "complete",
+      "current_evidence": "339/340 original-record representation and metadata plus343 actual worker, saved recalculation and requested typed-return integration accepted. Original FASTA ordinals remain distinct."
+    },
+    {
+      "id": "U02",
+      "original_item": "Both VDB candidate-function calculations remain unimplemented; other numerical components and declared synthetic episode paths stay verified.",
+      "status": "in_progress",
+      "current_evidence": "350 census and352 requested-artifact repairs remain accepted. 347 HSP publication-association union passes five targeted integration cases in run011, including both delivery orders and closed ancestor replay. Final combined regressions and root review remain pending. Both VDB rows remain outside108."
+    },
+    {
+      "id": "U03",
+      "original_item": "Authentic native-mode input coverage and actual HPC deployment/execution remain separately unfinished.",
+      "status": "open",
+      "current_evidence": "Authentic native-mode input coverage and actual HPC deployment/execution remain separately unfinished."
+    },
+    {
+      "id": "U04",
+      "original_item": "Nine broader regression failures remain: eight retired categorical-scorer calls and one BV-BRC operation declaration mismatch.",
+      "status": "complete",
+      "current_evidence": "356 reproduced nine failures, corrected only two test modules, and passed40 targeted tests with stable source snapshots. Retired scoring stays unavailable; both BV-BRC request versions select their exact operation. No production or scoring change. The old broad failed receipt remains unchanged; no full-repository pass is claimed."
+    },
+    {
+      "id": "U05",
+      "original_item": "All other fixed308 rows and resource bindings remain in scope. SeparateW05 and literature grading are not included in this tool-grader work.",
+      "status": "open",
+      "current_evidence": "All remaining fixed308 rows and resource bindings stay in scope. 354 has written the four RNA scientific modules and reports110 passing dedicated tests; root review and production integration are unfinished.355 is defining exact execution, publication and requested-return contracts. Neither RNA tool is counted. W05 and literature grading remain separate."
+    },
+    {
+      "id": "U06",
+      "original_item": "Native database path versus semantic census identity still uses exact equality; a separately scoped explicit association is needed, without rewriting original native fields.",
+      "status": "open",
+      "current_evidence": "Native database path versus semantic census identity still uses exact equality; a separately scoped explicit association is needed, without rewriting original native fields."
+    },
+    {
+      "id": "U07",
+      "original_item": "Fresh338 is defining the exact VDB candidate-function sheet/calculator/integration contract before coding; this planning does not complete either VDB grader.",
+      "status": "complete",
+      "current_evidence": "338 complete accepted contract now includes explicit source/validation/population/schema handoffs; implementation assigned against it."
+    },
+    {
+      "id": "U08",
+      "original_item": "339 public FASTA record support is implemented with927 compatibility tests;340 owns exact wire/proof/saved metadata integration. Actual worker/typed-return propagation and distinct record-quality row identities remain unfinished.",
+      "status": "complete",
+      "current_evidence": "343 accepted after source/test/receipt review and230 artifact plus14 frozen-source identity checks;314 tests plus56 producer checks, with32 overlapping repeated integration checks. Four actual typed returns retain distinct record-quality values0.9/0.6."
+    },
+    {
+      "id": "U09",
+      "original_item": "341 is correcting the independently confirmed native-six lifecycle exception/misclassification defect; no scientific calculator changes or tally increment are assigned to that repair.",
+      "status": "complete",
+      "current_evidence": "341 lifecycle correction accepted with exact original typed failures and retained partial work; no scientific formula/count change."
+    }
+  ],
+  "unfinished_work": [
+    "350 census and352 requested-artifact repairs remain accepted. 347 HSP publication-association union passes five targeted integration cases in run011, including both delivery orders and closed ancestor replay. Final combined regressions and root review remain pending. Both VDB rows remain outside108.",
+    "Authentic native-mode input coverage and actual HPC deployment/execution remain separately unfinished.",
+    "All remaining fixed308 rows and resource bindings stay in scope. 354 has written the four RNA scientific modules and reports110 passing dedicated tests; root review and production integration are unfinished.355 is defining exact execution, publication and requested-return contracts. Neither RNA tool is counted. W05 and literature grading remain separate.",
+    "Native database path versus semantic census identity still uses exact equality; a separately scoped explicit association is needed, without rewriting original native fields."
+  ],
+  "inventory_maintenance_counted_as_implementation_progress": false,
+  "specific_pending_NCBI_job_verification_included": false,
+  "complete_scientific_tools_claimed": 0
+}

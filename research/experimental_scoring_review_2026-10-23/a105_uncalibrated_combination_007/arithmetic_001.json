@@ -1,0 +1,1138 @@
+{
+  "status": "unadopted source-free arithmetic proposal; all inputs synthetic",
+  "source_fits": {
+    "H1": {
+      "n_original": 2,
+      "mean": 2.0,
+      "variance": 0.5,
+      "S": 4.0,
+      "B": 0.9640275800758169
+    },
+    "H2": {
+      "n_original": 1,
+      "mean": -2.0,
+      "variance": 1.0,
+      "S": -2.0,
+      "B": -0.7615941559557649
+    },
+    "genuinely_new_H1_preparation": {
+      "n_original": 3,
+      "mean": 2.0,
+      "variance": 0.3333333333333333,
+      "S": 6.0,
+      "B": 0.9950547536867305
+    }
+  },
+  "source_correspondence": {
+    "H1_components": [
+      0.8,
+      0.9,
+      0.7,
+      0.6,
+      1
+    ],
+    "H2_components": [
+      0.3,
+      0.4,
+      0.2,
+      0.1,
+      1
+    ],
+    "R1": 0.8,
+    "R2": 0.4,
+    "D1": 0.7712220640606535,
+    "D2": -0.30463766238230594,
+    "q1": 1.0233365989890952,
+    "q2": -0.3146237845286479
+  },
+  "examples": {
+    "H1_only": {
+      "blocks": [
+        [
+          0
+        ]
+      ],
+      "weights": [
+        1.0
+      ],
+      "Q": 1.0233365989890952,
+      "K": 0.7712220640606535,
+      "c": 0.7712220640606535,
+      "Q_bounds": [
+        1.0233365989890952,
+        1.0233365989890952
+      ],
+      "K_bounds": [
+        0.7712220640606535,
+        0.7712220640606535
+      ],
+      "c_bounds": [
+        0.7712220640606535,
+        0.7712220640606535
+      ],
+      "sampling_variance": null,
+      "sampling_variance_status": "joint sampling covariance not supplied"
+    },
+    "opposing_separate_blocks": {
+      "blocks": [
+        [
+          0
+        ],
+        [
+          1
+        ]
+      ],
+      "weights": [
+        1.0,
+        1.0
+      ],
+      "Q": 0.7087128144604473,
+      "K": 0.6098690379571441,
+      "c": 0.6098690379571441,
+      "Q_bounds": [
+        0.7087128144604473,
+        0.7087128144604473
+      ],
+      "K_bounds": [
+        0.6098690379571441,
+        0.6098690379571441
+      ],
+      "c_bounds": [
+        0.6098690379571441,
+        0.6098690379571441
+      ],
+      "sampling_variance": null,
+      "sampling_variance_status": "joint sampling covariance not supplied"
+    },
+    "opposing_same_block": {
+      "blocks": [
+        [
+          0,
+          1
+        ]
+      ],
+      "weights": [
+        0.5,
+        0.5
+      ],
+      "Q": 0.35435640723022366,
+      "K": 0.34023335299867896,
+      "c": 0.34023335299867896,
+      "Q_bounds": [
+        0.35435640723022366,
+        0.35435640723022366
+      ],
+      "K_bounds": [
+        0.34023335299867896,
+        0.34023335299867896
+      ],
+      "c_bounds": [
+        0.34023335299867896,
+        0.34023335299867896
+      ],
+      "sampling_variance": null,
+      "sampling_variance_status": "joint sampling covariance not supplied"
+    },
+    "unknown_allocation": {
+      "K": null,
+      "c": null,
+      "K_bounds": [
+        0.34023335299867896,
+        0.6098690379571441
+      ],
+      "c_bounds": [
+        0.34023335299867896,
+        0.6098690379571441
+      ],
+      "alternatives": [
+        {
+          "blocks": [
+            [
+              0
+            ],
+            [
+              1
+            ]
+          ],
+          "weights": [
+            1.0,
+            1.0
+          ],
+          "Q": 0.7087128144604473,
+          "K": 0.6098690379571441,
+          "c": 0.6098690379571441,
+          "Q_bounds": [
+            0.7087128144604473,
+            0.7087128144604473
+          ],
+          "K_bounds": [
+            0.6098690379571441,
+            0.6098690379571441
+          ],
+          "c_bounds": [
+            0.6098690379571441,
+            0.6098690379571441
+          ],
+          "sampling_variance": null,
+          "sampling_variance_status": "joint sampling covariance not supplied"
+        },
+        {
+          "blocks": [
+            [
+              0,
+              1
+            ]
+          ],
+          "weights": [
+            0.5,
+            0.5
+          ],
+          "Q": 0.35435640723022366,
+          "K": 0.34023335299867896,
+          "c": 0.34023335299867896,
+          "Q_bounds": [
+            0.35435640723022366,
+            0.35435640723022366
+          ],
+          "K_bounds": [
+            0.34023335299867896,
+            0.34023335299867896
+          ],
+          "c_bounds": [
+            0.34023335299867896,
+            0.34023335299867896
+          ],
+          "sampling_variance": null,
+          "sampling_variance_status": "joint sampling covariance not supplied"
+        }
+      ],
+      "bound_meaning": "hull of all partition-specific allowed values; no selected partition"
+    },
+    "positive_H2_separate": {
+      "blocks": [
+        [
+          0
+        ],
+        [
+          1
+        ]
+      ],
+      "weights": [
+        1.0,
+        1.0
+      ],
+      "Q": 1.3379603835177432,
+      "K": 0.8711814849847719,
+      "c": 0.8711814849847719,
+      "Q_bounds": [
+        1.3379603835177432,
+        1.3379603835177432
+      ],
+      "K_bounds": [
+        0.8711814849847719,
+        0.8711814849847719
+      ],
+      "c_bounds": [
+        0.8711814849847719,
+        0.8711814849847719
+      ],
+      "sampling_variance": null,
+      "sampling_variance_status": "joint sampling covariance not supplied"
+    },
+    "weak_positive_new_block": {
+      "blocks": [
+        [
+          0
+        ],
+        [
+          1
+        ]
+      ],
+      "weights": [
+        1.0,
+        1.0
+      ],
+      "Q": 1.0273364869925,
+      "K": 0.7728378916641185,
+      "c": 0.7728378916641185,
+      "Q_bounds": [
+        1.0273364869925,
+        1.0273364869925
+      ],
+      "K_bounds": [
+        0.7728378916641185,
+        0.7728378916641185
+      ],
+      "c_bounds": [
+        0.7728378916641185,
+        0.7728378916641185
+      ],
+      "sampling_variance": null,
+      "sampling_variance_status": "joint sampling covariance not supplied"
+    },
+    "weak_positive_same_block": {
+      "blocks": [
+        [
+          0,
+          1
+        ]
+      ],
+      "weights": [
+        0.5,
+        0.5
+      ],
+      "Q": 0.51366824349625,
+      "K": 0.472798385062968,
+      "c": 0.472798385062968,
+      "Q_bounds": [
+        0.51366824349625,
+        0.51366824349625
+      ],
+      "K_bounds": [
+        0.472798385062968,
+        0.472798385062968
+      ],
+      "c_bounds": [
+        0.472798385062968,
+        0.472798385062968
+      ],
+      "sampling_variance": null,
+      "sampling_variance_status": "joint sampling covariance not supplied"
+    },
+    "duplicate_representation": {
+      "blocks": [
+        [
+          0
+        ],
+        [
+          1
+        ]
+      ],
+      "weights": [
+        1.0,
+        1.0
+      ],
+      "Q": 0.7087128144604473,
+      "K": 0.6098690379571441,
+      "c": 0.6098690379571441,
+      "Q_bounds": [
+        0.7087128144604473,
+        0.7087128144604473
+      ],
+      "K_bounds": [
+        0.6098690379571441,
+        0.6098690379571441
+      ],
+      "c_bounds": [
+        0.6098690379571441,
+        0.6098690379571441
+      ],
+      "sampling_variance": null,
+      "sampling_variance_status": "joint sampling covariance not supplied"
+    },
+    "ten_positive_one_negative_two_blocks": {
+      "blocks": [
+        [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        [
+          10
+        ]
+      ],
+      "weights": [
+        0.1,
+        0.1,
+        0.1,
+        0.1,
+        0.1,
+        0.1,
+        0.1,
+        0.1,
+        0.1,
+        0.1,
+        1.0
+      ],
+      "Q": 0.7087128144604473,
+      "K": 0.6098690379571441,
+      "c": 0.6098690379571441,
+      "Q_bounds": [
+        0.7087128144604473,
+        0.7087128144604473
+      ],
+      "K_bounds": [
+        0.6098690379571441,
+        0.6098690379571441
+      ],
+      "c_bounds": [
+        0.6098690379571441,
+        0.6098690379571441
+      ],
+      "sampling_variance": null,
+      "sampling_variance_status": "joint sampling covariance not supplied"
+    },
+    "ten_positive_one_negative_eleven_blocks": {
+      "blocks": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ],
+        [
+          5
+        ],
+        [
+          6
+        ],
+        [
+          7
+        ],
+        [
+          8
+        ],
+        [
+          9
+        ],
+        [
+          10
+        ]
+      ],
+      "weights": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "Q": 9.918742205362305,
+      "K": 0.999999995150243,
+      "c": 0.999999995150243,
+      "Q_bounds": [
+        9.918742205362305,
+        9.918742205362305
+      ],
+      "K_bounds": [
+        0.999999995150243,
+        0.999999995150243
+      ],
+      "c_bounds": [
+        0.999999995150243,
+        0.999999995150243
+      ],
+      "sampling_variance": null,
+      "sampling_variance_status": "joint sampling covariance not supplied"
+    },
+    "equal_opposition": {
+      "blocks": [
+        [
+          0
+        ],
+        [
+          1
+        ]
+      ],
+      "weights": [
+        1.0,
+        1.0
+      ],
+      "Q": 0.0,
+      "K": 0.0,
+      "c": 0.0,
+      "Q_bounds": [
+        0.0,
+        0.0
+      ],
+      "K_bounds": [
+        0.0,
+        0.0
+      ],
+      "c_bounds": [
+        0.0,
+        0.0
+      ],
+      "sampling_variance": null,
+      "sampling_variance_status": "joint sampling covariance not supplied"
+    },
+    "stronger_opposition": {
+      "blocks": [
+        [
+          0
+        ],
+        [
+          1
+        ]
+      ],
+      "weights": [
+        1.0,
+        1.0
+      ],
+      "Q": -0.9766634010109048,
+      "K": -0.751617885683963,
+      "c": 0.0,
+      "Q_bounds": [
+        -0.9766634010109048,
+        -0.9766634010109048
+      ],
+      "K_bounds": [
+        -0.751617885683963,
+        -0.751617885683963
+      ],
+      "c_bounds": [
+        0.0,
+        0.0
+      ],
+      "sampling_variance": null,
+      "sampling_variance_status": "joint sampling covariance not supplied"
+    },
+    "known_zero_R_new_block": {
+      "blocks": [
+        [
+          0
+        ],
+        [
+          1
+        ]
+      ],
+      "weights": [
+        1.0,
+        1.0
+      ],
+      "Q": 1.0233365989890952,
+      "K": 0.7712220640606535,
+      "c": 0.7712220640606535,
+      "Q_bounds": [
+        1.0233365989890952,
+        1.0233365989890952
+      ],
+      "K_bounds": [
+        0.7712220640606535,
+        0.7712220640606535
+      ],
+      "c_bounds": [
+        0.7712220640606535,
+        0.7712220640606535
+      ],
+      "sampling_variance": null,
+      "sampling_variance_status": "joint sampling covariance not supplied"
+    },
+    "known_zero_R_same_block": {
+      "blocks": [
+        [
+          0,
+          1
+        ]
+      ],
+      "weights": [
+        0.5,
+        0.5
+      ],
+      "Q": 0.5116682994945476,
+      "K": 0.4712440374967983,
+      "c": 0.4712440374967983,
+      "Q_bounds": [
+        0.5116682994945476,
+        0.5116682994945476
+      ],
+      "K_bounds": [
+        0.4712440374967983,
+        0.4712440374967983
+      ],
+      "c_bounds": [
+        0.4712440374967983,
+        0.4712440374967983
+      ],
+      "sampling_variance": null,
+      "sampling_variance_status": "joint sampling covariance not supplied"
+    },
+    "unknown_R2": {
+      "blocks": [
+        [
+          0
+        ],
+        [
+          1
+        ]
+      ],
+      "weights": [
+        1.0,
+        1.0
+      ],
+      "Q": null,
+      "K": null,
+      "c": null,
+      "Q_bounds": [
+        0.023336598989095236,
+        1.0233365989890952
+      ],
+      "K_bounds": [
+        0.02333236356561394,
+        0.7712220640606535
+      ],
+      "c_bounds": [
+        0.02333236356561394,
+        0.7712220640606535
+      ],
+      "sampling_variance": null,
+      "sampling_variance_status": "joint sampling covariance not supplied"
+    },
+    "unknown_source_S2": {
+      "blocks": [
+        [
+          0
+        ],
+        [
+          1
+        ]
+      ],
+      "weights": [
+        1.0,
+        1.0
+      ],
+      "Q": null,
+      "K": null,
+      "c": null,
+      "Q_bounds": [
+        0.5996876687954934,
+        1.446985529182697
+      ],
+      "K_bounds": [
+        0.5368272817800436,
+        0.8950951977002021
+      ],
+      "c_bounds": [
+        0.5368272817800436,
+        0.8950951977002021
+      ],
+      "sampling_variance": null,
+      "sampling_variance_status": "joint sampling covariance not supplied"
+    },
+    "unknown_one_family_full_basis": {
+      "blocks": [
+        [
+          0
+        ],
+        [
+          1
+        ]
+      ],
+      "weights": [
+        1.0,
+        1.0
+      ],
+      "Q": null,
+      "K": null,
+      "c": null,
+      "Q_bounds": [
+        0.4703263039122695,
+        0.9355924723106224
+      ],
+      "K_bounds": [
+        0.43846292460983,
+        0.7331906518082694
+      ],
+      "c_bounds": [
+        0.43846292460983,
+        0.7331906518082694
+      ],
+      "sampling_variance": null,
+      "sampling_variance_status": "joint sampling covariance not supplied"
+    },
+    "unknown_one_family_available_basis": {
+      "blocks": [
+        [
+          0
+        ],
+        [
+          1
+        ]
+      ],
+      "weights": [
+        1.0,
+        1.0
+      ],
+      "Q": 0.8404362726506069,
+      "K": 0.6860400718557076,
+      "c": 0.6860400718557076,
+      "Q_bounds": [
+        0.8404362726506069,
+        0.8404362726506069
+      ],
+      "K_bounds": [
+        0.6860400718557076,
+        0.6860400718557076
+      ],
+      "c_bounds": [
+        0.6860400718557076,
+        0.6860400718557076
+      ],
+      "sampling_variance": null,
+      "sampling_variance_status": "joint sampling covariance not supplied"
+    },
+    "all_unknown": {
+      "blocks": [
+        [
+          0
+        ],
+        [
+          1
+        ]
+      ],
+      "weights": [
+        1.0,
+        1.0
+      ],
+      "Q": null,
+      "K": null,
+      "c": null,
+      "Q_bounds": [
+        "-infinity",
+        "+infinity"
+      ],
+      "K_bounds": [
+        -1.0,
+        1.0
+      ],
+      "c_bounds": [
+        0.0,
+        1.0
+      ],
+      "sampling_variance": null,
+      "sampling_variance_status": "joint sampling covariance not supplied"
+    },
+    "all_unknown_allocation": {
+      "K": null,
+      "c": null,
+      "K_bounds": [
+        -1.0,
+        1.0
+      ],
+      "c_bounds": [
+        0.0,
+        1.0
+      ],
+      "alternatives": [
+        {
+          "blocks": [
+            [
+              0
+            ],
+            [
+              1
+            ]
+          ],
+          "weights": [
+            1.0,
+            1.0
+          ],
+          "Q": null,
+          "K": null,
+          "c": null,
+          "Q_bounds": [
+            "-infinity",
+            "+infinity"
+          ],
+          "K_bounds": [
+            -1.0,
+            1.0
+          ],
+          "c_bounds": [
+            0.0,
+            1.0
+          ],
+          "sampling_variance": null,
+          "sampling_variance_status": "joint sampling covariance not supplied"
+        },
+        {
+          "blocks": [
+            [
+              0,
+              1
+            ]
+          ],
+          "weights": [
+            0.5,
+            0.5
+          ],
+          "Q": null,
+          "K": null,
+          "c": null,
+          "Q_bounds": [
+            "-infinity",
+            "+infinity"
+          ],
+          "K_bounds": [
+            -1.0,
+            1.0
+          ],
+          "c_bounds": [
+            0.0,
+            1.0
+          ],
+          "sampling_variance": null,
+          "sampling_variance_status": "joint sampling covariance not supplied"
+        }
+      ],
+      "bound_meaning": "hull of all partition-specific allowed values; no selected partition"
+    },
+    "saturated_display_cancellation": {
+      "blocks": [
+        [
+          0
+        ],
+        [
+          1
+        ]
+      ],
+      "weights": [
+        1.0,
+        1.0
+      ],
+      "Q": 0.0,
+      "K": 0.0,
+      "c": 0.0,
+      "Q_bounds": [
+        0.0,
+        0.0
+      ],
+      "K_bounds": [
+        0.0,
+        0.0
+      ],
+      "c_bounds": [
+        0.0,
+        0.0
+      ],
+      "sampling_variance": null,
+      "sampling_variance_status": "joint sampling covariance not supplied"
+    }
+  },
+  "same_effect_positive_counterexample": {
+    "first": {
+      "n_original": 1,
+      "mean": 0.8,
+      "variance": 0.25,
+      "S": 1.2800000000000002,
+      "B": 0.5648995528462251
+    },
+    "both": {
+      "n_original": 2,
+      "mean": 0.45,
+      "variance": 0.125,
+      "S": 0.81,
+      "B": 0.38421900860357633
+    },
+    "different_molecule_convention": {
+      "blocks": [
+        [
+          0
+        ],
+        [
+          1
+        ]
+      ],
+      "weights": [
+        1.0,
+        1.0
+      ],
+      "Q": 0.65,
+      "K": 0.5716699660851173,
+      "c": 0.5716699660851173,
+      "Q_bounds": [
+        0.65,
+        0.65
+      ],
+      "K_bounds": [
+        0.5716699660851173,
+        0.5716699660851173
+      ],
+      "c_bounds": [
+        0.5716699660851173,
+        0.5716699660851173
+      ],
+      "sampling_variance": null,
+      "sampling_variance_status": "joint sampling covariance not supplied"
+    }
+  },
+  "checks_passed": 255,
+  "checks": [
+    "H1 source fit before combining sources",
+    "H2 source fit before combining sources",
+    "H1 five numerical correspondence components",
+    "H2 five numerical correspondence components",
+    "two-singleton rational identity",
+    "one-block coefficient is exactly one half",
+    "opposing one-block checked value",
+    "unknown allocation does not select a point",
+    "two sources have exactly two partitions",
+    "unknown allocation lower endpoint",
+    "unknown allocation upper endpoint",
+    "positive new unit increases this convention",
+    "positive member can dilute its shared allocation",
+    "same observation representation counts once",
+    "duplicate cannot create a new cross-source contribution",
+    "equal numerical measurements are not duplicate identity",
+    "genuine extra preparation enters the source fit",
+    "representation conflict is not averaged",
+    "ten same-index members share one proposed unit",
+    "separate-unit count amplification is exposed",
+    "opposing measurements retained then cancel",
+    "negative K retained before nonnegative projection",
+    "known zero R annihilates unknown bounded B",
+    "zero new block is inert",
+    "zero member dilutes a within-block mean",
+    "all-unknown exact closed bounds",
+    "all-unknown coordinate not imputed zero",
+    "all-unknown including allocation",
+    "missing R yields no full-basis point",
+    "missing R bounds ordered",
+    "missing source S yields no full-basis point",
+    "missing source S bounds ordered",
+    "missing family yields no full-basis point",
+    "missing family bounds ordered",
+    "missing R enclosure 0",
+    "missing R enclosure 0.1",
+    "missing R enclosure 0.4",
+    "missing R enclosure 0.8",
+    "missing R enclosure 1",
+    "missing negative-source R exact lower",
+    "missing negative-source R exact upper",
+    "first positive common-effect score",
+    "second positive can lower common-effect directional evidence",
+    "no universal positive-observation monotonicity claim",
+    "cross-source convention is not common-effect likelihood",
+    "double-precision B display saturation reproduced",
+    "original finite S retained at positive saturation",
+    "original finite S retained at negative saturation",
+    "opposing saturated displays cancel using finite originals",
+    "R below one has finite limiting q",
+    "finite q for finite S=-1000, R=0",
+    "q sign symmetry S=-1000, R=0",
+    "finite q for finite S=-1000, R=0.1",
+    "q sign symmetry S=-1000, R=0.1",
+    "finite q for finite S=-1000, R=0.4",
+    "q sign symmetry S=-1000, R=0.4",
+    "finite q for finite S=-1000, R=0.8",
+    "q sign symmetry S=-1000, R=0.8",
+    "finite q for finite S=-1000, R=1",
+    "q sign symmetry S=-1000, R=1",
+    "finite q for finite S=-40, R=0",
+    "q sign symmetry S=-40, R=0",
+    "finite q for finite S=-40, R=0.1",
+    "q sign symmetry S=-40, R=0.1",
+    "finite q for finite S=-40, R=0.4",
+    "q sign symmetry S=-40, R=0.4",
+    "finite q for finite S=-40, R=0.8",
+    "q sign symmetry S=-40, R=0.8",
+    "finite q for finite S=-40, R=1",
+    "q sign symmetry S=-40, R=1",
+    "finite q for finite S=-4, R=0",
+    "q sign symmetry S=-4, R=0",
+    "single-source consistency S=-4, R=0",
+    "finite q for finite S=-4, R=0.1",
+    "q sign symmetry S=-4, R=0.1",
+    "single-source consistency S=-4, R=0.1",
+    "finite q for finite S=-4, R=0.4",
+    "q sign symmetry S=-4, R=0.4",
+    "single-source consistency S=-4, R=0.4",
+    "finite q for finite S=-4, R=0.8",
+    "q sign symmetry S=-4, R=0.8",
+    "single-source consistency S=-4, R=0.8",
+    "finite q for finite S=-4, R=1",
+    "q sign symmetry S=-4, R=1",
+    "single-source consistency S=-4, R=1",
+    "finite q for finite S=-2, R=0",
+    "q sign symmetry S=-2, R=0",
+    "single-source consistency S=-2, R=0",
+    "finite q for finite S=-2, R=0.1",
+    "q sign symmetry S=-2, R=0.1",
+    "single-source consistency S=-2, R=0.1",
+    "finite q for finite S=-2, R=0.4",
+    "q sign symmetry S=-2, R=0.4",
+    "single-source consistency S=-2, R=0.4",
+    "finite q for finite S=-2, R=0.8",
+    "q sign symmetry S=-2, R=0.8",
+    "single-source consistency S=-2, R=0.8",
+    "finite q for finite S=-2, R=1",
+    "q sign symmetry S=-2, R=1",
+    "single-source consistency S=-2, R=1",
+    "finite q for finite S=0, R=0",
+    "q sign symmetry S=0, R=0",
+    "single-source consistency S=0, R=0",
+    "finite q for finite S=0, R=0.1",
+    "q sign symmetry S=0, R=0.1",
+    "single-source consistency S=0, R=0.1",
+    "finite q for finite S=0, R=0.4",
+    "q sign symmetry S=0, R=0.4",
+    "single-source consistency S=0, R=0.4",
+    "finite q for finite S=0, R=0.8",
+    "q sign symmetry S=0, R=0.8",
+    "single-source consistency S=0, R=0.8",
+    "finite q for finite S=0, R=1",
+    "q sign symmetry S=0, R=1",
+    "single-source consistency S=0, R=1",
+    "finite q for finite S=2, R=0",
+    "q sign symmetry S=2, R=0",
+    "single-source consistency S=2, R=0",
+    "finite q for finite S=2, R=0.1",
+    "q sign symmetry S=2, R=0.1",
+    "single-source consistency S=2, R=0.1",
+    "finite q for finite S=2, R=0.4",
+    "q sign symmetry S=2, R=0.4",
+    "single-source consistency S=2, R=0.4",
+    "finite q for finite S=2, R=0.8",
+    "q sign symmetry S=2, R=0.8",
+    "single-source consistency S=2, R=0.8",
+    "finite q for finite S=2, R=1",
+    "q sign symmetry S=2, R=1",
+    "single-source consistency S=2, R=1",
+    "finite q for finite S=4, R=0",
+    "q sign symmetry S=4, R=0",
+    "single-source consistency S=4, R=0",
+    "finite q for finite S=4, R=0.1",
+    "q sign symmetry S=4, R=0.1",
+    "single-source consistency S=4, R=0.1",
+    "finite q for finite S=4, R=0.4",
+    "q sign symmetry S=4, R=0.4",
+    "single-source consistency S=4, R=0.4",
+    "finite q for finite S=4, R=0.8",
+    "q sign symmetry S=4, R=0.8",
+    "single-source consistency S=4, R=0.8",
+    "finite q for finite S=4, R=1",
+    "q sign symmetry S=4, R=1",
+    "single-source consistency S=4, R=1",
+    "finite q for finite S=40, R=0",
+    "q sign symmetry S=40, R=0",
+    "finite q for finite S=40, R=0.1",
+    "q sign symmetry S=40, R=0.1",
+    "finite q for finite S=40, R=0.4",
+    "q sign symmetry S=40, R=0.4",
+    "finite q for finite S=40, R=0.8",
+    "q sign symmetry S=40, R=0.8",
+    "finite q for finite S=40, R=1",
+    "q sign symmetry S=40, R=1",
+    "finite q for finite S=1000, R=0",
+    "q sign symmetry S=1000, R=0",
+    "finite q for finite S=1000, R=0.1",
+    "q sign symmetry S=1000, R=0.1",
+    "finite q for finite S=1000, R=0.4",
+    "q sign symmetry S=1000, R=0.4",
+    "finite q for finite S=1000, R=0.8",
+    "q sign symmetry S=1000, R=0.8",
+    "finite q for finite S=1000, R=1",
+    "q sign symmetry S=1000, R=1",
+    "invalid operands rejected inf, 0.8",
+    "invalid operands rejected nan, 0.8",
+    "invalid operands rejected 1, -1",
+    "invalid operands rejected 1, 1.1",
+    "invalid partition rejected [[0], [0, 1]]",
+    "invalid partition rejected [[0]]",
+    "invalid partition rejected [[], [0, 1]]",
+    "full-statement sign reversal",
+    "source and block permutation",
+    "three-source interval grid [[0], [1], [2]]: 0.6, 0.2, 0.1",
+    "three-source interval grid [[0], [1], [2]]: 0.6, 0.2, 0.45",
+    "three-source interval grid [[0], [1], [2]]: 0.6, 0.2, 0.8",
+    "three-source interval grid [[0], [1], [2]]: 0.6, 0.45, 0.1",
+    "three-source interval grid [[0], [1], [2]]: 0.6, 0.45, 0.45",
+    "three-source interval grid [[0], [1], [2]]: 0.6, 0.45, 0.8",
+    "three-source interval grid [[0], [1], [2]]: 0.6, 0.7, 0.1",
+    "three-source interval grid [[0], [1], [2]]: 0.6, 0.7, 0.45",
+    "three-source interval grid [[0], [1], [2]]: 0.6, 0.7, 0.8",
+    "three-source interval grid [[0], [1], [2]]: 0.75, 0.2, 0.1",
+    "three-source interval grid [[0], [1], [2]]: 0.75, 0.2, 0.45",
+    "three-source interval grid [[0], [1], [2]]: 0.75, 0.2, 0.8",
+    "three-source interval grid [[0], [1], [2]]: 0.75, 0.45, 0.1",
+    "three-source interval grid [[0], [1], [2]]: 0.75, 0.45, 0.45",
+    "three-source interval grid [[0], [1], [2]]: 0.75, 0.45, 0.8",
+    "three-source interval grid [[0], [1], [2]]: 0.75, 0.7, 0.1",
+    "three-source interval grid [[0], [1], [2]]: 0.75, 0.7, 0.45",
+    "three-source interval grid [[0], [1], [2]]: 0.75, 0.7, 0.8",
+    "three-source interval grid [[0], [1], [2]]: 0.9, 0.2, 0.1",
+    "three-source interval grid [[0], [1], [2]]: 0.9, 0.2, 0.45",
+    "three-source interval grid [[0], [1], [2]]: 0.9, 0.2, 0.8",
+    "three-source interval grid [[0], [1], [2]]: 0.9, 0.45, 0.1",
+    "three-source interval grid [[0], [1], [2]]: 0.9, 0.45, 0.45",
+    "three-source interval grid [[0], [1], [2]]: 0.9, 0.45, 0.8",
+    "three-source interval grid [[0], [1], [2]]: 0.9, 0.7, 0.1",
+    "three-source interval grid [[0], [1], [2]]: 0.9, 0.7, 0.45",
+    "three-source interval grid [[0], [1], [2]]: 0.9, 0.7, 0.8",
+    "three-source interval grid [[0, 1], [2]]: 0.6, 0.2, 0.1",
+    "three-source interval grid [[0, 1], [2]]: 0.6, 0.2, 0.45",
+    "three-source interval grid [[0, 1], [2]]: 0.6, 0.2, 0.8",
+    "three-source interval grid [[0, 1], [2]]: 0.6, 0.45, 0.1",
+    "three-source interval grid [[0, 1], [2]]: 0.6, 0.45, 0.45",
+    "three-source interval grid [[0, 1], [2]]: 0.6, 0.45, 0.8",
+    "three-source interval grid [[0, 1], [2]]: 0.6, 0.7, 0.1",
+    "three-source interval grid [[0, 1], [2]]: 0.6, 0.7, 0.45",
+    "three-source interval grid [[0, 1], [2]]: 0.6, 0.7, 0.8",
+    "three-source interval grid [[0, 1], [2]]: 0.75, 0.2, 0.1",
+    "three-source interval grid [[0, 1], [2]]: 0.75, 0.2, 0.45",
+    "three-source interval grid [[0, 1], [2]]: 0.75, 0.2, 0.8",
+    "three-source interval grid [[0, 1], [2]]: 0.75, 0.45, 0.1",
+    "three-source interval grid [[0, 1], [2]]: 0.75, 0.45, 0.45",
+    "three-source interval grid [[0, 1], [2]]: 0.75, 0.45, 0.8",
+    "three-source interval grid [[0, 1], [2]]: 0.75, 0.7, 0.1",
+    "three-source interval grid [[0, 1], [2]]: 0.75, 0.7, 0.45",
+    "three-source interval grid [[0, 1], [2]]: 0.75, 0.7, 0.8",
+    "three-source interval grid [[0, 1], [2]]: 0.9, 0.2, 0.1",
+    "three-source interval grid [[0, 1], [2]]: 0.9, 0.2, 0.45",
+    "three-source interval grid [[0, 1], [2]]: 0.9, 0.2, 0.8",
+    "three-source interval grid [[0, 1], [2]]: 0.9, 0.45, 0.1",
+    "three-source interval grid [[0, 1], [2]]: 0.9, 0.45, 0.45",
+    "three-source interval grid [[0, 1], [2]]: 0.9, 0.45, 0.8",
+    "three-source interval grid [[0, 1], [2]]: 0.9, 0.7, 0.1",
+    "three-source interval grid [[0, 1], [2]]: 0.9, 0.7, 0.45",
+    "three-source interval grid [[0, 1], [2]]: 0.9, 0.7, 0.8",
+    "three-source interval grid [[0, 1, 2]]: 0.6, 0.2, 0.1",
+    "three-source interval grid [[0, 1, 2]]: 0.6, 0.2, 0.45",
+    "three-source interval grid [[0, 1, 2]]: 0.6, 0.2, 0.8",
+    "three-source interval grid [[0, 1, 2]]: 0.6, 0.45, 0.1",
+    "three-source interval grid [[0, 1, 2]]: 0.6, 0.45, 0.45",
+    "three-source interval grid [[0, 1, 2]]: 0.6, 0.45, 0.8",
+    "three-source interval grid [[0, 1, 2]]: 0.6, 0.7, 0.1",
+    "three-source interval grid [[0, 1, 2]]: 0.6, 0.7, 0.45",
+    "three-source interval grid [[0, 1, 2]]: 0.6, 0.7, 0.8",
+    "three-source interval grid [[0, 1, 2]]: 0.75, 0.2, 0.1",
+    "three-source interval grid [[0, 1, 2]]: 0.75, 0.2, 0.45",
+    "three-source interval grid [[0, 1, 2]]: 0.75, 0.2, 0.8",
+    "three-source interval grid [[0, 1, 2]]: 0.75, 0.45, 0.1",
+    "three-source interval grid [[0, 1, 2]]: 0.75, 0.45, 0.45",
+    "three-source interval grid [[0, 1, 2]]: 0.75, 0.45, 0.8",
+    "three-source interval grid [[0, 1, 2]]: 0.75, 0.7, 0.1",
+    "three-source interval grid [[0, 1, 2]]: 0.75, 0.7, 0.45",
+    "three-source interval grid [[0, 1, 2]]: 0.75, 0.7, 0.8",
+    "three-source interval grid [[0, 1, 2]]: 0.9, 0.2, 0.1",
+    "three-source interval grid [[0, 1, 2]]: 0.9, 0.2, 0.45",
+    "three-source interval grid [[0, 1, 2]]: 0.9, 0.2, 0.8",
+    "three-source interval grid [[0, 1, 2]]: 0.9, 0.45, 0.1",
+    "three-source interval grid [[0, 1, 2]]: 0.9, 0.45, 0.45",
+    "three-source interval grid [[0, 1, 2]]: 0.9, 0.45, 0.8",
+    "three-source interval grid [[0, 1, 2]]: 0.9, 0.7, 0.1",
+    "three-source interval grid [[0, 1, 2]]: 0.9, 0.7, 0.45",
+    "three-source interval grid [[0, 1, 2]]: 0.9, 0.7, 0.8"
+  ]
+}

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>qualities.fastq - SAMStat report</title>
+<style>
+:root{--ink:#1a1a1a;--muted:#555555;--line:#c9cdd3;--wash:#f4f5f7;--accent:#0b4f8a;--accent-bg:#eaf1f8}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;background:#ffffff;color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+.page{max-width:52rem;margin:0 auto;padding:28px 16px 48px}
+h1,h2{line-height:1.25;overflow-wrap:anywhere}
+h1{font-size:1.75rem;margin:0 0 .25rem}
+h2{font-size:1.3rem;margin:0 0 .35rem}
+p{margin:0 0 .75rem}
+.eyebrow{margin:0 0 .25rem;font-size:.875rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--accent)}
+.meta{margin:0;color:var(--muted)}
+.partial{font-weight:600;color:var(--ink)}
+main>section,main>.strip,main>.notes{margin-top:2.25rem}
+main>.strip{margin-top:1.75rem}
+.strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:0}
+@media (max-width:42rem){.strip{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:24rem){.strip{grid-template-columns:minmax(0,1fr)}}
+.strip>div{margin:0;padding:12px 14px;background:var(--wash);border:1px solid var(--line);border-radius:8px}
+.strip dt{margin:0;font-size:.9rem;color:var(--muted)}
+.strip dd{margin:.1rem 0 0;font-size:clamp(1.25rem,5vw,1.75rem);line-height:1.2;font-weight:650;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.strip .sub{display:block;font-size:.85rem;font-weight:400;color:var(--muted)}
+.notes{list-style:none;padding:0}
+.banner{margin:1.75rem 0 0;padding:.9rem 1.1rem;background:var(--wash);border-left:5px solid var(--muted);border-radius:0 6px 6px 0;font-size:1.15rem;font-weight:600}
+.notes li{margin:0 0 8px;padding:.6rem .9rem;background:var(--wash);border-left:5px solid var(--muted);border-radius:0 6px 6px 0}
+.caption{max-width:48rem;margin-bottom:1rem}
+.table-wrap{overflow-x:auto}
+table{border-collapse:collapse;min-width:20rem}
+th,td{padding:.55rem .9rem;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+thead th{border-bottom:2px solid var(--ink);font-size:.9rem}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+td svg{display:block}
+.plot h2 .num{display:inline-block;min-width:1.6rem;color:var(--accent)}
+.figs{margin:0 0 .5rem;overflow-x:auto}
+.figs svg{display:block;width:100%;margin:0 0 12px 0}
+.figs:not(.paired)>svg{min-width:30rem}
+.figs .plot-key svg{width:auto}
+.figs.paired{max-width:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}
+.figs.paired>p{grid-column:1/-1}
+.figs.paired svg{max-width:32rem}
+@media (max-width:40rem){.figs.paired{grid-template-columns:minmax(0,1fr)}}
+.good{max-width:48rem;margin:0 0 .6rem}
+.plot-na{display:inline-block;margin:0 0 .75rem;padding:.6rem .9rem;border:2px dashed var(--muted);border-radius:6px}
+.plot-note{margin:0 0 .75rem;padding:.5rem .9rem;background:var(--wash);border-left:5px solid var(--muted);border-radius:0 6px 6px 0;max-width:48rem}
+.plot-key{margin:0 0 .5rem}
+.plot-key svg{margin:0}
+details{margin:.25rem 0 0;border:1px solid var(--line);border-radius:6px;max-width:48rem}
+summary{padding:.5rem .9rem;font-weight:600;color:var(--accent);cursor:pointer}
+summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+details[open] summary{border-bottom:1px solid var(--line)}
+.howto{padding:.75rem .9rem 0}
+.howto p{margin-bottom:.6rem}
+footer{margin-top:3rem;padding-top:1rem;border-top:2px solid var(--line);font-size:.9rem;color:var(--muted)}
+footer p{margin-bottom:.5rem}
+@page{size:A4 portrait;margin:14mm}
+@media print{
+body{font-size:11pt;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{max-width:none;padding:0}
+main>section,.strip>div,.notes li,details,table,tr,.figs,.plot-na,.plot-note,.good{break-inside:avoid}
+h1,h2,summary{break-after:avoid}
+section.plot{break-inside:avoid-page}
+details>*:not(summary){display:block!important}
+details::details-content{content-visibility:visible!important;display:block!important}
+details>summary{list-style:none;border-bottom:1px solid var(--line)}
+details>summary::-webkit-details-marker{display:none}
+summary{color:var(--ink)}
+}
+</style>
+</head>
+<body>
+<div class="page">
+<header>
+<p class="eyebrow">SAMStat report</p>
+<h1>qualities.fastq</h1>
+<p class="meta">FASTQ &middot; short reads (median 5 bp) &middot; SAMStat 2.5.0</p>
+</header>
+<main>
+<dl class="strip" aria-label="Summary">
+<div><dt>Reads</dt><dd>2</dd></div>
+<div><dt>Bases</dt><dd>10 bp</dd></div>
+<div><dt>N50</dt><dd>5 bp<span class="sub">half of all bases are in reads at least this long</span></dd></div>
+<div><dt>Mean Q</dt><dd>9.5<span class="sub">average base quality (Q30 = 1 error in 1000 bases)</span></dd></div>
+</dl>
+<ul class="notes" aria-label="Notes">
+<li>Only 2 reads: per-position plots (3-5) are not reliable and are hidden.</li>
+</ul>
+<section class="plot" id="plot-1" aria-labelledby="plot-1-title">
+<h2 id="plot-1-title"><span class="num">1.</span> How long are the reads?</h2>
+<div class="figs">
+<p class="plot-note">All 2 reads are 5 bp long.</p>
+</div>
+</section>
+<section class="plot" id="plot-2" aria-labelledby="plot-2-title">
+<h2 id="plot-2-title"><span class="num">2.</span> How good is each read?</h2>
+<p class="caption">Reads by their average base quality (higher is better; Q20 = 1 error in 100 bases, Q30 = 1 in 1000).</p>
+<div class="figs">
+<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="samstat-p2-t samstat-p2-d" width="640" height="294.8" viewBox="0 0 640 294.8" style="max-width:100%;height:auto;vertical-align:top" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="14" fill="#1a1a1a"><title id="samstat-p2-t">How good is each read?</title><desc id="samstat-p2-d">Number of reads by their mean base quality, from Q6 to Q40. Lines: All reads. Qualities are averaged as error probabilities.</desc><rect width="640" height="294.8" fill="#fff"/><path fill="none" stroke="#e4e4e4" stroke-width="1" d="M77,247.2H619M77,175.5H619M77,103.9H619M77,32.2H619"/><path fill="none" stroke="#595959" stroke-width="1" d="M77,32.2V247.2H619M77,247.2v4M144.8,247.2v4M212.5,247.2v4M280.2,247.2v4M348,247.2v4M415.8,247.2v4M483.5,247.2v4M551.2,247.2v4M619,247.2v4M77,247.2h-4M77,175.5h-4M77,103.9h-4M77,32.2h-4"/><text x="77" y="264.7" text-anchor="middle">5</text><text x="144.8" y="264.7" text-anchor="middle">10</text><text x="212.5" y="264.7" text-anchor="middle">15</text><text x="280.2" y="264.7" text-anchor="middle">20</text><text x="348" y="264.7" text-anchor="middle">25</text><text x="415.8" y="264.7" text-anchor="middle">30</text><text x="483.5" y="264.7" text-anchor="middle">35</text><text x="551.2" y="264.7" text-anchor="middle">40</text><text x="619" y="264.7" text-anchor="middle">45</text><text x="348" y="286.4" text-anchor="middle">average base quality per read (Q), 1-Q bins</text><text x="70" y="252.1" text-anchor="end">0</text><text x="70" y="180.4" text-anchor="end">1</text><text x="70" y="108.8" text-anchor="end">2</text><text x="70" y="37.1" text-anchor="end">3</text><text transform="translate(13.3 139.7) rotate(-90)" text-anchor="middle">number of reads</text><path fill="none" stroke="#595959" stroke-width="1" d="M77,247.2v2.5M90.5,247.2v2.5M104.1,247.2v2.5M117.7,247.2v2.5M131.2,247.2v2.5M144.8,247.2v2.5M158.3,247.2v2.5M171.8,247.2v2.5M185.4,247.2v2.5M198.9,247.2v2.5M212.5,247.2v2.5M226.1,247.2v2.5M239.6,247.2v2.5M253.2,247.2v2.5M266.7,247.2v2.5M280.2,247.2v2.5M293.8,247.2v2.5M307.4,247.2v2.5M320.9,247.2v2.5M334.4,247.2v2.5M348,247.2v2.5M361.6,247.2v2.5M375.1,247.2v2.5M388.6,247.2v2.5M402.2,247.2v2.5M415.8,247.2v2.5M429.3,247.2v2.5M442.9,247.2v2.5M456.4,247.2v2.5M469.9,247.2v2.5M483.5,247.2v2.5M497.1,247.2v2.5M510.6,247.2v2.5M524.1,247.2v2.5M537.7,247.2v2.5M551.2,247.2v2.5M564.8,247.2v2.5M578.4,247.2v2.5M591.9,247.2v2.5M605.4,247.2v2.5M619,247.2v2.5"/><path fill="none" stroke="#000000" stroke-width="2" stroke-linejoin="round" d="M90.5,247.2V175.5H104.1V247.2M551.2,247.2V175.5H564.8V247.2"><title>All reads</title></path></svg>
+</div>
+<p class="good"><strong>What good looks like:</strong> One peak at high quality.</p>
+<details>
+<summary>How to read plot 2</summary>
+<div class="howto">
+<p><strong>Worth a look:</strong> A second, low-quality peak, especially if it matches the poorly mapped or unmapped reads.</p>
+<p><strong>Often benign:</strong> Instruments that bin qualities give a few spikes instead of a smooth curve.</p>
+<p><strong>How it is calculated:</strong> Base qualities are averaged as error probabilities, so a few bad bases pull a read down and the values read lower than a plain average of Q scores, which is what FastQC reports. Mean Q at the top of the page and plot 3 are averaged in the same way.</p>
+</div>
+</details>
+</section>
+<section class="plot" id="plot-3" aria-labelledby="plot-3-title">
+<h2 id="plot-3-title"><span class="num">3.</span> Where along the read does quality drop?</h2>
+<div class="figs">
+<p class="plot-na">Too few reads (2) for a per-position plot (needs at least 50).</p>
+</div>
+</section>
+<section class="plot" id="plot-4" aria-labelledby="plot-4-title">
+<h2 id="plot-4-title"><span class="num">4.</span> Is base composition even along the read?</h2>
+<div class="figs">
+<p class="plot-na">Too few reads (2) for a per-position plot (needs at least 50).</p>
+</div>
+</section>
+</main>
+<footer>
+<p>Report of <strong>qualities.fastq</strong> made by SAMStat 2.5.0.</p>
+<p>Please cite: Lassmann T., &ldquo;SAMStat 2: quality control for next generation sequencing data&rdquo;, <em>Bioinformatics</em> 39(1), btad019, 2023, doi:10.1093/bioinformatics/btad019.</p>
+<p>Original method: Lassmann T., Hayashizaki Y., Daub C.O., &ldquo;SAMStat: monitoring biases in next generation sequencing data&rdquo;, <em>Bioinformatics</em> 27(1), 130-131, 2011, doi:10.1093/bioinformatics/btq614.</p>
+</footer>
+</div>
+</body>
+</html>

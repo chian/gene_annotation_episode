@@ -1,0 +1,73 @@
+{
+  "evidence_kind": "saved_shared_workflow_with_synthetic_native_responses",
+  "source_database": "verification/tool_graders_bvbrc_appservice_monitor_workflow_2026-10-24/second-run/test_shared_workflow_native_mo0/state/state.sqlite3",
+  "read_mode": "read_only",
+  "episodes": [
+    {
+      "role": "launch_api",
+      "state": "yielded",
+      "completion": {
+        "actions": 2,
+        "ended_by": "yield_stop"
+      },
+      "observation_count": 2,
+      "marginal_credit": [
+        0.0,
+        2.0
+      ],
+      "native_choices": []
+    },
+    {
+      "role": "launch",
+      "state": "yielded",
+      "completion": {
+        "actions": 1,
+        "ended_by": "yield_stop"
+      },
+      "observation_count": 1,
+      "marginal_credit": [
+        2.0
+      ],
+      "native_choices": []
+    },
+    {
+      "role": "monitor",
+      "state": "yielded",
+      "completion": {
+        "actions": 2,
+        "ended_by": "yield_stop"
+      },
+      "observation_count": 2,
+      "marginal_credit": [
+        0.5,
+        0.5
+      ],
+      "native_choices": [
+        "query_tasks",
+        "stdout"
+      ]
+    },
+    {
+      "role": "annotation",
+      "state": "yielded",
+      "completion": {
+        "actions": 2,
+        "ended_by": "yield_stop"
+      },
+      "observation_count": 2,
+      "marginal_credit": [
+        0.0,
+        0.0
+      ],
+      "native_choices": []
+    }
+  ],
+  "observation_count": 7,
+  "typed_return_count": 3,
+  "typed_return_failures": 0,
+  "scientific_annotation_count": 0,
+  "changed_production_files_sha256": {
+    "gene_annotation_episode/bvbrc_appservice_host.py": "d22908204a521d1e68df98520f2c1a837beac9a18d8a2e3cc43fbebaf84b9def",
+    "gene_annotation_episode/bvbrc_appservice_monitor.py": "20c4dfeb5f3ffac8756de242704728171154d8053f0c6aa8d34197367e3e3f00"
+  }
+}

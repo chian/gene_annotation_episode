@@ -1,0 +1,647 @@
+--- original_as_read/docs/IMPLEMENTATION_PLAN.md
++++ preserved_modified/docs/IMPLEMENTATION_PLAN.md
+@@ -7,18 +7,28 @@
+ and includes an explicit crosswalk accounting for the rejected draft's entries.
+ Keep its completed foundations and open subitems visible in full progress reports.
+ 
+-This plan's earlier C1-C10 contracts and coding packages describe the mechanical
+-episode/execution foundation. C11-C14 record an interrupted construction proposal,
+-not a ready dispatch contract. LIB-D, LIB-M and I-LIB are interrupted; their
+-candidate files remain, with no shared runtime/worker construction wiring applied.
+-Do not resume or dispatch coding from those sections or the historical queues.
+-
+-The proposal prematurely fixes concrete tool menus inside process definitions.
+-The parent/child prompts and the construction that combines problem-solving
+-skills with tool libraries are still being worked through with the user. Shared
+-skill-loading mechanics do not erase the difference in intent, prompt design
+-and episode construction. C11-C14 must be reconsidered against that design before
+-implementation continues. See [TOOL_KNOWLEDGE.md](TOOL_KNOWLEDGE.md).
++This plan's C1-C10 contracts and coding packages describe the mechanical
++episode/execution foundation. The later C11–C14 generic complete-episode factory
++specification was wrong and is removed. Its literature/monitoring/resource
++library migrations and LIB-D/LIB-M/I-LIB assignments are withdrawn. They are not
++pending work and must not be resumed under different names. This correction
++neither completes nor removes the independent I/G/H responsibilities below.
++
++The existing scoped bioinformatics episode already has slotted construction.
++The information library supplies its three components, not additional episode
++types. The user's requirement is:
++
++> there should be 3 slots from our discussion. 1 related to annotation credit axis, 1 related to thought pattern, and 1 with the tools that the child is scoped to
++
++Former A01–A10 claim-property headings have been removed from active selection
++and retained as background research. The current catalogue has zero first-slot
++entries and 19 thought patterns; no accepted `annotation_ref` is currently
++available from this source. The user instructed: "Review the scoring axes first".
++That review remains open; neither the former headings nor the current scoring
++axes have been accepted as the first-slot design. No credit schema, formula or saved
++history changes follow from this documentation correction. The actual tools
++retriever and existing construction contracts are in
++[TOOL_KNOWLEDGE.md](TOOL_KNOWLEDGE.md).
+ 
+ [RESOURCE_ESTIMATION_BATCH.md](RESOURCE_ESTIMATION_BATCH.md) records the bounded
+ M1/M2/E2 work already dispatched. Those module jobs have returned; their shared
+@@ -29,7 +39,8 @@
+ Status: interface, workload and integration specification. The common detached
+ application lifecycle is exercised with real subprocesses and scripted decisions;
+ the complete configured-model scientific path is not established. Earlier
+-exploratory agents were retired before fresh contract-scoped coding jobs. This plan does not
++exploratory implementation contexts were retired before fresh bounded coding
++workloads. This plan does not
+ change GOAL.md or the user's fixed specification at
+ `/home/chia/.codex/attachments/6c61440f-d223-4bea-91e3-6e4f7b2c5013/pasted-text-1.txt`.
+ 
+@@ -40,31 +51,27 @@
+ later choices. A child has an owning scientific relationship to its parent;
+ detachment changes execution placement, not that relationship. Each specialized
+ episode below still runs the ordinary `method_loop.Episode`. No specialist
+-module contains a second agent loop.
++module contains a second decision loop.
+ 
+ The unit being composed is an intelligence carrying out a problem-solving
+-process. The information library supplies processes that fill a common mother
+-episode template, helping construct a child's decision problem and a small
+-relevant set of alternatives on each turn. The parent supplies the job, scope,
+-constraints and requested typed return form; the child makes its own iterative
+-decisions and can invoke further processes. Implementing a fixed collection of
+-role classes plus a tool/manual catalog does not establish this construction.
+-
+-The development boundaries must therefore distinguish common episode machinery,
+-library process definitions, construction of a particular invocation, and the
+-mechanical adapters for primitive operations and authoritative state. Concrete
+-literature, resource and monitoring processes use those boundaries. Literature
+-episode implementation remains package I; it is not absorbed into the library
+-work. Caller-owned credit, resource and continuation bindings keep their owners.
+-
+-The next construction plan must specify what a selected process contributes to
+-the filled child, what remains supplied by its parent/caller, how its actual
+-per-turn alternatives are limited, and how the same process information survives
+-C1 commissioning and worker reconstruction. Its connected checks must include a
+-library-defined process instantiated through the common template without a new
+-handwritten episode implementation, followed by use of its typed information in
+-a later parent decision. This is a required implementation path, not one already
+-established by the C7 role registry or manual retrieval tests.
++process in an episode. The information library fills the existing scoped
++bioinformatics episode with annotation-credit-axis information, a thought pattern
++and the actual tools that child is scoped to. Its parent supplies the job, scope,
++constraints and requested typed return form. The child owns iterative choices.
++Supporting tool manuals do not substitute for thought-pattern information.
++
++This construction does not redesign literature, launch, monitoring or results
++episodes. Literature remains package I with its separate specialized structure.
++Scoped scientific episodes retain the same scientific/literature/helper branches
++as their scientific parents. Caller-owned credit, resources and continuation
++bindings retain their owners. The full fixed-goal tree is in
++[EPISODE_STRUCTURE.md](EPISODE_STRUCTURE.md).
++
++The existing scientific construction path must preserve selected slot information
++through C1 commissioning and worker reconstruction, narrow the actual tool
++catalog, and retain original parent forms and per-episode histories. The first
++slot's connection to credit axes and final production integration remain open.
++No additional episode layer or complete-process catalogue is required.
+ 
+ There are two different graphs:
+ 
+@@ -99,7 +106,7 @@
+ | `case_execution.py`: `PolicyBindings`, `_load_policy`, `run_prepared_case` | Fixed target, resources, explicit model/policy binding and pin validation | Reconstruct one commissioned child using the original binding, without launching another root |
+ | `execution_expectations.py`, `resource_estimation.py`, `run_statistics.py` | Typed duration expectations and restricted global statistics | Waiting consumes these records without relabeling measurements or inventing workload transfer |
+ | `numerical.py`: `ScalarScoreYieldEstimator`, `YieldController` | Raw local histories and configured continuation | Pending/wait context enters the existing contextual estimator boundary; no new stopping rule in infrastructure |
+-| `tools.py`, `materials.py`, `literature_assets.py` | Ordinary evidence acquisition, source custody and exact source windows | Literature episodes consume these tools; source navigation remains ordinary non-agentic work |
++| `tools.py`, `materials.py`, `literature_assets.py` | Ordinary evidence acquisition, source custody and exact source windows | Literature episodes consume these tools; source navigation remains an ordinary tool operation |
+ 
+ ## Shared data and function contracts
+ 
+@@ -351,7 +358,7 @@
+ 
+ The ordinary loop recognizes pending dispatch without calling `advance` or the
+ completed-unit hook. A returned child is projected through the existing
+-`_receive_closed_child_async` boundary, not through another agent loop.
++`_receive_closed_child_async` boundary, within the same ordinary episode loop.
+ `Context` gains a public restoration constructor for the C1 parent boundary;
+ callers do not mutate its private nesting stacks.
+ 
+@@ -456,16 +463,17 @@
+ There is no infrastructure override to force another decision or drain an inbox
+ after numerical closure.
+ 
+-### C7. Existing episode binding interface and construction gap
++### C7. Existing episode binding interface
+ 
+ Module: `gene_annotation_episode/episode_bindings.py`.
+ This is a binding interface for the existing loop, not an autonomous workflow
+ layer. Existing `HomologyEpisodes` provides concrete examples of these concerns.
+-The interface below describes the earlier role-based implementation boundary.
+-Its instructions, context, assignment, catalog and return ports are relevant to
+-filling the common template, but there is no library process definition or
+-constructor at this boundary yet. Supplying a separate binding class per process
+-would leave the central design requirement unimplemented.
++The interface below describes the existing specialized-role boundary. Scoped
++bioinformatics construction uses the existing ScientificProcessEpisodes binding;
++annotation-credit-axis and thought-pattern information plus a retrieved set of
++actual tools fill that episode. Separate literature, monitor and resource
++bindings continue to implement their own assigned iterative responsibilities.
++This interface is not a requirement to migrate them into library definitions.
+ 
+ ```text
+ EpisodeBinding.roles -> tuple[role name]
+@@ -540,12 +548,11 @@
+ commissioning and waits are supplied by the common application source. A binding
+ currently declares which of those actions its role permits and implements its
+ specialist ordinary operations. It does not call the model or select a child.
+-In the target design, library process information supplies the particular
+-decision problem, relevant guidance and permitted alternatives through the
+-common template. Operation/state adapters supply executable mechanics and
+-validation. Keeping those concerns in handwritten role implementations alone
+-does not satisfy the target. The exact construction handoff needs specification
+-before changing this existing interface or dispatching its consumers.
++For scoped bioinformatics investigations, the information library supplies the
++three slot components used to construct the particular decision problem.
++Actual operations and state adapters supply execution and validation. Literature,
++monitoring and resources remain separate episode implementations; this interface
++does not require replacing them with a generic library layer.
+ 
+ The existing specialized role names are `literature`, `literature_strategy`,
+ `literature_search`, `literature_page`, `literature_table`, `literature_ordered`,
+@@ -554,7 +561,7 @@
+ scientific meanings; the old job-role adapter retains explicit saved identities
+ where needed. Binding registration rejects duplicate role names. The new role
+ names are choices, never automatically created episode instances. They record
+-the implemented roles, not a closed list of all processes the library may define.
++the implemented roles and do not define an information-library slot catalogue.
+ 
+ `entry_roles` supplies root/scoped-scientific branch choices without requiring
+ a specialist to handle an unowned `annotation` role. `child_roles` declares the
+@@ -724,381 +731,27 @@
+ scientific scoped child retains the same available branches as the root, and
+ returned literature/bioinformatics evidence can motivate either kind of work.
+ 
+-### C11. Process definitions and the frozen library
+-
+-**C11-C14 are an interrupted candidate proposal.** Their record formats, role
+-mapping and process-owned tool menus are not settled design requirements. The
+-following text preserves the proposal for review; it is not permission to resume
+-coding. Parent construction and its prompts remain under discussion.
+-
+-The candidate followed inspection of the complete
+-C7 registry/composer, shared Grain/tree/Context paths, literature binding, source
+-ports, and commission/worker reconstruction. The common `Episode` already owns
+-iteration. Library-declared process names fit its existing role-indexed schemas,
+-credit kinds, tree edges and full-path identities. A single undifferentiated
+-role would require replacing those contracts and maintaining another process
+-graph. Use one common `LibraryEpisodes` binding with data-declared roles instead.
+-Declaring type metadata does not instantiate children or prescribe an itinerary.
+-
+-One process ID equals its role name in this version. IDs are nonempty strings
+-matching `[a-z][a-z0-9_]*`. No role alias or new Episode subclass is needed when
+-adding a process using existing mechanics. Compact metadata can be loaded for
+-registration; full definitions and guidance remain separately addressable.
+-
+-All records below are closed, finite JSON. Digests use the existing
+-`method_loop.durable.content_digest` canonical semantics. Unknown/missing values
+-are not supplied by inference. New pure module `process_records.py` exports:
+-
+-```python
+-process_digest(value) -> str  # full SHA-256, existing canonical semantics
+-validate_definition(value) -> dict  # plain independent validated copy
+-validate_process_ref(value) -> dict
+-validate_process_binding(value) -> dict
+-```
+-
+-`ProcessDefinitionV1` has exactly these required fields:
+-
+-```text
+-version: "episode_process_definition_v1"
+-process_id, title, summary: nonempty strings
+-tags: unique nonempty strings[]
+-entry: bool
+-credit_kind: "scientific" | "operational" | "monitoring"
+-decision_question: nonempty string identifying the recurring decision
+-instructions: nonempty process guidance string
+-input_schema: JSON Schema object for the parent's selected input values
+-assignment_schema: JSON Schema object for the prepared child assignment
+-common_actions: unique values from tool,reason,child,wait,redeliver_report
+-common_tools: unique exact runtime-tool names (enumerated below)
+-children: unique process_id[] of permitted subprocesses
+-operations: [{name: nonempty actual operation name,
+-              arguments_schema: JSON Schema object | null}]
+-mechanics: {id: nonempty string, configuration: finite JSON object}
+-guidance_sections: [{section_id: nonempty string, title: nonempty string,
+-                     path: relative UTF-8 guidance-file path}]
+-```
+-
+-Input/assignment schemas describe object inputs with explicit properties and a
+-closed root. Argument constraints may be partial schemas: they are intersected
+-with actual executable contracts, never substituted for them. Schemas must be
+-valid; external `$ref` dependencies are not part of this snapshot format. Process
+-IDs, operation names and section IDs are unique in their respective lists.
+-Definitions describe recurring decisions and alternatives, not steps, timers,
+-retry rules or child counts. The parent still supplies its own return form.
+-
+-Allowed `common_tools` are `process.search`, `process.entry`, `process.read`,
+-`knowledge.search`, `knowledge.entry`, `knowledge.read`, `episode.history`,
+-`episode.credit`, `episode.annotation_score`, `episode.estimate_wait`, and
+-`episode.monitoring_information`. Actual host support is still required. These
+-are inspection/retrieval operations, distinct from primitive domain operations
+-in `operations`. The common runtime must not append excluded tools afterward.
+-
+-The source directory has `index.json` exactly:
+-
+-```text
+-{version:"episode_process_library_v1", definition_files:[relative JSON path]}
+-```
+-
+-Each file contains one ProcessDefinitionV1. Every declared child must resolve in
+-that same library. The snapshot manifest stores each definition's relative path,
+-canonical digest and compact header, and each guidance file's byte digest and
+-line count. `ProcessHeaderV1` is exactly `{process_id,title,summary,tags,entry,
+-credit_kind,children,mechanics_id,definition_sha256}`. A library identity is a
+-content digest of this manifest's definitions and guidance information, excluding
+-its own identity field. The public snapshot descriptor is exactly
+-`{version:"episode_process_library_snapshot_v1",library_id,manifest_sha256}`.
+-Its physical location is the caller's run directory, not an executable import.
+-
+-`ProcessRefV1` is exactly `{version:"episode_process_reference_v1",library_id,
+-process_id,definition_sha256}`. Opening a saved snapshot never refreezes a newer
+-source. Definition and guidance reads verify saved hashes. Missing/changed bytes
+-are specific failures, never permission to select another process. The library
+-does not retain all definition/manual bodies in active state.
+-
+-New `process_library.py` exports:
+-
+-```python
+-ProcessLibrary.freeze(directory, *, source) -> ProcessLibrary
+-ProcessLibrary(directory)  # reopen existing manifest; no implicit freeze
+-.as_record() -> snapshot descriptor above
+-.headers() -> tuple[ProcessHeaderV1, ...]
+-.reference(process_id) -> ProcessRefV1
+-.definition(process_id) -> ProcessDefinitionV1
+-.search(*, query, offset, limit) -> {
+-    library: snapshot descriptor, entries: [ProcessHeaderV1],
+-    offset, limit, next_offset: int|null}
+-.entry(process_id) -> {process_ref, definition,
+-    guidance_index:[{section_id,title,sha256,line_count}]}
+-.read(*, process_id, section_id, offset, limit) -> {
+-    process_ref,section_id,sha256,offset,text,total_lines,next_offset:int|null}
+-.execute(name, arguments) -> existing ToolOutcome
+-catalog() -> list[ToolSpec]  # process.search/entry/read only
+-```
+-
+-Search uses literal case-insensitive metadata terms and explicit paging; it
+-does not assess scientific relevance. Empty search pages metadata. Read offsets
+-count zero-based UTF-8 text lines, not scientific source bytes. Search/read
+-limits are positive integers; offsets are nonnegative. Retrieval outcomes have
+-no scientific records, credit, native submissions or fabricated measurements.
+-Structured failures identify missing process/section, invalid operands, malformed
+-library or changed snapshot. A failed retrieval does not become completed work.
+-
+-### C12. Common template and mechanical adapters
+-
+-New `process_mechanics.py` defines the runtime-checkable `ProcessMechanics` port
+-and `PlainProcessMechanics(services)`. The latter has ID `plain`, empty definition
+-configuration, ordinary service execution/resolution, and empty additional
+-context/facts/receipt hooks. It supplies no question, instructions, child menu,
+-tool menu or credit formula. It is reusable for new scientific process data.
+-
+-Every mechanics object implements these exact ports. `definition` is the selected
+-ProcessDefinitionV1; `context` is the actual C7 BindingContext, never role-aliased.
+-
+-```python
+-mechanics_id: str
+-as_record() -> nonempty finite JSON object  # actual implementation/resources
+-validate_definition(definition) -> None  # its mechanical configuration only
+-prepare_assignment(parent, definition, inputs, scope, operation_key,
+-                   *, parent_definition=None) -> dict
+-validate_assignment(context, definition) -> None
+-decision_context(context, definition, current_view) -> dict
+-catalog(context, definition) -> list[ToolSpec]  # actual bound capabilities
+-eligible_children(context, definition, declared_roles, caller_capabilities)
+-    -> tuple[str, ...]  # only mechanical eligibility; never expand the set
+-execute(context, definition, tool_name, arguments, operation_key) -> ToolOutcome
+-fact_sources(definition) -> mapping[str, FactDefinition]
+-facts(context, definition, completion_snapshot) -> dict
+-resolve(context, definition, reference, namespace) -> bool
+-validate_report(context, definition, form, original_schema) -> None
+-initial_references(context, definition) -> list[str]
+-received_form_references(context, form, schema, operation_key) -> list[str]
+-```
+-
+-Execute may be async. Reference hooks have the existing M1 semantics; the
+-received-form hook can be called for another receiver role and must not require
+-that receiver to belong to this mechanics object. Plain/source hooks return [].
+-Preparation is selected mechanical work/validation, not a process chooser; run
+-it once. It cannot rewrite goal, scope, form or caller allocations. Unknown
+-mechanics need an actual caller-supplied object; a library string cannot import
+-or invent an executable. Non-scientific credit remains explicitly caller bound.
+-
+-New `library_episodes.py` exports:
+-
+-```python
+-LibraryEpisodes(services, *, library, mechanics)
+-# mechanics is Mapping[id, actual ProcessMechanics object]
+-# Implements the complete existing EpisodeBinding protocol.
+-.prepare_invocation(parent, role, inputs, scope, operation_key, *, invocation)
+-    -> {assignment:dict, process_binding:ProcessBindingV1}
+-.prepare_root(role, inputs, scope, operation_key, *, invocation)
+-    -> {assignment:dict, process_binding:ProcessBindingV1}
+-.validate_context(context) -> None
+-.common_tool_names(context) -> tuple[str, ...]
+-.initial_references(context) -> list[str]
+-.received_form_references(context, form, schema, operation_key) -> list[str]
+-```
+-
+-`invocation` is exactly `{objective, purpose, report_schema, initial_report}`;
+-purpose/schema are null for a root. Scope is passed separately. The mother uses
+-the selected input schema, calls the selected mechanics preparation once, and
+-validates the prepared assignment schema. The old C7 `prepare_assignment` remains
+-implemented for protocol completeness; the new host uses prepare_invocation
+-once rather than calling both. No loop/model/child execution belongs here.
+-
+-For compatibility with the existing host's child-selection consumer, C7
+-`assignment_schema(role)` returns definition.input_schema, the parent's selectable
+-operands. The separately named definition.assignment_schema validates the
+-prepared assignment internally. This mapping is intentional; callers must not
+-offer the prepared-only fields as parent-selected inputs. prepare_assignment
+-returns only the prepared assignment; prepare_invocation additionally fills C13.
+-prepare_root calls mechanics preparation once with parent=None and
+-parent_definition=None, and the explicit operation_key. The host supplies
+-`<run_id>:root:process` for root construction and reuses saved fills on resume.
+-
+-Mother initial_references returns [] outside its owned roles; otherwise it
+-validates the selected fill and delegates to its mechanics. received_form_references
+-aggregates every distinct bound mechanics object once, including for receivers
+-outside the mother's roles, and deduplicates returned references. These are the
+-existing optional registry hooks, required on this mother even though C7's base
+-protocol does not require them. They add no selected action or observation.
+-
+-Roles, entry roles, credit kinds and child edges come from headers. Instructions
+-come from the selected definition's recurring question and guidance, not the old
+-role classes. Catalog is the intersection of `operations` with mechanics' actual
+-capabilities; argument schema is the actual schema, or `allOf:[actual,constraint]`
+-when a process supplies constraints. Validate that same effective schema before
+-selected execution, so data cannot broaden a primitive contract. Child choices
+-are the declared data edges filtered only for actual mechanical eligibility.
+-
+-The decision context contains `episode_process:{process_ref,decision_question,
+-assignment,permitted_children,permitted_operations,guidance_index}` plus the
+-mechanics' actual context. It contains only this selected process, not every
+-process definition. Earlier outcomes and original admitted forms still arrive
+-through the ordinary source. Scientific credit delegates to scientific_credit;
+-other kinds delegate to bound_role_credit. Parent forms and recorded-fact
+-validation use the existing protocol. Shared facts are not replaced by a new
+-library-owned mandatory report.
+-
+-The binding descriptor is exactly:
+-
+-```text
+-{version:"library_episode_binding_v1", binding_id:"library_episodes",
+- implementation_sha256: actual template/mechanics-port Python code digest,
+- configuration:{library: C11 snapshot descriptor,
+-                mechanics:[{id,definition:actual mechanics.as_record()}]}}
+-```
+-
+-Mechanics descriptors are sorted by ID; roles remain process IDs. Opening the
+-mother checks required mechanics IDs from compact headers. Validate a selected
+-definition's mechanical parameters when loading it, without retaining all full
+-definitions in active state. Existing handwritten bindings remain for explicitly
+-saved old configurations; migrated roles are never registered twice.
+-
+-### C13. Filled invocation and durable handoff
+-
+-`ProcessBindingV1` has exactly:
+-
+-```text
+-{version:"filled_episode_process_v1", process_ref:ProcessRefV1,
+- input_values:original parent-selected input object,
+- assignment_sha256: digest of the actual prepared episode_assignment,
+- invocation_sha256: digest of {objective,scope,purpose,report_schema,initial_report},
+- mechanics_binding:actual selected mechanics.as_record()}
+-```
+-
+-The selected definition plus prepared assignment and original invocation fill
+-the common template. Original raw inputs are retained separately because
+-mechanical preparation can add recorded execution identities. Store this exact
+-record in `EpisodeRequest.message.process_binding`, beside episode_assignment.
+-Do not wrap/change C9 assignments or their existing hashes. The C1 envelope
+-already pins the whole request; no additional process ledger is needed.
+-
+-Mother validate_context checks process/library/digest/role identity, actual
+-mechanics binding, input/assignment schemas and invocation digest against the
+-original request. Instruction bodies always resolve from the pinned snapshot,
+-including an unanswered interrupted model call. Saved historical context/schema
+-and closed controller inputs remain untouched. Fields introduced by raw input
+-must be included in normal Store input pinning where they name actual records;
+-library IDs themselves are not Store records. New process bindings must not
+-introduce extra scientific inputs outside the selected input/assignment values.
+-
+-### C14. Host consumers, literature workload and dispatch ownership
+-
+-The coordinator exclusively changes common consumers:
+-
+-* `runtime.Workflow.selected`: compile/validate the parent's original form,
+-  prepare one invocation, pass both outputs to build, preserve existing pending
+-  C1 recovery first. A saved child request without an intent is an original fill
+-  authority: reopen/validate it rather than refilling from newer parent state.
+-* `Workflow.build(..., process_binding=None)`: preserve this exact optional field
+-  before comparing/saving the immutable request. For a selected mother role,
+-  validate_context before initial credit, work or provider entry. Prepare a root
+-  explicitly through prepare_root; do not infer a process for a saved legacy root.
+-* `Workflow.commission_child`: pin actual input/assignment Store references;
+-  freeze the complete original request through unchanged C1. Return/admission
+-  validation uses that same process_binding through returned_request.
+-* `Workflow.catalog/execute/action_schema` and `DecisionSource.next/call`: expose
+-  process retrieval, selected process information and only permitted operations,
+-  children and common tools. Final catalog filtering must prevent augmentation
+-  from restoring excluded choices. Honor redelivery/child/tool action permission
+-  on all branches. Handle constrained `allOf` tool schemas through action-response
+-  normalization without changing authoritative validation or optional values.
+-* `episode_composition.compose_episode_bindings` gains optional `run_directory`
+-  and a known library_episodes branch opening `<run>/process-library`. Reconstruct
+-  known mechanical adapters from actual services/resources and compare the full
+-  descriptor. Unknown caller executables retain explicit custom reconstruction.
+-  Caller service factories can freeze a library before returning its descriptor;
+-  they do not construct or execute a scientific root.
+-* `independent_execution._saved_episode_factories/_standard_bindings` and
+-  `open_commission`: reopen known library bindings and pass the original optional
+-  process_binding to build. Validate snapshots and filled request before provider
+-  entry. No new PolicyBindings field is required: the existing pinned service
+-  factory receives the run directory and supplies exact descriptors.
+-
+-There is no method_loop change for this construction. The existing loop, C1-C6
+-ownership/closure/admission, controllers and receipt accounting remain consumers
+-of the same ordinary Episode and original typed returns.
+-
+-The literature workload implements ONE `LiteratureProcessAdapter(services)` with
+-mechanics_id `literature_source`. Its methods follow C12; its as_record pins its
+-actual code. Per-definition configuration is exactly:
+-
+-```text
+-{reference_fields:{JSON-pointer:namespace-string|null},
+- page_pointer:null|""|"/page",
+- selector:"none"|"window"|"table_or_window"|"spans",
+- within_parent_source:bool, fixed_sheet:bool,
+- context_source_fields:[JSON-pointer],
+- outcome_tools:[exact operation name], outcome_page_size:positive integer}
+-```
+-
+-Pointers address explicit object fields; reference_fields/context_source_fields
+-values are actual reference arrays. A page_pointer selects the input itself or
+-its page object. Custody roots are that page's scalar source_ref when page_pointer
+-is non-null, plus the arrays in context_source_fields, deduplicated. The adapter
+-validates actual source/artifact/representation,
+-scope, source ancestry and selected sheet, returns actual custody/outcomes and
+-executes selected existing source operations. It must not dispatch process logic
+-by role names. Parent source policy comes from parent_definition during prepare.
+-within_parent_source=true requires an actual parent definition with a valid
+-bound page policy; missing parent/page information is a specific failure, not
+-permission to skip containment. Root preparation uses parent=None as above.
+-Selectors are initial context: they do not execute a read, prescribe spans or
+-require full coverage. Rereading, new spans and valid derivative sources remain
+-possible; a selected XLSX sheet stays fixed. Credit/report use the common ports.
+-
+-Literature data retains all seven current questions, exact C10 input schemas and
+-the intentional literature -> strategy -> search -> page -> table/ordered/targeted
+-relationships. Process guidance, operation lists and PubMed/estimate restrictions
+-move to data. Common machinery and source adapters cannot retain a second role
+-table controlling these decisions. New processes using these mechanics require
+-data, not a new Python episode implementation.
+-
+-Candidate coding ownership for the interrupted batch (all three jobs stopped;
+-do not dispatch or resume from this table):
+-
+-| Job | Owned production files | Owned checks | Exact consumed/produced handoff |
+-| --- | --- | --- | --- |
+-| LIB-D | new process_records.py, process_library.py | new test_process_library.py | C11/C13 records and library ports -> pinned definitions/headers/references/discovery; fixture source libraries suffice |
+-| LIB-M | new process_mechanics.py, library_episodes.py | new test_library_episodes.py | C11 library protocol and C12 services/mechanics -> complete C7 mother, C13 prepared fill, limited catalogs and original form validation; library/mechanics fixtures suffice |
+-| I-LIB | new literature_process_adapter.py; new processes/literature/*.json (seven definitions) | new test_literature_process_adapter.py, test_literature_process_construction.py | Exact C11 definitions and C12 mechanics -> source-custody adapter plus all seven data-defined literature processes; use protocol fixtures until shared modules land |
+-| Coordinator | runtime.py, episode_composition.py, independent_execution.py; narrow shared exports/services only if required; processes/index.json and processes/scientific/*.json | new test_process_construction_runtime.py; extend exact existing reconstruction consumers as needed | Actual D/M/source outputs -> original root/child fill, narrowed decision schema, deterministic return/recovery and worker reconstruction |
+-
+-The first three jobs can code concurrently: their depended-on outputs are exact
+-records/ports above, so contract fixtures do not require another implementation
+-to finish first. Source nesting creates no development barrier. Integration checks
+-wait for the real modules; available slots limit simultaneous jobs, not the episode
+-hierarchy. All boundary-analysis contexts are retired; coding jobs start with fresh
+-bounded contexts. No owner changes another's files or dispatches more jobs.
+-
+-Required connected evidence includes: a new data-only process using the same
+-template/mechanics; actual limited context and schema; earlier child outcomes
+-changing later scripted choices; original typed child information reaching a later
+-parent choice; interruption before/after commission with unchanged fill; and real
+-worker reconstruction from the frozen library after source-library edits. Missing
+-or tampered process bytes fail before provider entry. Engineering fixtures are not
+-configured-model scientific evidence. No scientific model or investigation_009
+-execution belongs to these module jobs.
+-
+-Subsequent required work remains visible: migrate resource and recursive-monitor
+-process definitions to this same mother boundary; connect existing M1/M2 received
+-resource credit and E2 local return evidence; finish after-action estimation,
+-numerical pending/wait models and native-job events; bind the real caller profile;
+-then demonstrate configured-model ybhP science and verify the complete goal. These
+-are not declared complete, blocked behind literature, or reassigned by this batch.
++### Withdrawn C11–C14 factory specification
++
++The complete-episode factory, whole-role library definitions, extra filled-request
++format and literature/monitoring/resource migration instructions previously
++inserted here were wrong. Their specification is removed. They are not a future
++implementation contract. LIB uses the existing scoped scientific construction
++path and three slots described above; I/G/H remain independent work packages.
+ 
+ ## Coding work packages and file ownership
+ 
+ The A-I names below are retained from the earlier coding plan. Their contracts
+ remain useful for existing machinery. LIB is an explicit additional work item
+-from the user's design clarification, separate from I. Its bounded current
+-dispatch ports and file ownership are C11-C14 above; this historical table alone
+-is not the construction dispatch plan.
++from the user's design clarification, separate from I. It uses the existing
++scoped bioinformatics construction path; the wrong C11–C14 factory specification
++is withdrawn. This historical table alone is not a new
++implementation assignment.
+ 
+ Each owner must read the complete affected implementation paths before editing.
+ New modules must have a consumer integration test; standalone helpers or role
+ metadata do not establish an implemented episode path. The following ownership
+-is a task definition, not an assignment to any existing agent.
++is a task definition, not an assignment to an existing implementation worker.
+ 
+ | Package | Exact implementation scope | Owned files | Required producer/consumer contracts |
+ | --- | --- | --- | --- |
+@@ -1111,7 +764,7 @@
+ | G: monitoring episodes | Implement episode/job progress providers, selected recursive monitoring and requested controlled progress facts. | new `episode_monitoring.py`, `tests/test_recursive_monitoring.py` | C7 binding consumes C2/C8 providers; returns C3 through C4 |
+ | H: resource episodes | Implement launch and resource-specific iterative children using actual capabilities; adapt existing job operations and result acquisition without copying their execution logic. | new `resource_episodes.py`, `tests/test_resource_episode_branches.py`; coordinated changes to `homology_episodes.py` | C7 binding consumes/produces C9; commissioning through C1 |
+ | I: literature episodes | Implement substantive iterative literature/search/page/reading choices with actual source tools and typed scientific returns. Add source navigation only where required by the selected operations. | new `literature_episodes.py`, optional `source_navigation.py`, `tests/test_literature_episode_branches.py` | C7 binding consumes C10 and existing custody/tool contracts; C3/C4 returns |
+-| LIB: problem-solving process library and mother-template construction | Define retrievable process information and use it to construct a child's bounded iterative decision problem through the common template. Connect discovery, invocation, actual alternatives, original parent return and worker reconstruction. Preserve the intentional literature relationships; do not substitute tool manuals or one handwritten episode implementation per process. | C11-C14 below define the bounded library/template/source-adapter batch and exclusive files. Resource/monitor migration and production composition remain explicit subsequent consumers. | Selected C11 process + parent invocation + actual caller capabilities -> C13 fill and ordinary episode; C14 retains that fill through C1/C3/C4 and reconstruction. |
++| LIB: problem-solving process library and mother-template construction | Fill the existing scoped bioinformatics episode with annotation-credit-axis information, a thought pattern and multiple retrieved actual tools. Curate components and relate the first slot to scoring axes without changing scores by assertion. Preserve the original job/scope/form, fixed selection, revision-child provenance and independent histories. | Existing scientific_process_library.py, scientific_process_episodes.py, scientific_tool_library.py and their connected construction/reconstruction consumers; exact current interfaces in TOOL_KNOWLEDGE.md. No literature/monitor/resource migration belongs here. | Selected component references + retrieved actual tool names + original parent invocation -> existing scientific_process fill; unchanged C1/C3/C4 and worker reconstruction preserve it. |
+ 
+ Shared changes are not silently made by a second owner. C performs its Journal
+ extraction before F edits that section, or supplies a patch for F to apply.
+@@ -1547,8 +1200,8 @@
+ F4's integration tests consume the real F1/F2/C4/E/F3 modules. Before those land,
+ it can code against the exact contracts with fixtures; only the assembled checks
+ wait for those implementations. The coordinator owns the binding adapters and
+-archive reconstruction described in steps 3-4, so no independent agent has to
+-guess either shape.
++archive reconstruction described in steps 3-4, so independent implementation
++workloads do not have to guess either shape.
+ 
+ ### Remaining specialist and estimation handoffs
+ 
+@@ -1826,7 +1479,7 @@
+ IDs, and exercise the existing C7 bound_role_credit consumer.
+ 
+ All G2/G3/J workloads are ready against these contracts and own disjoint files.
+-With three agent slots plus the coordinator they can code simultaneously. The
++With three coding-worker slots plus the coordinator they can code simultaneously. The
+ coordinator owns progress_records.py, services/protocol forwarding, runtime
+ dependency publication and later saved-caller composition. None is a scientific
+ or parent-child runtime prerequisite for the other's coding.
+@@ -1867,7 +1520,7 @@
+ original pinned policy factory and passes the same setup callable/definition;
+ it never launches a new scientific root.
+ 
+-K's fresh agent owns only case_execution.py and new
++K's fresh coding worker owns only case_execution.py and new
+ tests/test_case_specialist_setup.py. Append optional PolicyBindings fields
+ episode_service_factory and episode_service_binding, defaulting to None; validate
+ callability/finite nonempty definition and paired presence. _load_policy records
+@@ -1891,14 +1544,14 @@
+ 
+ ## Historical orchestration and implementation checkpoints
+ 
+-The queues below record earlier dispatch decisions. They are not authorization
+-to resume coding before the process-construction plan above is specified.
+-
+-All previous agents are retired; fresh jobs receive this document, the original
++The queues below record earlier development dispatch decisions. They are not
++current assignments or authorization to revive withdrawn factory/migration work.
++
++All previous implementation contexts are retired; fresh jobs receive this document, the original
+ specification, applicable instructions and their bounded package only. They do
+ not inherit the exploratory task assignments.
+ 
+-With four total slots, use one coordinator and up to three coding agents. The
++With four total slots, use one coordinator and up to three coding workers. The
+ ready queue contains all A-I packages once their boundary contract is settled;
+ it is not partitioned into architectural layers. Select initial work using:
+ 
+@@ -1923,9 +1576,9 @@
+ contract compatibility. When a slot opens, G's committed-notification boundary
+ and H's unfinished real-local-job consumer checks are independently ready; they
+ are not blocked by F1/F2/F3. With four total slots, the limit is three concurrent
+-coding agents plus the coordinator. There is no architectural wave barrier.
+-
+-An agent handoff must contain: changed files, exact public signatures and record
++coding workers plus the coordinator. There is no architectural wave barrier.
++
++An implementation handoff must contain: changed files, exact public signatures and record
+ versions, consumer registration/patch, commands actually run, fixture versus
+ real execution distinction, and unresolved interface issues. If the specified
+ contract is insufficient, report the concrete missing field or semantic
+@@ -1939,7 +1592,7 @@
+ H local resource handoff/acquisition, and E wait-input projection. At most three
+ ran concurrently alongside the coordinator. Reusing freed capacity for G/H/E was
+ a slot-allocation choice, not a dependency on F1/F2/F3. No former exploratory
+-agent was resumed with a new coding workload.
++context was resumed with a new coding workload.
+ 
+ F1/F2 are ready for F4's detached source/return integration; their module tests do
+ not establish that consumer. F3 is connected to the common application and worker

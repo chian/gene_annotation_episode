@@ -1,0 +1,73 @@
+{
+  "version": "received_job_timing_information_verification_v1",
+  "captured_at_utc": "2026-10-21T09:09:46.443336+00:00",
+  "source_sha256": {
+    "gene_annotation_episode/domain.py": "c8abee03e0470bd9461f4d3cde543d91cf6ea88f4ad31c2138422c9ba7f72092",
+    "gene_annotation_episode/state.py": "817312e07961ee6fe54c6000ac2c18f4c3f8305ec7dd4a8d746740a8f2443116",
+    "gene_annotation_episode/tools.py": "5b48be64e05bb7f43116cea696e59007939edb4340f130ed5e992c85743b5a75",
+    "gene_annotation_episode/native_timing_information.py": "0a4493abb9d215d3de477397ee623894c1e77795e26c5ff2b7e82ad28f10496a",
+    "gene_annotation_episode/homology_episodes.py": "38227bccbe85e6d79ffc5e38c01bd6a4e7d880a5dcf0dee2d87470f803a44226",
+    "gene_annotation_episode/runtime.py": "c02550aabb89b41787dd8147d352684b6e3a66b83a393345dac86d7074080082",
+    "gene_annotation_episode/case_execution.py": "b3d5bc216fd8ed575d2d3ce1e6eddef83ed0861cbd014080ddffb6b61e3b244e",
+    "tests/test_received_job_timing_information.py": "1b88897b43695789a313e39e9a9773d4c3c264e880f448346567ce82ff947a25"
+  },
+  "old_pin_regression": {
+    "working_directory": "cases/gene_001/runs/investigation_007",
+    "pythonpath": "code-snapshot",
+    "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=\"$PWD/code-snapshot\" /home/chia/repos/gene_annotation_episode/.venv/bin/python -m pytest -q /home/chia/repos/gene_annotation_episode/tests/test_received_job_timing_information.py --tb=short",
+    "failed": 1,
+    "seconds": 7.49,
+    "actual_failure": "parent monitoring_information_credit 0 instead of fixture unit 7"
+  },
+  "verification": [
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_received_job_timing_information.py tests/test_native_timing_information_runtime.py tests/test_spreadsheet_timing_learning.py tests/test_checked_status_monitoring.py tests/test_case_execution.py tests/test_episode_receipts.py tests/test_runtime_history.py --tb=short",
+      "passed": 56,
+      "seconds": 270.57,
+      "scope": "before_final_two_received_timing_redelivery_tests"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_received_job_timing_information.py --tb=short",
+      "passed": 7,
+      "seconds": 52.09,
+      "scope": "current_received_timing_tests_including_redelivery_and_interruption"
+    }
+  ],
+  "counts_overlap_not_additive": true,
+  "configured_models_launched_by_tests": false,
+  "covered": [
+    "requested_checked_status_sample_and_finding_array_to_parent_physical_timing_receipt",
+    "one_parent_timing_contribution_for_repeated_physical_duration",
+    "child_credit_not_copied",
+    "omitted_duration_does_not_cross_with_child_score",
+    "missing_provenance_feedback_preserves_valid_form",
+    "unavailable_shared_history_does_not_gate_received_timing",
+    "same_complete_resume_actions_observations_statistics",
+    "explicit_form_redelivery_no_extra_observation_or_timing_credit",
+    "interrupted_parent_recovery_before_redelivery"
+  ],
+  "live_or_historical_model_run_repriced": false,
+  "not_established": [
+    "configured_model_monitor_yield_while_native_job_running",
+    "configured_model_timed_recommission"
+  ],
+  "credit_units_or_controller_parameters_changed": false,
+  "actual_configured_model_verification": {
+    "run_id": "run_948c9e402c444ec0923ff7034db2cc50",
+    "verified_at_utc": "2026-10-21T09:21:31.701858+00:00",
+    "parent_commission_decision_index": 2,
+    "parent_next_call_index": 3,
+    "child_episode_id": "episode_853dc98054bbb2835e5570f84b82e272df1effaef42256d8470fa2f29f753dc3",
+    "native_execution_ref": "native_execution_1d35422a8bf917f451b8dd46",
+    "physical_attempt_sha256": "146bd3fc641175478860c043b97d569be3b465d9afa65e5cb038b3dfe00da6f9",
+    "elapsed_seconds": 1.788559488,
+    "equal_form_receipt_and_shared_statistic": true,
+    "parent_monitoring_information_credit": 1,
+    "parent_scientific_progress": 15,
+    "parent_completed_action_observations_through_return": 2,
+    "receipt_source_kind": "child_form",
+    "receipt_source_index": 2,
+    "form_projection_issues": [],
+    "admitted_form_sha256": "8b11fb0e17dcb01d31ba55749bf6a5a80c5b6a67de0900f9783210fef2a95d3d"
+  }
+}

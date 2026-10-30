@@ -1,0 +1,485 @@
+Umeå University
+
+
+
+This is a published version of a paper published in Cell Reports.
+
+
+Citation for the published paper:
+Fuhrmann, J., Mierzwa, B., Trentini, D., Spiess, S., Lehner, A. et al. (2013)
+"Structural Basis for Recognizing Phosphoarginine and Evolving Residue-Specific
+Protein Phosphatases in Gram-Positive Bacteria"
+Cell Reports, 3(6): 1832-1839
+
+
+Access to the published version may require subscription.
+
+
+Permanent link to this version:
+http://urn.kb.se/resolve?urn=urn:nbn:se:umu:diva-79439
+
+
+
+
+http://umu.diva-portal.org
+                                                                                                                         Cell Reports
+
+                                                                                                                    Report
+
+Structural Basis for Recognizing Phosphoarginine
+and Evolving Residue-Specific Protein Phosphatases
+in Gram-Positive Bacteria
+Jakob Fuhrmann,1,4 Beata Mierzwa,2 Débora B. Trentini,1 Silvia Spiess,3 Anita Lehner,1 Emmanuelle Charpentier,3
+and Tim Clausen1,*
+1Research Institute of Molecular Pathology (IMP), A-1030 Vienna, Austria
+2Institute of Molecular Biotechnology (IMBA), A-1030 Vienna, Austria
+3The Laboratory for Molecular Infection Medicine Sweden, Umeå University, 90187 Umeå, Sweden
+4Present address: Department of Chemistry, The Scripps Research Institute, Jupiter, FL 33458, USA
+
+*Correspondence: clausen@imp.univie.ac.at
+ http://dx.doi.org/10.1016/j.celrep.2013.05.023
+
+
+
+
+SUMMARY                                                                of specific client proteins. Based on their sequence, structure,
+                                                                       and function, protein phosphatases are grouped into three
+Many cellular pathways are regulated by the com-                       main classes. Phosphatases acting on phospho-serine/threo-
+peting activity of protein kinases and phosphatases.                   nine (pSer, pThr) comprise the PPP (phospho protein phospha-
+The recent identification of arginine phosphorylation                  tase) and PPM (Mg2+/Mn2+-dependent protein phosphatase)
+as a protein modification in bacteria prompted us to                   families, whereas enzymes acting on phospho-tyrosine (pTyr)
+analyze the molecular basis of targeting phospho-                      constitute the protein tyrosine phosphatase (PTP) superfamily
+                                                                       (Barford et al., 1998; Stoker, 2005). In addition, specialized pro-
+arginine. In this work, we characterize an annotated
+                                                                       tein phosphatases act on phospho-aspartate, phospho-histi-
+tyrosine phosphatase, YwlE, that counteracts the                       dine, and phospho-cysteine residues (Klumpp and Krieglstein,
+protein arginine kinase McsB. Strikingly, structural                   2009; Perego et al., 1994; Rigden, 2008; Sun et al., 2012). Given
+studies of YwlE reaction intermediates provide a                       the excess of phosphorylated proteins, for example, about 50%
+direct view on a captured arginine residue. Together                   of all eukaryotic proteins are phosphorylated once in their life-
+with biochemical data, the crystal structures depict                   time and about 30% of all human proteins are phosphorylated
+the evolution of a highly specific phospho-arginine                    at any given time (Olsen et al., 2006), it is evident that the activ-
+phosphatase, with the use of a size-and-polarity filter                ities of protein kinases and phosphatases have to be carefully
+for distinguishing phosphorylated arginine from                        balanced to achieve the physiologically relevant phosphorylation
+other phosphorylated side chains. To confirm the                       level of targeted substrates.
+proposed mechanism, we performed bioinformatic                            Recently, an additional type of protein kinase was identified
+                                                                       that targets arginine (Fuhrmann et al., 2009). This kinase,
+searches for phosphatases, employing a similar
+                                                                       McsB, phosphorylates arginine residues in the winged helix-
+selectivity filter, and identified a protein in Drosophila             turn-helix domain of the transcriptional repressor CtsR, thereby
+melanogaster exhibiting robust arginine phospha-                       preventing its binding to DNA and consequently inducing the
+tase activity. In sum, our findings uncover the                        expression of repressed genes. In vivo, its activity is counter-
+molecular framework for specific targeting of phos-                    acted by an annotated tyrosine phosphatase, YwlE (Elsholz
+pho-arginine and suggest that protein arginine (de)                    et al., 2012). However, the precise molecular mechanism of
+phosphorylation may be relevant in eukaryotes.                         this antagonistic effect is currently unknown. In contrast to the
+                                                                       kinase, which is highly specific in modifying arginine residues
+                                                                       (Fuhrmann et al., 2009), the substrate specificity of the YwlE
+INTRODUCTION                                                           phosphatase is controversially discussed. Whereas YwlE was
+                                                                       initially described as having tyrosine phosphatase activity (Kirst-
+Protein phosphorylation is a reversible posttranslational modifi-      ein et al., 2005; Musumeci et al., 2005), a more recent analysis
+cation that is of paramount importance in regulating a variety         suggests that YwlE functions as an arginine phosphatase in vivo
+of cellular processes including responses to environmental             (Elsholz et al., 2012). Based on its amino acid sequence, YwlE
+signals, metabolism, growth, and differentiation (Hunter, 1995).       belongs to the low-molecular-weight protein tyrosine phospha-
+Protein phosphorylation is carried out by hundreds of different        tase (LMW-PTP) family that has a conserved set of active-site
+protein kinases that transfer the g-phosphate from ATP to spe-         residues (Zhang, 2003). For example, all LMW-PTPs have a
+cific amino acids on proteins, predominantly to the side chains        specifically shaped binding pocket to distinguish pTyr from other
+of serine, threonine, and tyrosine residues (Hanks and Hunter,         phosphorylated residues. Given this conserved architecture, it is
+1995; Pereira et al., 2011). An arsenal of protein phosphatases        surprising that an annotated LMW-PTP appears to target a
+counteracts this reaction by catalyzing the dephosphorylation          different phospho-residue. To clarify this point, we performed a
+
+
+1832 Cell Reports 3, 1832–1839, June 27, 2013 ª2013 The Authors
+Figure 1. Generation of a pArg-Specific Antibody
+(A) Schematic presentation of pArg antibody generation involving the enzymatic production of arginine phosphorylated peptide (step 1), selection of antigen-
+specific binders by phage display (step 2), and exclusion of cross-reactive binders by counterselection toward pTyr and nonphosphorylated peptides (step 3).
+(B) Dot-blot analysis highlighting the high specificity of the generated antibody in targeting the pArg-containing McsB protein (dilution of different proteins is
+indicated). The E122A mutant of McsB, which is catalytically inactive and thus cannot be autophosphorylated (Fuhrmann et al., 2009), was used as the non-
+phosphorylated control sample. The blot in the right panel was probed with a McsB-specific antibody yielding signals in both phosphorylated (McsB pArg) and
+unphosphorylated (McsB E122A) samples.
+
+
+
+structural and biochemical analysis of YwlE from Bacillus subti-                  labile modification (Sickmann and Meyer, 2001). Presumably,
+lis. Using distinct phospho-peptide substrates, we show that                      it is this inherent lability of P-N linkages that caused prob-
+YwlE is the founding member of a phosphatase family acting                        lems in producing antibodies against pArg by classical
+specifically on phosphorylated arginine residues. Crystal struc-                  immunization methods that rely on antigen internalization and
+tures of YwlE reaction intermediates reveal molecular features                    processing in endosomal/lysosomal compartments under
+that are essential to distinguish phospho-arginine (pArg) from                    acidic pH conditions. Therefore, we switched to a defined
+other phospho-residues and ultimately led to the identification                   in vitro methodology and applied, together with Morphosys
+of a putative eukaryotic protein arginine phosphatase.                            AG, a specific phage-display approach at neutral pH (Prassler
+                                                                                  et al., 2011) (Figure 1A). For antibody screening, we used the
+RESULTS                                                                           branched phospho-peptide antigen (KIVQSKpRGGGGYIK)2KC
+                                                                                  featuring two pArg residues. To remove cross-reactive anti-
+Generation of pArg-Specific Antibodies by an In Vitro                             bodies, resulting phages recognizing the pArg peptide were
+Phage-Display Approach                                                            further counterselected against the corresponding nonphos-
+To directly monitor the phosphorylation and dephosphorylation                     phorylated and pTyr-containing peptides (Figure 1A). The
+of arginine residues in bacterial cell lysates, we generated a                    candidate pArg-specific binders were sequenced and subcl-
+pArg-specific antibody. Although we could produce pArg-con-                       oned into human F(ab)2 antibody format. These antibodies were
+taining proteins and peptides in large amounts, immunization                      further selected by comparing their sensitivity of pArg recog-
+trials carried out in various animal systems failed to produce a                  nition employing recombinant autophosphorylated McsB.
+selective antibody. In contrast to O-linked phosphates such as                    Based on these data, we selected a single antibody for further
+pSer, pThr, and pTyr, free pArg has been described as an acid                     characterizations. Ultimately, the specificity of the generated
+
+
+                                                                                 Cell Reports 3, 1832–1839, June 27, 2013 ª2013 The Authors 1833
+                                                                                            Figure 2. Characterization of the Protein
+                                                                                            Arginine Phosphatase YwlE
+                                                                                            (A) ELISA-based screen monitoring the capabil-
+                                                                                            ities of different B. subtilis cell extracts to
+                                                                                            dephosphorylate a pArg containing substrate
+                                                                                            (McsB-P). The illustrated data are from three in-
+                                                                                            dependent experiments performed in duplicates
+                                                                                            using wild-type (WT) and different phosphatase-
+                                                                                            deficient B. subtilis strains (disrupted genes
+                                                                                            indicated; PI, phosphatase inhibitors; Pase,
+                                                                                            phosphatase). Data are presented as mean ± SE.
+                                                                                            (B) Autoradiogram of an SDS-PAGE gel of 32P-
+                                                                                            labeled CtsR incubated with the recombinant
+                                                                                            phosphatases YwlE, YfkJ, and YwqE from
+                                                                                            B. subtilis (control, no phosphatase added).
+                                                                                            (C) EMSA analysis monitoring the ability of CtsR
+                                                                                            to bind clpC promoter DNA. After preincubation
+                                                                                            with the protein arginine kinase McsB, various
+                                                                                            B. subtilis phosphatases were tested for their
+                                                                                            ability to restore the DNA-binding function of CtsR.
+                                                                                            (D) Dephosphorylation of KpXGGGGYIKIIKV
+                                                                                            phospho-peptides. The pArg containing peptide
+                                                                                            was incubated with 5 nM YwlE, whereas all other
+                                                                                            phospho-peptides were treated with 20 mM YwlE.
+
+
+recombinant pArg antibody was tested toward distinct phospho-        dephosphorylating McsB-P (Figure 2A), whereas cell lysates
+proteins by dot-blot assays. For this purpose, pArg-containing       of the other phosphatase-deficient strains could not promote
+McsB, pTyr BSA, pSer BSA, pThr BSA, and nonphosphory-                pArg dephosphorylation. Accordingly, YwlE should be the only
+lated McsB were spotted onto a nitrocellulose membrane and           active pArg phosphatase present in B. subtilis. To characterize
+incubated with the F(ab’)2 anti-pArg antibody. The resulting         this pArg phosphatase activity in vitro, we cloned and purified
+signals clearly indicated that the generated F(ab’)2 antibody is     the three annotated B. subtilis tyrosine phosphatases YfkJ,
+highly selective for pArg and does not cross-react with nonphos-     YwqE, and YwlE and analyzed their ability to target the arginine
+phorylated McsB or pTyr, pSer, or pThr proteins (Figure 1B). In      phosphorylated CtsR (CtsR-P). Whereas recombinant YwlE effi-
+sum, these findings demonstrate that the described phage-            ciently removed the 32P-labeled phosphate from CtsR-P within
+display methodology can be used to generate specific pArg            short time, CtsR-P was entirely resistant to dephosphorylation
+antibodies in vitro. Given the chemical instability of the           by YfkJ or YwqE (Figure 2B). Consistently, electrophoretic
+phospho-mark, it will be interesting to test whether this            mobility shift assay (EMSA) studies showed that only YwlE can
+approach may be also applicable to raise antibodies against          restore the DNA-binding ability of the repressor (Figure 2C) by
+other acid labile posttranslational protein modifications such       reversing the McsB-mediated phosphorylation. Because YwlE
+as pHis.                                                             was previously described as a tyrosine phosphatase, a classifi-
+                                                                     cation mainly derived from sequence homology and the
+Characterization of YwlE as a Highly Specific pArg                   enzyme’s activity against the general phosphatase substrate
+Phosphatase                                                          pNPP (Mijakovic et al., 2005), we next studied the activity against
+Given the varying characterizations of McsB and YwlE as tyro-        various peptide substrates containing different phospho-
+sine and/or arginine directed enzymes (Elsholz et al., 2012; Fuhr-   residues embedded within the same sequence context
+mann et al., 2009; Hahn et al., 2009; Kirstein et al., 2005), we     (KpXGGGGYIKIIKV). Whereas the KpRGGGGYIKIIKV peptide
+wanted to test whether the reported in vivo activity of dephos-      was rapidly dephosphorylated, even at very low (5 nM) enzyme
+phorylating pArg-containing proteins is directly mediated by         concentration, YwlE exhibited almost no activity against pSer,
+YwlE or a ‘‘side’’ reaction catalyzed by other B. subtilis protein   pThr, or pTyr peptides (Figure 2D). To rule out the possibility
+phosphatases as well. Upon developing a pArg-specific anti-          that unrelated phosphatases could have a similarly unpredicted
+body, we carried out ELISA screens to monitor the endogenous         arginine phosphatase activity, we tested different types of tyro-
+pArg phosphatase activity of various B. subtilis cell extracts.      sine, serine/threonine, and dual specificity phosphatases from
+Using the autophosphorylated form of the protein arginine kinase     different organisms in a pArg phosphatase assay (data not
+McsB (McsB-P) as model substrate, we observed that a cell            shown). Except for the promiscuous alkaline phosphatase,
+extract prepared from the B. subtilis wild-type strain had sub-      which showed about 15% of the YwlE activity, none of the
+stantial pArg dephosphorylation activity, which was blocked by       enzymes was able to efficiently remove the phosphate group
+phosphatase inhibitors (Figure 2A). To pinpoint the responsible      from the pArg peptide. Therefore, the dephosphorylation of
+enzyme(s), we analyzed the pArg phosphatase activity of 16           pArg is not a general property or side reaction of other protein
+B. subtilis mutant strains carrying chromosomal deletions of         phosphatases. We conclude that YwlE is a highly specific pro-
+genes of all annotated protein phosphatases. These ELISA             tein arginine phosphatase (PAP) counteracting the McsB
+analyses revealed that the strain lacking YwlE was impaired in       protein arginine kinase.
+
+
+1834 Cell Reports 3, 1832–1839, June 27, 2013 ª2013 The Authors
+                                                                                                   Figure 3. Active-Site Architecture of the
+                                                                                                   YwlE Arginine Phosphatase
+                                                                                                   (A) Ribbon representation of YwlE with labeled
+                                                                                                   secondary structural elements and highlighted
+                                                                                                   P-loop (blue).
+                                                                                                   (B) Molecular surface of YwlE colored by its elec-
+                                                                                                   trostatic potential. The C-terminal segment of a
+                                                                                                   crystallographic neighbor is shown as a ribbon
+                                                                                                   model (yellow) from where Arg149* protrudes into
+                                                                                                   the active-site crevice (shown in closeup view in
+                                                                                                   right panel).
+                                                                                                   (C) Mutational analysis of residues interacting with
+                                                                                                   Arg149*. The panel represents the specific activity
+                                                                                                   of distinct active-site mutants toward the pArg
+                                                                                                   peptide (blue bars), whereas the right part depicts
+                                                                                                   the specific activity against the corresponding
+                                                                                                   pTyr peptide (gray bars). Additionally, an arrow
+                                                                                                   above each bar highlights the relative increase or
+                                                                                                   decrease in specific activity compared to the wild-
+                                                                                                   type enzyme (na, no activity detectable).
+                                                                                                   See also Figure S1.
+
+
+
+Crystal Structure of YwlE Capturing an Arginine Residue                    Phe120 on substrate specificity, we assayed the phosphatase
+Despite limited sequence similarity, all PTP enzymes share a               activity of selected mutant proteins using pArg- and pTyr-
+seven residue CXXXXXR active-site loop region that comprises               containing peptides. Whereas mutating residues Asp118 and
+a conserved cysteine and arginine residue. This P-loop is critical         Phe120 almost completely abolished phosphatase activity,
+for binding the phosphate group of the incoming substrate and              mutating residue Thr11 had opposing effects on the two sub-
+subsequently, to form a transient enzyme-substrate phospho-                strates. Replacing Thr11 of YwlE by isoleucine resulted in signif-
+thioester adduct (Denu and Dixon, 1998). Unfortunately, neither            icant reduction of pArg phosphatase activity while markedly
+detailed sequence analyses of PTP proteins nor the YwlE NMR                increasing the activity toward the pTyr substrate (Figure 3C).
+structure (Xu et al., 2006), in which the active site is largely disor-    The same effect was observed for the T11V mutation converting
+dered, provides insight how to distinguish between pArg and                the YwlE arginine phosphatase into a better tyrosine phospha-
+pTyr substrates. To address this point, we determined the                  tase. Accordingly, substitution of a single hydroxyl group (threo-
+high-resolution crystal structure of YwlE from B. subtilis in its          nine) by a methyl group (valine) or ethyl group (isoleucine) led to a
+phosphate bound form (Table S1). Overall, YwlE adopts the                  drastic change in the substrate specificity of YwlE.
+typical LMW-PTP fold consisting of four b strands forming a cen-
+tral, highly twisted parallel b sheet that is flanked by helices H1,       Structure of a Phospho-Enzyme Intermediate Reveals
+H2, H5, and H6 on one side, and H3 and H4 on the other side                Details of pArg Recognition and Hydrolysis
+(Figure 3A). The P-loop encompassing the C7XXXXXR13 motif                  The crystal structure of phosphate-bound YwlE provides a
+connects strand S1 and a helix H1 and constitutes the base of              detailed view on the enzyme-product complex. To determine
+the active-site pocket. Here, residues Cys7 and Asp118 are                 structural data of a distinct reaction intermediate illustrating
+properly arranged to dephosphorylate the incoming substrate                how Thr11 directly interacts with the substrate’s guanidinium
+in a concerted reaction (Zhang, 2003). The phosphate-binding               group, we incubated several catalytically inactive YwlE mutants
+site is formed akin LMW-PTPs by the side chain of Arg13, the               with the phosphorylated form of free arginine. By using the C7S
+backbone amides of the P-loop and the positive end of the mac-             mutant, we succeeded to obtain a complex, in which the chemi-
+rodipole of helix H1, which together generate a highly positively          cally labile phosphate group of pArg was transferred to the
+charged pocket at the bottom of the substrate-binding cleft (Fig-          introduced Ser7. The electron density map of the C7S mutant un-
+ures 3B and S1). Closer inspection of the active site revealed an          equivocally reveals the formation of the covalent phospho-Ser7
+additional electron density that could be unambiguously attrib-            adduct indicating that the crystallized mutant mimics the phos-
+uted to an arginine side chain that protrudes from a neighboring           pho-enzyme intermediate of the dephosphorylation reaction (Fig-
+YwlE molecule in the crystal lattice (Arg149*), thus providing the         ure 4A). Interestingly, in the crystal structure of phospho-Ser7
+unbiased view on the preferred YwlE ligand (Figure 3B). Remark-            YwlE, Arg149* moves 1.5 Å deeper into the substrate binding
+ably, the loop segment harboring Arg149* adopts a similarly                pocket such that its terminal nitrogens can form bidentate
+kinked conformation as the peptide ligand in the PTP1B phos-               hydrogen bonds with the hydroxyl group of Thr11 and the
+pho-substrate complex (Jia et al., 1995; Sarmiento et al., 2000)           carboxyl group of Asp118 (Figure 4A). Oriented by these resi-
+(Figure S1) implying that the observed crystal contact indeed              dues, the angle formed by the h2 nitrogen atom of Arg149*, the
+reflects the interaction with a potential ligand. The substrate-           phosphorus of the phosphate group and the hydroxyl oxygen of
+mimicking Arg149* is sandwiched between Thr11, Asp118,                     Ser7 is approximately 180 and thus consistent with a SN2 nucle-
+and Phe120 with its guanidinium group hydrogen bonding to                  ophilic substitution reaction, as outlined in Figure 4B. Accord-
+Asp118 (Figure 3B). To test the impact of Thr11, Asp118, and               ingly, the C7S structure in complex with Arg149* highlights the
+
+
+                                                                          Cell Reports 3, 1832–1839, June 27, 2013 ª2013 The Authors 1835
+Figure 4. Structural Basis for Specifically Binding and Hydrolyzing pArg
+(A) Active-site architecture of YwlE C7S mutant (left) and YwlE WT (right) reflecting the phospho-enzyme reaction intermediate and the enzyme-product complex,
+respectively (corresponding reaction intermediates indicated by arrows). The bound phosphate and Arg149* are overlaid with the 2FoFc omit electron density
+maps (contoured at 1.5 s). The panel in the middle illustrates the superposition of the respective active sites.
+(B) Supposed reaction mechanism of YwlE highlighting residues involved in substrate binding and catalysis. The structure of the phospho-C7S reaction inter-
+mediate supports a catalytic mechanism involving two sequential inline nucleophilic substitutions (SN) at the phosphorus. The first SN reaction is mediated by the
+thiolate of Cys7 that attacks the phosphorus atom of the incoming substrate, the second by an active-site water molecule that displaces the Cys7 thiolate, thus
+triggering phosphate release. Arg13 is critical for the coordination of the phosphate group (red), whereas residues Asp118 and Thr11 are crucial for precisely
+orienting the guanidinium group (blue) of the pArg substrate protein.
+(C) Sequence alignment of the N-terminal segment of LMW-PTPs from various species. The PX5 residue of the conserved P loop is shaded in red.
+(D) Substrate specificity of various PX5 mutants. The bars represent relative phosphatase activities toward pArg (up) and pTyr (down) peptide substrates.
+(E) Activity of the putative Drosophila PAP. The bars represent the specific activity of CG31469 (blue) and its mutant version (CG31469 T11I, purple) toward
+pTyr, pArg, pSer, and pThr peptide substrates, respectively. The dephosphorylation activity was tested against the phospho-peptide ac-KpXGGGGYIKIIKV
+(pX denotes pTyr, pArg, pSer, or pThr).
+See also Figures S2 and S3.
+
+
+
+
+1836 Cell Reports 3, 1832–1839, June 27, 2013 ª2013 The Authors
+                                                                                               Figure 5. Determinants of Substrate Speci-
+                                                                                               ficity within the LMW-PTP Family
+                                                                                               Substrate selectivity against different phosphory-
+                                                                                               lated residues is achieved by a two-step mecha-
+                                                                                               nism. First, phosphatases have evolved binding
+                                                                                               pockets of characteristic depth that reflects the
+                                                                                               size of their cognate substrates. The active-site
+                                                                                               clefts of PTPs (HPTP, Zabell et al., 2006) and PAPs
+                                                                                               (YwlE) are much deeper than those of the dual-
+                                                                                               specificity phosphatases (TMDP, Kim et al., 2007),
+                                                                                               which can dephosphorylate both pTyr and pSer/
+                                                                                               pThr residues (Patterson et al., 2009). Second,
+                                                                                               PAPs appear to have installed a polarity filter,
+                                                                                               Thr11, to detect the presence of the hydrophilic
+                                                                                               guanidinium group of the pArg substrate. Con-
+                                                                                               versely, PTPs express an isoleucine as PX5 res-
+                                                                                               idue that contributes to the hydrophobic pocket
+                                                                                               accommodating the phenyl group of pTyr. See
+                                                                                               also Figure S3.
+
+
+
+
+                                                                                               (orienting substrate for catalysis) of the
+                                                                                               dephosphorylation reaction. In sum,
+                                                                                               these findings demonstrate that position
+importance of Thr11 in binding the side chain of the incoming sub-     PX5 of the CXXXX5XR P loop is critical to direct substrate selec-
+strate, thereby ensuring the precise alignment of the phosphory-       tivity either to pArg (PX5 = Thr) or pTyr (PX5 = Ile) and thus to
+lated guanidinium group for the dephosphorylation reaction.            determine, in combination with the depth of the active site, the
+                                                                       substrate specificity of the LMW-PTPs and most probably also
+Switching Phospho-Substrate Specificities by Mutating                  that of other protein phosphatase families (Figure 5).
+the PX5 Residue                                                           To test this prediction, we performed a bioinformatic search
+Though all LMW-PTPs exhibit a similar active-site architecture,        for potential eukaryotic PAPs containing a PX5 threonine
+in which residues lining the substrate-binding cleft are particu-      residue. In this search, we identified CG31469 of Drosophila
+larly well conserved, structural comparison of YwlE with the           melanogaster, a so-far-uncharacterized protein showing an
+related PtpA tyrosine phosphatase (Vega et al., 2011) reveals a        age-dependent expression pattern (Lai et al., 2007), as fitting
+remarkable difference regarding position 5 within the CXXXX5XR         candidate (Figure S3). We then analyzed the activity of the puta-
+P-loop (the PX5 residue; Thr11 in YwlE, Ile12 in PtpA) (Figure S2).    tive phosphatase against different phospho-peptides. Remark-
+As PX5 of YwlE directly interacts with the pArg substrate, teth-       ably, CG31469 exhibits substantial pArg phosphatase activity
+ering the guanidinium group adjacent to the phosphate group,           (Figure 4E), whereas it fails to dephosphorylate other substrates.
+the respective threonine-to-isoleucine exchange may have an            Moreover, the Thr / Ile mutant (T11I) showed a similar effect in
+immediate effect on substrate selection. Consistently, sequence        changing substrate specificity as observed for the bacterial PAP
+analyses evaluating the conservation of the PX5 residue revealed       YwlE (Figure 4E; Table S2). Compared to the wild-type enzyme,
+that LMW-PTPs either express a hydrophobic residue (most               the pArg phosphatase activity of CG31469 T11I was diminished
+often an isoleucine) or a threonine at this position (Figure 4C).      35-fold, whereas the activity against pTyr was improved 20-fold.
+Therefore, the PX5 residue may define the substrate specificity        Although we cannot exclude that this Drosophila phosphatase
+of the different phosphatase families. To test this idea, we gener-    also dephosphorylates nonprotein substrates, the robust activity
+ated Thr / Ile and Ile / Thr inversion mutants in PAP and              toward pArg-containing peptide implies that CG31469 acts
+PTP enzymes, respectively, and compared their activity with            in vivo as a bona fide PAP.
+the wild-type proteins. Similarly as observed for the B. subtilis
+YwlE (Figure 3C), a Thr / Ile inversion in the PAP from Geoba-         DISCUSSION
+cillus stearothermophilus strongly diminished the hydrolysis of
+pArg substrates and markedly increased the pTyr phosphatase            Owing to technical difficulties in working with phospho-arginine
+activity (Figure 4D). In analogy, the Ile / Thr exchange drasti-       peptides (Schmidt et al., 2013), little is known about their func-
+cally improved the pArg phosphatase activity of the PTPs YfkJ          tional and biological relevance as posttranslational protein
+or PtpA, while weakening their pTyr phosphatase activity. The          modifiers. So far, it has been shown that McsB is a bacterial pro-
+effect of the Thr 4 Ile mutations on substrate selection was           tein arginine kinase that exclusively targets arginine residues
+further confirmed by analyzing the dephosphorylation of the            (Fuhrmann et al., 2009). In addition, a recent phospho-arginine
+pTyr mimicking compound para-nitrophenylphosphate (pNPP;               proteome analysis revealed a number of arginine phosphory-
+Table S2). Derived kinetic parameters indicated that the PX5           lated proteins in B. subtilis (Elsholz et al., 2012). Together these
+mutation affects both the KM (substrate binding) and the kcat          data demonstrate that arginine phosphorylation represents an
+
+
+                                                                      Cell Reports 3, 1832–1839, June 27, 2013 ª2013 The Authors 1837
+important posttranslational protein modification in Gram-posi-                   CtsR protein. To obtain pArg-specific phages, primary hits were counterse-
+tive bacteria. In this work, we show that the McsB-mediated                      lected against closely related antigenic peptides that either were unphos-
+                                                                                 phorylated or contained a pTyr residue instead of the pArg. The pArg-specific
+phosphorylation can be directly reversed by YwlE, which is the
+                                                                                 binders were sequenced and subcloned into human F(ab)2 antibody format.
+founding member of the PAP phosphatase family targeting                          Subsequently, the generated antibodies were tested for pArg selectivity using
+pArg residues with high specificity. The close interplay of YwlE                 dot-blot analysis.
+and McsB is also evidenced by previous findings showing that
+YwlE influences the localization of McsB-regulated proteins in                   ELISA Screen for the Identification of Potential pArg Phosphatases
+the cell (Hahn et al., 2009), functions as ‘‘inhibitor’’ of McsB                 To pinpoint endogenous arginine phosphatases in B. subtilis, we developed a
+(Elsholz et al., 2011) and is involved in the bacterial stress                   specific ELISA screen. In this screen, the pArg-specific antibody was instru-
+response (Musumeci et al., 2005). Moreover, our study reveals                    mental to monitor the dephosphorylation of a pArg-containing protein
+                                                                                 (McsB-P) in the presence of various B. subtilis cell extracts. A secondary anti-
+that the dephosphorylation of pArg residues by YwlE is a clearly
+                                                                                 body (anti-human F(ab’)2-specific) conjugated with horseradish peroxidase was
+defined enzymatic activity that is not shared by other protein                   applied to quantify the bound pArg antibody, and thus the phospho-mark.
+phosphatases. To ensure substrate selectivity, YwlE encom-
+passes a dual selectivity filter comprising a deep active-site                   Characterization of the pArg Phosphatase Activity
+pocket that has a polar belt at its bottom. This construction is                 To monitor the effect of different phosphatases on arginine phosphorylated
+perfectly suited to specifically accommodate phospho-arginine                    CtsR (CtsR-P), different biochemical assays were carried out. First, phospha-
+residues while discriminating the small pSer/pThr phospho-res-                   tase activity was evaluated by monitoring the dephosphorylation of radioac-
+idues (filter: size) as well as the hydrophobic pTyr (filter: polarity)          tively (g-32P) labeled CtsR-P. Second, the counteracting effect of various
+                                                                                 phosphatases in restoring the DNA-binding capability of CtsR was tested in
+(Figure 5). The efficient hydrolysis of phospho-arginine is accom-
+                                                                                 EMSA. Phosphatase activity against KpXSGGGYIKIIKV phospho-peptides
+plished by selective recognition of the pArg guanidinium group                   was determined by the EnzCheck Phosphate assay (Invitrogen). In parallel,
+that is recognized and oriented for catalysis by Asp118 and                      phosphatase activity was tested against pNPP following standard procedures.
+Thr11, the PX5 residue. Comparison of YwlE with related PTPs
+indicates that the exchange of isoleucine to threonine at the                    Crystallization and Structure Solution of YwlE and YwlEC7S
+PX5 position is critical to evolve the PAP activity, a finding that              All YwlE crystals were grown with the sitting-drop vapor diffusion method in
+led to the discovery of a YwlE homolog in D. melanogaster. We                    96-well plates at 19 C. The YwlE crystals belonged to space group C2 contain-
+thus suppose that the dephosphorylation mechanism outlined                       ing one YwlE molecule per asymmetric unit. For structure solution, a single
+                                                                                 wavelength anomalous dispersion (SAD) data set was collected at the Swiss
+for the bacterial YwlE enzyme may be conserved in other eukary-
+                                                                                 Light Source (SLS, Beamline X06SA) at l = 0.9791 Å using a Pilatus detector
+otic protein phosphatases as well, which are known to occur in                   (Dectris). The C7S mutant of YwlE was crystallized after preincubation with
+great diversity. Among the many different types of phosphatases                  10 mM pArg. The structure of the C7S mutant was solved by molecular
+and pseudophosphatases are several proteins that could not be                    replacement at 1.8 Å resolution with diffraction data collected at the European
+classified according to activity and thus represent attractive tar-              Synchrotron Radiation Facility (ESRF, Grenoble, beamline ID 14-4). Data
+gets to screen for potential PAP activity. Moreover, the presence                collection, phasing, and refinement statistics are summarized in Table S1.
+                                                                                 For further details, please refer to Extended Experimental Procedures.
+of a putative eukaryotic PAP suggests that protein arginine phos-
+phorylation constitutes a widespread protein modification that
+                                                                                 ACCESSION NUMBERS
+may have been underestimated so far. To this regard, the crystal
+structure of the YwlE reaction intermediate provides an excellent
+                                                                                 The Protein Data Bank accession numbers for the YwlE and YwlEC7S crystal
+basis to develop highly specific PAP inhibitors. Such inhibitors                 structures are 4KK3 and 4KK4, respectively.
+should be essential to monitor arginine-phosphorylated proteins
+in eukaryotic cells and evaluate the previously proposed impact                  SUPPLEMENTAL INFORMATION
+of arginine phosphorylation for transcriptional regulation, epige-
+netics (Wakim and Aswad, 1994), and other fundamental biolog-                    Supplemental Information includes Extended Experimental Procedures, three
+ical processes.                                                                  figures, and two tables and can be found with this article online at http://dx.doi.
+                                                                                 org/10.1016/j.celrep.2013.05.023.
+EXPERIMENTAL PROCEDURES
+                                                                                 LICENSING INFORMATION
+The detailed description of experimental procedures is available online in the
+Supplemental Information.                                                        This is an open-access article distributed under the terms of the Creative
+                                                                                 Commons Attribution-NonCommercial-No Derivative Works License, which
+Protein Expression and Purification                                              permits non-commercial use, distribution, and reproduction in any medium,
+For functional studies, all phosphatase constructs were overexpressed in         provided the original author and source are credited.
+Escherichia coli BL21(DE3) cells. Protein purification was proceeded by
+Ni-NTA affinity and size-exclusion chromatography (SEC). Structural integrity    ACKNOWLEDGMENTS
+of the proteins was validated by analytical SEC, dynamic light scattering, and
+circular dichroism measurements. For structural studies, YwlE from B. subtilis   J.F. and T.C. designed the research; J.F., B.M., S.S., D.B.T., and A.L. per-
+was expressed in the methionine auxotrophic E. coli cell line B834.              formed the research; J.F., B.M., S.S., D.B.T, A.L., E.C., and T.C. analyzed
+                                                                                 data; J.F. and T.C. wrote the paper. We thank Kazuo Kobayashi for providing
+Generation of pArg-Specific Antibody                                             the B. subtilis phosphatase mutant strains, Karl Mechtler, Andreas Schmidt,
+A pArg-specific antibody was generated in a phage-display screen (synthetic      and Matthias Madalinsky for preparing the pArg peptide used for antibody
+HuCAL PLATINUM library, Morphosys; Prassler et al., 2011) using a branched       generation, and the beamline scientists at the ESRF and SLS and Dirk Reinert
+arginine phosphorylated peptide (KIVQSKpRGGGGYIK)2KC derived from the            (Boehringer Ingelheim) for their support in collecting diffraction data. The
+
+
+
+1838 Cell Reports 3, 1832–1839, June 27, 2013 ª2013 The Authors
+Research Institute of Molecular Pathology (IMP) is funded by Boehringer                 Musumeci, L., Bongiorni, C., Tautz, L., Edwards, R.A., Osterman, A., Perego,
+Ingelheim.                                                                              M., Mustelin, T., and Bottini, N. (2005). Low-molecular-weight protein tyrosine
+                                                                                        phosphatases of Bacillus subtilis. J. Bacteriol. 187, 4945–4956.
+Received: April 15, 2013                                                                Olsen, J.V., Blagoev, B., Gnad, F., Macek, B., Kumar, C., Mortensen, P., and
+Revised: May 7, 2013                                                                    Mann, M. (2006). Global, in vivo, and site-specific phosphorylation dynamics in
+Accepted: May 10, 2013                                                                  signaling networks. Cell 127, 635–648.
+Published: June 13, 2013
+                                                                                        Patterson, K.I., Brummer, T., O’Brien, P.M., and Daly, R.J. (2009). Dual-spec-
+REFERENCES                                                                              ificity phosphatases: critical regulators with diverse cellular targets. Biochem.
+                                                                                        J. 418, 475–489.
+Barford, D., Das, A.K., and Egloff, M.P. (1998). The structure and mechanism of         Perego, M., Hanstein, C., Welsh, K.M., Djavakhishvili, T., Glaser, P., and Hoch,
+protein phosphatases: insights into catalysis and regulation. Annu. Rev.                J.A. (1994). Multiple protein-aspartate phosphatases provide a mechanism for
+Biophys. Biomol. Struct. 27, 133–164.                                                   the integration of diverse signals in the control of development in B. subtilis.
+Denu, J.M., and Dixon, J.E. (1998). Protein tyrosine phosphatases: mecha-               Cell 79, 1047–1055.
+nisms of catalysis and regulation. Curr. Opin. Chem. Biol. 2, 633–641.                  Pereira, S.F., Goss, L., and Dworkin, J. (2011). Eukaryote-like serine/threonine
+Elsholz, A.K., Hempel, K., Michalik, S., Gronau, K., Becher, D., Hecker, M., and        kinases and phosphatases in bacteria. Microbiol. Mol. Biol. Rev. 75, 192–212.
+Gerth, U. (2011). Activity control of the ClpC adaptor McsB in Bacillus subtilis.
+                                                                                        Prassler, J., Thiel, S., Pracht, C., Polzer, A., Peters, S., Bauer, M., Nörenberg,
+J. Bacteriol. 193, 3887–3893.
+                                                                                        S., Stark, Y., Kölln, J., Popp, A., et al. (2011). HuCAL PLATINUM, a synthetic
+Elsholz, A.K., Turgay, K., Michalik, S., Hessling, B., Gronau, K., Oertel, D.,          Fab library optimized for sequence diversity and superior performance in
+Mäder, U., Bernhardt, J., Becher, D., Hecker, M., and Gerth, U. (2012). Global         mammalian expression systems. J. Mol. Biol. 413, 261–278.
+impact of protein arginine phosphorylation on the physiology of Bacillus sub-
+                                                                                        Rigden, D.J. (2008). The histidine phosphatase superfamily: structure and
+tilis. Proc. Natl. Acad. Sci. USA 109, 7451–7456.
+                                                                                        function. Biochem. J. 409, 333–348.
+Fuhrmann, J., Schmidt, A., Spiess, S., Lehner, A., Turgay, K., Mechtler, K.,
+Charpentier, E., and Clausen, T. (2009). McsB is a protein arginine kinase              Sarmiento, M., Puius, Y.A., Vetter, S.W., Keng, Y.F., Wu, L., Zhao, Y., Law-
+that phosphorylates and inhibits the heat-shock regulator CtsR. Science                 rence, D.S., Almo, S.C., and Zhang, Z.Y. (2000). Structural basis of plasticity
+324, 1323–1327.                                                                         in protein tyrosine phosphatase 1B substrate recognition. Biochemistry 39,
+                                                                                        8171–8179.
+Hahn, J., Kramer, N., Briley, K., Jr., and Dubnau, D. (2009). McsA and B
+mediate the delocalization of competence proteins from the cell poles of                Schmidt, A., Ammerer, G., and Mechtler, K. (2013). Studying the fragmentation
+Bacillus subtilis. Mol. Microbiol. 72, 202–215.                                         behavior of peptides with arginine phosphorylation and its influence on phos-
+Hanks, S.K., and Hunter, T. (1995). Protein kinases 6. The eukaryotic protein           pho-site localization. Proteomics 13, 945–954.
+kinase superfamily: kinase (catalytic) domain structure and classification.             Sickmann, A., and Meyer, H.E. (2001). Phosphoamino acid analysis. Prote-
+FASEB J. 9, 576–596.                                                                    omics 1, 200–206.
+Hunter, T. (1995). Protein kinases and phosphatases: the yin and yang of pro-           Stoker, A.W. (2005). Protein tyrosine phosphatases and signalling.
+tein phosphorylation and signaling. Cell 80, 225–236.                                   J. Endocrinol. 185, 19–33.
+Jia, Z., Barford, D., Flint, A.J., and Tonks, N.K. (1995). Structural basis for         Sun, F., Ding, Y., Ji, Q., Liang, Z., Deng, X., Wong, C.C., Yi, C., Zhang, L., Xie,
+phosphotyrosine peptide recognition by protein tyrosine phosphatase 1B.                 S., Alvarez, S., et al. (2012). Protein cysteine phosphorylation of SarA/MgrA
+Science 268, 1754–1758.                                                                 family transcriptional regulators mediates bacterial virulence and antibiotic
+Kim, S.J., Jeong, D.G., Yoon, T.S., Son, J.H., Cho, S.K., Ryu, S.E., and Kim,           resistance. Proc. Natl. Acad. Sci. USA 109, 15461–15466.
+J.H. (2007). Crystal structure of human TMDP, a testis-specific dual specificity
+                                                                                        Vega, C., Chou, S., Engel, K., Harrell, M.E., Rajagopal, L., and Grundner, C.
+protein phosphatase: implications for substrate specificity. Proteins 66,
+                                                                                        (2011). Structure and substrate recognition of the Staphylococcus aureus pro-
+239–245.
+                                                                                        tein tyrosine phosphatase PtpA. J. Mol. Biol. 413, 24–31.
+Kirstein, J., Zühlke, D., Gerth, U., Turgay, K., and Hecker, M. (2005). A tyrosine
+                                                                                        Wakim, B.T., and Aswad, G.D. (1994). Ca(2+)-calmodulin-dependent phos-
+kinase and its activator control the activity of the CtsR heat shock repressor in
+                                                                                        phorylation of arginine in histone 3 by a nuclear kinase from mouse leukemia
+B. subtilis. EMBO J. 24, 3435–3445.
+                                                                                        cells. J. Biol. Chem. 269, 2722–2727.
+Klumpp, S., and Krieglstein, J. (2009). Reversible phosphorylation of histidine
+residues in proteins from vertebrates. Sci. Signal. 2, pe13.                            Xu, H., Xia, B., and Jin, C. (2006). Solution structure of a low-molecular-weight
+                                                                                        protein tyrosine phosphatase from Bacillus subtilis. J. Bacteriol. 188, 1509–
+Lai, C.Q., Parnell, L.D., Lyman, R.F., Ordovas, J.M., and Mackay, T.F. (2007).
+                                                                                        1517.
+Candidate genes affecting Drosophila life span identified by integrating micro-
+array gene expression analysis and QTL mapping. Mech. Ageing Dev. 128,                  Zabell, A.P., Schroff, A.D., Jr., Bain, B.E., Van Etten, R.L., Wiest, O., and Stauf-
+237–249.                                                                                facher, C.V. (2006). Crystal structure of the human B-form low molecular
+Mijakovic, I., Musumeci, L., Tautz, L., Petranovic, D., Edwards, R.A., Jensen,          weight phosphotyrosyl phosphatase at 1.6-A resolution. J. Biol. Chem. 281,
+P.R., Mustelin, T., Deutscher, J., and Bottini, N. (2005). In vitro characterization    6520–6527.
+of the Bacillus subtilis protein tyrosine phosphatase YwqE. J. Bacteriol. 187,          Zhang, Z.Y. (2003). Mechanistic studies on protein tyrosine phosphatases.
+3384–3390.                                                                              Prog. Nucleic Acid Res. Mol. Biol. 73, 171–220.
+
+
+
+
+                                                                                       Cell Reports 3, 1832–1839, June 27, 2013 ª2013 The Authors 1839
+

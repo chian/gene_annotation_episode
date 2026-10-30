@@ -1,0 +1,93 @@
+{
+  "status": "Derived arithmetic from reported numbers; combinations marked conditional are not new measurements or adopted scores.",
+  "calibration": [
+    {
+      "concentration_uM": 10,
+      "reported_cv": 0.22,
+      "derived_sd_uM": 2.2,
+      "inverse_relative_variance": 20.66115702479339,
+      "relative_variance_of_triplicate_mean_if_iid": 0.016133333333333333
+    },
+    {
+      "concentration_uM": 400,
+      "reported_cv": 0.1,
+      "derived_sd_uM": 40.0,
+      "inverse_relative_variance": 99.99999999999999,
+      "relative_variance_of_triplicate_mean_if_iid": 0.003333333333333334
+    },
+    {
+      "concentration_uM": 3000,
+      "reported_cv": 0.08,
+      "derived_sd_uM": 240.0,
+      "inverse_relative_variance": 156.25,
+      "relative_variance_of_triplicate_mean_if_iid": 0.0021333333333333334
+    },
+    {
+      "concentration_uM": 4800,
+      "reported_cv": 0.03,
+      "derived_sd_uM": 144.0,
+      "inverse_relative_variance": 1111.111111111111,
+      "relative_variance_of_triplicate_mean_if_iid": 0.0003
+    }
+  ],
+  "response": {
+    "reported_half_time_s": 4,
+    "derived_time_constant_s": 5.7707801635558535,
+    "constant_rate_step_model": [
+      {
+        "time_s": 8,
+        "instantaneous_slope_fraction": 0.75,
+        "endpoint_slope_fraction": 0.4589893596666388
+      },
+      {
+        "time_s": 12,
+        "instantaneous_slope_fraction": 0.875,
+        "endpoint_slope_fraction": 0.5792139464073858
+      },
+      {
+        "time_s": 20,
+        "instantaneous_slope_fraction": 0.96875,
+        "endpoint_slope_fraction": 0.7204778358277634
+      }
+    ]
+  },
+  "oxidase_partition": [
+    {
+      "reported_oxidase_fraction_oxalate_turnover": 0.003,
+      "derived_CO2_fraction_decarboxylation": 0.9940179461615155,
+      "derived_O2_CO2_rate_ratio": 0.0029910269192422734,
+      "conditional_decarboxylation_kcat_s_inv": 70.5752741774676,
+      "conditional_scaled_fit_se_s_inv": 1.988035892323031
+    },
+    {
+      "reported_oxidase_fraction_oxalate_turnover": 0.005,
+      "derived_CO2_fraction_decarboxylation": 0.9900497512437811,
+      "derived_O2_CO2_rate_ratio": 0.0049751243781094535,
+      "conditional_decarboxylation_kcat_s_inv": 70.29353233830847,
+      "conditional_scaled_fit_se_s_inv": 1.9800995024875623
+    }
+  ],
+  "method_comparison": {
+    "reported_mims_kcat_s_inv": 71,
+    "reported_coupled_kcat_s_inv": 44,
+    "ratio": 1.6136363636363635,
+    "difference_s_inv": 27,
+    "conditional_independent_fit_se_difference_s_inv": 2.23606797749979,
+    "conditional_standardized_difference": 12.074767078498864,
+    "conditional_squared_standardized_difference": 145.8,
+    "log_ratio": 0.4784902431230542,
+    "conditional_se_log_ratio": 0.036194229928442886,
+    "conditional_se_ratio_delta_method": 0.058404325566351015,
+    "km_ratio": 1.0256410256410258,
+    "km_difference_mM": 0.10000000000000009,
+    "conditional_standardized_km_difference": 0.1561737618886062,
+    "efficiency_ratio": 1.6363636363636365,
+    "conditional_standardized_efficiency_difference": 4.949747468305833,
+    "mims_relative_fit_variance": 0.0007934933544931561,
+    "coupled_relative_fit_variance": 0.0005165289256198347,
+    "conditional_inverse_variance_mean_kcat_s_inv": 49.4,
+    "conditional_inverse_variance_mean_fit_se_s_inv": 0.8944271909999159,
+    "conditional_ratio_95_log_normal_fit_only_low": 1.503129927479275,
+    "conditional_ratio_95_log_normal_fit_only_high": 1.732266962721017
+  }
+}

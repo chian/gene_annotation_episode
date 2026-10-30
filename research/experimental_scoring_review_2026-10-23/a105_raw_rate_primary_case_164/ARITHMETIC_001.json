@@ -1,0 +1,160 @@
+{
+  "version": "case164_native_arithmetic_001",
+  "origin": "derived_from_reported_cells",
+  "rounding": "60 digit Decimal; exact Fraction mean/variance verification",
+  "summaries": {
+    "DHA": {
+      "reported_parallel_count": 3,
+      "native_unit": "U/mg",
+      "sum": "0.47029999999999997",
+      "mean": "0.156766666666666656666666666666666666666666666666666666666667",
+      "sum_squared_deviations": "0.0000582624000000001632000000000002666666666666666666666666666667",
+      "sample_variance": "0.0000291312000000000816000000000001333333333333333333333333333334",
+      "sample_sd": "0.00539733267457177236391275632197569371887319639930888264787980",
+      "cv": "0.0344290836141086925890086697622535803250684288019010369885014",
+      "exact_mean": {
+        "numerator": "47029999999999997",
+        "denominator": "300000000000000000"
+      },
+      "exact_sample_variance": {
+        "numerator": "218484000000000612000000000001",
+        "denominator": "7500000000000000000000000000000000"
+      },
+      "operand_cells": [
+        "J8",
+        "J9",
+        "J10"
+      ],
+      "scientific_unit_mean": null,
+      "between_preparation_sd": null,
+      "se": null,
+      "mean_and_sd_scope": "descriptive across source-labelled reported Parallel measurements; underlying unit grouping unknown"
+    },
+    "L-EUS": {
+      "reported_parallel_count": 3,
+      "native_unit": "U/mg",
+      "sum": "0.56686000000000000",
+      "mean": "0.188953333333333333333333333333333333333333333333333333333333",
+      "sum_squared_deviations": "0.000311041066666666644000000000000466666666666666666666666666666",
+      "sample_variance": "0.000155520533333333322000000000000233333333333333333333333333333",
+      "sample_sd": "0.0124707871978208866395880552337027888281793058601922984122017",
+      "cv": "0.0659992971694292416447873649597931878850825910817078206904794",
+      "exact_mean": {
+        "numerator": "28343",
+        "denominator": "150000"
+      },
+      "exact_sample_variance": {
+        "numerator": "4665615999999999660000000000007",
+        "denominator": "30000000000000000000000000000000000"
+      },
+      "operand_cells": [
+        "J12",
+        "J13",
+        "J14"
+      ],
+      "scientific_unit_mean": null,
+      "between_preparation_sd": null,
+      "se": null,
+      "mean_and_sd_scope": "descriptive across source-labelled reported Parallel measurements; underlying unit grouping unknown"
+    },
+    "D-EUS": {
+      "reported_parallel_count": 3,
+      "native_unit": "U/mg",
+      "sum": "1.51342000000000026",
+      "mean": "0.50447333333333342",
+      "sum_squared_deviations": "0.0023169322666666674373333333333338",
+      "sample_variance": "0.0011584661333333337186666666666669",
+      "sample_sd": "0.0340362473450486858849048638612705297101725772405123317529437",
+      "cv": "0.0674688731714567272223226645644054600353008054446996776047771",
+      "exact_mean": {
+        "numerator": "25223666666666671",
+        "denominator": "50000000000000000"
+      },
+      "exact_sample_variance": {
+        "numerator": "11584661333333337186666666666669",
+        "denominator": "10000000000000000000000000000000000"
+      },
+      "operand_cells": [
+        "J16",
+        "J17",
+        "J18"
+      ],
+      "scientific_unit_mean": null,
+      "between_preparation_sd": null,
+      "se": null,
+      "mean_and_sd_scope": "descriptive across source-labelled reported Parallel measurements; underlying unit grouping unknown"
+    }
+  },
+  "contrasts": {
+    "D-EUS_vs_L-EUS": {
+      "reference_substrate": "D-EUS",
+      "test_substrate": "L-EUS",
+      "reference_rate": "0.50447333333333342",
+      "test_rate": "0.188953333333333333333333333333333333333333333333333333333333",
+      "difference": "0.315520000000000086666666666666666666666666666666666666666667",
+      "difference_unit": "U/mg",
+      "test_over_reference": "0.374555642187892258999836814068806187338893593391385928484931",
+      "fractional_decrease": "0.625444357812107741000163185931193812661106406608614071515069",
+      "reference_over_test": "2.66983029319408718202025191405285255618671276858483576191653",
+      "formulae": {
+        "reference_rate": "sum(J16:J18)/3",
+        "test_rate": "sum(J12:J14)/3",
+        "difference": "reference_rate - test_rate",
+        "test_over_reference": "test_rate/reference_rate",
+        "fractional_decrease": "1 - test_rate/reference_rate",
+        "reference_over_test": "reference_rate/test_rate"
+      },
+      "dependence": "unknown",
+      "difference_se": null,
+      "profile_log_ratio": null,
+      "final_reliability_or_annotation_score": null,
+      "scope": "reported activity contrast under source-nominal common assay; substrate-dependent reporter/coupling response and blanks unquantified"
+    },
+    "D-EUS_vs_DHA": {
+      "reference_substrate": "D-EUS",
+      "test_substrate": "DHA",
+      "reference_rate": "0.50447333333333342",
+      "test_rate": "0.156766666666666656666666666666666666666666666666666666666667",
+      "difference": "0.347706666666666763333333333333333333333333333333333333333333",
+      "difference_unit": "U/mg",
+      "test_over_reference": "0.310753128675450231399206132060458984423627059428753452350944",
+      "fractional_decrease": "0.689246871324549768600793867939541015576372940571246547649056",
+      "reference_over_test": "3.21798851796725570176409853076264310636392924277970059731634",
+      "formulae": {
+        "reference_rate": "sum(J16:J18)/3",
+        "test_rate": "sum(J8:J10)/3",
+        "difference": "reference_rate - test_rate",
+        "test_over_reference": "test_rate/reference_rate",
+        "fractional_decrease": "1 - test_rate/reference_rate",
+        "reference_over_test": "reference_rate/test_rate"
+      },
+      "dependence": "unknown",
+      "difference_se": null,
+      "profile_log_ratio": null,
+      "final_reliability_or_annotation_score": null,
+      "scope": "reported activity contrast under source-nominal common assay; substrate-dependent reporter/coupling response and blanks unquantified"
+    }
+  },
+  "all_contrasts_share_reference_cells": [
+    "J16",
+    "J17",
+    "J18"
+  ],
+  "verification": {
+    "decimal_vs_independent_fraction_means_variances": true,
+    "arithmetic_is_source_extraction_verification": false,
+    "source_measurement_truth_or_assay_validity_verified": false,
+    "production_raw_reader_executed": false,
+    "ordinary_episode_binding_verified": false
+  },
+  "conditional_combination_proposal": {
+    "formula": "Q_L/Q_D = ((mu_L-b_L)/(mu_D-b_D)) * (g_D/g_L) * (f_L/f_D)",
+    "mu": "reported activity mean in source U/mg",
+    "b": "matched no-PK reporter blank expressed using the same mass normalization and native unit",
+    "g": "measured quantitative reporter recovery/gain in each substrate matrix, dimensionless, under established linear response",
+    "f": "fraction of blank-corrected response attributable to the intended BbPK product-forming process, dimensionless, requiring selective controls or orthogonal quantitative validation",
+    "assumptions": "positive nonzero denominators; calibrated linear coupling; same intended endpoint and normalization; same source unit convention; f correction not already included in g; no independence claim",
+    "populated": false,
+    "reason": "no numerical b,g,f for selected raw readings; no aggregate is substituted"
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "amends": "reader_fields_001.json by adding context and subject fields; no previous numerical value replaced",
+  "status": "proposed exact reader fields only, no implementation",
+  "comparison_subjects": {
+    "query_material": {
+      "type": "selected_sequence_record",
+      "source_file": "figshare_cb200361w_si_001.pdf",
+      "source_section": "Supplemental Data 1",
+      "selected_record": "YP_001055124.1",
+      "as_supplied_scope": "published full protein record",
+      "independently_resequenced": false,
+      "initial_candidate_annotation_required": false
+    },
+    "reported_identity_group": {
+      "query_sequence_accessions": [
+        "NP_147965.2",
+        "YP_001013236.1",
+        "NP_558529.1",
+        "YP_001154348.1",
+        "YP_001055124.1",
+        "YP_001794457.1",
+        "YP_931458.1",
+        "YP_003902446.1"
+      ],
+      "reference_description": "Vibrio cholerae QueF C-terminal half",
+      "reference_structure_accession": "3BP1",
+      "exact_reference_sequence_for_structure": null,
+      "query_specific_identity_rows": null,
+      "source": "main Results, manuscript page 3"
+    },
+    "local_site_reference": {
+      "sequence_accession": "NP_389258.1",
+      "organism": "Bacillus subtilis subsp. subtilis str. 168",
+      "published_site_numbers": [
+        55,
+        62,
+        70,
+        97
+      ],
+      "supplied_sequence_site_numbers_1based": [
+        56,
+        63,
+        71,
+        98
+      ],
+      "coordinate_offset_observed": 1,
+      "coordinate_offset_explanation": null,
+      "coordinate_unit": "residue positions"
+    },
+    "V_cholerae_supplied_sequence": {
+      "accession": "ZP_01677885.1",
+      "length_aa": 287,
+      "structure_construct_sequence_correspondence_verified": false,
+      "allowed_use": "sequence record context; not an unverified denominator for the 3BP1 comparison"
+    }
+  },
+  "alignment_method": {
+    "figure_method": "structure-based multisequence alignment",
+    "structure_comparison_software_reported": [
+      "MultiProt",
+      "ESPript"
+    ],
+    "model_software_reported": "Phyre",
+    "other_sequence_tools_named_in_methods": [
+      "NCBI BLAST tools",
+      "ClustalW in SEED",
+      "MultiAlign"
+    ],
+    "which_sequence_tool_produced_reported_16_to_22_percent": null,
+    "executable_version": null,
+    "substitution_matrix": null,
+    "gap_open_penalty": null,
+    "gap_extend_penalty": null,
+    "search_database": null,
+    "search_space_size": null,
+    "scope_type": "group range from domain-level comparison",
+    "complete_alignment_file": null,
+    "exact_domain_boundaries": null
+  },
+  "architecture_context": {
+    "unimodular_bacterial_QueF_Tfold_domains": 1,
+    "bimodular_bacterial_QueF_Tfold_domains": 2,
+    "bimodular_signature_domain": "N-terminal",
+    "bimodular_substrate_pocket_domain": "C-terminal",
+    "QueF_like_comparison_reference_domain": "bimodular C-terminal T-fold",
+    "Pcal_exact_domain_boundaries": null,
+    "source": "main Results, manuscript pages 2\u20133; Figure 2C",
+    "numeric_score_role": "context for coverage and motif interpretation, no architecture-weight formula selected"
+  },
+  "characterized_reference": {
+    "molecule": "Pcal_0221",
+    "source_organism": "Pyrobaculum calidifontis JCM 11548",
+    "source_sequence_accession": "YP_001055124.1",
+    "tested_construct": "pBAD24-derived expression plasmid described as pGPP358 and later pGP358 in supplement",
+    "full_translated_construct_sequence": null,
+    "host": "Escherichia coli K-12 MG1655",
+    "shared_genotype": "delta queF",
+    "test_strain": "VDC3368",
+    "control_strain": "VDC3367",
+    "control_construct": "empty pBAD24",
+    "native_bacterial_QueF_coexists": false,
+    "endpoint": "archaeosine-modified tRNA detected with introduced Pcal_0221; tRNA-Asp modification localized to position 34",
+    "demonstration_scope": "heterologous cellular product formation",
+    "direct_purified_protein_substrate_comparison": false,
+    "free_preQ0_vs_preQ0_tRNA_resolved": false,
+    "physiological_nitrogen_donor": null,
+    "activity_replication_statement": "at least two independent tRNA extractions and analyses",
+    "exact_replication_count_for_displayed_contrast": null,
+    "sequence_axis_role": "grounds the activity carried by this reference; does not itself populate an additional A101 score cell",
+    "sources": [
+      "main Results manuscript pages 3\u20134",
+      "supporting Methods pages 4\u20135",
+      "Supplemental Figure 2",
+      "main Figure 3B and Supplemental Figures 3\u20135"
+    ]
+  },
+  "bacterial_reference_function": {
+    "reported_reaction": "NADPH-dependent reduction of preQ0 to preQ1",
+    "support_status_in_this_review": "cited reference knowledge in the inspected 2012 primary paper; earlier activity paper not opened",
+    "not_to_infer": "Every bacterial sequence row has independent experimental validation, or the C-terminal domain alone has the full enzyme reaction."
+  },
+  "missing_field_semantics": {
+    "null": "not established by this inspected paper unit",
+    "false": "explicit negative only for the specified proposition and scope; not a score"
+  },
+  "reader_targeting": {
+    "subject_reader": "Populate exact source/query/assayed-molecule correspondence from selected record and construct descriptions. Preserve source conflicts and unknown construct sequence.",
+    "method_reader": "Populate method and denominator fields from actual Methods and outputs; do not infer BLAST-specific fields from tool names.",
+    "function_reader": "Populate the experimentally observed reaction/endpoint and experimental scope; do not upgrade heterologous product formation to a purified-enzyme substrate-specificity result."
+  }
+}

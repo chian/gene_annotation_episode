@@ -1,0 +1,31 @@
+# Follow-up lanes exposed during the experimental scoring review
+
+These are research questions to challenge the proposed scoring sheet. They are
+not adopted scoring components, evidence axes, new episode types or independent
+evidence counts. Preserve the identifiers and append refinements with sources.
+The original Follow-up Lane table and original corpus remain unchanged.
+
+| Follow-up Lane | Scoring/reporting question exposed by cases | What an inadequate score would miss | Source cases and present limits |
+| --- | --- | --- | --- |
+| ES01 — Attribution of the measured activity | Does the measured activity belong to the assigned protein, a contaminant, or a coupled partner? | Product detection, purification and a large signal do not by themselves establish attribution. A contaminant discovery can reverse an attribution rather than add another positive result. | spec_aquifex_hfp_coupling_contamination; chem_f420_precursor_partner; molecular lane is deepening the primary experiments. |
+| ES02 — Rescue without restoration of the proposed mechanism | Which molecular defect or pathway was repaired, bypassed or left unrepaired despite improved phenotype? | A common endpoint can improve through a different route. Rescue strength is not automatically evidence for the proposed biochemical activity. | cellular_yihI; replacement_folM; replacement_bioZ; retained evidence separates growth rescue from unchanged GTPase defect for YihI. |
+| ES03 — Equivalence of results before assessing consistency | Are the endpoint, time window, preparation, condition and comparison sufficiently matched to call two results agreeing or conflicting? | Faster recovery and worse prolonged survival are different outcomes. Long accumulation and initial-rate transport assays can expose different properties. | yeag; context_bioy_optional_module_2007; new primary reads are underway in their owning lanes. |
+| ES04 — Experimental coverage of fitted or inferred quantities | Does the experimental range constrain the parameter or specificity claim, separately from its reported numerical error? | A small fitted error does not alone establish saturation coverage or identifiability. | spec_frsa_disputed_pdc_native_unknown; FrsA 2019 Methods/Results report substrate range 0.05–6.0 mM and fitted Km18.6±1.3mM. Smax/Km≈0.323 is a derived range check, not a formal fit-invalidity test. Primary: https://pmc.ncbi.nlm.nih.gov/articles/PMC6450606/ |
+| ES05 — Competence and scope of negative evidence | Could the assay have detected the proposed event under the actual conditions, and which absence does its negative result establish? | No signal can reflect missing access, expression, substrate, partner or experimental sensitivity; it is not automatically zero biological activity. | spatial_murj_lipidII_access; archaeal_pibd_flak_recognition_access; context_comf_mmp16_2025; owning lanes retain the exact competence controls and unknown detection limits. |
+| ES06 — Construct, dosage and environmental transfer | Which properties of the tested preparation/system permit inference to the target's native setting? | A real engineered capacity can change with location, expression or partner access. It need not describe the ordinary biological role. | spatial_trxa_relocation_role; organism and replacement contrasts in system_and_transfer; TrxA genotype correction and nonmonotonic dosage effects are explicit primary findings. |
+| ES07 — Integrity and specificity of the perturbation | Does a mutant change the proposed catalytic/interface property while preserving the other properties needed to interpret its phenotype? | Failed rescue can reflect reduced abundance, altered folding or localization. A named catalytic substitution is not itself a selective catalytic experiment. | yeag: K116A at 64% WT abundance versus K426A at 100%; causal_envC_activation; causal_cas2_spacer_acquisition. |
+| ES08 — Coupled partners determine the measured output | Which component selects the final observed product when one enzyme's output is processed by another? | A downstream filter can make an upstream enzyme appear to prefer a substrate. Changing a partner is an informative intervention rather than automatically a failed repeat. | chem_f420_precursor_partner: holding CofC fixed while replacing CofD changes the mixture; chem_bcd_etf and other coupled reaction cases. |
+| ES09 — Productive completion versus a partial event | Does binding, an adduct, substrate loss or a cofactor reaction complete the proposed biochemical operation? | A strong intermediate event can occur without the defining final product. The relevant complement measures that missing step or product. | EUBREC2651_Fleischman_2014; seq_queFL_archaeosine; seq_yadB_gluQRS_ecoli. These remain retained-evidence examples in the latest batch. |
+| ES10 — Experimental units and shared-data dependence | Which samples, preparations, interventions and measurements are independent for the claim being evaluated? | Technical repeats, cytometry events, products within one mixture and papers reusing data cannot be counted as independent biological evidence. | csiD_glutarate_hydroxylase; cellular_ybeY; spatial_ftsw_bpbp_job; yeag; see the methodological source below. |
+| ES11 — Corrected experimental identity | Which prior attribution changes when a genotype, reagent, construct or recorded measurement is corrected? | A corrected strain identity should revise the affected inference, not become an additional opposing biological replicate. | spatial_trxa_relocation_role: reconstructed genotype corrects prior DsbB-independence interpretation; BioY Figure 4 correction is not a new experiment. |
+
+Related methodological source checked by root: Lazic et al., 2018,
+https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.2005282,
+distinguishes experimental from observational units. Its role here is to test
+replication/reporting definitions, not to import animal-study requirements or
+adopt a generic assay-quality scoring system.
+
+Root also located Assay Guidance Manual sections separating orthogonal readouts
+from interference counter-screens. Main Bookshelf pages returned browser
+challenges during root's opens; search excerpts alone are not a full primary
+section inspection. No handbook threshold is adopted as an annotation rule.

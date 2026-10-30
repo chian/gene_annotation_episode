@@ -1,0 +1,596 @@
+{
+  "description": "Experimentally constrained ligand, metal, contact or assembly facts on a homolog, related to the target through actual sequence or structural correspondence.",
+  "entry_version": "evidence_axis_entry_v1",
+  "evidence": [
+    {
+      "case_group": "DUF1537_Zhang_2016",
+      "case_id": "DUF1537_Zhang_2016",
+      "limit": "Relevant primary structural/results passages inspected; complete supplement not read.",
+      "observation": "Activity-guided D-threonate complex and ADP complex localized distinct substrate/nucleotide sites; ADP structure showed domain closure.",
+      "source_locator": "research/slotted_process_library/corpus/structure/cases.jsonl:14#/actual_observations/paper_reported/1",
+      "source_url": "https://doi.org/10.1073/pnas.1605546113"
+    },
+    {
+      "case_group": "EF1143_Vorontsov_2011_2014",
+      "case_id": "EF1143_Vorontsov_2011_2014",
+      "limit": "Relevant primary indexed passages inspected; no full supplement reanalysis or new assay.",
+      "observation": "Complex structures distinguished catalytic and allosteric binding sites.",
+      "source_locator": "research/slotted_process_library/corpus/structure/cases.jsonl:20#/actual_observations/paper_reported/1",
+      "source_url": "https://doi.org/10.1074/jbc.M111.250456"
+    },
+    {
+      "case_group": "MS53_0025_MAG6390_Korczynska_2014",
+      "case_id": "MS53_0025_MAG6390_Korczynska_2014",
+      "limit": "Primary abstract/methods and initial context read; complete results not read in this pass.",
+      "observation": "Structure revealed binuclear zinc and a separate phosphate-binding environment.",
+      "source_locator": "research/slotted_process_library/corpus/structure/cases.jsonl:16#/actual_observations/paper_reported/0",
+      "source_url": "https://doi.org/10.1021/bi500595c"
+    },
+    {
+      "case_group": "TT1927b_Handa_2005",
+      "case_id": "TT1927b_Handa_2005",
+      "limit": "Primary relevant results plus 1WUB inspected; complete methods not read.",
+      "observation": "Density in the hydrophobic barrel was modeled as octaprenyl pyrophosphate; mass spectrometry supported a C40 isoprenoid.",
+      "source_locator": "research/slotted_process_library/corpus/structure/cases.jsonl:19#/actual_observations/paper_reported/0",
+      "source_url": "https://doi.org/10.1110/ps.041183305"
+    },
+    {
+      "case_group": "causal_cas2_spacer_acquisition",
+      "case_id": "causal_cas2_spacer_acquisition",
+      "limit": "Three primary E. coli relevant Results/Methods inspected, with earlier other-species nuclease comparators explicitly limited; new descriptive deposited-coordinate comparison. No biological experiments or new annotation run. | Source observation limit: Contact presence alone does not establish functional necessity: R77 is an explicit tolerated contact-site example. Not every Cas2 contact mutant was directly assayed for binding affinity in isolation.",
+      "observation": "A four-Cas1/two-Cas2 complex positions the central donor duplex over Cas2 and terminal donor 3-prime ends in two Cas1 sites. Cas2 R16/R78 are part of a phosphate-backbone clamp; R16E and R78E strongly reduce in vivo acquisition, whereas R77E is tolerated. Cas1 clamp/channel and end-splaying mutants supply additional functional comparisons.",
+      "source_locator": "research/slotted_process_library/corpus/causal/cas2/case_trace.json#/key_observations/5/observation",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4662619/"
+    },
+    {
+      "case_group": "cellular_letB",
+      "case_id": "cellular_letB",
+      "limit": "Full primary Results on architecture, length threshold, pore-loop mutants and crosslinking read. No structural re-refinement. | Group source-use limits: Cryo-EM, crosslinking and complementation are different connected modalities; they are not three direct transport assays. Lipid identity, direction and net flux remain unresolved.",
+      "observation": "Structure shows a periplasm-length hydrophobic tunnel. Lipid crosslinking places phosphate-bearing material inside it. Length and pore-loop mutants lose ability to complement a sensitized pqiAB/letAB detergent phenotype.",
+      "source_locator": "research/slotted_process_library/corpus/cellular/verified_cases.jsonl:8#/actual_observations/0/observation",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7335425/"
+    },
+    {
+      "case_group": "replacement_queH",
+      "case_id": "replacement_queH",
+      "limit": "Full relevant primary results/methods in both papers; independent read-only 7LC5 coordinate probe recorded separately. No cultures, mass-spectrometric assays or mechanism reconstruction rerun.",
+      "observation": "Structure placed Cys9/Cys10 at a separate metal site; in-vitro oQ decreased without detectable Q product.",
+      "source_locator": "research/slotted_process_library/corpus/replacement/cases.jsonl:1#/actual_observations/5/observation",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8884141/"
+    },
+    {
+      "case_group": "spec_frsa_disputed_pdc_native_unknown",
+      "case_id": "spec_frsa_disputed_pdc_native_unknown",
+      "limit": "2013 main narrative, modeling assumptions and stated assay outcomes inspected; detailed supplementary assay protocols not independently checked. 2019 complete relevant activity/results/discussion and assay conditions inspected. Original 2011 paper not newly verified.",
+      "observation": "Bound electron density was modeled as hexanoate but remained an unknown ligand; docking could not determine native chemistry.",
+      "source_locator": "research/slotted_process_library/corpus/specificity/cases.jsonl:7#/actual_observations/1/result",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3788570/"
+    }
+  ],
+  "id": "A111",
+  "judgment_criteria": [
+    {
+      "criterion_id": "experimental_structural_origin",
+      "deterministic_test": null,
+      "outcomes": {
+        "met": "The source identifies an experimentally constrained structure/model of the stated homolog/construct and preserves the experimental method, preparation and limits on the structural fact being used.",
+        "not_met": "The claimed experimental fact is demonstrably a wholly predicted, docked or simulated result, or belongs to a different subject/construct from the one claimed.",
+        "unknown": "Experimental origin, studied subject, model identity or the relevant method/validation information is unavailable or ambiguous."
+      },
+      "question": "Is the cited structural fact experimentally constrained and assigned to the actual studied homolog?",
+      "required_evidence": [
+        "experimental_structure_source",
+        "studied_homolog_construct",
+        "method_and_model_origin",
+        "reported_structural_limits"
+      ],
+      "required_metric_ids": []
+    },
+    {
+      "criterion_id": "structural_state_identified",
+      "deterministic_test": null,
+      "outcomes": {
+        "met": "Received experimental/model evidence supports the stated ligand/metal/contact/architecture assignment within its reported ambiguity, including exact chains/sites or assembly relationship needed for the claim.",
+        "not_met": "Received evidence identifies an incompatible ligand, partner, site or architecture, or contradicts the assigned structural state.",
+        "unknown": "Density or a compatible model does not identify the claimed ligand/state, alternatives remain unresolved, or the relevant contact/assembly was not observed. A docked candidate is not an observed ligand."
+      },
+      "question": "Does the structural evidence identify the ligand, metal, contact or architecture actually being claimed?",
+      "required_evidence": [
+        "structural_observation",
+        "ligand_partner_or_architecture_identity",
+        "assignment_or_alternative_model_evidence"
+      ],
+      "required_metric_ids": []
+    },
+    {
+      "criterion_id": "structural_fact_mapped_to_target",
+      "deterministic_test": null,
+      "outcomes": {
+        "met": "An actual sequence or structural correspondence maps the observed homolog feature to the relevant target region and preserves matching geometry/architecture plus function-relevant differences.",
+        "not_met": "The received mapping excludes the necessary region, identifies a different target relationship or demonstrates an incompatible feature that rejects the proposed transfer.",
+        "unknown": "The correspondence, relevant site mapping or informative target feature comparison has not been established. A global fold similarity alone does not map a specific ligand/contact claim."
+      },
+      "question": "Does the homolog-to-target correspondence cover the structural feature relevant to the candidate annotation?",
+      "required_evidence": [
+        "identified_homolog_and_target",
+        "sequence_or_structural_correspondence",
+        "mapped_function_relevant_region",
+        "target_feature_comparison"
+      ],
+      "required_metric_ids": []
+    },
+    {
+      "criterion_id": "structural_claim_bounded",
+      "deterministic_test": null,
+      "outcomes": {
+        "met": "The target interpretation preserves the bounded structural observation and correspondence; any claim of affinity, catalysis, transport or necessity is tied to its actual separate functional evidence or retained as unestablished.",
+        "not_met": "The interpretation presents occupancy/contact/architecture as proof of a functional property contradicted by received functional evidence, or misrepresents a model-derived contact as an independent functional measurement.",
+        "unknown": "The available structural state does not distinguish the claimed molecular function, ligand identity or physiological responsibility, and the necessary functional comparisons have not been received."
+      },
+      "question": "Is the target interpretation limited to what the mapped experimental structural state establishes?",
+      "required_evidence": [
+        "proposed_target_hypothesis",
+        "experimental_structural_fact",
+        "mapped_correspondence",
+        "independent_functional_test_or_declared_limit"
+      ],
+      "required_metric_ids": []
+    },
+    {
+      "criterion_id": "positive_test_targets_claim",
+      "deterministic_test": null,
+      "outcomes": {
+        "met": "The actual native p/q or equivalent reported test concerns this claim-relative positive contrast, the observed direction agrees, required controls are valid and statistic/multiplicity meaning is retained.",
+        "not_met": "The native statistic concerns another hypothesis, an opposite effect, invalid controls or a contrast that does not distinguish the stated claim.",
+        "unknown": "The relevant native test, contrast, direction, controls or statistic interpretation has not been received."
+      },
+      "question": "Does the native formal test address the positive claim with the actual observed direction?",
+      "required_evidence": [
+        "native_test_definition",
+        "claim_matched_contrast",
+        "observed_effect_direction",
+        "controls_and_multiplicity"
+      ],
+      "required_metric_ids": []
+    },
+    {
+      "criterion_id": "negative_test_targets_exclusion",
+      "deterministic_test": null,
+      "outcomes": {
+        "met": "The native statistic comes from an actual competent exclusion/equivalence or detection-limit test for this claim under its conditions; its margin, direction and assay limits are retained.",
+        "not_met": "The result is only an ordinary nonsignificant difference or failed preparation, or tests a different claim/condition.",
+        "unknown": "No actual claim-excluding native test, source-defined margin or necessary competence/limit information has been received."
+      },
+      "question": "Does the native formal test actually exclude the stated claim within the tested scope?",
+      "required_evidence": [
+        "native_test_definition",
+        "claim_exclusion_or_equivalence_margin",
+        "observed_effect_direction",
+        "assay_competence_and_limits"
+      ],
+      "required_metric_ids": []
+    },
+    {
+      "criterion_id": "structural_feature_observed",
+      "deterministic_test": null,
+      "outcomes": {
+        "met": "An experimentally constrained model actually contains the relevant density/contact/architecture on the identified construct/site; ambiguity in chemical assignment remains explicit.",
+        "not_met": "The feature is absent from the cited model, wholly predicted/docked, or assigned to a different construct/site.",
+        "unknown": "The relevant actual feature/model/site or experimental validation has not been received."
+      },
+      "question": "Is the relevant physical feature actually observed in the experimental model, even if its assignment remains ambiguous?",
+      "required_evidence": [
+        "experimental_model_and_validation",
+        "relevant_density_contact_or_architecture",
+        "actual_construct_and_site"
+      ],
+      "required_metric_ids": []
+    },
+    {
+      "criterion_id": "structural_alternative_discriminated",
+      "deterministic_test": null,
+      "outcomes": {
+        "met": "An actual observed alternative state or matched site/partner comparison distinguishes the stated structural interpretation from its specified competing explanation.",
+        "not_met": "The comparison contradicts the claimed distinction or concerns an unrelated state/site.",
+        "unknown": "Only one compatible state or an untested modeled alternative is available; the stated alternatives are not experimentally distinguished."
+      },
+      "question": "Does an actual alternative-state or matched-site comparison distinguish the precise structural interpretation?",
+      "required_evidence": [
+        "original_structural_state",
+        "observed_alternative_or_matched_site",
+        "comparison_conditions",
+        "claim_relevant_difference"
+      ],
+      "required_metric_ids": []
+    },
+    {
+      "criterion_id": "orthogonal_structural_interpretation_test",
+      "deterministic_test": null,
+      "outcomes": {
+        "met": "An actual orthogonal chemical/state identification or selective functional comparison tests the specific structural interpretation on the stated subject and preserves which facts are structural versus functional.",
+        "not_met": "The orthogonal/selective result contradicts that structural interpretation or refers to a different subject/relationship.",
+        "unknown": "No relevant orthogonal/selective test has been received. A distance computed from the same coordinates is not another measurement principle."
+      },
+      "question": "Does another measurement principle or selective functional comparison test the specific structural interpretation?",
+      "required_evidence": [
+        "original_structural_interpretation",
+        "orthogonal_chemical_or_selective_functional_test",
+        "matched_source_subject",
+        "specific_tested_relationship"
+      ],
+      "required_metric_ids": []
+    },
+    {
+      "criterion_id": "incompatible_structural_feature_demonstrated",
+      "deterministic_test": null,
+      "outcomes": {
+        "met": "An actual experimentally constrained, sufficiently informative observation demonstrates a feature/site/state incompatible with the exact structural claim under its preparation conditions.",
+        "not_met": "The cited observation is merely missing/unresolved density, an untested modeled alternative or a wholly predicted structure, or the actual feature supports the claim.",
+        "unknown": "The relevant site/state, experimental validation or informative structural limits are unavailable."
+      },
+      "question": "Does actual structural evidence contradict the precise feature/state claimed?",
+      "required_evidence": [
+        "experimentally_validated_site_or_architecture",
+        "claimed_structural_state",
+        "observed_incompatibility",
+        "resolution_and_assignment_limits"
+      ],
+      "required_metric_ids": []
+    },
+    {
+      "criterion_id": "negative_structural_alternative_identified",
+      "deterministic_test": null,
+      "outcomes": {
+        "met": "The source positively identifies the incompatible alternative ligand/contact/architecture at the actual matched site/subject with its assignment limits retained.",
+        "not_met": "The proposed alternative remains an unidentified fit/density or concerns another site/subject.",
+        "unknown": "An experimentally discriminating alternative assignment is unavailable."
+      },
+      "question": "Is an incompatible alternative state positively identified rather than inferred from absent density?",
+      "required_evidence": [
+        "claimed_state",
+        "actual_alternative_assignment",
+        "assignment_validation",
+        "matched_site_and_subject"
+      ],
+      "required_metric_ids": []
+    }
+  ],
+  "name": "Experimental structural evidence through homologs",
+  "native_measurements": [
+    {
+      "binding": {
+        "json_pointer": null,
+        "kind": "unbound",
+        "measurement_name": null
+      },
+      "comparison_limits": [
+        "These quantity types are real structural measurements/model parameters, but this workflow has no registered extractor for them in the current ordinary observation vocabulary; absent a bound extractor they remain unknown.",
+        "A measured or refined structural value is not an affinity, turnover rate, transport flux or annotation-confidence value.",
+        "The structure, its derived contacts/distances and conclusions drawn from those contacts retain their shared dependency.",
+        "Resolution alone does not validate a particular ligand identity or functional claim; compare method-appropriate values."
+      ],
+      "direction": "not_ordered",
+      "method_requirements": [
+        "Identify the experimentally studied homolog, construct, chain, assembly, preparation, native structural record and method. Keep experimental data, refined models and wholly predicted models distinct.",
+        "Preserve the original quantity, unit and source-reported uncertainty or refinement limits. A coordinate-derived distance is derived from its model, not a second experiment.",
+        "Identify the actual ligand/metal/partner assignment and any ambiguity, occupancy or alternative-model limits; never silently assign an unidentified density or substitute prediction confidence for experimental validation."
+      ],
+      "metric_id": "experimental_structure_resolution",
+      "name": "Reported experimental structural resolution",
+      "native_field": null,
+      "observation_kinds": [
+        "structure_match",
+        "mechanism",
+        "assay_report"
+      ],
+      "units": [
+        "angstrom"
+      ],
+      "valid_range": {
+        "maximum": null,
+        "minimum": 0
+      }
+    },
+    {
+      "binding": {
+        "json_pointer": null,
+        "kind": "unbound",
+        "measurement_name": null
+      },
+      "comparison_limits": [
+        "These quantity types are real structural measurements/model parameters, but this workflow has no registered extractor for them in the current ordinary observation vocabulary; absent a bound extractor they remain unknown.",
+        "A measured or refined structural value is not an affinity, turnover rate, transport flux or annotation-confidence value.",
+        "The structure, its derived contacts/distances and conclusions drawn from those contacts retain their shared dependency.",
+        "An occupancy is conditional on the refined model and preparation and is not an equilibrium binding probability for the target."
+      ],
+      "direction": "not_ordered",
+      "method_requirements": [
+        "Identify the experimentally studied homolog, construct, chain, assembly, preparation, native structural record and method. Keep experimental data, refined models and wholly predicted models distinct.",
+        "Preserve the original quantity, unit and source-reported uncertainty or refinement limits. A coordinate-derived distance is derived from its model, not a second experiment.",
+        "Identify the actual ligand/metal/partner assignment and any ambiguity, occupancy or alternative-model limits; never silently assign an unidentified density or substitute prediction confidence for experimental validation."
+      ],
+      "metric_id": "refined_ligand_occupancy",
+      "name": "Reported refined ligand or partner occupancy",
+      "native_field": null,
+      "observation_kinds": [
+        "structure_match",
+        "mechanism",
+        "assay_report"
+      ],
+      "units": [
+        "reported_occupancy_fraction"
+      ],
+      "valid_range": {
+        "maximum": 1,
+        "minimum": 0
+      }
+    },
+    {
+      "binding": {
+        "json_pointer": null,
+        "kind": "unbound",
+        "measurement_name": null
+      },
+      "comparison_limits": [
+        "These quantity types are real structural measurements/model parameters, but this workflow has no registered extractor for them in the current ordinary observation vocabulary; absent a bound extractor they remain unknown.",
+        "A measured or refined structural value is not an affinity, turnover rate, transport flux or annotation-confidence value.",
+        "The structure, its derived contacts/distances and conclusions drawn from those contacts retain their shared dependency.",
+        "Preserve exact atoms/residues/chains and how distance was calculated. Distance alone does not establish contact necessity or productive chemistry."
+      ],
+      "direction": "target_dependent",
+      "method_requirements": [
+        "Identify the experimentally studied homolog, construct, chain, assembly, preparation, native structural record and method. Keep experimental data, refined models and wholly predicted models distinct.",
+        "Preserve the original quantity, unit and source-reported uncertainty or refinement limits. A coordinate-derived distance is derived from its model, not a second experiment.",
+        "Identify the actual ligand/metal/partner assignment and any ambiguity, occupancy or alternative-model limits; never silently assign an unidentified density or substitute prediction confidence for experimental validation."
+      ],
+      "metric_id": "structural_contact_distance",
+      "name": "Reported or explicitly calculated contact distance in the retained experimental model",
+      "native_field": null,
+      "observation_kinds": [
+        "structure_match",
+        "mechanism",
+        "assay_report"
+      ],
+      "units": [
+        "angstrom"
+      ],
+      "valid_range": {
+        "maximum": null,
+        "minimum": 0
+      }
+    },
+    {
+      "binding": {
+        "json_pointer": null,
+        "kind": "unbound",
+        "measurement_name": null
+      },
+      "comparison_limits": [
+        "A p/q-value is not a probability of function. Negative-log10 is a declared monotone evidence-statistic scale, not confidence.",
+        "Nonsignificance does not establish no effect; opposition requires an actual equivalence/detection-limit or other claim-excluding test.",
+        "Do not combine unlike tests, unadjusted families or repeated literature/dataset representations by summing their scores."
+      ],
+      "direction": "lower",
+      "method_requirements": [
+        "Retain the actual statistic type, null and alternative, contrast/effect direction, analysis method, sample/replicate unit and multiplicity handling. Prefer the reported adjusted q-value for the same family when available; do not count p and q as two independent results.",
+        "The source-native statistic must test this formal claim or its competent exclusion, with actual controls and experiment/measurement identity. An unrelated small p-value is not eligible.",
+        "No ordinary Store metric currently binds this quantity. It is unknown unless an actual retained/formal dataset or source measurement supplies the native value and provenance; no JSON pointer is invented."
+      ],
+      "metric_id": "claim_test_probability",
+      "name": "Source-reported p-value or multiplicity-adjusted q-value for the actual claim-relative contrast",
+      "native_field": null,
+      "observation_kinds": [
+        "assay_report",
+        "mechanism",
+        "structure_match"
+      ],
+      "units": [
+        "reported_p_value",
+        "reported_q_value"
+      ],
+      "valid_range": {
+        "maximum": 1,
+        "minimum": 0
+      }
+    }
+  ],
+  "qualitative_grading": [],
+  "scoring_rubric": {
+    "routes": [
+      {
+        "bands": [],
+        "direction": "not_ordered",
+        "eligible_when": [],
+        "grade_criterion": null,
+        "grade_scores": {},
+        "interpretation": "Native measured quantity only. This identity route does not convert magnitude to functional confidence and is not summed with the ordinal evidence-assurance route.",
+        "metric_ids": [
+          "experimental_structure_resolution"
+        ],
+        "operation": "identity",
+        "polarity": "non_discriminating",
+        "route_id": "native_resolution",
+        "score_unit": "angstrom"
+      },
+      {
+        "bands": [],
+        "direction": "not_ordered",
+        "eligible_when": [],
+        "grade_criterion": null,
+        "grade_scores": {},
+        "interpretation": "Native measured quantity only. This identity route does not convert magnitude to functional confidence and is not summed with the ordinal evidence-assurance route.",
+        "metric_ids": [
+          "refined_ligand_occupancy"
+        ],
+        "operation": "identity",
+        "polarity": "non_discriminating",
+        "route_id": "native_occupancy",
+        "score_unit": "reported_occupancy_fraction"
+      },
+      {
+        "bands": [],
+        "direction": "not_ordered",
+        "eligible_when": [],
+        "grade_criterion": null,
+        "grade_scores": {},
+        "interpretation": "Native measured quantity only. This identity route does not convert magnitude to functional confidence and is not summed with the ordinal evidence-assurance route.",
+        "metric_ids": [
+          "structural_contact_distance"
+        ],
+        "operation": "identity",
+        "polarity": "non_discriminating",
+        "route_id": "native_contact_distance",
+        "score_unit": "angstrom"
+      },
+      {
+        "bands": [],
+        "direction": "higher",
+        "eligible_when": [
+          "experimental_structural_origin",
+          "structural_fact_mapped_to_target",
+          "positive_test_targets_claim"
+        ],
+        "grade_criterion": null,
+        "grade_scores": {},
+        "interpretation": "PROPOSED transform: -log10 of the actual matched native p/q value. This is a tail-evidence statistic, not a probability of function. Native zero/censoring must remain a reported bound/unavailable exact score rather than an invented finite or infinite number. No cross-route summation or annotation formula is adopted.",
+        "metric_ids": [
+          "claim_test_probability"
+        ],
+        "operation": "neg_log10",
+        "polarity": "supporting",
+        "route_id": "positive_native_claim_test",
+        "score_unit": "negative_log10_native_tail_probability"
+      },
+      {
+        "bands": [],
+        "direction": "higher",
+        "eligible_when": [
+          "experimental_structural_origin",
+          "structural_fact_mapped_to_target",
+          "negative_test_targets_exclusion"
+        ],
+        "grade_criterion": null,
+        "grade_scores": {},
+        "interpretation": "PROPOSED transform: -log10 of the actual matched native p/q value. This is a tail-evidence statistic, not a probability of function. Native zero/censoring must remain a reported bound/unavailable exact score rather than an invented finite or infinite number. No cross-route summation or annotation formula is adopted.",
+        "metric_ids": [
+          "claim_test_probability"
+        ],
+        "operation": "neg_log10",
+        "polarity": "opposing",
+        "route_id": "negative_native_claim_test",
+        "score_unit": "negative_log10_native_tail_probability"
+      },
+      {
+        "bands": [
+          {
+            "requires": [],
+            "score": 0.0
+          },
+          {
+            "requires": [
+              "experimental_structural_origin",
+              "structural_feature_observed"
+            ],
+            "score": 0.25
+          },
+          {
+            "requires": [
+              "experimental_structural_origin",
+              "structural_feature_observed",
+              "structural_state_identified",
+              "structural_claim_bounded"
+            ],
+            "score": 0.5
+          },
+          {
+            "requires": [
+              "experimental_structural_origin",
+              "structural_feature_observed",
+              "structural_state_identified",
+              "structural_claim_bounded",
+              "structural_alternative_discriminated"
+            ],
+            "score": 0.75
+          },
+          {
+            "requires": [
+              "experimental_structural_origin",
+              "structural_feature_observed",
+              "structural_state_identified",
+              "structural_claim_bounded",
+              "structural_alternative_discriminated",
+              "orthogonal_structural_interpretation_test"
+            ],
+            "score": 1.0
+          }
+        ],
+        "direction": "higher",
+        "eligible_when": [
+          "structural_fact_mapped_to_target"
+        ],
+        "grade_criterion": null,
+        "grade_scores": {},
+        "interpretation": "PROPOSED experimental structural-state assurance, not native affinity, turnover or function probability. Model-derived geometry and its source structure remain one dependent observation.",
+        "metric_ids": [],
+        "operation": "ordinal",
+        "polarity": "supporting",
+        "route_id": "homolog_structural_state_assurance",
+        "score_unit": "ordinal_evidence_level"
+      },
+      {
+        "bands": [
+          {
+            "requires": [],
+            "score": 0.0
+          },
+          {
+            "requires": [
+              "experimental_structural_origin",
+              "incompatible_structural_feature_demonstrated"
+            ],
+            "score": 0.5
+          },
+          {
+            "requires": [
+              "experimental_structural_origin",
+              "incompatible_structural_feature_demonstrated",
+              "negative_structural_alternative_identified"
+            ],
+            "score": 0.75
+          },
+          {
+            "requires": [
+              "experimental_structural_origin",
+              "incompatible_structural_feature_demonstrated",
+              "negative_structural_alternative_identified",
+              "orthogonal_structural_interpretation_test"
+            ],
+            "score": 1.0
+          }
+        ],
+        "direction": "higher",
+        "eligible_when": [
+          "structural_fact_mapped_to_target"
+        ],
+        "grade_criterion": null,
+        "grade_scores": {},
+        "interpretation": "PROPOSED assurance of a specific incompatible structural state. Missing or unresolved density alone is unknown, not counterevidence to every possible function.",
+        "metric_ids": [],
+        "operation": "ordinal",
+        "polarity": "opposing",
+        "route_id": "incompatible_structural_state_assurance",
+        "score_unit": "ordinal_evidence_level"
+      }
+    ],
+    "status": "proposed",
+    "version": "evidence_axis_scoring_v1"
+  },
+  "slot": "evidence_axis",
+  "transfer_chain": {
+    "correspondence": "Link the homolog structural fact to the target through an actual sequence or structural mapping of the relevant residues, site, domain or assembly surface.",
+    "limitations": "Do not relabel homolog observations as target measurements or a wholly predicted/docked model as experimental evidence. Coordinate-derived measurements share the structure dependency; a contact does not by itself establish affinity, turnover or necessity.",
+    "source_property": "Retain the observed ligand/metal state, contacts or architecture, its model origin, native quantities and assignment limits. TT1927b and FrsA retain their ligand-identity ambiguity; a Cas2 contact retains the limits of its functional tests.",
+    "source_subject": "Identify the actual experimentally studied homolog, construct, preparation, chains and assembly; the target need not already have its own experimental structure.",
+    "target_hypothesis": "State which candidate target feature or function the mapped structural fact bears on, retaining the distinction between physical compatibility and demonstrated activity."
+  }
+}

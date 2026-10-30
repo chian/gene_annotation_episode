@@ -1,0 +1,57 @@
+{
+  "origin": "fully_synthetic_research_fixture_corrected_TM_pairs",
+  "rmsd": {
+    "support": 0.396,
+    "opposition": 0.1
+  },
+  "tm": {
+    "native_support_pair": [
+      0.7,
+      0.7
+    ],
+    "native_opposition_pair": [
+      0.5,
+      0.5
+    ],
+    "normalization_lengths": [
+      100,
+      100
+    ],
+    "support": 0.385,
+    "opposition": 0.125
+  },
+  "mixed_contribution": 0.278,
+  "no_recorded_opposition_contribution": 0.3905,
+  "included_missing_tm_alternative_bounds": [
+    0.0,
+    0.3405
+  ],
+  "included_missing_tm_channel_bounds": [
+    0.0,
+    0.648
+  ],
+  "adverse_tm_signed_margin": -0.052,
+  "incorrect_early_clip_example": 0.148,
+  "shared_necessity_bounds": [
+    0.0,
+    0.278
+  ],
+  "assertions_passed": 15,
+  "checks": [
+    "RMSD supporting contribution",
+    "RMSD opposing contribution",
+    "TM supporting contribution",
+    "TM opposing contribution",
+    "complete mixed contribution",
+    "no recorded opposition contribution",
+    "included missing alternative bounds",
+    "included missing TM channel bounds",
+    "opposing metric retained before clipping",
+    "early clipping would hide opposition",
+    "necessary contradiction fixes specific function at zero",
+    "shared unknown necessary predicate bounds",
+    "duplicate reference maximum unchanged",
+    "TM perfect-pair count preserves both normalizations",
+    "no duplicate coverage multiplier on TM"
+  ]
+}

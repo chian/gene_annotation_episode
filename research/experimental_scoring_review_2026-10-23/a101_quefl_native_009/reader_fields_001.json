@@ -1,0 +1,547 @@
+{
+  "status": "proposed_sheet_fields_only_no_reader_implementation",
+  "axis": "A101",
+  "case_id": "seq_queFL_archaeosine",
+  "paper_doi": "10.1021/cb200361w",
+  "sources": {
+    "main_results_domain": {
+      "url": "https://stacks.cdc.gov/view/cdc/41849/cdc_41849_DS1.pdf",
+      "location": "PDF page 3, opening Results paragraph on QueF-like comparisons",
+      "local_file": "paper_cdc.pdf"
+    },
+    "main_fig2C": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3289047/#F2",
+      "location": "Figure 2C; author-manuscript PDF page 9",
+      "local_file": "main_figure2.png"
+    },
+    "main_methods_bioinformatics": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3289047/",
+      "location": "Methods, Bioinformatics; manuscript PDF page 4",
+      "local_file": "paper_cdc.pdf"
+    },
+    "SI_sequences": {
+      "url": "https://ndownloader.figshare.com/files/4192036",
+      "location": "Supplemental Data 1, QueF-like and QueF sequences, PDF pages 9\u201311",
+      "local_file": "figshare_cb200361w_si_001.pdf"
+    },
+    "SI_constructs": {
+      "url": "https://ndownloader.figshare.com/files/4192036",
+      "location": "Supporting Methods, Strains and plasmids constructions, PDF pages 4\u20135",
+      "local_file": "figshare_cb200361w_si_001.pdf"
+    },
+    "SI_fig2": {
+      "url": "https://ndownloader.figshare.com/files/4192036",
+      "location": "Supplemental Figure 2, PDF page 28",
+      "local_file": "supplement_figure2.png"
+    },
+    "main_results_function_limit": {
+      "url": "https://stacks.cdc.gov/view/cdc/41849/cdc_41849_DS1.pdf",
+      "location": "Results/Discussion, manuscript pages 3\u20134; Figure 3B; SI Figures 3\u20135",
+      "local_file": "paper_cdc.pdf"
+    }
+  },
+  "fields": [
+    {
+      "field": "query_sequence",
+      "type": "string",
+      "value": "MLKVSKSPSLVRLKTRGESVCPISKTVDSFEVSVEYIPRGAVLAIEEFKKMVDSYRGREILHEELAVDLLEKVKAAVNPPYVKVTVKSYYIGVEVEVVAESGGVPPVYI",
+      "unit": "amino-acid symbols",
+      "origin": "transcribed_source",
+      "source_ids": [
+        "SI_sequences"
+      ],
+      "formula": null,
+      "denominator_definition": null,
+      "missing_reason": null,
+      "note": "Selected source record YP_001055124.1; target can be supplied without the record name. Not a candidate-annotation prerequisite."
+    },
+    {
+      "field": "query_length_aa",
+      "type": "integer",
+      "value": 109,
+      "unit": "aa",
+      "origin": "derived_from_source",
+      "source_ids": [
+        "SI_sequences"
+      ],
+      "formula": "count amino-acid symbols in selected record",
+      "denominator_definition": null,
+      "missing_reason": null,
+      "note": null
+    },
+    {
+      "field": "reference_full_sequence_length_aa",
+      "type": "integer",
+      "value": 165,
+      "unit": "aa",
+      "origin": "derived_from_source",
+      "source_ids": [
+        "SI_sequences"
+      ],
+      "formula": "count amino-acid symbols in NP_389258.1",
+      "denominator_definition": null,
+      "missing_reason": null,
+      "note": "B. subtilis reference for local sites, not the V. cholerae group-identity comparison."
+    },
+    {
+      "field": "published_identity_percent_range",
+      "type": "array[number,number]",
+      "value": [
+        16,
+        22
+      ],
+      "unit": "%",
+      "origin": "reported",
+      "source_ids": [
+        "main_results_domain"
+      ],
+      "formula": null,
+      "denominator_definition": "Identity denominator unspecified; do not substitute C-alpha atom count.",
+      "missing_reason": null,
+      "note": "Eight modeled QueF-like proteins versus V. cholerae QueF C-terminal half; unassigned group range."
+    },
+    {
+      "field": "identity_fraction_range",
+      "type": "array[number,number]",
+      "value": [
+        0.16,
+        0.22
+      ],
+      "unit": "fraction",
+      "origin": "proposed_unit_conversion",
+      "source_ids": [
+        "main_results_domain"
+      ],
+      "formula": "[lower_percent/100, upper_percent/100]",
+      "denominator_definition": "100 percent",
+      "missing_reason": null,
+      "note": "Same evidence as percent range; do not add as an independent component."
+    },
+    {
+      "field": "group_query_count",
+      "type": "integer",
+      "value": 8,
+      "unit": "sequence records",
+      "origin": "reported_and_source_checked",
+      "source_ids": [
+        "main_results_domain",
+        "SI_sequences"
+      ],
+      "formula": "count distinct supplied archaeal QueF-like records",
+      "denominator_definition": null,
+      "missing_reason": null,
+      "note": "Not the number of functional experiments."
+    },
+    {
+      "field": "named_sites_evaluated",
+      "type": "integer",
+      "value": 4,
+      "unit": "mapped named sites",
+      "origin": "source_defined_panel",
+      "source_ids": [
+        "main_results_domain",
+        "main_fig2C"
+      ],
+      "formula": null,
+      "denominator_definition": null,
+      "missing_reason": null,
+      "note": null
+    },
+    {
+      "field": "named_sites_identical",
+      "type": "integer",
+      "value": 4,
+      "unit": "mapped named sites",
+      "origin": "derived_from_source",
+      "source_ids": [
+        "main_fig2C",
+        "SI_sequences"
+      ],
+      "formula": "sum of four exact residue matches",
+      "denominator_definition": null,
+      "missing_reason": null,
+      "note": null
+    },
+    {
+      "field": "named_site_identity_fraction",
+      "type": "number",
+      "value": 1.0,
+      "unit": "fraction",
+      "origin": "proposed_count_component",
+      "source_ids": [
+        "main_fig2C",
+        "SI_sequences"
+      ],
+      "formula": "(1+1+1+1)/4",
+      "denominator_definition": "Four source-named substrate-pocket sites, not all residues.",
+      "missing_reason": null,
+      "note": null
+    },
+    {
+      "field": "signature_occurrences_in_query",
+      "type": "integer",
+      "value": 0,
+      "unit": "complete pattern matches",
+      "origin": "derived_from_source",
+      "source_ids": [
+        "SI_sequences"
+      ],
+      "formula": "count E[SL]K[SA].K[LY][YFW] matches; zero under relaxed h proves zero under stricter hydrophobic h",
+      "denominator_definition": null,
+      "missing_reason": null,
+      "note": "Complete source record; positive relaxed hits would need defined hydrophobic alphabet. Does not prove absent NADPH binding."
+    },
+    {
+      "field": "signature_bearing_sequences",
+      "type": "integer",
+      "value": 0,
+      "unit": "sequence records",
+      "origin": "derived_from_source",
+      "source_ids": [
+        "SI_sequences"
+      ],
+      "formula": "sum of eight sequence-level complete-signature presence indicators",
+      "denominator_definition": null,
+      "missing_reason": null,
+      "note": null
+    },
+    {
+      "field": "signature_bearing_sequence_fraction",
+      "type": "number",
+      "value": 0.0,
+      "unit": "fraction",
+      "origin": "proposed_count_component",
+      "source_ids": [
+        "SI_sequences"
+      ],
+      "formula": "(0+0+0+0+0+0+0+0)/8",
+      "denominator_definition": "Eight full supplied QueF-like records",
+      "missing_reason": null,
+      "note": "Pcal query is already one member; no extra independent support from counting it again."
+    },
+    {
+      "field": "reference_exact_signature_occurrences",
+      "type": "integer",
+      "value": 1,
+      "unit": "ESKSLKLY occurrences",
+      "origin": "derived_from_source",
+      "source_ids": [
+        "SI_sequences"
+      ],
+      "formula": "count exact ESKSLKLY occurrences in NP_389258.1",
+      "denominator_definition": null,
+      "missing_reason": null,
+      "note": "One-based supplied-sequence start 79; span 79\u201386 inclusive."
+    },
+    {
+      "field": "native_raw_alignment_score",
+      "type": "number|null",
+      "value": null,
+      "unit": "program-specific score",
+      "origin": "missing",
+      "source_ids": [],
+      "formula": null,
+      "denominator_definition": null,
+      "missing_reason": "not_reported_in_inspected_source",
+      "note": "Do not synthesize from percent identity."
+    },
+    {
+      "field": "native_bit_score",
+      "type": "number|null",
+      "value": null,
+      "unit": "bits",
+      "origin": "missing",
+      "source_ids": [],
+      "formula": null,
+      "denominator_definition": null,
+      "missing_reason": "not_reported_in_inspected_source",
+      "note": "No self score or normalization denominator supplied."
+    },
+    {
+      "field": "native_E_value",
+      "type": "number|null",
+      "value": null,
+      "unit": "expected chance matches under stated search model",
+      "origin": "missing",
+      "source_ids": [],
+      "formula": null,
+      "denominator_definition": null,
+      "missing_reason": "not_reported_in_inspected_source",
+      "note": "Search-space size and score-model settings also unknown."
+    },
+    {
+      "field": "native_similarity_percent",
+      "type": "number|null",
+      "value": null,
+      "unit": "%",
+      "origin": "missing",
+      "source_ids": [],
+      "formula": null,
+      "denominator_definition": null,
+      "missing_reason": "not_reported_in_inspected_source",
+      "note": "Substitution matrix and numerator/denominator unavailable."
+    },
+    {
+      "field": "identity_numerator",
+      "type": "integer|null",
+      "value": null,
+      "unit": "identical residue pairs",
+      "origin": "missing",
+      "source_ids": [],
+      "formula": null,
+      "denominator_definition": null,
+      "missing_reason": "not_reported_in_inspected_source",
+      "note": "Range gives no count or exact Pcal pair."
+    },
+    {
+      "field": "identity_denominator",
+      "type": "integer|null",
+      "value": null,
+      "unit": "columns or residue pairs, scheme must be declared",
+      "origin": "missing",
+      "source_ids": [],
+      "formula": null,
+      "denominator_definition": null,
+      "missing_reason": "not_reported_in_inspected_source",
+      "note": "Do not assume number of superposed C-alpha atoms."
+    },
+    {
+      "field": "alignment_columns",
+      "type": "integer|null",
+      "value": null,
+      "unit": "alignment columns",
+      "origin": "missing",
+      "source_ids": [],
+      "formula": null,
+      "denominator_definition": null,
+      "missing_reason": "not_reported_in_inspected_source",
+      "note": "No invented alignment length."
+    },
+    {
+      "field": "aligned_residue_pairs",
+      "type": "integer|null",
+      "value": null,
+      "unit": "nongap residue pairs",
+      "origin": "missing",
+      "source_ids": [],
+      "formula": null,
+      "denominator_definition": null,
+      "missing_reason": "not_reported_in_inspected_source",
+      "note": "Needed for paired identity component."
+    },
+    {
+      "field": "query_alignment_coverage",
+      "type": "number|null",
+      "value": null,
+      "unit": "fraction of supplied query residues",
+      "origin": "missing",
+      "source_ids": [],
+      "formula": null,
+      "denominator_definition": null,
+      "missing_reason": "not_reported_in_inspected_source",
+      "note": "109 aa is known; unique covered positions are unknown."
+    },
+    {
+      "field": "reference_alignment_coverage",
+      "type": "number|null",
+      "value": null,
+      "unit": "fraction of declared reference scope",
+      "origin": "missing",
+      "source_ids": [],
+      "formula": null,
+      "denominator_definition": null,
+      "missing_reason": "not_reported_in_inspected_source",
+      "note": "Exact C-terminal boundaries and per-pair covered positions absent."
+    },
+    {
+      "field": "query_gap_count",
+      "type": "integer|null",
+      "value": null,
+      "unit": "gapped columns",
+      "origin": "missing",
+      "source_ids": [],
+      "formula": null,
+      "denominator_definition": null,
+      "missing_reason": "not_reported_in_inspected_source",
+      "note": "The displayed figure has gaps but no complete machine-readable alignment was reconstructed."
+    },
+    {
+      "field": "reference_gap_count",
+      "type": "integer|null",
+      "value": null,
+      "unit": "gapped columns",
+      "origin": "missing",
+      "source_ids": [],
+      "formula": null,
+      "denominator_definition": null,
+      "missing_reason": "not_reported_in_inspected_source",
+      "note": "Gap count must share the declared alignment scope."
+    },
+    {
+      "field": "query_to_characterized_Pcal_score",
+      "type": "number|null",
+      "value": null,
+      "unit": "declared tool score",
+      "origin": "missing",
+      "source_ids": [],
+      "formula": null,
+      "denominator_definition": null,
+      "missing_reason": "no_new_target_comparison_available",
+      "note": "A future supplied target needs its own comparison; the bacterial-domain range cannot populate this cell."
+    },
+    {
+      "field": "A101_total",
+      "type": "number|null",
+      "value": null,
+      "unit": "not defined",
+      "origin": "missing",
+      "source_ids": [],
+      "formula": null,
+      "denominator_definition": null,
+      "missing_reason": "aggregation_not_selected_for_this_workload",
+      "note": "No A105 formula imported."
+    },
+    {
+      "field": "paired_identity",
+      "type": "number|null",
+      "value": null,
+      "unit": "fraction",
+      "origin": "proposed_unpopulated_component",
+      "source_ids": [],
+      "formula": "N_identical/N_pair",
+      "denominator_definition": "N_pair: aligned columns containing residues from both proteins",
+      "missing_reason": "missing_counts",
+      "note": null
+    },
+    {
+      "field": "paired_query_fraction",
+      "type": "number|null",
+      "value": null,
+      "unit": "fraction",
+      "origin": "proposed_unpopulated_component",
+      "source_ids": [],
+      "formula": "N_pair/L_query",
+      "denominator_definition": "Full supplied query length; paired positions must be unique for one declared alignment",
+      "missing_reason": "missing_counts",
+      "note": null
+    },
+    {
+      "field": "identical_query_fraction",
+      "type": "number|null",
+      "value": null,
+      "unit": "fraction",
+      "origin": "proposed_unpopulated_product",
+      "source_ids": [],
+      "formula": "paired_identity * paired_query_fraction = N_identical/L_query",
+      "denominator_definition": "Full supplied query length",
+      "missing_reason": "missing_counts",
+      "note": "Not a confidence score; native percentage denominator is not assumed to equal N_pair."
+    }
+  ],
+  "site_mapping": [
+    {
+      "reference_published_position": 55,
+      "reference_position_in_SI_sequence_1based": 56,
+      "reference_aa": "C",
+      "query_position_in_SI_sequence_1based": 21,
+      "query_aa": "C",
+      "expected_aa": "C",
+      "identity_match": 1,
+      "mapping_source": "Main Figure 2C and its four named site columns; sequence coordinates counted from Supplemental Data 1"
+    },
+    {
+      "reference_published_position": 62,
+      "reference_position_in_SI_sequence_1based": 63,
+      "reference_aa": "D",
+      "query_position_in_SI_sequence_1based": 28,
+      "query_aa": "D",
+      "expected_aa": "D",
+      "identity_match": 1,
+      "mapping_source": "Main Figure 2C and its four named site columns; sequence coordinates counted from Supplemental Data 1"
+    },
+    {
+      "reference_published_position": 70,
+      "reference_position_in_SI_sequence_1based": 71,
+      "reference_aa": "Y",
+      "query_position_in_SI_sequence_1based": 36,
+      "query_aa": "Y",
+      "expected_aa": "Y",
+      "identity_match": 1,
+      "mapping_source": "Main Figure 2C and its four named site columns; sequence coordinates counted from Supplemental Data 1"
+    },
+    {
+      "reference_published_position": 97,
+      "reference_position_in_SI_sequence_1based": 98,
+      "reference_aa": "E",
+      "query_position_in_SI_sequence_1based": 63,
+      "query_aa": "E",
+      "expected_aa": "E",
+      "identity_match": 1,
+      "mapping_source": "Main Figure 2C and its four named site columns; sequence coordinates counted from Supplemental Data 1"
+    }
+  ],
+  "supporting_non_A101_values": {
+    "rmsd_range_A": [
+      1.5,
+      3.1
+    ],
+    "superposed_Calpha_atom_range": [
+      89,
+      107
+    ],
+    "owner": "structural-comparison context; no additional A101 credit"
+  },
+  "population_contracts": [
+    {
+      "input": "Selected sequence record bytes and supplied completeness/boundary metadata",
+      "output": [
+        "query_sequence",
+        "query_length_aa",
+        "signature_occurrences_in_query"
+      ],
+      "method": "Deterministic count/match over selected bytes; unknown absence for unevaluated or missing region."
+    },
+    {
+      "input": "Main Results numerical statement with comparison subjects and scope",
+      "output": [
+        "published_identity_percent_range",
+        "identity_fraction_range",
+        "group_query_count"
+      ],
+      "method": "Targeted numeric extraction; preserve group range and unknown denominator; division by 100 only."
+    },
+    {
+      "input": "Figure 2C mapped site columns plus the two specified SI sequences",
+      "output": [
+        "named_sites_evaluated",
+        "named_sites_identical",
+        "named_site_identity_fraction",
+        "site_mapping"
+      ],
+      "method": "Transcribe declared columns, keep source coordinate conventions, compare actual symbols, sum matches, divide by evaluated source-defined sites. Unresolved mapping leaves its term unknown."
+    },
+    {
+      "input": "Native alignment output, if separately obtained in later authorized work",
+      "output": [
+        "native_raw_alignment_score",
+        "native_bit_score",
+        "native_E_value",
+        "alignment_columns",
+        "aligned_residue_pairs",
+        "identity_numerator",
+        "identity_denominator",
+        "query_gap_count",
+        "reference_gap_count",
+        "query_alignment_coverage",
+        "reference_alignment_coverage",
+        "paired_identity",
+        "paired_query_fraction",
+        "identical_query_fraction"
+      ],
+      "method": "Not implemented here. Preserve executable/version/scoring settings, score units, exact subject pairs, coordinate schemes and gap/denominator definitions; compute only from actual output."
+    }
+  ],
+  "missing_data_policy": "Unknown is null with a reason. Do not zero-impute, rescale other components to hide missing cells, or substitute categorical relevance grades.",
+  "uncertainty_policy": "Ranges are reported across-comparison ranges, not confidence intervals. No derived functional probability.",
+  "shared_evidence_policy": "Percent and fraction are aliases; query motif count is nested in the eight-record motif summary; site matches may overlap native identical-residue counts; structure-guided mapping is not independent of its structural evidence; functional assay evidence grounds the reference and is not a new A101 component."
+}

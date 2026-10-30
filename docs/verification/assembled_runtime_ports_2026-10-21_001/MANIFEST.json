@@ -1,0 +1,41 @@
+{
+  "final_implementation_sha256": "d0311295775af36ce4ee20b14da85b052e6670e6cbc2d8f60929807e800ddc31",
+  "logs": {
+    "initial_retained_fixture_failure.log": {
+      "command": ".venv/bin/python -m pytest -q tests/test_assembled_runtime_ports.py tests/test_case_specialist_setup.py tests/test_resource_service_setup.py",
+      "original_log": "/tmp/assembled-runtime-ports-checks.log",
+      "sha256": "4b55275eca24ff9351207b23f72009db12194ee5ba79a6cb69d8bfd17971d9c6"
+    },
+    "legacy_95.log": {
+      "command": ".venv/bin/python -m pytest -q tests/test_case_specialist_setup.py tests/test_resource_service_setup.py tests/test_runtime.py tests/test_episode_composition.py",
+      "original_log": "/tmp/assembled-runtime-legacy-final.log",
+      "sha256": "ad8af3ecd1ec43fb9dcd1b2ba82c9497358d80789daf52f2b982007af5b95df8"
+    },
+    "legacy_services_10.log": {
+      "command": ".venv/bin/python -m pytest -q tests/test_episode_application_services.py",
+      "original_log": "/tmp/assembled-runtime-legacy-services-final.log",
+      "sha256": "4e67647e48ad9986461b930079c37185bd7b35354dbfa2bfe0b382676e1cfdc8"
+    },
+    "ports_18_before_strict_copy.log": {
+      "command": ".venv/bin/python -m pytest -q tests/test_assembled_runtime_ports.py",
+      "original_log": "/tmp/assembled-runtime-ports-final.log",
+      "sha256": "8118dc4ddef46a9d07aef6f8c5f8997cb47758598bcb114d793a1fc6e03c63d2"
+    },
+    "ports_21_strict_final.log": {
+      "command": ".venv/bin/python -m pytest -q tests/test_assembled_runtime_ports.py",
+      "original_log": "/tmp/assembled-runtime-ports-strict-final.log",
+      "sha256": "d90e58d69d785493d26b5e4500de227bbe6dacbc4abe20b7789ec123634caab9"
+    }
+  },
+  "scope": "CP1/CP3; no profile adoption or configured-model science",
+  "source_sha256": {
+    "docs/ASSEMBLED_CALLER_PROFILE_PLAN_2026-10-21_001.md": "44f8dd2a73208346f576345509ea6ebf245d668c7abddb4ca6c3131abf897709",
+    "docs/ASSEMBLED_RUNTIME_PORTS_2026-10-21_001.md": "be2bebfdeea7df43dc2d898288f1802448b14d547d3670ed6eee5c14fd8bc26b",
+    "gene_annotation_episode/case_execution.py": "827b924469e677c425e3d76469396ccea19b3f1f25f2a3a2db7349d0e9642ee0",
+    "gene_annotation_episode/episode_application_services.py": "da875465e663515a706f3e2d50b8e5b76506a565fa0328ad55f83079096a1a80",
+    "gene_annotation_episode/independent_execution.py": "8f02ee01b8a482055c1ab99de09869f6cff390c4e84b248de25712e355120955",
+    "gene_annotation_episode/runtime.py": "5a162c139e73172b8b62a73837fcac7df4bc317be2e82767ca3822e116e9cdbf",
+    "tests/test_assembled_runtime_ports.py": "c72c596caa7d62b58a8ec52dd5619e474095ae54f5f4bc3756c6d4d0219da1f7"
+  },
+  "version": "assembled_runtime_ports_evidence_v1"
+}

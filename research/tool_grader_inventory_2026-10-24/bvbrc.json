@@ -1,0 +1,3692 @@
+{
+  "schema": "bvbrc_tool_inventory_v1",
+  "inventory_date": "2026-10-24",
+  "created_at_utc": "2026-10-24T16:46:26.424981+00:00",
+  "scope": "Inventory only. Tool graders are deterministic native-output readers, numerical sheets and calculators. Literature graders, evidence-axis aggregation, annotation credit and episode orchestration remain separate. No graders or production/library changes made.",
+  "provenance": {
+    "repository": "https://github.com/BV-BRC/BV-BRC-MCP",
+    "commit": "176c82d227a0e94b6adf70214cd7dc4d9961489d",
+    "commit_date": "2026-02-24T22:41:40-06:00",
+    "checkout": "/home/chia/repos/gene_annotation_episode/reference/BV-BRC-MCP",
+    "source_checkout_modified": false,
+    "registration_method": "Python AST active @mcp.tool decorators plus stdio_server.py/http_server.py registrations",
+    "inspected_implementation_files": [
+      "common/config.py",
+      "common/json_rpc.py",
+      "common/token_provider.py",
+      "common/workflow_engine_client.py",
+      "config/manifest_template.json",
+      "config/service_mapping.json",
+      "config/service_outputs.json",
+      "config/service_required_params.json",
+      "functions/data_functions.py",
+      "functions/rag_database_functions.py",
+      "functions/service_functions.py",
+      "functions/sra_functions.py",
+      "functions/workflow_functions.py",
+      "functions/workspace_functions.py",
+      "http_server.py",
+      "stdio_server.py",
+      "tools/data_tools.py",
+      "tools/rag_database_tools.py",
+      "tools/service_tools.py",
+      "tools/sra_tools.py",
+      "tools/workspace_tools.py"
+    ]
+  },
+  "counts": {
+    "registered_tool_names_union": 19,
+    "http_registered_tools": 18,
+    "stdio_registered_tools": 18,
+    "registered_tools_by_category": {
+      "execution_workspace_helper": 16,
+      "biological_data_retrieval": 2,
+      "literature_helpdesk_exclusion": 1
+    },
+    "directly_registered_analysis_service_tools": 0,
+    "service_families": 31,
+    "service_families_by_category": {
+      "execution_service_helper": 3,
+      "scientific_algorithm_service": 28
+    },
+    "service_families_with_declared_output_patterns": 16,
+    "collection_prompt_definitions": 33,
+    "inactive_tool_definitions": 6,
+    "manifest_advertised_names": 47,
+    "manifest_names_currently_registered": 10,
+    "manifest_names_not_currently_registered": 37
+  },
+  "access_here": {
+    "bound_bvbrc_mcp_tools_in_session": [],
+    "plugin_search_query": "BV-BRC",
+    "plugin_search_result_count": 0,
+    "KB_AUTH_TOKEN_present": false,
+    "no_login_performed": true,
+    "no_service_jobs_submitted": true,
+    "no_live_service_result_requests_performed": true,
+    "source_python3_module_presence": {
+      "fastmcp": false,
+      "bvbrc_solr_api": false,
+      "pymongo": false
+    },
+    "workspace_venv_modules_checked": {
+      "fastmcp": false,
+      "bvbrc_solr_api": false,
+      "pymongo": false
+    },
+    "executables_on_path": {
+      "singularity": null,
+      "apptainer": null,
+      "p3-sra": null
+    },
+    "configured_sra_container_exists_here": false,
+    "source_endpoints": {
+      "base_url": "https://www.bv-brc.org/api-bulk",
+      "service_api_url": "https://p3.theseed.org/services/app_service",
+      "similar_genome_finder_api_url": "https://p3.theseed.org/services/minhash_service",
+      "workspace_url": "https://p3.theseed.org/services/Workspace"
+    },
+    "remote_workflow_engine_in_source_config_enabled": true,
+    "remote_workflow_engine_reachability": "not probed",
+    "source_config_is_not_deployment_proof": true,
+    "project_existing_bvbrc_adapter": {
+      "path": "gene_annotation_episode/api_bvbrc.py",
+      "lines": [
+        28,
+        29,
+        52,
+        53
+      ],
+      "scope": "Separate public data adapter for genome/genome_feature/protein_family_ref with api.bvbrc.query and api.bvbrc.result; not upstream MCP AppService/Workspace integration. Historical public retrieval evidence is described in launch_instruction_library/api-bvbrc.md, not reverified here."
+    }
+  },
+  "registered_tools": [
+    {
+      "name": "bvbrc_search_data",
+      "python_function": "bvbrc_search_data",
+      "description": "Unified natural-language data search tool for BV-BRC.",
+      "transports": [
+        "stdio",
+        "http"
+      ],
+      "registration": {
+        "path": "tools/data_tools.py",
+        "line": 847,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/data_tools.py#L847"
+      },
+      "implementation": {
+        "path": "tools/data_tools.py",
+        "line": 848,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/data_tools.py#L848",
+        "end_line": 1234
+      },
+      "declared_return_annotation": "Dict[str, Any]",
+      "category": "biological_data_retrieval",
+      "actual_operation": "LLM selects one collection; tokenized AND Solr search, cursor pagination; count/facet branch. advanced is unconditionally reset to False.",
+      "resource": "BV-BRC api-bulk plus configured LLM; local post-processing",
+      "auth_requirements": "Optional token for public data, needed for protected data; HTTP MCP endpoint itself uses OAuth. Configured LLM required.",
+      "native_or_return_result_type": "JSON envelope with TSV string/count/pagination; count-only numeric JSON; facets JSON plus TSV. Underlying Solr rows are structured JSON.",
+      "source_status": "source_registered_with_disabled_advanced_mode",
+      "backend_implementation": {
+        "path": "functions/data_functions.py",
+        "line": 90,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/data_functions.py#L90",
+        "end_line": 251
+      },
+      "bound_in_current_session": false,
+      "live_access_verified": false,
+      "grader_disposition": "retrieval_reader_candidate; preserve record assertions and raw numbers, no blanket scientific score"
+    },
+    {
+      "name": "get_sra_metadata",
+      "python_function": "get_sra_metadata",
+      "description": "Retrieve metadata for one or more SRA (Sequence Read Archive) IDs.",
+      "transports": [
+        "http"
+      ],
+      "registration": {
+        "path": "tools/sra_tools.py",
+        "line": 32,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/sra_tools.py#L32"
+      },
+      "implementation": {
+        "path": "tools/sra_tools.py",
+        "line": 33,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/sra_tools.py#L33",
+        "end_line": 83
+      },
+      "declared_return_annotation": "Dict[str, Any]",
+      "category": "biological_data_retrieval",
+      "actual_operation": "Runs singularity exec <container> p3-sra --metaonly once per run ID, then parses local metadata JSON.",
+      "resource": "MCP server local Singularity command fetching SRA metadata; no HPC binding",
+      "auth_requirements": "No tool-level BV-BRC token argument; HTTP endpoint uses OAuth; configured container and Singularity needed.",
+      "native_or_return_result_type": "JSON results per SRA ID: success, metadata, error; requested/success/failed totals.",
+      "source_status": "source_registered_http_only_missing_local_dependencies",
+      "backend_implementation": {
+        "path": "functions/sra_functions.py",
+        "line": 14,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/sra_functions.py#L14",
+        "end_line": 140
+      },
+      "bound_in_current_session": false,
+      "live_access_verified": false,
+      "grader_disposition": "metadata_reader_candidate; metadata lookup is not an analysis result"
+    },
+    {
+      "name": "create_feature_group",
+      "python_function": "create_feature_group",
+      "description": "Create a feature group in the workspace.",
+      "transports": [
+        "stdio",
+        "http"
+      ],
+      "registration": {
+        "path": "tools/workspace_tools.py",
+        "line": 1062,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/workspace_tools.py#L1062"
+      },
+      "implementation": {
+        "path": "tools/workspace_tools.py",
+        "line": 1063,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/workspace_tools.py#L1063",
+        "end_line": 1128
+      },
+      "declared_return_annotation": "dict",
+      "category": "execution_workspace_helper",
+      "actual_operation": "Rewrites feature ID punctuation before Workspace.create feature_group. Four-digit suffix IDs can be corrupted.",
+      "resource": "BV-BRC Workspace API",
+      "auth_requirements": "BV-BRC token required.",
+      "native_or_return_result_type": "Workspace object metadata wrapped in JSON data/source or error.",
+      "source_status": "confirmed_source_id_rewrite_defect",
+      "backend_implementation": {
+        "path": "functions/workspace_functions.py",
+        "line": 1167,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/workspace_functions.py#L1167",
+        "end_line": 1193
+      },
+      "bound_in_current_session": false,
+      "live_access_verified": false,
+      "grader_disposition": "group management; no scientific grade"
+    },
+    {
+      "name": "create_genome_group",
+      "python_function": "create_genome_group",
+      "description": "Create a genome group in the workspace.",
+      "transports": [
+        "stdio",
+        "http"
+      ],
+      "registration": {
+        "path": "tools/workspace_tools.py",
+        "line": 998,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/workspace_tools.py#L998"
+      },
+      "implementation": {
+        "path": "tools/workspace_tools.py",
+        "line": 999,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/workspace_tools.py#L999",
+        "end_line": 1060
+      },
+      "declared_return_annotation": "dict",
+      "category": "execution_workspace_helper",
+      "actual_operation": "Workspace.create genome_group containing supplied genome_id list.",
+      "resource": "BV-BRC Workspace API",
+      "auth_requirements": "BV-BRC token required.",
+      "native_or_return_result_type": "Workspace object metadata wrapped in JSON data/source or error.",
+      "source_status": "source_registered_live_unverified",
+      "backend_implementation": {
+        "path": "functions/workspace_functions.py",
+        "line": 1134,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/workspace_functions.py#L1134",
+        "end_line": 1165
+      },
+      "bound_in_current_session": false,
+      "live_access_verified": false,
+      "grader_disposition": "group management; no scientific grade"
+    },
+    {
+      "name": "get_feature_group_ids",
+      "python_function": "get_feature_group_ids",
+      "description": "Get feature_ids from a specific feature group. Requires either feature_group_name or feature_group_path to identify the group.",
+      "transports": [
+        "stdio",
+        "http"
+      ],
+      "registration": {
+        "path": "tools/workspace_tools.py",
+        "line": 1181,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/workspace_tools.py#L1181"
+      },
+      "implementation": {
+        "path": "tools/workspace_tools.py",
+        "line": 1182,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/workspace_tools.py#L1182",
+        "end_line": 1230
+      },
+      "declared_return_annotation": "dict",
+      "category": "execution_workspace_helper",
+      "actual_operation": "Workspace.get followed by JSON decode and id_list.feature_id extraction.",
+      "resource": "BV-BRC Workspace API",
+      "auth_requirements": "BV-BRC token required.",
+      "native_or_return_result_type": "JSON feature_ids array/count/source.",
+      "source_status": "source_registered_live_unverified",
+      "backend_implementation": {
+        "path": "functions/workspace_functions.py",
+        "line": 1322,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/workspace_functions.py#L1322",
+        "end_line": 1368
+      },
+      "bound_in_current_session": false,
+      "live_access_verified": false,
+      "grader_disposition": "group membership retrieval; no scientific grade"
+    },
+    {
+      "name": "get_genome_group_ids",
+      "python_function": "get_genome_group_ids",
+      "description": "Get genome_ids from a specific genome group. Requires either genome_group_name or genome_group_path to identify the group.",
+      "transports": [
+        "stdio",
+        "http"
+      ],
+      "registration": {
+        "path": "tools/workspace_tools.py",
+        "line": 1130,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/workspace_tools.py#L1130"
+      },
+      "implementation": {
+        "path": "tools/workspace_tools.py",
+        "line": 1131,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/workspace_tools.py#L1131",
+        "end_line": 1179
+      },
+      "declared_return_annotation": "dict",
+      "category": "execution_workspace_helper",
+      "actual_operation": "Workspace.get followed by JSON decode and id_list.genome_id extraction.",
+      "resource": "BV-BRC Workspace API",
+      "auth_requirements": "BV-BRC token required.",
+      "native_or_return_result_type": "JSON genome_ids array/count/source.",
+      "source_status": "source_registered_live_unverified",
+      "backend_implementation": {
+        "path": "functions/workspace_functions.py",
+        "line": 1278,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/workspace_functions.py#L1278",
+        "end_line": 1320
+      },
+      "bound_in_current_session": false,
+      "live_access_verified": false,
+      "grader_disposition": "group membership retrieval; no scientific grade"
+    },
+    {
+      "name": "get_job_details",
+      "python_function": "service_get_job_details",
+      "description": "Query task details by task IDs. Use this tool for questions about specific jobs, such as:\n- Why did a job fail?\n- What happened during job execution?\n- What is the current status of a job?\n- What were the job parameters or results?\n- Debugging job issues or errors",
+      "transports": [
+        "stdio",
+        "http"
+      ],
+      "registration": {
+        "path": "tools/service_tools.py",
+        "line": 227,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/service_tools.py#L227"
+      },
+      "implementation": {
+        "path": "tools/service_tools.py",
+        "line": 228,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/service_tools.py#L228",
+        "end_line": 282
+      },
+      "declared_return_annotation": "Dict[str, Any]",
+      "category": "execution_workspace_helper",
+      "actual_operation": "Calls AppService.query_tasks; optionally GETs last 100 stdout/stderr lines per task.",
+      "resource": "BV-BRC AppService API and task_info HTTP",
+      "auth_requirements": "BV-BRC token required.",
+      "native_or_return_result_type": "JSON {data:<native task records>,source}; optional log strings, error object.",
+      "source_status": "source_registered_live_unverified",
+      "backend_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 411,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L411",
+        "end_line": 508
+      },
+      "bound_in_current_session": false,
+      "live_access_verified": false,
+      "grader_disposition": "operational state/log reader; no scientific grade"
+    },
+    {
+      "name": "get_service_submission_schema",
+      "python_function": "service_get_service_submission_schema",
+      "description": "Fetch the authoritative submission schema for one service.\nUse the helpdesk tool for any other guidance or questions about which service to run.",
+      "transports": [
+        "stdio",
+        "http"
+      ],
+      "registration": {
+        "path": "tools/service_tools.py",
+        "line": 351,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/service_tools.py#L351"
+      },
+      "implementation": {
+        "path": "tools/service_tools.py",
+        "line": 352,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/service_tools.py#L352",
+        "end_line": 386
+      },
+      "declared_return_annotation": "str",
+      "category": "execution_workspace_helper",
+      "actual_operation": "Reads prompts/services/<name>.txt and appends an output-path note; does not query a live authoritative schema.",
+      "resource": "Local MCP source text",
+      "auth_requirements": "Requires BV-BRC token even though the implementation reads local files.",
+      "native_or_return_result_type": "Plain parameter-guidance text or error string.",
+      "source_status": "source_registered_description_overstates_authority",
+      "backend_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 253,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L253",
+        "end_line": 289
+      },
+      "bound_in_current_session": false,
+      "live_access_verified": false,
+      "grader_disposition": "parameter documentation; no scientific grade"
+    },
+    {
+      "name": "health_check",
+      "python_function": "health_check",
+      "description": "Health check endpoint",
+      "transports": [
+        "stdio"
+      ],
+      "registration": {
+        "path": "stdio_server.py",
+        "line": 65,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/stdio_server.py#L65"
+      },
+      "implementation": {
+        "path": "stdio_server.py",
+        "line": 66,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/stdio_server.py#L66",
+        "end_line": 69
+      },
+      "declared_return_annotation": "str",
+      "category": "execution_workspace_helper",
+      "actual_operation": "Returns fixed health text; no backend checks.",
+      "resource": "Local MCP process",
+      "auth_requirements": "No tool-level auth; stdio only.",
+      "native_or_return_result_type": "JSON encoded string with healthy/service/mode.",
+      "source_status": "source_registered_stdio_only",
+      "backend_implementation": {
+        "path": "stdio_server.py",
+        "line": 66,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/stdio_server.py#L66",
+        "end_line": 69
+      },
+      "bound_in_current_session": false,
+      "live_access_verified": false,
+      "grader_disposition": "liveness helper; no scientific grade"
+    },
+    {
+      "name": "list_jobs",
+      "python_function": "service_list_jobs",
+      "description": "List jobs (summary view) with sorting/filtering support.",
+      "transports": [
+        "stdio",
+        "http"
+      ],
+      "registration": {
+        "path": "tools/service_tools.py",
+        "line": 284,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/service_tools.py#L284"
+      },
+      "implementation": {
+        "path": "tools/service_tools.py",
+        "line": 285,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/service_tools.py#L285",
+        "end_line": 349
+      },
+      "declared_return_annotation": "Dict[str, Any]",
+      "category": "execution_workspace_helper",
+      "actual_operation": "AppService.enumerate_tasks_filtered with filters/sort; removes deleted jobs.",
+      "resource": "BV-BRC AppService API",
+      "auth_requirements": "BV-BRC token required.",
+      "native_or_return_result_type": "JSON items,total,count,offset,limit,filters,call,ui_grid.",
+      "source_status": "source_registered_live_unverified",
+      "backend_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 510,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L510",
+        "end_line": 634
+      },
+      "bound_in_current_session": false,
+      "live_access_verified": false,
+      "grader_disposition": "operational listing; no scientific grade"
+    },
+    {
+      "name": "list_service_apps",
+      "python_function": "service_enumerate_apps",
+      "description": "List available BV-BRC service apps that can be submitted.",
+      "transports": [
+        "stdio",
+        "http"
+      ],
+      "registration": {
+        "path": "tools/service_tools.py",
+        "line": 161,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/service_tools.py#L161"
+      },
+      "implementation": {
+        "path": "tools/service_tools.py",
+        "line": 162,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/service_tools.py#L162",
+        "end_line": 225
+      },
+      "declared_return_annotation": "str",
+      "category": "execution_workspace_helper",
+      "actual_operation": "Calls AppService.enumerate_apps then maps app IDs; wrapper mistakenly requires a list after helper wraps result in a dict.",
+      "resource": "BV-BRC AppService API",
+      "auth_requirements": "BV-BRC token required; HTTP OAuth or stdio KB_AUTH_TOKEN/explicit token.",
+      "native_or_return_result_type": "Advertised service list; actual successful helper response yields {services:[],count:0,source}. Declares str but returns dict.",
+      "source_status": "confirmed_source_wrapper_defect",
+      "backend_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 291,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L291",
+        "end_line": 309
+      },
+      "bound_in_current_session": false,
+      "live_access_verified": false,
+      "grader_disposition": "operational inventory; no scientific grade"
+    },
+    {
+      "name": "plan_workflow",
+      "python_function": "plan_workflow",
+      "description": "Plan and persist a workflow from natural language without executing it.",
+      "transports": [
+        "stdio",
+        "http"
+      ],
+      "registration": {
+        "path": "tools/service_tools.py",
+        "line": 392,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/service_tools.py#L392"
+      },
+      "implementation": {
+        "path": "tools/service_tools.py",
+        "line": 393,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/service_tools.py#L393",
+        "end_line": 579
+      },
+      "declared_return_annotation": "Dict[str, Any]",
+      "category": "execution_workspace_helper",
+      "actual_operation": "Configured LLM selects services and generates manifest; configured workflow engine may persist it. Service-catalog discovery unwrap is defective.",
+      "resource": "Configured LLM + AppService catalog + external workflow-engine API",
+      "auth_requirements": "BV-BRC token, configured LLM, engine for persistence.",
+      "native_or_return_result_type": "JSON workflow_id,status,persisted,workflow_json,step_count,warnings. Local fallback ID can be labelled persisted=true by wrapper.",
+      "source_status": "source_registered_with_confirmed_catalog_and_persistence_reporting_defects",
+      "backend_implementation": {
+        "path": "functions/workflow_functions.py",
+        "line": 1101,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/workflow_functions.py#L1101",
+        "end_line": 1386
+      },
+      "bound_in_current_session": false,
+      "live_access_verified": false,
+      "grader_disposition": "upstream orchestration helper; outside deterministic tool graders and this project episode ownership"
+    },
+    {
+      "name": "read_file_bytes_tool",
+      "python_function": "read_file_bytes_tool",
+      "description": "Read a byte window from local session files or workspace files.",
+      "transports": [
+        "stdio",
+        "http"
+      ],
+      "registration": {
+        "path": "tools/workspace_tools.py",
+        "line": 789,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/workspace_tools.py#L789"
+      },
+      "implementation": {
+        "path": "tools/workspace_tools.py",
+        "line": 790,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/workspace_tools.py#L790",
+        "end_line": 912
+      },
+      "declared_return_annotation": "dict",
+      "category": "execution_workspace_helper",
+      "actual_operation": "Reads configured local session/path byte window or Workspace download URL HTTP Range.",
+      "resource": "Local MCP server file system or BV-BRC Workspace HTTP; not HPC",
+      "auth_requirements": "Local mode needs configured session base/registry; remote mode needs BV-BRC token; HTTP endpoint OAuth.",
+      "native_or_return_result_type": "JSON data text/tagged base64, byte counts/offset/next offset and source type.",
+      "source_status": "source_registered_live_unverified",
+      "backend_implementation": {
+        "path": "functions/workspace_functions.py",
+        "line": 866,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/workspace_functions.py#L866",
+        "end_line": 931
+      },
+      "bound_in_current_session": false,
+      "live_access_verified": false,
+      "grader_disposition": "artifact transport; byte count is operational, not scientific score"
+    },
+    {
+      "name": "read_file_lines",
+      "python_function": "read_file_lines",
+      "description": "Read line ranges from a local Copilot session file.",
+      "transports": [
+        "stdio",
+        "http"
+      ],
+      "registration": {
+        "path": "tools/workspace_tools.py",
+        "line": 914,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/workspace_tools.py#L914"
+      },
+      "implementation": {
+        "path": "tools/workspace_tools.py",
+        "line": 915,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/workspace_tools.py#L915",
+        "end_line": 957
+      },
+      "declared_return_annotation": "dict",
+      "category": "execution_workspace_helper",
+      "actual_operation": "Reads local session file; JSON array/object and CSV/TSV are sliced by records, other text by lines.",
+      "resource": "Local MCP server file system and optional MongoDB file registry; not HPC",
+      "auth_requirements": "Configured session_base_path and session/file identity; no tool token; HTTP endpoint OAuth.",
+      "native_or_return_result_type": "JSON lines/records,startLine,endLine,totalLines,hasMore.",
+      "source_status": "source_registered_live_unverified",
+      "backend_implementation": {
+        "path": "tools/workspace_tools.py",
+        "line": 458,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/workspace_tools.py#L458",
+        "end_line": 511
+      },
+      "bound_in_current_session": false,
+      "live_access_verified": false,
+      "grader_disposition": "generic deterministic reader only; scientific schema and calculations belong elsewhere"
+    },
+    {
+      "name": "submit_workflow",
+      "python_function": "submit_workflow",
+      "description": "Submit an already planned workflow for execution.",
+      "transports": [
+        "stdio",
+        "http"
+      ],
+      "registration": {
+        "path": "tools/service_tools.py",
+        "line": 581,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/service_tools.py#L581"
+      },
+      "implementation": {
+        "path": "tools/service_tools.py",
+        "line": 582,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/service_tools.py#L582",
+        "end_line": 758
+      },
+      "declared_return_annotation": "Dict[str, Any]",
+      "category": "execution_workspace_helper",
+      "actual_operation": "Health-checks configured workflow engine then POSTs /workflows/<id>/submit; does not call local start_* functions.",
+      "resource": "External workflow-engine API; downstream BV-BRC service execution is outside this repository",
+      "auth_requirements": "BV-BRC token and enabled/reachable configured engine; existing engine-registered workflow ID.",
+      "native_or_return_result_type": "JSON workflow ID/status/submission time/status URL or structured engine error; no scientific result bytes.",
+      "source_status": "source_registered_external_dispatch_unverified",
+      "backend_implementation": {
+        "path": "common/workflow_engine_client.py",
+        "line": 260,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/common/workflow_engine_client.py#L260",
+        "end_line": 320
+      },
+      "bound_in_current_session": false,
+      "live_access_verified": false,
+      "grader_disposition": "submission receipt; no scientific grade"
+    },
+    {
+      "name": "workspace_browse_tool",
+      "python_function": "workspace_browse_tool",
+      "description": "Find and list files in the user's personal workspace by name, type, or extension.",
+      "transports": [
+        "stdio",
+        "http"
+      ],
+      "registration": {
+        "path": "tools/workspace_tools.py",
+        "line": 560,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/workspace_tools.py#L560"
+      },
+      "implementation": {
+        "path": "tools/workspace_tools.py",
+        "line": 561,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/workspace_tools.py#L561",
+        "end_line": 653
+      },
+      "declared_return_annotation": "dict",
+      "category": "execution_workspace_helper",
+      "actual_operation": "Workspace.ls recursive search with filters, one-level list without filters, or Workspace.get metadata.",
+      "resource": "BV-BRC Workspace API",
+      "auth_requirements": "BV-BRC token required.",
+      "native_or_return_result_type": "JSON result with items or metadata, count, result_type, call and ui_grid.",
+      "source_status": "source_registered_live_unverified",
+      "backend_implementation": {
+        "path": "functions/workspace_functions.py",
+        "line": 452,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/workspace_functions.py#L452",
+        "end_line": 724
+      },
+      "bound_in_current_session": false,
+      "live_access_verified": false,
+      "grader_disposition": "workspace inventory; no scientific grade"
+    },
+    {
+      "name": "workspace_download_file_tool",
+      "python_function": "workspace_download_file_tool",
+      "description": "Download a file from the workspace.",
+      "transports": [
+        "stdio",
+        "http"
+      ],
+      "registration": {
+        "path": "tools/workspace_tools.py",
+        "line": 758,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/workspace_tools.py#L758"
+      },
+      "implementation": {
+        "path": "tools/workspace_tools.py",
+        "line": 759,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/workspace_tools.py#L759",
+        "end_line": 787
+      },
+      "declared_return_annotation": "dict",
+      "category": "execution_workspace_helper",
+      "actual_operation": "Workspace.get_download_url then HTTP GET; can write supplied local output_file and/or return full data.",
+      "resource": "BV-BRC Workspace/download HTTP and optional local file write",
+      "auth_requirements": "BV-BRC token required.",
+      "native_or_return_result_type": "JSON data containing UTF-8 text or tagged base64; optional saved-file message.",
+      "source_status": "source_registered_live_unverified",
+      "backend_implementation": {
+        "path": "functions/workspace_functions.py",
+        "line": 766,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/workspace_functions.py#L766",
+        "end_line": 838
+      },
+      "bound_in_current_session": false,
+      "live_access_verified": false,
+      "grader_disposition": "artifact transport; pass retained scientific files to their own native readers"
+    },
+    {
+      "name": "workspace_upload",
+      "python_function": "workspace_upload",
+      "description": "Create an upload URL for a file in the workspace.",
+      "transports": [
+        "stdio",
+        "http"
+      ],
+      "registration": {
+        "path": "tools/workspace_tools.py",
+        "line": 959,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/workspace_tools.py#L959"
+      },
+      "implementation": {
+        "path": "tools/workspace_tools.py",
+        "line": 960,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/workspace_tools.py#L960",
+        "end_line": 996
+      },
+      "declared_return_annotation": "dict",
+      "category": "execution_workspace_helper",
+      "actual_operation": "Workspace.create creates upload node, then uploads local filename via HTTP PUT. More than merely returning a URL.",
+      "resource": "BV-BRC Workspace/storage API plus local file read",
+      "auth_requirements": "BV-BRC token and existing local file.",
+      "native_or_return_result_type": "JSON upload URL/file/directory/upload_status; optional upload_error.",
+      "source_status": "source_registered_description_omits_actual_upload",
+      "backend_implementation": {
+        "path": "functions/workspace_functions.py",
+        "line": 966,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/workspace_functions.py#L966",
+        "end_line": 1063
+      },
+      "bound_in_current_session": false,
+      "live_access_verified": false,
+      "grader_disposition": "artifact mutation/transport; no scientific grade"
+    },
+    {
+      "name": "helpdesk_service_usage",
+      "python_function": "helpdesk_service_usage",
+      "description": "Search BV-BRC help guides/FAQs and return a short grounded usage answer.",
+      "transports": [
+        "stdio",
+        "http"
+      ],
+      "registration": {
+        "path": "tools/rag_database_tools.py",
+        "line": 31,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/rag_database_tools.py#L31"
+      },
+      "implementation": {
+        "path": "tools/rag_database_tools.py",
+        "line": 32,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/rag_database_tools.py#L32",
+        "end_line": 89
+      },
+      "declared_return_annotation": "Dict[str, Any]",
+      "category": "literature_helpdesk_exclusion",
+      "actual_operation": "POST to configured RAG helpdesk index and optional LLM summary.",
+      "resource": "Configured RAG API plus summarization LLM",
+      "auth_requirements": "No tool-level BV-BRC token; HTTP endpoint OAuth; RAG/model configuration required.",
+      "native_or_return_result_type": "JSON retrieved documents with relevance scores/content/metadata, summary, count; may contain summary_error.",
+      "source_status": "source_registered_live_unverified",
+      "backend_implementation": {
+        "path": "functions/rag_database_functions.py",
+        "line": 12,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/rag_database_functions.py#L12",
+        "end_line": 116
+      },
+      "bound_in_current_session": false,
+      "live_access_verified": false,
+      "grader_disposition": "exclude from bioinformatics tool graders; retrieval similarity is not a scientific confidence grade"
+    }
+  ],
+  "service_families": [
+    {
+      "name": "date",
+      "description": "Date/test job, operational utility",
+      "category": "execution_service_helper",
+      "mapped_service": "Date",
+      "source_handler": "start_date_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 311,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L311",
+        "end_line": 341
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 3,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L3"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/date.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/date.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "output_path",
+        "output_file"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "Output files not specified in MCP output catalog.",
+      "output_patterns": null,
+      "output_patterns_status": "absent from config/service_outputs.json",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "execution/data-transfer helper; no scientific grade"
+    },
+    {
+      "name": "genome_assembly",
+      "description": "Assemble sequence reads; recipes include Unicycler, Flye, Canu, SPAdes, MEGAHIT",
+      "category": "scientific_algorithm_service",
+      "mapped_service": "GenomeAssembly2",
+      "source_handler": "start_genome_assembly_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 636,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L636",
+        "end_line": 679
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 4,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L4"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/genome_assembly.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/genome_assembly.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "paired_end_libs",
+        "single_end_libs",
+        "srr_ids",
+        "max_bases",
+        "recipe",
+        "racon_iter",
+        "pilon_iter",
+        "trim",
+        "target_depth",
+        "normalize",
+        "filtlong",
+        "genome_size",
+        "min_contig_len",
+        "min_contig_cov",
+        "output_path",
+        "output_file",
+        "debug"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "contigs FASTA; assembly HTML report",
+      "output_patterns": {
+        "contigs_fasta": "${params.output_path}/.${params.output_file}/${params.output_file}_contigs.fasta",
+        "assembly_report": "${params.output_path}/.${params.output_file}/${params.output_file}_AssemblyReport.html"
+      },
+      "output_patterns_status": "upstream templates only; not downloaded/validated",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "native result reader/numerical sheet candidate; output specification/fixtures still needed",
+      "output_pattern_source": {
+        "path": "config/service_outputs.json",
+        "line": 2,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_outputs.json#L2"
+      }
+    },
+    {
+      "name": "genome_annotation",
+      "description": "Annotate genome contigs with selected recipe",
+      "category": "scientific_algorithm_service",
+      "mapped_service": "GenomeAnnotation",
+      "source_handler": "start_genome_annotation_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 343,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L343",
+        "end_line": 409
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 5,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L5"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/genome_annotation.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/genome_annotation.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "genome_id",
+        "contigs",
+        "scientific_name",
+        "tax_id",
+        "my_label",
+        "reference_genome_id",
+        "taxonomy_id",
+        "code",
+        "domain",
+        "public",
+        "queue_nowait",
+        "skip_indexing",
+        "skip_workspace_output",
+        "output_path",
+        "output_file",
+        "lowvan_min_contig_length",
+        "lowvan_max_contig_length",
+        "reference_virus_name",
+        "fix_errors",
+        "fix_frameshifts",
+        "verbose_level",
+        "workflow",
+        "recipe",
+        "disable_replication",
+        "analyze_quality",
+        "assembly_output",
+        "custom_pipeline"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "native .genome object (encoding not established here); HTML report",
+      "output_patterns": {
+        "genome_file": "${params.output_path}/.${params.output_file}/${params.output_file}.genome",
+        "genome_report": "${params.output_path}/.${params.output_file}/GenomeReport.html"
+      },
+      "output_patterns_status": "upstream templates only; not downloaded/validated",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "native result reader/numerical sheet candidate; output specification/fixtures still needed",
+      "output_pattern_source": {
+        "path": "config/service_outputs.json",
+        "line": 6,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_outputs.json#L6"
+      }
+    },
+    {
+      "name": "comprehensive_genome_analysis",
+      "description": "Comprehensive genome analysis from reads, contigs or GenBank/GTO",
+      "category": "scientific_algorithm_service",
+      "mapped_service": "ComprehensiveGenomeAnalysis",
+      "source_handler": "start_comprehensive_genome_analysis_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 681,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L681",
+        "end_line": 738
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 6,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L6"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/comprehensive_genome_analysis.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/comprehensive_genome_analysis.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "input_type",
+        "output_path",
+        "output_file",
+        "paired_end_libs",
+        "single_end_libs",
+        "srr_ids",
+        "reference_assembly",
+        "recipe",
+        "racon_iter",
+        "pilon_iter",
+        "trim",
+        "normalize",
+        "filtlong",
+        "target_depth",
+        "genome_size",
+        "min_contig_len",
+        "min_contig_cov",
+        "gto",
+        "genbank_file",
+        "contigs",
+        "scientific_name",
+        "taxonomy_id",
+        "code",
+        "domain",
+        "public",
+        "queue_nowait",
+        "skip_indexing",
+        "reference_genome_id",
+        "analyze_quality",
+        "debug_level"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "annotated.genome object; FullGenomeReport HTML",
+      "output_patterns": {
+        "genome_report": "${params.output_path}/.${params.output_file}/FullGenomeReport.html",
+        "genome_file": "${params.output_path}/.${params.output_file}/annotated.genome"
+      },
+      "output_patterns_status": "upstream templates only; not downloaded/validated",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "native result reader/numerical sheet candidate; output specification/fixtures still needed",
+      "output_pattern_source": {
+        "path": "config/service_outputs.json",
+        "line": 15,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_outputs.json#L15"
+      }
+    },
+    {
+      "name": "blast",
+      "description": "Sequence homology search via Homology service",
+      "category": "scientific_algorithm_service",
+      "mapped_service": "Homology",
+      "source_handler": "start_blast_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 740,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L740",
+        "end_line": 800
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 7,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L7"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/blast.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/blast.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "input_type",
+        "input_source",
+        "input_fasta_data",
+        "input_id_list",
+        "input_fasta_file",
+        "input_feature_group",
+        "input_genome_group",
+        "db_type",
+        "db_source",
+        "db_fasta_data",
+        "db_fasta_file",
+        "db_id_list",
+        "db_feature_group",
+        "db_genome_group",
+        "db_genome_list",
+        "db_taxon_list",
+        "db_precomputed_database",
+        "blast_program",
+        "blast_evalue_cutoff",
+        "blast_max_hits",
+        "blast_min_coverage",
+        "output_path",
+        "output_file"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "blast_out.txt and blast_out.json; exact schema/outfmt not established",
+      "output_patterns": {
+        "blast_output": "${params.output_path}/.${params.output_file}/blast_out.txt",
+        "blast_json": "${params.output_path}/.${params.output_file}/blast_out.json"
+      },
+      "output_patterns_status": "upstream templates only; not downloaded/validated",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "native result reader/numerical sheet candidate; output specification/fixtures still needed",
+      "output_pattern_source": {
+        "path": "config/service_outputs.json",
+        "line": 19,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_outputs.json#L19"
+      },
+      "format_caution": "Filename blast_out.json does not establish NCBI JSON2/JSON15 compatibility with existing project BLAST graders."
+    },
+    {
+      "name": "primer_design",
+      "description": "Design primers with sequence-region, length, Tm and GC constraints",
+      "category": "scientific_algorithm_service",
+      "mapped_service": "PrimerDesign",
+      "source_handler": "start_primer_design_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 802,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L802",
+        "end_line": 854
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 8,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L8"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/primer_design.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/primer_design.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "output_file",
+        "output_path",
+        "input_type",
+        "sequence_input",
+        "SEQUENCE_ID",
+        "SEQUENCE_TARGET",
+        "SEQUENCE_INCLUDED_REGION",
+        "SEQUENCE_EXCLUDED_REGION",
+        "SEQUENCE_OVERLAP_JUNCTION_LIST",
+        "PRIMER_PICK_INTERNAL_OLIGO",
+        "PRIMER_PRODUCT_SIZE_RANGE",
+        "PRIMER_NUM_RETURN",
+        "PRIMER_MIN_SIZE",
+        "PRIMER_OPT_SIZE",
+        "PRIMER_MAX_SIZE",
+        "PRIMER_MAX_TM",
+        "PRIMER_MIN_TM",
+        "PRIMER_OPT_TM",
+        "PRIMER_PAIR_MAX_DIFF_TM",
+        "PRIMER_MAX_GC",
+        "PRIMER_MIN_GC",
+        "PRIMER_OPT_GC",
+        "PRIMER_SALT_MONOVALENT",
+        "PRIMER_SALT_DIVALENT",
+        "PRIMER_DNA_CONC",
+        "PRIMER_DNTP_CONC"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "Output file schema unspecified in this MCP repository.",
+      "output_patterns": null,
+      "output_patterns_status": "absent from config/service_outputs.json",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "native result reader/numerical sheet candidate; output specification/fixtures still needed"
+    },
+    {
+      "name": "variation",
+      "description": "Map reads and call variants (BWA-mem/other mapper; FreeBayes/BCFtools)",
+      "category": "scientific_algorithm_service",
+      "mapped_service": "Variation",
+      "source_handler": "start_variation_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 856,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L856",
+        "end_line": 891
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 9,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L9"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/variation.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/variation.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "reference_genome_id",
+        "paired_end_libs",
+        "single_end_libs",
+        "srr_ids",
+        "mapper",
+        "caller",
+        "output_path",
+        "output_file",
+        "debug"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "all.var.tsv variant table",
+      "output_patterns": {
+        "variation_table": "${params.output_path}/.${params.output_file}/all.var.tsv"
+      },
+      "output_patterns_status": "upstream templates only; not downloaded/validated",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "native result reader/numerical sheet candidate; output specification/fixtures still needed",
+      "output_pattern_source": {
+        "path": "config/service_outputs.json",
+        "line": 29,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_outputs.json#L29"
+      }
+    },
+    {
+      "name": "tnseq",
+      "description": "Analyze transposon-insertion sequencing; gumbel/griffin/tn5gaps/rankproduct/HMM/binomial/resampling recipes",
+      "category": "scientific_algorithm_service",
+      "mapped_service": "TnSeq",
+      "source_handler": "start_tnseq_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 893,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L893",
+        "end_line": 928
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 10,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L10"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/tnseq.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/tnseq.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "experimental_conditions",
+        "contrasts",
+        "read_files",
+        "reference_genome_id",
+        "recipe",
+        "protocol",
+        "primer",
+        "output_path",
+        "output_file"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "Output file schema unspecified in this MCP repository.",
+      "output_patterns": null,
+      "output_patterns_status": "absent from config/service_outputs.json",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "native result reader/numerical sheet candidate; output specification/fixtures still needed"
+    },
+    {
+      "name": "bacterial_genome_tree",
+      "description": "CodonTree bacterial genome phylogeny with selected genes/bootstrap count",
+      "category": "scientific_algorithm_service",
+      "mapped_service": "CodonTree",
+      "source_handler": "start_bacterial_genome_tree_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 930,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L930",
+        "end_line": 971
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 11,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L11"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/bacterial_genome_tree.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/bacterial_genome_tree.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "output_path",
+        "output_file",
+        "genome_ids",
+        "genome_groups",
+        "optional_genome_ids",
+        "genome_metadata_fields",
+        "number_of_genes",
+        "bootstraps",
+        "max_genomes_missing",
+        "max_allowed_dups"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "Newick tree; HTML report",
+      "output_patterns": {
+        "tree_file": "${params.output_path}/.${params.output_file}/${params.output_file}_tree.nwk",
+        "tree_report": "${params.output_path}/.${params.output_file}/.${params.output_file}_report.html"
+      },
+      "output_patterns_status": "upstream templates only; not downloaded/validated",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "native result reader/numerical sheet candidate; output specification/fixtures still needed",
+      "output_pattern_source": {
+        "path": "config/service_outputs.json",
+        "line": 38,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_outputs.json#L38"
+      }
+    },
+    {
+      "name": "gene_tree",
+      "description": "Sequence alignment and phylogenetic tree (MUSCLE/MAFFT; RAxML/PhyML/FastTree)",
+      "category": "scientific_algorithm_service",
+      "mapped_service": "GeneTree",
+      "source_handler": "start_gene_tree_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 973,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L973",
+        "end_line": 1012
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 12,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L12"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/gene_tree.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/gene_tree.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "sequences",
+        "alignment_program",
+        "trim_threshold",
+        "gap_threshold",
+        "alphabet",
+        "substitution_model",
+        "bootstrap",
+        "recipe",
+        "tree_type",
+        "feature_metadata_fields",
+        "genome_metadata_fields",
+        "output_path",
+        "output_file"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "Newick tree; aligned FASTA; HTML report",
+      "output_patterns": {
+        "tree_file": "${params.output_path}/.${params.output_file}/${params.output_file}_raxml_rell_tree.nwk",
+        "alignment_file": "${params.output_path}/.${params.output_file}/${params.output_file}_aligned.fa",
+        "tree_report": "${params.output_path}/.${params.output_file}/${params.output_file}_tree_report.html"
+      },
+      "output_patterns_status": "upstream templates only; not downloaded/validated",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "native result reader/numerical sheet candidate; output specification/fixtures still needed",
+      "output_pattern_source": {
+        "path": "config/service_outputs.json",
+        "line": 42,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_outputs.json#L42"
+      }
+    },
+    {
+      "name": "core_genome_mlst",
+      "description": "Core-genome multilocus typing with chewBBACA and selected schema",
+      "category": "scientific_algorithm_service",
+      "mapped_service": "CoreGenomeMLST",
+      "source_handler": "start_core_genome_mlst_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 1014,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L1014",
+        "end_line": 1048
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 13,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L13"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/core_genome_mlst.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/core_genome_mlst.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "input_genome_type",
+        "analysis_type",
+        "input_genome_group",
+        "input_genome_fasta",
+        "schema_location",
+        "input_schema_selection",
+        "output_path",
+        "output_file"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "Output file schema unspecified in this MCP repository.",
+      "output_patterns": null,
+      "output_patterns_status": "absent from config/service_outputs.json",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "native result reader/numerical sheet candidate; output specification/fixtures still needed"
+    },
+    {
+      "name": "whole_genome_snp",
+      "description": "Whole-genome SNP analysis with inclusion/linkage thresholds",
+      "category": "scientific_algorithm_service",
+      "mapped_service": "WholeGenomeSNPAnalysis",
+      "source_handler": "start_whole_genome_snp_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 1050,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L1050",
+        "end_line": 1085
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 14,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L14"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/whole_genome_snp.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/whole_genome_snp.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "input_genome_type",
+        "majority_threshold",
+        "min_mid_linkage",
+        "max_mid_linkage",
+        "analysis_type",
+        "input_genome_group",
+        "input_genome_fasta",
+        "output_path",
+        "output_file"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "HTML report only in MCP output catalog; native SNP matrices unspecified",
+      "output_patterns": {
+        "report": "${params.output_path}/.${params.output_file}/WholeGenomeSNP_Report.html"
+      },
+      "output_patterns_status": "upstream templates only; not downloaded/validated",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "native result reader/numerical sheet candidate; output specification/fixtures still needed",
+      "output_pattern_source": {
+        "path": "config/service_outputs.json",
+        "line": 47,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_outputs.json#L47"
+      }
+    },
+    {
+      "name": "taxonomic_classification",
+      "description": "Taxonomic classification of sequence reads",
+      "category": "scientific_algorithm_service",
+      "mapped_service": "TaxonomicClassification",
+      "source_handler": "start_taxonomic_classification_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 1087,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L1087",
+        "end_line": 1124
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 15,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L15"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/taxonomic_classification.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/taxonomic_classification.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "host_genome",
+        "analysis_type",
+        "paired_end_libs",
+        "single_end_libs",
+        "srr_libs",
+        "database",
+        "save_classified_sequences",
+        "save_unclassified_sequences",
+        "confidence_interval",
+        "output_path",
+        "output_file"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "MultiQC HTML report only in MCP output catalog; native classification tables unspecified",
+      "output_patterns": {
+        "classification_report": "${params.output_path}/.${params.output_file}/Taxonomic-Classification-Service-BVBRC_multiqc_report.html"
+      },
+      "output_patterns_status": "upstream templates only; not downloaded/validated",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "native result reader/numerical sheet candidate; output specification/fixtures still needed",
+      "output_pattern_source": {
+        "path": "config/service_outputs.json",
+        "line": 26,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_outputs.json#L26"
+      }
+    },
+    {
+      "name": "metagenomic_binning",
+      "description": "Bin metagenomic sequences and optionally annotate/index bins",
+      "category": "scientific_algorithm_service",
+      "mapped_service": "MetagenomeBinning",
+      "source_handler": "start_metagenomic_binning_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 1126,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L1126",
+        "end_line": 1172
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 16,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L16"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/metagenomic_binning.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/metagenomic_binning.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "paired_end_libs",
+        "single_end_libs",
+        "srr_ids",
+        "contigs",
+        "genome_group",
+        "skip_indexing",
+        "recipe",
+        "viral_recipe",
+        "output_path",
+        "output_file",
+        "force_local_assembly",
+        "force_inline_annotation",
+        "perform_bacterial_binning",
+        "perform_viral_binning",
+        "perform_viral_annotation",
+        "perform_bacterial_annotation",
+        "assembler",
+        "danglen",
+        "min_contig_len",
+        "min_contig_cov"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "BinningReport HTML; output key bins_directory misleadingly points to this HTML file",
+      "output_patterns": {
+        "bins_directory": "${params.output_path}/.${params.output_file}/BinningReport.html"
+      },
+      "output_patterns_status": "upstream templates only; not downloaded/validated",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "native result reader/numerical sheet candidate; output specification/fixtures still needed",
+      "output_pattern_source": {
+        "path": "config/service_outputs.json",
+        "line": 32,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_outputs.json#L32"
+      }
+    },
+    {
+      "name": "metagenomic_read_mapping",
+      "description": "Map metagenomic reads to a selected gene set such as CARD/VFDB",
+      "category": "scientific_algorithm_service",
+      "mapped_service": "MetagenomicReadMapping",
+      "source_handler": "start_metagenomic_read_mapping_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 1174,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L1174",
+        "end_line": 1209
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 17,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L17"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/metagenomic_read_mapping.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/metagenomic_read_mapping.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "gene_set_type",
+        "gene_set_name",
+        "gene_set_fasta",
+        "gene_set_feature_group",
+        "paired_end_libs",
+        "single_end_libs",
+        "srr_ids",
+        "output_path",
+        "output_file"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "HTML mapping report only in MCP output catalog; native alignments/counts unspecified",
+      "output_patterns": {
+        "mapping_report": "${params.output_path}/.${params.output_file}/MetagenomicReadMappingReport.html"
+      },
+      "output_patterns_status": "upstream templates only; not downloaded/validated",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "native result reader/numerical sheet candidate; output specification/fixtures still needed",
+      "output_pattern_source": {
+        "path": "config/service_outputs.json",
+        "line": 35,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_outputs.json#L35"
+      }
+    },
+    {
+      "name": "rnaseq",
+      "description": "RNA-seq mapping/expression contrasts (HTSeq-DESeq/cufflinks/Host recipes)",
+      "category": "scientific_algorithm_service",
+      "mapped_service": "RNASeq",
+      "source_handler": "start_rnaseq_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 1211,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L1211",
+        "end_line": 1252
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 18,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L18"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/rnaseq.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/rnaseq.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "experimental_conditions",
+        "contrasts",
+        "strand_specific",
+        "paired_end_libs",
+        "single_end_libs",
+        "srr_libs",
+        "reference_genome_id",
+        "genome_type",
+        "recipe",
+        "host_ftp",
+        "output_path",
+        "output_file",
+        "trimming",
+        "unit_test",
+        "skip_sampling"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "MultiQC HTML only in MCP output catalog; expression/count result schemas unspecified",
+      "output_patterns": {
+        "multiqc_report": "${params.output_path}/.${params.output_file}/multiqc_report.html"
+      },
+      "output_patterns_status": "upstream templates only; not downloaded/validated",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "native result reader/numerical sheet candidate; output specification/fixtures still needed",
+      "output_pattern_source": {
+        "path": "config/service_outputs.json",
+        "line": 23,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_outputs.json#L23"
+      }
+    },
+    {
+      "name": "expression_import",
+      "description": "Import existing expression comparison data and metadata",
+      "category": "execution_service_helper",
+      "mapped_service": "ExpressionImport",
+      "source_handler": "start_expression_import_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 1254,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L1254",
+        "end_line": 1285
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 19,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L19"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/expression_import.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/expression_import.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "xfile",
+        "mfile",
+        "ustring",
+        "output_path",
+        "output_file"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "Imported object/file schema unspecified; importing does not create independent experimental evidence.",
+      "output_patterns": null,
+      "output_patterns_status": "absent from config/service_outputs.json",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "execution/data-transfer helper; no scientific grade"
+    },
+    {
+      "name": "sars_wastewater_analysis",
+      "description": "SARS wastewater analysis with coverage and lineage-abundance thresholds",
+      "category": "scientific_algorithm_service",
+      "mapped_service": "SARSWastewaterAnalysis",
+      "source_handler": "start_sars_wastewater_analysis_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 1287,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L1287",
+        "end_line": 1333
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 20,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L20"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/sars_wastewater_analysis.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/sars_wastewater_analysis.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "paired_end_libs",
+        "single_end_libs",
+        "srr_libs",
+        "recipe",
+        "primers",
+        "minimum_base_quality_score",
+        "minimum_genome_coverage",
+        "agg_minimum_lineage_abundance",
+        "minimum_coverage_depth",
+        "confirmedonly",
+        "minimum_lineage_abundance",
+        "coverage_estimate",
+        "timeseries_plot_interval",
+        "primer_version",
+        "barcode_csv",
+        "sample_metadata_csv",
+        "keep_intermediates",
+        "output_path",
+        "output_file",
+        "debug_level"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "Output file schema unspecified in this MCP repository.",
+      "output_patterns": null,
+      "output_patterns_status": "absent from config/service_outputs.json",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "native result reader/numerical sheet candidate; output specification/fixtures still needed"
+    },
+    {
+      "name": "sequence_submission",
+      "description": "Submit sequence data with submitter and sample metadata",
+      "category": "execution_service_helper",
+      "mapped_service": "SequenceSubmission",
+      "source_handler": "start_sequence_submission_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 1335,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L1335",
+        "end_line": 1380
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 21,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L21"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/sequence_submission.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/sequence_submission.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "input_source",
+        "input_fasta_data",
+        "input_fasta_file",
+        "input_genome_group",
+        "metadata",
+        "affiliation",
+        "first_name",
+        "last_name",
+        "email",
+        "consortium",
+        "country",
+        "phoneNumber",
+        "street",
+        "postal_code",
+        "city",
+        "state",
+        "numberOfSequences",
+        "output_path",
+        "output_file"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "Submission output/receipt schema unspecified; not a scientific analysis grade.",
+      "output_patterns": null,
+      "output_patterns_status": "absent from config/service_outputs.json",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "execution/data-transfer helper; no scientific grade"
+    },
+    {
+      "name": "influenza_ha_subtype_conversion",
+      "description": "Convert influenza HA subtype/numbering representations",
+      "category": "scientific_algorithm_service",
+      "mapped_service": "InfluenzaHASubtypeConversion",
+      "source_handler": "start_influenza_ha_subtype_conversion_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 1382,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L1382",
+        "end_line": 1416
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 22,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L22"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/influenza_ha_subtype_conversion.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/influenza_ha_subtype_conversion.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "input_source",
+        "input_fasta_data",
+        "input_fasta_file",
+        "input_feature_group",
+        "input_feature_list",
+        "types",
+        "output_path",
+        "output_file"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "Output file schema unspecified; service-name alias mismatch exists.",
+      "output_patterns": null,
+      "output_patterns_status": "absent from config/service_outputs.json",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "native result reader/numerical sheet candidate; output specification/fixtures still needed"
+    },
+    {
+      "name": "subspecies_classification",
+      "description": "Classify viral sequences against subtype/reference alignment",
+      "category": "scientific_algorithm_service",
+      "mapped_service": "SubspeciesClassification",
+      "source_handler": "start_subspecies_classification_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 1418,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L1418",
+        "end_line": 1452
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 23,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L23"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/subspecies_classification.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/subspecies_classification.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "input_source",
+        "input_fasta_data",
+        "input_fasta_file",
+        "input_genome_group",
+        "ref_msa_fasta",
+        "virus_type",
+        "output_path",
+        "output_file"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "Output file schema unspecified in this MCP repository.",
+      "output_patterns": null,
+      "output_patterns_status": "absent from config/service_outputs.json",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "native result reader/numerical sheet candidate; output specification/fixtures still needed"
+    },
+    {
+      "name": "viral_assembly",
+      "description": "Viral sequence assembly with auto/IRMA and virus module",
+      "category": "scientific_algorithm_service",
+      "mapped_service": "ViralAssembly",
+      "source_handler": "start_viral_assembly_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 1454,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L1454",
+        "end_line": 1489
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 24,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L24"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/viral_assembly.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/viral_assembly.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "paired_end_lib",
+        "single_end_lib",
+        "srr_id",
+        "recipe",
+        "module",
+        "viral_size",
+        "output_path",
+        "output_file",
+        "debug"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "contigs FASTA; assembly report text",
+      "output_patterns": {
+        "contigs_fasta": "${params.output_path}/${params.output_file}.contigs.fasta",
+        "assembly_report": "${params.output_path}/${params.output_file}.assembly_report.txt"
+      },
+      "output_patterns_status": "upstream templates only; not downloaded/validated",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "native result reader/numerical sheet candidate; output specification/fixtures still needed",
+      "output_pattern_source": {
+        "path": "config/service_outputs.json",
+        "line": 50,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_outputs.json#L50"
+      }
+    },
+    {
+      "name": "genome_alignment",
+      "description": "Multiple genome alignment with progressiveMauve",
+      "category": "scientific_algorithm_service",
+      "mapped_service": "GenomeAlignment",
+      "source_handler": "start_genome_alignment_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 1527,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L1527",
+        "end_line": 1565
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 25,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L25"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/genome_alignment.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/genome_alignment.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "genome_ids",
+        "recipe",
+        "seedWeight",
+        "maxGappedAlignerLength",
+        "maxBreakpointDistanceScale",
+        "conservationDistanceScale",
+        "weight",
+        "minScaledPenalty",
+        "hmmPGoHomologous",
+        "hmmPGoUnrelated",
+        "output_path",
+        "output_file"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "Output file schema unspecified in this MCP repository; do not assume XMFA without a native artifact/specification.",
+      "output_patterns": null,
+      "output_patterns_status": "absent from config/service_outputs.json",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "native result reader/numerical sheet candidate; output specification/fixtures still needed"
+    },
+    {
+      "name": "sars_genome_analysis",
+      "description": "SARS2Assembly analysis and consensus generation with primer/depth settings",
+      "category": "scientific_algorithm_service",
+      "mapped_service": "SARS2Assembly",
+      "source_handler": "start_sars_genome_analysis_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 1567,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L1567",
+        "end_line": 1605
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 26,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L26"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/sars_genome_analysis.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/sars_genome_analysis.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "paired_end_libs",
+        "single_end_libs",
+        "srr_ids",
+        "recipe",
+        "primers",
+        "primer_version",
+        "min_depth",
+        "max_depth",
+        "keep_intermediates",
+        "output_path",
+        "output_file",
+        "debug_level"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "consensus FASTA; analysis report text",
+      "output_patterns": {
+        "consensus_fasta": "${params.output_path}/${params.output_file}.consensus.fasta",
+        "analysis_report": "${params.output_path}/${params.output_file}.analysis_report.txt"
+      },
+      "output_patterns_status": "upstream templates only; not downloaded/validated",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "native result reader/numerical sheet candidate; output specification/fixtures still needed",
+      "output_pattern_source": {
+        "path": "config/service_outputs.json",
+        "line": 54,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_outputs.json#L54"
+      }
+    },
+    {
+      "name": "msa_snp_analysis",
+      "description": "Multiple sequence alignment/SNP analysis with MUSCLE, MAFFT or ClustalW",
+      "category": "scientific_algorithm_service",
+      "mapped_service": "MSA",
+      "source_handler": "start_msa_snp_analysis_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 1607,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L1607",
+        "end_line": 1648
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 27,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L27"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/msa_snp_analysis.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/msa_snp_analysis.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "input_status",
+        "input_type",
+        "fasta_files",
+        "select_genomegroup",
+        "feature_groups",
+        "feature_list",
+        "genome_list",
+        "aligner",
+        "alphabet",
+        "fasta_keyboard_input",
+        "ref_type",
+        "strategy",
+        "ref_string",
+        "output_path",
+        "output_file"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "Output file schema unspecified in this MCP repository.",
+      "output_patterns": null,
+      "output_patterns_status": "absent from config/service_outputs.json",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "native result reader/numerical sheet candidate; output specification/fixtures still needed"
+    },
+    {
+      "name": "metacats",
+      "description": "Compare alignment positions across metadata-defined groups with p-value threshold",
+      "category": "scientific_algorithm_service",
+      "mapped_service": "MetaCATS",
+      "source_handler": "start_metacats_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 1650,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L1650",
+        "end_line": 1688
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 28,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L28"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/metacats.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/metacats.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "output_path",
+        "output_file",
+        "p_value",
+        "year_ranges",
+        "metadata_group",
+        "input_type",
+        "alphabet",
+        "groups",
+        "alignment_file",
+        "group_file",
+        "alignment_type",
+        "auto_groups"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "Output file schema unspecified in this MCP repository.",
+      "output_patterns": null,
+      "output_patterns_status": "absent from config/service_outputs.json",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "native result reader/numerical sheet candidate; output specification/fixtures still needed"
+    },
+    {
+      "name": "proteome_comparison",
+      "description": "Compare proteomes using coverage, E-value, identity and positives thresholds",
+      "category": "scientific_algorithm_service",
+      "mapped_service": "GenomeComparison",
+      "source_handler": "start_proteome_comparison_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 1690,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L1690",
+        "end_line": 1726
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 29,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L29"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/proteome_comparison.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/proteome_comparison.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "genome_ids",
+        "user_genomes",
+        "user_feature_groups",
+        "reference_genome_index",
+        "min_seq_cov",
+        "max_e_val",
+        "min_ident",
+        "min_positives",
+        "output_path",
+        "output_file"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "Output file schema unspecified in this MCP repository.",
+      "output_patterns": null,
+      "output_patterns_status": "absent from config/service_outputs.json",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "native result reader/numerical sheet candidate; output specification/fixtures still needed"
+    },
+    {
+      "name": "comparative_systems",
+      "description": "Compare genome pathways, subsystems and protein families",
+      "category": "scientific_algorithm_service",
+      "mapped_service": "ComparativeSystems",
+      "source_handler": "start_comparative_systems_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 1728,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L1728",
+        "end_line": 1758
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 30,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L30"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/comparative_systems.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/comparative_systems.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "output_path",
+        "output_file",
+        "genome_ids",
+        "genome_groups"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "three JSON table files for pathways, subsystems and protein families",
+      "output_patterns": {
+        "pathways_table": "${params.output_path}/.${params.output_file}/${params.output_file}_pathways_tables.json",
+        "subsystems_table": "${params.output_path}/.${params.output_file}/${params.output_file}_subsystems_tables.json",
+        "proteinfams_table": "${params.output_path}/.${params.output_file}/${params.output_file}_proteinfams_tables.json"
+      },
+      "output_patterns_status": "upstream templates only; not downloaded/validated",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "native result reader/numerical sheet candidate; output specification/fixtures still needed",
+      "output_pattern_source": {
+        "path": "config/service_outputs.json",
+        "line": 10,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_outputs.json#L10"
+      }
+    },
+    {
+      "name": "docking",
+      "description": "Protein-ligand docking from structures and supplied/named ligand libraries",
+      "category": "scientific_algorithm_service",
+      "mapped_service": "Docking",
+      "source_handler": "start_docking_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 1760,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L1760",
+        "end_line": 1797
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 31,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L31"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/docking.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/docking.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "protein_input_type",
+        "input_pdb",
+        "user_pdb_file",
+        "ligand_library_type",
+        "ligand_named_library",
+        "ligand_smiles_list",
+        "ligand_ws_file",
+        "top_n",
+        "batch_size",
+        "output_path",
+        "output_file"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "Output file schema unspecified; no native pose/score files established here.",
+      "output_patterns": null,
+      "output_patterns_status": "absent from config/service_outputs.json",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "native result reader/numerical sheet candidate; output specification/fixtures still needed"
+    },
+    {
+      "name": "similar_genome_finder",
+      "description": "MinHash genome-distance search by genome ID or FASTA",
+      "category": "scientific_algorithm_service",
+      "mapped_service": "SimilarGenomeFinder",
+      "source_handler": "start_similar_genome_finder_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 1799,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L1799",
+        "end_line": 1834
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 32,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L32"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/similar_genome_finder.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/similar_genome_finder.txt#L1"
+      },
+      "native_methods": [
+        "Minhash.compute_genome_distance_for_genome2",
+        "Minhash.compute_genome_distance_for_fasta2"
+      ],
+      "source_handler_parameters": [
+        "selectedGenomeId",
+        "fasta_file",
+        "max_pvalue",
+        "max_distance",
+        "max_hits",
+        "include_reference",
+        "include_representative",
+        "include_bacterial",
+        "include_viral",
+        "output_path",
+        "output_file"
+      ],
+      "resource": "Remote BV-BRC Minhash API",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around synchronous Minhash reply",
+      "declared_result_artifact_types": "Native Minhash JSON-RPC list/dict wrapped in data/source; exact row fields unspecified",
+      "output_patterns": null,
+      "output_patterns_status": "absent from config/service_outputs.json",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "native result reader/numerical sheet candidate; output specification/fixtures still needed",
+      "dispatch_caution": "SPECIAL_API_SERVICES names a Minhash handler, but no registered tool dispatches through that map; generic engine dispatch to this service is unverified."
+    },
+    {
+      "name": "fastqutils",
+      "description": "Read preprocessing and quality-control utilities",
+      "category": "scientific_algorithm_service",
+      "mapped_service": "FastqUtils",
+      "source_handler": "start_fastq_utils_app",
+      "handler_implementation": {
+        "path": "functions/service_functions.py",
+        "line": 1491,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L1491",
+        "end_line": 1525
+      },
+      "mapping_source": {
+        "path": "config/service_mapping.json",
+        "line": 33,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L33"
+      },
+      "parameter_guidance_source": {
+        "path": "prompts/services/fastqutils.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/fastqutils.txt#L1"
+      },
+      "native_methods": [
+        "AppService.start_app2"
+      ],
+      "source_handler_parameters": [
+        "reference_genome_id",
+        "paired_end_libs",
+        "single_end_libs",
+        "srr_libs",
+        "output_path",
+        "output_file",
+        "recipe"
+      ],
+      "resource": "Remote BV-BRC AppService",
+      "local_analysis_binding_present": false,
+      "hpc_binding_present": false,
+      "auth_requirements": "BV-BRC service token; actual permissions and backend availability unverified. MCP workflow route also requires configured LLM/engine.",
+      "registered_as_individual_mcp_tool": false,
+      "exposure": "Service family in mapping and parameter prompts; functions exist but generic submit_workflow delegates to a separate engine. No direct service-named MCP tool.",
+      "actual_generic_dispatch_verified": false,
+      "native_handler_return": "JSON data/source envelope around JSON-RPC reply (normally submission receipt, not analysis output)",
+      "declared_result_artifact_types": "processed-read path (content format not specified); QC text report",
+      "output_patterns": {
+        "processed_reads": "${params.output_path}/${params.output_file}_processed",
+        "qc_report": "${params.output_path}/${params.output_file}.qc_report.txt"
+      },
+      "output_patterns_status": "upstream templates only; not downloaded/validated",
+      "bound_here": false,
+      "live_run_verified": false,
+      "grader_disposition": "native result reader/numerical sheet candidate; output specification/fixtures still needed",
+      "output_pattern_source": {
+        "path": "config/service_outputs.json",
+        "line": 58,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_outputs.json#L58"
+      }
+    }
+  ],
+  "collection_prompt_definitions": [
+    {
+      "name": "antibiotics",
+      "source": {
+        "path": "prompts/solr_collections/antibiotics.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/antibiotics.txt#L1"
+      }
+    },
+    {
+      "name": "bioset",
+      "source": {
+        "path": "prompts/solr_collections/bioset.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/bioset.txt#L1"
+      }
+    },
+    {
+      "name": "bioset_result",
+      "source": {
+        "path": "prompts/solr_collections/bioset_result.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/bioset_result.txt#L1"
+      }
+    },
+    {
+      "name": "enzyme_class_ref",
+      "source": {
+        "path": "prompts/solr_collections/enzyme_class_ref.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/enzyme_class_ref.txt#L1"
+      }
+    },
+    {
+      "name": "epitope",
+      "source": {
+        "path": "prompts/solr_collections/epitope.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/epitope.txt#L1"
+      }
+    },
+    {
+      "name": "epitope_assay",
+      "source": {
+        "path": "prompts/solr_collections/epitope_assay.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/epitope_assay.txt#L1"
+      }
+    },
+    {
+      "name": "experiment",
+      "source": {
+        "path": "prompts/solr_collections/experiment.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/experiment.txt#L1"
+      }
+    },
+    {
+      "name": "gene_ontology_ref",
+      "source": {
+        "path": "prompts/solr_collections/gene_ontology_ref.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/gene_ontology_ref.txt#L1"
+      }
+    },
+    {
+      "name": "genome",
+      "source": {
+        "path": "prompts/solr_collections/genome.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/genome.txt#L1"
+      }
+    },
+    {
+      "name": "genome_amr",
+      "source": {
+        "path": "prompts/solr_collections/genome_amr.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/genome_amr.txt#L1"
+      }
+    },
+    {
+      "name": "genome_feature",
+      "source": {
+        "path": "prompts/solr_collections/genome_feature.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/genome_feature.txt#L1"
+      }
+    },
+    {
+      "name": "genome_sequence",
+      "source": {
+        "path": "prompts/solr_collections/genome_sequence.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/genome_sequence.txt#L1"
+      }
+    },
+    {
+      "name": "id_ref",
+      "source": {
+        "path": "prompts/solr_collections/id_ref.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/id_ref.txt#L1"
+      }
+    },
+    {
+      "name": "misc_niaid_sgc",
+      "source": {
+        "path": "prompts/solr_collections/misc_niaid_sgc.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/misc_niaid_sgc.txt#L1"
+      }
+    },
+    {
+      "name": "pathway",
+      "source": {
+        "path": "prompts/solr_collections/pathway.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/pathway.txt#L1"
+      }
+    },
+    {
+      "name": "pathway_ref",
+      "source": {
+        "path": "prompts/solr_collections/pathway_ref.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/pathway_ref.txt#L1"
+      }
+    },
+    {
+      "name": "ppi",
+      "source": {
+        "path": "prompts/solr_collections/ppi.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/ppi.txt#L1"
+      }
+    },
+    {
+      "name": "protein_family_ref",
+      "source": {
+        "path": "prompts/solr_collections/protein_family_ref.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/protein_family_ref.txt#L1"
+      }
+    },
+    {
+      "name": "protein_feature",
+      "source": {
+        "path": "prompts/solr_collections/protein_feature.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/protein_feature.txt#L1"
+      }
+    },
+    {
+      "name": "protein_structure",
+      "source": {
+        "path": "prompts/solr_collections/protein_structure.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/protein_structure.txt#L1"
+      }
+    },
+    {
+      "name": "sequence_feature",
+      "source": {
+        "path": "prompts/solr_collections/sequence_feature.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/sequence_feature.txt#L1"
+      }
+    },
+    {
+      "name": "sequence_feature_vt",
+      "source": {
+        "path": "prompts/solr_collections/sequence_feature_vt.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/sequence_feature_vt.txt#L1"
+      }
+    },
+    {
+      "name": "serology",
+      "source": {
+        "path": "prompts/solr_collections/serology.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/serology.txt#L1"
+      }
+    },
+    {
+      "name": "sp_gene",
+      "source": {
+        "path": "prompts/solr_collections/sp_gene.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/sp_gene.txt#L1"
+      }
+    },
+    {
+      "name": "sp_gene_ref",
+      "source": {
+        "path": "prompts/solr_collections/sp_gene_ref.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/sp_gene_ref.txt#L1"
+      }
+    },
+    {
+      "name": "spike_lineage",
+      "source": {
+        "path": "prompts/solr_collections/spike_lineage.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/spike_lineage.txt#L1"
+      }
+    },
+    {
+      "name": "spike_variant",
+      "source": {
+        "path": "prompts/solr_collections/spike_variant.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/spike_variant.txt#L1"
+      }
+    },
+    {
+      "name": "strain",
+      "source": {
+        "path": "prompts/solr_collections/strain.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/strain.txt#L1"
+      }
+    },
+    {
+      "name": "structured_assertion",
+      "source": {
+        "path": "prompts/solr_collections/structured_assertion.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/structured_assertion.txt#L1"
+      }
+    },
+    {
+      "name": "subsystem",
+      "source": {
+        "path": "prompts/solr_collections/subsystem.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/subsystem.txt#L1"
+      }
+    },
+    {
+      "name": "subsystem_ref",
+      "source": {
+        "path": "prompts/solr_collections/subsystem_ref.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/subsystem_ref.txt#L1"
+      }
+    },
+    {
+      "name": "surveillance",
+      "source": {
+        "path": "prompts/solr_collections/surveillance.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/surveillance.txt#L1"
+      }
+    },
+    {
+      "name": "taxonomy",
+      "source": {
+        "path": "prompts/solr_collections/taxonomy.txt",
+        "line": 1,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/solr_collections/taxonomy.txt#L1"
+      }
+    }
+  ],
+  "inactive_tool_definitions": [
+    {
+      "name": "bvbrc_collection_fields_and_parameters",
+      "implementation": {
+        "path": "tools/data_tools.py",
+        "line": 824,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/data_tools.py#L824",
+        "end_line": 834
+      },
+      "status": "decorator_commented_not_registered",
+      "note": "Function body exists but this is not an exposed MCP tool."
+    },
+    {
+      "name": "bvbrc_list_collections",
+      "implementation": {
+        "path": "tools/data_tools.py",
+        "line": 837,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/data_tools.py#L837",
+        "end_line": 845
+      },
+      "status": "decorator_commented_not_registered",
+      "note": "Function body exists but this is not an exposed MCP tool."
+    },
+    {
+      "name": "bvbrc_get_feature_sequence_by_id",
+      "implementation": {
+        "path": "tools/data_tools.py",
+        "line": 1237,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/data_tools.py#L1237",
+        "end_line": 1311
+      },
+      "status": "decorator_commented_not_registered",
+      "note": "Function body exists but this is not an exposed MCP tool."
+    },
+    {
+      "name": "bvbrc_get_genome_sequence_by_id",
+      "implementation": {
+        "path": "tools/data_tools.py",
+        "line": 1314,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/data_tools.py#L1314",
+        "end_line": 1381
+      },
+      "status": "decorator_commented_not_registered",
+      "note": "Function body exists but this is not an exposed MCP tool."
+    },
+    {
+      "name": "get_file_metadata",
+      "implementation": {
+        "path": "tools/workspace_tools.py",
+        "line": 657,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/workspace_tools.py#L657",
+        "end_line": 756
+      },
+      "status": "decorator_commented_not_registered",
+      "note": "Function body exists but this is not an exposed MCP tool."
+    },
+    {
+      "name": "list_publication_datasets",
+      "implementation": {
+        "path": "tools/rag_database_tools.py",
+        "line": 92,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/rag_database_tools.py#L92",
+        "end_line": 142
+      },
+      "status": "decorator_commented_not_registered",
+      "note": "Underlying publication lookup is a TODO returning empty results; excluded from bioinformatics graders."
+    }
+  ],
+  "advertised_manifest_reconciliation": [
+    {
+      "name": "query_collection",
+      "description": "Query BV-BRC data directly using collection name and Solr query expression",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 27,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L27"
+      },
+      "status": "advertised_name_absent_from_active_registration_and_function_definitions",
+      "replacement": "bvbrc_search_data is active but is natural-language/LLM-routed and has advanced mode disabled"
+    },
+    {
+      "name": "solr_collection_parameters",
+      "description": "Get parameters for a given collection",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 31,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L31"
+      },
+      "status": "advertised_name_absent_from_active_registration_and_function_definitions",
+      "replacement": "bvbrc_search_data is active but is natural-language/LLM-routed and has advanced mode disabled"
+    },
+    {
+      "name": "solr_query_instructions",
+      "description": "Get general query instructions for all collections",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 35,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L35"
+      },
+      "status": "advertised_name_absent_from_active_registration_and_function_definitions",
+      "replacement": "bvbrc_search_data is active but is natural-language/LLM-routed and has advanced mode disabled"
+    },
+    {
+      "name": "solr_collections",
+      "description": "Get all available collections",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 39,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L39"
+      },
+      "status": "advertised_name_absent_from_active_registration_and_function_definitions",
+      "replacement": "bvbrc_search_data is active but is natural-language/LLM-routed and has advanced mode disabled"
+    },
+    {
+      "name": "list_service_apps",
+      "description": "Enumerate all apps",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 43,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L43"
+      },
+      "status": "registered"
+    },
+    {
+      "name": "submit_date_app",
+      "description": "Start the date app",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 47,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L47"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "date"
+    },
+    {
+      "name": "get_service_info",
+      "description": "Get information about the service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 51,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L51"
+      },
+      "status": "backend_helper_exists_but_not_registered_under_advertised_name",
+      "replacement": "get_service_submission_schema (reads local parameter guidance)"
+    },
+    {
+      "name": "get_job_details",
+      "description": "Query tasks",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 55,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L55"
+      },
+      "status": "registered"
+    },
+    {
+      "name": "list_jobs",
+      "description": "List jobs with sorting and filtering",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 59,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L59"
+      },
+      "status": "registered"
+    },
+    {
+      "name": "genome_assembly",
+      "description": "Genome assembly service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 63,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L63"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "genome_assembly"
+    },
+    {
+      "name": "genome_annotation",
+      "description": "Genome annotation service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 67,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L67"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "genome_annotation"
+    },
+    {
+      "name": "comprehensive_genome_analysis",
+      "description": "Comprehensive genome analysis service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 71,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L71"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "comprehensive_genome_analysis"
+    },
+    {
+      "name": "blast",
+      "description": "BLAST search service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 75,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L75"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "blast"
+    },
+    {
+      "name": "primer_design",
+      "description": "Primer design service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 79,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L79"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "primer_design"
+    },
+    {
+      "name": "variation",
+      "description": "Variation analysis service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 83,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L83"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "variation"
+    },
+    {
+      "name": "tnseq",
+      "description": "TnSeq analysis service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 87,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L87"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "tnseq"
+    },
+    {
+      "name": "bacterial_genome_tree",
+      "description": "Bacterial genome tree service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 91,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L91"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "bacterial_genome_tree"
+    },
+    {
+      "name": "gene_tree",
+      "description": "Gene tree service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 95,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L95"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "gene_tree"
+    },
+    {
+      "name": "core_genome_mlst",
+      "description": "Core genome MLST service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 99,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L99"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "core_genome_mlst"
+    },
+    {
+      "name": "whole_genome_snp",
+      "description": "Whole genome SNP analysis service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 103,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L103"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "whole_genome_snp"
+    },
+    {
+      "name": "taxonomic_classification",
+      "description": "Taxonomic classification service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 107,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L107"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "taxonomic_classification"
+    },
+    {
+      "name": "metagenomic_binning",
+      "description": "Metagenomic binning service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 111,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L111"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "metagenomic_binning"
+    },
+    {
+      "name": "metagenomic_read_mapping",
+      "description": "Metagenomic read mapping service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 115,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L115"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "metagenomic_read_mapping"
+    },
+    {
+      "name": "rnaseq",
+      "description": "RNA-seq analysis service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 119,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L119"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "rnaseq"
+    },
+    {
+      "name": "expression_import",
+      "description": "Expression import service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 123,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L123"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "expression_import"
+    },
+    {
+      "name": "sars_wastewater_analysis",
+      "description": "SARS wastewater analysis service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 127,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L127"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "sars_wastewater_analysis"
+    },
+    {
+      "name": "sequence_submission",
+      "description": "Sequence submission service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 131,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L131"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "sequence_submission"
+    },
+    {
+      "name": "influenza_ha_subtype_conversion",
+      "description": "Influenza HA subtype conversion service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 135,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L135"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "influenza_ha_subtype_conversion"
+    },
+    {
+      "name": "subspecies_classification",
+      "description": "Subspecies classification service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 139,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L139"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "subspecies_classification"
+    },
+    {
+      "name": "viral_assembly",
+      "description": "Viral assembly service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 143,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L143"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "viral_assembly"
+    },
+    {
+      "name": "genome_alignment",
+      "description": "Genome alignment service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 147,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L147"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "genome_alignment"
+    },
+    {
+      "name": "sars_genome_analysis",
+      "description": "SARS genome analysis service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 151,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L151"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "sars_genome_analysis"
+    },
+    {
+      "name": "msa_snp_analysis",
+      "description": "MSA SNP analysis service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 155,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L155"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "msa_snp_analysis"
+    },
+    {
+      "name": "metacats",
+      "description": "Metacats analysis service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 159,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L159"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "metacats"
+    },
+    {
+      "name": "proteome_comparison",
+      "description": "Proteome comparison service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 163,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L163"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "proteome_comparison"
+    },
+    {
+      "name": "comparative_systems",
+      "description": "Comparative systems analysis service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 167,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L167"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "comparative_systems"
+    },
+    {
+      "name": "docking",
+      "description": "Docking service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 171,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L171"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "docking"
+    },
+    {
+      "name": "similar_genome_finder",
+      "description": "Similar genome finder service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 175,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L175"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "similar_genome_finder"
+    },
+    {
+      "name": "fastqutils",
+      "description": "FASTQ utilities service",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 179,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L179"
+      },
+      "status": "service_handler_exists_but_individual_tool_not_registered",
+      "service_family": "fastqutils"
+    },
+    {
+      "name": "workspace_browse_tool",
+      "description": "Find and list files in the user's personal workspace by name, type, or extension",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 183,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L183"
+      },
+      "status": "registered"
+    },
+    {
+      "name": "get_file_metadata",
+      "description": "Get normalized file metadata from either workspace paths or local session files",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 187,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L187"
+      },
+      "status": "implementation_exists_but_decorator_commented"
+    },
+    {
+      "name": "workspace_download_file_tool",
+      "description": "Download a file from the workspace",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 191,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L191"
+      },
+      "status": "registered"
+    },
+    {
+      "name": "workspace_upload",
+      "description": "Create an upload URL for a file in the workspace",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 195,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L195"
+      },
+      "status": "registered"
+    },
+    {
+      "name": "create_genome_group",
+      "description": "Create a genome group in the workspace",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 199,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L199"
+      },
+      "status": "registered"
+    },
+    {
+      "name": "create_feature_group",
+      "description": "Create a feature group in the workspace",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 203,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L203"
+      },
+      "status": "registered"
+    },
+    {
+      "name": "get_genome_group_ids",
+      "description": "Get genome_ids from a specific genome group (requires genome_group_name or genome_group_path)",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 207,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L207"
+      },
+      "status": "registered"
+    },
+    {
+      "name": "get_feature_group_ids",
+      "description": "Get feature_ids from a specific feature group (requires feature_group_name or feature_group_path)",
+      "source": {
+        "path": "config/manifest_template.json",
+        "line": 211,
+        "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L211"
+      },
+      "status": "registered"
+    }
+  ],
+  "source_issues_and_gaps": [
+    {
+      "id": "service_listing_unwrap",
+      "evidence_status": "confirmed_offline",
+      "finding": "list_service_apps expects list but enumerate_apps always wraps data in dict; returns zero apps even on nonempty native response.",
+      "sources": [
+        {
+          "path": "tools/service_tools.py",
+          "line": 190,
+          "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/service_tools.py#L190"
+        },
+        {
+          "path": "functions/service_functions.py",
+          "line": 291,
+          "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L291"
+        }
+      ]
+    },
+    {
+      "id": "workflow_catalog_unwrap",
+      "evidence_status": "confirmed_offline",
+      "finding": "Same list/dict mismatch empties build_service_catalog. generate_workflow_with_services receives no detailed selected-service specs; this does not prove every plan fails.",
+      "sources": [
+        {
+          "path": "functions/workflow_functions.py",
+          "line": 108,
+          "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/workflow_functions.py#L108"
+        },
+        {
+          "path": "functions/workflow_functions.py",
+          "line": 467,
+          "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/workflow_functions.py#L467"
+        }
+      ]
+    },
+    {
+      "id": "advanced_search_disabled",
+      "evidence_status": "confirmed_source",
+      "finding": "bvbrc_search_data unconditionally sets advanced=False, so advertised structured query and sequence-mode branch are unreachable.",
+      "sources": [
+        {
+          "path": "tools/data_tools.py",
+          "line": 888,
+          "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/data_tools.py#L888"
+        }
+      ]
+    },
+    {
+      "id": "feature_id_rewrite",
+      "evidence_status": "confirmed_offline",
+      "finding": "create_feature_group inserts a dot before last three characters if missing there, corrupting otherwise valid four-digit feature suffixes.",
+      "sources": [
+        {
+          "path": "tools/workspace_tools.py",
+          "line": 1095,
+          "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/workspace_tools.py#L1095"
+        }
+      ]
+    },
+    {
+      "id": "plan_persistence_flag",
+      "evidence_status": "confirmed_source",
+      "finding": "Internal planning assigns wf_local fallback plus warnings; outer plan_workflow sets persisted=True whenever any ID is returned and drops generated warnings. A local ID can be represented as persisted/saved.",
+      "sources": [
+        {
+          "path": "functions/workflow_functions.py",
+          "line": 1256,
+          "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/workflow_functions.py#L1256"
+        },
+        {
+          "path": "tools/service_tools.py",
+          "line": 518,
+          "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/service_tools.py#L518"
+        }
+      ]
+    },
+    {
+      "id": "schema_is_prompt_text",
+      "evidence_status": "confirmed_source",
+      "finding": "get_service_submission_schema reads local prose prompt text, not a live schema. Some prose differs from handler signatures (genome_annotation recipie typo).",
+      "sources": [
+        {
+          "path": "functions/service_functions.py",
+          "line": 253,
+          "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/service_functions.py#L253"
+        },
+        {
+          "path": "prompts/services/genome_annotation.txt",
+          "line": 4,
+          "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/prompts/services/genome_annotation.txt#L4"
+        }
+      ]
+    },
+    {
+      "id": "inactive_publication_placeholder",
+      "evidence_status": "confirmed_source",
+      "finding": "list_publication_datasets is not registered and its helper has TODO logic returning an empty list.",
+      "sources": [
+        {
+          "path": "tools/rag_database_tools.py",
+          "line": 91,
+          "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/rag_database_tools.py#L91"
+        },
+        {
+          "path": "functions/rag_database_functions.py",
+          "line": 244,
+          "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/rag_database_functions.py#L244"
+        }
+      ]
+    },
+    {
+      "id": "manifest_stale",
+      "evidence_status": "confirmed_source",
+      "finding": "47 manifest names are not equivalent to active tools: only 10 overlap. All 31 service-related manifest names are not individual exposed tools.",
+      "sources": [
+        {
+          "path": "config/manifest_template.json",
+          "line": 25,
+          "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/manifest_template.json#L25"
+        }
+      ]
+    },
+    {
+      "id": "ha_alias_disagreement",
+      "evidence_status": "confirmed_source",
+      "finding": "Service reverse map chooses HASubtypeNumberingConversion while config mapping/start handler use InfluenzaHASubtypeConversion; live compatibility unverified.",
+      "sources": [
+        {
+          "path": "tools/service_tools.py",
+          "line": 88,
+          "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/service_tools.py#L88"
+        },
+        {
+          "path": "config/service_mapping.json",
+          "line": 22,
+          "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_mapping.json#L22"
+        }
+      ]
+    },
+    {
+      "id": "binning_output_key",
+      "evidence_status": "confirmed_source",
+      "finding": "bins_directory output template points to BinningReport.html; does not identify a bins directory or native bin sequences.",
+      "sources": [
+        {
+          "path": "config/service_outputs.json",
+          "line": 33,
+          "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/config/service_outputs.json#L33"
+        }
+      ]
+    },
+    {
+      "id": "submission_dispatch_external",
+      "evidence_status": "confirmed_source",
+      "finding": "submit_workflow invokes an external engine by workflow ID. The local SERVICE_MAP/SPECIAL_API_SERVICES are never called for submission. Source presence does not prove backend execution availability.",
+      "sources": [
+        {
+          "path": "tools/service_tools.py",
+          "line": 716,
+          "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/tools/service_tools.py#L716"
+        },
+        {
+          "path": "common/workflow_engine_client.py",
+          "line": 260,
+          "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/common/workflow_engine_client.py#L260"
+        }
+      ]
+    },
+    {
+      "id": "stdio_catalog_unawaited",
+      "evidence_status": "confirmed_source",
+      "finding": "STDIO main calls async initialize_service_catalog without awaiting; separate from its unwrap defect.",
+      "sources": [
+        {
+          "path": "stdio_server.py",
+          "line": 91,
+          "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/stdio_server.py#L91"
+        }
+      ]
+    },
+    {
+      "id": "upload_more_than_description",
+      "evidence_status": "confirmed_source",
+      "finding": "workspace_upload creates workspace object and actually PUTs local file bytes, beyond docstring claim of creating URL.",
+      "sources": [
+        {
+          "path": "functions/workspace_functions.py",
+          "line": 1032,
+          "url": "https://github.com/BV-BRC/BV-BRC-MCP/blob/176c82d227a0e94b6adf70214cd7dc4d9961489d/functions/workspace_functions.py#L1032"
+        }
+      ]
+    }
+  ],
+  "offline_checks": {
+    "helper": {
+      "data": [
+        [
+          {
+            "id": "Homology"
+          },
+          {
+            "id": "GenomeAssembly2"
+          }
+        ]
+      ],
+      "source": "bvbrc-service"
+    },
+    "registered_list_service_apps": {
+      "services": [],
+      "count": 0,
+      "source": "bvbrc-service"
+    },
+    "workflow_catalog_count": 0,
+    "feature_group_original_id": "fig|511145.12.peg.1234",
+    "feature_group_result": {
+      "captured_ids": [
+        "fig|511145.12.peg.1.234"
+      ]
+    },
+    "network_calls": 0,
+    "auth_service_calls": 0,
+    "remote_mutations": 0,
+    "method": "AST extraction of original functions with fake API/token and fake group writer; no upstream import/startup or external service"
+  },
+  "verification_limits": [
+    "Source-level registration and dispatch inventory; no server launched, no package installation, no authentication, no job submission or service-result downloads.",
+    "Native result artifact patterns are upstream templates, not observed files. File names/extensions do not prove detailed schemas or existing parser compatibility.",
+    "All 31 service families accounted for, but only 28 produce/preprocess scientific analyses; date, expression_import and sequence_submission are helpers.",
+    "No local/HPC scientific algorithm execution binding is provided by this MCP checkout; its SRA metadata command and local file readers are actual local helper paths.",
+    "Existing public-data adapter is separate from authenticated AppService/Workspace; source availability and historical receipts do not establish current working access."
+  ]
+}

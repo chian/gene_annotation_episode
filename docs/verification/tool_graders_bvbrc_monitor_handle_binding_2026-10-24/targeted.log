@@ -1,0 +1,23 @@
+..F............................                                          [100%]
+=================================== FAILURES ===================================
+____ test_typed_monitor_target_uses_actual_assignment_and_original_handoff _____
+
+h = namespace(d=<test_bvbrc_appservice_host.ProductionDriver object at 0x784e78484c80>, store=<gene_annotation_episode.sta..._appservice_task_handoff_v1'}}, directory=PosixPath('/tmp/pytest-of-chia/pytest-1356/test_typed_monitor_target_uses0'))
+
+    def test_typed_monitor_target_uses_actual_assignment_and_original_handoff(h):
+        c = consumer(h)
+        schema = {'type': 'object', 'additionalProperties': False, 'required': ['target'],
+            'properties': {'target': c.monitor.fact_sources('monitor')['monitoring_target_handle']['report_schema']}}
+        form = {'target': h.target['handle']}
+        assert validate_form(form, schema, lambda ref, ns: resolve(h, ref, namespace=ns)) == form
+        h.store.db.execute('DELETE FROM runtime_report_attempts WHERE parent_episode_id=?',
+            (h.d.saved.root.episode_id,))
+>       with pytest.raises(ValueError, match='unknown_reference'):
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'unknown_reference'
+E         Actual message: 'report.target: reference is unavailable at this boundary'
+
+tests/test_bvbrc_appservice_monitor_handle_resolution.py:45: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_bvbrc_appservice_monitor_handle_resolution.py::test_typed_monitor_target_uses_actual_assignment_and_original_handoff
+1 failed, 30 passed in 332.31s (0:05:32)

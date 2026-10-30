@@ -1,0 +1,731 @@
+{
+  "record_type": "implementation_progress_evidence",
+  "recorded_at": "2026-10-28T05:27:36.036084+00:00",
+  "historical_status_evidence": {
+    "path": "research/tool_grader_goal_2026-10-24/WORK_STATUS.json",
+    "sha256": "079c0f12201cebde19bed545d0a9e263a20ed6011246d1164370b34a6a8d645e",
+    "current_completion_must_not_be_inferred_from_row_counts": true
+  },
+  "retired_progress_measure": {
+    "display": "114/307 graders",
+    "valid_scientific_grader_fraction": false,
+    "reason": "Numerator contains mixed implementation rows; denominator contains modes, aliases, providers, lifecycle responsibilities, exclusions and resource constraints."
+  },
+  "shared_scientific_grader_counts": {
+    "required_distinct_families": null,
+    "verified_complete_families": null,
+    "reason": "Full operation-to-shared-sheet/calculator mapping is not yet established; null is unknown, not zero."
+  },
+  "deliverables": [
+    {
+      "id": "R1",
+      "status": "open",
+      "confirmed_repair_paths": [
+        "BLAST publication/read",
+        "HMMER coverage publication",
+        "Biopython alignment publication"
+      ],
+      "repaired_and_verified": 3,
+      "evidence": [
+        "verification/tool_graders_shared_scoring_trace_2026-10-27_501/REPORT.md",
+        "verification/tool_graders_shared_scoring_trace_2026-10-27_501/REPAIR_CONTRACT.md"
+      ],
+      "qualification": "All three named publication repairs are verified: BLAST, HMMER and Biopython. R1 remains open for equivalent-analysis consolidation encountered during the remaining goal work. This is not a count of all completed tool graders.",
+      "workers": [
+        {
+          "path": "/root/blast_shared_sheet_projection_502",
+          "boundary": "BLAST publication/read/source mapping"
+        },
+        {
+          "path": "/root/hmmer_shared_projection_503",
+          "boundary": "HMMER coverage aliases"
+        },
+        {
+          "path": "/root/biopython_shared_projection_504",
+          "boundary": "Biopython native convenience fields and publication"
+        }
+      ],
+      "repair_status": [
+        {
+          "name": "BLAST publication/read",
+          "status": "verified",
+          "evidence": "verification/tool_graders_blast_shared_sheet_projection_2026-10-27_502/REPORT.md",
+          "initial_suite": {
+            "passed": 352,
+            "failed": 1,
+            "failure": "Synthetic historical-fixture setup used _source outside tool publication context."
+          },
+          "focused_corrected_suite": {
+            "passed": 20,
+            "failed": 0
+          },
+          "counts_overlap": true,
+          "numerical_example": {
+            "reported_identity_count": 4,
+            "traceback_identical_pairs": 3,
+            "alignment_columns": 4,
+            "shared_published_read_and_returned_identity": 0.75,
+            "whole_hsp_calculator_calls_at_publication": 1,
+            "whole_hsp_calculator_calls_during_read": 0
+          },
+          "root_review": "Read publisher, source address map, retained-grading helper, reader/facts, shared spans, optional typed marker and site-input binding; reviewed both receipts/audits and final report; verified key publisher/helper functions match tested snapshot.",
+          "qualification": "No new live API/native database search. R2 BLAST native/resource work remains open. No separate pre-edit snapshot was captured."
+        },
+        {
+          "name": "HMMER coverage publication",
+          "status": "verified",
+          "shared_sheet": "hmmer_search_sheet_v1",
+          "shared_calculator": "calculate_hmmer_search_scores",
+          "calculator_unchanged": true,
+          "evidence": "verification/tool_graders_hmmer_shared_projection_2026-10-27_503/REPORT.md",
+          "attempts": [
+            {
+              "name": "check001",
+              "scope": "API publication and returns",
+              "passed": 42
+            },
+            {
+              "name": "native001",
+              "scope": "Native binding and returns before final cached-qualification fix",
+              "passed": 23
+            },
+            {
+              "name": "replay001",
+              "scope": "Final cached-qualification and historical-cache checks",
+              "passed": 2,
+              "deselected": 19
+            }
+          ],
+          "counts_overlap": true,
+          "numerical_example": {
+            "native_target_paired_coverage": 0.98828125,
+            "native_target_span_coverage": 1,
+            "api_query_span_coverage": "89/253",
+            "api_query_paired_coverage": "88/253"
+          },
+          "missingness": "Calculated aliases absent when shared grading unavailable; native scores retained. Cached new failures preserve exact status/feedback; historical recorded values and identities unchanged.",
+          "root_review": "Read scoped production diff and API/native return tests, final cache fix/tests, full report and original receipts/audits; current owned-function hashes and unchanged shared calculators match verified snapshots.",
+          "verification_limits": "Authentic retained API output plus controlled API transport; actual small local phmmer searches. No new live API or HPC test; R2 messages/resource/native-format gaps remain open."
+        },
+        {
+          "name": "Biopython alignment publication",
+          "status": "verified",
+          "initial_checks": {
+            "passed": 90,
+            "failed": 5,
+            "setup_errors": 1
+          },
+          "remaining": "No outstanding work in this bounded R1 repair. R2 messages, input handling, other formats/resources remain separately open.",
+          "worker": "/root/biopython_shared_projection_504",
+          "focused_checks": {
+            "check002_passed": 18,
+            "structure_setup_errors": 1,
+            "check003": "Same nested NumPy software identity mismatch; collected original failed handle",
+            "check004": "1 passed in 2696.54 seconds; original handle collected, exit 0, terminal/quiescent; all source/runtime/native pins unchanged and import audit clean."
+          },
+          "final_evidence": "verification/tool_graders_biopython_shared_projection_2026-10-27_504/REPORT.md",
+          "distinct_cases_with_latest_passing_outcome": 106,
+          "count_qualification": "Aggregate of retained targeted attempts; no claim of a fresh single 106-case run.",
+          "structure_workflow": {
+            "episodes_closed": 14,
+            "requested_child_forms": 13,
+            "successful_native_result_receipts": 4,
+            "unit": "gene-local-job-3f93748b244b49b2b2d18e4c74b91aec.service",
+            "receipt": "verification/tool_graders_biopython_shared_projection_2026-10-27_504/check004/receipt.json",
+            "native_alignment_score": 19,
+            "paired_residues": 4,
+            "fit_pairs": 3,
+            "original_evaluation_pairs": 1,
+            "original_rmsd_angstrom_approximately": 2,
+            "saved_recalculation_evaluation_pairs": 4,
+            "saved_rmsd_angstrom_approximately": 1
+          },
+          "conflict_example": {
+            "paired_positions": 5,
+            "identical_positions": 4,
+            "paired_identity": 0.8,
+            "alignment_identity": "4/7",
+            "query_aligned_coverage": 0.6,
+            "reference_aligned_coverage": 0.5,
+            "query_paired_coverage": 0.5,
+            "reference_paired_coverage": "5/12",
+            "scope": "Synthetic conflict fixture, not a new annotation finding. Exact shared values projected through publication and requested child returns."
+          },
+          "root_review": "Read complete scoped diff/tests/report and final receipt/audit/JUnit; independently matched all recorded owned function/type/test hashes to frozen check004 and confirmed historical before/after pins equal. Shared calculators unchanged. Read current goal and operating principles before acceptance."
+        }
+      ],
+      "additional_demonstrated_duplication": [
+        {
+          "status": "shared_contract_reviewed_fresh_parallel_implementation_in_progress",
+          "name": "alimask alignment-to-model reconstruction in native execution driver duplicates the shared alignment-preparation calculator",
+          "source": "gene_annotation_episode/native_hmmer_preparation_driver.py",
+          "worker": "/root/hmmer_alignment_map_boundary_516",
+          "qualification": "Root reviewed complete516contract; tree and sampler helpers authored, shared integration underway, runtime/native verification pending.",
+          "additional_calculation_defect": "Shared and driver PB normalization use ordinary sum; retained Easel native normalization uses compensated summation. Exact repair contract under review, not yet coded."
+        },
+        {
+          "name": "MinHash shared-hash-fraction calculation repeated in projection validation",
+          "status": "common_helper_and_projection_component_checks_verified_full_binding_pending",
+          "source": "gene_annotation_episode/bvbrc_minhash_grader.py and bvbrc_minhash_views.py",
+          "worker": "/root/minhash_metadata_contracts_519",
+          "qualification": "427 distinct passing contracts/numerical/projection cases across two frozen attempts; B521 service/custody integration and D522 Workflow verification remain unfinished.",
+          "evidence": "verification/tool_graders_minhash_metadata_verification_2026-10-27_523/REPORT.md"
+        }
+      ]
+    },
+    {
+      "id": "R2",
+      "status": "open",
+      "named_gap_groups": 8,
+      "existing_components_reused": true,
+      "nmf_original_attempt": {
+        "unit": "gene-local-job-fb22b65698254c09afacf2116ee0bd6a.service",
+        "observed_terminal": true,
+        "systemd_result": "exit-code",
+        "exit_status": 1,
+        "pytest_passed": 2,
+        "pytest_failed": 2,
+        "evidence": "verification/tool_graders_expression_nmf_episode_path_2026-10-27_490/check001/stdout.txt",
+        "final_receipt_collected": true,
+        "receipt_reviewed_by_root": true,
+        "receipt": "verification/tool_graders_expression_nmf_episode_path_2026-10-27_490/check001/receipt.json"
+      },
+      "qualification": "Prodigal single-genome local publication/return and the NMF original frozen local-mode snapshot gap are verified. Six other named gap groups remain open.",
+      "nmf_retained_verification": {
+        "status": "verified_for_original_frozen_local_mode_snapshot",
+        "unit": "gene-local-job-7d4679397c4a4ab9b5dfcd5a6733e739.service",
+        "returncode": 0,
+        "terminal": true,
+        "quiescent": true,
+        "source_and_runtime_pins_unchanged": true,
+        "retained_inputs_unchanged": true,
+        "original_fit_calls": 1,
+        "followup_fit_calls": 0,
+        "followup_model_calls": 0,
+        "followup_native_workers": 0,
+        "history_tables_preserved": 10,
+        "original_sse": 1.9138191182688943e-08,
+        "native_residual": 0.0001383408514600178,
+        "independent_residual": 0.00013834085146004034,
+        "corrections": "One report dictionary key and an overbroad assertion that incorrectly prohibited recreation of a derived artifact. Original failed test evidence preserved.",
+        "evidence": [
+          "verification/tool_graders_expression_nmf_episode_path_2026-10-27_490/HANDOFF.md",
+          "verification/tool_graders_expression_nmf_episode_path_2026-10-27_490/check002/receipt.json",
+          "verification/tool_graders_expression_nmf_episode_path_2026-10-27_490/check002/retained_checks.json",
+          "tests/test_expression_nmf_episode_path.py"
+        ],
+        "root_review": "Reviewed both receipts, retained checks, complete current four-test file and final handoff. Existing closed-replay and observation tests passed in original check001; corrected retained-data checks passed in check002. This is not a claim that a new full suite was rerun."
+      },
+      "gap_status": [
+        {
+          "name": "Prodigal single-genome publication/return",
+          "status": "verified_for_existing_local_scientific_child_path",
+          "shared_sheet": "prodigal_sheet_v1",
+          "shared_calculator": "calculate_prodigal_scores",
+          "production_changes": false,
+          "evidence": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/REPORT.md",
+          "test_result": {
+            "passed": 1,
+            "seconds": 37.74
+          },
+          "native_executions": 1,
+          "candidate_count": 103,
+          "returned_record_references": 311,
+          "union_coding_bases": 85743,
+          "submitted_length_nt": 100000,
+          "coding_coverage": 0.85743,
+          "partial_candidates": 2,
+          "child_actions": 1,
+          "parent_child_actions": 1,
+          "saved_recalculation_equal": true,
+          "replay_and_redelivery_preserve_histories": true,
+          "root_review": "Read complete test/report and original receipt/audit. Checked current test, predictor, grader, worker and relevant ToolRegistry functions equal frozen tested source.",
+          "verification_limits": "Scientific_process child selects local native sequence worker; not launch_local or API/HPC gene prediction, R3 wrappers or W05."
+        },
+        {
+          "name": "NMF full scientific-parent delivery, saved calculation and closed replay",
+          "status": "verified_for_original_frozen_local_mode_snapshot"
+        },
+        {
+          "name": "Protein-structure/interval-overlap messages and inputs",
+          "status": "open_boundary_contracts_and_display_drafts_prepared",
+          "evidence": [
+            "verification/tool_graders_protein_receiver_boundary_2026-10-27_506/CONTRACT_001.md",
+            "verification/tool_graders_overlap_receiver_boundary_2026-10-27_507/CONTRACT_DRAFT.md",
+            "verification/tool_graders_overlap_receiver_boundary_2026-10-27_507/ROOT_INTERFACE_CLARIFICATION_001.md"
+          ],
+          "verified_existing_behavior": "Explicit complete input files and received saved-sheet authority, native calculations and requested typed return paths exist; these are not new missing algorithms.",
+          "remaining_boundaries": [
+            "Source-aware grouping from admitted values plus actual source schema before model presentation",
+            "Parent receiving display and forwarded higher-parent display, preserving full own TASK",
+            "Results episode TASK/STEERING and actual status/collect meanings",
+            "Launch/local-child supplied-input presentation",
+            "Valid explicit selection of received inputs for unchanged existing action schemas",
+            "Requested artifact-table read operation where only artifact grant is currently exposed",
+            "Focused actual model-text/next-action verification after implementation"
+          ],
+          "feedback": "Two small illustrative requested-measurement displays printed in conversation; async user feedback requested. They are proposals, not accepted or coded. Retained synthetic-fixture numerical results were reused without new scientific calculations.",
+          "root_review": "Read complete506 contract,507 report/drafts/ownership interface and root clarification; independently read runtime.next/model_inputs provider dispatch, operation/return contract lookup and current scientific/RNA rendering. No production edit or new resolver made."
+        },
+        {
+          "name": "Chromatin insulation/weighted-Cooler episode paths and messages",
+          "status": "open"
+        },
+        {
+          "name": "ATAC messages and format/resource gaps",
+          "status": "open"
+        },
+        {
+          "name": "HMMER/Infernal/Rfam messages/resources and declared native formats",
+          "status": "open_supported_model_format_boundary_verified_other_gaps_remain",
+          "format_work": {
+            "contract": "verification/tool_graders_hmmer_model_format_boundary_2026-10-27_508/IMPLEMENTATION_CONTRACT.md",
+            "coding_handoff": "verification/tool_graders_hmmer_model_formats_2026-10-27_511/CODING_HANDOFF_001.md",
+            "historical_saved_unsupported_results": "preserved; no silent re-extraction",
+            "scoped_review_findings": 7,
+            "review_findings_owner_status": "Repairs included in passing check002 source/consumer tests; metadata fixture assumption subsequently corrected and verified in check004.",
+            "root_additions": [
+              "Frozen verification runner",
+              "Two new nested Workflow format cases with original typed returns, saved-only recalculation and unchanged replay",
+              "Current-production tests updated for decoded output; original tests snapshotted"
+            ],
+            "remaining_outside_this_change": [
+              "HMMER/Infernal/Rfam task/steering and resource presentation",
+              "Specified native alignment-map cases",
+              "Authentic older binary-revision and big-endian producer coverage not established by synthetic grammar cases",
+              "Historical HMMER2 binary and EVD interpretation remain explicitly unestablished"
+            ],
+            "verified_implementation": [
+              "HMMER3 a-f binary parser and public dispatch",
+              "HMMER2 ASCII parser",
+              "Shared source-cell decoding/validation and model/artifact/statistics/emission consumers"
+            ],
+            "scoped_verification_status": "verified_for_supported_binary_and_HMMER2_ASCII_boundary",
+            "report": "verification/tool_graders_hmmer_model_formats_2026-10-27_511/REPORT.md"
+          },
+          "current_verification": {
+            "attempt": "check002",
+            "handle": "verification/tool_graders_hmmer_model_formats_2026-10-27_511/check002/handle.json",
+            "unit": "gene-local-job-7fa29e4e3d8f4ffdb8f323ae55f49154.service",
+            "last_observed_state": "returned",
+            "terminal": true,
+            "quiescent": true,
+            "failed_cases_visible_in_progress": true,
+            "final_counts": {
+              "passed": 1022,
+              "failed": 80,
+              "errors": 0,
+              "seconds": 562.42
+            },
+            "earlier_staging_attempt": "check001 failed on archived named pipes before any handle/test/native execution; failure retained and copier corrected to record skipped special fixtures/aliases.",
+            "returncode": 1,
+            "receipt": "verification/tool_graders_hmmer_model_formats_2026-10-27_511/check002/receipt.json",
+            "source_runtime_native_pins_unchanged": true,
+            "outside_imports": [],
+            "unbound_mappings": [],
+            "failure_classification": [
+              {
+                "cases": 78,
+                "cause": "Archived producer267/check002/temporary was not staged; native acquisition test helpers depend on its 26 plan fixtures and partial-conversion fixture.",
+                "repair": "Supply the unchanged retained tree to the next frozen check; do not rerun its native producers."
+              },
+              {
+                "cases": 1,
+                "cause": "Statistics test still expected retained supported binary fixture to be unsupported.",
+                "repair": "Update supported-format expectation and preserve unknown-layout coverage separately; test-only change written, not yet executed."
+              },
+              {
+                "cases": 1,
+                "cause": "Selected authentic native fixtures have no COM; old test incorrectly required it. Binary COM length is zero.",
+                "repair": "Verified test-only correction plus synthetic ordered-log equivalence/changed-text/order/line-boundary coverage; production unchanged."
+              }
+            ],
+            "nested_format_workflow": {
+              "passed": 2,
+              "actual_small_native_conversions": 2,
+              "formats": [
+                "hmmer3_binary",
+                "hmmer2_ascii"
+              ],
+              "decoded_models_each": 1,
+              "model_positions_each": 12,
+              "binary_compared_probability_cells": 611,
+              "binary_max_absolute_probability_difference": 9.008887857930858e-09,
+              "hmmer2_compared_probability_cells": 526,
+              "hmmer2_whole_model_equivalence": "not_asserted_compatible",
+              "requested_return_equality": true,
+              "saved_recalculation_equal": true,
+              "replay_preserves_observations": true,
+              "qualification": "Scripted episode decisions with real local native work and production return paths; does not close the overall R2 gap group or historical format/resource coverage."
+            },
+            "status": "collected_original_failure_and_successful_targeted_followups",
+            "followup_attempts": [
+              {
+                "attempt": "check003",
+                "unit": "gene-local-job-0b1c01b436374764b42d8f612a071de2.service",
+                "passed": 80,
+                "failed": 0,
+                "seconds": 415.73,
+                "returncode": 0,
+                "terminal": true,
+                "quiescent": true,
+                "scope": "78 original missing-fixture cases plus supported/unsupported statistics cases; retained native producers not rerun"
+              },
+              {
+                "attempt": "check004",
+                "unit": "gene-local-job-b365b56d33f842038c6c23c3f97754cb.service",
+                "passed": 10,
+                "failed": 0,
+                "seconds": 2.51,
+                "returncode": 0,
+                "terminal": true,
+                "quiescent": true,
+                "scope": "Native metadata in both directions and eight explicitly synthetic command-log cases"
+              }
+            ],
+            "distinct_current_cases_with_passing_outcomes": 1112,
+            "count_qualification": "Nonoverlapping passing nodes across check002/003/004; no claim of one fresh 1112-case run. Original failed evidence retained; two obsolete failed tests replaced with explicit new coverage.",
+            "production_changes_for_failure_repairs": false,
+            "final_current_source_check": "All affected HMMER production modules match check002; repaired test files match follow-up snapshots. Two unrelated literature files changed outside this workload; no fresh check of those current bytes is claimed."
+          }
+        },
+        {
+          "name": "Existing BV-BRC messages/resources and MinHash pair metadata",
+          "status": "open_minhash_combined_verification_in_progress_failures_not_yet_closed",
+          "minhash_components": {
+            "tool_information": "existing information retained; new metadata instruction presentation unfinished",
+            "sheet": "existing bvbrc_minhash_sheet_v1 reused",
+            "parser_metadata_extraction": "pure typed inputs verified; actual source custody/extraction integration in progress",
+            "calculator": "existing calculate_minhash_components retained; common fraction helper and projection consistency verified",
+            "result_binding": "B521 authoring reviewed; combined selected Workflow exposed prospective commission proof defect, root repair written but unverified",
+            "numerical_verification": "427 distinct passing cases across check001/check002; initial four missing-fixture failures retained and resolved",
+            "episode_verification": "check003 running; no passing full metadata path accepted",
+            "live_resource_verification": "no new live service or remote sketch-parameter evidence",
+            "evidence": "verification/tool_graders_minhash_metadata_verification_2026-10-27_523/REPORT.md"
+          }
+        },
+        {
+          "name": "Database BLAST authentic format/configured-resource verification",
+          "status": "open"
+        }
+      ],
+      "verified_gap_groups": 2
+    },
+    {
+      "id": "R3",
+      "status": "open",
+      "named_operations": [
+        "annotate_open_reading_frames",
+        "annotate_plasmid",
+        "annotate_bacterial_genome",
+        "blast_sequence",
+        "align_sequences",
+        "find_sequence_mutations",
+        "analyze_protein_conservation",
+        "analyze_protein_phylogeny",
+        "predict_protein_disorder_regions",
+        "identify_fas_functional_domains",
+        "find_n_glycosylation_motifs",
+        "predict_o_glycosylation_hotspots",
+        "liftover_coordinates",
+        "detect_and_annotate_somatic_mutations",
+        "detect_and_characterize_structural_variations",
+        "analyze_copy_number_purity_ploidy_and_focal_events",
+        "analyze_cas9_mutation_outcomes",
+        "analyze_crispr_genome_editing",
+        "identify_transcription_factor_binding_sites",
+        "perform_chipseq_peak_calling_with_macs2",
+        "find_enriched_motifs_with_homer",
+        "gene_set_enrichment_analysis",
+        "annotate_celltype_with_panhumanpy",
+        "create_scvi_embeddings_scRNA",
+        "create_harmony_embeddings_scRNA",
+        "get_uce_embeddings_scRNA",
+        "map_to_ima_interpret_scRNA",
+        "unsupervised_celltype_transfer_between_scRNA_datasets",
+        "generate_embeddings_with_state",
+        "generate_transcriptformer_embeddings",
+        "generate_gene_embeddings_with_ESM_models",
+        "analyze_circular_dichroism_spectra",
+        "analyze_protease_kinetics",
+        "analyze_itc_binding_thermodynamics",
+        "analyze_arsenic_speciation_hplc_icpms",
+        "analyze_cytokine_production_in_cd4_tcells",
+        "perform_facs_cell_sorting",
+        "perform_flux_balance_analysis",
+        "get_gene_coding_sequence",
+        "get_plasmid_sequence",
+        "find_restriction_sites",
+        "find_restriction_enzymes",
+        "get_rna_seq_archs4",
+        "interspecies_gene_conversion",
+        "get_gene_set_enrichment_analysis_supported_database_list",
+        "download_geo_series",
+        "inspect_file"
+      ],
+      "named_scientific_or_wrapper_operations": 38,
+      "supporting_operations": 9,
+      "shared_family_total": null,
+      "qualification": "47 named operation contracts, not 47 distinct graders. Eighteen source/shared-analysis/consumer mappings reviewed. No additional complete R3 operation is established by these mappings.",
+      "mapped_operation_count": 18,
+      "mapping_evidence": [
+        "verification/tool_graders_sequence_operation_mapping_2026-10-27_509/MAPPING.md",
+        "verification/tool_graders_sequence_operation_mapping_2026-10-27_509/CODING_BOUNDARIES.md",
+        "verification/tool_graders_protein_sequence_mapping_2026-10-27_510/MAPPING.md",
+        "verification/tool_graders_variant_coordinate_mapping_2026-10-27_518/MAPPING.md"
+      ],
+      "mapping_qualification": "Root reviewed509,510 and518 mapping packets. Mappings identify common numerical owners and specific missing parameter/format/consumer ports; they do not establish completed invocation/result/return paths or installed/live resources.",
+      "delivered_mapping_pending_root_review": {
+        "operation_count": 6,
+        "path": "verification/tool_graders_variant_coordinate_mapping_2026-10-27_518/MAPPING.md",
+        "qualification": "Root now reviewed complete mapping and inspection receipt; no new native or scientific execution.",
+        "status": "reviewed"
+      }
+    },
+    {
+      "id": "R4",
+      "status": "open",
+      "applications": [
+        "GenomeAssembly2",
+        "GenomeAnnotation",
+        "ComprehensiveGenomeAnalysis",
+        "Variation",
+        "TnSeq",
+        "CoreGenomeMLST",
+        "WholeGenomeSNPAnalysis",
+        "TaxonomicClassification",
+        "MetagenomeBinning",
+        "MetagenomicReadMapping",
+        "RNASeq",
+        "ViralAssembly",
+        "SARS2Assembly",
+        "InfluenzaHASubtypeConversion",
+        "SubspeciesClassification"
+      ],
+      "application_count": 15,
+      "preparation_descriptors": "present_in_historical_implementation",
+      "scientific_result_path_closures_verified": 0,
+      "qualification": "No closure for these15 application-specific paths is established by preparation descriptors."
+    },
+    {
+      "id": "R5",
+      "status": "open",
+      "existing_collection_handlers": 22,
+      "existing_query_operation_categories": 11,
+      "remaining": "Combined selections, receiver instructions and requested delivery combinations; reuse recorded handler/host tests."
+    },
+    {
+      "id": "R6",
+      "status": "open",
+      "named_provider_scopes": 46,
+      "matching_wrapper_contracts": 29,
+      "remaining": "Resolve aliases and close missing acquisition/metadata/result bindings. Existing NCBI and UniProt routes are baseline, not new graders."
+    },
+    {
+      "id": "R7",
+      "status": "open",
+      "supporting_utilities": [
+        "dustmasker",
+        "segmasker",
+        "windowmasker",
+        "blast_formatter",
+        "blast_formatter_vdb",
+        "blast_vdb_cmd",
+        "blastdb_aliastool",
+        "blastdbcheck",
+        "blastdbcmd",
+        "convert2blastmask",
+        "makeblastdb",
+        "makembindex",
+        "makeprofiledb"
+      ],
+      "utility_count": 13,
+      "verified_completed_binding_count": null,
+      "qualification": "No completion evidence established for these rows; unassessed is not proof of absent code. No independent confidence graders are required."
+    }
+  ],
+  "previous_progress_record": {
+    "path": "research/tool_grader_progress_2026-10-27/PROGRESS_013.json",
+    "sha256": "feaede5e044928a26d405af6bc88e502b63e3549cb8742fb017a011ee8d302e9"
+  },
+  "shared_regression_evidence": {
+    "purpose": "After previously authorized barcode removal; no scope change or new grader",
+    "status": "passed",
+    "tests": 50,
+    "seconds": 157.12,
+    "receipt": "verification/tool_graders_barcode_removal_2026-10-27_499/check001/receipt.json",
+    "audit": "verification/tool_graders_barcode_removal_2026-10-27_499/check001/execution_audit.json",
+    "report": "verification/tool_graders_barcode_removal_2026-10-27_499/REGRESSION_RESULT.md",
+    "source_runtime_and_native_pins_unchanged": true,
+    "outside_imports": [],
+    "unbound_native_mappings": [],
+    "qualification": "PBS is a local fixture; NMF cases verify bindings without another fit. Not a claim of verifying independent R1 changes."
+  },
+  "previous_turn_classification": {
+    "classification": "progress",
+    "basis": "Previous goal turn accepted the third named R1 repair after final native/Workflow closure and source-pin checks; preserved all fixed remaining goal rows."
+  },
+  "current_workloads": [
+    {
+      "worker": "/root/biopython_shared_projection_504",
+      "scope": "Bounded R1 repair and affected structure-format compatibility",
+      "status": "verified_complete"
+    },
+    {
+      "worker": "/root/hmmer_model_format_boundary_508",
+      "scope": "R2 binary/HMMER2 model parser contract feeding existing shared sheet/calculator; source and authentic fixtures first",
+      "status": "bounded_contract_or_mapping_complete_no_scientific_tests"
+    },
+    {
+      "worker": "/root/sequence_operation_mapping_509",
+      "scope": "R3 first eight sequence-operation contracts mapped to actual underlying algorithms and existing numerical authorities",
+      "status": "bounded_contract_or_mapping_complete_no_scientific_tests"
+    },
+    {
+      "worker": "/root/protein_sequence_mapping_510",
+      "scope": "Read-only R3 mapping for predict_protein_disorder_regions, identify_fas_functional_domains, find_n_glycosylation_motifs, predict_o_glycosylation_hotspots; exact existing shared-analysis reuse and missing handoffs before coding",
+      "status": "bounded_contract_or_mapping_complete_no_scientific_tests"
+    },
+    {
+      "worker": "/root/hmmer_shared_model_consumers_511",
+      "scope": "Shared source-cell/validator and consumer implementation",
+      "status": "verified_for_bounded_model_format_contract"
+    },
+    {
+      "worker": "/root/hmmer_binary_decoder_512",
+      "scope": "Binary decoder and shared dispatch",
+      "status": "verified_for_bounded_model_format_contract"
+    },
+    {
+      "worker": "/root/hmmer_legacy_decoder_513",
+      "scope": "HMMER2 ASCII decoder",
+      "status": "verified_for_bounded_model_format_contract"
+    },
+    {
+      "worker": "/root/hmmer_decoder_boundary_review_514",
+      "scope": "Exact new parser/shared-validator/consumer boundary review",
+      "status": "review_complete_seven_findings_sent_to_owner"
+    },
+    {
+      "worker": "/root/hmmer_optional_metadata_repair_515",
+      "scope": "Exact failed optional metadata fixture/comparison boundary",
+      "status": "test_only_repair_verified_by_root_check004"
+    },
+    {
+      "worker": "/root/hmmer_alignment_map_boundary_516",
+      "scope": "Read-only native weighting/map and duplicate-driver calculation contract",
+      "status": "complete_contract_reviewed_root_defined_parallel_coding_boundaries"
+    },
+    {
+      "worker": "/root/minhash_pair_metadata_boundary_517",
+      "scope": "Read-only exact supplied metadata/acquisition/return integration contract",
+      "status": "read_only_contract_complete_root_reviewed_with_additive_interface_clarification",
+      "evidence": [
+        "verification/tool_graders_minhash_pair_metadata_boundary_2026-10-27_517/CONTRACT.md",
+        "verification/tool_graders_minhash_pair_metadata_boundary_2026-10-27_517/ROOT_INTERFACE_CLARIFICATION_001.md"
+      ]
+    },
+    {
+      "worker": "/root/variant_coordinate_operation_mapping_518",
+      "scope": "Read-only mapping of six named R3 variant/coordinate operations to existing shared analyses and precise missing bindings",
+      "status": "source_mapping_reviewed_no_execution_or_completion_claim"
+    },
+    {
+      "worker": "/root/minhash_metadata_contracts_519",
+      "scope": "Pure typed selector/metadata/publication-input shapes and single fraction helper in existing grader; no host/service/views/execution/prompt changes",
+      "status": "bounded_component_verification_passed_full_binding_and_episode_verification_pending"
+    },
+    {
+      "worker": "/root/minhash_metadata_projection_520",
+      "scope": "MinHash v1/v2 saved-value validation and requested calculation/diagnostic families; shared fraction-helper consumption",
+      "status": "bounded_component_verification_passed_full_binding_and_episode_verification_pending"
+    },
+    {
+      "worker": "/root/minhash_metadata_binding_521",
+      "scope": "MinHash selected metadata custody, original saved-result selection, service publication, acquisition identity and exact diagnostics schema registration",
+      "status": "authored_frozen_root_reviewed_combined_verification_in_progress"
+    },
+    {
+      "worker": "/root/minhash_metadata_workflow_tests_522",
+      "scope": "Complete selected MinHash metadata and saved-sheet Workflow tests against fixed interfaces; no production edits",
+      "status": "20_selected_workflow_cases_authored_frozen_combined_verification_in_progress"
+    },
+    {
+      "worker": "root523",
+      "scope": "Frozen A/C contracts, numerical and saved projection verification",
+      "status": "427_component_passes_retained_check003_running_root_receiver_and_custody_repairs_unverified",
+      "evidence": "verification/tool_graders_minhash_metadata_verification_2026-10-27_523/REPORT.md"
+    },
+    {
+      "worker": "/root/hmmer_tree_weights_524",
+      "scope": "Pure GSC/BLOSUM raw weights and shared pair identity; no normalization/sheet/driver",
+      "status": "authored_frozen_15_synthetic_tests_unexecuted"
+    },
+    {
+      "worker": "/root/hmmer_pb_sampling_525",
+      "scope": "Pure exact MT19937-64/Vitter D/A row sampler and diagnostic oracle source",
+      "status": "authored_frozen_17_test_functions_unexecuted"
+    },
+    {
+      "worker": "/root/hmmer_map_integration_526",
+      "scope": "Shared HMMER map calculation/normalization/context/driver/retained publication integration against516 and fixed helper ports",
+      "status": "coding_and_test_authoring_in_progress"
+    },
+    {
+      "worker": "/root/minhash_prospective_custody_tests_527",
+      "scope": "Independent regression tests of original recorded selection before commission and strict committed proof afterward",
+      "status": "fresh_test_authoring_in_progress"
+    }
+  ],
+  "current_update_evidence": {
+    "classification": "progress",
+    "basis": "Printed fixed R1–R7 accounting after reading goal. B521 and D522 authoring frozen and reviewed. Root repaired selected-input error detail loss and identified/provisionally repaired prospective commission proof ordering during frozen check003. Three fresh HMMER helper/integration workloads assigned against complete reviewed516contract; a fresh MinHash regression-test owner covers the prospective proof boundary. No new full path accepted pending verification.",
+    "named_R1_repairs_verified": 3,
+    "named_R2_gap_groups_verified": 2,
+    "goal_or_scope_changed": false
+  },
+  "accounting_review": {
+    "requested_by_user": "Read the new goal, account properly, print current progress, then continue next action.",
+    "all_seven_deliverables_remain_open": true,
+    "verified_named_R1_repairs": 3,
+    "verified_R2_gap_groups": 2,
+    "HMMER_supported_model_format_boundary": "verified subpart of an open R2 group",
+    "historical_rows": 308,
+    "previously_removed_barcode_row": "B-L130-analyze_barcode_sequencing_data",
+    "retained_row_count_after_removal": 307,
+    "retained_prefix_counts": {
+      "A": 78,
+      "B": 54,
+      "C": 37,
+      "D": 33,
+      "E": 79,
+      "X": 13,
+      "R": 13
+    },
+    "row_count_is_not_distinct_algorithms": true,
+    "completion_fraction": null,
+    "reason_no_completion_fraction": "Operation-to-shared-sheet/calculator mapping and remaining per-path completion accounting are unfinished. Historical described statuses are not equivalent to verified full completion.",
+    "review_basis": [
+      "authoritative user attachment",
+      "AGENTS.md",
+      "PROGRESS_011.json",
+      "historical fixed WORK_STATUS rows",
+      "retained HMMER format report and original receipts",
+      "Prodigal and NMF final receipts",
+      "current collaboration roster",
+      "authoritative user attachment reread 2026-10-28",
+      "PROGRESS_013 fixed rows and retained reports",
+      "B521/D522 final manifests and actual collaboration roster"
+    ],
+    "no_new_tests_or_native_work_during_accounting": true,
+    "report_printed_in_conversation": true
+  },
+  "current_native_verification": {
+    "attempt": "verification/tool_graders_minhash_metadata_verification_2026-10-27_523/check003",
+    "unit": "gene-local-job-85575147678346d59918a61d06553fb8.service",
+    "status": "running_original_handle",
+    "scope": "MinHash service/custody/full Workflow, deferred diagnostics schema and affected service/communication/feedback regressions",
+    "full_path_completion_claimed": false,
+    "failures_observed": true
+  }
+}

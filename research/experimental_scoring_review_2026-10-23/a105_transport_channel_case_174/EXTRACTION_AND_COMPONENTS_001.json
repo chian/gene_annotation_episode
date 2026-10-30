@@ -1,0 +1,358 @@
+{
+  "version": "a105_channel_case_research_proposal_001",
+  "axis": "A105",
+  "production_implementation": false,
+  "source": {
+    "paper": "elife01084",
+    "doi": "10.7554/eLife.01084",
+    "correction": "10.7554/eLife.01700",
+    "source_xml_sha256": "83867d6966a972f32899bdfe545c9952cb9d10393dc54d68dce29b6f4954b053"
+  },
+  "actual_subject": {
+    "name": "Fluc-Ec2",
+    "organism": "Escherichia coli, virulence-plasmid source",
+    "accession": "YP_001481330.1",
+    "expression_host": "Escherichia coli BL21-DE3",
+    "construct": "synthetic construct with C-terminal LysC/hexahistidine tail",
+    "tag_cleavage_in_recorded_preparation": "unknown",
+    "exact_boundaries": "unresolved",
+    "active_fraction": null,
+    "functional_unit": "source-interpreted assembled channel; pore count unresolved"
+  },
+  "arrangements": [
+    {
+      "id": "liposome_electrode",
+      "endpoint": "external_anion_appearance",
+      "lipid": "E. coli polar lipid",
+      "counterion": "K",
+      "normalization": "detergent endpoint",
+      "initial_rate": "dead_time_limited",
+      "relationship": "separate protein preparations; F and Cl coexist as loaded anions",
+      "qualifications": [
+        "external_buffer_description_both_vs_or_anions",
+        "electrode_calibration_difference",
+        "reported_turnover_limits_derived_not_raw_detector_observations"
+      ]
+    },
+    {
+      "id": "bilayer_macroscopic",
+      "endpoint": "electrical_current_and_reversal",
+      "lipid": "POPE/POPG",
+      "counterion": "Na",
+      "unit_event": "vesicle_insertion_packet",
+      "active_channel_count": null
+    },
+    {
+      "id": "bilayer_unitary",
+      "endpoint": "electrical_current_step",
+      "lipid": "POPE/POPG",
+      "counterion": "Na",
+      "unit_event": "single_functional_unit_interpretation_supported_by_low_density_and_histogram",
+      "active_pore_count": null,
+      "sampling": {
+        "insertion_events": 63,
+        "bilayers": {
+          "value": 50,
+          "relation": "approximate"
+        },
+        "independent_protein_preparations": null
+      },
+      "reversal_sampling": {
+        "bilayers_min": 4,
+        "bilayers_max": 5,
+        "reported_spreads_mV": [
+          1,
+          3
+        ],
+        "spread_kind": "unknown",
+        "averaging_estimator": "unspecified"
+      }
+    }
+  ],
+  "components": [
+    {
+      "component": "nominal_driving_potential",
+      "value": -253.0,
+      "unit": "mV",
+      "section": "comparability",
+      "formula": "Vrecord-Ereversal",
+      "operand_witness_ids": [
+        "voltage",
+        "salt_reversal"
+      ],
+      "relation": "eq",
+      "origin": "derived",
+      "unavailable_reason": null,
+      "qualifications": [
+        "common_ionic_condition_summary_not_paired_event"
+      ],
+      "annotation_credit": null
+    },
+    {
+      "component": "nominal_chord_conductance",
+      "value": 7.1146245059288535,
+      "unit": "pS",
+      "section": "signal_and_comparability",
+      "formula": "1000*reported_step_magnitude/abs(Vrecord-Ereversal)",
+      "operand_witness_ids": [
+        "step_amplitude",
+        "voltage",
+        "salt_reversal"
+      ],
+      "relation": "eq",
+      "origin": "derived",
+      "unavailable_reason": null,
+      "qualifications": [
+        "dominant_reported_step",
+        "common_ionic_condition_summary_not_paired_event",
+        "not_differential_slope",
+        "no_propagated_uncertainty"
+      ],
+      "annotation_credit": null
+    },
+    {
+      "component": "monovalent_charge_equivalent_throughput",
+      "value": 11234716.334029373,
+      "unit": "charge_equivalents/s",
+      "section": "signal",
+      "formula": "reported_step_pA*1e-12/elementary_charge_C",
+      "operand_witness_ids": [
+        "step_amplitude"
+      ],
+      "relation": "eq",
+      "origin": "derived",
+      "unavailable_reason": null,
+      "qualifications": [
+        "charge_endpoint",
+        "F_specific_fraction_not_quantified",
+        "functional_unit_interpretation_not_pore_count"
+      ],
+      "annotation_credit": null
+    },
+    {
+      "component": "full_open_occupancy_limit",
+      "value": 0.95,
+      "unit": "fraction",
+      "section": "functional_behavior",
+      "formula": "reported_source_occupancy_limit",
+      "operand_witness_ids": [
+        "full_open_occupancy"
+      ],
+      "relation": "gt",
+      "origin": "reported_limit",
+      "unavailable_reason": null,
+      "qualifications": [
+        "not_exact_occupancy",
+        "not_confidence_bound"
+      ],
+      "annotation_credit": null
+    },
+    {
+      "component": "full_open_state_charge_contribution_threshold",
+      "value": 10672980.517327905,
+      "unit": "charge_equivalents/s",
+      "section": "functional_behavior",
+      "formula": "Pfull_threshold*full_open_charge_equivalent_throughput",
+      "operand_witness_ids": [
+        "full_open_occupancy",
+        "step_amplitude"
+      ],
+      "relation": "gt",
+      "origin": "derived",
+      "unavailable_reason": null,
+      "qualifications": [
+        "conditional_common_condition",
+        "one_state_contribution_only",
+        "not_total_mean_flux",
+        "reported_limit_arithmetic"
+      ],
+      "annotation_credit": null
+    },
+    {
+      "component": "matched_liposome_reported_threshold_ratio",
+      "value": 1000.0,
+      "unit": "fraction",
+      "section": "functional_specificity",
+      "formula": "reported_F_lower_threshold/reported_Cl_upper_threshold",
+      "operand_witness_ids": [
+        "liposome_limits",
+        "deadtime"
+      ],
+      "relation": "gt",
+      "origin": "derived",
+      "unavailable_reason": null,
+      "qualifications": [
+        "reported_limit_arithmetic",
+        "source_F_estimate_also_qualified_approximate",
+        "not_confidence_or_permeability_bound",
+        "common_assay_unit_interpretation_required"
+      ],
+      "annotation_credit": null
+    },
+    {
+      "component": "source_biionic_permeability_limit",
+      "value": 100,
+      "unit": "fraction",
+      "section": "functional_specificity",
+      "formula": "source_reported_model_lower_limit",
+      "operand_witness_ids": [
+        "reported_biionic_selectivity",
+        "biionic_gradient"
+      ],
+      "relation": "approximate_lower_limit",
+      "origin": "reported_inference",
+      "unavailable_reason": null,
+      "qualifications": [
+        "not_recomputed",
+        "temperature_and_activities_not_supplied_for_recalculation"
+      ],
+      "annotation_credit": null
+    },
+    {
+      "component": "source_combined_selectivity_assertion",
+      "value": 10000,
+      "unit": "fraction",
+      "section": "functional_specificity",
+      "formula": "source_combined_inference",
+      "operand_witness_ids": [
+        "reported_combined_selectivity",
+        "liposome_limits"
+      ],
+      "relation": "gt",
+      "origin": "reported_inference",
+      "unavailable_reason": null,
+      "qualifications": [
+        "not_reproduced_by_matched_liposome_thresholds_alone",
+        "cross_assay_comparability_required",
+        "not_independent_experiment"
+      ],
+      "annotation_credit": null
+    },
+    {
+      "component": "conductance_variance",
+      "value": null,
+      "unit": "pS^2",
+      "section": "uncertainty",
+      "formula": "grad_g*Cov(I,V,E)*grad_g_transpose",
+      "operand_witness_ids": [
+        "step_amplitude",
+        "voltage",
+        "salt_reversal"
+      ],
+      "relation": "unknown",
+      "origin": "derived",
+      "unavailable_reason": "sampling_uncertainty_and_covariance_not_established",
+      "qualifications": [],
+      "annotation_credit": null
+    },
+    {
+      "component": "F_specific_throughput",
+      "value": null,
+      "unit": "F_ions/s",
+      "section": "attribution",
+      "formula": "phi_F*phi_channel*charge_equivalent_throughput",
+      "operand_witness_ids": [
+        "step_amplitude",
+        "salt_reversal"
+      ],
+      "relation": "unknown",
+      "origin": "derived",
+      "unavailable_reason": "quantitative_current_attribution_fractions_not_established",
+      "qualifications": [],
+      "annotation_credit": null
+    },
+    {
+      "component": "GHK_permeability_ratio",
+      "value": null,
+      "unit": "fraction",
+      "section": "method_validity",
+      "formula": "exp(F*Erev/(R*T))*a_Cl_trans/a_F_cis",
+      "operand_witness_ids": [
+        "salt_reversal",
+        "biionic_gradient"
+      ],
+      "relation": "unknown",
+      "origin": "derived",
+      "unavailable_reason": "temperature_activity_and_model_linkage_not_supplied",
+      "qualifications": [],
+      "annotation_credit": null
+    },
+    {
+      "component": "liposome_released_fraction",
+      "value": null,
+      "unit": "fraction",
+      "section": "signal",
+      "formula": "(plateau-initial)/(detergent_endpoint-initial)",
+      "operand_witness_ids": [],
+      "relation": "unknown",
+      "origin": "derived",
+      "unavailable_reason": "source_curve_points_not_digitized_in_this_packet",
+      "qualifications": [],
+      "annotation_credit": null
+    },
+    {
+      "component": "independent_preparation_count_for_Fig3",
+      "value": null,
+      "unit": "preparations",
+      "section": "replication",
+      "formula": "source_established_independent_preparation_count",
+      "operand_witness_ids": [
+        "insertion_count"
+      ],
+      "relation": "unknown",
+      "origin": "derived",
+      "unavailable_reason": "event_to_preparation_relationship_unresolved",
+      "qualifications": [],
+      "annotation_credit": null
+    }
+  ],
+  "dependencies": [
+    {
+      "shared_operand": "step_amplitude",
+      "used_by": [
+        "nominal_chord_conductance",
+        "monovalent_charge_equivalent_throughput",
+        "full_open_state_charge_contribution_threshold"
+      ],
+      "independent_evidence_count_increase": false
+    },
+    {
+      "shared_operand": "liposome_F_lower_estimate",
+      "repeated_representations": [
+        "Results approximate estimate",
+        "Discussion derived lower limit"
+      ],
+      "independent_evidence_count_increase": false
+    },
+    {
+      "relationship": "chemical and electrical assays complementary, not matched repetitions or automatically independent preparations"
+    }
+  ],
+  "implementation_assessment": {
+    "inspected_files": [
+      "literature_transport_inputs.py",
+      "literature_transport_calculations.py",
+      "literature_transport_prompt.py"
+    ],
+    "existing_scope": "same-curve Michaelis-Menten substrate-saturation response only",
+    "channel_assay_contract_in_inspected_path": "not implemented",
+    "generic_other_modules_exhaustively_audited": false,
+    "reuse_candidates": [
+      "scoped source custody",
+      "exact numeric selector and unit validation patterns",
+      "figure observation access without inventing points",
+      "typed subset and immutable saved projection patterns"
+    ],
+    "needed": [
+      "channel-specific current/voltage/reversal/level/ion context inputs",
+      "electrical physical units and reported-limit parsing including validated source thousands grouping",
+      "deterministic chord/charge/occupancy/threshold and covariance calculations",
+      "source-specific inference TASK and existing-LiteratureEpisodes integration"
+    ]
+  },
+  "missing_source_facts_separate_from_missing_implementation": true,
+  "target_transfer": null,
+  "overall_reliability_grade": null,
+  "annotation_credit": null,
+  "a105_adequacy_claim": false
+}

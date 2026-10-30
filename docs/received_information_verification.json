@@ -1,0 +1,152 @@
+{
+  "version": "received_information_integration_verification_v1",
+  "recorded_at": "2026-10-21T23:11:31.476088+00:00",
+  "plan": "docs/RECEIVED_INFORMATION_INTEGRATION.md",
+  "scope": "RI0-RI4 received resource information and selection-time local return evidence; engineering verification only",
+  "commands": [
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_resource_service_setup.py",
+      "passed": 19,
+      "seconds": 23.78,
+      "reported_by": "ri_operational_setup",
+      "command_kind": "reproduction_command_for_agent_reported_suite"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_local_return_input_adapter.py",
+      "passed": 15,
+      "seconds": 38.28,
+      "reported_by": "ri_return_input_adapter",
+      "command_kind": "reproduction_command_for_agent_reported_suite"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_resource_receipt_reconstruction.py",
+      "passed": 9,
+      "seconds": 129.94,
+      "reported_by": "ri_resource_reconstruction",
+      "command_kind": "reproduction_command_for_agent_reported_suite"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_local_return_inputs.py",
+      "passed": 13,
+      "seconds": 69.72,
+      "reported_by": "ri_local_return_runtime",
+      "command_kind": "reproduction_command_for_agent_reported_suite"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_local_return_inputs.py::test_actual_workflow_admission_observation_next_decision_preserves_completion_order tests/test_local_return_inputs.py::test_runtime_support_retains_failed_and_unobserved_samples_read_only",
+      "passed": 2,
+      "seconds": 28.04,
+      "reported_by": "ri_local_return_runtime",
+      "note": "Rerun after tightening actual archive read/write guards; overlaps the 13-case suite.",
+      "command_kind": "reproduction_command_for_agent_reported_suite"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_resource_receipt_runtime.py -x",
+      "passed": 6,
+      "seconds": 88.86,
+      "reported_by": "ri_resource_runtime_tests",
+      "note": "Before adding the seventh physical-check deduplication case.",
+      "command_kind": "reproduction_command_for_agent_reported_suite"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_resource_receipt_runtime.py::test_two_selected_checks_keep_both_original_proofs_but_one_physical_contribution",
+      "passed": 1,
+      "seconds": 5.88,
+      "reported_by": "ri_resource_runtime_tests",
+      "command_kind": "reproduction_command_for_agent_reported_suite"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_episode_binding_runtime.py tests/test_wait_estimation_inputs.py tests/test_runtime_history.py tests/test_scientific_process_runtime.py",
+      "passed": 28,
+      "seconds": 387.98,
+      "reported_by": "root",
+      "command_kind": "executed_command"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_episode_waiting.py tests/test_local_return_history.py",
+      "passed": 48,
+      "seconds": 266.3,
+      "reported_by": "root",
+      "command_kind": "executed_command"
+    }
+  ],
+  "source_sha256_at_checkpoint": {
+    "gene_annotation_episode/runtime.py": "44c83a053b07031178ae936a18556238a7f84bdfd910159a7f38c90009cfdf21",
+    "gene_annotation_episode/independent_execution.py": "136c70984c81a50d97b92a7878b2a0002cf925ccbd5fde1f8878602a1d49aadd",
+    "gene_annotation_episode/resource_service_setup.py": "0ce0d8bee45d01e4e5834a5a3cd08c8dc05b5d65480b4eca55384af99461ce62",
+    "gene_annotation_episode/wait_estimation_inputs.py": "7854dd07cc883980ac3638fa0e9f9630b1f3bbf4dd26c6548bb09b1447d181c3",
+    "gene_annotation_episode/waiting.py": "5732429a4aaa8158917fedea399f8e72d387b5f8586ec9783a8671f1098db7b8",
+    "gene_annotation_episode/homology_episodes.py": "999848cab1fe1a8d955edb055ba36661383c24d3b2ec713feefacdae2cc5b156",
+    "gene_annotation_episode/resource_information.py": "94f8f29490acdeb1a9b7fce1e3f55ee440fe779152c4c44fdb17c02a954f5c99",
+    "gene_annotation_episode/resource_operational_credit.py": "69bf95c172c4b3df5c1f84bcc3bc2b9ff920e4f58ae00103693bab2f5d8645bf",
+    "gene_annotation_episode/resource_episodes.py": "321c225a092efff7782234714b4e8bfdf9bbb9d89d8df898fd689275e9790d34",
+    "gene_annotation_episode/local_return_history.py": "946fd9dc0f1447681104681432e836b5b94f0527211f062e5ce0f900aafc33b5",
+    "gene_annotation_episode/numerical.py": "a414cfa623ab7ecb1bf129768c58a577bc207c2ddb340fa418b73004590108b0",
+    "method_loop/episode.py": "e379a669f58561894370c1e68f2e7ec0df2fdbd9ae3484b6e1c51e0b4ab066d8",
+    "tests/test_resource_receipt_runtime.py": "62ff50ceea724249e83c77f98e7aac99c2779886465df41fe3a8eb5e4b7a1e0a",
+    "tests/test_resource_service_setup.py": "4200191bb8c571e715a3433a0c14f97ad22c260f8f554a7a93708e202199209c",
+    "tests/test_local_return_input_adapter.py": "9e1b3f38bbb91a954a9e40aaffab2d07b976714654e5a7add390d40a72ec837e",
+    "tests/test_resource_receipt_reconstruction.py": "c96fa1b43bfb57254defe28dae459eee302bd9c3a10db1adeae283644b48efac",
+    "tests/test_local_return_inputs.py": "7bb60ea56785893fba5f51cc0895a47bc614b9754d6c641c1f51c145b4591b09"
+  },
+  "runtime_evidence": {
+    "specialist_context_consumers": [
+      "selected child",
+      "returned_request",
+      "independent worker",
+      "redelivery",
+      "episode.history"
+    ],
+    "resource_receipt_before_projection": true,
+    "original_result_handoff_baseline_credit": 0,
+    "same_physical_job_selected_twice_marginal_units": [
+      3.25,
+      0
+    ],
+    "worker_child_marginal_units": [
+      2.75,
+      0
+    ],
+    "worker_parent_observations": 0,
+    "actual_production_worker_entrypoint": "gene_annotation_episode.independent_execution.open_commission",
+    "worker_provider": "ModelConnection RPC with scripted fixture transport; no configured-model inference",
+    "native_work": "tiny homology search/parser fixture, actual local execution",
+    "local_completion_decision_order": [
+      9,
+      1,
+      4
+    ],
+    "local_signed_controller_deltas": [
+      5.25,
+      -3.25,
+      0.125
+    ],
+    "local_time_measure": "original UTC selection-to-return timestamp difference; not native execution or queue time",
+    "selection_history_forwarding": "exact saved selection-time history; current admission remains unobserved before observe",
+    "new_wait_inputs_binding": "wait_inputs_binding_v2",
+    "new_wait_support_version": "wait_inputs_v2",
+    "optional_completed_action_context": "completed_action_estimation_context_v4",
+    "legacy_absent_marker": "wait_inputs_v1; completed saved contexts replay unchanged",
+    "replay_no_recollection_reprojection_or_new_observation": true
+  },
+  "resolved_defects": [
+    "Original specialist context was absent from reconstructed reference resolvers, rejecting C9 namespaces before receipt normalization.",
+    "Selected-child semantic callback retained a live child source; it now retains detached immutable BindingContext.",
+    "Changed commission run_id could be masked by constructing a context from self.run_id; original spec.run_id now reaches validation."
+  ],
+  "verification_notes": [
+    "New test files contain 7, 19, 15, 9 and 13 passing cases respectively across recorded commands. Overlapping reruns and older groups are not summed.",
+    "A supplementary agent-owned broad regression result was unavailable to root and is not claimed as passing. Root collected the original affected wait/history suites separately.",
+    "Some initial new fixture runs failed due to intentionally permissive source identifiers, archive packaging, an incorrect controller-step field, a missing audit_identifiers argument or an invalid empty history selector; corrected fixtures passed as recorded.",
+    "Production worker evidence preceded two runtime input-validation refinements; the later resource-consumer tests exercise those refinements. Checkpoint hashes describe the final increment, not a claim that every command used identical bytes.",
+    "Agent suite commands are recorded as reproducible invocations; their literal shell arguments were not independently recovered. Root command strings are the actual executed commands."
+  ],
+  "remaining_limits": [
+    "No production caller profile or numerical credit units were selected/adopted.",
+    "No current-completion evidence enrichment, numerical pending/wait gain model or new continuation rule.",
+    "No physical native-job event transport was added.",
+    "No literature-library migration or API/HPC deployment.",
+    "No configured-model scientific investigation and no new parent against investigation_009 workspace.",
+    "The full fixed system goal remains incomplete; this record is not a completion gate or source of runtime policy."
+  ]
+}

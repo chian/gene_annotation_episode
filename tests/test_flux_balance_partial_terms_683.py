@@ -1,0 +1,179 @@
+"""683 sparse-population regression tests; no native capture or solve is run.
+
+The existing 680 fixtures TEST-normalize retained 677 API records. The controlled
+expression below is deliberately synthetic, including its corrupt first term;
+it is supplied to the unchanged byte reader before shared sheet/calculation use.
+"""
+from copy import deepcopy
+import builtins
+import io
+import json
+import os
+from pathlib import Path
+import socket
+import subprocess
+
+import pytest
+
+from gene_annotation_episode.flux_balance_calculations import calculate_flux_balance_sheet
+from gene_annotation_episode.flux_balance_contracts import validate_flux_balance_record
+from gene_annotation_episode.flux_balance_readers import parse_fba_capture
+from gene_annotation_episode.flux_balance_sheet import populate_flux_balance_sheet
+from test_flux_balance_core_679 import calc, make_sheet, parameters
+from test_flux_balance_readers_680 import bundle, captures, encode, file, missing, number
+
+
+def controlled_sheet(captures, *, defect=None, missing_positions=(6,)):
+    """Supply a synthetic expression in the existing TEST-normalized capture."""
+    supplied = deepcopy(captures)
+    constraint = supplied["problems"]["effective"]["constraints"][0]
+    constraint["terms"] = [
+        {"variable_position": position, "coefficient": number(coefficient,
+            f"/effective/constraints/0/terms/{index}/coefficient/value", "effective_problem")}
+        for index, (position, coefficient) in enumerate(((0, 1), (2, -1), (4, 2), (6, 0)))
+    ]
+    constraint["native_expression_pointer"] = "/effective/constraints/0/terms"
+    if defect == "malformed_coefficient":
+        constraint["terms"][0]["coefficient"]["value"] = True
+    elif defect == "out_of_range_variable":
+        constraint["terms"][0]["variable_position"] = 7
+    else:
+        assert defect is None
+    for row in supplied["solution"]["variable_values"]:
+        if row["variable_position"] in missing_positions:
+            row["primal"] = missing()
+    for role, key in (("effective_problem", "problems"), ("solution", "solution")):
+        supplied["raw"][role] = encode(supplied[key])
+        supplied["files"][role] = file(supplied["raw"][role], supplied[key]["version"])
+    payloads, expected = bundle(supplied)
+    before = deepcopy(payloads)
+    parsed = parse_fba_capture(payloads, expected=expected)
+    sheet = populate_flux_balance_sheet(bundle=parsed)
+    assert payloads == before
+    return sheet, payloads
+
+
+def retain_example(name, sheet, payloads, result):
+    attempt = os.environ.get("HMMER529_ATTEMPT")
+    if attempt:
+        Path(attempt, f"fba683_{name}.json").write_text(json.dumps({
+            "fixture_identity": "synthetic expression in TEST-normalized retained677 capture; not production capture; no new solve",
+            "supplied_effective_problem": json.loads(payloads["effective_problem"]["bytes"]),
+            "supplied_solution": json.loads(payloads["solution"]["bytes"]),
+            "sheet": sheet, "calculations": result,
+        }, indent=2, allow_nan=False) + "\n")
+
+
+@pytest.mark.parametrize("defect", ["malformed_coefficient", "out_of_range_variable"])
+def test_filtered_sparse_terms_do_not_establish_expected_population(captures, defect):
+    sheet, payloads = controlled_sheet(captures, defect=defect, missing_positions=(2, 6))
+    problem = sheet["problems"]["effective"]
+    constraint = problem["constraints"][0]
+    assert problem["representation"] == "partial"
+    assert constraint["terms_complete"] is False
+    assert [term["variable_position"] for term in constraint["terms"]] == [2, 4, 6]
+    assert [term["coefficient"]["value"] for term in constraint["terms"]] == [-1, 2, 0]
+    assert [term["coefficient"]["source"]["pointer"] for term in constraint["terms"]] == [
+        f"/effective/constraints/0/terms/{index}/coefficient/value" for index in (1, 2, 3)]
+    variables = {row["position"]: row["id"] for row in problem["variables"]}
+    assert [(position, variables[position]) for position in (2, 4, 6)] == [(2, "AB"), (4, "OUT"), (6, "aux")]
+    assert sheet["problems"]["loaded_original"]["representation"] == "complete_continuous_linear"
+    result = calculate_flux_balance_sheet(sheet, parameters=parameters(sheet))
+    check = result["constraint_checks"][0]
+    assert check["expected_term_count"] is None
+    # OUT has primal 6; aux has an explicit zero coefficient and needs no primal.
+    # The retained nonzero AB term has no primal, so only these two are usable.
+    assert check["available_term_count"] == 2
+    assert check["activity"]["state"] == "missing"
+    assert check["activity"]["value"] is None
+    assert "term_population_incomplete" in check["activity"]["issue_codes"]
+    assert check["equality_residual"]["value"] is None
+    assert check["comparison"] == "unknown"
+    assert result["candidate_feasibility"] != "passes_recorded_checks"
+    assert any(issue["code"] == "term_population_incomplete" and issue["constraint_position"] == 0
+               for issue in result["issues"])
+    retain_example(defect, sheet, payloads, result)
+
+
+def test_complete_expression_keeps_exact_count_and_zero_coefficient_needs_no_primal(captures):
+    sheet, payloads = controlled_sheet(captures)
+    constraint = sheet["problems"]["effective"]["constraints"][0]
+    assert constraint["terms_complete"] is True
+    assert sheet["native_solution"]["native"]["variable_values"][6]["primal"]["state"] == "missing"
+    result = calculate_flux_balance_sheet(sheet, parameters=parameters(sheet))
+    check = result["constraint_checks"][0]
+    assert check["expected_term_count"] == check["available_term_count"] == 4
+    assert check["activity"]["value"] == 13  # 1*7 - 1*6 + 2*6 + 0*unknown
+    assert check["equality_residual"]["value"] == 12  # recorded RHS remains 1
+    assert "term_population_incomplete" not in check["activity"]["issue_codes"]
+    retain_example("complete_expression", sheet, payloads, result)
+
+
+def test_incomplete_population_with_all_retained_terms_usable_still_has_no_activity(captures):
+    sheet, payloads = controlled_sheet(captures, defect="malformed_coefficient")
+    constraint = sheet["problems"]["effective"]["constraints"][0]
+    assert [term["variable_position"] for term in constraint["terms"]] == [2, 4, 6]
+    assert constraint["terms_complete"] is False
+    result = calculate_flux_balance_sheet(sheet, parameters=parameters(sheet))
+    check = result["constraint_checks"][0]
+    assert check["expected_term_count"] is None
+    assert check["available_term_count"] == 3
+    assert check["activity"]["state"] == "missing"
+    assert check["activity"]["value"] is None
+    assert check["activity"]["issue_codes"] == ["term_population_incomplete"]
+    assert check["native_activity"]["value"] == 1
+    assert check["native_minus_calculated_activity"]["value"] is None
+    assert check["comparison"] == "unknown"
+    retain_example("all_retained_usable", sheet, payloads, result)
+
+
+def test_constraint_check_validator_allows_unknown_expected_but_bounds_known_count():
+    check = calc(make_sheet())["constraint_checks"][0]
+    for expected, available in ((None, 0), (None, 7), (0, 0), (4, 3), (4, 4)):
+        supplied = {**deepcopy(check), "expected_term_count": expected, "available_term_count": available}
+        validated = validate_flux_balance_record("ConstraintCheck", supplied)
+        assert validated == supplied and validated is not supplied
+    for expected, available in ((0, 1), (4, 5)):
+        supplied = {**deepcopy(check), "expected_term_count": expected, "available_term_count": available}
+        with pytest.raises(ValueError, match="schema_invalid:/available_term_count"):
+            validate_flux_balance_record("ConstraintCheck", supplied)
+
+
+@pytest.mark.parametrize("value", [-1, True, 1.5])
+def test_nullable_expected_count_preserves_nonnegative_integer_count_types(value):
+    check = calc(make_sheet())["constraint_checks"][0]
+    for field in ("expected_term_count", "available_term_count"):
+        supplied = {**deepcopy(check), "expected_term_count": None, field: value}
+        with pytest.raises(ValueError, match=f"schema_invalid:/{field}"):
+            validate_flux_balance_record("ConstraintCheck", supplied)
+
+
+def test_partial_saved_sheet_recalculates_without_files_network_solver_or_imports(captures, tmp_path, monkeypatch):
+    sheet, _ = controlled_sheet(captures, defect="malformed_coefficient", missing_positions=(2, 6))
+    encoded = json.dumps(sheet, allow_nan=False)
+    path = tmp_path / "synthetic_partial_sheet.json"
+    path.write_text(encoded)
+    saved = json.loads(path.read_text())
+    tight, loose = parameters(saved), parameters(saved, tolerance=20, active=11)
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("saved-sheet calculator attempted external work")
+
+    with monkeypatch.context() as guarded:
+        for owner, name in ((builtins, "open"), (io, "open"), (os, "open"), (Path, "open"),
+                            (socket, "socket"), (socket, "create_connection"),
+                            (subprocess, "Popen"), (subprocess, "run"), (builtins, "__import__")):
+            guarded.setattr(owner, name, forbidden)
+        first = calculate_flux_balance_sheet(saved, parameters=tight)
+        second = calculate_flux_balance_sheet(saved, parameters=loose)
+
+    for result in (first, second):
+        check = result["constraint_checks"][0]
+        assert check["expected_term_count"] is None
+        assert check["available_term_count"] == 2
+        assert check["activity"]["value"] is None
+        assert "term_population_incomplete" in check["activity"]["issue_codes"]
+        assert result["candidate_feasibility"] != "passes_recorded_checks"
+    assert first["active_count"] == 3 and second["active_count"] == 0
+    assert first["sheet_sha256"] == second["sheet_sha256"]
+    assert json.dumps(saved, allow_nan=False) == encoded

@@ -1,0 +1,334 @@
+{
+  "BLAST_only_variant": {
+    "A_F": 0.8,
+    "C_native": 0.40294968197361625,
+    "H_F": 0.731054692601763,
+    "V_F": 1.0,
+    "feature_qualified": 0.322359745578893,
+    "regions": [
+      {
+        "C": 0.40294968197361625,
+        "H": 0.731054692601763,
+        "X": 0.3281050106281468,
+        "channels": {
+          "BLAST": {
+            "C": 0.40294968197361625,
+            "H": 0.731054692601763,
+            "X": 0.3281050106281468
+          }
+        },
+        "region_length": 100
+      }
+    ]
+  },
+  "HMMER_only_variant": {
+    "A_F": 0.8,
+    "C_native": 0.4560311236749753,
+    "H_F": 0.6400850842077626,
+    "V_F": 1.0,
+    "feature_qualified": 0.36482489893998027,
+    "regions": [
+      {
+        "C": 0.4560311236749753,
+        "H": 0.6400850842077626,
+        "X": 0.18405396053278728,
+        "channels": {
+          "HMMER": {
+            "C": 0.4560311236749753,
+            "H": 0.6400850842077626,
+            "X": 0.18405396053278728
+          }
+        },
+        "region_length": 100
+      }
+    ]
+  },
+  "additive_export_note": "Same arithmetic as receipt001; paper-specific components exported separately.",
+  "checks": [
+    "closed-form versus per-position complete calculation",
+    "duplicate invariance",
+    "weaker overlapping profile adds no vote",
+    "bits/nats operand-and-coefficient conversion",
+    "own/alternative score directions at 42 settings",
+    "full-sequence/domain separation",
+    "displayed-zero E leaves finite bit channel",
+    "required-region geometric mean",
+    "missing-site interval without point imputation",
+    "missing identity conservative bounds",
+    "observed opposing hits lower the conditional index",
+    "retained source counts and absent native scores preserved"
+  ],
+  "comparison_weights": {
+    "B_F1": 0.7781982450870486,
+    "B_F2": 0.6603393638738346,
+    "B_G1": 0.7027022841963302,
+    "H_F1": 0.5267671323571315,
+    "H_F1_related_profile": 0.49452528354950076,
+    "H_F2": 0.7534030360583935,
+    "H_G1": 0.6988057880877979
+  },
+  "complete_example_one_region": {
+    "A_F": 0.8,
+    "C_native": 0.42949040282429574,
+    "H_F": 0.6855698884047627,
+    "V_F": 1.0,
+    "feature_qualified": 0.3435923222594366,
+    "regions": [
+      {
+        "C": 0.42949040282429574,
+        "H": 0.6855698884047627,
+        "X": 0.256079485580467,
+        "channels": {
+          "BLAST": {
+            "C": 0.40294968197361625,
+            "H": 0.731054692601763,
+            "X": 0.3281050106281468
+          },
+          "HMMER": {
+            "C": 0.4560311236749753,
+            "H": 0.6400850842077626,
+            "X": 0.18405396053278728
+          }
+        },
+        "region_length": 100
+      }
+    ]
+  },
+  "identity_mixture_sensitivity": {
+    "0.0": 0.3475746425345227,
+    "0.5": 0.3435923222594366,
+    "1.0": 0.3354435891509774
+  },
+  "missing_BLAST_identity_qualified_bounds": [
+    0.32433716607098134,
+    0.3497618305449513
+  ],
+  "missing_site": {
+    "A_bounds": [
+      0.8,
+      0.9
+    ],
+    "panel_bounds": [
+      0.6,
+      0.8
+    ],
+    "point": null,
+    "qualified_bounds": [
+      0.3435923222594366,
+      0.38654136254186616
+    ]
+  },
+  "native_programs_or_production_readers_executed": false,
+  "no_observed_competitor_variant": {
+    "A_F": 0.8,
+    "C_native": 0.6855698884047627,
+    "H_F": 0.6855698884047627,
+    "V_F": 1.0,
+    "feature_qualified": 0.5484559107238102,
+    "regions": [
+      {
+        "C": 0.6855698884047627,
+        "H": 0.6855698884047627,
+        "X": 0.0,
+        "channels": {
+          "BLAST": {
+            "C": 0.731054692601763,
+            "H": 0.731054692601763,
+            "X": 0.0
+          },
+          "HMMER": {
+            "C": 0.6400850842077626,
+            "H": 0.6400850842077626,
+            "X": 0.0
+          }
+        },
+        "region_length": 100
+      }
+    ]
+  },
+  "orientation_receipt": "orientation_arithmetic_002.json",
+  "proposal": "015_not_adopted_or_calibrated",
+  "scale_sensitivity": {
+    "0.5": 0.27851327497482825,
+    "1.0": 0.3435923222594366,
+    "2.0": 0.363839961812026
+  },
+  "source_component_receipts": [
+    "source_arithmetic_001_coda.json",
+    "source_arithmetic_002_quefl.json",
+    "source_arithmetic_003_tria.json"
+  ],
+  "status": "passed_research_arithmetic_only",
+  "synthetic_native_rows": [
+    {
+      "alignment_columns": 60,
+      "bits": 80.0,
+      "function": "F",
+      "group": "F_A",
+      "id": "B_F1",
+      "identical_columns": 48,
+      "paired_reference_count": 60,
+      "q_from": 1,
+      "q_to": 60,
+      "reference_denominator": 60,
+      "synthetic_E": 7.444625512977249e-17,
+      "synthetic_effective_search_space": 90000000,
+      "tool": "BLAST"
+    },
+    {
+      "alignment_columns": 60,
+      "bits": 60.0,
+      "function": "F",
+      "group": "F_B",
+      "id": "B_F2",
+      "identical_columns": 42,
+      "paired_reference_count": 60,
+      "q_from": 41,
+      "q_to": 100,
+      "reference_denominator": 60,
+      "synthetic_E": 7.806255641895632e-11,
+      "synthetic_effective_search_space": 90000000,
+      "tool": "BLAST"
+    },
+    {
+      "alignment_columns": 60,
+      "bits": 65.0,
+      "function": "G",
+      "group": "G_A",
+      "id": "B_G1",
+      "identical_columns": 45,
+      "paired_reference_count": 60,
+      "q_from": 1,
+      "q_to": 60,
+      "reference_denominator": 60,
+      "synthetic_E": 2.439454888092385e-12,
+      "synthetic_effective_search_space": 90000000,
+      "tool": "BLAST"
+    },
+    {
+      "bits": 50.0,
+      "full_sequence_bits": 52.0,
+      "function": "F",
+      "group": "F_A",
+      "id": "H_F1",
+      "paired_reference_count": 50,
+      "q_from": 1,
+      "q_to": 50,
+      "reference_denominator": 60,
+      "synthetic_Z": 20000,
+      "synthetic_cE": 2.2737367544323206e-13,
+      "synthetic_domZ": 8,
+      "synthetic_iE": 5.684341886080801e-10,
+      "synthetic_lambda_H": 0.6931471805599453,
+      "synthetic_sequence_E": 1.4210854715202004e-10,
+      "synthetic_tau_bits": 5.0,
+      "tool": "HMMER"
+    },
+    {
+      "bits": 70.0,
+      "full_sequence_bits": 72.0,
+      "function": "F",
+      "group": "F_B",
+      "id": "H_F2",
+      "paired_reference_count": 50,
+      "q_from": 51,
+      "q_to": 100,
+      "reference_denominator": 50,
+      "synthetic_Z": 20000,
+      "synthetic_cE": 2.168404344971009e-19,
+      "synthetic_domZ": 8,
+      "synthetic_iE": 5.421010862427522e-16,
+      "synthetic_lambda_H": 0.6931471805599453,
+      "synthetic_sequence_E": 1.3552527156068805e-16,
+      "synthetic_tau_bits": 5.0,
+      "tool": "HMMER"
+    },
+    {
+      "bits": 45.0,
+      "full_sequence_bits": 47.0,
+      "function": "F",
+      "group": "F_A",
+      "id": "H_F1_related_profile",
+      "paired_reference_count": 50,
+      "q_from": 1,
+      "q_to": 50,
+      "reference_denominator": 60,
+      "synthetic_Z": 20000,
+      "synthetic_cE": 7.275957614183426e-12,
+      "synthetic_domZ": 8,
+      "synthetic_iE": 1.8189894035458565e-08,
+      "synthetic_lambda_H": 0.6931471805599453,
+      "synthetic_sequence_E": 4.547473508864641e-09,
+      "synthetic_tau_bits": 5.0,
+      "tool": "HMMER"
+    },
+    {
+      "bits": 60.0,
+      "full_sequence_bits": 62.0,
+      "function": "G",
+      "group": "G_A",
+      "id": "H_G1",
+      "paired_reference_count": 50,
+      "q_from": 1,
+      "q_to": 50,
+      "reference_denominator": 50,
+      "synthetic_Z": 20000,
+      "synthetic_cE": 2.220446049250313e-16,
+      "synthetic_domZ": 8,
+      "synthetic_iE": 5.551115123125783e-13,
+      "synthetic_lambda_H": 0.6931471805599453,
+      "synthetic_sequence_E": 1.3877787807814457e-13,
+      "synthetic_tau_bits": 5.0,
+      "tool": "HMMER"
+    }
+  ],
+  "two_required_regions_variant": {
+    "A_F": 0.8,
+    "C_native": 0.3598332327919912,
+    "H_F": 0.6847709902620567,
+    "V_F": 1.0,
+    "feature_qualified": 0.28786658623359296,
+    "regions": [
+      {
+        "C": 0.19500788599918045,
+        "H": 0.65248268872209,
+        "X": 0.4574748027229096,
+        "channels": {
+          "BLAST": {
+            "C": 0.231356560706804,
+            "H": 0.7781982450870486,
+            "X": 0.5468416843802446
+          },
+          "HMMER": {
+            "C": 0.1586592112915569,
+            "H": 0.5267671323571315,
+            "X": 0.36810792106557455
+          }
+        },
+        "region_length": 50
+      },
+      {
+        "C": 0.663972919649411,
+        "H": 0.7186570880874354,
+        "X": 0.05468416843802446,
+        "channels": {
+          "BLAST": {
+            "C": 0.5745428032404285,
+            "H": 0.6839111401164775,
+            "X": 0.10936833687604892
+          },
+          "HMMER": {
+            "C": 0.7534030360583935,
+            "H": 0.7534030360583935,
+            "X": 0.0
+          }
+        },
+        "region_length": 50
+      }
+    ]
+  },
+  "unsearched_alternatives_sensitivity": [
+    0,
+    0.3435923222594366
+  ]
+}

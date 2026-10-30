@@ -1,0 +1,251 @@
+{
+  "scope": "Research reconstruction with published outcomes known in advance. Every observed experimental result is attributed to the authors. My actual work comprises source inspection, public-record retrieval and arithmetic; no experiments, model fitting, new biological measurements or target-gene annotation performed.",
+  "candidate_question_status": "Candidate additional support question only; this investigation does not accept a scoring axis or propose process slots.",
+  "traces": [
+    {
+      "case_id": "chem_bcd_etf",
+      "contrast": "A redox-feasibility problem with coupled work hidden behind apparent activation.",
+      "starting_uncertainty": "Can NADH support the observed low-potential output under reported conditions, and does acetyl-CoA act as an activator or supply a reactant consumed in a coupled reaction? The energetic and causal questions require different evidence.",
+      "routes": [
+        {
+          "route": "Chemical redox and energetic feasibility",
+          "scientific_question": "What supplies the driving force for NADH-derived ferredoxin/H2 production?",
+          "turns": [
+            {
+              "question_before": "Could an activated standalone NADH:ferredoxin oxidoreductase explain the output without another energy contribution?",
+              "authors_observation_refs": [
+                "raw/PMC2223550.paragraphs.txt [15]-[20]"
+              ],
+              "authors_observation": "The reported carrier potentials, intracellular NADH/NAD+ ratio and culture H2 pressure make the isolated redox step unfavorable under the conditions discussed.",
+              "our_actual_action": "Re-read the primary energetic argument and distinguish reported physiological constraints from the simplifying standard potentials used in our calculation.",
+              "changed_question": "Which exergonic reaction could compensate for the low-potential output, rather than only accelerate electron transfer?",
+              "possibilities_retained": [
+                "An energy contribution from a coupled reaction.",
+                "Condition-dependent feasibility must be evaluated using concentrations; standard potentials alone are insufficient."
+              ],
+              "possibilities_disfavored_or_rejected": [
+                "Activation alone as the complete energetic explanation at the reported physiological conditions. This is not a claim that direct transfer is impossible at every concentration."
+              ],
+              "why_next_probe_over_alternatives": "Compare candidate reaction free energies before inferring function from an oxidoreductase name. A kinetic activation explanation does not itself provide an energy balance.",
+              "reasoning_reported_vs_reconstructed": "The unfavorable-step argument is reported by the authors; the explicit retained/rejected comparison and probe rationale are reconstructed."
+            },
+            {
+              "question_before": "Could crotonyl-CoA reduction supply enough driving force, without invoking an additional ATP input?",
+              "authors_observation_refs": [
+                "raw/PMC2223550.paragraphs.txt [11], [63]"
+              ],
+              "our_actual_action": "Calculate the illustrative two-electron contributions from the paper's standard transformed potentials; preserve the lumped-ferredoxin approximation in the saved arithmetic record.",
+              "our_result": "raw/bcd_redox_arithmetic.json gives +17.37 kJ/mol for the unfavorable contribution and -59.82 for the favorable contribution, summing to -42.45.",
+              "changed_question": "The paired reaction is energetically admissible; does the enzyme actually connect these transformations and consume crotonyl-CoA?",
+              "possibilities_retained": [
+                "Energetic coupling of crotonyl-CoA reduction to ferredoxin reduction.",
+                "Other sources of driving force are not excluded merely by this feasible sum."
+              ],
+              "possibilities_disfavored_or_rejected": [
+                "The objection that the proposed paired reaction is impossible on this simplified standard-potential balance.",
+                "Treating the favorable sum as proof of a catalyst, coupling mechanism, intracellular free energy or exact stoichiometry."
+              ],
+              "why_next_probe_over_alternatives": "The next uncertainty is causal, so inspect dependence, product and substrate-limited measurements in the second route. Refining a sequence match or repeating the same energy arithmetic would not show that coupling occurs.",
+              "reasoning_reported_vs_reconstructed": "Input potentials and the coupled-reaction hypothesis are authors' material; the arithmetic is our actual computation. The decision decomposition is retrospective."
+            }
+          ],
+          "route_result": "This route establishes chemical plausibility and an energy-balance requirement at the reported conditions. It does not establish causal coupling or a flavin-level mechanism."
+        },
+        {
+          "route": "Causal biochemical discrimination of activation, substrate supply and coupling",
+          "scientific_question": "Why is acetyl-CoA required in lysates, and which contribution belongs to the isolated Bcd/Etf complex?",
+          "turns": [
+            {
+              "question_before": "Is acetyl-CoA an indispensable activator, or does its metabolism supply the needed reactant?",
+              "authors_observation_refs": [
+                "chem_bcd_etf.1",
+                "raw/PMC2223550.paragraphs.txt [63]-[70]; Table 1"
+              ],
+              "our_actual_action": "Inspect the primary lysate substitutions and regeneration-system logic, including direct chemically synthesized crotonyl-CoA and vinylacetate-derived supply.",
+              "changed_question": "Can a purified complex reproduce the dependence when acetyl-CoA and its upstream conversion system are bypassed?",
+              "possibilities_retained": [
+                "Acetyl-CoA supplies a downstream substrate in the lysate.",
+                "Additional lysate enzymes or a different active protein could still explain the crude-extract result.",
+                "Substitution alone does not exclude an additional regulatory effect."
+              ],
+              "possibilities_disfavored_or_rejected": [
+                "Acetyl-CoA itself is indispensable for the observed activity, because its requirement can be bypassed."
+              ],
+              "why_next_probe_over_alternatives": "Purification and defined-component assays can attribute the reaction; further crude-extract supplementation cannot remove the alternative of multiple contributing enzymes.",
+              "reasoning_reported_vs_reconstructed": "Authors explicitly report substitution followed by purification. The hypothesis comparison is our reconstruction of why those results discriminate."
+            },
+            {
+              "question_before": "Does the isolated Bcd/Etf complex show the paired dependencies, or is H2 only a nonspecific reporter response?",
+              "authors_observation_refs": [
+                "chem_bcd_etf.2",
+                "chem_bcd_etf.4",
+                "raw/PMC2223550.paragraphs.txt [76]-[77], [85]-[92]; Table 2"
+              ],
+              "our_actual_action": "Inspect purified omission/addition assays alongside NADH oxidation, donor substitution and cofactor/stability controls; distinguish the H2 reporter components from the reaction under investigation.",
+              "changed_question": "The substrate-dependent low-potential output is attributable to the isolated complex; is crotonyl-CoA consumed as a paired substrate rather than serving only as an effector?",
+              "possibilities_retained": [
+                "Crotonyl-CoA-dependent ferredoxin reduction by the complete complex.",
+                "Hydrogenase and ferredoxin are required components of the indirect H2 reporter.",
+                "Loss of FAD or complex integrity can produce a false negative."
+              ],
+              "possibilities_disfavored_or_rejected": [
+                "An upstream acetyl-CoA-processing system is necessary in the defined assay.",
+                "NADPH is an interchangeable donor under the tested conditions.",
+                "FAD-dependent activity/stability alone proves electron bifurcation."
+              ],
+              "why_next_probe_over_alternatives": "Dependency narrows causation but does not by itself distinguish a consumed substrate from an activator. Product identification and substrate-limited stoichiometry address that remaining question; more artificial-acceptor activity would not.",
+              "reasoning_reported_vs_reconstructed": "All biochemical observations belong to the authors. Separating reporter requirements, enzyme integrity and the consumed-substrate question is reconstructed reasoning."
+            },
+            {
+              "question_before": "Are both output chemistry and stoichiometry consistent with coupled reduction, and how obligatory is the coupling?",
+              "authors_observation_refs": [
+                "chem_bcd_etf.3",
+                "raw/PMC2223550.paragraphs.txt [59], [83], [85], [89]-[94]; Figure 2"
+              ],
+              "authors_observation": "The product assay detects the crotonyl-to-butyryl mass change. Substrate-limited H2 yields support the paired reaction, while low uncoupled crotonyl-CoA reduction persists.",
+              "our_actual_action": "Read product analysis and both limiting-substrate experiments together, retaining preparation variability and the distinction between measured and extrapolated stoichiometry.",
+              "changed_question": "The supported assignment is a coupled reaction with incomplete coupling in these preparations; the remaining question is its microscopic electron-transfer mechanism and native flux.",
+              "possibilities_retained": [
+                "Crotonyl-CoA is a consumed partner, explaining its supply from acetyl-CoA.",
+                "Coupling supports the measured ferredoxin-reduction route.",
+                "Some crotonyl-CoA reduction can occur without ferredoxin; additional regulatory effects are not exhaustively excluded."
+              ],
+              "possibilities_disfavored_or_rejected": [
+                "Acetyl-CoA allostery as the complete explanation of the substrate-dependent reaction.",
+                "Perfectly obligate coupling of every turnover.",
+                "The ideal fully coupled ratio is an exact directly measured stoichiometry."
+              ],
+              "why_next_probe_over_alternatives": "These combined measurements answer the assignment question. Microscopic flavin redox states or physiological direction require different evidence; they should remain bounded rather than be inferred from cofactor identity or the ideal ratio.",
+              "reasoning_reported_vs_reconstructed": "Authors report the product, measured ratios, basal uncoupled activity and fully coupled extrapolation. Their FAD-based bifurcation mechanism is proposed in Discussion [102]-[106], not directly measured by these controls."
+            }
+          ],
+          "route_result": "The primary paper supports the causal transition from apparent acetyl-CoA activation to substrate supply and paired Bcd/Etf chemistry. It supports coupling for the measured ferredoxin-reduction route, not absolute coupling of every reaction turnover."
+        }
+      ],
+      "bounded_annotation": "For the experimentally identified complex, assign NADH-dependent coupled crotonyl-CoA and ferredoxin reduction. Coupling is supported for the measured ferredoxin-reduction route, while low uncoupled crotonyl-CoA reduction occurs. Do not transfer this coupling to another paralog from a name, gene adjacency or the energy calculation. The ideal fully coupled ratio is extrapolated; the detailed flavin mechanism remains proposed in this paper.",
+      "unperformed_decisive_work": "New purified-protein dependency tests for an uncharacterized homolog; native redox-ratio/flux measurements if physiological direction is in question.",
+      "primary_source_urls": [
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC2223550/"
+      ],
+      "actual_probe_files": [
+        "raw/bcd_redox_arithmetic.json",
+        "raw/CKL_genomic_window.gb",
+        "raw/CKL_target_window.gb",
+        "raw/bcd_genome_probe_summary.json"
+      ],
+      "supporting_identity_work": {
+        "route": "Bind the biochemical contribution to actual gene records without transferring neighboring labels",
+        "turns": [
+          {
+            "information_available": "Authors identify the active complex by partial protein sequences and specific CKL locus tags (observation 4).",
+            "actual_action": "Retrieve a small CP000673.1 GenBank interval at 480000..520000 to check locus identity.",
+            "result": "No requested tags; first local tag is CKL_0508.",
+            "changed_uncertainty": "The window guess was wrong; no evidence against the gene assignment was obtained.",
+            "why_this_choice": "A bounded genomic interval can map the experimentally identified proteins with less transfer than a full genome. The negative hit requires adjusting the query, not changing function.",
+            "reasoning_status": "Actual retrieval and adaptive choice."
+          },
+          {
+            "information_available": "Observed tags place the initial interval downstream of the target cluster.",
+            "actual_action": "Retrieve CP000673.1 positions 420000..450000 and parse each CDS within its own feature block.",
+            "result": "Find CKL_0455/0456/0457 with protein accessions EDK32509.1/EDK32510.1/EDK32511.1. Nearby CKL_0459/0460 still carry older predictive labels; see raw/bcd_genome_probe_summary.json.",
+            "changed_uncertainty": "The record binds the reported activity to named loci; annotations in that record are not independent functional evidence and cannot overwrite the NfnAB primary experiment.",
+            "why_this_choice": "The first retrieval supplies enough coordinate guidance to repair the targeted probe. Repeating keyword searches would not resolve a window-location error.",
+            "reasoning_status": "Actual retrieval and parsing; no expression or gene deletion performed."
+          }
+        ],
+        "classification": "Supporting identity/provenance work; not a substantive biological route and not an additional scientific run."
+      },
+      "decomposition_status": "Two substantive scientific questions reconstructed within one published investigation. These are not two newly performed scientific runs, independent replications, or two proven episode implementations. Our scientific work here is evidence inspection plus illustrative arithmetic; authors performed the experiments.",
+      "source_support_audit": {
+        "primary_source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2223550/",
+        "rechecked_sections": "Introduction [15]-[21]; purification and reporter/product methods [24]-[61]; Results [63]-[100], Tables 1-2/Figure 2; proposed mechanism [102]-[106], using saved parsed-primary paragraph numbers.",
+        "supports_two_scientific_questions": true,
+        "does_not_establish": [
+          "Two independent scientific runs or a prospective blind rediscovery.",
+          "A fully coupled ideal stoichiometry measured without uncoupling.",
+          "Direct observation of the proposed microscopic flavin bifurcation mechanism.",
+          "Physiological direction or coupling of every homolog."
+        ],
+        "provenance_boundary": "The adaptive GenBank window lookup is retained only under supporting_identity_work."
+      }
+    },
+    {
+      "case_id": "chem_f420_precursor_partner",
+      "contrast": "A chemical-product and substrate-source problem in which the coupled assay itself filters what can be observed.",
+      "starting_uncertainty": "A missing source of phospholactate motivates alternatives, but abundance or chemical resemblance cannot determine the pathway. A fluorescent product can leave reduction state ambiguous.",
+      "routes": [
+        {
+          "route": "Resolve exact product and missing reduction, then check cellular support",
+          "turns": [
+            {
+              "information_available": "The 2019 result uses PEP, implying a double bond absent from mature F420 (observation 1).",
+              "actual_action": "Inspect coupled-assay composition, MS/MS identity and reduced-FMN/FbiB reconstitution; then inspect the 2020 native-cell deletion/metabolite result (observation 2).",
+              "result_refs": [
+                "chem_f420_precursor_partner.1",
+                "chem_f420_precursor_partner.2"
+              ],
+              "changed_uncertainty": "The reduction-state discrepancy identifies additional chemistry and a testable FbiB contribution. Cellular metabolite evidence bounds the mycobacterial physiological assignment beyond purified-enzyme capability.",
+              "why_this_choice": "Resolve what was chemically produced before looking for another generic transferase. Native-cell metabolite detection is more informative for this question than matching a fluorescence peak or docking alone.",
+              "reasoning_status": "Authors performed experiments; my cross-paper probe order and comparisons are reconstructed."
+            },
+            {
+              "information_available": "The 2020 primary paper identifies a product-bound FbiA deposition.",
+              "actual_action": "Use RCSB core entry 6UW7, enumerate nonpolymer entities, then query chemcomp QMD after observing the product entity.",
+              "result": "The product is QMD; its canonical SMILES includes a phosphate-linked terminal C=C. Entry resolution is 2.342 A. Polymer source maps to M. smegmatis FbiA/MSMEG_1830.",
+              "changed_uncertainty": "The deposited ligand identity is consistent with an unsaturated product rather than saturated F420-0. A present-day record corroborates the paper's identity mapping; it is not a new cellular observation.",
+              "why_this_choice": "Querying the actual component avoids inferring chemistry from the enzyme's functional name. Once the component is known, its chemical graph directly addresses the double-bond question.",
+              "reasoning_status": "Actual read-only record probe; no density-map, coordinate or refinement analysis."
+            }
+          ]
+        },
+        {
+          "route": "Challenge organism transfer through the coupled partner, then audit a structural record",
+          "turns": [
+            {
+              "information_available": "The 2019 broad archaeal proposal needs an unexplained reduction absent from the known archaeal CofE architecture.",
+              "actual_action": "Search later primary work and inspect the 2022 cognate-versus-mixed partner comparisons and complete coupled-assay methods.",
+              "result_ref": "chem_f420_precursor_partner.3",
+              "changed_uncertainty": "The coupled product readout cannot assign upstream CofC preference independently. Downstream partner specificity explains an apparent upstream negative result.",
+              "why_this_choice": "Changing the assay partner can distinguish failed precursor activation from failed downstream acceptance. A conserved binding motif or invented universal reductase would not resolve that ambiguity.",
+              "reasoning_status": "Partner comparisons and their explanation are authors' results; selecting this challenge is reconstructed."
+            },
+            {
+              "information_available": "The 2022 structural result identifies a trapped activated 3-PG product and a deposited entry.",
+              "actual_action": "Retrieve 7P97 entry/nonpolymer entities and then its polymer-source record.",
+              "result": "Ligand 6WI is GPPG. The paper calls the crystallized protein Mycetohabitans sp. B3, while PDB source fields name M. rhizoxinica HKI454/RBRH_02550.",
+              "changed_uncertainty": "The product mapping is clear, but the exact construct/organism provenance requires resolution; I do not merge the two names silently.",
+              "why_this_choice": "A deposited ligand can verify the activated substrate class, while source metadata tests whether that evidence belongs to the claimed organism.",
+              "reasoning_status": "Actual retrieval; mismatch is an observed record discrepancy, not a demonstrated error in either source."
+            },
+            {
+              "information_available": "The organism/construct mismatch could affect exact assignment of the structural result.",
+              "actual_action": "Search NCBI Protein for the paper's B3 CofC locus KQH55_09515 to obtain a sequence for comparison.",
+              "result": "The exact-locus query returns zero records (raw/B3_cofC_protein_esearch.json).",
+              "changed_uncertainty": "No sequence comparison is possible from that query. The mismatch remains unresolved, while matched-pair functional results retain their reported organism labels.",
+              "why_this_choice": "A sequence could discriminate near-identical constructs more directly than species-name interpretation. An empty identifier lookup is not evidence that the protein or strain does not exist.",
+              "reasoning_status": "Actual unsuccessful follow-up; no inferred sequence identity."
+            }
+          ]
+        }
+      ],
+      "bounded_annotation": "Use mycobacterial PEP-to-dehydro-F420 chemistry with a subsequent FbiB reduction; retain experimentally supported 3-PG and 2-PL entry for the tested other pairs. Do not generalize precursor preference from an isolated homolog, a mixed coupled assay or a diagnostic residue. The biosynthetic source of archaeal 2-PL is not solved by these results.",
+      "unperformed_decisive_work": "For a new organism: identify its native product and cognate partners experimentally, then distinguish precursor activation from downstream selection. Resolve the 7P97 construct mapping before attributing that structure to an exact B3 sequence.",
+      "primary_source_urls": [
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC6450877/",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC7253369/",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC8764529/"
+      ],
+      "actual_probe_files": [
+        "raw/rcsb_6UW7_entry.json",
+        "raw/rcsb_6UW7_entity3.json",
+        "raw/rcsb_QMD_chemcomp.json",
+        "raw/rcsb_6UW7_polymer1.json",
+        "raw/rcsb_7P97_entry.json",
+        "raw/rcsb_7P97_entity2.json",
+        "raw/rcsb_7P97_polymer1.json",
+        "raw/B3_cofC_protein_esearch.json",
+        "raw/F420_record_probe_summary.json"
+      ]
+    }
+  ]
+}

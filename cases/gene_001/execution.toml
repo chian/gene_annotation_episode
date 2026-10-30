@@ -1,0 +1,40 @@
+# Caller-owned resources for the fixed one-gene investigation.
+# Scientific credit and continuation come from a separately supplied policy module.
+workspace = "workspace"
+history = "../../resources/run_statistics.sqlite"
+resource_id = "local-development"
+max_cpu = 1
+reference_records = 575748
+reference_residues = 209017843
+
+[executable]
+path = "../../resources/software/infernal-1.1.5/hmmer/src/phmmer"
+sha256 = "e44ed0bf3f3ce441ceed7854391954f057140dab935f2e0ac4608d1a3f72ef61"
+
+[reference_database]
+# Reuse the retained corpus. No reference download occurs during preparation.
+path = "jobs/homology_001/reviewed.fasta"
+sha256 = "0e39da39014607bd1687caef1f495721bd4a405c4b83dceb134cd62f0c26332b"
+
+[local_jobs]
+memory_bytes = 21474836480
+scratch_bytes = 4294967296
+# No default native work timeout.
+
+[models.connection]
+command = ["codex", "app-server", "--stdio"]
+
+[models.FAST]
+model = "gpt-6-luna"
+reasoning_effort = "none"
+
+[models.REASONING]
+model = "gpt-6-sol"
+reasoning_effort = "medium"
+
+[models.routing]
+decide = "REASONING"
+child_interpretation = "REASONING"
+
+[restoration]
+preview_size = 24

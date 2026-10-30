@@ -1,0 +1,782 @@
+{
+  "definition": "A107 research proposal v001; reported expression inputs, derived statistics, proposed transforms",
+  "source_commit": "782c252d4e4e6fb7e5d0037b85b1a00b59c6f1fe",
+  "sample_selection": {
+    "Project ID": "ica",
+    "Strain Description": "Escherichia coli K-12 MG1655",
+    "Evolved Sample": "No",
+    "Base Media": "M9",
+    "Temperature (C)": "37",
+    "pH": "7",
+    "Culture Type": "Batch"
+  },
+  "expression_unit": "log2(TPM+1)",
+  "condition_ids": [
+    "ade_glc",
+    "arg_sbt",
+    "cytd_rib",
+    "gth",
+    "leu_glcr",
+    "met_glc",
+    "no3_anaero",
+    "phe_acgam",
+    "thm_gal",
+    "tyr_glcn",
+    "ura_pyr",
+    "wt_glc"
+  ],
+  "sample_ids": [
+    "ica__wt_glc__1",
+    "ica__wt_glc__2",
+    "ica__wt_glc__3",
+    "ica__wt_glc__4",
+    "ica__arg_sbt__1",
+    "ica__arg_sbt__2",
+    "ica__cytd_rib__1",
+    "ica__cytd_rib__2",
+    "ica__gth__1",
+    "ica__gth__2",
+    "ica__leu_glcr__1",
+    "ica__leu_glcr__2",
+    "ica__met_glc__1",
+    "ica__met_glc__2",
+    "ica__no3_anaero__1",
+    "ica__no3_anaero__2",
+    "ica__phe_acgam__1",
+    "ica__phe_acgam__2",
+    "ica__thm_gal__1",
+    "ica__thm_gal__2",
+    "ica__tyr_glcn__1",
+    "ica__tyr_glcn__2",
+    "ica__ura_pyr__1",
+    "ica__ura_pyr__2",
+    "ica__wt_glc__5",
+    "ica__wt_glc__6",
+    "ica__ade_glc__1",
+    "ica__ade_glc__2"
+  ],
+  "n_biological_samples": 28,
+  "n_condition_units": 12,
+  "family_size": 10,
+  "alpha": 0.05,
+  "family_normal_critical": 2.807033768343811,
+  "raw_scores_assumptions": "Native candidate molecules explicitly identified by exact NC_000913.3 loci; H=G=1 by identity and reference presence, not a homology search or paper-strain transfer.",
+  "relations": [
+    {
+      "target": "yfgM",
+      "partner": "ppiD",
+      "target_locus": "b2513",
+      "partner_locus": "b0441",
+      "n_conditions": 12,
+      "n_biological_samples": 28,
+      "growth_covariates": 1,
+      "df": 9,
+      "raw_pearson_r": 0.7198650588651948,
+      "partial_r": 0.6908347247657706,
+      "t_statistic": 2.866483724607963,
+      "p_two_sided": 0.01858290934474411,
+      "fisher_se": 0.35355339059327373,
+      "fisher_ci95": [
+        0.1553312191074519,
+        0.91253995739321
+      ],
+      "fisher_family_ci95": [
+        -0.14192098567996844,
+        0.9509855228334323
+      ],
+      "codetection_count_by_tpm_threshold": {
+        "1": 12,
+        "5": 12,
+        "10": 12
+      },
+      "codetection_denominator": 12,
+      "D": 1.0,
+      "sample_codetection_count": 28,
+      "sample_codetection_denominator": 28,
+      "positive_squared_r": 0.47725261694219795,
+      "edge_point": 0.738626308471099,
+      "edge_family_interval": [
+        0.5,
+        0.9521867323193882
+      ],
+      "leave_one_condition_out_partial_r_range": [
+        0.6617644255072536,
+        0.8578963631478638
+      ],
+      "residual_dot_product": 0.4404846462288093,
+      "residual_ss_target": 0.6664976355145927,
+      "residual_ss_partner": 0.6099786276418819,
+      "independent_partial_r": 0.6908347247657705
+    },
+    {
+      "target": "yfgM",
+      "partner": "secY",
+      "target_locus": "b2513",
+      "partner_locus": "b3300",
+      "n_conditions": 12,
+      "n_biological_samples": 28,
+      "growth_covariates": 1,
+      "df": 9,
+      "raw_pearson_r": 0.785030522767291,
+      "partial_r": 0.8202758009700939,
+      "t_statistic": 4.302385073231733,
+      "p_two_sided": 0.0019837031267594795,
+      "fisher_se": 0.35355339059327373,
+      "fisher_ci95": [
+        0.43391359328265705,
+        0.951803546663764
+      ],
+      "fisher_family_ci95": [
+        0.16373638977020197,
+        0.973231248096104
+      ],
+      "codetection_count_by_tpm_threshold": {
+        "1": 12,
+        "5": 12,
+        "10": 12
+      },
+      "codetection_denominator": 12,
+      "D": 1.0,
+      "sample_codetection_count": 28,
+      "sample_codetection_denominator": 28,
+      "positive_squared_r": 0.6728523896571291,
+      "edge_point": 0.8364261948285645,
+      "edge_family_interval": [
+        0.5134048026674898,
+        0.9735895311353502
+      ],
+      "leave_one_condition_out_partial_r_range": [
+        0.24877699022740235,
+        0.8732041597507222
+      ],
+      "residual_dot_product": 1.2991749252992448,
+      "residual_ss_target": 0.6664976355145927,
+      "residual_ss_partner": 3.7637160198442103,
+      "independent_partial_r": 0.8202758009700942
+    },
+    {
+      "target": "yfgM",
+      "partner": "secE",
+      "target_locus": "b2513",
+      "partner_locus": "b3981",
+      "n_conditions": 12,
+      "n_biological_samples": 28,
+      "growth_covariates": 1,
+      "df": 9,
+      "raw_pearson_r": 0.7080763692778652,
+      "partial_r": 0.6849270311121954,
+      "t_statistic": 2.8201320194607318,
+      "p_two_sided": 0.020042687639551027,
+      "fisher_se": 0.35355339059327373,
+      "fisher_ci95": [
+        0.14436899476946857,
+        0.9106448413391683
+      ],
+      "fisher_family_ci95": [
+        -0.15289135698768166,
+        0.9499016377526206
+      ],
+      "codetection_count_by_tpm_threshold": {
+        "1": 12,
+        "5": 12,
+        "10": 12
+      },
+      "codetection_denominator": 12,
+      "D": 1.0,
+      "sample_codetection_count": 28,
+      "sample_codetection_denominator": 28,
+      "positive_squared_r": 0.46912503794816635,
+      "edge_point": 0.7345625189740832,
+      "edge_family_interval": [
+        0.5,
+        0.9511565607025554
+      ],
+      "leave_one_condition_out_partial_r_range": [
+        -0.06988847244556658,
+        0.8185322674347021
+      ],
+      "residual_dot_product": 0.673494732681964,
+      "residual_ss_target": 0.6664976355145927,
+      "residual_ss_partner": 1.4507119264067923,
+      "independent_partial_r": 0.6849270311121952
+    },
+    {
+      "target": "yfgM",
+      "partner": "secG",
+      "target_locus": "b2513",
+      "partner_locus": "b3175",
+      "n_conditions": 12,
+      "n_biological_samples": 28,
+      "growth_covariates": 1,
+      "df": 9,
+      "raw_pearson_r": 0.5394155383533171,
+      "partial_r": 0.47022511192948563,
+      "t_statistic": 1.5984147216904114,
+      "p_two_sided": 0.14441509356808366,
+      "fisher_se": 0.35355339059327373,
+      "fisher_ci95": [
+        -0.18059008336562024,
+        0.8346618133041931
+      ],
+      "fisher_family_ci95": [
+        -0.4479054611985499,
+        0.9056521644130291
+      ],
+      "codetection_count_by_tpm_threshold": {
+        "1": 12,
+        "5": 12,
+        "10": 12
+      },
+      "codetection_denominator": 12,
+      "D": 1.0,
+      "sample_codetection_count": 28,
+      "sample_codetection_denominator": 28,
+      "positive_squared_r": 0.22111165588909729,
+      "edge_point": 0.6105558279445487,
+      "edge_family_interval": [
+        0.5,
+        0.9101029214530021
+      ],
+      "leave_one_condition_out_partial_r_range": [
+        -0.048458458896838884,
+        0.5767280231805674
+      ],
+      "residual_dot_product": 0.8897759355058417,
+      "residual_ss_target": 0.6664976355145927,
+      "residual_ss_partner": 5.3721862584448985,
+      "independent_partial_r": 0.4702251119294857
+    },
+    {
+      "target": "nlpI",
+      "partner": "mepS",
+      "target_locus": "b3163",
+      "partner_locus": "b2175",
+      "n_conditions": 12,
+      "n_biological_samples": 28,
+      "growth_covariates": 1,
+      "df": 9,
+      "raw_pearson_r": -0.24855480160159693,
+      "partial_r": -0.1811813545785072,
+      "t_statistic": -0.5526912688272445,
+      "p_two_sided": 0.5939338557496981,
+      "fisher_se": 0.35355339059327373,
+      "fisher_ci95": [
+        -0.7044882411610711,
+        0.4697488625949477
+      ],
+      "fisher_family_ci95": [
+        -0.8260718859299068,
+        0.6691666164743182
+      ],
+      "codetection_count_by_tpm_threshold": {
+        "1": 12,
+        "5": 12,
+        "10": 12
+      },
+      "codetection_denominator": 12,
+      "D": 1.0,
+      "sample_codetection_count": 28,
+      "sample_codetection_denominator": 28,
+      "positive_squared_r": 0.0,
+      "edge_point": 0.5,
+      "edge_family_interval": [
+        0.5,
+        0.7238919803018437
+      ],
+      "leave_one_condition_out_partial_r_range": [
+        -0.2510944658051986,
+        -0.07208011888597235
+      ],
+      "residual_dot_product": -0.656139196359658,
+      "residual_ss_target": 1.7285079209551986,
+      "residual_ss_partner": 7.587410585072929,
+      "independent_partial_r": -0.18118135457850718
+    },
+    {
+      "target": "nlpI",
+      "partner": "mepM",
+      "target_locus": "b3163",
+      "partner_locus": "b1856",
+      "n_conditions": 12,
+      "n_biological_samples": 28,
+      "growth_covariates": 1,
+      "df": 9,
+      "raw_pearson_r": 0.33160685976636,
+      "partial_r": 0.3456632905931648,
+      "t_statistic": 1.1051104084076968,
+      "p_two_sided": 0.2977778020708485,
+      "fisher_se": 0.35355339059327373,
+      "fisher_ci95": [
+        -0.32071311823183957,
+        0.7831486873488358
+      ],
+      "fisher_family_ci95": [
+        -0.5593771125067819,
+        0.8747469491148601
+      ],
+      "codetection_count_by_tpm_threshold": {
+        "1": 12,
+        "5": 12,
+        "10": 12
+      },
+      "codetection_denominator": 12,
+      "D": 1.0,
+      "sample_codetection_count": 28,
+      "sample_codetection_denominator": 28,
+      "positive_squared_r": 0.1194831104636947,
+      "edge_point": 0.5597415552318473,
+      "edge_family_interval": [
+        0.5,
+        0.8825911124928778
+      ],
+      "leave_one_condition_out_partial_r_range": [
+        -0.22141247004899597,
+        0.5631166480582884
+      ],
+      "residual_dot_product": 0.24389342171476097,
+      "residual_ss_target": 1.7285079209551986,
+      "residual_ss_partner": 0.2880197568503068,
+      "independent_partial_r": 0.3456632905931649
+    },
+    {
+      "target": "nlpI",
+      "partner": "dacB",
+      "target_locus": "b3163",
+      "partner_locus": "b3182",
+      "n_conditions": 12,
+      "n_biological_samples": 28,
+      "growth_covariates": 1,
+      "df": 9,
+      "raw_pearson_r": 0.40448978054226903,
+      "partial_r": 0.6828655553549728,
+      "t_statistic": 2.8042068365210793,
+      "p_two_sided": 0.020570781313725618,
+      "fisher_se": 0.35355339059327373,
+      "fisher_ci95": [
+        0.14057472746793676,
+        0.9099813024043513
+      ],
+      "fisher_family_ci95": [
+        -0.15667145316778436,
+        0.9495219126440881
+      ],
+      "codetection_count_by_tpm_threshold": {
+        "1": 12,
+        "5": 12,
+        "10": 12
+      },
+      "codetection_denominator": 12,
+      "D": 1.0,
+      "sample_codetection_count": 28,
+      "sample_codetection_denominator": 28,
+      "positive_squared_r": 0.46630536669025546,
+      "edge_point": 0.7331526833451277,
+      "edge_family_interval": [
+        0.5,
+        0.9507959312956437
+      ],
+      "leave_one_condition_out_partial_r_range": [
+        0.23976020501010983,
+        0.9211124836681345
+      ],
+      "residual_dot_product": 0.6351797067713593,
+      "residual_ss_target": 1.7285079209551986,
+      "residual_ss_partner": 0.5005545818819147,
+      "independent_partial_r": 0.6828655553549728
+    },
+    {
+      "target": "nlpI",
+      "partner": "pbpG",
+      "target_locus": "b3163",
+      "partner_locus": "b2134",
+      "n_conditions": 12,
+      "n_biological_samples": 28,
+      "growth_covariates": 1,
+      "df": 9,
+      "raw_pearson_r": 0.520261093593001,
+      "partial_r": 0.6529180805968636,
+      "t_statistic": 2.5860581702996623,
+      "p_two_sided": 0.029402971651486375,
+      "fisher_se": 0.35355339059327373,
+      "fisher_ci95": [
+        0.08719445194723471,
+        0.900208940425327
+      ],
+      "fisher_family_ci95": [
+        -0.20894502163566078,
+        0.943916006147965
+      ],
+      "codetection_count_by_tpm_threshold": {
+        "1": 12,
+        "5": 12,
+        "10": 12
+      },
+      "codetection_denominator": 12,
+      "D": 1.0,
+      "sample_codetection_count": 28,
+      "sample_codetection_denominator": 28,
+      "positive_squared_r": 0.4263020199702925,
+      "edge_point": 0.7131510099851462,
+      "edge_family_interval": [
+        0.5,
+        0.9454887133311626
+      ],
+      "leave_one_condition_out_partial_r_range": [
+        0.1958050969287657,
+        0.7995563428096683
+      ],
+      "residual_dot_product": 1.065609888369585,
+      "residual_ss_target": 1.7285079209551986,
+      "residual_ss_partner": 1.541018027265432,
+      "independent_partial_r": 0.6529180805968637
+    },
+    {
+      "target": "nlpI",
+      "partner": "mrcA",
+      "target_locus": "b3163",
+      "partner_locus": "b3396",
+      "n_conditions": 12,
+      "n_biological_samples": 28,
+      "growth_covariates": 1,
+      "df": 9,
+      "raw_pearson_r": 0.4930549141750935,
+      "partial_r": 0.7327873302724154,
+      "t_statistic": 3.230710562902632,
+      "p_two_sided": 0.010310906640930652,
+      "fisher_se": 0.35355339059327373,
+      "fisher_ci95": [
+        0.23716589114537534,
+        0.9257294449037046
+      ],
+      "fisher_family_ci95": [
+        -0.05765145311257396,
+        0.9585029906749247
+      ],
+      "codetection_count_by_tpm_threshold": {
+        "1": 12,
+        "5": 12,
+        "10": 12
+      },
+      "codetection_denominator": 12,
+      "D": 1.0,
+      "sample_codetection_count": 28,
+      "sample_codetection_denominator": 28,
+      "positive_squared_r": 0.536977271407774,
+      "edge_point": 0.7684886357038869,
+      "edge_family_interval": [
+        0.5,
+        0.9593639915663874
+      ],
+      "leave_one_condition_out_partial_r_range": [
+        0.09169175327859393,
+        0.8454335112293571
+      ],
+      "residual_dot_product": 1.7991241511474276,
+      "residual_ss_target": 1.7285079209551986,
+      "residual_ss_partner": 3.487345604784481,
+      "independent_partial_r": 0.7327873302724154
+    },
+    {
+      "target": "nlpI",
+      "partner": "lpoA",
+      "target_locus": "b3163",
+      "partner_locus": "b3147",
+      "n_conditions": 12,
+      "n_biological_samples": 28,
+      "growth_covariates": 1,
+      "df": 9,
+      "raw_pearson_r": -0.11775224483082691,
+      "partial_r": -0.042926406900776766,
+      "t_statistic": -0.12889803414461837,
+      "p_two_sided": 0.9002728904360288,
+      "fisher_se": 0.35355339059327373,
+      "fisher_ci95": [
+        -0.6266645092549726,
+        0.5716693666681436
+      ],
+      "fisher_family_ci95": [
+        -0.776060729804799,
+        0.7395491331866585
+      ],
+      "codetection_count_by_tpm_threshold": {
+        "1": 12,
+        "5": 12,
+        "10": 12
+      },
+      "codetection_denominator": 12,
+      "D": 1.0,
+      "sample_codetection_count": 28,
+      "sample_codetection_denominator": 28,
+      "positive_squared_r": 0.0,
+      "edge_point": 0.5,
+      "edge_family_interval": [
+        0.5,
+        0.773466460198569
+      ],
+      "leave_one_condition_out_partial_r_range": [
+        -0.5428468483288735,
+        0.19557648869900704
+      ],
+      "residual_dot_product": -0.03807524980480958,
+      "residual_ss_target": 1.7285079209551986,
+      "residual_ss_partner": 0.45516103127290314,
+      "independent_partial_r": -0.04292640690077678
+    }
+  ],
+  "candidate_coordinates": {
+    "yfgM_ppiD_secYEG_hypothesis": {
+      "partners": [
+        "ppiD",
+        "secY",
+        "secE",
+        "secG"
+      ],
+      "point": 0.6105558279445487,
+      "family_interval": [
+        0.5,
+        0.9101029214530021
+      ]
+    },
+    "nlpI_mepS_pbp4_or_pbp7_hypothesis": {
+      "clauses": [
+        {
+          "partners": [
+            "mepS",
+            "dacB"
+          ],
+          "point": 0.5,
+          "family_interval": [
+            0.5,
+            0.7238919803018437
+          ]
+        },
+        {
+          "partners": [
+            "mepS",
+            "pbpG"
+          ],
+          "point": 0.5,
+          "family_interval": [
+            0.5,
+            0.7238919803018437
+          ]
+        }
+      ],
+      "point": 0.5,
+      "family_interval": [
+        0.5,
+        0.7238919803018437
+      ]
+    },
+    "nlpI_pbp1a_lpoa_pbp4_hypothesis": {
+      "partners": [
+        "mrcA",
+        "lpoA",
+        "dacB"
+      ],
+      "point": 0.5,
+      "family_interval": [
+        0.5,
+        0.773466460198569
+      ]
+    }
+  },
+  "publication_arithmetic": {
+    "yfgm_ppid_reported_ratio": 0.99,
+    "yfgm_ppid_conditional_loading_ratio": 0.8839285714285713,
+    "yfgm_skp_reported_ratio": 1.31,
+    "yfgm_skp_conditional_loading_ratio": 1.169642857142857,
+    "yfgm_sura_conditional_loading_ratio": 0.8482142857142857,
+    "yfgm_skp_conditional_amount_closeness": 0.8549618320610687,
+    "nlpi_pbp4_supply_assuming_one_to_one": 1.1336760925449871,
+    "nlpi_mepm_supply_assuming_one_to_one": 0.8766066838046273,
+    "nlpi_meps_supply_assuming_one_to_one": 10.105398457583547,
+    "nlpi_fig6_concentrations_using_rounded_5nM_per_molecule": {
+      "PBP1A": 2.77,
+      "PBP1B": 2.56,
+      "LpoA": 2.565,
+      "LpoB": 7.45,
+      "NlpI": 1.945,
+      "PBP4": 2.205,
+      "PBP7": 5.025,
+      "MepA": 3.125,
+      "MepH": 1.325,
+      "MepM": 1.705,
+      "MepS": 19.655
+    }
+  },
+  "synthetic": {
+    "data_kind": "synthetic illustration; no biological measurement",
+    "n_conditions": 20,
+    "k_covariates": 1,
+    "family_size": 3,
+    "target_mapping_raw_scores": [
+      180,
+      200,
+      200
+    ],
+    "target_mapping_H0": 0.9,
+    "context_overlap_numerator": 20,
+    "context_overlap_denominator": 20,
+    "C_context": 1.0,
+    "rows": [
+      {
+        "partner": "P",
+        "raw_pair_score": 160,
+        "raw_self_query": 200,
+        "raw_self_reference": 200,
+        "H": 0.8,
+        "P": 1,
+        "G": 0.8,
+        "D_numerator": 18,
+        "D_denominator": 20,
+        "D": 0.9,
+        "partial_r": 0.8,
+        "R": 0.6400000000000001,
+        "E_without_target_correspondence": 0.5760000000000002,
+        "E": 0.5184000000000001,
+        "edge": 0.6073600000000001,
+        "partial_r_family_ci": [
+          0.46220943302121115,
+          0.9350464667135973
+        ],
+        "edge_family_interval": [
+          0.4692185694315078,
+          0.6832770539520008
+        ]
+      },
+      {
+        "partner": "Q",
+        "raw_pair_score": 135,
+        "raw_self_query": 180,
+        "raw_self_reference": 180,
+        "H": 0.75,
+        "P": 1,
+        "G": 0.75,
+        "D_numerator": 16,
+        "D_denominator": 20,
+        "D": 0.8,
+        "partial_r": 0.6,
+        "R": 0.36,
+        "E_without_target_correspondence": 0.288,
+        "E": 0.25920000000000004,
+        "edge": 0.47220000000000006,
+        "partial_r_family_ci": [
+          0.09437057538347271,
+          0.8595560085274605
+        ],
+        "edge_family_interval": [
+          0.3774045674845161,
+          0.5744858635848281
+        ]
+      },
+      {
+        "partner": "R",
+        "raw_pair_score": 180,
+        "raw_self_query": 200,
+        "raw_self_reference": 200,
+        "H": 0.9,
+        "P": 1,
+        "G": 0.9,
+        "D_numerator": 20,
+        "D_denominator": 20,
+        "D": 1.0,
+        "partial_r": -0.4,
+        "R": 0.0,
+        "E_without_target_correspondence": 0.0,
+        "E": 0.0,
+        "edge": 0.45,
+        "partial_r_family_ci": [
+          -0.7707383099208114,
+          0.17308579462426338
+        ],
+        "edge_family_interval": [
+          0.45,
+          0.46213327038178864
+        ]
+      },
+      {
+        "partner": "O_optional",
+        "raw_pair_score": 190,
+        "raw_self_query": 200,
+        "raw_self_reference": 200,
+        "H": 0.95,
+        "P": 1,
+        "G": 0.95,
+        "D_numerator": 20,
+        "D_denominator": 20,
+        "D": 1.0,
+        "partial_r": 0.95,
+        "R": 0.9025,
+        "E_without_target_correspondence": 0.9025,
+        "E": 0.81225,
+        "edge": 0.8608187500000001,
+        "partial_r_family_ci": [
+          0.843529791387607,
+          0.9846266644483386
+        ],
+        "edge_family_interval": [
+          0.7791844225797244,
+          0.8894568332164876
+        ]
+      }
+    ],
+    "clauses": [
+      [
+        "P",
+        "Q"
+      ],
+      [
+        "P",
+        "R"
+      ]
+    ],
+    "clause_scores": [
+      0.47220000000000006,
+      0.45
+    ],
+    "coordinate": 0.47220000000000006,
+    "family_interval": [
+      0.45,
+      0.5744858635848281
+    ]
+  },
+  "checks": [
+    {
+      "check": "sample IDs unique; 28 biological samples, 12 equal-weight condition units",
+      "passed": true
+    },
+    {
+      "check": "control replication does not create extra conditions",
+      "passed": true
+    },
+    {
+      "check": "all 10 partial correlations agree with independent algebra and scipy",
+      "passed": true
+    },
+    {
+      "check": "every coordinate and interval is bounded and contains the point",
+      "passed": true
+    },
+    {
+      "check": "adding a duplicate relation cannot change min/max combination",
+      "passed": true
+    },
+    {
+      "check": "negative association supplies zero positive association support",
+      "passed": true
+    },
+    {
+      "check": "verified missing mandatory partner blocks its conjunctive clause",
+      "passed": true
+    },
+    {
+      "check": "optional partner is excluded from synthetic coordinate",
+      "passed": true
+    },
+    {
+      "check": "synthetic end-to-end result independently equals 0.4722",
+      "passed": true
+    }
+  ]
+}

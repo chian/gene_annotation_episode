@@ -1,0 +1,486 @@
+{
+  "scope": "final numerical joins and missing-condition correction only",
+  "new_primary_or_paper_packet_inspection": false,
+  "new_full_public_dataset_reconstruction": false,
+  "source_receipt": "../a107_sheet_construction_001/parent_arithmetic_001.json",
+  "native_relations": {
+    "yfgM:ppiD": {
+      "G": 1.0,
+      "H0": 1.0,
+      "D_full": 1.0,
+      "r_full": 0.6908347247657712,
+      "R_full": 0.4772526169421989,
+      "E_full": 0.4772526169421989,
+      "s": 0.7386263084710994,
+      "family_s_interval": [
+        0.5,
+        0.9521867323193884
+      ]
+    },
+    "yfgM:secY": {
+      "G": 1.0,
+      "H0": 1.0,
+      "D_full": 1.0,
+      "r_full": 0.8202758009700937,
+      "R_full": 0.6728523896571287,
+      "E_full": 0.6728523896571287,
+      "s": 0.8364261948285643,
+      "family_s_interval": [
+        0.5134048026674897,
+        0.9735895311353502
+      ]
+    },
+    "yfgM:secE": {
+      "G": 1.0,
+      "H0": 1.0,
+      "D_full": 1.0,
+      "r_full": 0.684927031112196,
+      "R_full": 0.4691250379481671,
+      "E_full": 0.4691250379481671,
+      "s": 0.7345625189740835,
+      "family_s_interval": [
+        0.5,
+        0.9511565607025556
+      ]
+    },
+    "yfgM:secG": {
+      "G": 1.0,
+      "H0": 1.0,
+      "D_full": 1.0,
+      "r_full": 0.47022511192948585,
+      "R_full": 0.2211116558890975,
+      "E_full": 0.2211116558890975,
+      "s": 0.6105558279445488,
+      "family_s_interval": [
+        0.5,
+        0.9101029214530023
+      ]
+    },
+    "nlpI:mepS": {
+      "G": 1.0,
+      "H0": 1.0,
+      "D_full": 1.0,
+      "r_full": -0.18118135457850817,
+      "R_full": 0.0,
+      "E_full": 0.0,
+      "s": 0.5,
+      "family_s_interval": [
+        0.5,
+        0.7238919803018433
+      ]
+    },
+    "nlpI:mepM": {
+      "G": 1.0,
+      "H0": 1.0,
+      "D_full": 1.0,
+      "r_full": 0.3456632905931664,
+      "R_full": 0.11948311046369581,
+      "E_full": 0.11948311046369581,
+      "s": 0.5597415552318479,
+      "family_s_interval": [
+        0.5,
+        0.882591112492878
+      ]
+    },
+    "nlpI:dacB": {
+      "G": 1.0,
+      "H0": 1.0,
+      "D_full": 1.0,
+      "r_full": 0.6828655553549726,
+      "R_full": 0.4663053666902552,
+      "E_full": 0.4663053666902552,
+      "s": 0.7331526833451276,
+      "family_s_interval": [
+        0.5,
+        0.9507959312956435
+      ]
+    },
+    "nlpI:pbpG": {
+      "G": 1.0,
+      "H0": 1.0,
+      "D_full": 1.0,
+      "r_full": 0.6529180805968644,
+      "R_full": 0.42630201997029354,
+      "E_full": 0.42630201997029354,
+      "s": 0.7131510099851468,
+      "family_s_interval": [
+        0.5,
+        0.9454887133311627
+      ]
+    },
+    "nlpI:mrcA": {
+      "G": 1.0,
+      "H0": 1.0,
+      "D_full": 1.0,
+      "r_full": 0.7327873302724154,
+      "R_full": 0.536977271407774,
+      "E_full": 0.536977271407774,
+      "s": 0.7684886357038869,
+      "family_s_interval": [
+        0.5,
+        0.9593639915663874
+      ]
+    },
+    "nlpI:lpoA": {
+      "G": 1.0,
+      "H0": 1.0,
+      "D_full": 1.0,
+      "r_full": -0.042926406900777404,
+      "R_full": 0.0,
+      "E_full": 0.0,
+      "s": 0.5,
+      "family_s_interval": [
+        0.5,
+        0.7734664601985688
+      ]
+    }
+  },
+  "native_candidates": {
+    "yfgM_ppiD_secYEG_hypothesis": {
+      "clauses": [
+        [
+          "yfgM:ppiD",
+          "yfgM:secY",
+          "yfgM:secE",
+          "yfgM:secG"
+        ]
+      ],
+      "point": 0.6105558279445488,
+      "conditional_family_interval": [
+        0.5,
+        0.9101029214530023
+      ]
+    },
+    "nlpI_mepS_pbp4_or_pbp7_hypothesis": {
+      "clauses": [
+        [
+          "nlpI:mepS",
+          "nlpI:dacB"
+        ],
+        [
+          "nlpI:mepS",
+          "nlpI:pbpG"
+        ]
+      ],
+      "point": 0.5,
+      "conditional_family_interval": [
+        0.5,
+        0.7238919803018433
+      ]
+    },
+    "nlpI_pbp1a_lpoa_pbp4_hypothesis": {
+      "clauses": [
+        [
+          "nlpI:mrcA",
+          "nlpI:lpoA",
+          "nlpI:dacB"
+        ]
+      ],
+      "point": 0.5,
+      "conditional_family_interval": [
+        0.5,
+        0.7734664601985688
+      ]
+    }
+  },
+  "synthetic_relations": {
+    "P": {
+      "G": 0.8,
+      "H0": 0.9,
+      "D_full": 0.9,
+      "r_full": 0.8000000000000003,
+      "R_full": 0.6400000000000005,
+      "E_full": 0.5184000000000004,
+      "s": 0.6073600000000002,
+      "raw_pair_self_self": [
+        160,
+        200,
+        200
+      ],
+      "codetection_count": 18,
+      "family_r_interval": [
+        0.46220943302121165,
+        0.9350464667135973
+      ],
+      "family_s_interval": [
+        0.46921856943150797,
+        0.6832770539520008
+      ]
+    },
+    "Q": {
+      "G": 0.75,
+      "H0": 0.9,
+      "D_full": 0.8,
+      "r_full": 0.5999999999999995,
+      "R_full": 0.35999999999999943,
+      "E_full": 0.2591999999999996,
+      "s": 0.47219999999999984,
+      "raw_pair_self_self": [
+        135,
+        180,
+        180
+      ],
+      "codetection_count": 16,
+      "family_r_interval": [
+        0.09437057538347204,
+        0.8595560085274603
+      ],
+      "family_s_interval": [
+        0.377404567484516,
+        0.574485863584828
+      ]
+    },
+    "R": {
+      "G": 0.9,
+      "H0": 0.9,
+      "D_full": 1.0,
+      "r_full": -0.4,
+      "R_full": 0.0,
+      "E_full": 0.0,
+      "s": 0.45,
+      "raw_pair_self_self": [
+        180,
+        200,
+        200
+      ],
+      "codetection_count": 20,
+      "family_r_interval": [
+        -0.7707383099208114,
+        0.17308579462426338
+      ],
+      "family_s_interval": [
+        0.45,
+        0.46213327038178864
+      ]
+    },
+    "O_optional": {
+      "G": 0.95,
+      "H0": 0.9,
+      "D_full": 1.0,
+      "r_full": 0.9500000000000001,
+      "R_full": 0.9025000000000001,
+      "E_full": 0.8122500000000001,
+      "s": 0.8608187500000001,
+      "raw_pair_self_self": [
+        190,
+        200,
+        200
+      ],
+      "codetection_count": 20
+    }
+  },
+  "synthetic_candidate": {
+    "clauses": [
+      [
+        "P",
+        "Q"
+      ],
+      [
+        "P",
+        "R"
+      ]
+    ],
+    "point": 0.47219999999999984,
+    "conditional_family_interval": [
+      0.45,
+      0.574485863584828
+    ]
+  },
+  "corrected_missing_conditions": {
+    "D_full": {
+      "point": null,
+      "range": [
+        0.8,
+        1.0
+      ]
+    },
+    "r_full": {
+      "point": null,
+      "range": [
+        -1.0,
+        1.0
+      ]
+    },
+    "E_full": {
+      "point": null,
+      "range": [
+        0.0,
+        0.9
+      ]
+    },
+    "s": {
+      "point": null,
+      "range": [
+        0.375,
+        0.7124999999999999
+      ]
+    }
+  },
+  "counterexample_actual_completion": 0.375,
+  "historical_invalid_bounds": [
+    0.47220000000000006,
+    0.5397000000000001
+  ],
+  "missing_growth": {
+    "D_full": {
+      "point": 0.8,
+      "range": [
+        0.8,
+        0.8
+      ]
+    },
+    "r_full": {
+      "point": null,
+      "range": [
+        -1.0,
+        1.0
+      ]
+    },
+    "E_full": {
+      "point": null,
+      "range": [
+        0.0,
+        0.7200000000000001
+      ]
+    },
+    "s": {
+      "point": null,
+      "range": [
+        0.375,
+        0.645
+      ]
+    }
+  },
+  "missing_growth_candidate_range": [
+    0.45,
+    0.6073600000000002
+  ],
+  "missing_genome_candidate_range": [
+    0.45,
+    0.47219999999999984
+  ],
+  "replication_examples": {
+    "weaker_positive": {
+      "second_block_r": 0.4,
+      "second_block_E": 0.12960000000000002,
+      "combined_P_E": 0.12960000000000002,
+      "P_s": 0.45184,
+      "candidate": 0.45184
+    },
+    "contrary": {
+      "second_block_r": -0.4,
+      "second_block_E": 0.0,
+      "combined_P_E": 0.0,
+      "P_s": 0.4,
+      "candidate": 0.4
+    }
+  },
+  "overlap_candidate_range": [
+    0.45184,
+    0.47219999999999984
+  ],
+  "publication_arithmetic": {
+    "YfgM_PpiD_reported_ratio": 0.99,
+    "YfgM_PpiD_conditional_loading_ratio": 0.8839285714285714,
+    "YfgM_Skp_conditional_loading_ratio": 1.1696428571428572,
+    "YfgM_SurA_conditional_loading_ratio": 0.8482142857142857,
+    "YfgM_Skp_conditional_amount_similarity": 0.8549618320610687,
+    "NlpI_PBP4_synthesis_ratio": 1.1336760925449871,
+    "NlpI_MepM_synthesis_ratio": 0.8766066838046273,
+    "NlpI_MepS_synthesis_ratio": 10.105398457583547,
+    "NlpI_conditional_micromolar": 1.945,
+    "PBP4_conditional_micromolar": 2.205,
+    "MepM_conditional_micromolar": 1.705,
+    "MepS_conditional_micromolar": 19.655
+  },
+  "assertions_passed": 87,
+  "checks": [
+    "retained parent receipt describes 28 samples and 12 conditions",
+    "ten retained relation rows",
+    "yfgM:ppiD residual numerator/denominator join",
+    "yfgM:ppiD realizable complete count",
+    "yfgM:ppiD component join",
+    "yfgM:ppiD family join",
+    "yfgM:secY residual numerator/denominator join",
+    "yfgM:secY realizable complete count",
+    "yfgM:secY component join",
+    "yfgM:secY family join",
+    "yfgM:secE residual numerator/denominator join",
+    "yfgM:secE realizable complete count",
+    "yfgM:secE component join",
+    "yfgM:secE family join",
+    "yfgM:secG residual numerator/denominator join",
+    "yfgM:secG realizable complete count",
+    "yfgM:secG component join",
+    "yfgM:secG family join",
+    "nlpI:mepS residual numerator/denominator join",
+    "nlpI:mepS realizable complete count",
+    "nlpI:mepS component join",
+    "nlpI:mepS family join",
+    "nlpI:mepM residual numerator/denominator join",
+    "nlpI:mepM realizable complete count",
+    "nlpI:mepM component join",
+    "nlpI:mepM family join",
+    "nlpI:dacB residual numerator/denominator join",
+    "nlpI:dacB realizable complete count",
+    "nlpI:dacB component join",
+    "nlpI:dacB family join",
+    "nlpI:pbpG residual numerator/denominator join",
+    "nlpI:pbpG realizable complete count",
+    "nlpI:pbpG component join",
+    "nlpI:pbpG family join",
+    "nlpI:mrcA residual numerator/denominator join",
+    "nlpI:mrcA realizable complete count",
+    "nlpI:mrcA component join",
+    "nlpI:mrcA family join",
+    "nlpI:lpoA residual numerator/denominator join",
+    "nlpI:lpoA realizable complete count",
+    "nlpI:lpoA component join",
+    "nlpI:lpoA family join",
+    "yfgM_ppiD_secYEG_hypothesis complete candidate join",
+    "yfgM_ppiD_secYEG_hypothesis complete interval join",
+    "nlpI_mepS_pbp4_or_pbp7_hypothesis complete candidate join",
+    "nlpI_mepS_pbp4_or_pbp7_hypothesis complete interval join",
+    "nlpI_pbp1a_lpoa_pbp4_hypothesis complete candidate join",
+    "nlpI_pbp1a_lpoa_pbp4_hypothesis complete interval join",
+    "synthetic complete fixed roster has 20 unique conditions",
+    "P synthetic vector r",
+    "P synthetic integer co-detection",
+    "P nonnegative synthetic log expression",
+    "Q synthetic vector r",
+    "Q synthetic integer co-detection",
+    "Q nonnegative synthetic log expression",
+    "R synthetic vector r",
+    "R synthetic integer co-detection",
+    "R nonnegative synthetic log expression",
+    "O_optional synthetic vector r",
+    "O_optional synthetic integer co-detection",
+    "O_optional nonnegative synthetic log expression",
+    "synthetic candidate join",
+    "synthetic conditional interval join",
+    "optional relation excluded",
+    "counterexample observed r",
+    "counterexample completed r",
+    "counterexample realizable observed count",
+    "corrected missing-panel interval",
+    "incomplete panel retains null full-panel point",
+    "actual completion preserved",
+    "historical invalid bounds identified",
+    "old interval excludes completion",
+    "corrected interval includes completion",
+    "old 0.8 of 16 is not an integer count",
+    "missing growth preserves paired-expression D",
+    "missing growth partner range",
+    "missing-growth candidate range",
+    "known zero detection fixes expression",
+    "known zero detection fixes partner despite undefined r",
+    "unknown genomic presence range",
+    "resolved absent alternative is zero",
+    "duplicate relation is idempotent",
+    "weaker_positive repeated block combination",
+    "contrary repeated block combination",
+    "unresolved overlap is a range, not a new replicate",
+    "published contrast PpiD conditional arithmetic",
+    "published contrast MepM synthesis arithmetic"
+  ]
+}

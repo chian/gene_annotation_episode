@@ -1,0 +1,165 @@
+{
+  "slot": "tools",
+  "id": "T03",
+  "name": "Comparative gene neighborhoods, fusions and presence profiles",
+  "description": "Expose gene-order, strand, fusion and component-presence observations across explicitly selected genomes and proteins; count only defined records and retain unknown or incomplete context.",
+  "capability_operations": [
+    {
+      "operation": "Acquire and inspect selected genome features",
+      "inputs": {
+        "reference_accession": "exact NCBI nucleotide record",
+        "selector": "locus tag, protein ID or coordinate with coordinate frame",
+        "window": "explicit left/right base span"
+      },
+      "outputs": {
+        "features": "native labels, coordinates, strands and partial-boundary markers; source assertions preserved"
+      },
+      "implementation_status": "repository_catalog_defined",
+      "confirmed_repository_callables": [
+        "public.ncbi.sequence",
+        "reference.neighborhood",
+        "material.annotations"
+      ],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    },
+    {
+      "operation": "Tabulate selected component profiles",
+      "inputs": {
+        "rows": "explicit organism/genome identities",
+        "components": "declared genes/domains/fusions",
+        "cells": "reported or search-derived presence/absence/unknown with method and completeness"
+      },
+      "outputs": {
+        "matrix": "source-bound component profile",
+        "counts": "selected-row counts and intersections; unknown not coerced to absent"
+      },
+      "implementation_status": "research_script_only",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    },
+    {
+      "operation": "Build a new comparative profile or gene tree",
+      "inputs": {
+        "proteins_genomes": "chosen versions and organism sampling",
+        "homology_model": "specified search/domain rule",
+        "tree_model": "explicit alignment, substitution and support settings if used"
+      },
+      "outputs": {
+        "candidate_profile": "matches and unresolved cases",
+        "candidate_tree": "topology and support with exact method"
+      },
+      "implementation_status": "capability_specification",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    }
+  ],
+  "availability": {
+    "repository_catalog_defined": [
+      "gene_annotation_episode/tools.py:reference.neighborhood, public.ncbi.sequence and material.annotations definitions"
+    ],
+    "research_operations_performed": [
+      "context/oarx-profile-probe.json and oarx_actual_routes.json: exact published component rows and CP022614.1 CDS/regulatory coordinates inspected; no full phylogenetic reconstruction.",
+      "chemistry/raw/bcd_genome_probe_summary.json: published subunit identities checked against a current genome record; supports identity, not a second biochemical causal route."
+    ],
+    "capability_specifications_not_confirmed_as_repository_callables": [
+      "New cross-genome profile assembly, fusion detection and phylogenetic inference need explicit data and implementations; the catalog does not establish a turnkey comparative-genomics agent."
+    ],
+    "author_experiments_are_source_evidence_only": [
+      "Knockout growth, product reconstitution and substrate tests used to validate profile suggestions are author experiments."
+    ],
+    "binding_limit": "A repository catalog definition is confirmed source-code identity, not proof of caller enablement, service availability, installed dependencies or execution in this research. Research scripts are retained operations, not registered runtime tools."
+  },
+  "limits": [
+    "Blank source cells can be unknown; native missing genes require the actual search/completeness scope.",
+    "Gene adjacency supports association, not the specific catalytic reaction, donor, order or universal requirement.",
+    "Source taxon/strain and experimental strain must retain separate identities."
+  ],
+  "observed_uses": [
+    {
+      "case_group": "context_oarx_thiamin_2024",
+      "use": "The actual OarX/FmnO profile and selected neighborhoods limited a universal paired-enzyme hypothesis.",
+      "execution_scope": "87 published rows were counted; no de-novo genome survey or native activity assignment.",
+      "use_status": "research_read_only_operation_performed"
+    },
+    {
+      "case_group": "context_archaeal_shikimate_kinase_2001",
+      "use": "Cross-organism neighborhoods separated two GHMP-like paralogs and pathway-bearing from pathway-lacking comparisons.",
+      "execution_scope": "Authors genome analysis; historical WIT IDs retained without invented modern mappings.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "context_poxa_yjek_efp_2010_2011",
+      "use": "EF-P residue/component distribution and paralog neighborhoods tied YjeK to EF-P modification rather than the catabolic LAM partner.",
+      "execution_scope": "Context did not decide the two possible chemical orders; later author substrate tests did.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "replacement_queH",
+      "use": "Inverse QueG/DUF208 distribution, pathway neighborhoods and QueA fusions exposed replacement candidates.",
+      "execution_scope": "Published comparative profiles and cellular rescue; purified productive QueH reaction remained unestablished.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "context_bioy_optional_module_2007",
+      "use": "Only a subset of BioY neighborhoods link BioMN, motivating optional-module distinctions.",
+      "execution_scope": "Authors transport kinetics, not module counts, established affinity effects.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "yjef_nnr",
+      "use": "Fusion related the epimerase and dehydratase problem but did not transfer the ATP donor from eukaryotic homologs.",
+      "execution_scope": "The ADP dependence was author biochemical evidence, not an implication of fusion.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    }
+  ],
+  "evidence": [
+    {
+      "case_group": "context_oarx_thiamin_2024",
+      "case_id": "context_oarx_thiamin_2024",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11223231/",
+      "source_locator": "Case-record observation; inspected scope: Complete primary methods/results read through Europe PMC XML; deposited XLSX parsed; actual ENA genome record retrieved. No annotation run or experiment performed. Table and experimental strains were kept distinct.",
+      "observation": "The actual OarX/FmnO profile and selected neighborhoods limited a universal paired-enzyme hypothesis.",
+      "limit": "87 published rows were counted; no de-novo genome survey or native activity assignment."
+    },
+    {
+      "case_group": "context_archaeal_shikimate_kinase_2001",
+      "case_id": "context_archaeal_shikimate_kinase_2001",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC94878/",
+      "source_locator": "Case-record observation; inspected scope: Complete main paper, genome-analysis methods, results, and substrate-assay methods read. No WIT reconstruction, alignment, or enzyme assay rerun. Historical WIT identifier retained without an unverified modern-locus mapping.",
+      "observation": "Cross-organism neighborhoods separated two GHMP-like paralogs and pathway-bearing from pathway-lacking comparisons.",
+      "limit": "Authors genome analysis; historical WIT IDs retained without invented modern mappings."
+    },
+    {
+      "case_group": "context_poxa_yjek_efp_2010_2011",
+      "case_id": "context_poxa_yjek_efp_2010_2011",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2821294/",
+      "source_locator": "Case-record observation; inspected scope: 2010 hypothesis/results/methods passages and complete 2011 main article read. Detailed 2011 supplementary methods not inspected. No new genome count, alignment, or assays.",
+      "observation": "EF-P residue/component distribution and paralog neighborhoods tied YjeK to EF-P modification rather than the catabolic LAM partner.",
+      "limit": "Context did not decide the two possible chemical orders; later author substrate tests did."
+    },
+    {
+      "case_group": "replacement_queH",
+      "case_id": "replacement_queH",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5495094/",
+      "source_locator": "Case-record observation; inspected scope: Full relevant primary results/methods in both papers; independent read-only 7LC5 coordinate probe recorded separately. No cultures, mass-spectrometric assays or mechanism reconstruction rerun.",
+      "observation": "Inverse QueG/DUF208 distribution, pathway neighborhoods and QueA fusions exposed replacement candidates.",
+      "limit": "Published comparative profiles and cellular rescue; purified productive QueH reaction remained unestablished."
+    },
+    {
+      "case_group": "context_bioy_optional_module_2007",
+      "case_id": "context_bioy_optional_module_2007",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1815280/",
+      "source_locator": "Case-record observation; inspected scope: Comparative results, all transport/complex results, discussion, and assay/bioinformatics methods read from full paper. No membrane assay or phylogenetic reconstruction performed.",
+      "observation": "Only a subset of BioY neighborhoods link BioMN, motivating optional-module distinctions.",
+      "limit": "Authors transport kinetics, not module counts, established affinity effects."
+    },
+    {
+      "case_group": "yjef_nnr",
+      "case_id": "context_yjef_nnr_fusion_2011",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3308837/",
+      "source_locator": "Case-record observation; inspected scope: Complete main experimental procedures and relevant results read from full PMC HTML; supplementary procedures not independently inspected. No new sequence/fusion search or assays.",
+      "observation": "Fusion related the epimerase and dehydratase problem but did not transfer the ATP donor from eukaryotic homologs.",
+      "limit": "The ADP dependence was author biochemical evidence, not an implication of fusion."
+    }
+  ]
+}

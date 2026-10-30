@@ -1,0 +1,86 @@
+{
+  "version": "case164_direct_protocol_operands_001",
+  "source_witnesses": [
+    {
+      "phrase_selector": "The activity of PKs on L-EUS and D-EUS",
+      "file": "originals/article.html",
+      "source_sha256": "85cbcfa7667f9f566dd167708e815cb987b95169405c4123f3382674ee776db8",
+      "start_byte": 141836,
+      "end_byte": 142400,
+      "quote_original_html": "<p>The activity of PKs on L-EUS and D-EUS were determined with 1 mg mL<sup>\u22121</sup> purified recombinant protein in 200 \u03bcL reaction mixtures. The reaction system comprised 10 mM L-EUS or D-EUS, 1 mM ThDP, 5 mM MgSO<sub>4</sub>, and 50 mM phosphate buffer (pH 7.4). After incubation at 37\u00b0C for 0.5 h, the reaction was stopped by adding 200 \u03bcL of acetonitrile. AcP in samples was detected by chromogenic and liquid chromatography. The by-product glycoaldehyde was confirmed by GC-MS. Chromogenic and liquid chromatography detection of AcP were same as DHA.</p>"
+    },
+    {
+      "phrase_selector": "Activity of PKs on DHA was determined",
+      "file": "originals/article.html",
+      "source_sha256": "85cbcfa7667f9f566dd167708e815cb987b95169405c4123f3382674ee776db8",
+      "start_byte": 138830,
+      "end_byte": 139306,
+      "quote_original_html": "<p>Activity of PKs on DHA was determined with 1 mg mL<sup>\u22121</sup> purified recombinant protein in 200 \u03bcL reaction mixtures. The reaction system comprised 10 mM DHA, 1 mM ThDP, 5 mM MgSO<sub>4</sub>, and 50 mM phosphate buffer (pH 7.4). After incubation at 37\u00b0C for 0.5 h, the reaction was stopped by adding 200 \u03bcL of acetonitrile. Acetyl-phosphate in samples is determined by chromogenic and liquid chromatography, the by-product formaldehyde was confirmed by GC-MS.</p>"
+    },
+    {
+      "phrase_selector": "HPLC detection for AcP:",
+      "file": "originals/article.html",
+      "source_sha256": "85cbcfa7667f9f566dd167708e815cb987b95169405c4123f3382674ee776db8",
+      "start_byte": 139985,
+      "end_byte": 140357,
+      "quote_original_html": "<p>HPLC detection for AcP: add equal volume of 5% sulfuric acid to the sample for completely decomposing AcP into acetic acid. Acetic acid was then detected by HPLC. HPLC conditions: column, Aminex HPX-87H (Bio-Rad); detection wavelength, 210 nm; mobile phase, 5 mM sulfuric acid; flow rate, 0.6 mL min<sup>\u22121</sup>; sample volume, 20 \u03bcL; column temperature, 40\u00b0C.</p>"
+    }
+  ],
+  "source_versus_raw_rate_link": "unknown; do not apply these denominators to S1Data rates without evidence",
+  "source_reported_operands": {
+    "enzyme_concentration": {
+      "value": "1",
+      "unit": "mg/mL"
+    },
+    "reaction_volume": {
+      "value": "200",
+      "unit": "uL"
+    },
+    "incubation": {
+      "value": "0.5",
+      "unit": "h"
+    },
+    "substrate_concentration_each_D_or_L_EUS": {
+      "value": "10",
+      "unit": "mM"
+    },
+    "temperature": {
+      "value": "37",
+      "unit": "C"
+    },
+    "pH": {
+      "value": "7.4",
+      "unit": "dimensionless"
+    }
+  },
+  "derived_numerical_cells": {
+    "enzyme_mass": {
+      "formula": "200 uL * (1 mL /1000 uL) *1 mg/mL",
+      "value": "0.2",
+      "unit": "mg"
+    },
+    "incubation_minutes": {
+      "formula": "0.5 h *60 min/h",
+      "value": "30",
+      "unit": "min"
+    },
+    "normalization_denominator": {
+      "formula": "0.2 mg *30 min",
+      "value": "6",
+      "unit": "mg min"
+    },
+    "nominal_D_over_L_dose_ratio": {
+      "formula": "0.2mg/0.2mg",
+      "value": "1",
+      "unit": "fraction"
+    },
+    "nominal_D_over_L_exposure_ratio": {
+      "formula": "30min/30min",
+      "value": "1",
+      "unit": "fraction"
+    }
+  },
+  "populating_operation": "research extraction/calculation only; not production execution",
+  "missing_direct_product_amounts": true,
+  "scientific_independence": null
+}

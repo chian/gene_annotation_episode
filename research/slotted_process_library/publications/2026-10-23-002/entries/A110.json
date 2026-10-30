@@ -1,0 +1,602 @@
+{
+  "entry_version": "evidence_axis_entry_v1",
+  "id": "A110",
+  "slot": "evidence_axis",
+  "name": "Biochemical feasibility and chemical/resource accounting",
+  "description": "Score the explicit chemical, electron, cofactor and resource account for the proposed biochemical function.",
+  "native_measurements": [
+    {
+      "metric_id": "atom_charge_account",
+      "name": "Actual atom and charge ledger for the declared reaction/system boundary",
+      "native_field": null,
+      "observation_kinds": [
+        "reaction_context",
+        "mechanism",
+        "biochemical_assay",
+        "assay_report"
+      ],
+      "units": [
+        "native stoichiometric coefficients and stated species/charge conventions"
+      ],
+      "direction": "target_dependent",
+      "method_requirements": [
+        "Name chemical species, coefficients, protonation convention and system boundary."
+      ],
+      "comparison_limits": [
+        "No generic chemical-ledger extractor is currently bound; a missing ledger is not a measured imbalance."
+      ],
+      "binding": {
+        "kind": "unbound",
+        "measurement_name": null,
+        "json_pointer": null
+      }
+    },
+    {
+      "metric_id": "electron_account",
+      "name": "Actual donor/acceptor electron-equivalent account",
+      "native_field": null,
+      "observation_kinds": [
+        "reaction_context",
+        "mechanism",
+        "biochemical_assay",
+        "assay_report"
+      ],
+      "units": [
+        "electron equivalents per stated reaction"
+      ],
+      "direction": "target_dependent",
+      "method_requirements": [
+        "Identify donor, acceptor, stoichiometry and whether values are measured, calculated or assumed."
+      ],
+      "comparison_limits": [
+        "An unassigned donor or acceptor stays unknown; do not invent a carrier-return route."
+      ],
+      "binding": {
+        "kind": "unbound",
+        "measurement_name": null,
+        "json_pointer": null
+      }
+    },
+    {
+      "metric_id": "cofactor_regeneration_account",
+      "name": "Actual consumed/regenerated cofactor and carrier quantities",
+      "native_field": null,
+      "observation_kinds": [
+        "reaction_context",
+        "mechanism",
+        "biochemical_assay",
+        "assay_report"
+      ],
+      "units": [
+        "native amount or equivalents within the stated boundary"
+      ],
+      "direction": "target_dependent",
+      "method_requirements": [
+        "Keep catalytic cofactors, consumed substrates and regeneration partners distinct."
+      ],
+      "comparison_limits": [
+        "An isolated apparent activity does not establish a sustainable cellular cycle."
+      ],
+      "binding": {
+        "kind": "unbound",
+        "measurement_name": null,
+        "json_pointer": null
+      }
+    },
+    {
+      "metric_id": "conditional_free_energy",
+      "name": "Actual measured or explicitly calculated reaction free energy",
+      "native_field": null,
+      "observation_kinds": [
+        "reaction_context",
+        "mechanism",
+        "biochemical_assay",
+        "assay_report"
+      ],
+      "units": [
+        "reported energy per stated reaction unit"
+      ],
+      "direction": "target_dependent",
+      "method_requirements": [
+        "Retain temperature, activities/concentrations, standard-state convention, equation, inputs and assumptions."
+      ],
+      "comparison_limits": [
+        "A standard-state estimate is not intracellular free energy or observed flux; unavailable concentrations remain unavailable."
+      ],
+      "binding": {
+        "kind": "unbound",
+        "measurement_name": null,
+        "json_pointer": null
+      }
+    },
+    {
+      "metric_id": "atom_balance_residual",
+      "name": "Sum of absolute element-balance residuals in the declared stoichiometric ledger",
+      "native_field": null,
+      "observation_kinds": [
+        "reaction_context",
+        "mechanism",
+        "biochemical_assay",
+        "assay_report"
+      ],
+      "units": [
+        "atom equivalents per stated reaction"
+      ],
+      "direction": "target_dependent",
+      "method_requirements": [
+        "Preserve the actual source experiment, fixed candidate/required set, matched sample/conditions, counting rule and original retained numeric result."
+      ],
+      "comparison_limits": [
+        "This derived quantity requires actual retained analysis or published numeric data; unavailable extraction stays unknown and no count is inferred from missing annotation."
+      ],
+      "binding": {
+        "kind": "unbound",
+        "measurement_name": null,
+        "json_pointer": null
+      },
+      "valid_range": {
+        "minimum": 0,
+        "maximum": null
+      }
+    },
+    {
+      "metric_id": "charge_balance_residual",
+      "name": "Signed charge-balance residual under the declared protonation convention",
+      "native_field": null,
+      "observation_kinds": [
+        "reaction_context",
+        "mechanism",
+        "biochemical_assay",
+        "assay_report"
+      ],
+      "units": [
+        "charge equivalents per stated reaction"
+      ],
+      "direction": "target_dependent",
+      "method_requirements": [
+        "Preserve the actual source experiment, fixed candidate/required set, matched sample/conditions, counting rule and original retained numeric result."
+      ],
+      "comparison_limits": [
+        "This derived quantity requires actual retained analysis or published numeric data; unavailable extraction stays unknown and no count is inferred from missing annotation."
+      ],
+      "binding": {
+        "kind": "unbound",
+        "measurement_name": null,
+        "json_pointer": null
+      }
+    },
+    {
+      "metric_id": "electron_balance_residual",
+      "name": "Donor minus acceptor electron equivalents within the declared coupled system",
+      "native_field": null,
+      "observation_kinds": [
+        "reaction_context",
+        "mechanism",
+        "biochemical_assay",
+        "assay_report"
+      ],
+      "units": [
+        "electron equivalents per stated reaction"
+      ],
+      "direction": "target_dependent",
+      "method_requirements": [
+        "Preserve the actual source experiment, fixed candidate/required set, matched sample/conditions, counting rule and original retained numeric result."
+      ],
+      "comparison_limits": [
+        "This derived quantity requires actual retained analysis or published numeric data; unavailable extraction stays unknown and no count is inferred from missing annotation."
+      ],
+      "binding": {
+        "kind": "unbound",
+        "measurement_name": null,
+        "json_pointer": null
+      }
+    },
+    {
+      "metric_id": "conditional_delta_g",
+      "name": "Actual measured or calculated reaction Gibbs free energy at the stated conditions",
+      "native_field": null,
+      "observation_kinds": [
+        "reaction_context",
+        "mechanism",
+        "biochemical_assay",
+        "assay_report"
+      ],
+      "units": [
+        "reported energy per stated reaction"
+      ],
+      "direction": "target_dependent",
+      "method_requirements": [
+        "Preserve the actual source experiment, fixed candidate/required set, matched sample/conditions, counting rule and original retained numeric result."
+      ],
+      "comparison_limits": [
+        "This derived quantity requires actual retained analysis or published numeric data; unavailable extraction stays unknown and no count is inferred from missing annotation."
+      ],
+      "binding": {
+        "kind": "unbound",
+        "measurement_name": null,
+        "json_pointer": null
+      }
+    }
+  ],
+  "judgment_criteria": [
+    {
+      "criterion_id": "reaction_boundary_defined",
+      "question": "Is the actual chemical conversion and system boundary specified?",
+      "required_metric_ids": [],
+      "required_evidence": [
+        "reaction_species",
+        "stoichiometry",
+        "system_boundary"
+      ],
+      "outcomes": {
+        "met": "The candidate conversion names reactants/products, coefficients and included coupled reactions or carrier-return steps.",
+        "not_met": "The stated conversion contradicts identified product or substrate identities.",
+        "unknown": "A chemical species, coefficient or relevant system boundary is missing."
+      },
+      "deterministic_test": null
+    },
+    {
+      "criterion_id": "atoms_and_charge_balance",
+      "question": "Does the specified account conserve atoms and charge?",
+      "required_metric_ids": [
+        "atom_balance_residual",
+        "charge_balance_residual"
+      ],
+      "required_evidence": [
+        "reaction_species",
+        "stoichiometry",
+        "protonation_convention"
+      ],
+      "outcomes": {
+        "met": "Under the declared convention, stoichiometric sums conserve each element and total charge.",
+        "not_met": "An actual specified ledger has a nonzero element or charge residual.",
+        "unknown": "Species identities, coefficients, charges or the protonation convention are insufficient to calculate the residual."
+      },
+      "deterministic_test": {
+        "operation": "all_zero",
+        "metric_ids": [
+          "atom_balance_residual",
+          "charge_balance_residual"
+        ]
+      }
+    },
+    {
+      "criterion_id": "electrons_accounted",
+      "question": "Does the specified donor/acceptor account balance electron equivalents?",
+      "required_metric_ids": [
+        "electron_balance_residual"
+      ],
+      "required_evidence": [
+        "redox_species",
+        "electron_stoichiometry"
+      ],
+      "outcomes": {
+        "met": "Measured or explicitly calculated electron equivalents balance within the named coupled system.",
+        "not_met": "The specified donor/acceptor quantities produce an actual electron imbalance.",
+        "unknown": "A donor, acceptor or electron stoichiometry remains unidentified."
+      },
+      "deterministic_test": {
+        "operation": "all_zero",
+        "metric_ids": [
+          "electron_balance_residual"
+        ]
+      }
+    },
+    {
+      "criterion_id": "carriers_regenerated",
+      "question": "Can the stated system supply and regenerate the required carriers/resources?",
+      "required_metric_ids": [],
+      "required_evidence": [
+        "carrier_stoichiometry",
+        "regeneration_steps"
+      ],
+      "outcomes": {
+        "met": "The declared boundary includes source-grounded supply/regeneration for the required carrier demand.",
+        "not_met": "An actual specified account consumes a required carrier with no compatible supply/regeneration in that claimed boundary.",
+        "unknown": "A supply/regeneration step or quantitative carrier demand is unknown."
+      },
+      "deterministic_test": null
+    },
+    {
+      "criterion_id": "energy_feasibility_examined",
+      "question": "Is the energetic account appropriate to the claimed conditions?",
+      "required_metric_ids": [],
+      "required_evidence": [
+        "conditional_energy_inputs",
+        "coupled_reaction_account"
+      ],
+      "outcomes": {
+        "met": "The actual measured/calculated account supports the proposed direction at the explicitly stated conditions and coupling.",
+        "not_met": "The actual account contradicts that direction under the stated conditions without the required coupled driving process.",
+        "unknown": "A relevant concentration/activity, energy quantity, coupling or condition is unknown; favorable standard-state arithmetic alone does not establish native flux."
+      },
+      "deterministic_test": null
+    },
+    {
+      "criterion_id": "chemical_contradiction_established",
+      "question": "Does a specified competent chemical account actually contradict the proposed conversion?",
+      "required_metric_ids": [],
+      "required_evidence": [
+        "reaction_species",
+        "stoichiometry",
+        "system_boundary"
+      ],
+      "outcomes": {
+        "met": "The actual stated account has an identified atom/charge/electron inconsistency, or a conditional energy contradiction without the proposed required coupling.",
+        "not_met": "The alleged contradiction is resolved by the actual specified boundary/convention/coupling.",
+        "unknown": "An account input is missing or the relevant condition is unknown; missing information is not a contradiction."
+      },
+      "deterministic_test": null
+    }
+  ],
+  "qualitative_grading": [],
+  "transfer_chain": {
+    "source_subject": "Identify the organism, assayed or analysed protein, preparation and experiment that actually supplied each observation.",
+    "source_property": "Actual chemical identities, stoichiometry, electron flow, resource regeneration and conditional energy define the tested biochemical account.",
+    "correspondence": "For a different source protein or organism retain the actual sequence/structural correspondence and matched region; do not turn that source experiment into a target measurement.",
+    "target_hypothesis": "Identify the particular candidate annotation and the property being evaluated, including its biological conditions.",
+    "limitations": "Selecting a balanced or feasible account does not establish that the cell uses it. Preserve source-measured quantities versus arithmetic/model inputs and shared dependencies with other axes."
+  },
+  "evidence": [
+    {
+      "case_group": "EUBREC2651_Fleischman_2014",
+      "case_id": "EUBREC2651_Fleischman_2014",
+      "source_url": "https://doi.org/10.1002/pro.2493",
+      "source_locator": "research/slotted_process_library/corpus/structure/cases.jsonl:22#/actual_observations/paper_reported/0",
+      "observation": "PLP-to-PMP conversion occurred, but phosphoserine/alpha-ketoglutarate did not yield expected glutamate; phosphate elimination occurred.",
+      "limit": "Relevant indexed primary results/limitations inspected; no new experiments."
+    },
+    {
+      "case_group": "chem_bcd_etf",
+      "case_id": "chem_bcd_etf",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2223550/",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:1#/actual_observations/2/result",
+      "observation": "H2 assay gives 2.2 NADH and 1.4 crotonyl-CoA per H2; fully coupled 2:1:1 stoichiometry is an extrapolation.",
+      "limit": "Full relevant introduction, purification/assay methods, results, tables and discussion inspected; raw HTML and parsed paragraphs saved."
+    },
+    {
+      "case_group": "chem_dsr_terminal",
+      "case_id": "chem_dsr_terminal",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10861901/",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:10#/actual_observations/0/result",
+      "observation": "Purified complex oxidizes menadiol when DsrC-trisulfide is supplied; omission controls and sequential substrate additions support dependency.",
+      "limit": "Full relevant primary results, discussion, assay/product methods and limitations inspected; 2015 DsrAB source saw abstract only and is not counted as a separately verified case."
+    },
+    {
+      "case_group": "chem_f420_precursor_partner",
+      "case_id": "chem_f420_precursor_partner",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6450877/",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:7#/actual_observations/0/result",
+      "observation": "2019: PEP in FbiD/FbiA assays yields dehydro-F420; FbiB plus reduced-FMN regeneration yields mature reduced product. Broad archaeal extrapolation leaves an unexplained reductase.",
+      "limit": "Relevant full primary results/discussion and assay/LC-MS/crystallography methods inspected in all three papers. No new flux measurements, crystallographic refinement or spectrum fitting."
+    },
+    {
+      "case_group": "chem_hemq",
+      "case_id": "chem_hemq",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4343137/",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:9#/actual_observations/0/result",
+      "observation": "2015 PNAS: purified pathway enzymes produce coproheme then protoheme; HemQ acts on Fe-coproporphyrin but not tested Ni-coproporphyrin. H2O2 or FMN supports product formation whereas several common acceptors do not.",
+      "limit": "Relevant primary body/results and main methods inspected for both; detailed supplementary purification protocols and later mechanistic revisions not checked."
+    },
+    {
+      "case_group": "chem_hydabc",
+      "case_id": "chem_hydabc",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2698477/",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:11#/actual_observations/1/result",
+      "observation": "Limited-NADH experiments yield about 1.8 H2 per NADH, consistent with roughly equal electron input from both carriers.",
+      "limit": "Full relevant primary methods, donor/stoichiometry results and discussion inspected; original raw gas-chromatography data not reprocessed."
+    },
+    {
+      "case_group": "chem_mvh_hdr",
+      "case_id": "chem_mvh_hdr",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3041090/",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:3#/actual_observations/1/result",
+      "observation": "Limiting-substrate experiments support approximately one two-electron ferredoxin per heterodisulfide; precise stoichiometry has stated analytical uncertainty.",
+      "limit": "Relevant entire primary body, methods, results, limitations and figure legends inspected. Supporting-information raw data not independently analyzed."
+    },
+    {
+      "case_group": "chem_nfnab",
+      "case_id": "chem_nfnab",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2944534/",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:2#/actual_observations/1/result",
+      "observation": "Measured stoichiometry supports one two-electron ferredoxin plus NADH reducing two NADP+ in a reversible reaction.",
+      "limit": "Relevant expression/reconstitution/assay methods, results, stoichiometry figures and discussion inspected; supplements not independently reanalyzed."
+    },
+    {
+      "case_group": "chem_ubiuv_oxygen_donor",
+      "case_id": "chem_ubiuv_oxygen_donor",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10990095/",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:8#/actual_observations/1/result",
+      "observation": "C4-18O-shikimate labels three ubiquinone oxygen positions; added unlabeled 4-hydroxybenzoate does not erase that pattern.",
+      "limit": "Full relevant primary body, methods and figure legends inspected; supplement synthesis/raw isotopologue data not independently reanalyzed."
+    },
+    {
+      "case_group": "pxpABC_oxoproline_disposal",
+      "case_id": "pxpABC_oxoproline_disposal",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5625064/",
+      "source_locator": "research/slotted_process_library/corpus/root/cases.jsonl:11#/actual_observations/2",
+      "observation": "Author experiments reconstituted ATP-dependent activity with three proteins; known ATP-independent activity raised a thermodynamic concern.",
+      "limit": "Primary indexed introduction, discussion and relevant comparative-genomics/assay methods inspected. No experiments or source genome analysis repeated."
+    },
+    {
+      "case_group": "replacement_bioZ",
+      "case_id": "replacement_bioZ",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7645780/",
+      "source_locator": "research/slotted_process_library/corpus/replacement/cases.jsonl:11#/actual_observations/0/observation",
+      "observation": "BioZ bypassed BioC plus BioH. Native bioZ deletion/C115S caused biotin auxotrophy; reconstitution and product MS supported glutaryl-CoA/malonyl-ACP condensation. CaiB loss/assays connected glutaryl-CoA supply.",
+      "limit": "Main relevant Results/Methods read; no independent raw spectral or isotope analysis."
+    },
+    {
+      "case_group": "replacement_thyX",
+      "case_id": "replacement_thyX",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2168944/",
+      "source_locator": "research/slotted_process_library/corpus/replacement/cases.jsonl:3#/actual_observations/0/observation",
+      "observation": "thyX disruption caused thymidine auxotrophy. ThyA alone gave slow/incomplete rescue; ThyA plus FolA restored near-parent growth and more labeled dT synthesis.",
+      "limit": "Relevant full main Results and Methods; authors’ folate-cycle simulations were inspected but not rerun."
+    },
+    {
+      "case_group": "seq_hutW_vibrio",
+      "case_id": "seq_hutW_vibrio",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8672366/",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:13#/actual_observations/2",
+      "observation": "Mass spectrometry supported a more reduced anaerobilin product; NADPH could drive turnover, exposing differences from the ChuW reference.",
+      "limit": "Primary hypothesis discussion, expression methods, enzyme results and product-analysis sections inspected through indexed full text; no heme experiment performed."
+    },
+    {
+      "case_group": "seq_ptmvd_m3k_picrophilus",
+      "case_id": "seq_ptmvd_m3k_picrophilus",
+      "source_url": "https://journals.asm.org/doi/full/10.1128/aem.04033-14",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:17#/actual_observations/3",
+      "observation": "Isobutene formation from another substrate reflected spontaneous decomposition after phosphorylation rather than direct enzymatic decarboxylation.",
+      "limit": "Primary sequence-analysis methods/results, abstract and product-analysis conclusion inspected; no new sequence search or biochemical experiment."
+    },
+    {
+      "case_group": "seq_queFL_archaeosine",
+      "case_id": "seq_queFL_archaeosine",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5485725/",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:10#/actual_observations/2",
+      "observation": "Free ammonium supplied nitrogen in the assayed reaction; glutamine did not.",
+      "limit": "2012 comparative alignment and tRNA-analysis results plus 2017 substrate/adduct methods and discussion inspected through indexed primary text. No new enzyme experiments."
+    }
+  ],
+  "scoring_rubric": {
+    "version": "evidence_axis_scoring_v1",
+    "status": "proposed",
+    "routes": [
+      {
+        "route_id": "chemical_account_resolution",
+        "operation": "ordinal",
+        "metric_ids": [],
+        "eligible_when": [],
+        "score_unit": "proposed ordinal account-resolution grade, 0 through 4",
+        "direction": "higher",
+        "interpretation": "The highest fully warranted nested level is computed from declared criteria. Unknown criteria yield a score interval. These levels describe the chemical account, not probability of physiological function.",
+        "polarity": "supporting",
+        "grade_criterion": null,
+        "grade_scores": {},
+        "bands": [
+          {
+            "score": 0,
+            "requires": []
+          },
+          {
+            "score": 1,
+            "requires": [
+              "reaction_boundary_defined"
+            ]
+          },
+          {
+            "score": 2,
+            "requires": [
+              "reaction_boundary_defined",
+              "atoms_and_charge_balance"
+            ]
+          },
+          {
+            "score": 3,
+            "requires": [
+              "reaction_boundary_defined",
+              "atoms_and_charge_balance",
+              "electrons_accounted",
+              "carriers_regenerated"
+            ]
+          },
+          {
+            "score": 4,
+            "requires": [
+              "reaction_boundary_defined",
+              "atoms_and_charge_balance",
+              "electrons_accounted",
+              "carriers_regenerated",
+              "energy_feasibility_examined"
+            ]
+          }
+        ]
+      },
+      {
+        "route_id": "established_chemical_conflict",
+        "operation": "ordinal",
+        "metric_ids": [],
+        "eligible_when": [],
+        "score_unit": "source-grounded chemical contradiction indicator",
+        "direction": "higher",
+        "interpretation": "Only a supported actual inconsistency is opposition. Missing donor, activity, concentration or other inputs remain unknown.",
+        "polarity": "opposing",
+        "grade_criterion": null,
+        "grade_scores": {},
+        "bands": [
+          {
+            "score": 0,
+            "requires": []
+          },
+          {
+            "score": 1,
+            "requires": [
+              "chemical_contradiction_established"
+            ]
+          }
+        ]
+      },
+      {
+        "route_id": "native_atom_residual",
+        "operation": "identity",
+        "metric_ids": [
+          "atom_balance_residual"
+        ],
+        "eligible_when": [],
+        "score_unit": "atom equivalents per stated reaction",
+        "direction": "lower",
+        "interpretation": "Exact native/calculated residual retained; zero means balanced within the stated account, not observed cellular use.",
+        "polarity": "non_discriminating",
+        "grade_criterion": null,
+        "grade_scores": {},
+        "bands": []
+      },
+      {
+        "route_id": "native_charge_residual",
+        "operation": "identity",
+        "metric_ids": [
+          "charge_balance_residual"
+        ],
+        "eligible_when": [],
+        "score_unit": "charge equivalents per stated reaction",
+        "direction": "not_ordered",
+        "interpretation": "Signed residual retains its native direction; balancing is determined by the explicit zero test.",
+        "polarity": "non_discriminating",
+        "grade_criterion": null,
+        "grade_scores": {},
+        "bands": []
+      },
+      {
+        "route_id": "native_electron_residual",
+        "operation": "identity",
+        "metric_ids": [
+          "electron_balance_residual"
+        ],
+        "eligible_when": [],
+        "score_unit": "electron equivalents per stated reaction",
+        "direction": "not_ordered",
+        "interpretation": "Preserve actual donor/acceptor balance and boundary.",
+        "polarity": "non_discriminating",
+        "grade_criterion": null,
+        "grade_scores": {},
+        "bands": []
+      },
+      {
+        "route_id": "native_conditional_energy",
+        "operation": "identity",
+        "metric_ids": [
+          "conditional_delta_g"
+        ],
+        "eligible_when": [],
+        "score_unit": "original energy per stated reaction",
+        "direction": "not_ordered",
+        "interpretation": "Actual conditional energy with units/assumptions. Favorable standard-state energy does not establish native flux.",
+        "polarity": "non_discriminating",
+        "grade_criterion": null,
+        "grade_scores": {},
+        "bands": []
+      }
+    ]
+  }
+}

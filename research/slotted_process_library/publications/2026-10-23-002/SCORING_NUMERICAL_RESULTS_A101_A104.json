@@ -1,0 +1,294 @@
+{
+  "command": ".venv/bin/pytest -q --tb=short tests/test_native_evidence_axes_A101_A104.py tests/test_evidence_axis_scoring_A101_A104.py",
+  "criterion_assignment": "Typed met/not_met/unknown fixtures test scoring-domain behavior; they are not new scientific judgments about the fixed target gene.",
+  "duration_seconds": 7.92,
+  "examples": [
+    {
+      "axis": "A101",
+      "fixture_meaning": "Raw254 and63/192 come from saved HemK analysis; E-value is explicitly a synthetic arithmetic fixture, not an E-value computed for HemK.",
+      "native_inputs": {
+        "alignment_score": 254,
+        "evalue": 1e-20,
+        "identity_fraction": 0.328125
+      },
+      "results": [
+        {
+          "direction": "higher",
+          "polarity": "supporting",
+          "reason": null,
+          "route_id": "sequence_raw",
+          "score": 254,
+          "score_bounds": {
+            "lower": 254,
+            "lower_inclusive": true,
+            "upper": 254,
+            "upper_inclusive": true
+          },
+          "score_unit": "native_alignment_score",
+          "status": "scored"
+        },
+        {
+          "direction": "higher",
+          "polarity": "non_discriminating",
+          "reason": null,
+          "route_id": "sequence_identity",
+          "score": 0.328125,
+          "score_bounds": {
+            "lower": 0.328125,
+            "lower_inclusive": true,
+            "upper": 0.328125,
+            "upper_inclusive": true
+          },
+          "score_unit": "fraction",
+          "status": "scored"
+        },
+        {
+          "direction": "higher",
+          "polarity": "supporting",
+          "reason": null,
+          "route_id": "sequence_log_expect",
+          "score": 20.0,
+          "score_bounds": {
+            "lower": 20.0,
+            "lower_inclusive": true,
+            "upper": 20.0,
+            "upper_inclusive": true
+          },
+          "score_unit": "negative_log10_expected_random_matches",
+          "status": "scored"
+        }
+      ]
+    },
+    {
+      "axis": "A102",
+      "fixture_meaning": "Synthetic arithmetic fixtures; no new structural search or case measurement is claimed.",
+      "native_inputs": {
+        "aligned_structure_rmsd": 1.8,
+        "dali_z_score": 11.4,
+        "tm_score": 0.72
+      },
+      "results": [
+        {
+          "direction": "higher",
+          "polarity": "supporting",
+          "reason": null,
+          "route_id": "structure_tm",
+          "score": 0.72,
+          "score_bounds": {
+            "lower": 0.72,
+            "lower_inclusive": true,
+            "upper": 0.72,
+            "upper_inclusive": true
+          },
+          "score_unit": "TM_score",
+          "status": "scored"
+        },
+        {
+          "direction": "higher",
+          "polarity": "supporting",
+          "reason": null,
+          "route_id": "structure_dali",
+          "score": 11.4,
+          "score_bounds": {
+            "lower": 11.4,
+            "lower_inclusive": true,
+            "upper": 11.4,
+            "upper_inclusive": true
+          },
+          "score_unit": "DALI_Z",
+          "status": "scored"
+        },
+        {
+          "direction": "lower",
+          "polarity": "non_discriminating",
+          "reason": null,
+          "route_id": "structure_rmsd",
+          "score": 1.8,
+          "score_bounds": {
+            "lower": 1.8,
+            "lower_inclusive": true,
+            "upper": 1.8,
+            "upper_inclusive": true
+          },
+          "score_unit": "angstrom",
+          "status": "scored"
+        }
+      ]
+    },
+    {
+      "axis": "A103",
+      "fixture_meaning": "Synthetic arithmetic fixtures; no new context analysis is claimed.",
+      "native_inputs": {
+        "conserved_context_genomes": 8,
+        "evaluable_context_genomes": 10,
+        "gene_context_association_pvalue": 0.001,
+        "string_neighborhood_score": 0.83
+      },
+      "results": [
+        {
+          "direction": "higher",
+          "polarity": "supporting",
+          "reason": null,
+          "route_id": "context_string_neighborhood",
+          "score": 0.83,
+          "score_bounds": {
+            "lower": 0.83,
+            "lower_inclusive": true,
+            "upper": 0.83,
+            "upper_inclusive": true
+          },
+          "score_unit": "STRING_neighborhood_score",
+          "status": "scored"
+        },
+        {
+          "direction": "higher",
+          "polarity": "supporting",
+          "reason": null,
+          "route_id": "context_log_significance",
+          "score": 3.0,
+          "score_bounds": {
+            "lower": 3.0,
+            "lower_inclusive": true,
+            "upper": 3.0,
+            "upper_inclusive": true
+          },
+          "score_unit": "negative_log10_p_value",
+          "status": "scored"
+        },
+        {
+          "direction": "higher",
+          "polarity": "supporting",
+          "reason": null,
+          "route_id": "context_conservation_fraction",
+          "score": 0.8,
+          "score_bounds": {
+            "lower": 0.8,
+            "lower_inclusive": true,
+            "upper": 0.8,
+            "upper_inclusive": true
+          },
+          "score_unit": "fraction_evaluable_genomes",
+          "status": "scored"
+        }
+      ]
+    },
+    {
+      "axis": "A104",
+      "fixture_meaning": "Synthetic arithmetic fixtures; no new phylogeny is claimed.",
+      "native_inputs": {
+        "bootstrap_clade_support_percent": 92,
+        "evaluable_clade_replicates": 1000,
+        "posterior_clade_probability": 0.97,
+        "supported_clade_replicates": 920
+      },
+      "results": [
+        {
+          "direction": "higher",
+          "polarity": "supporting",
+          "reason": null,
+          "route_id": "phylogeny_bootstrap_percent",
+          "score": 92,
+          "score_bounds": {
+            "lower": 92,
+            "lower_inclusive": true,
+            "upper": 92,
+            "upper_inclusive": true
+          },
+          "score_unit": "percent",
+          "status": "scored"
+        },
+        {
+          "direction": "higher",
+          "polarity": "supporting",
+          "reason": null,
+          "route_id": "phylogeny_bootstrap_fraction",
+          "score": 0.92,
+          "score_bounds": {
+            "lower": 0.92,
+            "lower_inclusive": true,
+            "upper": 0.92,
+            "upper_inclusive": true
+          },
+          "score_unit": "bootstrap_fraction",
+          "status": "scored"
+        },
+        {
+          "direction": "higher",
+          "polarity": "supporting",
+          "reason": null,
+          "route_id": "phylogeny_posterior_clade",
+          "score": 0.97,
+          "score_bounds": {
+            "lower": 0.97,
+            "lower_inclusive": true,
+            "upper": 0.97,
+            "upper_inclusive": true
+          },
+          "score_unit": "clade_posterior_probability",
+          "status": "scored"
+        },
+        {
+          "direction": "higher",
+          "polarity": "supporting",
+          "reason": "grade_unknown",
+          "route_id": "hgt_explanation_grade",
+          "score": null,
+          "score_bounds": {
+            "lower": 0,
+            "lower_inclusive": true,
+            "upper": 2,
+            "upper_inclusive": true
+          },
+          "score_unit": "ordinal_evidence_level",
+          "status": "partial"
+        }
+      ]
+    },
+    {
+      "axis": "A104",
+      "fixture_meaning": "Controlled permitted explanation-grade assignment; no real HGT event or candidate annotation is claimed.",
+      "grade": "contradicted",
+      "result": {
+        "route_id": "hgt_explanation_grade",
+        "score": 0,
+        "score_unit": "ordinal_evidence_level",
+        "status": "scored"
+      }
+    },
+    {
+      "axis": "A104",
+      "fixture_meaning": "Controlled permitted explanation-grade assignment; no real HGT event or candidate annotation is claimed.",
+      "grade": "plausible_only",
+      "result": {
+        "route_id": "hgt_explanation_grade",
+        "score": 1,
+        "score_unit": "ordinal_evidence_level",
+        "status": "scored"
+      }
+    },
+    {
+      "axis": "A104",
+      "fixture_meaning": "Controlled permitted explanation-grade assignment; no real HGT event or candidate annotation is claimed.",
+      "grade": "corroborated",
+      "result": {
+        "route_id": "hgt_explanation_grade",
+        "score": 2,
+        "score_unit": "ordinal_evidence_level",
+        "status": "scored"
+      }
+    }
+  ],
+  "failed": 0,
+  "no_cross_route_aggregate_added": true,
+  "no_new_live_job_or_model": true,
+  "number_meaning": "Actual evaluator outputs under controlled native-number and criterion fixtures; only explicitly identified HemK values derive from prior scientific analysis.",
+  "passed": 34,
+  "rubric": "SCORING_RUBRICS_A101_A104.md",
+  "scope_limits": [
+    "Native structure/context/phylogeny extraction bindings remain unbound; the scorer can accept an actual retained native fact under the common contract but does not run a tool.",
+    "Numeric score routing and data meaning are tested; calibrated correctness of annotation and global combination of units are not established.",
+    "The HGT ordinal coding0/1/2 is proposed for user review, not asserted as calibrated probability or a user-selected weighting."
+  ],
+  "sources_and_dataset_review": "SCORING_INPUT_ANALYSIS_A101_A104.json",
+  "status": "executed_controlled_numerical_fixtures"
+}

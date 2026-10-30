@@ -1,0 +1,1761 @@
+{
+  "schema": "tool_grader_goal_coverage_v1",
+  "counts": {
+    "scope_rows_total": 308,
+    "rows_by_section": {
+      "A": 78,
+      "B": 55,
+      "C": 37,
+      "X": 13,
+      "D": 33,
+      "E": 79,
+      "R": 13
+    },
+    "rows_by_kind": {
+      "measurement_mode": 2,
+      "supporting_transformation": 2,
+      "scientific_mode": 41,
+      "correspondence_reader_mode": 3,
+      "supporting_native_operation": 30,
+      "named_scientific_operation": 46,
+      "supporting_named_function": 9,
+      "bvbrc_service_family": 25,
+      "bvbrc_service_mode": 2,
+      "bvbrc_integration_responsibility": 7,
+      "classified_helper": 3,
+      "excluded_service": 3,
+      "bvbrc_data_collection": 22,
+      "bvbrc_typed_query_operation": 11,
+      "bounded_molecular_data_provider": 47,
+      "named_acquisition_wrapper_contract": 25,
+      "restricted_entrez_wrapper_contract": 4,
+      "api_lifecycle_operation": 3,
+      "exclusion_boundary": 9,
+      "conditional_exclusion": 1,
+      "resource_qualification": 13
+    },
+    "rows_by_scope_disposition": {
+      "required": 205,
+      "required_when_needed": 28,
+      "removed": 3,
+      "alias_of_existing_operation": 39,
+      "helper_only_if_needed": 3,
+      "not_required_public_submission": 1,
+      "excluded": 12,
+      "part_of_existing_operation": 3,
+      "excluded_as_working_capability_while_fabricated": 1,
+      "constraint": 13
+    },
+    "a_explicit_native_search_alignment_program_names": 21,
+    "a_explicit_supporting_native_program_names": 30,
+    "a_blast_database_program_rows": 11,
+    "a_blast_two_sequence_program_rows": 5,
+    "b_explicit_function_names": 55,
+    "b_explicit_supporting_functions": 9,
+    "c_required_service_families": 25,
+    "c_explicit_minhash_modes": 2,
+    "d_required_collections": 22,
+    "d_shared_typed_query_operations": 11,
+    "e_bounded_provider_dataset_rows": 47,
+    "e_provider_mentions_across_bullets": 48,
+    "e_named_wrapper_contracts": 25,
+    "e_restricted_entrez_wrapper_contracts": 4,
+    "e_explicit_blast_lifecycle_operations": 3,
+    "source_alias_observations": 622,
+    "source_alias_dispositions": {
+      "mapped_required_or_scoped_helper": 315,
+      "supporting_source_only": 77,
+      "excluded_by_current_goal": 106,
+      "outside_explicit_current_scope": 110,
+      "alias_no_independent_work": 11,
+      "removed_from_active_work": 3
+    },
+    "intended_resource_binding_rows": 288,
+    "resource_bindings_by_route": {
+      "local": 89,
+      "api": 166,
+      "hpc": 33
+    },
+    "retained_component_evidence_rows": 5,
+    "complete_scientific_tools_claimed": 0
+  },
+  "scope_bullet_coverage": [
+    {
+      "line": 59,
+      "requirement_row_ids": [
+        "A-L059-sequence",
+        "A-L059-reads"
+      ],
+      "covered": true
+    },
+    {
+      "line": 60,
+      "requirement_row_ids": [
+        "A-L060-translation",
+        "A-L060-extraction"
+      ],
+      "covered": true
+    },
+    {
+      "line": 61,
+      "requirement_row_ids": [
+        "A-L061-protein-local",
+        "A-L061-protein-global",
+        "A-L061-dna-local",
+        "A-L061-dna-global",
+        "A-L061-rna-local",
+        "A-L061-rna-global"
+      ],
+      "covered": true
+    },
+    {
+      "line": 62,
+      "requirement_row_ids": [
+        "A-L062-single-genome",
+        "A-L062-metagenomic"
+      ],
+      "covered": true
+    },
+    {
+      "line": 63,
+      "requirement_row_ids": [
+        "A-L063-map-ont",
+        "A-L063-map-pb",
+        "A-L063-map-hifi",
+        "A-L063-lr-hq",
+        "A-L063-map-iclr",
+        "A-L063-sr"
+      ],
+      "covered": true
+    },
+    {
+      "line": 64,
+      "requirement_row_ids": [
+        "A-L064-native-pairwise",
+        "A-L064-blast-hsp",
+        "A-L064-mapping-correspondence"
+      ],
+      "covered": true
+    },
+    {
+      "line": 65,
+      "requirement_row_ids": [
+        "A-L065-phmmer",
+        "A-L065-hmmscan",
+        "A-L065-hmmsearch",
+        "A-L065-jackhmmer",
+        "A-L065-nhmmer",
+        "A-L065-nhmmscan"
+      ],
+      "covered": true
+    },
+    {
+      "line": 66,
+      "requirement_row_ids": [
+        "A-L066-hmmalign"
+      ],
+      "covered": true
+    },
+    {
+      "line": 67,
+      "requirement_row_ids": [
+        "A-L067-cmsearch",
+        "A-L067-cmscan",
+        "A-L067-cmalign"
+      ],
+      "covered": true
+    },
+    {
+      "line": 68,
+      "requirement_row_ids": [
+        "A-L068-rfam-batch"
+      ],
+      "covered": true
+    },
+    {
+      "line": 69,
+      "requirement_row_ids": [
+        "A-L069-blastn-database",
+        "A-L069-blastn-pairwise",
+        "A-L069-blastp-database",
+        "A-L069-blastp-pairwise",
+        "A-L069-blastx-database",
+        "A-L069-blastx-pairwise",
+        "A-L069-tblastn-database",
+        "A-L069-tblastn-pairwise",
+        "A-L069-tblastx-database",
+        "A-L069-tblastx-pairwise"
+      ],
+      "covered": true
+    },
+    {
+      "line": 70,
+      "requirement_row_ids": [
+        "A-L070-psiblast-database",
+        "A-L070-deltablast-database",
+        "A-L070-rpsblast-database",
+        "A-L070-rpstblastn-database",
+        "A-L070-blastn_vdb-database",
+        "A-L070-tblastn_vdb-database"
+      ],
+      "covered": true
+    },
+    {
+      "line": 76,
+      "requirement_row_ids": [
+        "A-L076-alimask",
+        "A-L076-hmmbuild",
+        "A-L076-hmmconvert",
+        "A-L076-hmmemit",
+        "A-L076-hmmfetch",
+        "A-L076-hmmpress",
+        "A-L076-hmmsim",
+        "A-L076-hmmstat",
+        "A-L076-makehmmerdb",
+        "A-L076-hmmerfm-exactmatch"
+      ],
+      "covered": true
+    },
+    {
+      "line": 77,
+      "requirement_row_ids": [
+        "A-L077-cmbuild",
+        "A-L077-cmcalibrate",
+        "A-L077-cmconvert",
+        "A-L077-cmemit",
+        "A-L077-cmfetch",
+        "A-L077-cmpress",
+        "A-L077-cmstat"
+      ],
+      "covered": true
+    },
+    {
+      "line": 78,
+      "requirement_row_ids": [
+        "A-L078-dustmasker",
+        "A-L078-segmasker",
+        "A-L078-windowmasker",
+        "A-L078-blast_formatter",
+        "A-L078-blast_formatter_vdb",
+        "A-L078-blast_vdb_cmd",
+        "A-L078-blastdb_aliastool",
+        "A-L078-blastdbcheck",
+        "A-L078-blastdbcmd",
+        "A-L078-convert2blastmask",
+        "A-L078-makeblastdb",
+        "A-L078-makembindex",
+        "A-L078-makeprofiledb"
+      ],
+      "covered": true
+    },
+    {
+      "line": 87,
+      "requirement_row_ids": [
+        "B-L087-annotate_open_reading_frames"
+      ],
+      "covered": true
+    },
+    {
+      "line": 88,
+      "requirement_row_ids": [
+        "B-L088-annotate_plasmid"
+      ],
+      "covered": true
+    },
+    {
+      "line": 89,
+      "requirement_row_ids": [
+        "B-L089-annotate_bacterial_genome"
+      ],
+      "covered": true
+    },
+    {
+      "line": 90,
+      "requirement_row_ids": [
+        "B-L090-blast_sequence"
+      ],
+      "covered": true
+    },
+    {
+      "line": 91,
+      "requirement_row_ids": [
+        "B-L091-align_sequences"
+      ],
+      "covered": true
+    },
+    {
+      "line": 92,
+      "requirement_row_ids": [
+        "B-L092-find_sequence_mutations"
+      ],
+      "covered": true
+    },
+    {
+      "line": 93,
+      "requirement_row_ids": [
+        "B-L093-analyze_protein_conservation"
+      ],
+      "covered": true
+    },
+    {
+      "line": 94,
+      "requirement_row_ids": [
+        "B-L094-analyze_protein_phylogeny"
+      ],
+      "covered": true
+    },
+    {
+      "line": 97,
+      "requirement_row_ids": [
+        "B-L097-predict_protein_disorder_regions"
+      ],
+      "covered": true
+    },
+    {
+      "line": 98,
+      "requirement_row_ids": [
+        "B-L098-identify_fas_functional_domains"
+      ],
+      "covered": true
+    },
+    {
+      "line": 99,
+      "requirement_row_ids": [
+        "B-L099-find_n_glycosylation_motifs"
+      ],
+      "covered": true
+    },
+    {
+      "line": 100,
+      "requirement_row_ids": [
+        "B-L100-predict_o_glycosylation_hotspots"
+      ],
+      "covered": true
+    },
+    {
+      "line": 103,
+      "requirement_row_ids": [
+        "B-L103-predict_rna_secondary_structure"
+      ],
+      "covered": true
+    },
+    {
+      "line": 104,
+      "requirement_row_ids": [
+        "B-L104-analyze_rna_secondary_structure_features"
+      ],
+      "covered": true
+    },
+    {
+      "line": 107,
+      "requirement_row_ids": [
+        "B-L107-compare_protein_structures"
+      ],
+      "covered": true
+    },
+    {
+      "line": 110,
+      "requirement_row_ids": [
+        "B-L110-liftover_coordinates"
+      ],
+      "covered": true
+    },
+    {
+      "line": 111,
+      "requirement_row_ids": [
+        "B-L111-detect_and_annotate_somatic_mutations"
+      ],
+      "covered": true
+    },
+    {
+      "line": 112,
+      "requirement_row_ids": [
+        "B-L112-detect_and_characterize_structural_variations"
+      ],
+      "covered": true
+    },
+    {
+      "line": 113,
+      "requirement_row_ids": [
+        "B-L113-analyze_copy_number_purity_ploidy_and_focal_events"
+      ],
+      "covered": true
+    },
+    {
+      "line": 114,
+      "requirement_row_ids": [
+        "B-L114-analyze_cas9_mutation_outcomes"
+      ],
+      "covered": true
+    },
+    {
+      "line": 115,
+      "requirement_row_ids": [
+        "B-L115-analyze_crispr_genome_editing"
+      ],
+      "covered": true
+    },
+    {
+      "line": 120,
+      "requirement_row_ids": [
+        "B-L120-identify_transcription_factor_binding_sites"
+      ],
+      "covered": true
+    },
+    {
+      "line": 121,
+      "requirement_row_ids": [
+        "B-L121-perform_chipseq_peak_calling_with_macs2"
+      ],
+      "covered": true
+    },
+    {
+      "line": 122,
+      "requirement_row_ids": [
+        "B-L122-find_enriched_motifs_with_homer"
+      ],
+      "covered": true
+    },
+    {
+      "line": 123,
+      "requirement_row_ids": [
+        "B-L123-analyze_genomic_region_overlap"
+      ],
+      "covered": true
+    },
+    {
+      "line": 124,
+      "requirement_row_ids": [
+        "B-L124-analyze_chromatin_interactions"
+      ],
+      "covered": true
+    },
+    {
+      "line": 125,
+      "requirement_row_ids": [
+        "B-L125-analyze_atac_seq_differential_accessibility"
+      ],
+      "covered": true
+    },
+    {
+      "line": 128,
+      "requirement_row_ids": [
+        "B-L128-perform_gene_expression_nmf_analysis"
+      ],
+      "covered": true
+    },
+    {
+      "line": 129,
+      "requirement_row_ids": [
+        "B-L129-gene_set_enrichment_analysis"
+      ],
+      "covered": true
+    },
+    {
+      "line": 130,
+      "requirement_row_ids": [
+        "B-L130-analyze_barcode_sequencing_data"
+      ],
+      "covered": true
+    },
+    {
+      "line": 133,
+      "requirement_row_ids": [
+        "B-L133-annotate_celltype_with_panhumanpy"
+      ],
+      "covered": true
+    },
+    {
+      "line": 134,
+      "requirement_row_ids": [
+        "B-L134-create_scvi_embeddings_scRNA"
+      ],
+      "covered": true
+    },
+    {
+      "line": 135,
+      "requirement_row_ids": [
+        "B-L135-create_harmony_embeddings_scRNA"
+      ],
+      "covered": true
+    },
+    {
+      "line": 136,
+      "requirement_row_ids": [
+        "B-L136-get_uce_embeddings_scRNA"
+      ],
+      "covered": true
+    },
+    {
+      "line": 137,
+      "requirement_row_ids": [
+        "B-L137-map_to_ima_interpret_scRNA"
+      ],
+      "covered": true
+    },
+    {
+      "line": 138,
+      "requirement_row_ids": [
+        "B-L138-unsupervised_celltype_transfer_between_scRNA_datasets"
+      ],
+      "covered": true
+    },
+    {
+      "line": 139,
+      "requirement_row_ids": [
+        "B-L139-generate_embeddings_with_state"
+      ],
+      "covered": true
+    },
+    {
+      "line": 140,
+      "requirement_row_ids": [
+        "B-L140-generate_transcriptformer_embeddings"
+      ],
+      "covered": true
+    },
+    {
+      "line": 145,
+      "requirement_row_ids": [
+        "B-L145-generate_gene_embeddings_with_ESM_models"
+      ],
+      "covered": true
+    },
+    {
+      "line": 150,
+      "requirement_row_ids": [
+        "B-L150-analyze_circular_dichroism_spectra"
+      ],
+      "covered": true
+    },
+    {
+      "line": 151,
+      "requirement_row_ids": [
+        "B-L151-analyze_protease_kinetics"
+      ],
+      "covered": true
+    },
+    {
+      "line": 152,
+      "requirement_row_ids": [
+        "B-L152-analyze_itc_binding_thermodynamics"
+      ],
+      "covered": true
+    },
+    {
+      "line": 153,
+      "requirement_row_ids": [
+        "B-L153-analyze_arsenic_speciation_hplc_icpms"
+      ],
+      "covered": true
+    },
+    {
+      "line": 158,
+      "requirement_row_ids": [
+        "B-L158-analyze_cytokine_production_in_cd4_tcells"
+      ],
+      "covered": true
+    },
+    {
+      "line": 159,
+      "requirement_row_ids": [
+        "B-L159-perform_facs_cell_sorting"
+      ],
+      "covered": true
+    },
+    {
+      "line": 164,
+      "requirement_row_ids": [
+        "B-L164-perform_flux_balance_analysis"
+      ],
+      "covered": true
+    },
+    {
+      "line": 169,
+      "requirement_row_ids": [
+        "B-L169-get_gene_coding_sequence"
+      ],
+      "covered": true
+    },
+    {
+      "line": 170,
+      "requirement_row_ids": [
+        "B-L170-get_plasmid_sequence"
+      ],
+      "covered": true
+    },
+    {
+      "line": 171,
+      "requirement_row_ids": [
+        "B-L171-find_restriction_sites"
+      ],
+      "covered": true
+    },
+    {
+      "line": 172,
+      "requirement_row_ids": [
+        "B-L172-find_restriction_enzymes"
+      ],
+      "covered": true
+    },
+    {
+      "line": 173,
+      "requirement_row_ids": [
+        "B-L173-get_rna_seq_archs4"
+      ],
+      "covered": true
+    },
+    {
+      "line": 174,
+      "requirement_row_ids": [
+        "B-L174-interspecies_gene_conversion"
+      ],
+      "covered": true
+    },
+    {
+      "line": 175,
+      "requirement_row_ids": [
+        "B-L175-get_gene_set_enrichment_analysis_supported_database_list"
+      ],
+      "covered": true
+    },
+    {
+      "line": 176,
+      "requirement_row_ids": [
+        "B-L176-download_geo_series"
+      ],
+      "covered": true
+    },
+    {
+      "line": 177,
+      "requirement_row_ids": [
+        "B-L177-inspect_file"
+      ],
+      "covered": true
+    },
+    {
+      "line": 187,
+      "requirement_row_ids": [
+        "C-L187-GenomeAssembly2"
+      ],
+      "covered": true
+    },
+    {
+      "line": 188,
+      "requirement_row_ids": [
+        "C-L188-GenomeAnnotation"
+      ],
+      "covered": true
+    },
+    {
+      "line": 189,
+      "requirement_row_ids": [
+        "C-L189-ComprehensiveGenomeAnalysis"
+      ],
+      "covered": true
+    },
+    {
+      "line": 190,
+      "requirement_row_ids": [
+        "C-L190-Homology"
+      ],
+      "covered": true
+    },
+    {
+      "line": 191,
+      "requirement_row_ids": [
+        "C-L191-Variation"
+      ],
+      "covered": true
+    },
+    {
+      "line": 192,
+      "requirement_row_ids": [
+        "C-L192-TnSeq"
+      ],
+      "covered": true
+    },
+    {
+      "line": 193,
+      "requirement_row_ids": [
+        "C-L193-CodonTree"
+      ],
+      "covered": true
+    },
+    {
+      "line": 194,
+      "requirement_row_ids": [
+        "C-L194-GeneTree"
+      ],
+      "covered": true
+    },
+    {
+      "line": 195,
+      "requirement_row_ids": [
+        "C-L195-CoreGenomeMLST"
+      ],
+      "covered": true
+    },
+    {
+      "line": 196,
+      "requirement_row_ids": [
+        "C-L196-WholeGenomeSNPAnalysis"
+      ],
+      "covered": true
+    },
+    {
+      "line": 197,
+      "requirement_row_ids": [
+        "C-L197-TaxonomicClassification"
+      ],
+      "covered": true
+    },
+    {
+      "line": 198,
+      "requirement_row_ids": [
+        "C-L198-MetagenomeBinning"
+      ],
+      "covered": true
+    },
+    {
+      "line": 199,
+      "requirement_row_ids": [
+        "C-L199-MetagenomicReadMapping"
+      ],
+      "covered": true
+    },
+    {
+      "line": 200,
+      "requirement_row_ids": [
+        "C-L200-RNASeq"
+      ],
+      "covered": true
+    },
+    {
+      "line": 201,
+      "requirement_row_ids": [
+        "C-L201-ViralAssembly"
+      ],
+      "covered": true
+    },
+    {
+      "line": 202,
+      "requirement_row_ids": [
+        "C-L202-GenomeAlignment"
+      ],
+      "covered": true
+    },
+    {
+      "line": 203,
+      "requirement_row_ids": [
+        "C-L203-SARS2Assembly"
+      ],
+      "covered": true
+    },
+    {
+      "line": 204,
+      "requirement_row_ids": [
+        "C-L204-MSA"
+      ],
+      "covered": true
+    },
+    {
+      "line": 205,
+      "requirement_row_ids": [
+        "C-L205-MetaCATS"
+      ],
+      "covered": true
+    },
+    {
+      "line": 206,
+      "requirement_row_ids": [
+        "C-L206-GenomeComparison"
+      ],
+      "covered": true
+    },
+    {
+      "line": 207,
+      "requirement_row_ids": [
+        "C-L207-ComparativeSystems"
+      ],
+      "covered": true
+    },
+    {
+      "line": 208,
+      "requirement_row_ids": [
+        "C-L208-SimilarGenomeFinder",
+        "C-L208-minhash-genome",
+        "C-L208-minhash-fasta"
+      ],
+      "covered": true
+    },
+    {
+      "line": 209,
+      "requirement_row_ids": [
+        "C-L209-FastqUtils"
+      ],
+      "covered": true
+    },
+    {
+      "line": 210,
+      "requirement_row_ids": [
+        "C-L210-InfluenzaHASubtypeConversion"
+      ],
+      "covered": true
+    },
+    {
+      "line": 211,
+      "requirement_row_ids": [
+        "C-L211-SubspeciesClassification"
+      ],
+      "covered": true
+    },
+    {
+      "line": 221,
+      "requirement_row_ids": [
+        "C-L221-preparation"
+      ],
+      "covered": true
+    },
+    {
+      "line": 222,
+      "requirement_row_ids": [
+        "C-L222-submission"
+      ],
+      "covered": true
+    },
+    {
+      "line": 223,
+      "requirement_row_ids": [
+        "C-L223-status"
+      ],
+      "covered": true
+    },
+    {
+      "line": 224,
+      "requirement_row_ids": [
+        "C-L224-artifact-acquisition"
+      ],
+      "covered": true
+    },
+    {
+      "line": 225,
+      "requirement_row_ids": [
+        "C-L225-input-transfer"
+      ],
+      "covered": true
+    },
+    {
+      "line": 226,
+      "requirement_row_ids": [
+        "C-L226-parsing-and-grading"
+      ],
+      "covered": true
+    },
+    {
+      "line": 227,
+      "requirement_row_ids": [
+        "C-L227-return"
+      ],
+      "covered": true
+    },
+    {
+      "line": 240,
+      "requirement_row_ids": [
+        "D-L240-genome"
+      ],
+      "covered": true
+    },
+    {
+      "line": 241,
+      "requirement_row_ids": [
+        "D-L241-genome_feature"
+      ],
+      "covered": true
+    },
+    {
+      "line": 242,
+      "requirement_row_ids": [
+        "D-L242-genome_sequence"
+      ],
+      "covered": true
+    },
+    {
+      "line": 243,
+      "requirement_row_ids": [
+        "D-L243-feature_sequence"
+      ],
+      "covered": true
+    },
+    {
+      "line": 246,
+      "requirement_row_ids": [
+        "D-L246-protein_family_ref"
+      ],
+      "covered": true
+    },
+    {
+      "line": 247,
+      "requirement_row_ids": [
+        "D-L247-protein_feature"
+      ],
+      "covered": true
+    },
+    {
+      "line": 248,
+      "requirement_row_ids": [
+        "D-L248-sequence_feature"
+      ],
+      "covered": true
+    },
+    {
+      "line": 249,
+      "requirement_row_ids": [
+        "D-L249-sequence_feature_vt"
+      ],
+      "covered": true
+    },
+    {
+      "line": 250,
+      "requirement_row_ids": [
+        "D-L250-structured_assertion"
+      ],
+      "covered": true
+    },
+    {
+      "line": 253,
+      "requirement_row_ids": [
+        "D-L253-id_ref"
+      ],
+      "covered": true
+    },
+    {
+      "line": 254,
+      "requirement_row_ids": [
+        "D-L254-taxonomy"
+      ],
+      "covered": true
+    },
+    {
+      "line": 257,
+      "requirement_row_ids": [
+        "D-L257-pathway"
+      ],
+      "covered": true
+    },
+    {
+      "line": 258,
+      "requirement_row_ids": [
+        "D-L258-pathway_ref"
+      ],
+      "covered": true
+    },
+    {
+      "line": 259,
+      "requirement_row_ids": [
+        "D-L259-subsystem"
+      ],
+      "covered": true
+    },
+    {
+      "line": 260,
+      "requirement_row_ids": [
+        "D-L260-subsystem_ref"
+      ],
+      "covered": true
+    },
+    {
+      "line": 261,
+      "requirement_row_ids": [
+        "D-L261-enzyme_class_ref"
+      ],
+      "covered": true
+    },
+    {
+      "line": 262,
+      "requirement_row_ids": [
+        "D-L262-gene_ontology_ref"
+      ],
+      "covered": true
+    },
+    {
+      "line": 265,
+      "requirement_row_ids": [
+        "D-L265-protein_structure"
+      ],
+      "covered": true
+    },
+    {
+      "line": 266,
+      "requirement_row_ids": [
+        "D-L266-ppi"
+      ],
+      "covered": true
+    },
+    {
+      "line": 269,
+      "requirement_row_ids": [
+        "D-L269-experiment"
+      ],
+      "covered": true
+    },
+    {
+      "line": 270,
+      "requirement_row_ids": [
+        "D-L270-bioset"
+      ],
+      "covered": true
+    },
+    {
+      "line": 271,
+      "requirement_row_ids": [
+        "D-L271-bioset_result"
+      ],
+      "covered": true
+    },
+    {
+      "line": 287,
+      "requirement_row_ids": [
+        "E-L287-ncbi-blast",
+        "E-L287-submission",
+        "E-L287-status",
+        "E-L287-complete_result_acquisition"
+      ],
+      "covered": true
+    },
+    {
+      "line": 288,
+      "requirement_row_ids": [
+        "E-L288-ncbi-protein",
+        "E-L288-ncbi-nucleotide",
+        "E-L288-ncbi-gene",
+        "E-L288-ncbi-taxonomy",
+        "E-L288-ncbi-assembly",
+        "E-L288-ncbi-datasets"
+      ],
+      "covered": true
+    },
+    {
+      "line": 289,
+      "requirement_row_ids": [
+        "E-L289-ncbi-geo",
+        "E-L289-ncbi-sra"
+      ],
+      "covered": true
+    },
+    {
+      "line": 290,
+      "requirement_row_ids": [
+        "E-L290-uniprot"
+      ],
+      "covered": true
+    },
+    {
+      "line": 291,
+      "requirement_row_ids": [
+        "E-L291-pfam",
+        "E-L291-interpro",
+        "E-L291-rfam"
+      ],
+      "covered": true
+    },
+    {
+      "line": 292,
+      "requirement_row_ids": [
+        "E-L292-alphafold-protein-structure-database"
+      ],
+      "covered": true
+    },
+    {
+      "line": 293,
+      "requirement_row_ids": [
+        "E-L293-rcsb-pdb",
+        "E-L293-emdb"
+      ],
+      "covered": true
+    },
+    {
+      "line": 294,
+      "requirement_row_ids": [
+        "E-L294-string"
+      ],
+      "covered": true
+    },
+    {
+      "line": 295,
+      "requirement_row_ids": [
+        "E-L295-kegg",
+        "E-L295-reactome",
+        "E-L295-rhea"
+      ],
+      "covered": true
+    },
+    {
+      "line": 296,
+      "requirement_row_ids": [
+        "E-L296-quickgo"
+      ],
+      "covered": true
+    },
+    {
+      "line": 297,
+      "requirement_row_ids": [
+        "E-L297-chebi",
+        "E-L297-pubchem",
+        "E-L297-hmdb"
+      ],
+      "covered": true
+    },
+    {
+      "line": 298,
+      "requirement_row_ids": [
+        "E-L298-ensembl",
+        "E-L298-ucsc",
+        "E-L298-dbsnp",
+        "E-L298-eva",
+        "E-L298-gnomad"
+      ],
+      "covered": true
+    },
+    {
+      "line": 299,
+      "requirement_row_ids": [
+        "E-L299-jaspar",
+        "E-L299-remap",
+        "E-L299-encode",
+        "E-L299-regulomedb",
+        "E-L299-ccre-data"
+      ],
+      "covered": true
+    },
+    {
+      "line": 300,
+      "requirement_row_ids": [
+        "E-L289-ncbi-geo",
+        "E-L300-biostudies-arrayexpress",
+        "E-L300-archs4"
+      ],
+      "covered": true
+    },
+    {
+      "line": 301,
+      "requirement_row_ids": [
+        "E-L301-bgee",
+        "E-L301-gtex",
+        "E-L301-eqtl-catalogue",
+        "E-L301-human-protein-atlas"
+      ],
+      "covered": true
+    },
+    {
+      "line": 302,
+      "requirement_row_ids": [
+        "E-L302-cellxgene"
+      ],
+      "covered": true
+    },
+    {
+      "line": 303,
+      "requirement_row_ids": [
+        "E-L303-cbioportal"
+      ],
+      "covered": true
+    },
+    {
+      "line": 304,
+      "requirement_row_ids": [
+        "E-L304-pride",
+        "E-L304-proteomexchange"
+      ],
+      "covered": true
+    },
+    {
+      "line": 305,
+      "requirement_row_ids": [
+        "E-L305-metabolights"
+      ],
+      "covered": true
+    },
+    {
+      "line": 306,
+      "requirement_row_ids": [
+        "E-L306-mgnify"
+      ],
+      "covered": true
+    },
+    {
+      "line": 307,
+      "requirement_row_ids": [
+        "E-L307-synapse"
+      ],
+      "covered": true
+    },
+    {
+      "line": 319,
+      "requirement_row_ids": [
+        "X-L319"
+      ],
+      "covered": true
+    },
+    {
+      "line": 320,
+      "requirement_row_ids": [
+        "X-L320"
+      ],
+      "covered": true
+    },
+    {
+      "line": 321,
+      "requirement_row_ids": [
+        "X-L321"
+      ],
+      "covered": true
+    },
+    {
+      "line": 322,
+      "requirement_row_ids": [
+        "X-L322"
+      ],
+      "covered": true
+    },
+    {
+      "line": 323,
+      "requirement_row_ids": [
+        "X-L323"
+      ],
+      "covered": true
+    },
+    {
+      "line": 324,
+      "requirement_row_ids": [
+        "X-L324"
+      ],
+      "covered": true
+    },
+    {
+      "line": 325,
+      "requirement_row_ids": [
+        "X-L325"
+      ],
+      "covered": true
+    },
+    {
+      "line": 326,
+      "requirement_row_ids": [
+        "X-L326"
+      ],
+      "covered": true
+    },
+    {
+      "line": 327,
+      "requirement_row_ids": [
+        "X-L327"
+      ],
+      "covered": true
+    }
+  ],
+  "all_explicit_goal_bullet_lines_covered": true,
+  "explicit_B_function_names": [
+    "annotate_open_reading_frames",
+    "annotate_plasmid",
+    "annotate_bacterial_genome",
+    "blast_sequence",
+    "align_sequences",
+    "find_sequence_mutations",
+    "analyze_protein_conservation",
+    "analyze_protein_phylogeny",
+    "predict_protein_disorder_regions",
+    "identify_fas_functional_domains",
+    "find_n_glycosylation_motifs",
+    "predict_o_glycosylation_hotspots",
+    "predict_rna_secondary_structure",
+    "analyze_rna_secondary_structure_features",
+    "compare_protein_structures",
+    "liftover_coordinates",
+    "detect_and_annotate_somatic_mutations",
+    "detect_and_characterize_structural_variations",
+    "analyze_copy_number_purity_ploidy_and_focal_events",
+    "analyze_cas9_mutation_outcomes",
+    "analyze_crispr_genome_editing",
+    "identify_transcription_factor_binding_sites",
+    "perform_chipseq_peak_calling_with_macs2",
+    "find_enriched_motifs_with_homer",
+    "analyze_genomic_region_overlap",
+    "analyze_chromatin_interactions",
+    "analyze_atac_seq_differential_accessibility",
+    "perform_gene_expression_nmf_analysis",
+    "gene_set_enrichment_analysis",
+    "analyze_barcode_sequencing_data",
+    "annotate_celltype_with_panhumanpy",
+    "create_scvi_embeddings_scRNA",
+    "create_harmony_embeddings_scRNA",
+    "get_uce_embeddings_scRNA",
+    "map_to_ima_interpret_scRNA",
+    "unsupervised_celltype_transfer_between_scRNA_datasets",
+    "generate_embeddings_with_state",
+    "generate_transcriptformer_embeddings",
+    "generate_gene_embeddings_with_ESM_models",
+    "analyze_circular_dichroism_spectra",
+    "analyze_protease_kinetics",
+    "analyze_itc_binding_thermodynamics",
+    "analyze_arsenic_speciation_hplc_icpms",
+    "analyze_cytokine_production_in_cd4_tcells",
+    "perform_facs_cell_sorting",
+    "perform_flux_balance_analysis",
+    "get_gene_coding_sequence",
+    "get_plasmid_sequence",
+    "find_restriction_sites",
+    "find_restriction_enzymes",
+    "get_rna_seq_archs4",
+    "interspecies_gene_conversion",
+    "get_gene_set_enrichment_analysis_supported_database_list",
+    "download_geo_series",
+    "inspect_file"
+  ],
+  "explicit_C_service_identifiers": [
+    "GenomeAssembly2",
+    "GenomeAnnotation",
+    "ComprehensiveGenomeAnalysis",
+    "Homology",
+    "Variation",
+    "TnSeq",
+    "CodonTree",
+    "GeneTree",
+    "CoreGenomeMLST",
+    "WholeGenomeSNPAnalysis",
+    "TaxonomicClassification",
+    "MetagenomeBinning",
+    "MetagenomicReadMapping",
+    "RNASeq",
+    "ViralAssembly",
+    "GenomeAlignment",
+    "SARS2Assembly",
+    "MSA",
+    "MetaCATS",
+    "GenomeComparison",
+    "ComparativeSystems",
+    "SimilarGenomeFinder",
+    "FastqUtils",
+    "InfluenzaHASubtypeConversion",
+    "SubspeciesClassification"
+  ],
+  "explicit_D_collection_names": [
+    "genome",
+    "genome_feature",
+    "genome_sequence",
+    "feature_sequence",
+    "protein_family_ref",
+    "protein_feature",
+    "sequence_feature",
+    "sequence_feature_vt",
+    "structured_assertion",
+    "id_ref",
+    "taxonomy",
+    "pathway",
+    "pathway_ref",
+    "subsystem",
+    "subsystem_ref",
+    "enzyme_class_ref",
+    "gene_ontology_ref",
+    "protein_structure",
+    "ppi",
+    "experiment",
+    "bioset",
+    "bioset_result"
+  ],
+  "bounded_E_provider_names": [
+    "NCBI BLAST",
+    "NCBI Protein",
+    "NCBI Nucleotide",
+    "NCBI Gene",
+    "NCBI Taxonomy",
+    "NCBI Assembly",
+    "NCBI Datasets",
+    "NCBI GEO",
+    "NCBI SRA",
+    "UniProt",
+    "Pfam",
+    "InterPro",
+    "Rfam",
+    "AlphaFold Protein Structure Database",
+    "RCSB PDB",
+    "EMDB",
+    "STRING",
+    "KEGG",
+    "Reactome",
+    "Rhea",
+    "QuickGO",
+    "ChEBI",
+    "PubChem",
+    "HMDB",
+    "Ensembl",
+    "UCSC",
+    "dbSNP",
+    "EVA",
+    "gnomAD",
+    "JASPAR",
+    "ReMap",
+    "ENCODE",
+    "RegulomeDB",
+    "cCRE data",
+    "BioStudies/ArrayExpress",
+    "ARCHS4",
+    "Bgee",
+    "GTEx",
+    "eQTL Catalogue",
+    "Human Protein Atlas",
+    "CELLxGENE",
+    "cBioPortal",
+    "PRIDE",
+    "ProteomeXchange",
+    "MetaboLights",
+    "MGnify",
+    "Synapse"
+  ],
+  "explicit_E_wrapper_names": [
+    "query_uniprot",
+    "query_alphafold",
+    "query_interpro",
+    "query_pdb",
+    "query_pdb_identifiers",
+    "query_kegg",
+    "query_stringdb",
+    "query_jaspar",
+    "query_cbioportal",
+    "query_geo",
+    "query_dbsnp",
+    "query_ucsc",
+    "query_ensembl",
+    "query_gnomad",
+    "query_reactome",
+    "query_regulomedb",
+    "query_pride",
+    "query_remap",
+    "query_emdb",
+    "query_quickgo",
+    "query_encode",
+    "query_pubchem",
+    "query_synapse",
+    "region_to_ccre_screen",
+    "get_genes_near_ccre",
+    "esearch",
+    "efetch",
+    "esummary",
+    "query_ncbi_database"
+  ],
+  "required_source_names_without_matching_inventory_evidence": [
+    "D-L243-feature_sequence",
+    "E-L291-pfam"
+  ],
+  "omitted_explicit_requirements": [],
+  "unresolved_interpretations_or_source_gaps": [
+    {
+      "id": "Q-BLAST-EXTRA-PAIRWISE",
+      "requirement_refs": [
+        {
+          "line": 70,
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 72,
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        }
+      ],
+      "question": "Which additional native BLAST programs expose a meaningful two-sequence input contract?",
+      "accounting": "All six additional programs have retained database/native-program rows. Pairwise applicability is not inferred. Preserve their IDs and add mode children if native inspection establishes the contract."
+    },
+    {
+      "id": "Q-NATIVE-SERVICE-SUBMODES",
+      "requirement_refs": [
+        {
+          "line": 17,
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 187,
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 188,
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 611,
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        }
+      ],
+      "question": "The attachment does not enumerate every native parameter/recipe/viral variant of named service families or B functions.",
+      "accounting": "Named families/functions stay fixed. Selected scientifically distinct modes require explicit child rows, their own contracts and parent identity. Upstream recipes are not silently promoted to additional required independent algorithms."
+    },
+    {
+      "id": "Q-ROUTE-FIT",
+      "requirement_refs": [
+        {
+          "line": 508,
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 581,
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 586,
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        }
+      ],
+      "question": "Current dependency, access, resource fit, native format and production binding are unassessed for most intended routes.",
+      "accounting": "Route candidates remain explicit and unfinished. Local client placement is separate from remote computation; no universal deployment claim."
+    },
+    {
+      "id": "Q-BV-FEATURE-SEQUENCE-SOURCE",
+      "requirement_refs": [
+        {
+          "line": 243,
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 277,
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        }
+      ],
+      "question": "feature_sequence is absent from the historical BV-BRC collection prompt inventory.",
+      "accounting": "The required collection row is retained with source mapping not_assessed; do not substitute genome_sequence or drop the feature/sequence join."
+    },
+    {
+      "id": "Q-ENTREZ-APPLICABILITY",
+      "requirement_refs": [
+        {
+          "line": 288,
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 289,
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        },
+        {
+          "line": 311,
+          "attachment_sha256": "11e35ba1f0faea89c183af307a4b4bd2dd9a6b1a8fbd63af8bac42d06e7a17f7"
+        }
+      ],
+      "question": "Named provider/database scope does not prove every esearch/efetch/esummary method applies to every provider, especially Datasets.",
+      "accounting": "Entrez primitives are consolidated under applicable molecular provider paths. Their native applicability and retained-data evidence are assessed at those paths."
+    }
+  ],
+  "count_notes": [
+    "E provider mentions count GEO twice; its one provider row preserves lines 289 and 300.",
+    "BioStudies/ArrayExpress is the explicitly grouped provider row, not an assertion of two independent algorithms.",
+    "Native search/alignment program count is six HMMER searches, hmmalign, three Infernal tools and eleven BLAST programs.",
+    "Wrapper contracts, service lifecycle phases, source aliases, bindings and retained evidence are not independent scientific algorithms."
+  ],
+  "active_listing": {
+    "entries": {
+      "molecular_scientific_operations": [
+        "B-L087-annotate_open_reading_frames",
+        "B-L088-annotate_plasmid",
+        "B-L089-annotate_bacterial_genome",
+        "B-L091-align_sequences",
+        "B-L093-analyze_protein_conservation",
+        "B-L094-analyze_protein_phylogeny",
+        "B-L097-predict_protein_disorder_regions",
+        "B-L099-find_n_glycosylation_motifs",
+        "B-L100-predict_o_glycosylation_hotspots",
+        "B-L110-liftover_coordinates",
+        "B-L111-detect_and_annotate_somatic_mutations",
+        "B-L112-detect_and_characterize_structural_variations",
+        "B-L113-analyze_copy_number_purity_ploidy_and_focal_events",
+        "B-L114-analyze_cas9_mutation_outcomes",
+        "B-L120-identify_transcription_factor_binding_sites",
+        "B-L121-perform_chipseq_peak_calling_with_macs2",
+        "B-L122-find_enriched_motifs_with_homer",
+        "B-L129-gene_set_enrichment_analysis",
+        "B-L133-annotate_celltype_with_panhumanpy",
+        "B-L134-create_scvi_embeddings_scRNA",
+        "B-L135-create_harmony_embeddings_scRNA",
+        "B-L136-get_uce_embeddings_scRNA",
+        "B-L137-map_to_ima_interpret_scRNA",
+        "B-L138-unsupervised_celltype_transfer_between_scRNA_datasets",
+        "B-L139-generate_embeddings_with_state",
+        "B-L140-generate_transcriptformer_embeddings",
+        "B-L145-generate_gene_embeddings_with_ESM_models",
+        "B-L150-analyze_circular_dichroism_spectra",
+        "B-L151-analyze_protease_kinetics",
+        "B-L152-analyze_itc_binding_thermodynamics",
+        "B-L153-analyze_arsenic_speciation_hplc_icpms",
+        "B-L158-analyze_cytokine_production_in_cd4_tcells",
+        "B-L159-perform_facs_cell_sorting",
+        "B-L164-perform_flux_balance_analysis"
+      ],
+      "restriction_site_support_operation": [
+        "B-L171-find_restriction_sites"
+      ],
+      "new_bvbrc_application_bindings": [
+        "C-L187-GenomeAssembly2",
+        "C-L188-GenomeAnnotation",
+        "C-L189-ComprehensiveGenomeAnalysis",
+        "C-L191-Variation",
+        "C-L192-TnSeq",
+        "C-L195-CoreGenomeMLST",
+        "C-L196-WholeGenomeSNPAnalysis",
+        "C-L197-TaxonomicClassification",
+        "C-L198-MetagenomeBinning",
+        "C-L199-MetagenomicReadMapping",
+        "C-L200-RNASeq",
+        "C-L201-ViralAssembly",
+        "C-L203-SARS2Assembly",
+        "C-L210-InfluenzaHASubtypeConversion",
+        "C-L211-SubspeciesClassification"
+      ],
+      "bvbrc_data_collections": [
+        "D-L240-genome",
+        "D-L241-genome_feature",
+        "D-L242-genome_sequence",
+        "D-L243-feature_sequence",
+        "D-L246-protein_family_ref",
+        "D-L247-protein_feature",
+        "D-L248-sequence_feature",
+        "D-L249-sequence_feature_vt",
+        "D-L250-structured_assertion",
+        "D-L253-id_ref",
+        "D-L254-taxonomy",
+        "D-L257-pathway",
+        "D-L258-pathway_ref",
+        "D-L259-subsystem",
+        "D-L260-subsystem_ref",
+        "D-L261-enzyme_class_ref",
+        "D-L262-gene_ontology_ref",
+        "D-L265-protein_structure",
+        "D-L266-ppi",
+        "D-L269-experiment",
+        "D-L270-bioset",
+        "D-L271-bioset_result"
+      ],
+      "molecular_provider_bindings": [
+        "E-L288-ncbi-protein",
+        "E-L288-ncbi-nucleotide",
+        "E-L288-ncbi-gene",
+        "E-L288-ncbi-taxonomy",
+        "E-L288-ncbi-assembly",
+        "E-L288-ncbi-datasets",
+        "E-L289-ncbi-geo",
+        "E-L289-ncbi-sra",
+        "E-L290-uniprot",
+        "E-L291-pfam",
+        "E-L291-interpro",
+        "E-L291-rfam",
+        "E-L292-alphafold-protein-structure-database",
+        "E-L293-rcsb-pdb",
+        "E-L293-emdb",
+        "E-L294-string",
+        "E-L295-kegg",
+        "E-L295-reactome",
+        "E-L295-rhea",
+        "E-L296-quickgo",
+        "E-L297-chebi",
+        "E-L297-pubchem",
+        "E-L297-hmdb",
+        "E-L298-ensembl",
+        "E-L298-ucsc",
+        "E-L298-dbsnp",
+        "E-L298-eva",
+        "E-L298-gnomad",
+        "E-L299-jaspar",
+        "E-L299-remap",
+        "E-L299-encode",
+        "E-L299-regulomedb",
+        "E-L299-ccre-data",
+        "E-L300-biostudies-arrayexpress",
+        "E-L300-archs4",
+        "E-L301-bgee",
+        "E-L301-gtex",
+        "E-L301-eqtl-catalogue",
+        "E-L301-human-protein-atlas",
+        "E-L302-cellxgene",
+        "E-L303-cbioportal",
+        "E-L304-pride",
+        "E-L304-proteomexchange",
+        "E-L305-metabolights",
+        "E-L306-mgnify",
+        "E-L307-synapse",
+        "B-L170-get_plasmid_sequence"
+      ],
+      "blast_support_operations": [
+        "A-L078-dustmasker",
+        "A-L078-segmasker",
+        "A-L078-windowmasker",
+        "A-L078-blast_vdb_cmd",
+        "A-L078-blastdb_aliastool",
+        "A-L078-blastdbcheck",
+        "A-L078-blastdbcmd",
+        "A-L078-convert2blastmask",
+        "A-L078-makeblastdb",
+        "A-L078-makembindex",
+        "A-L078-makeprofiledb"
+      ]
+    },
+    "counts": {
+      "molecular_scientific_operations": 34,
+      "restriction_site_support_operation": 1,
+      "new_bvbrc_application_bindings": 15,
+      "bvbrc_data_collections": 22,
+      "molecular_provider_bindings": 47,
+      "blast_support_operations": 11
+    },
+    "display_names": {
+      "B-L170-get_plasmid_sequence": "Addgene plasmid acquisition (NCBI branch shares NCBI Nucleotide)"
+    },
+    "counts_are_completion_claims": false,
+    "existing_family_repairs_and_integration_gaps_are_not_new_algorithms": true,
+    "existing_family_rows": {
+      "Prodigal single-genome return": [
+        "A-L062-single-genome"
+      ],
+      "Existing molecular result and message gaps": [
+        "B-L107-compare_protein_structures",
+        "B-L123-analyze_genomic_region_overlap",
+        "B-L124-analyze_chromatin_interactions",
+        "B-L125-analyze_atac_seq_differential_accessibility",
+        "B-L128-perform_gene_expression_nmf_analysis"
+      ],
+      "HMMER, Infernal and Rfam message/format gaps": [
+        "A-L065-phmmer",
+        "A-L065-hmmscan",
+        "A-L065-hmmsearch",
+        "A-L065-jackhmmer",
+        "A-L065-nhmmer",
+        "A-L065-nhmmscan",
+        "A-L066-hmmalign",
+        "A-L067-cmsearch",
+        "A-L067-cmscan",
+        "A-L067-cmalign",
+        "A-L068-rfam-batch"
+      ],
+      "Existing BV-BRC resource/message gaps": [
+        "C-L190-Homology",
+        "C-L193-CodonTree",
+        "C-L194-GeneTree",
+        "C-L202-GenomeAlignment",
+        "C-L204-MSA",
+        "C-L205-MetaCATS",
+        "C-L206-GenomeComparison",
+        "C-L207-ComparativeSystems",
+        "C-L208-SimilarGenomeFinder",
+        "C-L209-FastqUtils"
+      ],
+      "Existing database BLAST native/resource verification": [
+        "A-L069-blastn-database",
+        "A-L069-blastp-database",
+        "A-L069-blastx-database",
+        "A-L069-tblastn-database",
+        "A-L069-tblastx-database",
+        "A-L070-psiblast-database",
+        "A-L070-deltablast-database",
+        "A-L070-rpsblast-database",
+        "A-L070-rpstblastn-database",
+        "A-L070-blastn_vdb-database",
+        "A-L070-tblastn_vdb-database"
+      ]
+    }
+  },
+  "historical_literal_coverage_is_current_goal_coverage": false,
+  "counts_role": "historical_inventory_structure"
+}

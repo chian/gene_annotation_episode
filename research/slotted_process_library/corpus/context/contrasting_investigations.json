@@ -1,0 +1,75 @@
+{
+  "context_archaeal_shikimate_kinase_2001": {
+    "source": "https://doi.org/10.1128/JB.183.1.292-300.2001",
+    "status": "Detailed post-publication reconstruction. The observations and experiments are the authors’ work; I read and compared their reported records. No genome-neighborhood search, alignment, or experiment was rerun.",
+    "initial_decision_problem": {
+      "job": "Find the gene supplying the missing archaeal shikimate phosphorylation step.",
+      "alternatives": [
+        "a distant member of known shikimate-kinase families",
+        "an unrelated kinase replacing that activity",
+        "an alternative route that avoids the reaction"
+      ],
+      "interpretive_constraint": "A gap in sequence annotation does not by itself prove loss of the pathway. Conversely, missing genes for the first two steps need not have the same explanation as an internal missing kinase."
+    },
+    "chain": [
+      {
+        "selected_comparison_reported": "Inspect which pathway steps flank the missing function in multiple archaeal genomes.",
+        "reported_observation": "Some genomes retain the enzymes before and after shikimate phosphorylation; P. horikoshii lacks the larger pathway.",
+        "reconstructed_change_in_question": "A candidate ought to explain the retained internal connection. I would now ask where an unfamiliar kinase-like family follows that pathway, while using the pathway-lacking genome as a contrast; I would not treat every hypothetical kinase in M. jannaschii as equally relevant."
+      },
+      {
+        "selected_comparison_reported": "Look beyond M. jannaschii to archaeal genomes with useful chromosomal clustering.",
+        "reported_observation": "An unknown GHMP-family candidate is immediately downstream of shikimate dehydrogenase in A. pernix and P. abyssi, whereas M. jannaschii gives no such local cluster.",
+        "reconstructed_change_in_question": "The target genome’s silence is not disconfirming once homologs show a recurrent relationship elsewhere. The actionable uncertainty has shifted to whether this GHMP protein is a shikimate kinase, a homoserine kinase near another pathway by chance, or a kinase serving both substrates."
+      },
+      {
+        "selected_comparison_reported": "Compare the other GHMP paralog, RMJ01903, and its orthologs with threonine-pathway context.",
+        "reported_observation": "RMJ01903 orthologs associate with the threonine pathway in other archaea. Authors then assayed both purified proteins against shikimate, homoserine, galactose, and mevalonate; the two proteins had distinct substrate preferences.",
+        "reconstructed_change_in_question": "The paralog comparison makes separate physiological roles coherent and gives a concrete discriminating experiment. The biochemical result resolves the enzyme annotation; it should not be retrospectively treated as information available at the first candidate-selection step."
+      }
+    ],
+    "annotation_boundary": {
+      "before_experiments": "GHMP-family kinase strongly implicated as the missing shikimate kinase by pathway and cross-genome context.",
+      "after_author_experiments": "RMJ07785 has shikimate kinase activity; RMJ01903 has homoserine kinase activity under the reported assays.",
+      "not_established_by_context_alone": "Substrate specificity, kinetic constants, and lack of detectable cross-activity."
+    },
+    "actual_capabilities_used_last": [
+      "full-primary-text retrieval",
+      "reading complete genome-analysis and assay methods",
+      "comparison of the authors’ stated organism/pathway/paralog contrasts"
+    ]
+  },
+  "context_quef_nitrile_reductase_2005": {
+    "source": "https://doi.org/10.1073/pnas.0408056102",
+    "status": "Detailed post-publication reconstruction from explicit reported choices. Authors performed the assays; no new genomic search or chemistry was done here.",
+    "initial_decision_problem": {
+      "job": "Locate the chemical role of a queuosine-associated FolE homolog.",
+      "initial_candidate": "The first GTP cyclohydrolase-like step",
+      "why_it_was_live": "GTP is a precursor and FolE-like similarity appears compatible with the needed loss of a guanine carbon."
+    },
+    "chain": [
+      {
+        "reported_action_and_return": "Test cyclohydrolase chemistry with controls; no QueF activity appears in several assays.",
+        "reconstructed_choice": "Do not discard the pathway association merely because the exact chemistry failed. Reinspect the branch boundary and organisms in which this component is unnecessary."
+      },
+      {
+        "reported_action_and_return": "Reconsider archaeal absence against the last shared intermediate preQ0; identify two bacterial downstream reductions as alternatives.",
+        "reconstructed_choice": "Compare the information expected from testing preQ0-to-preQ1 versus epoxyqueuosine-to-queuosine. The former directly tests the branch-boundary explanation; the latter carries a separate B12-related expectation."
+      },
+      {
+        "reported_action_and_return": "Use lack of a putative B12-binding motif to prioritize preQ0 reduction; NADPH supports activity and product analysis identifies preQ1.",
+        "reconstructed_choice": "A negative motif result can prioritize a test, but does not independently prove the other reaction. Direct product identification is the point at which the chemical annotation becomes supported."
+      },
+      {
+        "reported_action_and_return": "Inspect tRNA from a deficient Acinetobacter strain; the expected preQ0 nucleoside appears.",
+        "reconstructed_choice": "This tests whether the purified-enzyme interpretation fits the cellular block. It adds a distinct check rather than merely repeating the same biochemical readout."
+      }
+    ],
+    "annotation_boundary": "Context locates a pathway branch and helps choose among candidate reactions. Purified-enzyme/product and cellular-intermediate measurements establish NADPH-dependent nitrile reduction.",
+    "actual_capabilities_used_last": [
+      "full-primary-text retrieval",
+      "reading assay/product methods and complete relevant results",
+      "comparison of published pathway distribution and candidate chemistry"
+    ]
+  }
+}

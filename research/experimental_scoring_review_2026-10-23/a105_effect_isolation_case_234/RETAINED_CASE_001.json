@@ -1,0 +1,59 @@
+{
+  "source_path": "research/slotted_process_library/corpus/specificity/cases.jsonl",
+  "source_sha256": "b547f270e134027b9d9e9299b1397412ad4a8508ea44f8e5bc4c23642c5d746f",
+  "case": {
+    "case_id": "spec_aquifex_hfp_coupling_contamination",
+    "gene_protein_organism": {
+      "gene": "aq_1744 / gpmA label in current deposition",
+      "protein": "histidine-family phosphatase HFP, PP17; UniProt O67630; PDB 9MMH",
+      "organism": "Aquifex aeolicus; produced in E. coli"
+    },
+    "primary_source_urls": [
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC12051542/"
+    ],
+    "DOIs": [
+      "10.1016/j.jbc.2025.108443"
+    ],
+    "starting_question": "Which phosphatase can complete riboflavin synthesis without destroying pathway inputs, and does an apparent extra isomerase activity belong to it?",
+    "actual_observations": [
+      {
+        "observation_id": "hfp.1",
+        "source_ids": [
+          "S13"
+        ],
+        "actor": "published authors",
+        "result": "Two of 22 screened proteins supported a staged ARAPDP-dephosphorylation readout; only HFP supported the full one-pot pathway. IMP depleted NADPH and Ru5P."
+      },
+      {
+        "observation_id": "hfp.2",
+        "source_ids": [
+          "S13"
+        ],
+        "actor": "published authors",
+        "result": "HFP preparations also isomerized Ru5P/R5P. Extensive purification and 90 C heating slowed but did not eliminate this activity."
+      },
+      {
+        "observation_id": "hfp.3",
+        "source_ids": [
+          "S13"
+        ],
+        "actor": "published authors",
+        "result": "Four of five randomly chosen other preparations also isomerized the sugar. MS detected E. coli RpiA, defeating attribution of isomerase activity to HFP."
+      },
+      {
+        "observation_id": "hfp.4",
+        "source_ids": [
+          "S13"
+        ],
+        "actor": "published authors",
+        "result": "HFP also hydrolyzed FMN; substrate instability prevented comparative ARAPDP kinetics."
+      }
+    ],
+    "annotation_consequence": "HFP is an ARAPDP-phosphatase candidate compatible with the reconstituted pathway, not a demonstrated bifunctional ribose-phosphate isomerase. Native essentiality and exclusivity are not established by this paper.",
+    "experiment_dependence": "Published coupled-pathway reconstitution, NMR, orthogonal purification, contaminant MS and structures. No native knockout/flux experiment is reported.",
+    "reasoning_reported_vs_reconstructed": "The false extra-activity explanation is explicitly reported. Bounded native-role wording is my assessment rather than adoption of the title essential.",
+    "verification_scope": "Primary relevant complete results/discussion and reconstitution/NMR/purification methods inspected. Supplement MS identification accepted as reported; its underlying spectra were not reanalyzed. Current PDB polymer records bind HFP to aq_1744/O67630; gpmA is a record label, not independent mutase evidence.",
+    "known_outcome_disclosed": true,
+    "count_as_new_unique_question": true
+  }
+}

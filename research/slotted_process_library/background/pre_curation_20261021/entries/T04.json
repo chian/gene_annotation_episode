@@ -1,0 +1,147 @@
+{
+  "slot": "tools",
+  "id": "T04",
+  "name": "Deposited structure identities, ligands and contact geometry",
+  "description": "Retrieve exact deposited structures and metadata, map native chains/residues/ligands, and calculate declared geometric contacts without treating a static model as activity or physiological proof.",
+  "capability_operations": [
+    {
+      "operation": "Retrieve a selected structure record and coordinates",
+      "inputs": {
+        "entry": "exact PDB accession",
+        "representation": "entry/entity/ligand metadata or specific coordinate file and assembly"
+      },
+      "outputs": {
+        "record": "deposited identities, source numbering, ligand labels and file digest",
+        "coordinates": "selected model/assembly atom coordinates"
+      },
+      "implementation_status": "research_script_only",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    },
+    {
+      "operation": "Extract annotated contacts or compute declared distances",
+      "inputs": {
+        "structure": "identified coordinate or PDBe contact record",
+        "atom_selection": "explicit model, chains, residue numbers, atom groups and symmetry policy",
+        "metric": "specified Euclidean distance/contact cutoff"
+      },
+      "outputs": {
+        "pairs": "atom/residue pairs and distances with coordinate provenance",
+        "coverage": "selected atoms and missing residues; not energetic or binding inference"
+      },
+      "implementation_status": "research_script_only",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    }
+  ],
+  "availability": {
+    "repository_catalog_defined": [
+      "No dedicated PDB/PDBe retrieval or coordinate-distance callable was confirmed in the inspected repository catalog."
+    ],
+    "research_operations_performed": [
+      "causal/cas2/raw/coordinate_comparisons.json and analyze_coordinates.py: actual 5DS4/5DS5 nearest-heavy-atom calculations with Biopython 1.88.",
+      "structure TM0936/MJ0577 traces: actual PDBe binding-site records.",
+      "replacement/raw/7LC5-coordinate-probe.json and causal EnvC traces: current deposited identities/ligands and selected coordinate relationships inspected."
+    ],
+    "capability_specifications_not_confirmed_as_repository_callables": [
+      "General structure retrieval and geometry are capability specifications for runtime integration; retained scripts do not create registered episode callables."
+    ],
+    "author_experiments_are_source_evidence_only": [
+      "Crystallography, cryo-EM, mutagenesis and binding assays belong to the cited authors."
+    ],
+    "binding_limit": "A repository catalog definition is confirmed source-code identity, not proof of caller enablement, service availability, installed dependencies or execution in this research. Research scripts are retained operations, not registered runtime tools."
+  },
+  "limits": [
+    "PDB entry labels can differ from manuscript mappings; preserve actual files and discrepancies.",
+    "Close contact does not prove necessity, affinity, chemistry or physiological encounter.",
+    "A homolog structure is not the target structure; modeled ligand identity is not necessarily an identified metabolite."
+  ],
+  "observed_uses": [
+    {
+      "case_group": "causal_cas2_spacer_acquisition",
+      "use": "Actual donor-DNA and Cas1 interface distances separated Cas2 R16/R78, R18 and E9 geometry while preserving E9 proximity to some DNA.",
+      "execution_scope": "Static related deposited models; no catalytic-null proof, new binding assay or energetic inference.",
+      "use_status": "research_read_only_operation_performed"
+    },
+    {
+      "case_group": "TM0936_Hermann_2007",
+      "use": "Actual PDBe 1P1M/2PLM and 1K70 records exposed metal and ligand-contact sets used for a bounded comparison.",
+      "execution_scope": "Record comparison, not an independently computed sequence alignment or fresh docking.",
+      "use_status": "research_read_only_operation_performed"
+    },
+    {
+      "case_group": "MJ0577_Zarembinski_1998",
+      "use": "Actual1MJH contact records confirmed bound ATP contacts while authors found no appreciable ATPase activity without extract.",
+      "execution_scope": "Contact does not identify the unknown activating component or prove standalone ATPase.",
+      "use_status": "research_read_only_operation_performed"
+    },
+    {
+      "case_group": "causal_envC_activation",
+      "use": "Actual deposited ligand records and source Table 1 checks separated a LytM-like fold from its missing catalytic Zn and retained localized defective variants.",
+      "execution_scope": "The structure contains K; no-Zn must not be misstated as no-metal; no fresh alignment or binding assay.",
+      "use_status": "research_read_only_operation_performed"
+    },
+    {
+      "case_group": "replacement_queH",
+      "use": "The 7LC5 probe localized metal-associated features without converting oQ disappearance into a demonstrated Q product.",
+      "execution_scope": "No productive purified reaction, cofactor assignment or raw-spectrum reanalysis newly established.",
+      "use_status": "research_read_only_operation_performed"
+    },
+    {
+      "case_group": "spec_frsa_disputed_pdc_native_unknown",
+      "use": "A nearly identical fold and uncertain bound density did not resolve disputed decarboxylation or native substrate.",
+      "execution_scope": "Ligand modeled as hexanoate remained uncertain; later surrogate esterase assays did not establish native substrate.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    }
+  ],
+  "evidence": [
+    {
+      "case_group": "causal_cas2_spacer_acquisition",
+      "case_id": "causal_cas2_spacer_acquisition",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4662619/",
+      "source_locator": "Trace key_observations C6-C7; Fig. 2 structural analysis; raw/coordinate_comparisons.json",
+      "observation": "Actual donor-DNA and Cas1 interface distances separated Cas2 R16/R78, R18 and E9 geometry while preserving E9 proximity to some DNA.",
+      "limit": "Static related deposited models; no catalytic-null proof, new binding assay or energetic inference."
+    },
+    {
+      "case_group": "TM0936_Hermann_2007",
+      "case_id": "TM0936_Hermann_2007",
+      "source_url": "https://doi.org/10.1038/nature05981",
+      "source_locator": "Case-record observation; inspected scope: Read relevant primary results and methods; live deposited binding-site API retrievals. Original API URLs lacking entity ID returned 404 and were repaired using current PDBe documentation. No repository changes or scientific-case runs.",
+      "observation": "Actual PDBe 1P1M/2PLM and 1K70 records exposed metal and ligand-contact sets used for a bounded comparison.",
+      "limit": "Record comparison, not an independently computed sequence alignment or fresh docking."
+    },
+    {
+      "case_group": "MJ0577_Zarembinski_1998",
+      "case_id": "MJ0577_Zarembinski_1998",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC28018/",
+      "source_locator": "Case-record observation; inspected scope: Full primary text and live 1MJH contact record checked; published answer known.",
+      "observation": "Actual1MJH contact records confirmed bound ATP contacts while authors found no appreciable ATPase activity without extract.",
+      "limit": "Contact does not identify the unknown activating component or prove standalone ATPase."
+    },
+    {
+      "case_group": "causal_envC_activation",
+      "case_id": "causal_envC_activation",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3923381/",
+      "source_locator": "Case-record observation; inspected scope: 2013 complete relevant Results/Discussion/Methods and Table 1 read via primary BioC; 2010 primary abstract/targeted indexed results only. Actual PDBe molecule/contact/residue checks and Table 1 parsing saved. No new structural alignment or binding assay.",
+      "observation": "Actual deposited ligand records and source Table 1 checks separated a LytM-like fold from its missing catalytic Zn and retained localized defective variants.",
+      "limit": "The structure contains K; no-Zn must not be misstated as no-metal; no fresh alignment or binding assay."
+    },
+    {
+      "case_group": "replacement_queH",
+      "case_id": "replacement_queH",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5495094/",
+      "source_locator": "Case-record observation; inspected scope: Full relevant primary results/methods in both papers; independent read-only 7LC5 coordinate probe recorded separately. No cultures, mass-spectrometric assays or mechanism reconstruction rerun.",
+      "observation": "The 7LC5 probe localized metal-associated features without converting oQ disappearance into a demonstrated Q product.",
+      "limit": "No productive purified reaction, cofactor assignment or raw-spectrum reanalysis newly established."
+    },
+    {
+      "case_group": "spec_frsa_disputed_pdc_native_unknown",
+      "case_id": "spec_frsa_disputed_pdc_native_unknown",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3788570/",
+      "source_locator": "Case-record observation; inspected scope: 2013 main narrative, modeling assumptions and stated assay outcomes inspected; detailed supplementary assay protocols not independently checked. 2019 complete relevant activity/results/discussion and assay conditions inspected. Original 2011 paper not newly verified.",
+      "observation": "A nearly identical fold and uncertain bound density did not resolve disputed decarboxylation or native substrate.",
+      "limit": "Ligand modeled as hexanoate remained uncertain; later surrogate esterase assays did not establish native substrate."
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+.........F............................................                   [100%]
+=================================== FAILURES ===================================
+_ test_selected_resource_branch_preserves_parent_work_and_orders_only_under_launch _
+
+resources = namespace(store=<gene_annotation_episode.state.Store object at 0x7f29bb2012e0>, homology=<gene_annotation_episode.homo...f0>, directory=PosixPath('/tmp/pytest-of-chia/pytest-772/test_selected_resource_branch_0/run'), run_id='setup-fixture')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f29bb201460>
+
+    def test_selected_resource_branch_preserves_parent_work_and_orders_only_under_launch(resources, monkeypatch):
+        workflow, root, scope = configured_workflow(resources, monkeypatch)
+        query = scope['subject_refs'][0]
+        assignment = {'version': LAUNCH_VERSION, 'job_request': {'query_ref': query, 'cpu': 1},
+            'immutable_input_versions': [], 'constraints': {'cpu': 1}, 'resource_selection': None,
+            'software_knowledge_refs': [], 'resource_knowledge_refs': []}
+>       launch = workflow.selected(root.source, child_selection('launch', assignment, scope), 0).child
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_assembled_runtime_ports.py:190: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/runtime.py:2804: in selected
+    contract_binding = {}
+gene_annotation_episode/runtime.py:102: in __init__
+    super().__init__(decision=decision, measurements={"schema": admitted},
+<string>:6: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypedReportContract(decision='Return the original empty fixture form', measurements={'schema': {'type': 'object', 'properties': {}, 'required': [], 'additionalProperties': False}}, information={})
+
+    def __post_init__(self) -> None:
+        _text(self.decision, "parent decision")
+        if not isinstance(self.measurements, Mapping):
+            raise TypeError("report measurements must be explicitly declared")
+        if not isinstance(self.information, Mapping) or not self.information:
+>           raise ValueError("parent must declare the information its child returns")
+E           ValueError: parent must declare the information its child returns
+
+method_loop/communication.py:36: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_assembled_runtime_ports.py::test_selected_resource_branch_preserves_parent_work_and_orders_only_under_launch
+1 failed, 53 passed in 139.68s (0:02:19)

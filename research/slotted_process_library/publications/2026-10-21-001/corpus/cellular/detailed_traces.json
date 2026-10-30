@@ -1,0 +1,148 @@
+[
+  {
+    "case_id": "cellular_yhcB",
+    "aim": "Bound the supported cellular participation of YhcB while checking a plausible but misleading complex-membership assignment.",
+    "starting_annotation": "An orphan inner-membrane protein; 2005 co-migration led to a tentative cytochrome-bd-subunit proposal.",
+    "epistemic_status": "Retrospective investigation of a known published case. We chose competing cellular explanations before selecting retrieval/data probes. Wet-lab experiments below were the authors work. We did not rediscover or experimentally validate the function.",
+    "routes": [
+      {
+        "route": "A: Challenge a particular complex assignment, then localize the remaining cellular defect.",
+        "steps": [
+          {
+            "question": "Does the original association justify stable oxidase-subunit membership?",
+            "actual_selected_probe": "Read indexed primary 2005 membrane-complex report and primary 2006 follow-up record.",
+            "sources": [
+              "https://doi.org/10.1074/jbc.M506479200",
+              "https://pubmed.ncbi.nlm.nih.gov/16863643/"
+            ],
+            "observed_result": "Original co-migration is tentative. The follow-up reports unchanged CydAB assembly, heme properties and ubiquinol-1 kinetics after yhcB deletion, and no YhcB in the purified complex.",
+            "observation_owner": "Authors reported experimental results; my probe checked the record. The follow-up was available only at primary-abstract scope.",
+            "change_in_next_question": "Drop oxidase membership as the supported cellular annotation; ask whether independent division/envelope observations narrow the task."
+          },
+          {
+            "question": "Is division behavior altered independently of the old oxidase hypothesis?",
+            "actual_selected_probe": "Parse original 2021 JBC Table 1 from PMC XML; read Results on FtsZ amount and two-hybrid associations.",
+            "sources": [
+              "https://pmc.ncbi.nlm.nih.gov/articles/PMC8163987/#tbl1"
+            ],
+            "observed_result": "Table: abnormal FtsZ pattern WT 2% versus deletion 12.2%, with 675 and 793 scored cells. Paper reports sufficient FtsZ abundance and interactions with division/elongation proteins.",
+            "observation_owner": "My table extraction of authors counts; protein abundance/interaction claims remain author-reported.",
+            "change_in_next_question": "Division involvement is supported, but an exact bridging mechanism is not established. Ask whether broader envelope stoichiometry could explain the same phenotypes."
+          }
+        ]
+      },
+      {
+        "route": "B: Test a broader envelope-coordination explanation using genetic dependencies and repair.",
+        "steps": [
+          {
+            "question": "Which cellular dependencies distinguish a yhcB mutant from its parent?",
+            "actual_selected_probe": "Download original PLOS S4 spreadsheet; parse gene fitness rows rather than current annotation.",
+            "sources": [
+              "https://journals.plos.org/plosgenetics/article/file?type=supplementary&id=10.1371/journal.pgen.1009586.s004"
+            ],
+            "observed_result": "rodZ logFC -2.08994446885, q 1.37057645108e-14; mrcB -2.74968941142, q 1.51043150922e-66; fabF +1.02904021295, q 1.27767583759e-9.",
+            "observation_owner": "My extraction of authors-computed transposon-fitness statistics; these are fitness effects, not expression changes.",
+            "change_in_next_question": "The mixed dependency pattern points beyond one partner. Ask whether altering envelope pathways can repair the phenotype."
+          },
+          {
+            "question": "Do independent envelope challenges select comparable repair changes?",
+            "actual_selected_probe": "Download/parse S6 suppressor table and read validation Results.",
+            "sources": [
+              "https://journals.plos.org/plosgenetics/article/file?type=supplementary&id=10.1371/journal.pgen.1009586.s006",
+              "https://pmc.ncbi.nlm.nih.gov/articles/PMC8741058/"
+            ],
+            "observed_result": "S6 lists fabF and mlaA knockout-category candidates under both vanc200 and s1e05. Authors reconstruct fabF, mlaD and nlpI deletions and report restored resistance under both challenges.",
+            "observation_owner": "My row comparison; reconstruction/repair assays were performed by authors. Pipeline candidate labels are not proof that every essential-gene insertion is a clean null.",
+            "change_in_next_question": "Repair through multiple envelope pathways is consistent with coordination/imbalance. Do not reduce it to a unique physical coupling mechanism."
+          }
+        ]
+      }
+    ],
+    "bounded_conclusion": "YhcB participates in cell-envelope growth and division; an obligate cytochrome-bd-subunit annotation is not supported. The direct molecular role connecting lipid, PG and division processes remains narrower than the broad physiological participation and was not settled by this investigation.",
+    "not_run": "No mutants, microscopy, interaction assays, lipid analysis, raw-read alignment or independent statistical reanalysis.",
+    "local_evidence_files": [
+      "yhcB_direct_observations.json",
+      "yhcB_s004.xlsx",
+      "yhcB_s006.xlsx",
+      "PMC8163987.xml",
+      "PMC8741058.xml"
+    ],
+    "reconstruction_boundary": "The alternate question sequence and the decision to bound the final annotation are ours; papers supply their reported experimental logic, which is more specific in some places and incomplete in others."
+  },
+  {
+    "case_id": "cellular_y_complex",
+    "aim": "Distinguish a phenotype-defined developmental role from direct pathway/complex participation, preserving conflicting reports and selective substrate effects.",
+    "starting_annotation": "YlbF/YmcA/YaaT form a complex required for developmental phenotypes; competing papers assign direct phosphorelay stimulation or RNase Y-associated RNA processing.",
+    "epistemic_status": "Retrospective source/data inquiry, not blind rediscovery. Protein complex counted once; additional substrate and species checks are linked evidence, not independent case duplicates.",
+    "routes": [
+      {
+        "route": "A: Trace a developmental phenotype through a regulatory circuit and perturbation repair.",
+        "steps": [
+          {
+            "question": "Does the biofilm phenotype require reduced upstream Spo0A/SinI activity?",
+            "actual_selected_probe": "Read 2016 primary Results for SinI reporters, SinR amounts, promoter activity and codon-switch repair; compare the independent contradictory 2016 paper.",
+            "sources": [
+              "https://pmc.ncbi.nlm.nih.gov/articles/PMC4989519/",
+              "https://pmc.ncbi.nlm.nih.gov/articles/PMC4978174/"
+            ],
+            "observed_result": "One study finds little SinI change, elevated SinR, little sinR promoter change and repair by lowering SinR translation. The other reports Spo0A-related bypass/strain effects and rejects sinR stabilization.",
+            "observation_owner": "These are competing author-reported wet-lab results, checked in primary full texts.",
+            "change_in_next_question": "Do not select a direct target from phenotype alone or erase disagreement. Ask whether an orthogonal substrate unrelated to biofilms requires the same complex."
+          },
+          {
+            "question": "Is there RNA-processing involvement beyond one sensitive biofilm circuit?",
+            "actual_selected_probe": "Read cggR-gapA Northern and controlled RNase-Y interaction Results, then inspect genome-wide follow-up.",
+            "sources": [
+              "https://pmc.ncbi.nlm.nih.gov/articles/PMC4989519/",
+              "https://pmc.ncbi.nlm.nih.gov/articles/PMC6004469/"
+            ],
+            "observed_result": "Authors report cggR-gapA processing loss and RNase Y association. 2018 maps many RNA maturation defects and finds dependence is not universal.",
+            "observation_owner": "Authors experimental results and logic; my route selection is reconstruction.",
+            "change_in_next_question": "A broad accessory role is plausible; distinguish processing from alternate transcription initiation and from general RNase-Y activity."
+          }
+        ]
+      },
+      {
+        "route": "B: Inspect deposited transcript-end behavior and a discriminating substrate control.",
+        "steps": [
+          {
+            "question": "Do original processed tracks contain the expected internal RNA-end difference?",
+            "actual_selected_probe": "Download GSE108295 processed WIG archive and fetch exact NC_000964.3 feature table. Preselect known cggR/gapA and glnR/glnA windows; read track values at WT maxima.",
+            "sources": [
+              "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE108295",
+              "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE108nnn/GSE108295/suppl/GSE108295_RAW.tar",
+              "https://www.ncbi.nlm.nih.gov/nuccore/NC_000964.3"
+            ],
+            "observed_result": "Reverse 5-prime signal at 3482769: WT 341.61, delta-ylbF 7.52, delta-ymcA 8.93, delta-rny 2.39. Peak/local median: 217.59, 3.19, 3.67, 0.95. Forward glnRA end at 1878371 is also reduced in all three Y-complex deletions.",
+            "observation_owner": "My descriptive calculation from depositor-normalized tracks; no raw-read processing or new statistical significance claim.",
+            "change_in_next_question": "End signals differ, but they alone do not identify cleavage or demonstrate universal RNase activity. Check RNA-end chemistry evidence and a target that should remain mature."
+          },
+          {
+            "question": "Does this imply loss of all RNase-Y action, or selective dependency?",
+            "actual_selected_probe": "Read authors 5-prime-monophosphate exonuclease experiment; extract reverse 3-prime WIG values at mature rnpB end 2331320.",
+            "sources": [
+              "https://pmc.ncbi.nlm.nih.gov/articles/PMC6004469/",
+              "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE108295"
+            ],
+            "observed_result": "Authors exonuclease treatment supports processed ends rather than internal TSSs. rnpB signal: WT 945.11, delta-ylbF 727.82, delta-ymcA 833.67, delta-yaaT 705.71, delta-rny 108.54.",
+            "observation_owner": "RNA chemistry experiment is authors work; values at the preselected mature coordinate were extracted live.",
+            "change_in_next_question": "Selective retention of the control supports a substrate-specific accessory interpretation, not blanket RNase-Y loss. Keep direct-phosphorelay claims separate from this positive RNA evidence."
+          }
+        ]
+      }
+    ],
+    "bounded_conclusion": "Supports RNase Y-associated participation in selected mRNA maturation. These observations do not imply dependence of every RNase Y substrate, do not resolve all causal paths to developmental phenotypes, and do not independently settle the direct-phosphorelay dispute.",
+    "not_run": "No RNA extraction, protein-binding/localization work, new mutants, raw sequencing alignment, replicate-based statistical analysis or unbiased peak calling.",
+    "local_evidence_files": [
+      "ylbF_rendseq_initial_observations.json",
+      "ylbF_rendseq_control_observations.json",
+      "GSE108295_RAW.tar",
+      "GSE108295_filelist.txt",
+      "NC_000964.3.ft",
+      "PMC4989519.xml",
+      "PMC6004469.html",
+      "PMC4978174.html"
+    ],
+    "reconstruction_boundary": "Question transitions are a reconstruction after reading known results. Some key reasoning is explicit in the papers (alternate TSS challenge, substrate selectivity); omitted historical choices cannot be recovered from papers."
+  }
+]

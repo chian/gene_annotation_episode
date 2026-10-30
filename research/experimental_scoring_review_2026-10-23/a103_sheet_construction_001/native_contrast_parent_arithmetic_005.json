@@ -1,0 +1,63 @@
+{
+  "scope": "retained native records and bounded arithmetic; no fresh service or paper read",
+  "checks": [
+    "one exact BioY/BioN network row",
+    "one selected exact RibK/RibB network row",
+    "BioY/BioN exact unordered identifiers",
+    "RibK/RibB exact unordered identifiers",
+    "BioY/BioN organism taxon",
+    "name queries map to the scored BioY/BioN pair",
+    "D5ARG8 exact gene/locus",
+    "D5ARG8 exact STRING cross-reference",
+    "D5ARG8 taxon and SB1003 strain",
+    "D5ARG9 exact gene/locus",
+    "D5ARG9 exact STRING cross-reference",
+    "D5ARG9 taxon and SB1003 strain",
+    "cbiQ3 is an explicit BioN synonym",
+    "retained version endpoint",
+    "BioY_BioN actual native neighborhood field",
+    "BioY_BioN unit-interval native scale",
+    "BioY_BioN one-question compilation",
+    "RibK_RibB actual native neighborhood field",
+    "RibK_RibB unit-interval native scale",
+    "RibK_RibB one-question compilation",
+    "native descriptive difference",
+    "combined-channel ordering reversal"
+  ],
+  "check_count": 22,
+  "examples": {
+    "BioY_BioN": {
+      "native_neighborhood": "0.844",
+      "excluded_combined": "0.999",
+      "direction": "1",
+      "weight": "1",
+      "t": "0.844",
+      "S": "0.844",
+      "O": "0",
+      "c": "0.844",
+      "comparison_overlap_C": "not_applicable",
+      "matched_count_contrast_E": "not_applicable"
+    },
+    "RibK_RibB": {
+      "native_neighborhood": "0.956",
+      "excluded_combined": "0.959",
+      "direction": "1",
+      "weight": "1",
+      "t": "0.956",
+      "S": "0.956",
+      "O": "0",
+      "c": "0.956",
+      "comparison_overlap_C": "not_applicable",
+      "matched_count_contrast_E": "not_applicable"
+    }
+  },
+  "native_descriptive_difference": "0.112",
+  "excluded_combined_difference": "-0.040",
+  "limits": [
+    "Reference-locus identity does not establish sequence identity of a historical assay construct.",
+    "These separately retrieved database scores are not reported historical paper measurements.",
+    "No calibrated cross-species probability comparison is inferred from the .112 difference.",
+    "Native biological calibration uncertainty is unreported, not zero.",
+    "No new annotation target is assigned either pair's score."
+  ]
+}

@@ -1,0 +1,316 @@
+--- original_as_read/docs/TOOL_KNOWLEDGE.md
++++ preserved_modified/docs/TOOL_KNOWLEDGE.md
+@@ -2,140 +2,123 @@
+ 
+ ## Required design
+ 
+-The library is a collection of problem-solving processes. Its purpose is to
+-help construct an episode's decision problem: the investigation wants to work
+-on something, and retrieval supplies relevant ways to work on it. Selected
+-process information fills a common mother episode template, constructing a
+-child intelligence with a small relevant set of alternatives on each turn.
+-The child iterates, uses outcomes to revise its choices and can invoke further
+-problem-solving processes. The parent need not implement every variant as a
+-separate handwritten episode.
+-
+-Process information describes the recurring decision, relevant context and
+-guidance, and permitted alternatives, including narrower process invocations.
+-Primitive tools and their software/resource instructions support those
+-decisions. A tool catalog with manuals does not by itself define the child's
+-problem-solving process.
+-
+-The parent supplies its job, scope, constraints and requested typed return form.
+-Library information helps fill the child's decision problem within those
+-constraints and actual caller-bound capabilities. The child owns its subsequent
+-choices. Retrieval and template construction do not select a scientific action,
+-resource, retry, timer or cancellation. They introduce no autonomous workflow
+-layer. See [EPISODE_STRUCTURE.md](EPISODE_STRUCTURE.md) for ownership boundaries.
+-
+-Discovery should expose compact process descriptions and invocation information,
+-with relevant details separately retrievable and known processes directly
+-addressable. Filling a child from selected process information must narrow its
+-actual decision context and available alternatives. Leaving every executable
+-tool schema enabled and merely appending a manual reference does not establish
+-that behavior. The filled child must retain the supplied process identity and
+-information through commissioning and worker reconstruction, alongside the
+-original parent assignment and return contract.
+-
+-The earlier whole-process candidate in
+-[IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md), C11-C14, remains interrupted.
+-It is superseded for scientific construction by the three-slot implementation
+-below. Literature episode implementation remains a separate work item; a working
+-scientific library does not establish those processes, and working handwritten
+-literature episodes do not establish library-driven construction.
+-
+-## Scientific construction from three slots
+-
+-The required scientific slots are:
+-
+-1. An annotation-credit focus, selected from source-grounded A options.
+-2. A thought pattern, selected from source-grounded P options.
+-3. A set of actual tools, selected by a retriever from the available tool map for
+-   the parent's desired investigation. This set can contain multiple tools; it
+-   is not one library option or a fixed list attached to a thought pattern.
+-
+-The tool map describes callable operations and their actual input schemas.
+-Supporting manuals can explain those operations. Research proposals, imagined
+-scripts and capability descriptions are not available tools. The retriever
+-fills the tool slot with the selected actual tools; construction must carry that
+-selection into the child's real catalog and execution permissions.
+-
+-These parts fill a common scientific mother with the parent's actual job, scope,
+-evidence, constraints and typed return form. There is no catalogue of complete
+-predefined bioinformatics episodes. All constructed children use the ordinary
+-shared loop and their own controller. Case/source links explain A/P options;
+-they are not evidence about the current target or scientific credit receipts.
+-Worker reconstruction must retain the original selected information and tool
+-contracts rather than retrieve a different set.
+-
+-The existing SL implementation got the tool slot wrong: it selects one of 13
+-research T bundles through `tool_ref` and caller-written operation mappings.
+-Some of those bundles describe operations that are not implemented. Removing
+-that mechanism and wiring a retriever over actual tools is active work; the
+-historical SL/FP checks do not verify this correction. The research corpus also
+-contains 10 A and 19 P options, whose source relationships remain useful.
+-
+-The episode retains its original selected focus, thought pattern and tool set.
+-`process.revise` prepares an alternative approach and an explicit
+-`revision_origin` for an ordinary, separately selected `episode_child`
+-commission. It neither changes the current selection nor launches work.
+-When requested, scientific_process_results
+-returns each episode's existing credit/yield and its recorded origin through
+-the original typed forms. Forwarding preserves separate episodes; it introduces
+-no referral score, score allocation or extra controller observation. These
+-contracts are in [FIXED_PROCESS_BOUNDARIES.md](FIXED_PROCESS_BOUNDARIES.md).
+-
+-The initial SL1–SL5 increment has historical engineering evidence. FP0–FP7
+-tracks the later fixed-process/provenance correction; connected verification is
+-recorded [separately](fixed_process_verification.json). The complete-role
+-[LP migration plan](LIBRARY_PROCESS_MIGRATION.md) was wrong and is withdrawn;
+-its module outputs are not evidence of scientific slot construction. Literature
+-implementation, production composition and configured-model demonstration remain open
+-in the [retained checklist](IMPLEMENTATION_CHECKLIST.md).
+-
+-### Active correction contract and retained checklist
+-
+-The replacement selection is exactly
++The information library helps construct the decision problem of the existing
++scoped bioinformatics scientific episode. The user's requirement is:
++
++> there should be 3 slots from our discussion. 1 related to annotation credit axis, 1 related to thought pattern, and 1 with the tools that the child is scoped to
++
++The parent supplies its job, scope, constraints, evidence/context and requested
++typed return form. The three selected components fill the existing scientific
++mother template. The resulting child episode owns repeated choices, interpretation
++of outcomes and separately commissioned follow-up episodes. No additional episode
++type, catalogue of complete episode designs or generic episode factory is needed.
++
++The slots have distinct inputs:
++
++1. **Annotation credit axis:** information identifying the annotation-credit
++   dimension the investigation approaches. No accepted entries are currently
++   available. Former A01–A10 claim-property headings are background research,
++   removed from the active catalogue; they do not map to scoring axes. A required
++   `annotation_ref` alone does not resolve that empty first-slot collection.
++2. **Thought pattern:** reusable reasoning information that helps the episode
++   decide how to investigate, compare possibilities, interpret outcomes or examine
++   exceptions. It must describe a problem-solving process, not a source-navigation
++   task, ordered tool recipe or complete episode.
++3. **Tools the child is scoped to:** multiple actual callable tools retrieved
++   from the tool map for the parent's desired investigation. This is a retrieved
++   set, not a single T entry or a fixed bundle attached to a thought pattern.
++
++The user instructed: "Review the scoring axes first". The permanent verbatim
++requirements and retained LIB-R1–LIB-R4 review items are in
++[IMPLEMENTATION_CHECKLIST.md](IMPLEMENTATION_CHECKLIST.md#permanent-requirements-and-implementation-handoffs).
++Published cases and the Follow-up Lane table are required inputs to review exact
++scoring representation/arithmetic and derive scientific-support-slot entries.
++Neither former A01–A10 headings nor the current five scoring axes are accepted
++as the final slot design. The review may identify concrete scoring changes; this
++document itself changes no numerical schema, formula or saved history. Source
++links explain a component's basis; they are not target evidence or credit receipts.
++
++Literature episodes are separate from this information library. Their existing
++specialized episode relationships remain in
++[EPISODE_STRUCTURE.md](EPISODE_STRUCTURE.md). This library work does not construct,
++redesign or migrate literature episodes and does not attach monitoring to them.
++A scoped scientific parent retains its fixed-goal branches and can commission a
++separate literature episode when that investigation is needed.
++
++Process/thought information helps narrow the episode's alternatives. Supporting
++tool manuals explain actual operations and invocation contracts. Manuals do not
++replace the process information. Retrieval executes no scientific operation and
++creates no autonomous workflow layer. The child retains its original parent
++assignment, reporting form, caller capabilities and continuation controller.
++
++## Existing scientific construction and actual tool retrieval
++
++The current selection is exactly
+ `{version: scientific_process_selection_v2, annotation_ref, thought_ref, tools}`.
+-`annotation_ref` and `thought_ref` retain their A/P reference records. `tools` is
+-a unique list of zero or more actual callable names, not a reference to a T
+-entry. The complete actual catalog supplies their descriptions, input schemas
+-and existing metadata; a run freezes that map for reconstruction.
+-
+-`process.tools({investigation: string})` is an ordinary selected operation. Its
+-test retriever returns `{investigation, tools, catalog}`, where `tools` contains
+-the selected actual names and `catalog` their actual contracts. The parent can
+-pass `result.tools` directly into the child's selection. Different requests can
+-produce different sets; a thought pattern does not carry a fixed tool bundle.
+-The initial implementation uses literal relevance and does not establish
+-semantic retrieval quality or completeness.
+-
+-Construction checks selected names against the frozen actual map. The real
+-decision catalog and execution enforce the same selected contracts. Restoration
+-uses the saved selection and map; it does not retrieve again or silently convert
+-old T bindings. `process.revise({thought_ref, tools})` prepares a separate child
+-with the same annotation focus and recorded origin. Existing credit projection,
+-per-episode histories and original parent forms retain their meanings.
+-
+-These bounded items remain visible throughout this correction:
++`annotation_ref` and `thought_ref` identify entries in the frozen component
++library. The curated current source has zero first-slot entries and 19
++thought-pattern entries, so it cannot currently supply a valid `annotation_ref`
++for a new complete scientific construction. Saved snapshots retain their original
++contents and meanings. `tools` is a unique list of zero or more actual callable
++names. A run freezes the actual tool map, including descriptions, input schemas
++and existing metadata, for reconstruction.
++
++`process.tools({investigation: string})` is an ordinary selected retrieval
++operation. Its test retriever returns `{investigation, tools, catalog}`, where
++`tools` contains selected actual names and `catalog` contains those tools' actual
++contracts. The parent can pass `result.tools` directly into the child's tool
++slot. The test retriever matches request words against actual tool names and
++descriptions; it proves no semantic relevance or completeness guarantee. Different
++requests can select different tool sets without changing the thought pattern.
++
++The map contains actual callable contracts supplied by the caller. Research
++proposals, imagined scripts and study methods are not available tools merely
++because a research entry mentions them. Construction checks names against the
++frozen map and the real execution catalog. The child's callable schema and
++execution permissions must preserve the same selected set. Restoration uses the
++saved selection and original map; it does not retrieve a different set.
++
++The old `tool_ref`/caller-written T-operation mapping was wrong and is removed
++from the active contract. Historical SL/FP verification describes that earlier
++representation and does not prove the corrected tool slot or semantic validity
++of the annotation-credit-axis slot. The research corpus and its source links
++are retained separately from the runtime's available component entries.
++
++`process.revise({thought_ref, tools})` prepares an alternative approach and
++`revision_origin` for an ordinary, separately selected child commission. It does
++not change the current episode's selection or launch work. When requested,
++`scientific_process_results` forwards each episode's existing credit/yield and
++recorded origin through the original typed forms. This introduces no referral
++score, score allocation or extra controller observation. The bounded historical
++contracts and evidence are in
++[FIXED_PROCESS_BOUNDARIES.md](FIXED_PROCESS_BOUNDARIES.md).
++
++### Retained tool-correction items and their limits
++
++The bounded TR items remain separate from the full
++[implementation checklist](IMPLEMENTATION_CHECKLIST.md). Checked items below
++record the completed bounded tool engineering/source work reported by the
++coordinator; semantic review and cleanup integration remain separate:
+ 
+ - [x] TR0: fix selection, retrieval and reconstruction interfaces before coding;
+-  allocate exclusive owners.
+-- [ ] TR1: implement the actual tool map and test retriever, remove active
++  allocate exclusive implementation owners.
++- [x] TR1: implement the actual tool map and test retriever, remove active
+   `tool_ref`/T-operation mappings, and wire selection through construction,
+-  execution, revision provenance and worker restoration. One agent owns this
+-  entire production path and migration of existing tests.
+-- [ ] TR2: deliver the current A/P/source table and distinguish original study
+-  methods, research proposals and implemented tools. A second agent owns only
+-  the new source table and the research documentation's current-status notices;
+-  the pinned corpus and A/P identities remain intact.
+-- [ ] TR3: independently verify multiple-tool selection and execution, changed
++  execution, revision provenance and worker restoration.
++- [x] TR2: deliver the [A/P/source table](../research/slotted_process_library/CURRENT_SLOT_SOURCES.md) and distinguish original study methods,
++  research proposals and implemented tools. Later curation must identify valid
++  runtime slot entries and expose the unresolved first-slot credit-axis mapping.
++- [x] TR3: independently verify multiple-tool selection and execution, changed
+   selections for changed requests, exclusion, original forms, fixed selection,
+-  revision origin and restoration. A third agent owns only two new test files.
+-- [ ] TR4: review the assembled path, run the appropriate connected checks and
+-  record exact results and limits. The coordinator owns this integration review
+-  and current architecture/status documentation. This does not complete the
+-  full production profile or configured-model scientific demonstration.
+-
+-The three coding/source/check workloads consume the explicit records above and
+-can proceed together. Only assembled execution checks require the actual joined
+-implementation. No dependency on literature implementation is introduced.
++  revision origin and restoration.
++- [ ] TR4: review the assembled path, run appropriate connected checks and record
++  exact results and limits. This does not complete the production profile,
++  annotation-credit-axis relationship or configured-model demonstration.
++
++The wrong complete-episode migration plan and its C11–C14 specification have been
++removed. Their literature, monitoring and resource migrations are withdrawn,
++not unfinished requirements. Independent literature, monitoring and resource
++behavior remains tracked under I, G and H; none is completed by library cleanup.
+ 
+ ## Implemented supporting manual library
+ 
+@@ -146,8 +129,8 @@
+ Scientific, launch, monitoring and results episodes use the same three ordinary
+ retrieval tools. Their generic decision instructions describe retrieval; manuals
+ are not concatenated into those prompts. A selected read arrives through the
+-existing recorded outcome and next-decision context. No retrieval agent or
+-autonomous executor sits outside the shared episode runtime.
++existing recorded outcome and next-decision context. No autonomous retrieval
++episode or executor sits outside the shared episode runtime.
+ 
+ - `knowledge.search(query, offset, limit)` searches the small metadata index.
+   Empty query pages all entries. All whitespace-separated terms must occur in
+@@ -198,27 +181,27 @@
+ Failures identify the selected operation; they do not remove other entries or
+ reject scientific evidence. There is no mandatory manual-reading step.
+ 
+-## Current decision context and remaining construction work
++## Current decision context and remaining verification
+ 
+ The supporting manual library keeps manual bodies out of the initial decision
+-context and does not activate tool schemas. The scientific mother's old T
+-mapping path is being replaced by selection of actual tools as described above.
+-The retrieved tool set must narrow the final callable schemas. Other existing
+-bindings retain their own catalogs. Specialized nested literature episodes were
+-not implemented by the manual-library change; they have a separate implementation
+-and retain their own permitted child relationships.
+-
+-The target is library-assisted construction of bounded decision problems, as
+-specified above. Categories can assist discovery without becoming compulsory
+-episode levels. An ordinary capability/manual lookup remains a tool call; its
+-information can help construct a child, rather than being confined to manuals
+-consulted after a fixed handwritten child has already been defined.
+-Literature can motivate bioinformatics work and bioinformatics can motivate
+-literature work. The episode integrating the relevant returned findings chooses
+-the next uncertainty; neither is installed as a mandatory stage above the other.
+-
+-The current integration tests use scripted providers and synthetic controllers.
+-They verify page delivery, all-role access, unchanged credit for instruction
+-reads, constrained parent forms and interrupted recovery against original
+-instructions. They do not establish configured-model use or scientific benefit.
+-The already running investigation_009 retains its pinned code and settings.
++context and does not activate tool schemas. Scientific three-slot construction
++uses the existing scoped scientific binding and actual tool selection described
++above. Literature, monitoring, launch and results retain their separate existing
++bindings and permitted relationships. Their libraries of manuals do not make
++them members of the bioinformatics component library.
++
++The first-slot relationship to annotation credit axes, the curated thought
++patterns, final production caller profile and configured-model scientific benefit
++still require appropriate evidence. Categories can aid discovery without adding
++mandatory episode levels. Ordinary retrieval is a tool call; the scoped episode
++uses the supplied information in its own decision process.
++
++Scientific parents can commission separate literature and bioinformatics
++investigations and integrate their typed returns. Neither task is a slot value
++for the other, and there is no mandatory ordering between the investigations.
++
++Historical manual-library tests used scripted providers and synthetic
++controllers. They verified selected page delivery, all-role instruction access,
++unchanged credit for instruction reads, constrained parent forms and recovery
++against original instructions. They did not establish configured-model use or
++scientific benefit. Investigation_009 retains its pinned code and settings.

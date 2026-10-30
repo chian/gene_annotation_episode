@@ -1,0 +1,69 @@
+{
+  "origin": "derived_from_reported_typical_values_and_reported_limits",
+  "not_raw_replicates": true,
+  "arithmetic_only_not_scientific_validation": true,
+  "constants": {
+    "elementary_charge_C": "801088317/5000000000000000000000000000",
+    "definition": "exact SI elementary charge, not an experimental measurement"
+  },
+  "values": {
+    "driving_potential_mV": {
+      "exact": "-253",
+      "float": -253.0
+    },
+    "nominal_conductance_pS": {
+      "exact": "1800/253",
+      "float": 7.1146245059288535
+    },
+    "monovalent_charge_equivalent_rate_per_s": {
+      "exact": "1000000000000000/89009813",
+      "float": 11234716.334029373
+    },
+    "naive_zero_reversal_conductance_pS": {
+      "exact": "9",
+      "float": 9.0
+    },
+    "naive_to_driving_corrected_ratio": {
+      "exact": "253/200",
+      "float": 1.265
+    },
+    "open_main_state_contribution_threshold_per_s": {
+      "exact": "50000000000000/4684727",
+      "float": 10672980.517327905
+    },
+    "matched_liposome_limit_quotient": {
+      "exact": "1000",
+      "float": 1000.0
+    },
+    "nominal_concentration_gradient": {
+      "exact": "10",
+      "float": 10.0
+    },
+    "concentration_vs_reported_activity_ratio": {
+      "exact": "5/4",
+      "float": 1.25
+    }
+  },
+  "limitations": {
+    "nominal_conductance_pS": "Uses the reported dominant step amplitude and nominal common-condition reversal central/summary value from different bilayers, not a per-event paired conductance or a new independent observation. Source also reports roughly7pS.",
+    "monovalent_charge_equivalent_rate_per_s": "Current/e gives charge-equivalent count. F-specific ion assignment is conditional on the selectivity interpretation; no numerical F-current fraction is measured here.",
+    "open_main_state_contribution_threshold_per_s": "Reported >95% main-open occupancy gives a > threshold for the full-open-state contribution only under common-condition/current-level assumptions; not measured total time-average flux or confidence.",
+    "matched_liposome_limit_quotient": "Native reported-limit arithmetic on >30000 and <30 gives >1000 only conditionally on the authors unit/limit interpretation; Results additionally qualifies the F lower estimate approximately. It does not independently reproduce the authors stronger combined >1e4 claim.",
+    "concentration_vs_reported_activity_ratio": "A nominal concentration ratio is not an activity ratio; no Nernst or GHK recalculation without needed temperature/activity assumptions."
+  },
+  "checks": {
+    "independent_Fraction_Decimal_checks": 6,
+    "all_passed": true
+  },
+  "numeric_uncertainty_cells": {
+    "conductance_variance": null,
+    "conductance_SE": null,
+    "F_specific_flux": null,
+    "whole_assay_error_rate": null,
+    "independent_protein_preparation_count_for_fig3": null,
+    "permeability_ratio_recomputed_from_GHK": null
+  },
+  "no_model_or_episode_execution": true,
+  "version": "research_arithmetic_review_002",
+  "correction_to_001": "The reversal central value was called a mean in one limitation string. Caption does not define its averaging estimator or error type; use reported central/summary value. Numerical arithmetic unchanged."
+}

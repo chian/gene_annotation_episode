@@ -1,0 +1,160 @@
+{
+  "slot": "tools",
+  "id": "T11",
+  "name": "Time, population and ecological-outcome tables",
+  "description": "Extract outcome trajectories and condition-stratified growth, survival, reporter or competition measurements; calculate declared comparisons at the resolution actually observed.",
+  "capability_operations": [
+    {
+      "operation": "Build a time/condition/outcome table",
+      "inputs": {
+        "observations": "identified source trajectories, distributions or summary measurements",
+        "dimensions": "strain, medium, host/community state, time, population resolution and endpoint",
+        "provenance": "sample/replicate IDs, units and proxy definition"
+      },
+      "outputs": {
+        "table": "separate lag, growth, survival, uptake, signal and competitive outcomes",
+        "coverage": "time windows and cell/population resolution actually observed"
+      },
+      "implementation_status": "research_script_only",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    },
+    {
+      "operation": "Calculate a specified temporal or condition contrast",
+      "inputs": {
+        "table": "selected source rows or actual point data",
+        "contrast": "explicit time window, ratio/difference or group selection",
+        "uncertainty": "reported variation or unknown status"
+      },
+      "outputs": {
+        "summary": "descriptive conditional comparison",
+        "limits": "unobserved intervals, pooling and non-equivalent endpoints"
+      },
+      "implementation_status": "research_script_only",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    },
+    {
+      "operation": "Reanalyze actual single-cell trajectories or flow events",
+      "inputs": {
+        "data": "actual events/images/lineages plus gates or tracking model",
+        "analysis": "explicit gating, trajectory and calibration settings"
+      },
+      "outputs": {
+        "distribution": "pipeline-defined per-cell/trajectory summaries with errors"
+      },
+      "implementation_status": "capability_specification",
+      "confirmed_repository_callables": [],
+      "invocation_note": "Normalized capability contract; the confirmed callable list identifies existing related primitives only, not interchangeable signatures."
+    }
+  ],
+  "availability": {
+    "repository_catalog_defined": [
+      "Source access/readers are defined. No dedicated flow-cytometry, lineage, animal-study, ecological-competition or time-series analysis callable confirmed."
+    ],
+    "research_operations_performed": [
+      "replacement/raw/route_bookkeeping_probe.json includes source ThyX/ThyA growth ratios; no curve fitting.",
+      "YeaG source inquiry compared recovery and delayed CFU outcomes; no FCS/lineage reanalysis."
+    ],
+    "capability_specifications_not_confirmed_as_repository_callables": [
+      "New growth-curve digitization/fitting, flow-event analysis, animal-data reanalysis and population lineage inference are unexecuted capabilities needing actual data and implementations."
+    ],
+    "author_experiments_are_source_evidence_only": [
+      "Timed culture, CFU, microscopy, flow cytometry, host perturbation and microbial-community experiments are author experiments."
+    ],
+    "binding_limit": "A repository catalog definition is confirmed source-code identity, not proof of caller enablement, service availability, installed dependencies or execution in this research. Research scripts are retained operations, not registered runtime tools."
+  },
+  "limits": [
+    "Faster immediate regrowth need not mean greater long-term survival.",
+    "A reporter proxy is not direct metabolic flux; population heterogeneity is not tracked lineage fate.",
+    "No phenotype at one medium/time/host condition is not universal dispensability; competition and single-strain growth differ."
+  ],
+  "observed_uses": [
+    {
+      "case_group": "yeag",
+      "use": "Early induction, shorter 24-hour recovery lag and later 72-hour-and-beyond CFU loss expose distinct outcomes rather than one beneficial/defective label.",
+      "execution_scope": "Published data inspected; no new flow events, single-cell fates or survival experiments.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "organism_20_isia",
+      "use": "The mutant initially grew quickly but later bleached under severe iron deficiency/high light, with different outcomes under low light or iron repletion.",
+      "execution_scope": "Author time/condition comparisons, not new fluorescence-lifetime or growth analysis.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "organism_18_dsdapm",
+      "use": "A six-hour urine nonphenotype coexisted with a 96-hour catheter-associated-host fitness deficit.",
+      "execution_scope": "Different endpoint/context retained; no new animal or ex-vivo analysis.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "organism_07_xyg",
+      "use": "Dietary competition benefit disappeared when alternative polysaccharides were available.",
+      "execution_scope": "Author tested diets; no universal claim about ordinary human diets.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "organism_01_ttr",
+      "use": "Tetrathionate respiration benefited intestinal competition under inflammation with source and host-oxidase controls.",
+      "execution_scope": "Host mechanism is author work; actual live record query established locus identity only.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    },
+    {
+      "case_group": "replacement_lysU",
+      "use": "1990 temperature-conditioned defect and later lack of a tested growth difference must retain strain/assay differences.",
+      "execution_scope": "1990 primary abstract only; conflicting conditions not experimentally reconciled.",
+      "use_status": "published_author_result_inspected_no_fresh_operation"
+    }
+  ],
+  "evidence": [
+    {
+      "case_group": "yeag",
+      "case_id": "cellular_yeaG",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4664914/",
+      "source_locator": "2015 relevant induction/recovery/survival Results; trace extension organism/yeag/trace.json",
+      "observation": "Early induction, shorter 24-hour recovery lag and later 72-hour-and-beyond CFU loss expose distinct outcomes rather than one beneficial/defective label.",
+      "limit": "Published data inspected; no new flow events, single-cell fates or survival experiments."
+    },
+    {
+      "case_group": "organism_20_isia",
+      "case_id": "organism_20_isia",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8545134/",
+      "source_locator": "Case-record observation; inspected scope: Complete relevant mutant/spectroscopy/growth Results and growth conditions. No new fluorescence-lifetime analysis.",
+      "observation": "The mutant initially grew quickly but later bleached under severe iron deficiency/high light, with different outcomes under low light or iron repletion.",
+      "limit": "Author time/condition comparisons, not new fluorescence-lifetime or growth analysis."
+    },
+    {
+      "case_group": "organism_18_dsdapm",
+      "case_id": "organism_18_dsdapm",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6393727/",
+      "source_locator": "Case-record observation; inspected scope: Relevant growth/urine/motility/CAUTI Results and protocols; no inference that ex-vivo nonphenotype disproves an in-host role.",
+      "observation": "A six-hour urine nonphenotype coexisted with a 96-hour catheter-associated-host fitness deficit.",
+      "limit": "Different endpoint/context retained; no new animal or ex-vivo analysis."
+    },
+    {
+      "case_group": "organism_07_xyg",
+      "case_id": "organism_07_xyg",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4282169/",
+      "source_locator": "Case-record observation; inspected scope: Main Results and growth/reverse-genetics Methods, Extended Data captions/tables including dietary competition. No inference that ordinary human diets necessarily select the locus.",
+      "observation": "Dietary competition benefit disappeared when alternative polysaccharides were available.",
+      "limit": "Author tested diets; no universal claim about ordinary human diets."
+    },
+    {
+      "case_group": "organism_01_ttr",
+      "case_id": "organism_01_ttr",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2946174/",
+      "source_locator": "Case-record observation; inspected scope: 1999 Results and experimental descriptions; 2010 main Results/Methods Summary and figure captions; live AJ224978.1 metadata verified LT2 ttr locus, 12,121 bp. No raw LC-MS or animal reanalysis.",
+      "observation": "Tetrathionate respiration benefited intestinal competition under inflammation with source and host-oxidase controls.",
+      "limit": "Host mechanism is author work; actual live record query established locus identity only."
+    },
+    {
+      "case_group": "replacement_lysU",
+      "case_id": "replacement_lysU",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC209130/",
+      "source_locator": "Case-record observation; inspected scope: 1990 abstract plus complete relevant 2017 primary Results subsection read; conflicting conditions were not experimentally reconciled.",
+      "observation": "1990 temperature-conditioned defect and later lack of a tested growth difference must retain strain/assay differences.",
+      "limit": "1990 primary abstract only; conflicting conditions not experimentally reconciled."
+    }
+  ]
+}

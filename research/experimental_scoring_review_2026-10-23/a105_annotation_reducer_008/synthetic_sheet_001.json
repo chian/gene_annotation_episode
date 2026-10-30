@@ -1,0 +1,96 @@
+{
+  "schema_version": "research_a105_candidate_reducer_001_unadopted",
+  "axis_id": "A105",
+  "input_kind": "synthetic_upstream_statement_outputs",
+  "candidate": {
+    "id": "synthetic_candidate_01",
+    "semantic_revision": "assertion_01",
+    "subject_material_ref": "synthetic_supplied_sequence_01",
+    "scope_ref": "synthetic_conditions_C1_C2",
+    "annotation_record_ref": null,
+    "member_statement_ids": ["s_c1", "s_c2", "s_pref", "s_bind"],
+    "related_statement_ids": ["s_bind"],
+    "alternative_candidate_ids": []
+  },
+  "formula": {
+    "expression": {"all_of": ["s_c1", "s_c2", "s_pref"]},
+    "semantic_basis_refs": ["synthetic_assertion_definition_01"],
+    "canonical_sufficient_routes": [["s_c1", "s_c2", "s_pref"]]
+  },
+  "aliases": [{"alias_id": "s_c1_alias", "canonical_id": "s_c1", "equivalence_basis_ref": "synthetic_exact_equivalence_01"}],
+  "statement_definitions": {
+    "s_c1": {"endpoint": "conversion", "substrate": "A", "product": "P", "condition_ref": "C1", "comparison": "attributable activity above zero", "boundary": 0, "boundary_unit": "per_minute"},
+    "s_c2": {"endpoint": "conversion", "substrate": "A", "product": "P", "condition_ref": "C2", "comparison": "attributable activity above zero", "boundary": 0, "boundary_unit": "per_minute"},
+    "s_pref": {"endpoint": "conversion", "substrates": ["A", "B"], "condition_ref": "C1", "comparison": "attributable A turnover minus attributable B turnover above zero", "boundary": 0, "boundary_unit": "per_minute"},
+    "s_bind": {"endpoint": "binding", "ligand": "A", "condition_ref": "C1", "comparison": "specific binding above the declared reference", "boundary": 0, "boundary_unit": "bound_fraction_difference"}
+  },
+  "statement_inputs": [
+    {
+      "statement_id": "s_c1", "statement_definition_ref": "statement_definitions.s_c1",
+      "upstream_row_ref": "synthetic_statement_row_c1_r01", "upstream_calculation_ref": "synthetic_conventional_index_fixture_01",
+      "index_kind": "conventional_target_index", "signed_target_index": 0.84, "point_basis": "complete", "identification_bounds": [0.84, 0.84],
+      "original_measurement_refs": ["m_c1_A", "m_c1_blank", "m_c1_cal"], "assessment_refs": ["synthetic_assessment_c1"],
+      "shared_nuisance_refs": ["c1_blank", "c1_calibration"], "sampling_uncertainty_ref": "synthetic_upstream_model_c1",
+      "condition_refs": ["C1"], "missing_operands": []
+    },
+    {
+      "statement_id": "s_c2", "statement_definition_ref": "statement_definitions.s_c2",
+      "upstream_row_ref": "synthetic_statement_row_c2_r01", "upstream_calculation_ref": "synthetic_conventional_index_fixture_02",
+      "index_kind": "conventional_target_index", "signed_target_index": 0.42, "point_basis": "complete", "identification_bounds": [0.42, 0.42],
+      "original_measurement_refs": ["m_c2_A", "m_c2_blank", "m_c2_cal"], "assessment_refs": ["synthetic_assessment_c2"],
+      "shared_nuisance_refs": [], "sampling_uncertainty_ref": "synthetic_upstream_model_c2",
+      "condition_refs": ["C2"], "missing_operands": []
+    },
+    {
+      "statement_id": "s_pref", "statement_definition_ref": "statement_definitions.s_pref",
+      "upstream_row_ref": "synthetic_statement_row_pref_r01", "upstream_calculation_ref": "synthetic_conventional_index_fixture_03",
+      "index_kind": "conventional_target_index", "signed_target_index": 0.72, "point_basis": "complete", "identification_bounds": [0.72, 0.72],
+      "original_measurement_refs": ["m_c1_A", "m_c1_B", "m_c1_blank", "m_c1_cal"], "assessment_refs": ["synthetic_assessment_preference"],
+      "shared_nuisance_refs": ["c1_blank", "c1_calibration"], "sampling_uncertainty_ref": "synthetic_upstream_model_preference",
+      "condition_refs": ["C1"], "missing_operands": []
+    },
+    {
+      "statement_id": "s_bind", "statement_definition_ref": "statement_definitions.s_bind",
+      "upstream_row_ref": "synthetic_statement_row_binding_r01", "upstream_calculation_ref": "synthetic_conventional_index_fixture_04",
+      "index_kind": "conventional_target_index", "signed_target_index": 0.9604, "point_basis": "complete", "identification_bounds": [0.9604, 0.9604],
+      "original_measurement_refs": ["m_binding_curve"], "assessment_refs": ["synthetic_assessment_binding"],
+      "shared_nuisance_refs": [], "sampling_uncertainty_ref": "synthetic_upstream_model_binding",
+      "condition_refs": ["C1"], "missing_operands": []
+    }
+  ],
+  "input_snapshot_ref": "synthetic_evidence_snapshot_01",
+  "reducer": {"route": "declared_minmax_convention", "definition_ref": "ANNOTATION_REDUCER_PROPOSAL_001.md", "coordinate_mapping": "positive_part"},
+  "joint_model": null,
+  "result": {
+    "signed_axis_index": 0.42, "profile_log_ratio": null,
+    "coordinate_value": 0.42, "coordinate_bounds": [0.42, 0.42],
+    "bounds_kind": "exact_image_of_point_inputs", "status": "complete_conventional_point", "conditional_result": null, "missing_operands": [],
+    "coverage": {"essential_canonical_statement_count": 3, "complete_point_statement_count": 3, "conditional_statement_count": 0, "unavailable_statement_ids": [], "complete_fraction": 1.0},
+    "provenance": {
+      "used_statement_rows": ["synthetic_statement_row_c1_r01", "synthetic_statement_row_c2_r01", "synthetic_statement_row_pref_r01"],
+      "original_measurement_union": ["m_c1_A", "m_c1_B", "m_c1_blank", "m_c1_cal", "m_c2_A", "m_c2_blank", "m_c2_cal"],
+      "shared_observation_map": {"m_c1_A": ["s_c1", "s_pref"], "m_c1_blank": ["s_c1", "s_pref"], "m_c1_cal": ["s_c1", "s_pref"]},
+      "independent_replication_count": null
+    }
+  },
+  "joint_example_separate_from_candidate_above": {
+    "input_kind": "fully_defined_synthetic_known_normal_model",
+    "formula": {"any_of": ["ratio_AB_positive", "ratio_AC_positive"]},
+    "model_family": "multivariate_normal_known_covariance",
+    "parameter_order": ["theta_AB", "theta_AC"],
+    "observed_contrasts": [2.0, 3.0],
+    "known_covariance": [[2.0, 1.0], [1.0, 2.0]],
+    "contrast_unit": "natural_log_rate_ratio",
+    "statement_constraints": [
+      {"statement_id": "ratio_AB_positive", "coefficients": [1.0, 0.0], "boundary": 0.0, "unit": "natural_log_rate_ratio", "relation": "greater_than"},
+      {"statement_id": "ratio_AC_positive", "coefficients": [0.0, 1.0], "boundary": 0.0, "unit": "natural_log_rate_ratio", "relation": "greater_than"}
+    ],
+    "parameter_domain": {"kind": "unrestricted_real", "dimension": 2},
+    "native_observation_refs": ["log_rate_A", "log_rate_B", "log_rate_C"],
+    "native_observed_values": [3.0, 1.0, 0.0],
+    "native_value_definition": "natural log of rate divided by the same declared reference rate",
+    "native_covariance": [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]],
+    "linear_transform": [[1.0, -1.0, 0.0], [1.0, 0.0, -1.0]],
+    "result": {"q_plus": 0.0, "q_minus": 4.666666666666667, "profile_log_ratio": 2.3333333333333335, "signed_axis_index": 0.8232006455858831, "coordinate_value": 0.8232006455858831}
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "status": "research_proposal_not_adopted_or_calibrated",
+  "all_measurements_and_coefficients_are_synthetic": true,
+  "inputs": {
+    "b_f": 81.64814746351466,
+    "b_g": 79.72214958392789,
+    "h_f": 60.0,
+    "h_g": 64.0,
+    "query_span": 0.7866666666666666,
+    "reference_span": 0.9076923076923077,
+    "profile_span": 0.9,
+    "identity": 0.75,
+    "site_fraction": 0.6
+  },
+  "complete_example": {
+    "blast_index": 2.1182436017713373,
+    "hmmer_index": 1.0,
+    "pooled_algorithm_index": 1.5591218008856687,
+    "fraction_sum": 3.944358974358974,
+    "z": 0.5313012880651558,
+    "bounded_component": 0.6297865655757878
+  },
+  "unknown_fifth_site": {
+    "site_fraction_bounds": [
+      0.6,
+      0.8
+    ],
+    "point": null,
+    "bounded_component_bounds": [
+      0.6297865655757878,
+      0.6527844667305233
+    ]
+  },
+  "partial_derivatives_of_z": {
+    "b_f": 0.0325,
+    "h_f": 0.035,
+    "b_g": -0.02,
+    "h_g": -0.025
+  },
+  "prior_polynomial_defect": {
+    "partial_b_at_h400": -0.015,
+    "partial_h_at_b400": -0.01
+  },
+  "checked": [
+    "filled arithmetic",
+    "native score-unit conversion",
+    "missing-site bounds",
+    "positive own-score and negative alternative-score partial derivatives on 36 paired score settings"
+  ],
+  "whole_axis_aggregation": null,
+  "production_or_scientific_jobs_executed": false
+}

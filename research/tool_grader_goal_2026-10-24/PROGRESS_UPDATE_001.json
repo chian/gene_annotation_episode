@@ -1,0 +1,892 @@
+{
+  "id": "PROGRESS-001-B001-VERIFICATION",
+  "evidence_added": [
+    {
+      "id": "ROOT-B001-MODULE-178",
+      "kind": "parent_reported_targeted_module_suite",
+      "provenance": "Parent agent reported 178 passed in 0.50s on 2026-10-24; accounting did not rerun tests.",
+      "test_files": [
+        "tests/test_sequence_composition_grader.py",
+        "tests/test_biopython_pairwise_grader.py",
+        "tests/test_prodigal_grader.py"
+      ],
+      "passed": 178,
+      "failed": 0,
+      "seconds": 0.5,
+      "limits": [
+        "Targeted pure module suite; no independent production-path conclusion."
+      ]
+    },
+    {
+      "id": "B001-INTEGRATION-029",
+      "kind": "retained_integration_test_report",
+      "report": {
+        "path": "verification/tool_graders_batch_001/integration/VERIFICATION.md",
+        "sha256": "73cb231f863148e0e93f3b057772841d42924d30485ddc13bde5efbda7216181"
+      },
+      "junit": {
+        "path": "verification/tool_graders_batch_001/integration/pytest-results.xml",
+        "sha256": "47d9782bacd14d2f0013662e53dc63439ae30f6a446745733230f8507d8b2a56",
+        "tests": 29,
+        "errors": 0,
+        "failures": 0,
+        "seconds": 116.547
+      },
+      "filled_example_count": 9,
+      "example_summary": {
+        "path": "verification/tool_graders_batch_001/integration/example_summary.json",
+        "sha256": "74ec5b795b80a8a8ed4d017e18df8b005e8fa5f91d82e2200d8aa86a09136dca"
+      },
+      "tests_rerun_by_accounting": false,
+      "verified_by_accounting": "XML counts, report contents and exact retained file hashes inspected; no scientific execution.",
+      "coverage": {
+        "publication": "23 cases: all six pairwise molecule/mode combinations; local no alignment/gap/flanks; meta prediction; sequence/read quality; custody and injected grading failures.",
+        "workflow": "6 cases: five local operation names plus offline API BLAST; shared method_loop, child-selected action, typed committed_record_refs parent return.",
+        "full_child_pairwise_modes": [
+          "dna/global"
+        ],
+        "full_child_prodigal_modes": [
+          "meta"
+        ],
+        "composition": "Sequence inspection and original read members; full 16000-base quality, unknown molecule/missing quality remain qualified.",
+        "blast": "Offline blastp JSON2 provider fixture, complete grading retention and existing typed HSP return; not a live BLAST execution or comprehensive component validation."
+      },
+      "limits": [
+        "Workflow decisions/continuation estimates are scripted fixtures.",
+        "Scientific credit projector is zero; tests verify accounting event counts, not W05 scoring.",
+        "No detached host recovery, configured-model investigation, HPC deployment or live API availability.",
+        "Single-mode Pyrodigal and protein/RNA/local pairwise full child-return variants are not exercised.",
+        "The BLAST fixture native identity count and alignment-string literal matches differ; it tests custody and native HSP projection, not biological or full numerical consistency."
+      ]
+    },
+    {
+      "id": "ROOT-COMPATIBILITY-012",
+      "kind": "parent_reported_compatibility_result",
+      "provenance": "Parent agent report on 2026-10-24; not independently rerun by accounting.",
+      "test_files": [
+        "tests/test_child_tool_information.py",
+        "tests/test_tool_knowledge.py"
+      ],
+      "passed": 10,
+      "failed": 2,
+      "failure_qualification": "Parent reports both failing knowledge tests expect tools at root or count a root lookup as an action. The existing root tool restriction predates this change and remains. Do not describe the broader suite as green.",
+      "root_cause_independently_revalidated_by_accounting": false
+    }
+  ],
+  "status_changes": [
+    {
+      "group": "rows",
+      "id": "A-L059-sequence",
+      "before": {
+        "id": "A-L059-sequence",
+        "overall": "not_assessed",
+        "source_presence": "source_present_component_only",
+        "tool_information": "not_assessed",
+        "invocation_contract": "not_assessed",
+        "numerical_sheet": "not_assessed",
+        "native_parser": "not_assessed",
+        "metadata_extractor": "not_assessed",
+        "deterministic_calculator": "not_assessed",
+        "production_result_binding": "not_assessed",
+        "numerical_verification": "reported_module_evidence_only",
+        "integration_verification": "not_assessed",
+        "live_resource_verification": "not_assessed",
+        "scientific_score_applicability": "per_native_scientific_contract",
+        "evidence_ids": [
+          "B001-COMP"
+        ],
+        "note": "No scope-wide completion inferred from historical inventory or standalone components."
+      },
+      "after": {
+        "id": "A-L059-sequence",
+        "overall": "partially_verified",
+        "source_presence": "source_present_component_only",
+        "tool_information": "reported_parent_and_child_information_verified",
+        "invocation_contract": "reported_actual_local_invocation_tested",
+        "numerical_sheet": "reported_module_tests_passed",
+        "native_parser": "reported_native_output_extraction_tested",
+        "metadata_extractor": "reported_supplied_metadata_extraction_tested",
+        "deterministic_calculator": "reported_module_and_saved_sheet_recalculation_passed",
+        "production_result_binding": "reported_real_tool_registry_publication_tested",
+        "numerical_verification": "reported_module_and_targeted_publication_cases_passed",
+        "integration_verification": "reported_full_shared_loop_child_return_for_stated_fixture",
+        "live_resource_verification": "reported_actual_bounded_local_execution_on_supplied_fixtures",
+        "scientific_score_applicability": "per_native_scientific_contract",
+        "evidence_ids": [
+          "B001-COMP",
+          "ROOT-B001-MODULE-178",
+          "B001-INTEGRATION-029",
+          "ROOT-COMPATIBILITY-012"
+        ],
+        "note": "Full shared-loop typed child return exercised on stated fixture; no detached recovery, live API, HPC or W05 completion implied."
+      }
+    },
+    {
+      "group": "rows",
+      "id": "A-L059-reads",
+      "before": {
+        "id": "A-L059-reads",
+        "overall": "not_assessed",
+        "source_presence": "source_present_component_only",
+        "tool_information": "not_assessed",
+        "invocation_contract": "not_assessed",
+        "numerical_sheet": "not_assessed",
+        "native_parser": "not_assessed",
+        "metadata_extractor": "not_assessed",
+        "deterministic_calculator": "not_assessed",
+        "production_result_binding": "not_assessed",
+        "numerical_verification": "reported_module_evidence_only",
+        "integration_verification": "not_assessed",
+        "live_resource_verification": "not_assessed",
+        "scientific_score_applicability": "per_native_scientific_contract",
+        "evidence_ids": [
+          "B001-COMP"
+        ],
+        "note": "No scope-wide completion inferred from historical inventory or standalone components."
+      },
+      "after": {
+        "id": "A-L059-reads",
+        "overall": "partially_verified",
+        "source_presence": "source_present_component_only",
+        "tool_information": "reported_parent_and_child_information_verified",
+        "invocation_contract": "reported_actual_local_invocation_tested",
+        "numerical_sheet": "reported_module_tests_passed",
+        "native_parser": "reported_native_output_extraction_tested",
+        "metadata_extractor": "reported_supplied_metadata_extraction_tested",
+        "deterministic_calculator": "reported_module_and_saved_sheet_recalculation_passed",
+        "production_result_binding": "reported_real_tool_registry_publication_tested",
+        "numerical_verification": "reported_module_and_targeted_publication_cases_passed",
+        "integration_verification": "reported_full_shared_loop_child_return_for_stated_fixture",
+        "live_resource_verification": "reported_actual_bounded_local_execution_on_supplied_fixtures",
+        "scientific_score_applicability": "per_native_scientific_contract",
+        "evidence_ids": [
+          "B001-COMP",
+          "ROOT-B001-MODULE-178",
+          "B001-INTEGRATION-029",
+          "ROOT-COMPATIBILITY-012"
+        ],
+        "note": "Full shared-loop typed child return exercised on stated fixture; no detached recovery, live API, HPC or W05 completion implied."
+      }
+    },
+    {
+      "group": "rows",
+      "id": "A-L061-protein-local",
+      "before": {
+        "id": "A-L061-protein-local",
+        "overall": "not_assessed",
+        "source_presence": "source_present_component_only",
+        "tool_information": "not_assessed",
+        "invocation_contract": "not_assessed",
+        "numerical_sheet": "not_assessed",
+        "native_parser": "not_assessed",
+        "metadata_extractor": "not_assessed",
+        "deterministic_calculator": "not_assessed",
+        "production_result_binding": "not_assessed",
+        "numerical_verification": "reported_module_evidence_only",
+        "integration_verification": "not_assessed",
+        "live_resource_verification": "not_assessed",
+        "scientific_score_applicability": "per_native_scientific_contract",
+        "evidence_ids": [
+          "B001-PAIR"
+        ],
+        "note": "No scope-wide completion inferred from historical inventory or standalone components."
+      },
+      "after": {
+        "id": "A-L061-protein-local",
+        "overall": "partially_verified",
+        "source_presence": "source_present_component_only",
+        "tool_information": "reported_parent_and_child_information_verified",
+        "invocation_contract": "reported_actual_local_invocation_tested",
+        "numerical_sheet": "reported_module_tests_passed",
+        "native_parser": "reported_native_output_extraction_tested",
+        "metadata_extractor": "reported_supplied_metadata_extraction_tested",
+        "deterministic_calculator": "reported_module_and_saved_sheet_recalculation_passed",
+        "production_result_binding": "reported_real_tool_registry_publication_tested",
+        "numerical_verification": "reported_module_and_targeted_publication_cases_passed",
+        "integration_verification": "reported_publication_tested_full_mode_child_return_not_run",
+        "live_resource_verification": "reported_actual_bounded_local_execution_on_supplied_fixtures",
+        "scientific_score_applicability": "per_native_scientific_contract",
+        "evidence_ids": [
+          "B001-PAIR",
+          "ROOT-B001-MODULE-178",
+          "B001-INTEGRATION-029",
+          "ROOT-COMPATIBILITY-012"
+        ],
+        "note": "Actual ToolRegistry publication tested for this molecule/mode. The shared full Workflow child-return test uses DNA global; this mode was not separately exercised at that boundary."
+      }
+    },
+    {
+      "group": "rows",
+      "id": "A-L061-protein-global",
+      "before": {
+        "id": "A-L061-protein-global",
+        "overall": "not_assessed",
+        "source_presence": "source_present_component_only",
+        "tool_information": "not_assessed",
+        "invocation_contract": "not_assessed",
+        "numerical_sheet": "not_assessed",
+        "native_parser": "not_assessed",
+        "metadata_extractor": "not_assessed",
+        "deterministic_calculator": "not_assessed",
+        "production_result_binding": "not_assessed",
+        "numerical_verification": "reported_module_evidence_only",
+        "integration_verification": "not_assessed",
+        "live_resource_verification": "not_assessed",
+        "scientific_score_applicability": "per_native_scientific_contract",
+        "evidence_ids": [
+          "B001-PAIR"
+        ],
+        "note": "No scope-wide completion inferred from historical inventory or standalone components."
+      },
+      "after": {
+        "id": "A-L061-protein-global",
+        "overall": "partially_verified",
+        "source_presence": "source_present_component_only",
+        "tool_information": "reported_parent_and_child_information_verified",
+        "invocation_contract": "reported_actual_local_invocation_tested",
+        "numerical_sheet": "reported_module_tests_passed",
+        "native_parser": "reported_native_output_extraction_tested",
+        "metadata_extractor": "reported_supplied_metadata_extraction_tested",
+        "deterministic_calculator": "reported_module_and_saved_sheet_recalculation_passed",
+        "production_result_binding": "reported_real_tool_registry_publication_tested",
+        "numerical_verification": "reported_module_and_targeted_publication_cases_passed",
+        "integration_verification": "reported_publication_tested_full_mode_child_return_not_run",
+        "live_resource_verification": "reported_actual_bounded_local_execution_on_supplied_fixtures",
+        "scientific_score_applicability": "per_native_scientific_contract",
+        "evidence_ids": [
+          "B001-PAIR",
+          "ROOT-B001-MODULE-178",
+          "B001-INTEGRATION-029",
+          "ROOT-COMPATIBILITY-012"
+        ],
+        "note": "Actual ToolRegistry publication tested for this molecule/mode. The shared full Workflow child-return test uses DNA global; this mode was not separately exercised at that boundary."
+      }
+    },
+    {
+      "group": "rows",
+      "id": "A-L061-dna-local",
+      "before": {
+        "id": "A-L061-dna-local",
+        "overall": "not_assessed",
+        "source_presence": "source_present_component_only",
+        "tool_information": "not_assessed",
+        "invocation_contract": "not_assessed",
+        "numerical_sheet": "not_assessed",
+        "native_parser": "not_assessed",
+        "metadata_extractor": "not_assessed",
+        "deterministic_calculator": "not_assessed",
+        "production_result_binding": "not_assessed",
+        "numerical_verification": "reported_module_evidence_only",
+        "integration_verification": "not_assessed",
+        "live_resource_verification": "not_assessed",
+        "scientific_score_applicability": "per_native_scientific_contract",
+        "evidence_ids": [
+          "B001-PAIR"
+        ],
+        "note": "No scope-wide completion inferred from historical inventory or standalone components."
+      },
+      "after": {
+        "id": "A-L061-dna-local",
+        "overall": "partially_verified",
+        "source_presence": "source_present_component_only",
+        "tool_information": "reported_parent_and_child_information_verified",
+        "invocation_contract": "reported_actual_local_invocation_tested",
+        "numerical_sheet": "reported_module_tests_passed",
+        "native_parser": "reported_native_output_extraction_tested",
+        "metadata_extractor": "reported_supplied_metadata_extraction_tested",
+        "deterministic_calculator": "reported_module_and_saved_sheet_recalculation_passed",
+        "production_result_binding": "reported_real_tool_registry_publication_tested",
+        "numerical_verification": "reported_module_and_targeted_publication_cases_passed",
+        "integration_verification": "reported_publication_tested_full_mode_child_return_not_run",
+        "live_resource_verification": "reported_actual_bounded_local_execution_on_supplied_fixtures",
+        "scientific_score_applicability": "per_native_scientific_contract",
+        "evidence_ids": [
+          "B001-PAIR",
+          "ROOT-B001-MODULE-178",
+          "B001-INTEGRATION-029",
+          "ROOT-COMPATIBILITY-012"
+        ],
+        "note": "Actual ToolRegistry publication tested for this molecule/mode. The shared full Workflow child-return test uses DNA global; this mode was not separately exercised at that boundary."
+      }
+    },
+    {
+      "group": "rows",
+      "id": "A-L061-dna-global",
+      "before": {
+        "id": "A-L061-dna-global",
+        "overall": "not_assessed",
+        "source_presence": "source_present_component_only",
+        "tool_information": "not_assessed",
+        "invocation_contract": "not_assessed",
+        "numerical_sheet": "not_assessed",
+        "native_parser": "not_assessed",
+        "metadata_extractor": "not_assessed",
+        "deterministic_calculator": "not_assessed",
+        "production_result_binding": "not_assessed",
+        "numerical_verification": "reported_module_evidence_only",
+        "integration_verification": "not_assessed",
+        "live_resource_verification": "not_assessed",
+        "scientific_score_applicability": "per_native_scientific_contract",
+        "evidence_ids": [
+          "B001-PAIR"
+        ],
+        "note": "No scope-wide completion inferred from historical inventory or standalone components."
+      },
+      "after": {
+        "id": "A-L061-dna-global",
+        "overall": "partially_verified",
+        "source_presence": "source_present_component_only",
+        "tool_information": "reported_parent_and_child_information_verified",
+        "invocation_contract": "reported_actual_local_invocation_tested",
+        "numerical_sheet": "reported_module_tests_passed",
+        "native_parser": "reported_native_output_extraction_tested",
+        "metadata_extractor": "reported_supplied_metadata_extraction_tested",
+        "deterministic_calculator": "reported_module_and_saved_sheet_recalculation_passed",
+        "production_result_binding": "reported_real_tool_registry_publication_tested",
+        "numerical_verification": "reported_module_and_targeted_publication_cases_passed",
+        "integration_verification": "reported_full_shared_loop_child_return_for_stated_fixture",
+        "live_resource_verification": "reported_actual_bounded_local_execution_on_supplied_fixtures",
+        "scientific_score_applicability": "per_native_scientific_contract",
+        "evidence_ids": [
+          "B001-PAIR",
+          "ROOT-B001-MODULE-178",
+          "B001-INTEGRATION-029",
+          "ROOT-COMPATIBILITY-012"
+        ],
+        "note": "Full shared-loop typed child return exercised on stated fixture; no detached recovery, live API, HPC or W05 completion implied."
+      }
+    },
+    {
+      "group": "rows",
+      "id": "A-L061-rna-local",
+      "before": {
+        "id": "A-L061-rna-local",
+        "overall": "not_assessed",
+        "source_presence": "source_present_component_only",
+        "tool_information": "not_assessed",
+        "invocation_contract": "not_assessed",
+        "numerical_sheet": "not_assessed",
+        "native_parser": "not_assessed",
+        "metadata_extractor": "not_assessed",
+        "deterministic_calculator": "not_assessed",
+        "production_result_binding": "not_assessed",
+        "numerical_verification": "reported_module_evidence_only",
+        "integration_verification": "not_assessed",
+        "live_resource_verification": "not_assessed",
+        "scientific_score_applicability": "per_native_scientific_contract",
+        "evidence_ids": [
+          "B001-PAIR"
+        ],
+        "note": "No scope-wide completion inferred from historical inventory or standalone components."
+      },
+      "after": {
+        "id": "A-L061-rna-local",
+        "overall": "partially_verified",
+        "source_presence": "source_present_component_only",
+        "tool_information": "reported_parent_and_child_information_verified",
+        "invocation_contract": "reported_actual_local_invocation_tested",
+        "numerical_sheet": "reported_module_tests_passed",
+        "native_parser": "reported_native_output_extraction_tested",
+        "metadata_extractor": "reported_supplied_metadata_extraction_tested",
+        "deterministic_calculator": "reported_module_and_saved_sheet_recalculation_passed",
+        "production_result_binding": "reported_real_tool_registry_publication_tested",
+        "numerical_verification": "reported_module_and_targeted_publication_cases_passed",
+        "integration_verification": "reported_publication_tested_full_mode_child_return_not_run",
+        "live_resource_verification": "reported_actual_bounded_local_execution_on_supplied_fixtures",
+        "scientific_score_applicability": "per_native_scientific_contract",
+        "evidence_ids": [
+          "B001-PAIR",
+          "ROOT-B001-MODULE-178",
+          "B001-INTEGRATION-029",
+          "ROOT-COMPATIBILITY-012"
+        ],
+        "note": "Actual ToolRegistry publication tested for this molecule/mode. The shared full Workflow child-return test uses DNA global; this mode was not separately exercised at that boundary."
+      }
+    },
+    {
+      "group": "rows",
+      "id": "A-L061-rna-global",
+      "before": {
+        "id": "A-L061-rna-global",
+        "overall": "not_assessed",
+        "source_presence": "source_present_component_only",
+        "tool_information": "not_assessed",
+        "invocation_contract": "not_assessed",
+        "numerical_sheet": "not_assessed",
+        "native_parser": "not_assessed",
+        "metadata_extractor": "not_assessed",
+        "deterministic_calculator": "not_assessed",
+        "production_result_binding": "not_assessed",
+        "numerical_verification": "reported_module_evidence_only",
+        "integration_verification": "not_assessed",
+        "live_resource_verification": "not_assessed",
+        "scientific_score_applicability": "per_native_scientific_contract",
+        "evidence_ids": [
+          "B001-PAIR"
+        ],
+        "note": "No scope-wide completion inferred from historical inventory or standalone components."
+      },
+      "after": {
+        "id": "A-L061-rna-global",
+        "overall": "partially_verified",
+        "source_presence": "source_present_component_only",
+        "tool_information": "reported_parent_and_child_information_verified",
+        "invocation_contract": "reported_actual_local_invocation_tested",
+        "numerical_sheet": "reported_module_tests_passed",
+        "native_parser": "reported_native_output_extraction_tested",
+        "metadata_extractor": "reported_supplied_metadata_extraction_tested",
+        "deterministic_calculator": "reported_module_and_saved_sheet_recalculation_passed",
+        "production_result_binding": "reported_real_tool_registry_publication_tested",
+        "numerical_verification": "reported_module_and_targeted_publication_cases_passed",
+        "integration_verification": "reported_publication_tested_full_mode_child_return_not_run",
+        "live_resource_verification": "reported_actual_bounded_local_execution_on_supplied_fixtures",
+        "scientific_score_applicability": "per_native_scientific_contract",
+        "evidence_ids": [
+          "B001-PAIR",
+          "ROOT-B001-MODULE-178",
+          "B001-INTEGRATION-029",
+          "ROOT-COMPATIBILITY-012"
+        ],
+        "note": "Actual ToolRegistry publication tested for this molecule/mode. The shared full Workflow child-return test uses DNA global; this mode was not separately exercised at that boundary."
+      }
+    },
+    {
+      "group": "rows",
+      "id": "A-L062-single-genome",
+      "before": {
+        "id": "A-L062-single-genome",
+        "overall": "not_assessed",
+        "source_presence": "source_present_component_only",
+        "tool_information": "not_assessed",
+        "invocation_contract": "not_assessed",
+        "numerical_sheet": "not_assessed",
+        "native_parser": "not_assessed",
+        "metadata_extractor": "not_assessed",
+        "deterministic_calculator": "not_assessed",
+        "production_result_binding": "not_assessed",
+        "numerical_verification": "reported_module_evidence_only",
+        "integration_verification": "not_assessed",
+        "live_resource_verification": "not_assessed",
+        "scientific_score_applicability": "per_native_scientific_contract",
+        "evidence_ids": [
+          "B001-GENE"
+        ],
+        "note": "No scope-wide completion inferred from historical inventory or standalone components."
+      },
+      "after": {
+        "id": "A-L062-single-genome",
+        "overall": "partially_verified",
+        "source_presence": "source_present_component_only",
+        "tool_information": "reported_parent_and_child_information_verified",
+        "invocation_contract": "reported_common_operation_contract_mode_not_production_tested",
+        "numerical_sheet": "reported_module_tests_passed",
+        "native_parser": "reported_native_output_extraction_tested",
+        "metadata_extractor": "reported_supplied_metadata_extraction_tested",
+        "deterministic_calculator": "reported_module_and_saved_sheet_recalculation_passed",
+        "production_result_binding": "not_assessed",
+        "numerical_verification": "reported_targeted_module_suite_passed",
+        "integration_verification": "not_assessed",
+        "live_resource_verification": "reported_direct_native_module_execution_only",
+        "scientific_score_applicability": "per_native_scientific_contract",
+        "evidence_ids": [
+          "B001-GENE",
+          "ROOT-B001-MODULE-178",
+          "B001-INTEGRATION-029",
+          "ROOT-COMPATIBILITY-012"
+        ],
+        "note": "Single-mode native/module evidence remains; full single-mode ToolRegistry publication and child-return path were not exercised. Common genes.predict information was checked in the meta case."
+      }
+    },
+    {
+      "group": "rows",
+      "id": "A-L062-metagenomic",
+      "before": {
+        "id": "A-L062-metagenomic",
+        "overall": "not_assessed",
+        "source_presence": "source_present_component_only",
+        "tool_information": "not_assessed",
+        "invocation_contract": "not_assessed",
+        "numerical_sheet": "not_assessed",
+        "native_parser": "not_assessed",
+        "metadata_extractor": "not_assessed",
+        "deterministic_calculator": "not_assessed",
+        "production_result_binding": "not_assessed",
+        "numerical_verification": "reported_module_evidence_only",
+        "integration_verification": "not_assessed",
+        "live_resource_verification": "not_assessed",
+        "scientific_score_applicability": "per_native_scientific_contract",
+        "evidence_ids": [
+          "B001-GENE"
+        ],
+        "note": "No scope-wide completion inferred from historical inventory or standalone components."
+      },
+      "after": {
+        "id": "A-L062-metagenomic",
+        "overall": "partially_verified",
+        "source_presence": "source_present_component_only",
+        "tool_information": "reported_parent_and_child_information_verified",
+        "invocation_contract": "reported_actual_local_invocation_tested",
+        "numerical_sheet": "reported_module_tests_passed",
+        "native_parser": "reported_native_output_extraction_tested",
+        "metadata_extractor": "reported_supplied_metadata_extraction_tested",
+        "deterministic_calculator": "reported_module_and_saved_sheet_recalculation_passed",
+        "production_result_binding": "reported_real_tool_registry_publication_tested",
+        "numerical_verification": "reported_module_and_targeted_publication_cases_passed",
+        "integration_verification": "reported_full_shared_loop_child_return_for_stated_fixture",
+        "live_resource_verification": "reported_actual_bounded_local_execution_on_supplied_fixtures",
+        "scientific_score_applicability": "per_native_scientific_contract",
+        "evidence_ids": [
+          "B001-GENE",
+          "ROOT-B001-MODULE-178",
+          "B001-INTEGRATION-029",
+          "ROOT-COMPATIBILITY-012"
+        ],
+        "note": "Full shared-loop typed child return exercised on stated fixture; no detached recovery, live API, HPC or W05 completion implied."
+      }
+    },
+    {
+      "group": "rows",
+      "id": "A-L069-blastp-database",
+      "before": {
+        "id": "A-L069-blastp-database",
+        "overall": "not_assessed",
+        "source_presence": "source_present_component_only",
+        "tool_information": "not_assessed",
+        "invocation_contract": "not_assessed",
+        "numerical_sheet": "not_assessed",
+        "native_parser": "not_assessed",
+        "metadata_extractor": "not_assessed",
+        "deterministic_calculator": "not_assessed",
+        "production_result_binding": "not_assessed",
+        "numerical_verification": "reported_module_evidence_only",
+        "integration_verification": "not_assessed",
+        "live_resource_verification": "not_assessed",
+        "scientific_score_applicability": "per_native_scientific_contract",
+        "evidence_ids": [
+          "EXISTING-BLAST-DATABASE"
+        ],
+        "note": "No scope-wide completion inferred from historical inventory or standalone components."
+      },
+      "after": {
+        "id": "A-L069-blastp-database",
+        "overall": "partially_verified",
+        "source_presence": "source_present_component_only",
+        "tool_information": "not_assessed",
+        "invocation_contract": "not_assessed",
+        "numerical_sheet": "not_assessed",
+        "native_parser": "not_assessed",
+        "metadata_extractor": "not_assessed",
+        "deterministic_calculator": "not_assessed",
+        "production_result_binding": "reported_offline_api_json2_result_binding_tested",
+        "numerical_verification": "reported_module_evidence_only",
+        "integration_verification": "reported_offline_api_acquisition_and_original_hsp_return_tested",
+        "live_resource_verification": "not_assessed",
+        "scientific_score_applicability": "per_native_scientific_contract",
+        "evidence_ids": [
+          "EXISTING-BLAST-DATABASE",
+          "B001-INTEGRATION-029"
+        ],
+        "note": "Synthetic offline blastp provider fixture only. Full retained grader output and original typed HSP return were checked; not every statistical component, every program, actual service availability or live resource."
+      }
+    },
+    {
+      "group": "resource_bindings",
+      "id": "A-L059-sequence::local",
+      "before": {
+        "id": "A-L059-sequence::local",
+        "invocation_contract": "not_assessed",
+        "production_result_binding": "not_assessed",
+        "integration_verification": "not_assessed",
+        "live_resource_verification": "not_assessed",
+        "prerequisites_present": "not_assessed",
+        "native_format_observed": "not_assessed",
+        "evidence_ids": []
+      },
+      "after": {
+        "id": "A-L059-sequence::local",
+        "invocation_contract": "reported_actual_local_invocation_tested",
+        "production_result_binding": "reported_real_tool_registry_publication_tested",
+        "integration_verification": "reported_full_shared_loop_child_return_for_stated_fixture",
+        "live_resource_verification": "reported_actual_bounded_local_execution_on_supplied_fixtures",
+        "prerequisites_present": "reported_actual_local_fixture_execution",
+        "native_format_observed": "reported_actual_native_worker_output",
+        "evidence_ids": [
+          "ROOT-B001-MODULE-178",
+          "B001-INTEGRATION-029"
+        ]
+      }
+    },
+    {
+      "group": "resource_bindings",
+      "id": "A-L059-reads::local",
+      "before": {
+        "id": "A-L059-reads::local",
+        "invocation_contract": "not_assessed",
+        "production_result_binding": "not_assessed",
+        "integration_verification": "not_assessed",
+        "live_resource_verification": "not_assessed",
+        "prerequisites_present": "not_assessed",
+        "native_format_observed": "not_assessed",
+        "evidence_ids": []
+      },
+      "after": {
+        "id": "A-L059-reads::local",
+        "invocation_contract": "reported_actual_local_invocation_tested",
+        "production_result_binding": "reported_real_tool_registry_publication_tested",
+        "integration_verification": "reported_full_shared_loop_child_return_for_stated_fixture",
+        "live_resource_verification": "reported_actual_bounded_local_execution_on_supplied_fixtures",
+        "prerequisites_present": "reported_actual_local_fixture_execution",
+        "native_format_observed": "reported_actual_native_worker_output",
+        "evidence_ids": [
+          "ROOT-B001-MODULE-178",
+          "B001-INTEGRATION-029"
+        ]
+      }
+    },
+    {
+      "group": "resource_bindings",
+      "id": "A-L061-protein-local::local",
+      "before": {
+        "id": "A-L061-protein-local::local",
+        "invocation_contract": "not_assessed",
+        "production_result_binding": "not_assessed",
+        "integration_verification": "not_assessed",
+        "live_resource_verification": "not_assessed",
+        "prerequisites_present": "not_assessed",
+        "native_format_observed": "not_assessed",
+        "evidence_ids": []
+      },
+      "after": {
+        "id": "A-L061-protein-local::local",
+        "invocation_contract": "reported_actual_local_invocation_tested",
+        "production_result_binding": "reported_real_tool_registry_publication_tested",
+        "integration_verification": "reported_publication_tested_full_mode_child_return_not_run",
+        "live_resource_verification": "reported_actual_bounded_local_execution_on_supplied_fixtures",
+        "prerequisites_present": "reported_actual_local_fixture_execution",
+        "native_format_observed": "reported_actual_native_worker_output",
+        "evidence_ids": [
+          "ROOT-B001-MODULE-178",
+          "B001-INTEGRATION-029"
+        ]
+      }
+    },
+    {
+      "group": "resource_bindings",
+      "id": "A-L061-protein-global::local",
+      "before": {
+        "id": "A-L061-protein-global::local",
+        "invocation_contract": "not_assessed",
+        "production_result_binding": "not_assessed",
+        "integration_verification": "not_assessed",
+        "live_resource_verification": "not_assessed",
+        "prerequisites_present": "not_assessed",
+        "native_format_observed": "not_assessed",
+        "evidence_ids": []
+      },
+      "after": {
+        "id": "A-L061-protein-global::local",
+        "invocation_contract": "reported_actual_local_invocation_tested",
+        "production_result_binding": "reported_real_tool_registry_publication_tested",
+        "integration_verification": "reported_publication_tested_full_mode_child_return_not_run",
+        "live_resource_verification": "reported_actual_bounded_local_execution_on_supplied_fixtures",
+        "prerequisites_present": "reported_actual_local_fixture_execution",
+        "native_format_observed": "reported_actual_native_worker_output",
+        "evidence_ids": [
+          "ROOT-B001-MODULE-178",
+          "B001-INTEGRATION-029"
+        ]
+      }
+    },
+    {
+      "group": "resource_bindings",
+      "id": "A-L061-dna-local::local",
+      "before": {
+        "id": "A-L061-dna-local::local",
+        "invocation_contract": "not_assessed",
+        "production_result_binding": "not_assessed",
+        "integration_verification": "not_assessed",
+        "live_resource_verification": "not_assessed",
+        "prerequisites_present": "not_assessed",
+        "native_format_observed": "not_assessed",
+        "evidence_ids": []
+      },
+      "after": {
+        "id": "A-L061-dna-local::local",
+        "invocation_contract": "reported_actual_local_invocation_tested",
+        "production_result_binding": "reported_real_tool_registry_publication_tested",
+        "integration_verification": "reported_publication_tested_full_mode_child_return_not_run",
+        "live_resource_verification": "reported_actual_bounded_local_execution_on_supplied_fixtures",
+        "prerequisites_present": "reported_actual_local_fixture_execution",
+        "native_format_observed": "reported_actual_native_worker_output",
+        "evidence_ids": [
+          "ROOT-B001-MODULE-178",
+          "B001-INTEGRATION-029"
+        ]
+      }
+    },
+    {
+      "group": "resource_bindings",
+      "id": "A-L061-dna-global::local",
+      "before": {
+        "id": "A-L061-dna-global::local",
+        "invocation_contract": "not_assessed",
+        "production_result_binding": "not_assessed",
+        "integration_verification": "not_assessed",
+        "live_resource_verification": "not_assessed",
+        "prerequisites_present": "not_assessed",
+        "native_format_observed": "not_assessed",
+        "evidence_ids": []
+      },
+      "after": {
+        "id": "A-L061-dna-global::local",
+        "invocation_contract": "reported_actual_local_invocation_tested",
+        "production_result_binding": "reported_real_tool_registry_publication_tested",
+        "integration_verification": "reported_full_shared_loop_child_return_for_stated_fixture",
+        "live_resource_verification": "reported_actual_bounded_local_execution_on_supplied_fixtures",
+        "prerequisites_present": "reported_actual_local_fixture_execution",
+        "native_format_observed": "reported_actual_native_worker_output",
+        "evidence_ids": [
+          "ROOT-B001-MODULE-178",
+          "B001-INTEGRATION-029"
+        ]
+      }
+    },
+    {
+      "group": "resource_bindings",
+      "id": "A-L061-rna-local::local",
+      "before": {
+        "id": "A-L061-rna-local::local",
+        "invocation_contract": "not_assessed",
+        "production_result_binding": "not_assessed",
+        "integration_verification": "not_assessed",
+        "live_resource_verification": "not_assessed",
+        "prerequisites_present": "not_assessed",
+        "native_format_observed": "not_assessed",
+        "evidence_ids": []
+      },
+      "after": {
+        "id": "A-L061-rna-local::local",
+        "invocation_contract": "reported_actual_local_invocation_tested",
+        "production_result_binding": "reported_real_tool_registry_publication_tested",
+        "integration_verification": "reported_publication_tested_full_mode_child_return_not_run",
+        "live_resource_verification": "reported_actual_bounded_local_execution_on_supplied_fixtures",
+        "prerequisites_present": "reported_actual_local_fixture_execution",
+        "native_format_observed": "reported_actual_native_worker_output",
+        "evidence_ids": [
+          "ROOT-B001-MODULE-178",
+          "B001-INTEGRATION-029"
+        ]
+      }
+    },
+    {
+      "group": "resource_bindings",
+      "id": "A-L061-rna-global::local",
+      "before": {
+        "id": "A-L061-rna-global::local",
+        "invocation_contract": "not_assessed",
+        "production_result_binding": "not_assessed",
+        "integration_verification": "not_assessed",
+        "live_resource_verification": "not_assessed",
+        "prerequisites_present": "not_assessed",
+        "native_format_observed": "not_assessed",
+        "evidence_ids": []
+      },
+      "after": {
+        "id": "A-L061-rna-global::local",
+        "invocation_contract": "reported_actual_local_invocation_tested",
+        "production_result_binding": "reported_real_tool_registry_publication_tested",
+        "integration_verification": "reported_publication_tested_full_mode_child_return_not_run",
+        "live_resource_verification": "reported_actual_bounded_local_execution_on_supplied_fixtures",
+        "prerequisites_present": "reported_actual_local_fixture_execution",
+        "native_format_observed": "reported_actual_native_worker_output",
+        "evidence_ids": [
+          "ROOT-B001-MODULE-178",
+          "B001-INTEGRATION-029"
+        ]
+      }
+    },
+    {
+      "group": "resource_bindings",
+      "id": "A-L062-single-genome::local",
+      "before": {
+        "id": "A-L062-single-genome::local",
+        "invocation_contract": "not_assessed",
+        "production_result_binding": "not_assessed",
+        "integration_verification": "not_assessed",
+        "live_resource_verification": "not_assessed",
+        "prerequisites_present": "not_assessed",
+        "native_format_observed": "not_assessed",
+        "evidence_ids": []
+      },
+      "after": {
+        "id": "A-L062-single-genome::local",
+        "invocation_contract": "reported_common_contract_single_mode_not_exercised",
+        "production_result_binding": "not_assessed",
+        "integration_verification": "not_assessed",
+        "live_resource_verification": "reported_direct_native_module_execution_only",
+        "prerequisites_present": "not_assessed",
+        "native_format_observed": "not_assessed",
+        "evidence_ids": [
+          "ROOT-B001-MODULE-178",
+          "B001-INTEGRATION-029"
+        ]
+      }
+    },
+    {
+      "group": "resource_bindings",
+      "id": "A-L062-metagenomic::local",
+      "before": {
+        "id": "A-L062-metagenomic::local",
+        "invocation_contract": "not_assessed",
+        "production_result_binding": "not_assessed",
+        "integration_verification": "not_assessed",
+        "live_resource_verification": "not_assessed",
+        "prerequisites_present": "not_assessed",
+        "native_format_observed": "not_assessed",
+        "evidence_ids": []
+      },
+      "after": {
+        "id": "A-L062-metagenomic::local",
+        "invocation_contract": "reported_actual_local_invocation_tested",
+        "production_result_binding": "reported_real_tool_registry_publication_tested",
+        "integration_verification": "reported_full_shared_loop_child_return_for_stated_fixture",
+        "live_resource_verification": "reported_actual_bounded_local_execution_on_supplied_fixtures",
+        "prerequisites_present": "reported_actual_local_fixture_execution",
+        "native_format_observed": "reported_actual_native_worker_output",
+        "evidence_ids": [
+          "ROOT-B001-MODULE-178",
+          "B001-INTEGRATION-029"
+        ]
+      }
+    },
+    {
+      "group": "resource_bindings",
+      "id": "A-L069-blastp-database::api",
+      "before": {
+        "id": "A-L069-blastp-database::api",
+        "invocation_contract": "not_assessed",
+        "production_result_binding": "not_assessed",
+        "integration_verification": "not_assessed",
+        "live_resource_verification": "not_assessed",
+        "prerequisites_present": "not_assessed",
+        "native_format_observed": "not_assessed",
+        "evidence_ids": []
+      },
+      "after": {
+        "id": "A-L069-blastp-database::api",
+        "invocation_contract": "not_assessed",
+        "production_result_binding": "reported_offline_api_json2_result_binding_tested",
+        "integration_verification": "reported_offline_api_acquisition_and_original_hsp_return_tested",
+        "live_resource_verification": "not_assessed",
+        "prerequisites_present": "not_assessed",
+        "native_format_observed": "synthetic_offline_json2_fixture_only",
+        "evidence_ids": [
+          "B001-INTEGRATION-029"
+        ]
+      }
+    }
+  ],
+  "previous_status_sha256": "70e3e46c5e7d5f8ac900d19459c514984932c7531dc1ef40bcf6f100b26d3199",
+  "new_status_sha256": "e2612b9bcc77f3899187e45ed61dd914a61a086f229fc2ef562fd6636e931484",
+  "complete_scientific_tools_claimed": 0
+}

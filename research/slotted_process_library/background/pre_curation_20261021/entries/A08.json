@@ -1,0 +1,119 @@
+{
+  "slot": "annotation_distinction",
+  "id": "A08",
+  "name": "Native physiological contribution and its conditions",
+  "description": "Represent which cellular/organismal consequence an activity contributes to in biological context, preserving environmental, nutrient, temporal and population conditions.",
+  "claim_scope": "A gene/activity in a stated strain, environment, phase and outcome, with coexisting roles retained; measured capacity need not be dominant native function.",
+  "distinctions": [
+    "Capacity/induction versus native contribution.",
+    "Immediate regrowth versus long-term survival or competition.",
+    "Bulk mean versus population-state distributions.",
+    "Nutrient use versus detoxification, fitness or protection.",
+    "Additional conditional role versus erasing prior valid roles."
+  ],
+  "example_structured_values": {
+    "status": "illustrative_only_not_an_adopted_schema",
+    "fields": {
+      "physiological_contribution_examples": [
+        "nutrient_acquisition",
+        "metabolite_damage_prevention",
+        "stress_adaptation",
+        "sustained_starvation_survival",
+        "competitive_fitness",
+        "photoprotection",
+        "unresolved"
+      ],
+      "role_relation": [
+        "native_contribution_under_stated_conditions",
+        "capacity_only",
+        "additional_conditional_role",
+        "native_role_unresolved"
+      ],
+      "outcome_type": [
+        "growth_rate_or_yield",
+        "survival",
+        "competitive_abundance",
+        "population_state_distribution",
+        "molecular_homeostasis"
+      ],
+      "effect": [
+        "increases",
+        "decreases",
+        "no_detected_effect_in_test",
+        "heterogeneous_or_tradeoff",
+        "unresolved"
+      ]
+    },
+    "required_typed_references": [
+      "target_entity_ref",
+      "strain_and_background_ref",
+      "environment_and_nutrient_refs",
+      "time_or_phase_ref",
+      "population_and_outcome_refs",
+      "observation_refs"
+    ],
+    "meaning": "Finite examples of declared values/reference types, not a complete ontology, numerical credit scale, adopted scoring axis or claim of existing runtime compatibility."
+  },
+  "not_established": [
+    "One model/time window is not universal role.",
+    "Reporter is not flux; population association is not lineage-tracked fate.",
+    "No early growth defect does not exclude later survival contribution.",
+    "Side activity/heterologous rescue does not establish primary native flux."
+  ],
+  "follow_up_lane_ids": [
+    "F01",
+    "F03",
+    "F05"
+  ],
+  "boundary": "A08 gives biological consequence. A06 assigns system responsibility, A09 dependence given alternatives. Shared context fields are scope, not another library slot.",
+  "evidence": [
+    {
+      "case_group": "yeag",
+      "case_id": "cellular_yeaG",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4664914/",
+      "source_locator": "Trace route_1; recovery/heterogeneity/survival Results; culture/flow Methods; Fig. 6D limitation.",
+      "observation": "YeaG loss improves immediate recovery lag but worsens prolonged-starvation survival and changes reporter heterogeneity.",
+      "limit": "No raw FCS/CFU or lineage tracking; follow-up text and Fig. 6D caption disagree on exact timing."
+    },
+    {
+      "case_group": "organism_01_ttr",
+      "case_id": "organism_01_ttr",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2946174/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: 1999 Results and experimental descriptions; 2010 main Results/Methods Summary and figure captions; live AJ224978.1 metadata verified LT2 ttr locus, 12,121 bp. No raw LC-MS or animal reanalysis.",
+      "observation": "Inflammation-dependent intestinal benefit differs from an earlier systemic infection nonphenotype despite the same respiratory capacity.",
+      "limit": "Author host/competition experiments; no raw animal or LC-MS reanalysis and no universal virulence claim."
+    },
+    {
+      "case_group": "organism_13_icl",
+      "case_id": "organism_13_icl",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3977286/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Relevant complete Results and culture/extraction Methods; no isotope-flux recomputation. The 2005 infection paper was retrieved but remains an abstract-level auxiliary source here.",
+      "observation": "B12 rerouting restores survival without full growth, separating poison avoidance, assimilation and biomass outcomes.",
+      "limit": "No isotope-flux recomputation or new in-host flux assignment."
+    },
+    {
+      "case_group": "spec_yigl_conditional_b6",
+      "case_id": "spec_yigl_conditional_b6",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11409668/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: 2024 relevant complete results/discussion and assay/genotype methods inspected; 2013 relevant regulation, competition and growth results inspected. Supplements not independently analyzed. Fresh public-record probe documented in raw/live_probe_summary.json.",
+      "observation": "PNP hydrolysis/protection adds an excess-PNP role without erasing sugar-stress biology or assigning chief basal PNP catabolism.",
+      "limit": "Deletion retains substantial activity and near-normal basal growth; supplements not independently analyzed."
+    },
+    {
+      "case_group": "spec_suhb_catalysis_vs_rrna",
+      "case_id": "spec_suhb_catalysis_vs_rrna",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4807359/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: 2000 primary abstract only; 2016 suppressor, recruitment, reporter/endogenous comparison, genetic-interaction results and relevant methods/discussion inspected; 2019 relevant binding/reconstitution results/methods and stated limitations inspected. Raw data and earlier 1994 activity paper not independently analyzed.",
+      "observation": "Suppressor, recruitment and reporter/endogenous comparisons support Nus/rRNA participation while retaining genuine IMPase capacity.",
+      "limit": "Detailed recruitment/looping remains a model; 2000 complementation contrast is abstract-only."
+    },
+    {
+      "case_group": "context_oarx_thiamin_2024",
+      "case_id": "context_oarx_thiamin_2024",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11223231/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Complete primary methods/results read through Europe PMC XML; deposited XLSX parsed; actual ENA genome record retrieved. No annotation run or experiment performed. Table and experimental strains were kept distinct.",
+      "observation": "Thiamin associations support a bounded reductase role while tested salvage candidates fail, leaving exact substrate/reaction unresolved.",
+      "limit": "Actual research parsed table/genome records; no annotation run or new enzyme assay; context is not exact chemistry."
+    }
+  ]
+}

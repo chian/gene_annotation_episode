@@ -1,0 +1,2051 @@
+{
+  "word_document_sha256": "cbb4a2dc0277889baf5e7911a21d00896ad6c8e914643cfa1065134838f60af9",
+  "paragraphs": [
+    {
+      "paragraph": 0,
+      "text": "Identification of the phosphatase that catalyzes the essential substrate dephosphorylation step of riboflavin biosynthesis in Aquifex aeolicus ",
+      "images": []
+    },
+    {
+      "paragraph": 1,
+      "text": "Zoe A. Hoffpauir and Audrey L. Lamb",
+      "images": []
+    },
+    {
+      "paragraph": 2,
+      "text": "Department of Chemistry, University of Texas at San Antonio, San Antonio, TX",
+      "images": []
+    },
+    {
+      "paragraph": 3,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 4,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 5,
+      "text": "Supporting Information",
+      "images": []
+    },
+    {
+      "paragraph": 6,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 7,
+      "text": "Contents",
+      "images": []
+    },
+    {
+      "paragraph": 8,
+      "text": "Script S1: Python script for identifying consensus sequencesPage S-2",
+      "images": []
+    },
+    {
+      "paragraph": 9,
+      "text": "Table S1:  Enzymes used in this studyPage S-4",
+      "images": []
+    },
+    {
+      "paragraph": 10,
+      "text": "Table S2:  Model components for IMP structurePage S-5",
+      "images": []
+    },
+    {
+      "paragraph": 11,
+      "text": "Table S3:  Model components for HFP structurePage S-5",
+      "images": []
+    },
+    {
+      "paragraph": 12,
+      "text": "Figure S1: SDS-PAGE gel showing expression of phosphatasesPage S-6",
+      "images": []
+    },
+    {
+      "paragraph": 13,
+      "text": "Figure S2: SDS-PAGE gel of purified IMP and HFPPage S-7",
+      "images": []
+    },
+    {
+      "paragraph": 14,
+      "text": "Figure S3:  31P-NMR of prolonged incubation samples demonstratesPage S-8",
+      "images": []
+    },
+    {
+      "paragraph": 15,
+      "text": "GTP dephosphorylation",
+      "images": []
+    },
+    {
+      "paragraph": 16,
+      "text": "Figure S4: 13C-NMR to confirm Ru5P/R5P isomerizationPage S-9",
+      "images": []
+    },
+    {
+      "paragraph": 17,
+      "text": "Figure S5: Equilibrium mixture of ribose and ribulose 5-phosphatePage S-10",
+      "images": []
+    },
+    {
+      "paragraph": 18,
+      "text": "established by HFP sample",
+      "images": []
+    },
+    {
+      "paragraph": 19,
+      "text": "Figure S6: His-tagged HFP sample isomerization of Ru5PPage S-11",
+      "images": []
+    },
+    {
+      "paragraph": 20,
+      "text": "Figure S7: Isomerase activity by 31P-NMRPage S-12",
+      "images": []
+    },
+    {
+      "paragraph": 21,
+      "text": "Figure S8: Mass Spectrometry Confirmation of RpiAPage S-13",
+      "images": []
+    },
+    {
+      "paragraph": 22,
+      "text": "Figure S9: HFP asymmetric composition and biological assemblyPage S-14",
+      "images": []
+    },
+    {
+      "paragraph": 23,
+      "text": "Figure S10: FMN phosphatase activity by 31P-NMRPage S-15",
+      "images": []
+    },
+    {
+      "paragraph": 24,
+      "text": "Figure S11: Structural comparison of HFP to RpiA and RpiBPage S-16",
+      "images": []
+    },
+    {
+      "paragraph": 25,
+      "text": "Figure S12: Electron density comparison in IMP monomersPage S-17",
+      "images": []
+    },
+    {
+      "paragraph": 26,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 27,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 28,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 29,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 30,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 31,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 32,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 33,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 34,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 35,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 36,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 37,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 38,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 39,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 40,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 41,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 42,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 43,
+      "text": "Script S1.  Python Script for identifying consensus sequences. The published proteins for Aquifex aeolicus 14 (text file) were imported into Microsoft Excel and saved as a CSV file with each protein being on its own row. ",
+      "images": []
+    },
+    {
+      "paragraph": 44,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 45,
+      "text": "#import packages",
+      "images": []
+    },
+    {
+      "paragraph": 46,
+      "text": "import pandas as pd#define functionsdef check_IV(sequence):\u00a0\u00a0\u00a0 a=1\u00a0\u00a0\u00a0 hits=[]\u00a0\u00a0\u00a0 for i in range(len(sequence)-5):\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 if sequence[i]=='G' and sequence[i+1]=='D' and sequence[i+5]=='D':\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 hits.append(a)\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 a=a+1\u00a0\u00a0\u00a0 for i in range(len(sequence)-6):\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 if sequence[i]=='G' and sequence[i+1]=='D' and sequence[i+6]=='D':\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 hits.append(a)\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 a=a+1\u00a0\u00a0\u00a0 for i in range(len(sequence)-1):\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 if sequence[i]=='D' and sequence[i+1]=='D':\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 hits.append(a)\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 a=a+1\u00a0\u00a0\u00a0 return sorted(hits)def mark_pos(Hits):\u00a0\u00a0\u00a0 if len(Hits)>0: return 1\u00a0\u00a0\u00a0 else: return 0def check_I(sequence):\u00a0\u00a0\u00a0 hits=[]\u00a0\u00a0\u00a0 a=1\u00a0\u00a0\u00a0 for i in range(len(sequence)-6):\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 if sequence[i]=='D' and sequence[i+2]=='D' and ((sequence[i+4]==('T' or 'V')) and (sequence[i+5])==('L'or'I')):\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 hits.append(a)\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 a=a+1\u00a0\u00a0\u00a0 return hitsdef mark_Ipos(Hits):\u00a0\u00a0\u00a0 if len(Hits)>0: return 1\u00a0\u00a0\u00a0 else: return 0",
+      "images": []
+    },
+    {
+      "paragraph": 47,
+      "text": "#construct dataframedf= pd.read_csv(path to data, names=['ProteinID'])df[['ProteinID','Sequence']]=df['ProteinID'].str.split(']',1,expand=True)",
+      "images": []
+    },
+    {
+      "paragraph": 48,
+      "text": "df['Sequence']=[str(ele) for ele in df.Sequence]df['IV_Hits']= [check_IV(ele1) for ele1 in df.Sequence]df['IV_Positive']= [mark_pos(ele1) for ele1 in df.IV_Hits]df=df.loc[df.IV_Positive==1]df['I_Hits']= [check_I(ele1) for ele1 in df.Sequence]df['NumberI']=[len(ele) for ele in df.I_Hits]df['I_Positive']= [mark_pos(ele1) for ele1 in df.I_Hits]df['Sum']=df.IV_Positive+df.I_Positive",
+      "images": []
+    },
+    {
+      "paragraph": 49,
+      "text": "df=df.loc[df.Sum==2]",
+      "images": []
+    },
+    {
+      "paragraph": 50,
+      "text": "#create CSV with hitsdf.to_csv('Aacuratedhits.csv')",
+      "images": []
+    },
+    {
+      "paragraph": 51,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 52,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 53,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 54,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 55,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 56,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 57,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 58,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 59,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 60,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 61,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 62,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 63,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 64,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 65,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 66,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 67,
+      "text": "Table S1: Enzymes used in this study",
+      "images": []
+    },
+    {
+      "paragraph": 68,
+      "text": "Name",
+      "images": []
+    },
+    {
+      "paragraph": 69,
+      "text": "Genomic Annotation",
+      "images": []
+    },
+    {
+      "paragraph": 70,
+      "text": "Code",
+      "images": []
+    },
+    {
+      "paragraph": 71,
+      "text": "RibBA",
+      "images": []
+    },
+    {
+      "paragraph": 72,
+      "text": "bifunctional 3,4-dihydroxy-2-butanone-4-phosphate synthase/GTP cyclohydrolase II",
+      "images": []
+    },
+    {
+      "paragraph": 73,
+      "text": "WP_010880177.1",
+      "images": []
+    },
+    {
+      "paragraph": 74,
+      "text": "RibE",
+      "images": []
+    },
+    {
+      "paragraph": 75,
+      "text": "riboflavin synthase",
+      "images": []
+    },
+    {
+      "paragraph": 76,
+      "text": "WP_010881107.1",
+      "images": []
+    },
+    {
+      "paragraph": 77,
+      "text": "RibD",
+      "images": []
+    },
+    {
+      "paragraph": 78,
+      "text": "bifunctional diaminohydroxyphosphoribosyl-aminopyrimidine deaminase/ 5-amino-6-(5-phosphoribosylamino) uracil reductase",
+      "images": []
+    },
+    {
+      "paragraph": 79,
+      "text": "WP_010880032.1",
+      "images": []
+    },
+    {
+      "paragraph": 80,
+      "text": "RibH",
+      "images": []
+    },
+    {
+      "paragraph": 81,
+      "text": "6,7-dimethyl-8-ribityllumazine synthase (lumazine synthase)",
+      "images": []
+    },
+    {
+      "paragraph": 82,
+      "text": "WP_010880027.1",
+      "images": []
+    },
+    {
+      "paragraph": 83,
+      "text": "PP1",
+      "images": []
+    },
+    {
+      "paragraph": 84,
+      "text": "dUTP diphosphatase",
+      "images": []
+    },
+    {
+      "paragraph": 85,
+      "text": "WP_010880090.1",
+      "images": []
+    },
+    {
+      "paragraph": 86,
+      "text": "PP2",
+      "images": []
+    },
+    {
+      "paragraph": 87,
+      "text": "phosphatidylglycerophosphatase A",
+      "images": []
+    },
+    {
+      "paragraph": 88,
+      "text": "WP_010880153.1",
+      "images": []
+    },
+    {
+      "paragraph": 89,
+      "text": "PP3",
+      "images": []
+    },
+    {
+      "paragraph": 90,
+      "text": "serine/threonine-protein phosphatase",
+      "images": []
+    },
+    {
+      "paragraph": 91,
+      "text": "WP_010880576.1",
+      "images": []
+    },
+    {
+      "paragraph": 92,
+      "text": "PP4",
+      "images": []
+    },
+    {
+      "paragraph": 93,
+      "text": "inorganic diphosphatase",
+      "images": []
+    },
+    {
+      "paragraph": 94,
+      "text": "WP_010881004.1",
+      "images": []
+    },
+    {
+      "paragraph": 95,
+      "text": "PP5",
+      "images": []
+    },
+    {
+      "paragraph": 96,
+      "text": "phosphohistidine phosphatase SixA",
+      "images": []
+    },
+    {
+      "paragraph": 97,
+      "text": "WP_010880736.1",
+      "images": []
+    },
+    {
+      "paragraph": 98,
+      "text": "PP6",
+      "images": []
+    },
+    {
+      "paragraph": 99,
+      "text": "bifunctional oligoribonuclease/PAP phosphatase NrnA",
+      "images": []
+    },
+    {
+      "paragraph": 100,
+      "text": "WP_010881055.1",
+      "images": []
+    },
+    {
+      "paragraph": 101,
+      "text": "PP7",
+      "images": []
+    },
+    {
+      "paragraph": 102,
+      "text": "lipid A 1-phosphatase LpxE",
+      "images": []
+    },
+    {
+      "paragraph": 103,
+      "text": "WP_010881106.1",
+      "images": []
+    },
+    {
+      "paragraph": 104,
+      "text": "PP8",
+      "images": []
+    },
+    {
+      "paragraph": 105,
+      "text": "nucleoside triphosphate pyrophosphatase",
+      "images": []
+    },
+    {
+      "paragraph": 106,
+      "text": "WP_010881116.1",
+      "images": []
+    },
+    {
+      "paragraph": 107,
+      "text": "PP10",
+      "images": []
+    },
+    {
+      "paragraph": 108,
+      "text": "bifunctional phosphoribosyl-AMP cyclohydrolase/ phosphoribosyl-ATP diphosphatase HisIE",
+      "images": []
+    },
+    {
+      "paragraph": 109,
+      "text": "WP_010881285.1",
+      "images": []
+    },
+    {
+      "paragraph": 110,
+      "text": "PP11 (IMP)",
+      "images": []
+    },
+    {
+      "paragraph": 111,
+      "text": "inositol monophosphatase family protein",
+      "images": []
+    },
+    {
+      "paragraph": 112,
+      "text": "WP_010881296.1",
+      "images": []
+    },
+    {
+      "paragraph": 113,
+      "text": "PP12",
+      "images": []
+    },
+    {
+      "paragraph": 114,
+      "text": "histidine phosphatase family protein",
+      "images": []
+    },
+    {
+      "paragraph": 115,
+      "text": "WP_010881302.1",
+      "images": []
+    },
+    {
+      "paragraph": 116,
+      "text": "PP13*",
+      "images": []
+    },
+    {
+      "paragraph": 117,
+      "text": "undecaprenyl-diphosphatase UppP",
+      "images": []
+    },
+    {
+      "paragraph": 118,
+      "text": "WP_010881444.1",
+      "images": []
+    },
+    {
+      "paragraph": 119,
+      "text": "PP14",
+      "images": []
+    },
+    {
+      "paragraph": 120,
+      "text": "acylphosphatase",
+      "images": []
+    },
+    {
+      "paragraph": 121,
+      "text": "WP_164930633.1",
+      "images": []
+    },
+    {
+      "paragraph": 122,
+      "text": "PP15",
+      "images": []
+    },
+    {
+      "paragraph": 123,
+      "text": "1 Ppx/GppA phosphatase family protein",
+      "images": []
+    },
+    {
+      "paragraph": 124,
+      "text": "WP_164930648.1",
+      "images": []
+    },
+    {
+      "paragraph": 125,
+      "text": "PP16",
+      "images": []
+    },
+    {
+      "paragraph": 126,
+      "text": "UDP-2,3-diacylglucosamine diphosphatase LpxI",
+      "images": []
+    },
+    {
+      "paragraph": 127,
+      "text": "WP_164930695.1",
+      "images": []
+    },
+    {
+      "paragraph": 128,
+      "text": "PP17 (HFP)",
+      "images": []
+    },
+    {
+      "paragraph": 129,
+      "text": "histidine phosphatase family protein",
+      "images": []
+    },
+    {
+      "paragraph": 130,
+      "text": "WP_164930753.1",
+      "images": []
+    },
+    {
+      "paragraph": 131,
+      "text": "PP18",
+      "images": []
+    },
+    {
+      "paragraph": 132,
+      "text": "RdgB/HAM1 family non-canonical purine NTP pyrophosphatase",
+      "images": []
+    },
+    {
+      "paragraph": 133,
+      "text": "WP_010880078.1",
+      "images": []
+    },
+    {
+      "paragraph": 134,
+      "text": "PP20",
+      "images": []
+    },
+    {
+      "paragraph": 135,
+      "text": "low molecular weight phosphatase family protein",
+      "images": []
+    },
+    {
+      "paragraph": 136,
+      "text": "WP_010880379.1",
+      "images": []
+    },
+    {
+      "paragraph": 137,
+      "text": "PP21",
+      "images": []
+    },
+    {
+      "paragraph": 138,
+      "text": "acireductone synthase",
+      "images": []
+    },
+    {
+      "paragraph": 139,
+      "text": "WP_010881291.1",
+      "images": []
+    },
+    {
+      "paragraph": 140,
+      "text": "PP22",
+      "images": []
+    },
+    {
+      "paragraph": 141,
+      "text": "HAD family hydrolase",
+      "images": []
+    },
+    {
+      "paragraph": 142,
+      "text": "WP_010880861.1",
+      "images": []
+    },
+    {
+      "paragraph": 143,
+      "text": "PP23",
+      "images": []
+    },
+    {
+      "paragraph": 144,
+      "text": "HAD hydrolase-like protein",
+      "images": []
+    },
+    {
+      "paragraph": 145,
+      "text": "WP_010880597.1",
+      "images": []
+    },
+    {
+      "paragraph": 146,
+      "text": "PP24",
+      "images": []
+    },
+    {
+      "paragraph": 147,
+      "text": "HAD hydrolase-like protein",
+      "images": []
+    },
+    {
+      "paragraph": 148,
+      "text": "WP_164930629.1",
+      "images": []
+    },
+    {
+      "paragraph": 149,
+      "text": "PP25",
+      "images": []
+    },
+    {
+      "paragraph": 150,
+      "text": "nucleoside hydrolase",
+      "images": []
+    },
+    {
+      "paragraph": 151,
+      "text": "WP_010880610.1",
+      "images": []
+    },
+    {
+      "paragraph": 152,
+      "text": " * = The protein did not express adequately for subsequent screening, see Figure S1 gel.  ",
+      "images": []
+    },
+    {
+      "paragraph": 153,
+      "text": "** = PP9 and PP19 were removed because they were open reading frame duplicates from the RefSeq and GenBank predicted proteomes.",
+      "images": []
+    },
+    {
+      "paragraph": 154,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 155,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 156,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 157,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 158,
+      "text": "Table S2: IMP Structure Components",
+      "images": []
+    },
+    {
+      "paragraph": 159,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 160,
+      "text": "Total Residues",
+      "images": []
+    },
+    {
+      "paragraph": 161,
+      "text": "992",
+      "images": []
+    },
+    {
+      "paragraph": 162,
+      "text": "Total Waters",
+      "images": []
+    },
+    {
+      "paragraph": 163,
+      "text": "323",
+      "images": []
+    },
+    {
+      "paragraph": 164,
+      "text": "Chain A",
+      "images": []
+    },
+    {
+      "paragraph": 165,
+      "text": "260 Residues: 3-262",
+      "images": []
+    },
+    {
+      "paragraph": 166,
+      "text": "1 Phosphate",
+      "images": []
+    },
+    {
+      "paragraph": 167,
+      "text": "2 Magnesium Atoms",
+      "images": []
+    },
+    {
+      "paragraph": 168,
+      "text": "4 MPD",
+      "images": []
+    },
+    {
+      "paragraph": 169,
+      "text": "Chain B",
+      "images": []
+    },
+    {
+      "paragraph": 170,
+      "text": "261 Residues: 3-263",
+      "images": []
+    },
+    {
+      "paragraph": 171,
+      "text": "1 Phosphate",
+      "images": []
+    },
+    {
+      "paragraph": 172,
+      "text": "2 Magnesium Atoms",
+      "images": []
+    },
+    {
+      "paragraph": 173,
+      "text": "4 MPD",
+      "images": []
+    },
+    {
+      "paragraph": 174,
+      "text": "Chain C",
+      "images": []
+    },
+    {
+      "paragraph": 175,
+      "text": "233 Residues: 4-29, 42-74, 79-160, 167-258",
+      "images": []
+    },
+    {
+      "paragraph": 176,
+      "text": "2 Magnesium Atoms",
+      "images": []
+    },
+    {
+      "paragraph": 177,
+      "text": "1 MPD",
+      "images": []
+    },
+    {
+      "paragraph": 178,
+      "text": "Chain D",
+      "images": []
+    },
+    {
+      "paragraph": 179,
+      "text": "238 Residues: 4-34, 42-160, 168-255",
+      "images": []
+    },
+    {
+      "paragraph": 180,
+      "text": "2 Magnesium Atom",
+      "images": []
+    },
+    {
+      "paragraph": 181,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 182,
+      "text": "Table S3: HFP Structure Components",
+      "images": []
+    },
+    {
+      "paragraph": 183,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 184,
+      "text": "Total Residues",
+      "images": []
+    },
+    {
+      "paragraph": 185,
+      "text": "812",
+      "images": []
+    },
+    {
+      "paragraph": 186,
+      "text": "Total Waters",
+      "images": []
+    },
+    {
+      "paragraph": 187,
+      "text": "395",
+      "images": []
+    },
+    {
+      "paragraph": 188,
+      "text": "Chain A",
+      "images": []
+    },
+    {
+      "paragraph": 189,
+      "text": "203 Residues: 1-203",
+      "images": []
+    },
+    {
+      "paragraph": 190,
+      "text": "Chain B",
+      "images": []
+    },
+    {
+      "paragraph": 191,
+      "text": "203 Residues: 1-203",
+      "images": []
+    },
+    {
+      "paragraph": 192,
+      "text": "Chain C",
+      "images": []
+    },
+    {
+      "paragraph": 193,
+      "text": "203 Residues: 1-203",
+      "images": []
+    },
+    {
+      "paragraph": 194,
+      "text": "Chain D",
+      "images": []
+    },
+    {
+      "paragraph": 195,
+      "text": "203 Residues: 1-203",
+      "images": []
+    },
+    {
+      "paragraph": 196,
+      "text": "Chain E",
+      "images": []
+    },
+    {
+      "paragraph": 197,
+      "text": "11 sulfates",
+      "images": []
+    },
+    {
+      "paragraph": 198,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 199,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 200,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 201,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 202,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 203,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 204,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 205,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 206,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 207,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 208,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 209,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 210,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 211,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 212,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 213,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 214,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 215,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 216,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 217,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 218,
+      "text": "",
+      "images": [
+        "media/image1.emf"
+      ]
+    },
+    {
+      "paragraph": 219,
+      "text": "Figure S1: SDS-PAGE showing expression of phosphatases. Boxes highlight presence of putative phosphatase. Samples noted with * were diluted 1:10 prior to loading on to the gel for clarity as undiluted sample overloaded the lane.  PP9 and PP19 were removed because they were open reading frame duplicates from the RefSeq and GenBank predicted proteomes.",
+      "images": []
+    },
+    {
+      "paragraph": 220,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 221,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 222,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 223,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 224,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 225,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 226,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 227,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 228,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 229,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 230,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 231,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 232,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 233,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 234,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 235,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 236,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 237,
+      "text": "",
+      "images": [
+        "media/image2.emf"
+      ]
+    },
+    {
+      "paragraph": 238,
+      "text": "Figure S2: SDS-PAGE gel showing purified IMP and HFP used for assays. Note that there are two faint bands visible in the HFP sample between 48 and 63 kDa. Neither of these bands are the E. coli Rpi contaminants responsible for the observed isomerase activity of the sample. The molecular weights of E. coli RpiA and RpiB are ~22,860 and 16,073 Da, respectively. Because HFP is close in molecular weight to RpiA, the contaminant band may not be visible by SDS-PAGE.",
+      "images": []
+    },
+    {
+      "paragraph": 239,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 240,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 241,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 242,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 243,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 244,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 245,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 246,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 247,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 248,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 249,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 250,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 251,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 252,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 253,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 254,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 255,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 256,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 257,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 258,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 259,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 260,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 261,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 262,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 263,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 264,
+      "text": "",
+      "images": [
+        "media/image3.emf"
+      ]
+    },
+    {
+      "paragraph": 265,
+      "text": "Figure S3: 31P-NMR of prolonged incubation samples demonstrates GTP dephosphorylation. Overnight incubation of enzymes with GTP does show that GTP is dephosphorylated by HFP and IMP after prolonged incubation at 55\u02da C.  In particular, note the formation of the peak at 2.1 ppm which is free phosphate (highlighted by the gray box). A free phosphate peak is absent in the GTP standard, which was subjected to identical temperature and duration of incubation. ",
+      "images": []
+    },
+    {
+      "paragraph": 266,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 267,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 268,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 269,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 270,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 271,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 272,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 273,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 274,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 275,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 276,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 277,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 278,
+      "text": "",
+      "images": [
+        "media/image4.emf"
+      ]
+    },
+    {
+      "paragraph": 279,
+      "text": "Figure S4: 13C-NMR to confirm Ru5P/R5P isomerization. Top black trace shows labeled Ru5P and R5P generated by 13C-Ru5P isomerization by HFP. Blue trace shows chemical shifts of carbons in 13C-Ru5P. Unlabeled R5P was used to determine chemical shifts of the carbons in R5P (bottom red trace). ",
+      "images": []
+    },
+    {
+      "paragraph": 280,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 281,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 282,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 283,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 284,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 285,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 286,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 287,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 288,
+      "text": "",
+      "images": [
+        "media/image5.emf"
+      ]
+    },
+    {
+      "paragraph": 289,
+      "text": "Figure S5: Equilibrium mixture of ribose and ribulose 5-phosphate established by HFP sample.  Integration of 31P peaks showing an equilibrium mixture of 39.7% ketose (ribulose) and 60.3% aldose (ribose) stereoisomer 5-phosphates established by HFP sample during a 10 min incubation at room temperature. Calculation of equilibrium concentrations of Ru5P and R5P was performed in MestReNova.  ",
+      "images": []
+    },
+    {
+      "paragraph": 290,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 291,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 292,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 293,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 294,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 295,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 296,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 297,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 298,
+      "text": "",
+      "images": [
+        "media/image6.emf"
+      ]
+    },
+    {
+      "paragraph": 299,
+      "text": "Figure S6: His-tagged HFP sample isomerization of Ru5P. After affinity chromatography, gel filtration, and heating to 90 C for 2 minutes (until protein began to visibly fall out of solution), HFP sample still isomerizes Ru5P to R5P, but it takes longer for the 40:60 equilibrium to be reached. The top panel shows the sample after being incubated for 1 hour with Ru5P vs 18 hours. Only after a prolonged incubation time is equilibrium reached, suggesting significantly less contaminant Rpi present. ",
+      "images": []
+    },
+    {
+      "paragraph": 300,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 301,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 302,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 303,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 304,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 305,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 306,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 307,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 308,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 309,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 310,
+      "text": "",
+      "images": [
+        "media/image7.png"
+      ]
+    },
+    {
+      "paragraph": 311,
+      "text": "Figure S7:  Isomerase activity by 31P-NMR.  Four out of five randomly selected putative phosphate samples demonstrated isomerase activity, as evident from the new peak at 3.5 ppm.",
+      "images": []
+    },
+    {
+      "paragraph": 312,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 313,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 314,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 315,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 316,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 317,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 318,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 319,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 320,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 321,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 322,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 323,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 324,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 325,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 326,
+      "text": "",
+      "images": [
+        "media/image8.png"
+      ]
+    },
+    {
+      "paragraph": 327,
+      "text": "Figure S8.  Mass spectrometry confirmation of RpiA Sequence coverage from mass spectrometry analysis. A, HFP (Aquifex aeolicus); B, ribose-5-phosphate isomerase A (Escherichia coli). Sequences highlighted in gold were detected after applying the criteria described below. Detected modifications of amino acids are indicated in green: M, methionine oxidation; Q, glutamine deamidation; N asparagine deamidation. [Note: the modifications were detected on a percentage of residues\u2014i.e., they are not all modified.]",
+      "images": []
+    },
+    {
+      "paragraph": 328,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 329,
+      "text": "MS Method. Digests were analyzed by HPLC-electrospray ionization tandem mass spectrometry on a Thermo Scientific Orbitrap Fusion Lumos mass spectrometer using a data-dependent acquisition scan strategy. Mascot (v2.8.3; Matrix Science, London UK) was used to search the spectra against a combination of the following databases: UniProt_E_coli_ref; a \u201clocal\u201d database that includes the sequences of recombinant and target proteins; common contaminants (not including Bos taurus proteins). Cysteine carbamidomethylation was set as a fixed modification and methionine oxidation and deamidation of glutamine and asparagine were considered as variable modifications; trypsin was specified as the proteolytic enzyme, with two missed cleavages allowed. The Mascot search results were imported into Scaffold (version 5.3.3, Proteome Software Inc., Portland, OR): peptide threshold, 95%; protein threshold, 99%;  minimum peptides, 2. The settings used resulted in a protein-level FDR of ~0%.",
+      "images": []
+    },
+    {
+      "paragraph": 330,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 331,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 332,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 333,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 334,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 335,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 336,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 337,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 338,
+      "text": "",
+      "images": [
+        "media/image9.emf"
+      ]
+    },
+    {
+      "paragraph": 339,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 340,
+      "text": "Figure S9:  HFP asymmetric unit and biological assembly.  A. HFP crystals contained 4 chains in the asymmetric unit colored as follows: A, dark orange, B, bright orange, C, wheat, D, gray. Chains A and B form the dimer while chains C and D form dimers with adjacent unit cells. B. The biological assembly has high homology to PDB:4IJ6, shown in cyan, and the active sites are highlighted by the green spheres. ",
+      "images": []
+    },
+    {
+      "paragraph": 341,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 342,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 343,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 344,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 345,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 346,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 347,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 348,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 349,
+      "text": "",
+      "images": [
+        "media/image10.emf"
+      ]
+    },
+    {
+      "paragraph": 350,
+      "text": "Figure S10:  FMN phosphatase activity by 31P-NMR. 31P-NMR indicates that both EcYigB, in agreement with previously published reports, and HFP dephosphorylate FMN. ",
+      "images": []
+    },
+    {
+      "paragraph": 351,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 352,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 353,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 354,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 355,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 356,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 357,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 358,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 359,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 360,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 361,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 362,
+      "text": "S-15",
+      "images": []
+    },
+    {
+      "paragraph": 363,
+      "text": "",
+      "images": [
+        "media/image11.emf"
+      ]
+    },
+    {
+      "paragraph": 364,
+      "text": "Figure S11:  Structural comparison of HFP (orange) to RpiB (green, PDB: 3K7S) and RpiA (pink, PDB: 1LK7). ",
+      "images": []
+    },
+    {
+      "paragraph": 365,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 366,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 367,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 368,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 369,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 370,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 371,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 372,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 373,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 374,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 375,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 376,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 377,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 378,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 379,
+      "text": " ",
+      "images": [
+        "media/image12.emf"
+      ]
+    },
+    {
+      "paragraph": 380,
+      "text": "Figure S12: Electron density comparison in IMP monomers. The density for residues 151-160, 183-186, and 203-298 is shown for both the A and D chains. The 2Fo-Fc map is contoured to 1.5 \u03c3. ",
+      "images": []
+    },
+    {
+      "paragraph": 381,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 382,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 383,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 384,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 385,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 386,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 387,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 388,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 389,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 390,
+      "text": "",
+      "images": []
+    },
+    {
+      "paragraph": 391,
+      "text": "",
+      "images": []
+    }
+  ],
+  "members": [
+    {
+      "name": "word/media/image1.emf",
+      "bytes": 2005216,
+      "sha256": "3ea342b5ef44f9f5c11434a4eee44fd4fe1d72a3c04cf002d9a422853139b02b"
+    },
+    {
+      "name": "word/media/image2.emf",
+      "bytes": 1167856,
+      "sha256": "19035326433c5921b5bbdc2939d769879bfab982d45ef9036cedcb53845ecfcd"
+    },
+    {
+      "name": "word/media/image3.emf",
+      "bytes": 2941348,
+      "sha256": "0717ab19aa3f683a1cb32a70691b1eb5b1fe73f93ec6d42553360059aeae8aca"
+    },
+    {
+      "name": "word/media/image4.emf",
+      "bytes": 2051796,
+      "sha256": "a7b14be37e7e84b215b6f10d6d36344d70926a2b768e8059c63f0241da9f3c36"
+    },
+    {
+      "name": "word/media/image5.emf",
+      "bytes": 2023964,
+      "sha256": "f5e70bdb6e79973024f77fb53991dc3d6e791f696b930fa3dc72a3965003fddf"
+    },
+    {
+      "name": "word/media/image6.emf",
+      "bytes": 2024252,
+      "sha256": "d4d6defc7ecab86ef7a0493747936a005a72e847994cfa5b7ab55b3c244663ed"
+    },
+    {
+      "name": "word/media/image7.png",
+      "bytes": 148615,
+      "sha256": "f726a380d768e8319884b3961836be0c317613c784019ab123c7078a35bf36f6"
+    },
+    {
+      "name": "word/media/image8.png",
+      "bytes": 117422,
+      "sha256": "db374ece1d9a4d3cee8b67765de9d6a596c11086011efd35ccf4102f66cc16cd"
+    },
+    {
+      "name": "word/media/image9.emf",
+      "bytes": 6177424,
+      "sha256": "8bccbf296d9ad09e7fdda3f020f1dbf1ff22c1b868a4e7c88ea812da07168a69"
+    },
+    {
+      "name": "word/media/image10.emf",
+      "bytes": 2040604,
+      "sha256": "1b75bd54f9531871afb21bc4b09b1831131e74fbf305d97c03dbbdb2aafacb23"
+    },
+    {
+      "name": "word/media/image11.emf",
+      "bytes": 5640824,
+      "sha256": "9896c81f19382e25c26fdeb3dc490dec6d293ec6c9e4eb65c30f81c570b96b17"
+    },
+    {
+      "name": "word/media/image12.emf",
+      "bytes": 6946720,
+      "sha256": "6febbc468f94c0164e60e8b5f41d96077b5b7f4a40650e358f7ec601461ad98f"
+    }
+  ]
+}

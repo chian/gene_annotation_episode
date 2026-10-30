@@ -1,0 +1,17 @@
+{
+  "source_accession": "GSE108295",
+  "reference": "NC_000964.3",
+  "sample_labels": {
+    "GSM2895008": "WT B. subtilis 3610 delta-epsH, exponential LB",
+    "GSM2895009": "delta-ylbF, exponential LB",
+    "GSM2895010": "delta-ymcA, exponential LB",
+    "GSM2895011": "delta-yaaT, exponential LB",
+    "GSM2895012": "delta-rny, exponential LB"
+  },
+  "signal_units": "Depositor-normalized mapped-end signal (paper describes reads per million non-rRNA/non-tRNA reads).",
+  "calculation": "For selected WT peak p, local median uses all genomic positions p-50..p+50 with abs(q-p)>5, treating absent WIG entries as zero. Peak/local median is descriptive; no statistical threshold.",
+  "selection": "Known paper-identified windows were chosen before reading WIG maxima; not a blind genome-wide discovery.",
+  "missingness": "delta-yaaT reverse 5-prime filename lacks explicit _5_r suffix in archive; excluded from reverse-end comparison to avoid assuming filename identity. Its explicit forward track was used for glnRA, and explicit reverse 3-prime track for rnpB.",
+  "scope": "One deposited processed track per genotype; no biological-replicate model. Not a raw-read reanalysis.",
+  "download_failure": "PNAS supplementary XLSX retrieval returned anti-bot HTML; those files were renamed .failed.html and not used. GEO processed tracks were successfully downloaded and parsed."
+}

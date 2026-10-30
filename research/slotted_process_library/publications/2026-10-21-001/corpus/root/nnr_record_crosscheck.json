@@ -1,0 +1,26 @@
+{
+  "case_id": "nnr_yjef_cofactor_and_repair",
+  "probe": "Cross-check structural corroboration in the paper discussion against deposited ligand records",
+  "paper_reported": "Discussion cites 3RS8 while describing NADHX and ADP in a catalytic site.",
+  "performed_operations": [
+    {
+      "url": "https://www.ebi.ac.uk/pdbe/api/pdb/entry/molecules/3rs8",
+      "observed": "Current record lists potassium, magnesium, ADP-ribose and glycerol; not an ADP/NADHX pair."
+    },
+    {
+      "url": "https://www.ebi.ac.uk/pdbe/api/pdb/entry/summary/3rre",
+      "observed": "Related TM0922 entry is explicitly titled an ADP complex."
+    },
+    {
+      "url": "https://www.ebi.ac.uk/pdbe/api/pdb/entry/molecules/3rre",
+      "observed": "ADP is a bound molecule in 3RRE."
+    }
+  ],
+  "changed_next_question": "Which deposited complex actually supports the specific ligand claim? Do not silently substitute a related structure for the cited entry.",
+  "bounded_result": "The biochemical ADP-dependence result stands on its assays; the particular 3RS8 corroboration statement is not independently verified by the current ligand record. The reason for the mismatch remains unresolved.",
+  "not_performed": [
+    "No crystallographic re-refinement",
+    "No ligand chemistry re-identification",
+    "No reaction assays"
+  ]
+}

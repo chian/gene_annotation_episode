@@ -1,0 +1,139 @@
+{
+  "record_kind": "request operands transcribed from executed calls; response bytes are parsed JSON reserialization",
+  "timestamp_meaning": "response_saved_utc is raw response file write completion from filesystem mtime, not a provider timestamp",
+  "requests": {
+    "mapping_001": {
+      "client_script": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/string-skill/scripts/rest_request.py",
+      "request": {
+        "base_url": "https://string-db.org/api/json",
+        "path": "get_string_ids",
+        "method": "POST",
+        "form_body": {
+          "identifiers": "bioY\nbioN\nbioM",
+          "species": 272942,
+          "caller_identity": "gene-annotation-a103-contrast-031",
+          "limit": 10
+        },
+        "max_items": 10,
+        "save_raw": true,
+        "raw_output_path": "research/experimental_scoring_review_2026-10-23/a103_scored_published_contrast_031/string_bioy_mapping_001.json"
+      },
+      "requested_endpoint": "https://string-db.org/api/json/get_string_ids",
+      "response_status": 200,
+      "response_saved_utc": "2026-10-24T05:43:46.013136+00:00",
+      "response_record_count": 3,
+      "console_preview_record_count": 3,
+      "console_preview_truncated": false,
+      "complete_response_saved": true,
+      "sha256": "00302b1c5505c33b14c1ab7971502f198f1b486922c2b134cfb956acc19d543e",
+      "file": "string_bioy_mapping_001.json"
+    },
+    "network_001": {
+      "client_script": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/string-skill/scripts/rest_request.py",
+      "request": {
+        "base_url": "https://string-db.org/api/json",
+        "path": "network",
+        "method": "POST",
+        "form_body": {
+          "identifiers": "272942.RCAP_rcc03249\n272942.RCAP_rcc03250",
+          "species": 272942,
+          "network_type": "functional",
+          "required_score": 0,
+          "add_nodes": 0,
+          "caller_identity": "gene-annotation-a103-contrast-031",
+          "limit": 10
+        },
+        "max_items": 10,
+        "save_raw": true,
+        "raw_output_path": "research/experimental_scoring_review_2026-10-23/a103_scored_published_contrast_031/string_bioy_bion_network_001.json"
+      },
+      "requested_endpoint": "https://string-db.org/api/json/network",
+      "response_status": 200,
+      "response_saved_utc": "2026-10-24T05:44:03.406134+00:00",
+      "response_record_count": 44,
+      "console_preview_record_count": 10,
+      "console_preview_truncated": true,
+      "complete_response_saved": true,
+      "sha256": "058bf08b08641830fda744855bb77d6b8f6973e2afb8a55bf395084a5c321a34",
+      "file": "string_bioy_bion_network_001.json"
+    },
+    "network_002": {
+      "client_script": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/string-skill/scripts/rest_request.py",
+      "request": {
+        "base_url": "https://string-db.org/api/json",
+        "path": "network",
+        "method": "POST",
+        "form_body": {
+          "identifiers": "272942.RCAP_rcc03249%0d272942.RCAP_rcc03250",
+          "species": 272942,
+          "network_type": "functional",
+          "required_score": 0,
+          "add_nodes": 0,
+          "caller_identity": "gene-annotation-a103-contrast-031"
+        },
+        "max_items": 15,
+        "save_raw": true,
+        "raw_output_path": "research/experimental_scoring_review_2026-10-23/a103_scored_published_contrast_031/string_bioy_bion_network_002.json"
+      },
+      "requested_endpoint": "https://string-db.org/api/json/network",
+      "response_status": 200,
+      "response_saved_utc": "2026-10-24T05:44:52.053162+00:00",
+      "response_record_count": 1,
+      "console_preview_record_count": 1,
+      "console_preview_truncated": false,
+      "complete_response_saved": true,
+      "sha256": "319b9986da21a493d75adf20d47def84f22380df00b5fe12e81ee1432d040a41",
+      "file": "string_bioy_bion_network_002.json"
+    },
+    "version_001": {
+      "client_script": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/string-skill/scripts/rest_request.py",
+      "request": {
+        "base_url": "https://string-db.org/api/json",
+        "path": "version",
+        "method": "POST",
+        "form_body": {
+          "caller_identity": "gene-annotation-a103-contrast-031"
+        },
+        "max_items": 10,
+        "save_raw": true,
+        "raw_output_path": "research/experimental_scoring_review_2026-10-23/a103_scored_published_contrast_031/string_version_001.json"
+      },
+      "requested_endpoint": "https://string-db.org/api/json/version",
+      "response_status": 200,
+      "response_saved_utc": "2026-10-24T05:45:01.548154+00:00",
+      "response_record_count": 1,
+      "console_preview_record_count": 1,
+      "console_preview_truncated": false,
+      "complete_response_saved": true,
+      "sha256": "4f9e4ad67118ecc0e6f57d185735e734adb125bda8d6fb1f968f1f5c51c564b6",
+      "file": "string_version_001.json"
+    },
+    "uniprot_aliases_001": {
+      "client_script": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/uniprot-skill/scripts/rest_request.py",
+      "request": {
+        "base_url": "https://rest.uniprot.org",
+        "path": "uniprotkb/search",
+        "method": "GET",
+        "params": {
+          "query": "organism_id:272942 AND (gene_exact:RCAP_rcc03249 OR gene_exact:RCAP_rcc03250)",
+          "fields": "accession,id,protein_name,gene_names,organism_name,organism_id,xref_string",
+          "size": 10,
+          "format": "json"
+        },
+        "max_items": 10,
+        "max_depth": 6,
+        "save_raw": true,
+        "raw_output_path": "research/experimental_scoring_review_2026-10-23/a103_scored_published_contrast_031/uniprot_locus_aliases_001.json"
+      },
+      "requested_endpoint": "https://rest.uniprot.org/uniprotkb/search",
+      "response_status": 200,
+      "response_saved_utc": "2026-10-24T05:45:41.959464+00:00",
+      "response_record_count": 2,
+      "console_preview_record_count": 2,
+      "console_preview_truncated": false,
+      "complete_response_saved": true,
+      "sha256": "4a6a50e7afb3be2dc191d4c820181007d3300d183f2c50c99a58554ec6ab79d3",
+      "file": "uniprot_locus_aliases_001.json"
+    }
+  }
+}

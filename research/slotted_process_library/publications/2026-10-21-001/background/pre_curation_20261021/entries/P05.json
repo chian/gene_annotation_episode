@@ -1,0 +1,67 @@
+{
+  "slot": "thought_pattern",
+  "id": "P05",
+  "name": "Constrain missing-function hypotheses by what the system must accomplish",
+  "description": "Use a supported output or requirement to distinguish loss of function, unfamiliar replacement, different route and changed demand. Evaluate candidate similarities and context against these system explanations.",
+  "use_when": "A familiar enzyme is missing or a required conversion has no assigned protein despite evidence that the output exists or is needed.",
+  "live_alternatives": [
+    "Capability is absent or supplied environmentally.",
+    "An unfamiliar protein supplies the same contribution.",
+    "A different route reaches the output or bypasses the requirement.",
+    "The presumed system requirement is wrong here."
+  ],
+  "decision_guidance": [
+    "Specify the required input/output or demand before choosing families.",
+    "Prefer distribution, domain combinations and context distinguishing explanations, including pathway-negative organisms when available.",
+    "Allow an alternative to change the reaction boundary; replacement need not copy every activity of the familiar protein."
+  ],
+  "outcome_contingencies": [
+    {
+      "if_observed": "Candidate tracks the contribution and functional evidence agrees",
+      "then_consider": "Support the demonstrated contribution; association alone remains a candidate assignment."
+    },
+    {
+      "if_observed": "Output persists without the familiar route",
+      "then_consider": "Retain replacement and bypass alternatives."
+    },
+    {
+      "if_observed": "Only a missing label or textbook gap exists",
+      "then_consider": "Keep completion provisional instead of assigning a gene to fill a diagram."
+    }
+  ],
+  "boundary": "This is system abduction, not a gene-search task or one-gene-per-step rule. P19 starts from residual output after perturbation; P04 starts from a failed assignment.",
+  "evidence": [
+    {
+      "case_group": "context_archaeal_shikimate_kinase_2001",
+      "case_id": "context_archaeal_shikimate_kinase_2001",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC94878/",
+      "source_locator": "Case-record observation; inspected scope: Complete main paper, genome-analysis methods, results, and substrate-assay methods read. No WIT reconstruction, alignment, or enzyme assay rerun. Historical WIT identifier retained without an unverified modern-locus mapping.",
+      "observation": "Missing recognizable kinase, contrasting pathway-bearing archaea and contextual GHMP paralogs narrowed a nonorthologous replacement.",
+      "limit": "Context and direct substrate assays support different claims."
+    },
+    {
+      "case_group": "context_ribk_mj0056_2008",
+      "case_id": "context_ribk_mj0056_2008",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2293203/",
+      "source_locator": "Case-record observation; inspected scope: Complete short primary paper and methods read. No ribB-neighborhood retrieval or enzymatic measurement repeated.",
+      "observation": "A CTP-preferring archaeal kinase supplied missing riboflavin phosphorylation despite no recognizable canonical sequence.",
+      "limit": "Auxotroph occurrence also permits salvage; fold/CDP binding alone would not establish the assignment."
+    },
+    {
+      "case_group": "seq_ygbP_ispD_ecoli",
+      "case_id": "seq_ygbP_ispD_ecoli",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC18359/",
+      "source_locator": "Case-record observation; inspected scope: Primary results for purification, nucleotide preference, NMR and the database-search narrative inspected through indexed full-text sections; no live pathway analysis.",
+      "observation": "Observed CTP-dependent pathway chemistry guided a chemical-class/domain search followed by recombinant product validation.",
+      "limit": "The search rationale is author-reported; no new pathway analysis or assay."
+    },
+    {
+      "case_group": "replacement_queH",
+      "case_id": "replacement_queH",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5495094/",
+      "source_locator": "Case-record observation; inspected scope: Full relevant primary results/methods in both papers; independent read-only 7LC5 coordinate probe recorded separately. No cultures, mass-spectrometric assays or mechanism reconstruction rerun.",
+      "observation": "Q persisted despite missing QueG; distributions, context and cellular product tests identified an alternative contribution.",
+      "limit": "Cellular evidence does not settle isolated productive catalysis or native cofactors."
+    }
+  ]
+}

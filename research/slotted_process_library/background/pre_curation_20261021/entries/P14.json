@@ -1,0 +1,67 @@
+{
+  "slot": "thought_pattern",
+  "id": "P14",
+  "name": "Distinguish the transformation from its proxy readout",
+  "description": "Treat bands, cofactor changes, substrate loss and downstream signals as compatible with several transformations. Prefer evidence separating intended chemistry from half-reactions, spontaneous conversion or artifacts.",
+  "use_when": "A proxy is naming a reaction without establishing what actually changed.",
+  "live_alternatives": [
+    "Proxy reflects identified intended product.",
+    "A half-reaction/alternative creates the same proxy.",
+    "A spontaneous downstream step follows different enzyme chemistry.",
+    "Disappearance/migration changes without productive conversion."
+  ],
+  "decision_guidance": [
+    "Name rival transformations before selecting product, labeling, temporal or chemical-competence evidence.",
+    "Keep genuine partial chemistry when full product is absent.",
+    "Structural plausibility can guide discrimination but cannot identify the chemistry alone."
+  ],
+  "outcome_contingencies": [
+    {
+      "if_observed": "Identified products/labeled atoms distinguish the event",
+      "then_consider": "Assign that transformation at tested scope."
+    },
+    {
+      "if_observed": "Proxy persists without expected product",
+      "then_consider": "Reopen partial/alternative chemistry."
+    },
+    {
+      "if_observed": "Only disappearance or band shift is observed",
+      "then_consider": "Record it specifically; productive synthesis stays open."
+    }
+  ],
+  "boundary": "P14 asks what occurred; P06 asks who caused an established output. It is not routine record validation and does not assume new experiments are available.",
+  "evidence": [
+    {
+      "case_group": "EUBREC2651_Fleischman_2014",
+      "case_id": "EUBREC2651_Fleischman_2014",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4116655/",
+      "source_locator": "Case-record observation; inspected scope: Relevant indexed primary results/limitations inspected; no new experiments.",
+      "observation": "PLP-to-PMP conversion lacked expected glutamate; phosphate elimination limited a PSAT conclusion.",
+      "limit": "Physiological-direction substrate was unavailable; trapping remained proposed."
+    },
+    {
+      "case_group": "seq_ptmvd_m3k_picrophilus",
+      "case_id": "seq_ptmvd_m3k_picrophilus",
+      "source_url": "https://journals.asm.org/doi/full/10.1128/aem.04033-14",
+      "source_locator": "Case-record observation; inspected scope: Primary sequence-analysis methods/results, abstract and product-analysis conclusion inspected; no new sequence search or biochemical experiment.",
+      "observation": "Isobutene followed spontaneous decomposition after phosphorylation rather than direct enzymatic decarboxylation.",
+      "limit": "No new product assay."
+    },
+    {
+      "case_group": "causal_cas2_spacer_acquisition",
+      "case_id": "causal_cas2_spacer_acquisition",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4359072/",
+      "source_locator": "Integration/disintegration and3-prime-OH Results; C4 in causal/cas2/case_trace.json.",
+      "observation": "Radiolabel and disintegration controls separate covalent integration from plasmid topoisomer migration including BandX.",
+      "limit": "Defined assays do not recapitulate every cellular repair/acquisition step."
+    },
+    {
+      "case_group": "sulfoglycolysis_selectivity",
+      "case_id": "spec_yihs_sulfosugar_selectivity",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8006165/",
+      "source_locator": "YihS product Results and relevant figure legends, 2021; specificity record yihs.3.",
+      "observation": "NMR, isotope exchange and authentic reference identified an additional sulforhamnose product instead of assuming one isomerization product.",
+      "limit": "Supporting spectra were not independently reprocessed."
+    }
+  ]
+}

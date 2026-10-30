@@ -1,0 +1,2561 @@
+{
+  "inventory_date": "2026-10-24",
+  "source_root": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills",
+  "scope": "Installed life-science-research 1.0.3 skills. Provider/client inventory, not an enumeration of arbitrary endpoints allowed by generic REST/GraphQL clients. Native scientific algorithms and biological readers are distinct.",
+  "counts": {
+    "biological_data_reader": 44,
+    "excluded": 4,
+    "algorithm": 2
+  },
+  "entries": [
+    {
+      "name": "alphafold-skill",
+      "description": "Submit compact AlphaFold Protein Structure Database API requests for prediction, UniProt summary, sequence summary, and annotation lookups. Use when a user wants AlphaFold metadata or concise structure summaries",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/alphafold-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/alphafold-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "bgee-skill",
+      "description": "Submit compact Bgee SPARQL requests for healthy wild-type expression metadata and ontology-aware lookup patterns. Use when a user wants concise Bgee summaries; save raw results only on request.",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/bgee-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/bgee-skill/scripts/sparql_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 22
+            },
+            {
+              "name": "parse_input",
+              "line": 49
+            },
+            {
+              "name": "execute",
+              "line": 99
+            },
+            {
+              "name": "main",
+              "line": 182
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "bindingdb-skill",
+      "description": "Submit compact BindingDB REST API requests for ligand-target binding lookups by PDB, UniProt, or similarity search. Use when a user wants concise BindingDB summaries; save raw payloads only on request.",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/bindingdb-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/bindingdb-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "biobankjapan-phewas-skill",
+      "description": "Fetch compact BioBank Japan PheWAS summaries for single variants by accepting rsID, GRCh38, or GRCh37 input and resolving to the required GRCh37 query. Use when a user wants concise BBJ association results for one variant",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/biobankjapan-phewas-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/biobankjapan-phewas-skill/scripts/biobankjapan_phewas.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 35
+            },
+            {
+              "name": "parse_input",
+              "line": 43
+            },
+            {
+              "name": "fetch_bbj_variant",
+              "line": 73
+            },
+            {
+              "name": "extract_associations",
+              "line": 92
+            },
+            {
+              "name": "resolve_raw_output_path",
+              "line": 102
+            },
+            {
+              "name": "write_raw_json",
+              "line": 110
+            },
+            {
+              "name": "main",
+              "line": 115
+            }
+          ]
+        },
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/biobankjapan-phewas-skill/scripts/variant_resolution.py",
+          "public_functions": [
+            {
+              "name": "build_key_for",
+              "line": 36
+            },
+            {
+              "name": "build_variant_record",
+              "line": 40
+            },
+            {
+              "name": "parse_variant_string",
+              "line": 57
+            },
+            {
+              "name": "extract_variant_input",
+              "line": 94
+            },
+            {
+              "name": "lookup_rsid",
+              "line": 140
+            },
+            {
+              "name": "lookup_position",
+              "line": 174
+            },
+            {
+              "name": "resolve_rsid_both_builds",
+              "line": 203
+            },
+            {
+              "name": "resolve_position_both_builds",
+              "line": 231
+            },
+            {
+              "name": "resolve_variant",
+              "line": 268
+            },
+            {
+              "name": "resolve_query_variant",
+              "line": 362
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "biorxiv-skill",
+      "description": "Submit compact bioRxiv and medRxiv API requests for details, publication-linkage, and DOI lookups. Use when a user wants concise preprint metadata summaries",
+      "inventory_kind": "excluded",
+      "exclusion_reason": "Literature discovery; separate literature work.",
+      "resources": [],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/biorxiv-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/biorxiv-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": null
+    },
+    {
+      "name": "biostudies-arrayexpress-skill",
+      "description": "Submit compact BioStudies and ArrayExpress API requests for free-text search and accession-based study retrieval. Use when a user wants concise BioStudies summaries",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/biostudies-arrayexpress-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/biostudies-arrayexpress-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "cbioportal-skill",
+      "description": "Submit compact cBioPortal API requests for studies, molecular profiles, mutations, clinical data, and samples. Use when a user wants concise cBioPortal summaries",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/cbioportal-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/cbioportal-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "cellxgene-skill",
+      "description": "Submit compact CELLxGENE Discover API requests for public collection and dataset metadata. Use when a user wants concise single-cell collection summaries",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/cellxgene-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/cellxgene-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "chebi-skill",
+      "description": "Submit compact ChEBI 2.0 API requests for chemical search, compound lookup, ontology traversal, and structure metadata. Use when a user wants concise ChEBI summaries",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/chebi-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/chebi-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "chembl-skill",
+      "description": "Submit compact ChEMBL API requests for activity, molecule, target, mechanism, and text-search endpoints. Use when a user wants concise ChEMBL summaries",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/chembl-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/chembl-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "civic-skill",
+      "description": "Submit compact CIViC GraphQL requests for cancer variant interpretation schema inspection and targeted evidence retrieval. Use when a user wants concise CIViC summaries",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/civic-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/civic-skill/scripts/civic_graphql.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 22
+            },
+            {
+              "name": "parse_input",
+              "line": 49
+            },
+            {
+              "name": "execute",
+              "line": 90
+            },
+            {
+              "name": "main",
+              "line": 136
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "clinicaltrials-skill",
+      "description": "Submit compact ClinicalTrials.gov API v2 requests for study search, metadata, enums, search areas, and field statistics. Use when a user wants concise ClinicalTrials.gov summaries",
+      "inventory_kind": "excluded",
+      "exclusion_reason": "Clinical-trial registry search, not a bioinformatics algorithm.",
+      "resources": [],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/clinicaltrials-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/clinicaltrials-skill/scripts/clinicaltrials_client.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 31
+            },
+            {
+              "name": "parse_input",
+              "line": 74
+            },
+            {
+              "name": "execute",
+              "line": 109
+            },
+            {
+              "name": "main",
+              "line": 212
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": null
+    },
+    {
+      "name": "clinvar-variation-skill",
+      "description": "Submit compact ClinVar Clinical Tables and NCBI Variation requests for search, VCV, RCV, SCV, and RefSNP lookups. Use when a user wants variant-level summaries or identifier mapping",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/clinvar-variation-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/clinvar-variation-skill/scripts/clinvar_variation.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 23
+            },
+            {
+              "name": "parse_input",
+              "line": 50
+            },
+            {
+              "name": "execute",
+              "line": 97
+            },
+            {
+              "name": "main",
+              "line": 181
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "efo-ontology-skill",
+      "description": "Submit compact EFO OLS4 requests for search, term lookup, children, and descendants. Use when a user wants concise EFO resolution or ontology-expansion summaries",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/efo-ontology-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/efo-ontology-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "encode-skill",
+      "description": "Submit compact ENCODE REST API requests for object lookups, portal-style search, and metadata retrieval. Use when a user wants concise ENCODE summaries",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/encode-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/encode-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "ensembl-skill",
+      "description": "Submit compact Ensembl REST API requests for lookup, overlap, cross-reference, and variation endpoints. Use when a user wants concise Ensembl summaries",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/ensembl-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/ensembl-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "epigraphdb-skill",
+      "description": "Submit compact EpiGraphDB API requests for ontology, literature, MR, gene-drug, and support-path evidence. Use when a user wants concise EpiGraphDB summaries",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/epigraphdb-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/epigraphdb-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [
+        "Retain structured biological/MR/gene-drug data; literature endpoint search and interpretation excluded."
+      ],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "eqtl-catalogue-skill",
+      "description": "Submit compact eQTL Catalogue API requests for association retrieval and documented metadata endpoints. Use when a user wants concise public eQTL Catalogue summaries",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/eqtl-catalogue-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/eqtl-catalogue-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 35
+            },
+            {
+              "name": "parse_input",
+              "line": 214
+            },
+            {
+              "name": "execute",
+              "line": 253
+            },
+            {
+              "name": "main",
+              "line": 355
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "eva-skill",
+      "description": "Submit compact EVA REST requests for species metadata and archived variant lookups. Use when a user wants concise European Variation Archive summaries",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/eva-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/eva-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "finngen-phewas-skill",
+      "description": "Fetch compact FinnGen PheWAS summaries for single variants by accepting rsID, GRCh37, or GRCh38 input and resolving to the required GRCh38 query. Use when a user wants concise FinnGen association results for one variant",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/finngen-phewas-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/finngen-phewas-skill/scripts/finngen_phewas.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 35
+            },
+            {
+              "name": "parse_input",
+              "line": 43
+            },
+            {
+              "name": "fetch_finngen_variant",
+              "line": 73
+            },
+            {
+              "name": "extract_associations",
+              "line": 92
+            },
+            {
+              "name": "resolve_raw_output_path",
+              "line": 102
+            },
+            {
+              "name": "write_raw_json",
+              "line": 110
+            },
+            {
+              "name": "main",
+              "line": 115
+            }
+          ]
+        },
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/finngen-phewas-skill/scripts/variant_resolution.py",
+          "public_functions": [
+            {
+              "name": "build_key_for",
+              "line": 36
+            },
+            {
+              "name": "build_variant_record",
+              "line": 40
+            },
+            {
+              "name": "parse_variant_string",
+              "line": 57
+            },
+            {
+              "name": "extract_variant_input",
+              "line": 94
+            },
+            {
+              "name": "lookup_rsid",
+              "line": 140
+            },
+            {
+              "name": "lookup_position",
+              "line": 174
+            },
+            {
+              "name": "resolve_rsid_both_builds",
+              "line": 203
+            },
+            {
+              "name": "resolve_position_both_builds",
+              "line": 231
+            },
+            {
+              "name": "resolve_variant",
+              "line": 268
+            },
+            {
+              "name": "resolve_query_variant",
+              "line": 362
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "genebass-gene-burden-skill",
+      "description": "Submit compact Genebass gene burden requests for one Ensembl gene ID and one burden set. Use when a user wants concise Genebass PheWAS summaries",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/genebass-gene-burden-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/genebass-gene-burden-skill/scripts/genebass_gene_burden.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 29
+            },
+            {
+              "name": "normalize_gene_id",
+              "line": 37
+            },
+            {
+              "name": "normalize_burden_set",
+              "line": 51
+            },
+            {
+              "name": "parse_input",
+              "line": 69
+            },
+            {
+              "name": "fetch_gene_phewas",
+              "line": 95
+            },
+            {
+              "name": "fetch_phenotypes_metadata",
+              "line": 118
+            },
+            {
+              "name": "build_description_map",
+              "line": 139
+            },
+            {
+              "name": "unpack_phewas_payload",
+              "line": 149
+            },
+            {
+              "name": "build_phenotype_id",
+              "line": 169
+            },
+            {
+              "name": "transform_rows",
+              "line": 178
+            },
+            {
+              "name": "main",
+              "line": 194
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "gnomad-graphql-skill",
+      "description": "Submit compact gnomAD GraphQL requests for frequency, gene constraint, and variant context queries. Use when a user wants concise gnomAD summaries",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/gnomad-graphql-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/gnomad-graphql-skill/scripts/gnomad_graphql.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 22
+            },
+            {
+              "name": "parse_input",
+              "line": 49
+            },
+            {
+              "name": "execute",
+              "line": 90
+            },
+            {
+              "name": "main",
+              "line": 136
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "gtex-eqtl-skill",
+      "description": "Fetch GTEx single-tissue eQTL associations from one variant input by accepting rsID, GRCh37, or GRCh38 input and resolving to the required GRCh38 query for the GTEx v2 API. Use when a user wants eQTL associations returned as JSON.",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/gtex-eqtl-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/gtex-eqtl-skill/scripts/gtex_eqtl.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 31
+            },
+            {
+              "name": "parse_input",
+              "line": 39
+            },
+            {
+              "name": "build_variant_id",
+              "line": 57
+            },
+            {
+              "name": "fetch_eqtls",
+              "line": 61
+            },
+            {
+              "name": "extract_rows",
+              "line": 73
+            },
+            {
+              "name": "main",
+              "line": 81
+            }
+          ]
+        },
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/gtex-eqtl-skill/scripts/variant_resolution.py",
+          "public_functions": [
+            {
+              "name": "build_key_for",
+              "line": 36
+            },
+            {
+              "name": "build_variant_record",
+              "line": 40
+            },
+            {
+              "name": "parse_variant_string",
+              "line": 57
+            },
+            {
+              "name": "extract_variant_input",
+              "line": 94
+            },
+            {
+              "name": "lookup_rsid",
+              "line": 140
+            },
+            {
+              "name": "lookup_position",
+              "line": 174
+            },
+            {
+              "name": "resolve_rsid_both_builds",
+              "line": 203
+            },
+            {
+              "name": "resolve_position_both_builds",
+              "line": 231
+            },
+            {
+              "name": "resolve_variant",
+              "line": 268
+            },
+            {
+              "name": "resolve_query_variant",
+              "line": 362
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "gwas-catalog-skill",
+      "description": "Submit compact GWAS Catalog REST API v2 requests for studies, associations, SNPs, EFO traits, genes, publications, loci, and metadata. Use when a user wants concise GWAS Catalog summaries",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/gwas-catalog-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/gwas-catalog-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "hmdb-skill",
+      "description": "Submit compact HMDB search requests for metabolites, proteins, diseases, and pathways. Use when a user wants concise HMDB summaries",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/hmdb-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/hmdb-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "human-protein-atlas-skill",
+      "description": "Submit compact Human Protein Atlas requests for gene JSON, search downloads, and page-level tissue or cell-line lookups. Use when a user wants concise Human Protein Atlas summaries; save raw JSON or HTML only on request.",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/human-protein-atlas-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/human-protein-atlas-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "ipd-skill",
+      "description": "Submit compact IPD REST requests for HLA allele and cell-level metadata using the public IPD query API. Use when a user wants concise IPD summaries; save raw JSON or text only on request.",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/ipd-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/ipd-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "locus-to-gene-mapper-skill",
+      "description": "Map GWAS loci to ranked candidate genes using a deterministic multi-skill chain (EFO -> GWAS -> coordinates -> Open Targets L2G/coloc -> eQTL -> burden/coding context), with reproducible tables and optional figures. Use when a user provides a trait/EFO term and/or lead variants and needs locus-to-gene prioritization for downstream biology decisions.",
+      "inventory_kind": "algorithm",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/locus-to-gene-mapper-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/locus-to-gene-mapper-skill/scripts/map_locus_to_gene.py",
+          "public_functions": [
+            {
+              "name": "now_iso",
+              "line": 199
+            },
+            {
+              "name": "ensure_parent",
+              "line": 203
+            },
+            {
+              "name": "dedupe_keep_order",
+              "line": 207
+            },
+            {
+              "name": "safe_float",
+              "line": 221
+            },
+            {
+              "name": "coerce_dict",
+              "line": 239
+            },
+            {
+              "name": "coerce_list_of_dicts",
+              "line": 243
+            },
+            {
+              "name": "as_string_list",
+              "line": 249
+            },
+            {
+              "name": "normalize_rsid",
+              "line": 258
+            },
+            {
+              "name": "normalize_trait_key",
+              "line": 265
+            },
+            {
+              "name": "tokenize",
+              "line": 269
+            },
+            {
+              "name": "lexical_match_score",
+              "line": 274
+            },
+            {
+              "name": "safe_get_json",
+              "line": 299
+            },
+            {
+              "name": "safe_post_json",
+              "line": 310
+            },
+            {
+              "name": "run_json_skill_script",
+              "line": 319
+            },
+            {
+              "name": "resolve_efo",
+              "line": 366
+            },
+            {
+              "name": "gwas_iter_associations",
+              "line": 444
+            },
+            {
+              "name": "parse_rsid_from_association",
+              "line": 466
+            },
+            {
+              "name": "extract_trait_name",
+              "line": 492
+            },
+            {
+              "name": "extract_mapped_genes",
+              "line": 506
+            },
+            {
+              "name": "normalize_anchor_row",
+              "line": 517
+            },
+            {
+              "name": "fetch_gwas_study_metadata",
+              "line": 534
+            },
+            {
+              "name": "chromosome_from_refseq",
+              "line": 554
+            },
+            {
+              "name": "assembly_key_from_traits",
+              "line": 559
+            },
+            {
+              "name": "coordinate_from_placement",
+              "line": 569
+            },
+            {
+              "name": "fetch_refsnp_payload",
+              "line": 637
+            },
+            {
+              "name": "resolve_refsnp_coordinates",
+              "line": 648
+            },
+            {
+              "name": "resolve_anchor_coordinates",
+              "line": 673
+            },
+            {
+              "name": "ot_query",
+              "line": 700
+            },
+            {
+              "name": "search_ot_studies",
+              "line": 714
+            },
+            {
+              "name": "fetch_ot_l2g_coloc_for_anchors",
+              "line": 759
+            },
+            {
+              "name": "extract_eqtl_gene_symbol",
+              "line": 878
+            },
+            {
+              "name": "extract_eqtl_tissue",
+              "line": 902
+            },
+            {
+              "name": "fetch_gtex_support",
+              "line": 915
+            },
+            {
+              "name": "resolve_ensembl_ids_for_symbols",
+              "line": 960
+            },
+            {
+              "name": "fetch_genebass_support",
+              "line": 988
+            },
+            {
+              "name": "fetch_refsnp_annotations",
+              "line": 1055
+            },
+            {
+              "name": "fetch_gnomad_gene_constraints",
+              "line": 1115
+            },
+            {
+              "name": "support_from_burden",
+              "line": 1155
+            },
+            {
+              "name": "coding_component",
+              "line": 1165
+            },
+            {
+              "name": "confidence_label",
+              "line": 1175
+            },
+            {
+              "name": "format_gnomad_context",
+              "line": 1185
+            },
+            {
+              "name": "clamp01",
+              "line": 1198
+            },
+            {
+              "name": "markdown_image_tag",
+              "line": 1202
+            },
+            {
+              "name": "build_inline_image_markdown",
+              "line": 1207
+            },
+            {
+              "name": "build_summary_markdown",
+              "line": 1218
+            },
+            {
+              "name": "validate_summary_section_order",
+              "line": 1344
+            },
+            {
+              "name": "generate_optional_figures",
+              "line": 1366
+            },
+            {
+              "name": "build_anchors",
+              "line": 1545
+            },
+            {
+              "name": "group_anchors_by_locus",
+              "line": 1654
+            },
+            {
+              "name": "map_locus_to_gene",
+              "line": 1686
+            },
+            {
+              "name": "parse_args",
+              "line": 2126
+            },
+            {
+              "name": "main",
+              "line": 2158
+            }
+          ]
+        }
+      ],
+      "qualifications": [
+        "Existing algorithm chains API data and scoring; inspect default seed-variant fallbacks and underlying data before binding. Its orchestration must not replace episode decisions.",
+        "Static source inspection: support_from_burden maps p-value bands to 0/0.6/1; coding_component maps categories to 0/0.3/0.6/1; missing upstream L2G/colocalisation values become 0. These existing composite values are not adopted as annotation credit or calibrated confidence. Retain original component measurements and design an explicit tool sheet before binding this composite. Source lines: map_locus_to_gene.py:1155,1165,1883,1908."
+      ],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": null
+    },
+    {
+      "name": "metabolights-skill",
+      "description": "Submit compact MetaboLights requests for study discovery and study-level metabolomics metadata. Use when a user wants concise MetaboLights summaries",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/metabolights-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/metabolights-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "mgnify-skill",
+      "description": "Submit compact MGnify API requests for microbiome studies, samples, and biome metadata. Use when a user wants concise MGnify summaries",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/mgnify-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/mgnify-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "ncbi-blast-skill",
+      "description": "Submit, poll, and summarize NCBI BLAST Common URL API jobs (Blast.cgi) for nucleotide or protein sequences. Use when a user wants RID status, BLAST results, or compact top-hit summaries; fetch raw Text/JSON2 only on request.",
+      "inventory_kind": "algorithm",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/ncbi-blast-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/ncbi-blast-skill/scripts/ncbi_blast.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 50
+            },
+            {
+              "name": "parse_input",
+              "line": 81
+            },
+            {
+              "name": "make_session",
+              "line": 173
+            },
+            {
+              "name": "submit_search",
+              "line": 184
+            },
+            {
+              "name": "parse_search_info",
+              "line": 224
+            },
+            {
+              "name": "get_search_info",
+              "line": 233
+            },
+            {
+              "name": "fetch_action",
+              "line": 552
+            },
+            {
+              "name": "run_action",
+              "line": 604
+            },
+            {
+              "name": "execute",
+              "line": 694
+            },
+            {
+              "name": "main",
+              "line": 740
+            }
+          ]
+        }
+      ],
+      "qualifications": [
+        "Existing project BLAST API binding already consumes this client. Algorithm execution is API; local submit/status client code does not make the search local. Preserve original pending RID; no local database execution."
+      ],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": null
+    },
+    {
+      "name": "ncbi-clinicaltables-skill",
+      "description": "Submit compact Clinical Tables NCBI Gene requests for human gene lookup, pagination, and field selection. Use when a user wants concise autocomplete-style human gene search results",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/ncbi-clinicaltables-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/ncbi-clinicaltables-skill/scripts/ncbi_gene_clinicaltables.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 22
+            },
+            {
+              "name": "parse_input",
+              "line": 49
+            },
+            {
+              "name": "execute",
+              "line": 87
+            },
+            {
+              "name": "main",
+              "line": 134
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "ncbi-datasets-skill",
+      "description": "Submit compact NCBI Datasets v2 requests for assembly, genome, taxonomy, and related metadata endpoints. Use when a user wants concise NCBI Datasets summaries; save raw JSON or text only on request.",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/ncbi-datasets-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/ncbi-datasets-skill/scripts/ncbi_datasets.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 22
+            },
+            {
+              "name": "parse_input",
+              "line": 120
+            },
+            {
+              "name": "execute",
+              "line": 174
+            },
+            {
+              "name": "main",
+              "line": 215
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "ncbi-entrez-skill",
+      "description": "Submit compact NCBI Entrez E-Utilities requests for PubMed, Gene, Protein, Nucleotide, PMC metadata, and GEO metadata workflows. Use when a user wants concise Entrez search, fetch, summary, or link results; save raw JSON or XML only on request.",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/ncbi-entrez-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/ncbi-entrez-skill/scripts/ncbi_entrez.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 24
+            },
+            {
+              "name": "parse_input",
+              "line": 151
+            },
+            {
+              "name": "execute",
+              "line": 221
+            },
+            {
+              "name": "main",
+              "line": 282
+            }
+          ]
+        }
+      ],
+      "qualifications": [
+        "Retain biological sequence/gene/GEO/taxonomy requests; PubMed/PMC requests are literature work and excluded."
+      ],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "ncbi-pmc-skill",
+      "description": "Submit compact NCBI PMC Open Access requests for article/file availability metadata. Use when a user wants concise PMC Open Access summaries; save raw XML only on request.",
+      "inventory_kind": "excluded",
+      "exclusion_reason": "Literature acquisition; separate literature work.",
+      "resources": [],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/ncbi-pmc-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/ncbi-pmc-skill/scripts/ncbi_pmc.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 24
+            },
+            {
+              "name": "parse_input",
+              "line": 147
+            },
+            {
+              "name": "execute",
+              "line": 209
+            },
+            {
+              "name": "main",
+              "line": 238
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": null
+    },
+    {
+      "name": "opentargets-skill",
+      "description": "Submit compact Open Targets Platform GraphQL requests for target, disease, drug, variant, study, and search data, including associated-disease datasource heatmap matrices. Use when a user wants concise Open Targets summaries or per-datasource evidence context",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/opentargets-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/opentargets-skill/scripts/opentargets_disease_heatmap.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 85
+            },
+            {
+              "name": "safe_float",
+              "line": 89
+            },
+            {
+              "name": "prettify_datasource_id",
+              "line": 100
+            },
+            {
+              "name": "label_for_datasource",
+              "line": 120
+            },
+            {
+              "name": "parse_input",
+              "line": 124
+            },
+            {
+              "name": "fetch_page",
+              "line": 157
+            },
+            {
+              "name": "sort_datasource_ids",
+              "line": 179
+            },
+            {
+              "name": "build_top_datasources",
+              "line": 190
+            },
+            {
+              "name": "execute",
+              "line": 198
+            },
+            {
+              "name": "main",
+              "line": 326
+            }
+          ]
+        },
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/opentargets-skill/scripts/opentargets_graphql.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 22
+            },
+            {
+              "name": "parse_input",
+              "line": 49
+            },
+            {
+              "name": "execute",
+              "line": 90
+            },
+            {
+              "name": "main",
+              "line": 136
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "pharmgkb-skill",
+      "description": "Submit compact PharmGKB API requests for genes, variants, clinical annotations, dosing guidelines, and search. Use when a user wants concise PharmGKB summaries",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/pharmgkb-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/pharmgkb-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "pride-skill",
+      "description": "Submit compact PRIDE Archive API requests for proteomics project discovery and project-level metadata. Use when a user wants concise PRIDE summaries",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/pride-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/pride-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "proteomexchange-skill",
+      "description": "Submit compact ProteomeXchange PROXI requests for datasets, libraries, peptidoforms, proteins, PSMs, spectra, and USI examples. Use when a user wants concise PROXI summaries",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/proteomexchange-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/proteomexchange-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "pubchem-pug-skill",
+      "description": "Submit compact PubChem PUG REST requests for compound properties, descriptions, assay summaries, and substance metadata. Use when a user wants concise PubChem summaries",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/pubchem-pug-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/pubchem-pug-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "quickgo-skill",
+      "description": "Submit compact QuickGO requests for GO terms, annotations, and ontology traversal. Use when a user wants concise QuickGO summaries",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/quickgo-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/quickgo-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "rcsb-pdb-skill",
+      "description": "Submit compact RCSB PDB requests for core metadata, Search API queries, and FASTA downloads. Use when a user wants concise RCSB summaries; save raw JSON or FASTA only on request.",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/rcsb-pdb-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/rcsb-pdb-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "reactome-skill",
+      "description": "Submit compact Reactome ContentService requests for pathway, event, participant, search, and diagram-related data. Use when a user wants concise Reactome summaries",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/reactome-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/reactome-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "research-router-skill",
+      "description": "Route broad or ambiguous life-sciences research requests to the right skills, normalize core entities, optionally parallelize independent evidence gathering with subagents when available, and synthesize a concise evidence-backed answer. Use when a user asks a general life-sciences question that could span multiple sources or analysis types.",
+      "inventory_kind": "excluded",
+      "exclusion_reason": "Research orchestration instructions, not a bioinformatics algorithm.",
+      "resources": [],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/research-router-skill/SKILL.md",
+      "scripts": [],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": false,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": null
+    },
+    {
+      "name": "rhea-skill",
+      "description": "Submit compact Rhea reaction search requests for biochemical reactions and reaction IDs. Use when a user wants concise Rhea summaries",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/rhea-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/rhea-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "rnacentral-skill",
+      "description": "Submit compact RNAcentral API requests for RNA entry browsing, single-entry lookup, and cross-reference retrieval. Use when a user wants concise RNAcentral summaries",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/rnacentral-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/rnacentral-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "string-skill",
+      "description": "Submit compact STRING API requests for network, interaction partner, and enrichment endpoints. Use when a user wants concise STRING summaries",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/string-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/string-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "tpmi-phewas-skill",
+      "description": "Fetch compact TPMI PheWAS summaries for single variants by accepting rsID, GRCh37, or GRCh38 input and resolving to the required GRCh38 query. Use when a user wants concise TPMI association results for one variant",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/tpmi-phewas-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/tpmi-phewas-skill/scripts/tpmi_phewas.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 35
+            },
+            {
+              "name": "parse_input",
+              "line": 43
+            },
+            {
+              "name": "fetch_tpmi_variant",
+              "line": 73
+            },
+            {
+              "name": "extract_associations",
+              "line": 92
+            },
+            {
+              "name": "resolve_raw_output_path",
+              "line": 104
+            },
+            {
+              "name": "write_raw_json",
+              "line": 112
+            },
+            {
+              "name": "main",
+              "line": 117
+            }
+          ]
+        },
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/tpmi-phewas-skill/scripts/variant_resolution.py",
+          "public_functions": [
+            {
+              "name": "build_key_for",
+              "line": 36
+            },
+            {
+              "name": "build_variant_record",
+              "line": 40
+            },
+            {
+              "name": "parse_variant_string",
+              "line": 57
+            },
+            {
+              "name": "extract_variant_input",
+              "line": 94
+            },
+            {
+              "name": "lookup_rsid",
+              "line": 140
+            },
+            {
+              "name": "lookup_position",
+              "line": 174
+            },
+            {
+              "name": "resolve_rsid_both_builds",
+              "line": 203
+            },
+            {
+              "name": "resolve_position_both_builds",
+              "line": 231
+            },
+            {
+              "name": "resolve_variant",
+              "line": 268
+            },
+            {
+              "name": "resolve_query_variant",
+              "line": 362
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "ukb-topmed-phewas-skill",
+      "description": "Fetch compact UKB-TOPMed PheWAS summaries for single variants by accepting rsID, GRCh37, or GRCh38 input and resolving to the required GRCh38 query. Use when a user wants concise UKB-TOPMed association results for one variant",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/ukb-topmed-phewas-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/ukb-topmed-phewas-skill/scripts/ukb_topmed_phewas.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 35
+            },
+            {
+              "name": "parse_input",
+              "line": 43
+            },
+            {
+              "name": "fetch_variant",
+              "line": 73
+            },
+            {
+              "name": "extract_associations",
+              "line": 92
+            },
+            {
+              "name": "resolve_raw_output_path",
+              "line": 102
+            },
+            {
+              "name": "write_raw_json",
+              "line": 110
+            },
+            {
+              "name": "main",
+              "line": 115
+            }
+          ]
+        },
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/ukb-topmed-phewas-skill/scripts/variant_resolution.py",
+          "public_functions": [
+            {
+              "name": "build_key_for",
+              "line": 36
+            },
+            {
+              "name": "build_variant_record",
+              "line": 40
+            },
+            {
+              "name": "parse_variant_string",
+              "line": 57
+            },
+            {
+              "name": "extract_variant_input",
+              "line": 94
+            },
+            {
+              "name": "lookup_rsid",
+              "line": 140
+            },
+            {
+              "name": "lookup_position",
+              "line": 174
+            },
+            {
+              "name": "resolve_rsid_both_builds",
+              "line": 203
+            },
+            {
+              "name": "resolve_position_both_builds",
+              "line": 231
+            },
+            {
+              "name": "resolve_variant",
+              "line": 268
+            },
+            {
+              "name": "resolve_query_variant",
+              "line": 362
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    },
+    {
+      "name": "uniprot-skill",
+      "description": "Submit compact UniProt REST API requests for UniProtKB, UniRef, UniParc, and FASTA stream endpoints. Use when a user wants concise UniProt summaries; save raw JSON or FASTA only on request.",
+      "inventory_kind": "biological_data_reader",
+      "exclusion_reason": null,
+      "resources": [
+        "api"
+      ],
+      "instruction_source": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/uniprot-skill/SKILL.md",
+      "scripts": [
+        {
+          "path": "/home/chia/.codex/plugins/cache/openai-curated-remote/life-science-research/1.0.3/skills/uniprot-skill/scripts/rest_request.py",
+          "public_functions": [
+            {
+              "name": "error",
+              "line": 20
+            },
+            {
+              "name": "parse_input",
+              "line": 145
+            },
+            {
+              "name": "execute",
+              "line": 180
+            },
+            {
+              "name": "main",
+              "line": 273
+            }
+          ]
+        }
+      ],
+      "qualifications": [],
+      "availability": {
+        "source_files_present": true,
+        "live_service_tested_in_this_inventory": false,
+        "episode_library_binding": "Not inferred from installation; compare current.json for exact callable binding."
+      },
+      "grading_boundary": "Parse native biological values and calculate only explicitly defined numerical components; retrieval success does not become a scientific score."
+    }
+  ]
+}

@@ -1,0 +1,570 @@
+{
+  "scope": "Published outcomes were known in advance. These are explicit re-interrogations of real primary investigations, not blind discoveries. Wet-lab and published computation belong to the authors. Actual work here was reading, public-record retrieval, sequence motif inspection and arithmetic. No repository/runtime scientific execution or target-state changes occurred.",
+  "strong_native_function_deep_cases": [
+    "spec_yihu_native_sulfonate",
+    "spec_suhb_catalysis_vs_rrna"
+  ],
+  "additional_bounded_cases": [
+    "spec_yigl_conditional_b6",
+    "spec_aquifex_hfp_coupling_contamination"
+  ],
+  "observation_reference": "All result_observation_refs resolve to actual_observations in cases.jsonl; use source_ids for primary-source provenance.",
+  "traces": [
+    {
+      "case_id": "spec_yihu_native_sulfonate",
+      "contrast": "Substrate present in a convenient extract is distinguished from the substrate carrying native pathway flux.",
+      "routes": [
+        {
+          "route": "Start from the measured carboxylate reaction, then challenge physiological priority",
+          "steps": [
+            {
+              "information_available": "yihu.1: screening changed two product signals but did not identify a consumed substrate.",
+              "plausible_routes": [
+                "Name the enzyme from the growing peak.",
+                "Test chemically defined reactions and authenticate products."
+              ],
+              "selected_next_comparison_or_probe": "Inspect the authors reverse-reaction and reference-compound comparisons.",
+              "result_observation_refs": [
+                "yihu.1"
+              ],
+              "changed_question": "The SSA/GHB reaction is real; does that make it the main native job?",
+              "reasoning_status": "Reconstructed comparison choice; experimental results are published author observations."
+            },
+            {
+              "information_available": "The imposed-substrate experiments support cellular capacity, while yihu.2 includes a strong sulfonate analog response.",
+              "plausible_routes": [
+                "Treat the overproduction phenotype as a complete native assignment.",
+                "Ask whether the tested metabolite space omitted a relevant native chemical class."
+              ],
+              "selected_next_comparison_or_probe": "Read the substrate panel and then the later native induction/activity-guided identification.",
+              "result_observation_refs": [
+                "yihu.2",
+                "yihu.3"
+              ],
+              "changed_question": "Which metabolic context actually recruits this protein and supplies its substrate?",
+              "reasoning_status": "Reconstructed comparison choice; experimental results are published author observations."
+            },
+            {
+              "information_available": "The induced native activity is tied to the target protein in yihu.3.",
+              "plausible_routes": [
+                "Preserve the old label as the preferred function.",
+                "Compare the native-pathway substrate directly with the old biochemical assignment."
+              ],
+              "selected_next_comparison_or_probe": "Inspect the later comparative kinetic and substrate-negative results.",
+              "result_observation_refs": [
+                "yihu.4"
+              ],
+              "changed_question": "Keep real side chemistry, but assign the native pathway reaction and state the remaining secondary-role uncertainty.",
+              "reasoning_status": "Reconstructed comparison choice; experimental results are published author observations."
+            }
+          ]
+        },
+        {
+          "route": "Start from the enzyme family and audit exactly what the structural record establishes",
+          "steps": [
+            {
+              "information_available": "The shared dehydrogenase scaffold supports several substrate alternatives.",
+              "plausible_routes": [
+                "Transfer a neighboring family substrate.",
+                "Check the experimentally characterized target sequence and exact deposited ligand."
+              ],
+              "selected_next_comparison_or_probe": "Retrieve UniProt P0A9V8 and RCSB entry/polymer/nonpolymer records for 6SMY.",
+              "result_observation_refs": [],
+              "changed_question": "The record maps to the target and has a sulfonated diol component; retrieve that component rather than infer chemistry from its acronym.",
+              "reasoning_status": "Actual read-only queries; files raw/uniprot_P0A9V8.json and raw/rcsb_6SMY_*.json."
+            },
+            {
+              "information_available": "The first record query supplies LLQ and NAD component identifiers.",
+              "plausible_routes": [
+                "Treat the title as evidence of every ligand oxidation state.",
+                "Inspect the chemical component graph and sequence motif while preserving unresolved record details."
+              ],
+              "selected_next_comparison_or_probe": "Query LLQ/EPE/NAD chemcomp records and scan the published motif in the retrieved target sequence.",
+              "result_observation_refs": [],
+              "changed_question": "The product chemistry and target motif corroborate the published specificity; neither independently establishes native flux. The PDB NAD label does not newly determine NADH oxidation state.",
+              "reasoning_status": "Actual probe summary raw/live_probe_summary.json; sequence residues/motif checked, no density or coordinate refinement."
+            },
+            {
+              "information_available": "The old paper supplies specific activity and molecular mass, whereas the new comparison uses second-order kinetic units.",
+              "plausible_routes": [
+                "Compare numerical values without unit conversion.",
+                "Normalize units and expose cross-study limitations."
+              ],
+              "selected_next_comparison_or_probe": "Calculate the earlier SSA efficiency from its reported units before comparing scales.",
+              "result_observation_refs": [],
+              "changed_question": "The approximate discrepancy is enormous, but a precise matched-condition ratio is unverified.",
+              "reasoning_status": "Actual arithmetic in raw/live_probe_summary.json; rounded values/preparations and NADH conditions differ. No kinetic fitting performed."
+            }
+          ]
+        }
+      ],
+      "bounded_annotation_ref": "annotation_consequence in cases.jsonl",
+      "unperformed_work": "No new native flux experiment or test of a secondary SSA-protection role under naturally encountered stress. No novel homolog assigned from the motif alone.",
+      "shared_pattern_retest": {
+        "updated_at_utc": "2026-10-21T21:23:17.906772+00:00",
+        "lane_reference": "F01, with candidate reuse across existing lanes; no lane definitions changed.",
+        "thought_pattern_under_test": "Separate measured capacity from native responsibility.",
+        "known_outcomes_disclosed": true,
+        "branch_origin": "Evidence-informed retrospective branches around the real investigation; new arithmetic is explicitly marked. These branches do not claim a hidden author chronology.",
+        "branches": [
+          {
+            "branch_id": "YIHU_CAPACITY_CHEMISTRY",
+            "evidence_available": [
+              "yihu.1",
+              "yihu.2"
+            ],
+            "live_alternatives": [
+              "The convenient SSA positive identifies the chief job.",
+              "SSA is a secondary capacity and the omitted native substrate is from another chemical class."
+            ],
+            "selected_next_choice": "Revisit the surprising sulfonate-analog response, compare plausible substrate classes and ask whether the recognition-loop evidence reflects substrate-dependent kinetics or merely less active protein.",
+            "available_computational_analysis": {
+              "status": "A table calculation was actually run; the wider substrate-class search is a reconstructed choice supported by the authors experiments.",
+              "analysis_ref": "yihu_table1_substrate_dependent_perturbation",
+              "what_it_can_distinguish": "Substrate-dependent parameter perturbation versus the narrow hypothesis of simple active-protein scaling. Together with reported WT specificity, this prioritizes sulfonate recognition for investigation.",
+              "what_it_cannot_distinguish": "It cannot demonstrate native metabolite availability, quantify physiological SSA/SLA flux, assign microscopic binding constants, exclude all destabilization mechanisms or show a specificity switch."
+            },
+            "observed_result_refs": [
+              "yihu.4"
+            ],
+            "new_calculation": {
+              "analysis_id": "yihu_table1_substrate_dependent_perturbation",
+              "performed_at_utc": "2026-10-21T21:23:17.906772+00:00",
+              "status": "Actually calculated from the already retrieved public primary table; no new experimental measurements or fitted models.",
+              "source_url": "https://eprints.whiterose.ac.uk/id/eprint/156563/1/acscatal.9b04427.pdf",
+              "DOI": "10.1021/acscatal.9b04427",
+              "source_id": "S05",
+              "source_file": "raw/yihu2020.pdf",
+              "exact_input_bounds": "Table 1, accepted-manuscript printed page 25 (final PDF page); interpretation paragraphs printed pages 11-12; co-substrate definitions printed page 6.",
+              "units": {
+                "eff": "mM^-1 s^-1, apparent kcat/Km",
+                "Km": "mM, apparent Km",
+                "error": "Quoted plus/minus values retained without reinterpreting them as a specific error type or confidence interval."
+              },
+              "inputs": {
+                "WT": {
+                  "SLA_eff": 1090,
+                  "SLA_eff_error": 120,
+                  "NADH_eff": 6720,
+                  "NADH_eff_error": 580,
+                  "SLA_Km": 0.3,
+                  "SLA_Km_error": 0.038,
+                  "NADH_Km": 0.082,
+                  "NADH_Km_error": 0.011
+                },
+                "G122S": {
+                  "SLA_eff": 43,
+                  "SLA_eff_error": 4,
+                  "NADH_eff": 1450,
+                  "NADH_eff_error": 230,
+                  "SLA_Km": 1.63,
+                  "SLA_Km_error": 0.11,
+                  "NADH_Km": 0.123,
+                  "NADH_Km_error": 0.013
+                },
+                "R123G": {
+                  "SLA_eff": 8.5,
+                  "SLA_eff_error": 1.8,
+                  "NADH_eff": 2360,
+                  "NADH_eff_error": 300,
+                  "SLA_Km": 7.99,
+                  "SLA_Km_error": 1.02,
+                  "NADH_Km": 0.009,
+                  "NADH_Km_error": 0.001
+                },
+                "T124G": {
+                  "SLA_eff": 4.7,
+                  "SLA_eff_error": 1.0,
+                  "NADH_eff": 570,
+                  "NADH_eff_error": 130,
+                  "SLA_Km": 5.74,
+                  "SLA_Km_error": 0.79,
+                  "NADH_Km": 0.023,
+                  "NADH_Km_error": 0.004
+                }
+              },
+              "operations": [
+                "For each mutant, loss_X = WT apparent efficiency_X / mutant apparent efficiency_X.",
+                "Compare substrate versus cofactor impact with loss_SLA / loss_NADH.",
+                "Calculate mutant/WT apparent Km ratios separately for each variable substrate."
+              ],
+              "outputs": [
+                {
+                  "variant": "G122S",
+                  "SLA_apparent_efficiency_loss_fold": 25.348837209302324,
+                  "NADH_apparent_efficiency_loss_fold": 4.63448275862069,
+                  "SLA_loss_divided_by_NADH_loss": 5.469615171650054,
+                  "SLA_Km_fold_change": 5.433333333333334,
+                  "NADH_Km_fold_change": 1.5
+                },
+                {
+                  "variant": "R123G",
+                  "SLA_apparent_efficiency_loss_fold": 128.23529411764707,
+                  "NADH_apparent_efficiency_loss_fold": 2.847457627118644,
+                  "SLA_loss_divided_by_NADH_loss": 45.03501400560225,
+                  "SLA_Km_fold_change": 26.633333333333336,
+                  "NADH_Km_fold_change": 0.1097560975609756
+                },
+                {
+                  "variant": "T124G",
+                  "SLA_apparent_efficiency_loss_fold": 231.91489361702128,
+                  "NADH_apparent_efficiency_loss_fold": 11.789473684210526,
+                  "SLA_loss_divided_by_NADH_loss": 19.67135258358663,
+                  "SLA_Km_fold_change": 19.133333333333336,
+                  "NADH_Km_fold_change": 0.28048780487804875
+                }
+              ],
+              "scientific_discrimination": "A change only in the amount/fraction of active protein would scale measured catalytic rates and efficiencies together while preserving each apparent Km. These point estimates show disproportionate substrate versus cofactor effects and altered Km values. The narrow active-amount-only explanation is therefore insufficient under the stated model; altered substrate-dependent kinetics or coupling must be considered.",
+              "interpretation_limits": [
+                "These are apparent two-substrate parameters, not dissociation constants.",
+                "SLA was varied at fixed 0.1 mM NADH; NADH was varied at fixed 5 mM racemic D/L-SLA. The manuscript calculates concentrations for D-SLA assuming L-SLA inactive, hence nominally 2.5 mM D-SLA for the second series.",
+                "The fixed SLA concentration may undersaturate mutants whose apparent SLA Km increased; cofactor-series changes therefore do not isolate NADH recognition.",
+                "No formal significance test, uncertainty propagation, microscopic-mechanism fit or protein-folding measurement was performed.",
+                "The mutants were not shown here to acquire SSA, GAP or GarR substrate specificity.",
+                "This calculation discriminates molecular explanations for measured activity loss; native pathway responsibility still requires cellular evidence."
+              ]
+            },
+            "changed_next_question": "Does the strongly supported sulfonate reaction account for the native enzyme under a relevant growth condition, rather than only in the assay?",
+            "experiment_dependent_followup": "Native substrate/product/induction evidence is needed for responsibility. Testing alternate-substrate kinetics of the mutants would be needed to claim a switch rather than activity loss.",
+            "bounded_branch_outcome": "Measured chemistry is refined toward sulfonate recognition, but kinetics alone does not identify the native role."
+          },
+          {
+            "branch_id": "YIHU_NATIVE_RESPONSIBILITY",
+            "evidence_available": [
+              "yihu.2",
+              "yihu.3"
+            ],
+            "live_alternatives": [
+              "The imposed-SSA resistance/overproduction phenotype reveals the ordinary job.",
+              "A stress capacity coexists with a pathway role induced and used under other native conditions."
+            ],
+            "selected_next_choice": "Compare the imposed-substrate context with SQ-growth induction and follow the native active enzyme to its protein identity before choosing which physiological assignment to retain.",
+            "available_computational_analysis": {
+              "status": "Published evidence reexamined; no new transcriptomics, flux inference or raw proteomics analysis run.",
+              "input_available": "The existing primary growth, induced-protein identification and extract-activity observations in S03/S04; a new raw omics analysis would require its own deposited input.",
+              "operation": "Construct a condition-indexed matrix retaining strain, carbon source, imposed substrate, expression level, measured product and target-protein identification. Compare which alternatives predict each observation.",
+              "what_it_can_distinguish": "Evidence observed only during forced SSA exposure/overexpression versus evidence that recruits the native enzyme into SQ utilization; it exposes where a phenotype cannot establish a constitutive role.",
+              "what_it_cannot_distinguish": "Co-induction alone does not identify a reaction, and the matrix cannot measure endogenous competing-substrate pools or erase a possible secondary stress contribution."
+            },
+            "observed_result_refs": [
+              "yihu.2",
+              "yihu.3",
+              "yihu.4"
+            ],
+            "changed_next_question": "Retain SLA reductase as the supported native pathway job; ask separately whether SSA conversion matters under a defined physiological stress.",
+            "experiment_dependent_followup": "The published native active-protein purification, product analysis and enzyme tests discriminate the main pathway. New condition-matched endogenous flux/perturbation measurements would be required to establish or dismiss the secondary stress role.",
+            "bounded_branch_outcome": "Native responsibility is supported by the combined cellular and biochemical evidence, while the measured SSA capacity is preserved."
+          }
+        ],
+        "scientific_calculation_count_added": 1
+      }
+    },
+    {
+      "case_id": "spec_suhb_catalysis_vs_rrna",
+      "contrast": "The cellular role is separated from a genuine, measurable catalytic capacity; native function need not be a more favored small-molecule substrate.",
+      "routes": [
+        {
+          "route": "Test necessity and sufficiency of the enzyme reaction",
+          "steps": [
+            {
+              "information_available": "SuhB has a real phosphatase activity, but its growth phenotype need not be caused by that reaction.",
+              "plausible_routes": [
+                "Increase phosphatase expression until rescue occurs.",
+                "Separate the catalytic activity from the protein identity."
+              ],
+              "selected_next_comparison_or_probe": "Inspect the 2000 primary abstract for active-ortholog and inactive-native-protein comparisons.",
+              "result_observation_refs": [
+                "suhb.1"
+              ],
+              "changed_question": "What protein-specific contribution can explain complementation when phosphatase activity is neither sufficient nor required?",
+              "reasoning_status": "The comparisons are explicitly reported; only the primary abstract was accessible. Subsequent route ordering is reconstructed."
+            },
+            {
+              "information_available": "The biochemical interpretation no longer explains the phenotype by itself.",
+              "plausible_routes": [
+                "Search only for alternative small-molecule phosphatase substrates.",
+                "Use the genetic phenotype to locate a cellular process and relevant interaction partners."
+              ],
+              "selected_next_comparison_or_probe": "Inspect the later suppressor investigation and its controls for generic translation defects.",
+              "result_observation_refs": [
+                "suhb.2"
+              ],
+              "changed_question": "The informative neighbors are the Nus/RNA maturation machinery rather than every IMPase homolog.",
+              "reasoning_status": "Reconstructed comparison choice; experimental results are published author observations."
+            }
+          ]
+        },
+        {
+          "route": "Start with the Nus connection and discriminate reporter behavior from the native job",
+          "steps": [
+            {
+              "information_available": "suhb.2 links the phenotype to Nus factors.",
+              "plausible_routes": [
+                "Promote the familiar antitermination label directly.",
+                "Measure recruitment and compare the reporter with the endogenous target."
+              ],
+              "selected_next_comparison_or_probe": "Read the BoxA/recruitment results beside the endogenous RNAP-occupancy comparison.",
+              "result_observation_refs": [
+                "suhb.3"
+              ],
+              "changed_question": "An artificial reporter can reveal capacity without making that capacity the primary native explanation.",
+              "reasoning_status": "Reconstructed comparison choice; experimental results are published author observations."
+            },
+            {
+              "information_available": "The native-target comparison changes what remains to be explained.",
+              "plausible_routes": [
+                "Infer a complete physical bridge from genetic similarity alone.",
+                "Look for direct partner contacts while keeping assembly mechanisms provisional."
+              ],
+              "selected_next_comparison_or_probe": "Inspect the 2019 binary binding, complex assembly and RNA comparisons.",
+              "result_observation_refs": [
+                "suhb.4"
+              ],
+              "changed_question": "Assign the rRNA-biogenesis contribution; retain the uncertainty in exact recruitment, weak contacts and looping mechanism.",
+              "reasoning_status": "Reconstructed comparison choice; experimental results are published author observations."
+            }
+          ]
+        }
+      ],
+      "bounded_annotation_ref": "annotation_consequence in cases.jsonl",
+      "unperformed_work": "No reanalysis of the original ChIP/RNA-seq data; no new demonstration of the complete native RNA-folding trajectory. The E. coli conclusion is not generalized to the archaeal control proteins.",
+      "shared_pattern_retest": {
+        "updated_at_utc": "2026-10-21T21:23:17.906772+00:00",
+        "lane_reference": "F01; root retains ownership of follow_up_lanes.md.",
+        "thought_pattern_under_test": "Separate measured capacity from native responsibility.",
+        "known_outcomes_disclosed": true,
+        "branch_origin": "Retrospective next-choice branches using the existing primary inspections; no RNA-seq, ChIP or wet-lab reanalysis was run here.",
+        "branches": [
+          {
+            "branch_id": "SUHB_CAPACITY_CAUSAL_SUFFICIENCY",
+            "evidence_available": [
+              "suhb.1"
+            ],
+            "live_alternatives": [
+              "A stronger or differently expressed IMPase activity should restore the phenotype.",
+              "The required contribution depends on protein identity/partners and is separable from the measured IMPase reaction."
+            ],
+            "selected_next_choice": "Treat the active-ortholog and inactive-native comparison as a necessity/sufficiency test, then use the phenotype to seek a cellular process instead of continuing to rank phosphatase substrates.",
+            "available_computational_analysis": {
+              "status": "The comparative logic was applied to published outcomes; no new sequence/function prediction is presented.",
+              "input_available": "S08 primary abstract reports active heterologous IMPases without complementation and inactive E. coli D87N with complementation. Full 2000 methods remain outside our inspection.",
+              "operation": "Encode the experimentally measured activity and rescue separately for each tested construct, retaining the host, temperature and double-mutant background; test the implication that restored IMPase activity explains rescue.",
+              "what_it_can_distinguish": "The reported outcomes violate both directions of that implication in the tested system. A conserved catalytic-site match or large assay activity cannot repair this causal mismatch.",
+              "what_it_cannot_distinguish": "The matrix cannot validate expression/folding controls absent from the inspected abstract, establish the exact non-IMPase contribution or rule out another unknown catalytic activity."
+            },
+            "observed_result_refs": [
+              "suhb.1",
+              "suhb.2"
+            ],
+            "changed_next_question": "Which protein-specific cellular association explains the phenotype once the measured IMPase reaction is insufficient?",
+            "experiment_dependent_followup": "The authors genetic suppressor/interaction controls and physical-association tests provide the decisive evidence; catalytic-site computation cannot replace those tests.",
+            "bounded_branch_outcome": "Retain genuine IMPase capacity; investigate native responsibility through Nus/rRNA biology rather than infer a new small-molecule substrate from homology."
+          },
+          {
+            "branch_id": "SUHB_REPORTER_VS_NATIVE_CONTRIBUTION",
+            "evidence_available": [
+              "suhb.2",
+              "suhb.3"
+            ],
+            "live_alternatives": [
+              "SuhB chiefly prevents premature termination because a reporter requires it.",
+              "The reporter exposes a real capacity while the native rRNA contribution concerns recruitment/maturation."
+            ],
+            "selected_next_choice": "Compare endogenous occupancy shape and recruitment with the reporter, and distinguish a shared mutant response from proof of direct molecular causation.",
+            "available_computational_analysis": {
+              "status": "Concrete public input identified in the inspected paper; reanalysis proposed, not executed.",
+              "public_input": "ArrayExpress E-MTAB-4240 (paper states raw suppressor-screen and RNA-seq reads deposited there); https://www.ebi.ac.uk/biostudies/arrayexpress/studies/E-MTAB-4240 . Current repository availability was not newly queried.",
+              "input_bounds": "The primary methods specify two biological replicates each of WT, delta-suhB and delta-nusB, grown in LB to mid-exponential phase. Figures 3-5 contain separate ChIP-qPCR observations; these are not ChIP-seq.",
+              "operations": [
+                "Reanalyze gene-count effects for delta-suhB versus delta-nusB with replicate-aware normalization, retaining genotype/background differences and growth-state confounding.",
+                "With quantitative ChIP-qPCR values, or explicitly bounded digitization of the published figure, normalize each mutant/WT occupancy series by its promoter-level ratio before inspecting downstream loss. Neither computation was run here."
+              ],
+              "what_it_can_distinguish": "RNA-seq can test similarity of transcriptomic responses without treating it as direct partnership. Promoter-normalized occupancy can distinguish an approximately uniform loading change from substantial position-dependent attrition at the resolution of the assay.",
+              "what_it_cannot_distinguish": "Ordinary gene counts do not directly measure rRNA maturation. Neither correlation nor occupancy shape proves the proposed RNA loop; ChIP conformation/epitope effects, elongation-rate changes and indirect stress responses remain possible."
+            },
+            "observed_result_refs": [
+              "suhb.3",
+              "suhb.4"
+            ],
+            "changed_next_question": "Use native recruitment, genetic processing connections and direct partner contacts to constrain the rRNA-biogenesis role while leaving the exact assembly mechanism open.",
+            "experiment_dependent_followup": "Published ChIP-qPCR and genetic processing controls bear on native responsibility; direct RNA-folding/assembly and appropriately controlled functional perturbations would be needed to establish the detailed mechanism.",
+            "bounded_branch_outcome": "The rRNA contribution is better supported than assignment from the reporter alone; physical and causal details remain condition- and assay-bounded."
+          }
+        ],
+        "scientific_calculation_count_added": 0
+      }
+    },
+    {
+      "case_id": "spec_yigl_conditional_b6",
+      "contrast": "An added conditional role is preserved without replacing an established function or equating overexpression rescue with physiological priority.",
+      "routes": [
+        {
+          "route": "Distinguish direct chemistry from an indirect metabolic bypass",
+          "steps": [
+            {
+              "information_available": "PN formation could be direct or could pass through several known enzymes.",
+              "plausible_routes": [
+                "Attribute the end product directly to an unknown phosphatase.",
+                "Test intermediates and remove a required detour component."
+              ],
+              "selected_next_comparison_or_probe": "Inspect the authors PLP-substitution and ybhA comparisons.",
+              "result_observation_refs": [
+                "yigl.1"
+              ],
+              "changed_question": "A direct reaction remains plausible; which protein actually supplies it?",
+              "reasoning_status": "Reconstructed comparison choice; experimental results are published author observations."
+            },
+            {
+              "information_available": "The suppressor screen has several positive genes.",
+              "plausible_routes": [
+                "Annotate every suppressor with the sought chemistry.",
+                "Separate bypass rescue from direct enzymatic conversion."
+              ],
+              "selected_next_comparison_or_probe": "Inspect candidate extract activities and purified YigL measurements rather than rescue alone.",
+              "result_observation_refs": [
+                "yigl.2"
+              ],
+              "changed_question": "Direct chemistry is supported, but its significance at endogenous expression and substrate levels remains open.",
+              "reasoning_status": "Reconstructed comparison choice; experimental results are published author observations."
+            }
+          ]
+        },
+        {
+          "route": "Challenge native priority with a positive biochemical neighbor and varied cellular conditions",
+          "steps": [
+            {
+              "information_available": "YbhA is a related biochemical positive, yet that does not identify its contribution under the tested conditions.",
+              "plausible_routes": [
+                "Infer equal cellular jobs from similar docking or assay positivity.",
+                "Compare native deletion and substrate pools with forced-expression rescue."
+              ],
+              "selected_next_comparison_or_probe": "Inspect YbhA deletion/pool results against YigL and the forced PNP load.",
+              "result_observation_refs": [
+                "yigl.3",
+                "yigl.4"
+              ],
+              "changed_question": "The conditional intracellular contribution is better constrained than a universal primary-substrate label.",
+              "reasoning_status": "Reconstructed comparison choice; experimental results are published author observations."
+            },
+            {
+              "information_available": "The B6 experiments do not erase the existing sugar-stress evidence.",
+              "plausible_routes": [
+                "Replace the old label completely.",
+                "Retain both contributions with their demonstrated conditions."
+              ],
+              "selected_next_comparison_or_probe": "Inspect the earlier medium/stressor comparisons.",
+              "result_observation_refs": [
+                "yigl.5"
+              ],
+              "changed_question": "The warranted result is an added conditional role, not an exclusive reassignment.",
+              "reasoning_status": "Reconstructed comparison choice; experimental results are published author observations."
+            },
+            {
+              "information_available": "The B6 paper uses a homolog structure to orient docking.",
+              "plausible_routes": [
+                "Describe that reference as a vitamin-bound target structure.",
+                "Audit organism mapping and actual ligand identities."
+              ],
+              "selected_next_comparison_or_probe": "Retrieve 3PGV entry/polymer/nonpolymer records, then EPE chemistry.",
+              "result_observation_refs": [],
+              "changed_question": "HEPES-bound Klebsiella homolog geometry is modeling support; cellular tests provide the functional evidence.",
+              "reasoning_status": "Actual public-record query; raw/rcsb_3PGV_*.json and raw/live_probe_summary.json. No docking rerun."
+            }
+          ]
+        }
+      ],
+      "bounded_annotation_ref": "annotation_consequence in cases.jsonl",
+      "unperformed_work": "No naturally occurring high-PNP exposure established; no native flux partition across YigL/PdxH/other phosphatases determined. The YigL example is explicitly not treated as a replacement of sugar-stress function."
+    },
+    {
+      "case_id": "spec_aquifex_hfp_coupling_contamination",
+      "contrast": "Coupled pathway output and purification-resistant extra activity require distinct causal checks.",
+      "routes": [
+        {
+          "route": "Decompose why a staged positive fails in the complete pathway",
+          "steps": [
+            {
+              "information_available": "Two proteins support the staged readout.",
+              "plausible_routes": [
+                "Treat both as equally specific pathway enzymes.",
+                "Expose all pathway inputs simultaneously and monitor their fate."
+              ],
+              "selected_next_comparison_or_probe": "Inspect the full-pathway result and substrate-resolved NMR.",
+              "result_observation_refs": [
+                "hfp.1"
+              ],
+              "changed_question": "A failed complete assay can result from destruction of other inputs rather than inability to catalyze the target step.",
+              "reasoning_status": "Reconstructed comparison choice; experimental results are published author observations."
+            },
+            {
+              "information_available": "HFP is compatible with reconstitution, but broader substrate activities and native proof remain open.",
+              "plausible_routes": [
+                "Use the word essential from the title as a native-genetics result.",
+                "Retain the measured reaction while checking substrate scope and assay limits."
+              ],
+              "selected_next_comparison_or_probe": "Inspect the FMN result and inability to obtain comparative ARAPDP kinetics.",
+              "result_observation_refs": [
+                "hfp.4"
+              ],
+              "changed_question": "The candidate pathway role is bounded by what was actually measured.",
+              "reasoning_status": "Reconstructed comparison choice; experimental results are published author observations."
+            }
+          ]
+        },
+        {
+          "route": "Refuse an attractive extra activity until it follows the target protein",
+          "steps": [
+            {
+              "information_available": "Sugar isomerization survives several purification approaches.",
+              "plausible_routes": [
+                "Call the protein bifunctional because the new reaction benefits the same pathway.",
+                "Test whether that activity is specific to this target preparation."
+              ],
+              "selected_next_comparison_or_probe": "Inspect the authors additional heating/purification and unrelated-protein controls.",
+              "result_observation_refs": [
+                "hfp.2",
+                "hfp.3"
+              ],
+              "changed_question": "Persistence through purification does not settle protein attribution; the contaminant result changes the annotation.",
+              "reasoning_status": "Reconstructed comparison choice; experimental results are published author observations."
+            },
+            {
+              "information_available": "The record exposes a gene-name prediction that differs from the tested reaction.",
+              "plausible_routes": [
+                "Treat a present database name as another experimental result.",
+                "Resolve identity while keeping function evidence tied to the paper."
+              ],
+              "selected_next_comparison_or_probe": "Retrieve current 9MMH and 9MMI polymer records.",
+              "result_observation_refs": [],
+              "changed_question": "HFP maps to aq_1744/O67630 while IMP maps to aq_1983/O67791; their labels do not create a second activity assignment.",
+              "reasoning_status": "Actual read-only records raw/rcsb_9MMH_polymer1.json and raw/rcsb_9MMI_polymer1.json."
+            }
+          ]
+        }
+      ],
+      "bounded_annotation_ref": "annotation_consequence in cases.jsonl",
+      "unperformed_work": "No native Aquifex knockout, endogenous substrate profiling or purified-target isomerase validation performed. The RpiA contaminant was identified by the published authors, not by our MS analysis."
+    }
+  ],
+  "cross_case_shared_pattern_retest": {
+    "updated_at_utc": "2026-10-21T21:23:17.906772+00:00",
+    "thought_pattern": "Separate measured capacity from native responsibility.",
+    "case_ids": [
+      "spec_yihu_native_sulfonate",
+      "spec_suhb_catalysis_vs_rrna"
+    ],
+    "reusable_decision_content": [
+      "State separately what the assay establishes and which native contribution is being explained.",
+      "Choose a next comparison whose possible outcomes distinguish the live explanations; retain condition, dosage and readout rather than treating any positive as decisive.",
+      "Use computational evidence to narrow the explanations it actually addresses; require cellular/catalytic experiments for the unresolved causal step.",
+      "Preserve a real secondary capacity when the chief assignment changes."
+    ],
+    "concrete_incompatibilities": [
+      "YihU remains an enzyme whose native substrate class is refined; matched substrate kinetics and chemical recognition are useful. SuhB catalytic capacity does not explain the tested growth phenotype, so more favorable substrate scores do not supply the missing native contribution.",
+      "YihU motif-mutant comparisons discriminate some molecular explanations for rate loss, not native usage. For SuhB, the key separation is activity versus rescue and reporter behavior versus native recruitment; an analogous active-site motif scan would miss the relevant causal question.",
+      "A shared transcriptome or gene neighborhood can prioritize a pathway/partner, but YihU chemistry still needs authenticated substrate/product evidence and SuhB responsibility still needs genotype/interaction/processing evidence. The concrete discriminating tools cannot be exchanged solely because the abstract thought pattern is shared."
+    ],
+    "one_actual_new_scientific_analysis": "Published YihU Table 1 ratios and apparent-Km comparisons, embedded in the YIHU_CAPACITY_CHEMISTRY branch.",
+    "not_adopted": "No new slots, lane names, credit dimensions or implementation rules proposed."
+  }
+}

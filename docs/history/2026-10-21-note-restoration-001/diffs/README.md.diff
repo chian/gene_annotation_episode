@@ -1,0 +1,24 @@
+--- original_as_read/README.md
++++ preserved_modified/README.md
+@@ -7,13 +7,14 @@
+ uses constrained child-to-parent forms. This goal remains incomplete; see
+ [GOAL.md](GOAL.md) and [BUILD_STATUS.md](BUILD_STATUS.md).
+ 
+-The design composes intelligences carrying out problem-solving processes. The
+-information library supplies processes that fill a common episode template,
+-constructing children with a limited relevant decision problem. Each child
+-iterates and can invoke further processes; its typed return informs its parent.
+-The current manual library and handwritten episode bindings do not yet implement
+-that construction. See [episode structure](docs/EPISODE_STRUCTURE.md) and
+-[the process-library design and implementation gap](docs/TOOL_KNOWLEDGE.md).
++The design composes intelligences carrying out problem-solving processes within
++episodes. The information library fills the existing scoped bioinformatics
++episode's three slots: annotation credit axis, thought pattern and the actual
++tools the child is scoped to. The existing constructor and tool test retriever
++provide bounded engineering behavior; the active first-slot collection is empty
++pending case-based scoring review. Former claim headings are background-only. Literature episodes retain their
++separate specialized structure. See [episode structure](docs/EPISODE_STRUCTURE.md)
++and [the information-library contracts and open gaps](docs/TOOL_KNOWLEDGE.md).
+ 
+ The fixed development case is **one gene**, E. coli K-12 MG1655 ybhP / b0790:
+ 762 nt translating to 253 aa. [The case](cases/gene_001/CASE.md) records the

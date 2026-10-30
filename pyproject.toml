@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gene-annotation-episode"
+version = "0.2.0"
+description = "Controlled iterative biological annotation through method_loop"
+requires-python = ">=3.11"
+dependencies = ["biopython>=1.85,<2", "jsonschema>=4.23,<5", "numpy>=2,<3", "scipy>=1.14,<2", "pyrodigal>=3.7,<4", "pyhmmer>=0.12,<0.13", "requests>=2.32,<3", "Pillow>=11,<13"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10"]
+
+[project.scripts]
+gene-episode = "gene_annotation_episode.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["gene_annotation_episode*", "method_loop*"]
+exclude = ["tests*", "_superseded*"]
+
+[tool.setuptools.package-data]
+gene_annotation_episode = ["defaults.toml", "vendor/*.txt", "vendor/*.json", "vendor/LICENSE*", "knowledge/*.json", "knowledge/*.md", "launch_instruction_library/*.json", "launch_instruction_library/*.md", "bvbrc_application_specs/MANIFEST.json", "bvbrc_application_specs/original/*.json", "bvbrc_application_specs/derived/*.json", "bvbrc_application_specs/README.md", "bvbrc_appservice_schemas.json", "bvbrc_proteome_native_schemas.json", "bvbrc_proteome_data_schemas.json", "bvbrc_proteome_sheet_schemas.json", "bvbrc_proteome_bundle_schemas.json", "bvbrc_proteome_directional_schemas.json", "bvbrc_proteome_directional_numerical_schemas.json", "bvbrc_proteome_bundle_v2_schemas.json", "bvbrc_comparative_systems_handoff_schemas.json", "bvbrc_fastqutils_schemas.json", "bvbrc_fastqutils_legacy_v2_schemas.json", "bvbrc_fastqutils_legacy_cutadapt_schemas.json", "literature_assay_grading_legacy_cells_v1.json"]
+method_loop = ["LICENSE", "SOURCE.json", "LOCAL_PATCHES.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+cache_dir = "runs/pytest-cache"

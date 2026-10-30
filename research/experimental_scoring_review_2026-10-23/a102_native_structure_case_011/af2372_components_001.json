@@ -1,0 +1,539 @@
+{
+  "packet_version": "a102_af2372_native_components_001",
+  "status": "one_primary_source_conversion_with_declared_source_gaps",
+  "case_group": "AF2372_Stieglitz_2002",
+  "axis": "A102",
+  "axis_sheet_complete": false,
+  "overall_axis_aggregation_adopted": false,
+  "current_target_credit": null,
+  "target_role_in_example": "AF2372 as retrospective worked example; no correspondence to the active annotation target established",
+  "source": {
+    "title": "Crystal structure of a dual activity IMPase/FBPase (AF2372) from Archaeoglobus fulgidus. The story of a mobile loop",
+    "authors": [
+      "Kimberly A. Stieglitz",
+      "Kenneth A. Johnson",
+      "Hongying Yang",
+      "Mary F. Roberts",
+      "Barbara A. Seaton",
+      "James F. Head",
+      "Boguslaw Stec"
+    ],
+    "year": 2002,
+    "journal": "Journal of Biological Chemistry",
+    "volume": 277,
+    "issue": 25,
+    "pages": "22863-22874",
+    "doi": "10.1074/jbc.M201042200",
+    "pmid": "11940584",
+    "primary_url": "https://doi.org/10.1074/jbc.M201042200",
+    "inspected_author_copy_url": "https://www.researchgate.net/profile/Boguslaw-Stec/publication/11425018_Crystal_structure_of_a_dual_activity_IMPaseFBPase_AF2372_from_Archaeoglobus_fulgidus_The_story_of_a_mobile_loop/links/09e415078fbeae1c3b000000/Crystal-structure-of-a-dual-activity-IMPase-FBPase-AF2372-from-Archaeoglobus-fulgidus-The-story-of-a-mobile-loop.pdf",
+    "corpus_metadata_path": "research/slotted_process_library/case_records.json",
+    "corpus_evidence_body_inspected": false,
+    "primary_extracted_text_inspected": true,
+    "table_v_image_visually_inspected": false,
+    "figure_images_visually_inspected": false,
+    "original_pdf_saved_locally": false
+  },
+  "comparison_subjects": {
+    "target": {
+      "label": "AF2372",
+      "organism": "Archaeoglobus fulgidus",
+      "strain": null,
+      "genotype": null,
+      "engineered_variant_described": false,
+      "construct_tag_or_boundaries": null,
+      "expression_host": "Escherichia coli; strain not specified in this paper",
+      "structure_kind": "experimental_xray",
+      "paper_reported_monomer_length_residues": 252,
+      "reported_deposition_set": [
+        "1LBV",
+        "1LBW",
+        "1LBX",
+        "1LBY",
+        "1LBZ"
+      ],
+      "comparison_pdb_id": null,
+      "comparison_chain_ids": null,
+      "comparison_ligand_state": null,
+      "source_refs": [
+        "S01",
+        "S02",
+        "S06"
+      ]
+    },
+    "reference": {
+      "label": "MJ0109",
+      "organism": "Methanococcus jannaschii",
+      "strain": null,
+      "genotype": null,
+      "construct_tag_or_boundaries": null,
+      "structure_kind": "previously_experimentally_solved_xray_structure_as_described_by_this_paper",
+      "paper_reported_monomer_length_residues": 252,
+      "molecular_replacement_probe_pdb_id": "1DK4",
+      "comparison_pdb_id": null,
+      "comparison_chain_ids": null,
+      "comparison_ligand_state": null,
+      "reference_activity_status": "Characterized dual IMPase/FBPase described and cited by this primary; original reference activity papers not independently reread",
+      "source_refs": [
+        "S01",
+        "S02",
+        "S06"
+      ]
+    },
+    "coexistence": "Separate structural models from different proteins; no mixed AF2372/MJ0109 expression or assay in this structural comparison",
+    "intentional_comparison": "Protein structural correspondence across species",
+    "uncontrolled_or_unresolved_differences": [
+      "Exact compared structure/chain/ligand states are unrecovered",
+      "Crystal packing and temperature conditions can differ",
+      "AF2372 was solved with MJ0109 coordinates as molecular-replacement probe; coordinate-model independence is not established"
+    ]
+  },
+  "native_comparisons": [
+    {
+      "id": "C01_AF2372_MJ0109",
+      "role": "interprotein_structural_correspondence",
+      "metric": "RMSD",
+      "value_angstrom": 1.5,
+      "value_status": "paper_reported_computation",
+      "method": "SEQUOIA",
+      "software_version": null,
+      "superposed_residue_pairs": 209,
+      "matched_residue_map": null,
+      "matched_region_definition": "209 superposed residue positions selected by SEQUOIA; residue identities and interval map not recovered",
+      "point_atom_selection": null,
+      "number_of_atomic_points_in_rmsd_denominator": null,
+      "alignment_parameter_assignment": null,
+      "reported_parameter_regimes": [
+        {
+          "table_row": "upper_final",
+          "distance_cutoff_angstrom": 3,
+          "continuation_degrees": 30
+        },
+        {
+          "table_row": "lower_total",
+          "distance_cutoff_angstrom": 8,
+          "continuation_degrees": 80
+        }
+      ],
+      "parameter_limit": "Matrix body not inspected; do not assign the narrative value to a parameter regime or chain by inference",
+      "uncertainty": {
+        "standard_error_angstrom": null,
+        "confidence_interval_angstrom": null,
+        "reason": "Not reported for this pair; printed RMSD precision is not experimental uncertainty"
+      },
+      "source_refs": [
+        "S06",
+        "S07"
+      ],
+      "dependency_group": "AF2372_MJ0109_structure_chain"
+    },
+    {
+      "id": "C02_AF2372_apo_forms",
+      "role": "within_protein_state_and_packing_diagnostic",
+      "metric": "RMSD",
+      "value_angstrom": 0.6,
+      "value_qualifier": "approximately",
+      "method": null,
+      "compared_objects": "AF2372 apo P21 dimer versus apo P32 dimer",
+      "point_atom_selection": "C_alpha",
+      "superposed_residue_pairs": null,
+      "coverage_fraction": null,
+      "source_refs": [
+        "S03"
+      ],
+      "dependency_group": "AF2372_crystallographic_series"
+    },
+    {
+      "id": "C03_AF2372_human_IPPase",
+      "role": "additional_interprotein_comparison_with_missing_extent",
+      "metric": "RMSD",
+      "value_angstrom": 2.5,
+      "value_qualifier": "paper prose says up to 2.5 for this pair",
+      "method": "SEQUOIA",
+      "reference_organism": "Homo sapiens",
+      "reference_paper_reported_length_residues": 400,
+      "superposed_residue_pairs": null,
+      "matched_residue_map": null,
+      "point_atom_selection": null,
+      "coverage_fraction": null,
+      "derived_pair_descriptor": null,
+      "source_refs": [
+        "S06",
+        "S07"
+      ],
+      "dependency_group": "AF2372_family_superpositions"
+    }
+  ],
+  "derived_components": {
+    "target_reported_length_coverage": {
+      "value": 0.8293650793650794,
+      "numerator": 209,
+      "denominator": 252,
+      "unit": "fraction",
+      "formula": "superposed_residue_pairs / target_paper_reported_monomer_length_residues",
+      "status": "derived_from_reported_counts",
+      "interpretation": "Extent of reported correspondence relative to the paper-stated complete monomer length; not percent sequence identity, probability, or a whole-protein RMSD",
+      "source_refs": [
+        "S06"
+      ]
+    },
+    "reference_reported_length_coverage": {
+      "value": 0.8293650793650794,
+      "numerator": 209,
+      "denominator": 252,
+      "unit": "fraction",
+      "formula": "superposed_residue_pairs / reference_paper_reported_monomer_length_residues",
+      "status": "derived_from_reported_counts",
+      "source_refs": [
+        "S06"
+      ]
+    },
+    "symmetric_reported_length_coverage": {
+      "value": 0.8293650793650794,
+      "numerator": 418,
+      "denominator": 504,
+      "unit": "fraction",
+      "formula": "2 * superposed_residue_pairs / (target_length + reference_length)",
+      "status": "proposed_symmetric_summary_of_derived_coverages",
+      "interpretation": "One coverage factor; do not separately add or multiply the two same-count coverages as independent evidence",
+      "source_refs": [
+        "S06"
+      ]
+    },
+    "residues_outside_reported_superposition_per_protein": {
+      "value": 43,
+      "unit": "residues",
+      "formula": "252 - 209",
+      "status": "derived",
+      "missing_coordinates_or_gaps_classification": null,
+      "source_refs": [
+        "S06"
+      ]
+    },
+    "whole_protein_rmsd_angstrom": null,
+    "summed_squared_point_distances_angstrom_squared": null,
+    "local_functional_site_rmsd_angstrom": null,
+    "local_functional_site_pair_count": null,
+    "local_functional_site_coverage_fraction": null,
+    "native_tm_score": null,
+    "native_dali_z_score": null,
+    "calibrated_function_probability": null
+  },
+  "local_architecture": {
+    "second_n_terminal_helix": {
+      "target_residue_interval_inclusive": [
+        44,
+        58
+      ],
+      "reference_residue_interval_inclusive": [
+        45,
+        54
+      ],
+      "target_span_residues": 15,
+      "reference_span_residues": 10,
+      "length_difference_residues": 5,
+      "shorter_to_longer_length_ratio": 0.6666666666666666,
+      "formula": "(54 - 45 + 1) / (58 - 44 + 1)",
+      "interpretation": "Local span difference; not coordinate RMSD, matched-site coverage, or a calibrated penalty for function",
+      "source_refs": [
+        "S04"
+      ]
+    },
+    "AF2372_mobile_catalytic_loop": {
+      "residue_interval_inclusive": [
+        32,
+        43
+      ],
+      "span_residues": 12,
+      "reference_matched_interval": null,
+      "between_homolog_loop_rmsd_angstrom": null,
+      "source_refs": [
+        "S03",
+        "S05",
+        "S08"
+      ]
+    },
+    "within_AF2372_ligand_associated_loop_movement_angstrom": {
+      "value": 2.5,
+      "qualifier": "approximately",
+      "definition_limit": "Results describe an average shift and later a tip displacement; detailed atom and normalization definitions not recovered",
+      "used_as_homology_score": false,
+      "source_refs": [
+        "S05",
+        "S06",
+        "S08"
+      ]
+    }
+  },
+  "structure_quality": {
+    "rows": [
+      {
+        "structure_label": "AF_apo_P21",
+        "ligand_condition": "apo",
+        "space_group": "P21",
+        "resolution_angstrom": 1.8,
+        "diffraction_completeness_percent": 93.7,
+        "r_work_all_reflections": 0.215,
+        "r_free_all_reflections": 0.273,
+        "r_free_holdout_fraction": 0.04,
+        "derived_r_free_minus_r_work": 0.058,
+        "rmsd_standard_error_angstrom": null,
+        "quality_role": "diagnostic_not_similarity_or_probability",
+        "selected_for_interprotein_comparison": null,
+        "source_refs": [
+          "S02",
+          "S03"
+        ]
+      },
+      {
+        "structure_label": "AF_apo_P32",
+        "ligand_condition": "apo",
+        "space_group": "P32",
+        "resolution_angstrom": 2.0,
+        "diffraction_completeness_percent": 92.4,
+        "r_work_all_reflections": 0.188,
+        "r_free_all_reflections": 0.212,
+        "r_free_holdout_fraction": 0.04,
+        "derived_r_free_minus_r_work": 0.024,
+        "rmsd_standard_error_angstrom": null,
+        "quality_role": "diagnostic_not_similarity_or_probability",
+        "selected_for_interprotein_comparison": null,
+        "source_refs": [
+          "S02",
+          "S03"
+        ]
+      },
+      {
+        "structure_label": "AF_DIns1P_Ca_P21",
+        "ligand_condition": "D-Ins-1-P plus Ca",
+        "space_group": "P21",
+        "resolution_angstrom": 2.4,
+        "diffraction_completeness_percent": 94.3,
+        "r_work_all_reflections": 0.201,
+        "r_free_all_reflections": 0.288,
+        "r_free_holdout_fraction": 0.04,
+        "derived_r_free_minus_r_work": 0.087,
+        "rmsd_standard_error_angstrom": null,
+        "quality_role": "diagnostic_not_similarity_or_probability",
+        "selected_for_interprotein_comparison": null,
+        "source_refs": [
+          "S02",
+          "S03"
+        ]
+      },
+      {
+        "structure_label": "AF_FBP_Ca_P32",
+        "ligand_condition": "FBP plus Ca",
+        "space_group": "P32",
+        "resolution_angstrom": 2.2,
+        "diffraction_completeness_percent": 99.3,
+        "r_work_all_reflections": 0.213,
+        "r_free_all_reflections": 0.244,
+        "r_free_holdout_fraction": 0.04,
+        "derived_r_free_minus_r_work": 0.031,
+        "rmsd_standard_error_angstrom": null,
+        "quality_role": "diagnostic_not_similarity_or_probability",
+        "selected_for_interprotein_comparison": null,
+        "source_refs": [
+          "S02",
+          "S03"
+        ]
+      },
+      {
+        "structure_label": "AF_F6P_Pi_Mn_P32",
+        "ligand_condition": "F-6-P plus phosphate plus Mn",
+        "space_group": "P32",
+        "resolution_angstrom": 2.25,
+        "diffraction_completeness_percent": 96.7,
+        "r_work_all_reflections": 0.175,
+        "r_free_all_reflections": 0.21,
+        "r_free_holdout_fraction": 0.04,
+        "derived_r_free_minus_r_work": 0.035,
+        "rmsd_standard_error_angstrom": null,
+        "quality_role": "diagnostic_not_similarity_or_probability",
+        "selected_for_interprotein_comparison": null,
+        "source_refs": [
+          "S02",
+          "S03"
+        ]
+      }
+    ],
+    "apo_P32_twin_fraction": 0.499,
+    "loop_B_ratio_apo_P21": 2.8,
+    "loop_B_ratio_apo_P32": 1.2,
+    "loop_B_ratio_qualifier": "approximate",
+    "loop_B_ratio_definition": "Average main-chain B of mobile loop / average B of entire structure, as described in the apo-form paragraph",
+    "later_liganded_loop_B_ratio_definition": "Later paragraph uses rest of molecule as denominator; do not treat it as the same ratio without clarification",
+    "reference_quality_for_selected_pair": null,
+    "pair_specific_quality_join": null,
+    "quality_to_reliability_probability_conversion": null,
+    "source_refs": [
+      "S02",
+      "S03",
+      "S05"
+    ]
+  },
+  "proposed_component_combination": {
+    "status": "illustrative_pair_descriptor_only_no_axis_aggregation_or_default_scale",
+    "coverage_definition": "c = 2*N/(L_target+L_reference)",
+    "rmsd_kernel_definition": "g(r,d) = 1/(1+(r/d)^2), d>0 in angstrom",
+    "pair_descriptor_definition": "b(d) = c*g(r,d)",
+    "reported_operands": {
+      "N": 209,
+      "L_target": 252,
+      "L_reference": 252,
+      "r_angstrom": 1.5
+    },
+    "adopted_distance_scale_angstrom": null,
+    "sensitivity_examples": [
+      {
+        "distance_scale_angstrom": 1,
+        "scale_status": "illustrative_not_paper_measurement_or_adopted_parameter",
+        "rmsd_kernel": 0.3076923076923077,
+        "rmsd_kernel_exact": "4/13",
+        "coverage_times_kernel": 0.25518925518925517,
+        "coverage_times_kernel_exact": "209/819"
+      },
+      {
+        "distance_scale_angstrom": 2,
+        "scale_status": "illustrative_not_paper_measurement_or_adopted_parameter",
+        "rmsd_kernel": 0.64,
+        "rmsd_kernel_exact": "16/25",
+        "coverage_times_kernel": 0.5307936507936508,
+        "coverage_times_kernel_exact": "836/1575"
+      },
+      {
+        "distance_scale_angstrom": 3,
+        "scale_status": "illustrative_not_paper_measurement_or_adopted_parameter",
+        "rmsd_kernel": 0.8,
+        "rmsd_kernel_exact": "4/5",
+        "coverage_times_kernel": 0.6634920634920635,
+        "coverage_times_kernel_exact": "209/315"
+      }
+    ],
+    "not_a_TM_score": true,
+    "not_a_function_probability": true,
+    "not_an_adopted_A102_score": true,
+    "uncomputed_terms": [
+      "Local functional-site comparison",
+      "Pair-specific reliability conversion",
+      "Function-specific discrimination calibration"
+    ],
+    "limits": [
+      "RMSD is a statistic of the selected positions; the kernel is a proposed function of that aggregate, not a per-residue distance score",
+      "No probability, native TM-score, or calibration follows from the illustrative scales",
+      "Do not multiply crystal resolution or 1-Rfree into this number without a justified model",
+      "Do not use this within-reference geometry to score the active target without an actual target-reference relationship"
+    ]
+  },
+  "missingness_policy": {
+    "numeric_missing": "JSON null plus the field-specific reason; never impute zero or category midpoint",
+    "unreported_pair_uncertainty": "null; no SD, SE or confidence interval manufactured from matched count",
+    "unrecovered_table_matrix": "retain narrative metric and count; threshold/chain assignment null",
+    "nondetection": "No reported failure to superpose is available; missing image or omitted count is not a failed match",
+    "additional_scope": "This packet does not estimate unknown residues coordinates or assume all unaligned residues are unstructured"
+  },
+  "dependence_policy": {
+    "independent_replication_count": null,
+    "same_pair_quantities": [
+      "RMSD",
+      "matched count",
+      "coverage",
+      "pair descriptor"
+    ],
+    "same_pair_rule": "Alternative numerical views of one structural comparison; do not sum as independent proofs",
+    "same_paper_crystal_forms": "Different conditions/packing observations; not independent function-validation replicates",
+    "cross_axis_chain": "A101 correspondence, A102 comparison and A111 occupancy/contact evidence can use the same proteins/coordinates; retain shared chain identity and do not count the same observation repeatedly",
+    "activity_and_perturbation": "A105 activity and A106 perturbation may ground reference function or test mechanism; their values do not populate structural-similarity cells",
+    "molecular_replacement_dependency": "MJ0109 1DK4 was a phasing probe for AF2372; acknowledge dependence without fabricating a numeric bias penalty"
+  },
+  "source_trace": [
+    {
+      "id": "S01",
+      "url": "https://doi.org/10.1074/jbc.M201042200",
+      "location": "p. 22863; publication title, authors, deposit note",
+      "extract_lines": [
+        0,
+        85
+      ],
+      "meaning": "Primary metadata and AF2372 deposition set"
+    },
+    {
+      "id": "S02",
+      "url": "https://doi.org/10.1074/jbc.M201042200",
+      "location": "p. 22864; Experimental Procedures, Overexpression and Purification, Crystallization, Structural Solution and Refinement",
+      "extract_lines": [
+        103,
+        186
+      ],
+      "meaning": "Construct/procedure limits; experimental X-ray structures; MJ0109 1DK4 molecular-replacement model; twinning"
+    },
+    {
+      "id": "S03",
+      "url": "https://doi.org/10.1074/jbc.M201042200",
+      "location": "p. 22865; General Description and Quality; Table II and its footnotes",
+      "extract_lines": [
+        231,
+        310
+      ],
+      "meaning": "Same-protein apo-form comparison; structure-quality measurements"
+    },
+    {
+      "id": "S04",
+      "url": "https://doi.org/10.1074/jbc.M201042200",
+      "location": "pp. 22866-22867; General Description and Quality, continuation",
+      "extract_lines": [
+        312,
+        367
+      ],
+      "meaning": "Reported N-terminal helix ranges and other architectural differences"
+    },
+    {
+      "id": "S05",
+      "url": "https://doi.org/10.1074/jbc.M201042200",
+      "location": "pp. 22867-22868; Structural Details and Structural Differences",
+      "extract_lines": [
+        368,
+        482
+      ],
+      "meaning": "Apo-form loop B-factor ratios; different denominators in later ligand-form prose; within-protein ligand-associated loop movement"
+    },
+    {
+      "id": "S06",
+      "url": "https://doi.org/10.1074/jbc.M201042200",
+      "location": "pp. 22868 and 22870; Architectural Differences with Other Members of the Family",
+      "extract_lines": [
+        483,
+        518
+      ],
+      "meaning": "Reported protein lengths, SEQUOIA pair RMSD and matched count; family comparison"
+    },
+    {
+      "id": "S07",
+      "url": "https://doi.org/10.1074/jbc.M201042200",
+      "location": "p. 22872; Table V caption and footnotes ONLY",
+      "extract_lines": [
+        679,
+        686
+      ],
+      "meaning": "Two alignment-parameter regimes; table matrix image NOT visually inspected"
+    },
+    {
+      "id": "S08",
+      "url": "https://doi.org/10.1074/jbc.M201042200",
+      "location": "pp. 22871-22874; family-cluster passage, Figure 6 caption and Discussion",
+      "extract_lines": [
+        583,
+        723
+      ],
+      "meaning": "Loop-state/cluster distinctions and authors stated limits on predictive generalization"
+    }
+  ],
+  "unresolved_work": [
+    "Visually inspect Table V matrix to determine exact pair-specific parameter regime and any listed structure identifiers",
+    "Recover exact compared coordinate IDs, chains, ligand states and matched residue map",
+    "Obtain a between-homolog functional-site numerical comparison if required for a specific function transfer",
+    "Calibrate any distance scale and reliability/discrimination conversions before an overall A102 combination",
+    "Additional contrasting primary cases and the complete axis sheet remain parent work"
+  ]
+}

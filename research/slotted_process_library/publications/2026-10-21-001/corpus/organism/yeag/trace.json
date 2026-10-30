@@ -1,0 +1,409 @@
+{
+  "case_group": "yeag",
+  "existing_case_ids": [
+    "cellular_yeaG",
+    "organism_06_yeag"
+  ],
+  "status": "Extension of the existing published YeaG case, not an additional counted annotation target or a new scoring axis.",
+  "updated_utc": "2026-10-21T21:36:35.762052+00:00",
+  "known_outcomes_disclosed": true,
+  "sources": [
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4664914/",
+      "doi": "10.1038/srep17524",
+      "scope_read": "Complete relevant adaptation/recovery, GFP heterogeneity, survival and population-follow-up Results; Discussion; culture, growth/viability and flow-cytometry Methods. Supplement Table S1 and captions read; no raw FCS, CFU reanalysis or full mechanistic toxin-antitoxin audit.",
+      "materials": [
+        "../PMC4664914.xml",
+        "PMC4664914_srep17524-s1.pdf",
+        "YeaG_2015_supplement.txt"
+      ]
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8055822/",
+      "doi": "10.3389/fmicb.2021.657562",
+      "scope_read": "Complete relevant growth, proteome/phosphoproteome, candidate-substrate and concluding Results; strain construction, sampling, MS processing, purification and in-vitro-assay Methods. Main Tables 2/3, supplementary workbook legends/headers and selected site/protein rows, supplementary figure captions. No raw spectra or gel quantification.",
+      "materials": [
+        "YeaG_2021.xml",
+        "YeaG_2021_jats.xml",
+        "PMC8055822_Table_1.XLSX",
+        "PMC8055822_Table_2.DOCX"
+      ]
+    }
+  ],
+  "route_1_temporal_and_population_consequences": [
+    {
+      "question": "Does early stress induction identify the time and nature of the useful contribution?",
+      "author_observations": "N-starvation induction and no pre-starvation growth defect coexist with shorter mutant recovery lag after sustained starvation; later CFU survival is worse without yeaG.",
+      "changed_decision": "Retain adaptation/survival alternatives across different time windows instead of calling faster regrowth a universal benefit or lack of an early phenotype a nonfunction.",
+      "follow_up_choices": [
+        "Compare recovery and prolonged-starvation outcomes with genotype and phase retained.",
+        "Ask whether a changed average reflects a uniform shift or altered subpopulation behavior."
+      ]
+    },
+    {
+      "question": "Is the reporter change shared uniformly across cells?",
+      "author_observations": "WT develops a heterogeneous GFP-production distribution during recovery; mutant has an earlier, more uniform reporter response. GFP production is a proxy; it is not a direct flux measurement.",
+      "changed_decision": "A mean alone leaves different population explanations compatible. Inspect gated distributions and the separate viability follow-up before assigning a population role.",
+      "tool_inputs_and_limits": "Published gated histograms/10,000-event method and CFU observations; no raw FCS was available or reprocessed. Joint single-cell lineage/survival data were not produced here."
+    },
+    {
+      "question": "Does loss of the bright reporter population prove a particular dormant-state mechanism?",
+      "author_observations": "The reported post-recovery return to starvation combines loss of bright cells with CFU decline; the authors interpret higher-activity cells as less viable.",
+      "changed_decision": "Support the stated population association without claiming direct tracking of every cell fate, a measured substrate, or proven antibiotic persistence.",
+      "source_limit": "The follow-up text says a further 72 h, while the Fig. 6D caption describes 24 h. Exact timing is retained as internally inconsistent rather than silently selected. Supplement Table S1 concerns delta-yeaH/delta-yeaGH; it must not be relabeled as a delta-yeaG quantitative table."
+    }
+  ],
+  "route_2_phosphorylation_to_direct_contribution": [
+    {
+      "question": "Does a changed phosphosite response after kinase deletion identify a direct substrate?",
+      "author_observations": "Main Table 2 reports carbon-shift response ratios; Table 3 lists sites with WT ratios and missing mutant ratios. Multiple indirect kinase/phosphatase/expression explanations remain possible.",
+      "changed_decision": "Separate site, condition, replicate and normalization before ranking a direct-catalysis hypothesis; prefer a discriminating purified-protein comparison over assigning all changing signals to direct kinase targets."
+    },
+    {
+      "question": "Can all AceA sites be represented as one phosphorylation outcome?",
+      "actual_probe": "Extracted selected site rows from the authors XLSX and computed reported response contrasts without filling missing entries. AceA T5 has a different record from T3/S398.",
+      "changed_decision": "Retain site-specific observations. A nonzero KO-channel intensity with no reported ratio is unresolved quantitative evidence, not proof of physical absence or zero occupancy.",
+      "probe_ref": "workbook_probe"
+    },
+    {
+      "question": "What does the positive AceA assay establish?",
+      "author_observations": "Purified YeaG/AceA with ATP and malate yields the reported Phos-tag shift; absence of malate does not show that shift.",
+      "changed_decision": "Support condition-dependent in-vitro phosphorylation of AceA, while leaving exact modified sites, direct malate binding, native flux and causal explanation of recovery unresolved.",
+      "assay_scope": "Authors: 6 micrograms YeaG and 5 micrograms AceA, 20 microliter reaction, 10 mM ATP, 10 mM MgCl2, 10 mM MnCl2, plus/minus 10 mM malate, 37 C for 2 h. These are experiments, not available wet-lab tools."
+    }
+  ],
+  "workbook_probe": {
+    "actual_work": "Unzipped the public XLSX, decoded shared strings and sheets with standard XML parsing, retained exact cell coordinates, extracted selected rows and performed exponentiation/difference arithmetic. No spectral identification, kinetic fitting or raw-data normalization rerun.",
+    "file": "PMC8055822_Table_1.XLSX",
+    "sha256": "14176e5a297df4e7604819018082b1f9a207f93d4970cd44ff8dc445f3a3db95",
+    "sheet": "Phospho sites table",
+    "header_row": {
+      "row": 2,
+      "cells": {
+        "A": "Protein ID",
+        "B": "Protein names",
+        "C": "Gene names",
+        "D": "Protein description",
+        "E": "Positions",
+        "F": "Amino acid",
+        "G": "Localization prob",
+        "H": "PEP",
+        "I": "Score",
+        "J": "Sequence window",
+        "K": "Phospho (STY) Probabilities",
+        "L": "Charge",
+        "M": "Mass error (ppm)",
+        "N": "WT malate/WT glucose ratio",
+        "O": "WT glucose occupancy",
+        "P": "WT malate occupancy",
+        "Q": "ΔyeaG glucose/WT glucose ratio",
+        "R": "ΔyeaG malate/WT glucose ratio",
+        "S": "ΔyeaG malate/ΔyeaG glucose ratio",
+        "T": "WT glucose occupancy",
+        "U": "ΔyeaG glucose occupancy",
+        "V": "ΔyeaG malate occupancy",
+        "W": "WT malate/WT glucose ratio",
+        "X": "WT glucose occupancy",
+        "Y": "WT malate occupancy",
+        "Z": "ΔyeaG glucose/WT glucose ratio",
+        "AA": "ΔyeaG malate/WT glucose ratio",
+        "AB": "ΔyeaG malate/ΔyeaG glucose ratio",
+        "AC": "WT glucose occupancy",
+        "AD": "ΔyeaG glucose occupancy",
+        "AE": "ΔyeaG malate occupancy",
+        "AF": "Intensity WT glucose ",
+        "AG": "Intensity WT malate",
+        "AH": "Intensity WT glucose ",
+        "AI": "Intensity ΔyeaG glucose ",
+        "AJ": "Intensity ΔyeaG malate ",
+        "AK": "Intensity WT glucose ",
+        "AL": "Intensity WT malate",
+        "AM": "Intensity WT glucose ",
+        "AN": "Intensity ΔyeaG glucose ",
+        "AO": "Intensity ΔyeaG malate ",
+        "AP": "WT malate/WT glucose averaged ratio",
+        "AQ": "ΔyeaG glucose/WT glucose averaged ratio",
+        "AR": "ΔyeaG malate/WT glucose averaged ratio",
+        "AS": "ΔyeaG malate/ΔyeaG glucose averaged ratio",
+        "AT": "(ΔyeaG malate/ΔyeaG glucose) / (WT malate/WT glucose) calculated ratio",
+        "AU": ""
+      }
+    },
+    "selected_source_rows": [
+      {
+        "row": 3,
+        "cells": {
+          "A": "P0A9G6",
+          "B": "Isocitrate lyase",
+          "C": "aceA",
+          "D": "Isocitrate lyase",
+          "E": "5",
+          "F": "T",
+          "G": "0.99946299999999999",
+          "H": "9.4596000000000002E-84",
+          "I": "237.18",
+          "J": "___________MKTRTQQIEELQKEWTQPRW",
+          "K": "T(0.001)RT(0.999)QQIEELQK",
+          "L": "2",
+          "M": "-0.36819000000000002",
+          "N": "1.0976999999999999",
+          "Q": "1.3226",
+          "R": "20.971",
+          "S": "15.023999999999999",
+          "T": "4.0049000000000001E-2",
+          "W": "1.2085999999999999",
+          "AF": "666190",
+          "AG": "1201900",
+          "AH": "4800800",
+          "AI": "8192000",
+          "AJ": "199030000",
+          "AK": "8222100",
+          "AL": "12994000",
+          "AP": "0.20558018877524808",
+          "AQ": "0.40337680668708198",
+          "AR": "4.3903237527283041",
+          "AS": "3.9091970629916872",
+          "AT": "3.703616874216439"
+        }
+      },
+      {
+        "row": 4,
+        "cells": {
+          "A": "P0A9G6",
+          "B": "Isocitrate lyase",
+          "C": "aceA",
+          "D": "Isocitrate lyase",
+          "E": "3",
+          "F": "T",
+          "G": "0.99121899999999996",
+          "H": "1.9640900000000001E-4",
+          "I": "107.5",
+          "J": "_____________MKTRTQQIEELQKEWTQP",
+          "K": "T(0.991)RT(0.009)QQIEELQK",
+          "L": "2",
+          "M": "0.96738999999999997",
+          "W": "1.1669",
+          "AK": "3009400",
+          "AL": "4334400",
+          "AP": "0.22268093149457158"
+        }
+      },
+      {
+        "row": 5,
+        "cells": {
+          "A": "P0A9G6",
+          "B": "Isocitrate lyase",
+          "C": "aceA",
+          "D": "Isocitrate lyase",
+          "E": "321",
+          "F": "S",
+          "G": "0.999996",
+          "H": "1.92579E-137",
+          "I": "279.91000000000003",
+          "J": "HAKYPGKLLAYNCSPSFNWQKNLDDKTIASF",
+          "K": "LLAYNCSPS(1)FNWQK",
+          "L": "2",
+          "M": "-0.34066000000000002",
+          "AJ": "19753000"
+        }
+      },
+      {
+        "row": 6,
+        "cells": {
+          "A": "P0A9G6",
+          "B": "Isocitrate lyase",
+          "C": "aceA",
+          "D": "Isocitrate lyase",
+          "E": "398",
+          "F": "S",
+          "G": "1",
+          "H": "8.8349000000000006E-126",
+          "I": "268.24",
+          "J": "QQPEFAAAKDGYTFVSHQQEVGTGYFDKVTT",
+          "K": "DGYTFVS(1)HQQEVGTGYFDK",
+          "L": "3",
+          "M": "-0.73116999999999999",
+          "N": "1.9126000000000001",
+          "O": "6.5087000000000006E-2",
+          "AF": "934120",
+          "AG": "2505200",
+          "AJ": "12609000",
+          "AP": "0.93553518086801812"
+        }
+      },
+      {
+        "row": 53,
+        "cells": {
+          "A": "P0A6X3",
+          "B": "RNA-binding protein Hfq",
+          "C": "hfq",
+          "D": "RNA-binding protein Hfq",
+          "E": "49",
+          "F": "T",
+          "G": "0.99988900000000003",
+          "H": "7.3570400000000003E-5",
+          "I": "93.203000000000003",
+          "J": "GQIESFDQFVILLKNTVSQMVYKHAISTVVP",
+          "K": "NT(1)VSQMVYK",
+          "L": "2",
+          "M": "0.23218",
+          "N": "2.9931999999999999",
+          "Q": "3.0954000000000002",
+          "R": "8.673",
+          "S": "2.7936000000000001",
+          "W": "2.4826999999999999",
+          "AF": "19946000",
+          "AG": "62041000",
+          "AH": "2107900",
+          "AI": "6222100",
+          "AJ": "14494000",
+          "AK": "7967900",
+          "AL": "23590000",
+          "AP": "1.4530961005729135",
+          "AQ": "1.6301258523243809",
+          "AR": "3.116531109536119",
+          "AS": "1.4821254640799906",
+          "AT": "2.9029363507077077E-2"
+        }
+      },
+      {
+        "row": 128,
+        "cells": {
+          "A": "P39368",
+          "B": "Uncharacterized N-acetyltransferase YjhQ",
+          "C": "yjhQ",
+          "D": "Uncharacterized N-acetyltransferase YjhQ",
+          "E": "11",
+          "F": "T",
+          "G": "0.95849200000000001",
+          "H": "1.0415000000000001E-3",
+          "I": "42.975999999999999",
+          "J": "_____MTVHHFTFHITDKSDASDIREVETRA",
+          "K": "MTVHHFT(0.041)FHIT(0.958)DK",
+          "L": "2",
+          "M": "-1.8414999999999999",
+          "Q": "1.6554",
+          "R": "0.37889",
+          "S": "0.22686999999999999",
+          "W": "0.80471000000000004",
+          "AH": "73317000",
+          "AI": "112170000",
+          "AJ": "18087000",
+          "AK": "98187000",
+          "AL": "86447000",
+          "AP": "-0.31345913394658681",
+          "AQ": "0.72717986252497979",
+          "AR": "-1.4001490314218221",
+          "AS": "-2.1400622470613673",
+          "AT": "-1.8266031131147804"
+        }
+      }
+    ],
+    "calculations": [
+      {
+        "xlsx_row": 3,
+        "gene": "aceA",
+        "site": "T5",
+        "published_WT_log2_response": 0.20558018877524808,
+        "published_KO_log2_response": 3.9091970629916872,
+        "published_log2_response_ratio": 3.703616874216439,
+        "computed_response_ratio": 13.028660625243894,
+        "computed_difference_of_logs": 3.703616874216439,
+        "replicate_coverage": {
+          "WT_response_ratios": [
+            "1.0976999999999999",
+            "1.2085999999999999"
+          ],
+          "KO_response_ratios": [
+            "15.023999999999999",
+            null
+          ]
+        },
+        "interpretation": "Ratio of carbon-shift responses, not a site-occupancy fraction or an unconditional KO/WT comparison."
+      },
+      {
+        "xlsx_row": 53,
+        "gene": "hfq",
+        "site": "T49",
+        "published_WT_log2_response": 1.4530961005729135,
+        "published_KO_log2_response": 1.4821254640799906,
+        "published_log2_response_ratio": 0.029029363507077077,
+        "computed_response_ratio": 1.0203254259573769,
+        "computed_difference_of_logs": 0.029029363507077077,
+        "replicate_coverage": {
+          "WT_response_ratios": [
+            "2.9931999999999999",
+            "2.4826999999999999"
+          ],
+          "KO_response_ratios": [
+            "2.7936000000000001",
+            null
+          ]
+        },
+        "interpretation": "Ratio of carbon-shift responses, not a site-occupancy fraction or an unconditional KO/WT comparison."
+      },
+      {
+        "xlsx_row": 128,
+        "gene": "yjhQ",
+        "site": "T11",
+        "published_WT_log2_response": -0.3134591339465868,
+        "published_KO_log2_response": -2.1400622470613673,
+        "published_log2_response_ratio": -1.8266031131147804,
+        "computed_response_ratio": 0.2819276509550024,
+        "computed_difference_of_logs": -1.8266031131147804,
+        "replicate_coverage": {
+          "WT_response_ratios": [
+            null,
+            "0.80471000000000004"
+          ],
+          "KO_response_ratios": [
+            "0.22686999999999999",
+            null
+          ]
+        },
+        "interpretation": "Ratio of carbon-shift responses, not a site-occupancy fraction or an unconditional KO/WT comparison."
+      }
+    ],
+    "important_readout_boundaries": [
+      "Column AT is the log2 ratio of KO carbon-shift response to WT carbon-shift response. Equal responses do not imply equal baseline or state-specific abundance.",
+      "Phosphosite ratios and occupancy columns are separately named; sparsely supplied occupancy values do not justify calling every relative ratio an occupancy fraction.",
+      "AceA T3 has a WT response ratio in replicate 2 with no KO response ratios. S398 has a WT ratio in replicate 1 and a nonzero stored KO-malate channel intensity but no KO ratios. These patterns require quantification/detection caveats, not an imputed zero.",
+      "AceA T5 and Hfq T49 have two WT response ratios but one KO response ratio in the supplied sheet; all effect sizes are descriptive and not formal equivalence or significance tests.",
+      "The main narrative says 13 WT-only sites; the rendered Table 3 contains 15 site rows across 12 protein names. Count definitions/cause are unresolved; the table is not silently altered.",
+      "The main candidate-substrate text names SodB and later SodA inconsistently. The negative is not reassigned to a different gene by inference."
+    ],
+    "main_table3_data_rows": 15,
+    "main_table3_unique_protein_names": 12
+  },
+  "candidate_thought_patterns": [
+    {
+      "pattern": "Compare consequences across relevant time windows and cell states before assigning a uniform physiological benefit.",
+      "lane_links": [
+        "F05",
+        "F03"
+      ],
+      "choices_constrained": "Seek early/late or within-population contrasts that can separate the live explanations; retain a real short-term improvement alongside a long-term cost.",
+      "not_a_new_slot": "The measured times and states are observation context. The reusable process is the choice to test whether the aggregate interpretation survives those contrasts."
+    },
+    {
+      "pattern": "Resolve an aggregate disagreement by separating contributions at the biological resolution required by the claim.",
+      "lane_links": [
+        "F01",
+        "F03"
+      ],
+      "choices_constrained": "Inspect site-specific records, baseline-versus-response contrasts, and missingness when a whole-protein label conflates incompatible signals; do not infer direct catalysis from the pooled label.",
+      "not_a_tool": "XML extraction and exponentiation return values. Choosing which explanation and relation those values test remains episode reasoning."
+    }
+  ],
+  "credit_questions_exposed": [
+    "Physiological support is condition-, phase- and outcome-specific; faster regrowth and survival support different conclusions.",
+    "A direct protein-substrate assay does not establish every phosphosite or the physiological consequence.",
+    "Information that qualifies an overbroad assignment advances investigation without creating positive support for the corrected claim."
+  ],
+  "not_performed": [
+    "No new annotation run or runtime episode",
+    "No raw flow-cytometry, CFU, sequencing or mass-spectrum reanalysis",
+    "No wet-lab experiment",
+    "No implementation, scoring or design edits"
+  ]
+}

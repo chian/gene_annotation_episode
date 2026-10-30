@@ -1,0 +1,315 @@
+{
+  "version": "research_case167_numeric_components_v1",
+  "axis": "A105",
+  "cells": {
+    "standard_1_recovery": {
+      "value": 1.0209302325581395,
+      "unit": "dimensionless",
+      "formula": "measured_NADPH_amount/nominal_NADPH_amount",
+      "scope": "buffer_NADPH_standard_4.3_nmol",
+      "origin": "derived",
+      "status": "populated",
+      "unavailable_reason": null,
+      "witnesses": [
+        "Tab2",
+        "Par31",
+        "Par32"
+      ]
+    },
+    "standard_1_relative_bias_percent": {
+      "value": 2.0930232558139528,
+      "unit": "percent",
+      "formula": "100*(recovery-1)",
+      "scope": "buffer_NADPH_standard_4.3_nmol",
+      "origin": "derived",
+      "status": "populated",
+      "unavailable_reason": null,
+      "witnesses": [
+        "Tab2"
+      ]
+    },
+    "standard_2_recovery": {
+      "value": 1.013953488372093,
+      "unit": "dimensionless",
+      "formula": "measured_NADPH_amount/nominal_NADPH_amount",
+      "scope": "buffer_NADPH_standard_8.6_nmol",
+      "origin": "derived",
+      "status": "populated",
+      "unavailable_reason": null,
+      "witnesses": [
+        "Tab2",
+        "Par31",
+        "Par32"
+      ]
+    },
+    "standard_2_relative_bias_percent": {
+      "value": 1.3953488372093092,
+      "unit": "percent",
+      "formula": "100*(recovery-1)",
+      "scope": "buffer_NADPH_standard_8.6_nmol",
+      "origin": "derived",
+      "status": "populated",
+      "unavailable_reason": null,
+      "witnesses": [
+        "Tab2"
+      ]
+    },
+    "standard_3_recovery": {
+      "value": 1.006201550387597,
+      "unit": "dimensionless",
+      "formula": "measured_NADPH_amount/nominal_NADPH_amount",
+      "scope": "buffer_NADPH_standard_12.9_nmol",
+      "origin": "derived",
+      "status": "populated",
+      "unavailable_reason": null,
+      "witnesses": [
+        "Tab2",
+        "Par31",
+        "Par32"
+      ]
+    },
+    "standard_3_relative_bias_percent": {
+      "value": 0.6201550387596955,
+      "unit": "percent",
+      "formula": "100*(recovery-1)",
+      "scope": "buffer_NADPH_standard_12.9_nmol",
+      "origin": "derived",
+      "status": "populated",
+      "unavailable_reason": null,
+      "witnesses": [
+        "Tab2"
+      ]
+    },
+    "NADPH_calibration_slope": {
+      "value": 0.0999,
+      "unit": "absorbance/nmol",
+      "formula": "source_reported_linear_fit_slope",
+      "scope": "buffer_NADPH_calibration",
+      "origin": "reported",
+      "status": "populated",
+      "unavailable_reason": null,
+      "witnesses": [
+        "source/Fig3.png:panelB inset"
+      ]
+    },
+    "NADPH_calibration_intercept": {
+      "value": 0.0166,
+      "unit": "absorbance",
+      "formula": "source_reported_linear_fit_intercept",
+      "scope": "buffer_NADPH_calibration",
+      "origin": "reported",
+      "status": "populated",
+      "unavailable_reason": null,
+      "witnesses": [
+        "source/Fig3.png:panelB inset"
+      ]
+    },
+    "NADPH_calibration_R_squared": {
+      "value": 0.9994,
+      "unit": "dimensionless",
+      "formula": "source_reported_fit_R_squared",
+      "scope": "buffer_NADPH_calibration",
+      "origin": "reported",
+      "status": "populated",
+      "unavailable_reason": null,
+      "witnesses": [
+        "source/Fig3.png:panelB inset"
+      ]
+    },
+    "midpoint_within_run_CV_percent": {
+      "value": 0.8,
+      "unit": "percent",
+      "formula": "source_reported_within_run_CV",
+      "scope": "8.6nmol_buffer_NADPH",
+      "origin": "reported",
+      "status": "populated",
+      "unavailable_reason": null,
+      "witnesses": [
+        "Tab2",
+        "Par32"
+      ]
+    },
+    "midpoint_between_run_CV_percent": {
+      "value": 1.7,
+      "unit": "percent",
+      "formula": "source_reported_between_run_CV",
+      "scope": "8.6nmol_buffer_NADPH",
+      "origin": "reported",
+      "status": "populated",
+      "unavailable_reason": null,
+      "witnesses": [
+        "Tab2",
+        "Par32"
+      ]
+    },
+    "FBS_G6PD_activity_recovery_from_displayed_rates": {
+      "value": 1.2060546875,
+      "unit": "dimensionless",
+      "formula": "measured_net_activity/reported_expected_activity",
+      "scope": "0.2ug_G6PD_spiked_FBS",
+      "origin": "derived",
+      "status": "populated",
+      "unavailable_reason": null,
+      "witnesses": [
+        "Tab4",
+        "Par37"
+      ]
+    },
+    "FBS_G6PD_activity_recovery_reported_percent": {
+      "value": 120.57,
+      "unit": "percent",
+      "formula": "source_reported_percent_recovery",
+      "scope": "0.2ug_G6PD_spiked_FBS",
+      "origin": "reported",
+      "status": "populated",
+      "unavailable_reason": null,
+      "witnesses": [
+        "Tab4"
+      ]
+    },
+    "FBS_G6PD_activity_recovery_reported_SD_percentage_points": {
+      "value": 0.33,
+      "unit": "percentage_points",
+      "formula": "source_reported_recovery_SD",
+      "scope": "0.2ug_G6PD_spiked_FBS",
+      "origin": "reported",
+      "status": "populated",
+      "unavailable_reason": null,
+      "witnesses": [
+        "Tab4",
+        "Par43"
+      ]
+    },
+    "FBS_G6PD_activity_excess_over_expected": {
+      "value": 0.211,
+      "unit": "nmol/min",
+      "formula": "measured_net_activity-reported_expected_activity",
+      "scope": "0.2ug_G6PD_spiked_FBS",
+      "origin": "derived",
+      "status": "populated",
+      "unavailable_reason": null,
+      "witnesses": [
+        "Tab4"
+      ]
+    },
+    "FBS_G6PD_measured_rate_CV": {
+      "value": 0.0032388663967611335,
+      "unit": "dimensionless",
+      "formula": "reported_SD/reported_mean",
+      "scope": "0.2ug_G6PD_spiked_FBS",
+      "origin": "derived",
+      "status": "populated",
+      "unavailable_reason": null,
+      "witnesses": [
+        "Tab4",
+        "Par43"
+      ]
+    },
+    "G6PD_method_specific_activity_ratio": {
+      "value": 0.8407258064516129,
+      "unit": "dimensionless",
+      "formula": "WST8_specific_activity/UV_specific_activity",
+      "scope": "purified_G6PD_method_comparison",
+      "origin": "derived",
+      "status": "populated",
+      "unavailable_reason": null,
+      "witnesses": [
+        "Tab3",
+        "Par33",
+        "Par39"
+      ]
+    },
+    "G6PD_method_enzyme_concentration_ratio": {
+      "value": 1.3333333333333333,
+      "unit": "dimensionless",
+      "formula": "(0.1ug/0.150mL)/(0.5ug/1mL)",
+      "scope": "purified_G6PD_method_comparison",
+      "origin": "derived",
+      "status": "populated",
+      "unavailable_reason": null,
+      "witnesses": [
+        "Par33",
+        "Par39"
+      ]
+    },
+    "same_matrix_reporter_gain": {
+      "value": null,
+      "unit": "unknown",
+      "formula": "unavailable",
+      "scope": "scoped_functional_assay",
+      "origin": "derived",
+      "status": "unavailable",
+      "unavailable_reason": "enzyme_spike_and_buffer_analyte_calibration_do_not_isolate_it",
+      "witnesses": []
+    },
+    "matched_blank_fraction": {
+      "value": null,
+      "unit": "unknown",
+      "formula": "unavailable",
+      "scope": "scoped_functional_assay",
+      "origin": "derived",
+      "status": "unavailable",
+      "unavailable_reason": "individual_sample_and_blank_values_unreported",
+      "witnesses": []
+    },
+    "chemical_product_attribution_fraction": {
+      "value": null,
+      "unit": "unknown",
+      "formula": "unavailable",
+      "scope": "scoped_functional_assay",
+      "origin": "derived",
+      "status": "unavailable",
+      "unavailable_reason": "quantitative_sugar_product_identity_or_coupling_not_measured",
+      "witnesses": []
+    },
+    "corrected_molar_G6PD_activity": {
+      "value": null,
+      "unit": "unknown",
+      "formula": "unavailable",
+      "scope": "scoped_functional_assay",
+      "origin": "derived",
+      "status": "unavailable",
+      "unavailable_reason": "molar_E_attribution_condition_response_and_applicable_recovery_not_established",
+      "witnesses": []
+    },
+    "calibration_residual_SD": {
+      "value": null,
+      "unit": "unknown",
+      "formula": "unavailable",
+      "scope": "scoped_functional_assay",
+      "origin": "derived",
+      "status": "unavailable",
+      "unavailable_reason": "point_data_and_residuals_unavailable",
+      "witnesses": []
+    },
+    "independent_preparation_count": {
+      "value": null,
+      "unit": "unknown",
+      "formula": "unavailable",
+      "scope": "scoped_functional_assay",
+      "origin": "derived",
+      "status": "unavailable",
+      "unavailable_reason": "preparation_independence_not_reported",
+      "witnesses": []
+    },
+    "overall_experimental_reliability": {
+      "value": null,
+      "unit": "unknown",
+      "formula": "unavailable",
+      "scope": "scoped_functional_assay",
+      "origin": "derived",
+      "status": "unavailable",
+      "unavailable_reason": "no_justified_compilation_to_overall_grade_defined",
+      "witnesses": []
+    }
+  },
+  "independence": "not inferred; recovery, relative error and inverse multiplier share operands",
+  "compilation": {
+    "calibration_relation": "A=m*N+b",
+    "matched_blank_relation_conditional": "(A_sample-A_blank)/(m*t)",
+    "additional_recovery_multiplier_conditional": "1/r only if independently established for same matrix and assay",
+    "corrected_functional_result": null,
+    "unknowns_not_imputed": true,
+    "W05_aggregation": null
+  }
+}

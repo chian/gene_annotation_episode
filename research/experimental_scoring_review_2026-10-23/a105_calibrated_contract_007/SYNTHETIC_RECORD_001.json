@@ -1,0 +1,1070 @@
+{
+  "contract_version": "a105_calibrated_contract_research_001",
+  "status": "SYNTHETIC; UNADOPTED; NOT_A_READER; NOT_A_COMPLETED_AXIS",
+  "scope": {
+    "target_material_id": "SYNTHETIC_T_material",
+    "target_material_status": "hypothetical_only_no_actual_sequence_or_public_target",
+    "emerged_comparison": "attributed molecular reaction A rate divided by attributed molecular reaction B rate",
+    "estimand": "theta_T = ln(a_A,T / a_B,T)",
+    "reference_condition": {
+      "temperature_C": 30,
+      "pH": 7,
+      "substrate_A_concentration_mM": 1,
+      "substrate_B_concentration_mM": 1,
+      "molecular_state": "synthetic_fixed_state_M0"
+    },
+    "intended_changed_variable": "reaction A substrate versus reaction B substrate; separately assayed at same nominal concentration",
+    "source_comparison_arrangement": "Each G source is measured in separate A and B assays. G1/G2/G3 are not co-mingled. Other molecular contributors within each preparation are represented by the measured attribution fractions.",
+    "signed_hypotheses": {
+      "plus": "theta_T >= 0: A rate at least B rate",
+      "minus": "theta_T <= 0: B rate at least A rate",
+      "boundary": "Both include equality theta_T = 0."
+    },
+    "endpoint_limits": "No assertion of absolute activity, physiological role, or target annotation probability."
+  },
+  "input": {
+    "observations": [
+      {
+        "observation_id": "GO1",
+        "source_molecule_id": "G1",
+        "preparation_id": "GP1",
+        "family_residual_id": "F12",
+        "source_residual_id": "US_G1",
+        "source_condition": {
+          "temperature_C": 25,
+          "pH": 7
+        },
+        "assay": {
+          "endpoint_status": "detected_positive",
+          "net_rate_A": 2.45960311115695,
+          "net_rate_B": 1.0,
+          "rate_unit": "min^-1",
+          "rate_denominator": "amount of assayed source molecule",
+          "log_ratio_y": 0.9,
+          "variance_y": 0.04,
+          "replicate_count": null,
+          "replicate_count_status": "not_needed_for_supplied_known_covariance; no empirical replicates invented"
+        },
+        "comparability": {
+          "control_id": "C1",
+          "attributed_ratio_A_over_B_at_source_condition": 1.1051709180756477,
+          "attributed_ratio_A_over_B_at_reference_condition": 1.0,
+          "log_condition_ratio_c": 0.1,
+          "variance_c": 0.01,
+          "excluded_intended_variable": "reaction A versus reaction B",
+          "calibration_status": "synthetic_external_matched_condition_summary"
+        },
+        "isolation": {
+          "control_id": "I1",
+          "fraction_A": 0.7238699344287677,
+          "fraction_B": 0.8,
+          "negative_log_fraction_ratio_d": 0.1,
+          "variance_d": 0.01,
+          "fraction_denominator": "the respective net measured rate A or B",
+          "background": "remaining 1-fraction is other molecular contributors",
+          "calibration_status": "synthetic_external_attribution_summary"
+        },
+        "descriptor": {
+          "source_value": 3,
+          "target_value": 2,
+          "target_minus_source_x": -1,
+          "unit": "1",
+          "measurement_variance": 0.0,
+          "status": "fixed_synthetic_covariate"
+        }
+      },
+      {
+        "observation_id": "GO2",
+        "source_molecule_id": "G2",
+        "preparation_id": "GP2",
+        "family_residual_id": "F12",
+        "source_residual_id": "US_G2",
+        "source_condition": {
+          "temperature_C": 30,
+          "pH": 6.8
+        },
+        "assay": {
+          "endpoint_status": "detected_positive",
+          "net_rate_A": 1.8221188003905089,
+          "net_rate_B": 1.0,
+          "rate_unit": "min^-1",
+          "rate_denominator": "amount of assayed source molecule",
+          "log_ratio_y": 0.6,
+          "variance_y": 0.09,
+          "replicate_count": null,
+          "replicate_count_status": "not_needed_for_supplied_known_covariance; no empirical replicates invented"
+        },
+        "comparability": {
+          "control_id": "C2",
+          "attributed_ratio_A_over_B_at_source_condition": 1.0512710963760241,
+          "attributed_ratio_A_over_B_at_reference_condition": 1.0,
+          "log_condition_ratio_c": 0.05,
+          "variance_c": 0.01,
+          "excluded_intended_variable": "reaction A versus reaction B",
+          "calibration_status": "synthetic_external_matched_condition_summary"
+        },
+        "isolation": {
+          "control_id": "I2",
+          "fraction_A": 0.8143536762323635,
+          "fraction_B": 0.9,
+          "negative_log_fraction_ratio_d": 0.1,
+          "variance_d": 0.04,
+          "fraction_denominator": "the respective net measured rate A or B",
+          "background": "remaining 1-fraction is other molecular contributors",
+          "calibration_status": "synthetic_external_attribution_summary"
+        },
+        "descriptor": {
+          "source_value": 2,
+          "target_value": 2,
+          "target_minus_source_x": 0,
+          "unit": "1",
+          "measurement_variance": 0.0,
+          "status": "fixed_synthetic_covariate"
+        }
+      },
+      {
+        "observation_id": "GO3",
+        "source_molecule_id": "G3",
+        "preparation_id": "GP3",
+        "family_residual_id": "F3",
+        "source_residual_id": "US_G3",
+        "source_condition": {
+          "temperature_C": 35,
+          "pH": 7.4
+        },
+        "assay": {
+          "endpoint_status": "detected_positive",
+          "net_rate_A": 2.585709659315846,
+          "net_rate_B": 1.0,
+          "rate_unit": "min^-1",
+          "rate_denominator": "amount of assayed source molecule",
+          "log_ratio_y": 0.95,
+          "variance_y": 0.16,
+          "replicate_count": null,
+          "replicate_count_status": "not_needed_for_supplied_known_covariance; no empirical replicates invented"
+        },
+        "comparability": {
+          "control_id": "C3",
+          "attributed_ratio_A_over_B_at_source_condition": 1.2214027581601699,
+          "attributed_ratio_A_over_B_at_reference_condition": 1.0,
+          "log_condition_ratio_c": 0.2,
+          "variance_c": 0.04,
+          "excluded_intended_variable": "reaction A versus reaction B",
+          "calibration_status": "synthetic_external_matched_condition_summary"
+        },
+        "isolation": {
+          "control_id": "I3",
+          "fraction_A": 0.7134220683755355,
+          "fraction_B": 0.75,
+          "negative_log_fraction_ratio_d": 0.05,
+          "variance_d": 0.01,
+          "fraction_denominator": "the respective net measured rate A or B",
+          "background": "remaining 1-fraction is other molecular contributors",
+          "calibration_status": "synthetic_external_attribution_summary"
+        },
+        "descriptor": {
+          "source_value": 1,
+          "target_value": 2,
+          "target_minus_source_x": 1,
+          "unit": "1",
+          "measurement_variance": 0.0,
+          "status": "fixed_synthetic_covariate"
+        }
+      }
+    ],
+    "response": {
+      "model_id": "SYNTHETIC_EXTERNAL_RESPONSE_FIT",
+      "prediction_design_X": [
+        [
+          1,
+          -1
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "coefficient_order": [
+        "intercept",
+        "target_minus_source_descriptor"
+      ],
+      "coefficient_values_beta": [
+        0.15,
+        0.05
+      ],
+      "coefficient_units": [
+        "log_ratio",
+        "log_ratio per unit descriptor"
+      ],
+      "coefficient_covariance": [
+        [
+          0.02,
+          0.005
+        ],
+        [
+          0.005,
+          0.02
+        ]
+      ],
+      "coefficient_status": "synthetic_supplied_fit_summary; no training dataset or actual fit is asserted",
+      "coefficient_covariance_status": "fixed_known_sampling_covariance_for_fixture",
+      "calibration_training_design": null,
+      "calibration_training_design_status": "not_supplied; not_needed_for_this_conditional_check; required_for_empirical_fit_audit",
+      "descriptor_definition": "toy dimensionless scalar; x = target value 2 minus source value [3,2,1]",
+      "domain": {
+        "x_min": -1,
+        "x_max": 1,
+        "endpoint": "same declared A/B log contrast",
+        "reference_state": "scope.reference_condition"
+      },
+      "reuses_assay_or_control_records": false,
+      "assumption_id": "external_fit_independence"
+    },
+    "residuals": {
+      "inclusion": "already_in_primitive_covariance; do_not_add_again",
+      "source": {
+        "ids": [
+          "US_G1",
+          "US_G2",
+          "US_G3"
+        ],
+        "owners": [
+          "G1",
+          "G2",
+          "G3"
+        ],
+        "means": [
+          0,
+          0,
+          0
+        ],
+        "loadings": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ],
+        "covariance": [
+          [
+            0.04,
+            0,
+            0
+          ],
+          [
+            0,
+            0.04,
+            0
+          ],
+          [
+            0,
+            0,
+            0.04
+          ]
+        ],
+        "meaning": "centered source-to-target mapping errors conditional on shared target/family effects; same molecular source retains same realization across new preparations"
+      },
+      "target": {
+        "id": "UT_T",
+        "owner": "SYNTHETIC_T_material",
+        "mean": 0,
+        "loadings": [
+          [
+            1
+          ],
+          [
+            1
+          ],
+          [
+            1
+          ]
+        ],
+        "covariance": [
+          [
+            0.06
+          ]
+        ],
+        "meaning": "one centered common target mapping error, shared by all three rows"
+      },
+      "family": {
+        "ids": [
+          "UF_F12",
+          "UF_F3"
+        ],
+        "owners": [
+          [
+            "G1",
+            "G2"
+          ],
+          [
+            "G3"
+          ]
+        ],
+        "means": [
+          0,
+          0
+        ],
+        "loadings": [
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        "covariance": [
+          [
+            0.04,
+            0
+          ],
+          [
+            0,
+            0.04
+          ]
+        ],
+        "meaning": "centered family mapping effects established as synthetic assumptions; labels alone supply no variance"
+      }
+    },
+    "primitive": {
+      "order": [
+        "y_G1",
+        "y_G2",
+        "y_G3",
+        "c_G1",
+        "c_G2",
+        "c_G3",
+        "d_G1",
+        "d_G2",
+        "d_G3",
+        "beta_intercept",
+        "beta_descriptor",
+        "u_source_G1",
+        "u_source_G2",
+        "u_source_G3",
+        "u_target_T",
+        "u_family_F12",
+        "u_family_F3"
+      ],
+      "values": [
+        0.9,
+        0.6,
+        0.95,
+        0.1,
+        0.05,
+        0.2,
+        0.1,
+        0.1,
+        0.05,
+        0.15,
+        0.05,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "units": [
+        "log_ratio",
+        "log_ratio",
+        "log_ratio",
+        "log_ratio",
+        "log_ratio",
+        "log_ratio",
+        "log_ratio",
+        "log_ratio",
+        "log_ratio",
+        "log_ratio",
+        "log_ratio",
+        "log_ratio",
+        "log_ratio",
+        "log_ratio",
+        "log_ratio",
+        "log_ratio",
+        "log_ratio"
+      ],
+      "covariance_entry_unit": "product of row and column primitive units; here squared dimensionless natural-log-ratio units",
+      "covariance_matrix": [
+        [
+          0.04,
+          0,
+          0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0,
+          0.09,
+          0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0,
+          0,
+          0.16,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.01,
+          0,
+          0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0,
+          0.01,
+          0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0,
+          0,
+          0.04,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.01,
+          0,
+          0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0,
+          0.04,
+          0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0,
+          0,
+          0.01,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.02,
+          0.005,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.005,
+          0.02,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.04,
+          0,
+          0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0,
+          0.04,
+          0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0,
+          0,
+          0.04,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.06,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.04,
+          0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0,
+          0.04
+        ]
+      ],
+      "jacobian_J": [
+        [
+          1,
+          0,
+          0,
+          -1,
+          0,
+          0,
+          -1,
+          0,
+          0,
+          1,
+          -1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          -1,
+          0,
+          0,
+          -1,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          -1,
+          0,
+          0,
+          -1,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          1
+        ]
+      ]
+    },
+    "uncertainty": {
+      "model": "joint_Gaussian_errors_on_declared_log_summary_primitives; fixed_X; known_covariance",
+      "covariance_status": "declared_known_for_synthetic_fixture",
+      "degrees_of_freedom": null,
+      "degrees_of_freedom_reason": "not_an_estimated_variance_fixture; no real sample count or df invented",
+      "upstream_boundary": "Net assay rates and independent condition/attribution calibration summaries, not raw detector data. Their native values are deterministic representations of the supplied log summaries. No native-scale distribution or exact propagation from raw readings is asserted.",
+      "nonlinear_applicability": "For real raw ratios, normality and covariance propagation require their own justified sampling or likelihood model."
+    },
+    "independence_assumptions": [
+      {
+        "id": "assay_blocks",
+        "scope": "y_G1,y_G2,y_G3",
+        "meaning": "independent distinct source/preparation assay errors; specified covariance, not deduced from identities"
+      },
+      {
+        "id": "separate_controls",
+        "scope": "all y,c,d blocks",
+        "meaning": "independent assay, condition-response, and attribution calibration summaries; c and d independently calibrated on the same endpoint with distinct synthetic data"
+      },
+      {
+        "id": "external_fit_independence",
+        "scope": "beta versus y,c,d and residuals",
+        "meaning": "external fit reuses none of the three assay/control observations; beta coefficients are correlated with covariance .005"
+      },
+      {
+        "id": "residual_components",
+        "scope": "source,target,family effects",
+        "meaning": "source residuals independent conditional on shared target/family terms; family F12 and F3 independent; all residual blocks independent of measurement and beta errors"
+      },
+      {
+        "id": "fixed_covariate",
+        "scope": "X",
+        "meaning": "x observed exactly in this fixture; real predictor uncertainty must join primitive covariance or likelihood"
+      }
+    ]
+  },
+  "derived": {
+    "source_corrected_contrast": [
+      0.7,
+      0.45,
+      0.7
+    ],
+    "response_mean": [
+      0.1,
+      0.15,
+      0.2
+    ],
+    "mapped_target_contrast_z": [
+      0.8,
+      0.6,
+      0.9
+    ],
+    "covariance_components": {
+      "assay": [
+        [
+          0.04,
+          0,
+          0
+        ],
+        [
+          0,
+          0.09,
+          0
+        ],
+        [
+          0,
+          0,
+          0.16
+        ]
+      ],
+      "comparability": [
+        [
+          0.01,
+          0,
+          0
+        ],
+        [
+          0,
+          0.01,
+          0
+        ],
+        [
+          0,
+          0,
+          0.04
+        ]
+      ],
+      "isolation": [
+        [
+          0.01,
+          0,
+          0
+        ],
+        [
+          0,
+          0.04,
+          0
+        ],
+        [
+          0,
+          0,
+          0.01
+        ]
+      ],
+      "response_coefficients": [
+        [
+          0.03,
+          0.015,
+          0
+        ],
+        [
+          0.015,
+          0.02,
+          0.025
+        ],
+        [
+          0,
+          0.025,
+          0.05
+        ]
+      ],
+      "source_residual": [
+        [
+          0.04,
+          0,
+          0
+        ],
+        [
+          0,
+          0.04,
+          0
+        ],
+        [
+          0,
+          0,
+          0.04
+        ]
+      ],
+      "target_residual": [
+        [
+          0.06,
+          0.06,
+          0.06
+        ],
+        [
+          0.06,
+          0.06,
+          0.06
+        ],
+        [
+          0.06,
+          0.06,
+          0.06
+        ]
+      ],
+      "family_residual": [
+        [
+          0.04,
+          0.04,
+          0
+        ],
+        [
+          0.04,
+          0.04,
+          0
+        ],
+        [
+          0,
+          0,
+          0.04
+        ]
+      ]
+    },
+    "target_covariance_C": [
+      [
+        0.23,
+        0.115,
+        0.06
+      ],
+      [
+        0.115,
+        0.3,
+        0.085
+      ],
+      [
+        0.06,
+        0.085,
+        0.4
+      ]
+    ],
+    "pool": {
+      "precision_P": 6.4316277948532505,
+      "weights": [
+        0.4771364317841079,
+        0.2612443778110945,
+        0.26161919040479764
+      ],
+      "theta_hat": 0.7739130434782608,
+      "variance_V": 0.15548163418290856,
+      "standard_uncertainty": 0.3943115952935046,
+      "Q": 0.21739130434782614,
+      "Q_df_conditional_on_known_C": 2,
+      "theta_plus": 0.7739130434782608,
+      "theta_minus": 0.0,
+      "Q_plus": 0.21739130434782614,
+      "Q_minus": 4.069559452781293,
+      "S_nats": 1.9260840742167336,
+      "B": 0.7456307045069301
+    },
+    "annotation_support_coordinate": null,
+    "annotation_support_status": "unresolved_W05_signed_to_annotation_interface; not a completion claim"
+  },
+  "auxiliary_checks": {
+    "covariance_reuse": {
+      "primitive_order": [
+        "source_log_contrast",
+        "target_minus_same_source_calibration_difference"
+      ],
+      "values": [
+        0.8,
+        0.2
+      ],
+      "covariance": [
+        [
+          0.04,
+          -0.04
+        ],
+        [
+          -0.04,
+          0.13
+        ]
+      ],
+      "linear_map": [
+        1,
+        1
+      ],
+      "expected_mapped_variance": 0.09,
+      "meaning": "same source error enters source estimate and calibration difference with opposite signs; this is not isolation d and not a required target experiment"
+    },
+    "known_component_sensitivity": {
+      "n": 10,
+      "equal_z": 0.8,
+      "known_independent_variance": 0.1,
+      "unresolved_residual_diagonal": 0.15,
+      "constraints": [
+        "C = .10 I + R",
+        "diag(R) = .15",
+        "R positive semidefinite"
+      ],
+      "variance_bounds": [
+        0.01,
+        0.16
+      ],
+      "S_bounds": [
+        2,
+        32
+      ],
+      "B_bounds": [
+        0.7615941559557649,
+        0.9999999999999747
+      ],
+      "nonnegative_exchangeable_residual_S_bounds": [
+        2,
+        12.8
+      ],
+      "status": "explicit_synthetic_sensitivity_set; no midpoint or best-case estimate"
+    }
+  },
+  "provenance": {
+    "number_origin": "All values are SYNTHETIC. Core y,c,d,X,beta,covariance and fit copied as check targets from a105_correlated_bridge_006; backing rate/control/fraction representations and exact covariate values are new synthetic representations.",
+    "no_new_bio_sources": true,
+    "no_paper_read": true,
+    "no_target_application": true,
+    "no_policy_adoption": true,
+    "completion": "0/10; A105 first",
+    "reader_implementation": "none; this record is a proposed sheet population contract plus arithmetic fixture",
+    "R_multiplier": "absent: calibrated response mapping already incorporates supported correspondence"
+  }
+}

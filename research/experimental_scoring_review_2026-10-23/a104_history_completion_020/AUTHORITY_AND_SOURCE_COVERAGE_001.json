@@ -1,0 +1,77 @@
+{
+  "record_kind": "research_work_provenance_not_runtime_gate",
+  "created_utc": "2026-10-24T04:23:35.246921+00:00",
+  "meaning": "This receipt records actual displayed reads in this worker conversation. Hashing does not substitute for reading. Hashes were captured when this receipt was written, after the displayed reads.",
+  "coverage_events": [
+    {
+      "event": "initial_authority_read",
+      "coverage": "All listed files complete; latest human instruction read last.",
+      "display_chunks": [
+        "8520f4",
+        "778871",
+        "e6629b",
+        "7e5dd3",
+        "8f8d4a",
+        "889057",
+        "977048",
+        "6c2528",
+        "a5705e",
+        "217591",
+        "c4027c"
+      ],
+      "truncation_repairs": [
+        "Initial batched EPISODE_STRUCTURE/TIME_AWARE output was clipped globally; both were reread completely in chunk 7e5dd3.",
+        "VERBATIM_RECOVERY output had a clipped section; complete sequential portions 1-120 and 121-215 were read in chunks 977048 and a5705e."
+      ]
+    },
+    {
+      "event": "after_smillie2011_before_conversion",
+      "coverage": "All listed files complete; latest human instruction read last; source conversion then written to PAPER01_SMILLIE_2011_001.md.",
+      "display_chunks": [
+        "b96dcb",
+        "67a718",
+        "7a4dac",
+        "65e837",
+        "4c76a7",
+        "c9429d",
+        "171d1e",
+        "33a3f2",
+        "911ea5",
+        "9d6a57"
+      ],
+      "truncation_repairs": [
+        "Global clipping between TIME_AWARE_ESTIMATION and TOOL_KNOWLEDGE repaired by time lines 351-388 and knowledge lines 1-50 in 7a4dac and 65e837."
+      ]
+    },
+    {
+      "event": "after_hehemann2010_before_conversion",
+      "coverage": "All listed files complete; latest human instruction read last; source conversion then written to PAPER02_HEHEMANN_2010_001.md.",
+      "display_chunks": [
+        "af9ac1",
+        "218a17",
+        "ffffb0",
+        "0be4d8",
+        "c6122f",
+        "87f509",
+        "cd0469"
+      ],
+      "truncation_repairs": []
+    }
+  ],
+  "a104_base_design_reads": {
+    "parent_review": "complete 109 lines",
+    "numerical_draft": "complete sequential portions 1-200, 201-400, 401-506",
+    "original_arithmetic_checker": "complete source read, then pure toy fixture rerun under new arithmetic checker"
+  },
+  "primary_source_coverage": [
+    {
+      "doi": "10.1038/nature10571",
+      "coverage": "Main abstract/landing-page methods access limit; supplementary text lines 1-260 and 261-700 (complete Methods pp 1-5 and six figure captions, plus Tables 1-2/start of 3). Only Methods/abstract quantities used. Main full text and supplement remainder/metadata/sequence datasets uninspected. Screenshot requests did not produce a visual inspection."
+    },
+    {
+      "doi": "10.1038/nature08937",
+      "coverage": "Retained main normalized text 1-280 and 281-545 complete, including Methods/references; supplementary Table 3 lines 284-513; retained Figure 3 visually inspected. Other supplementary contents not read for this task."
+    }
+  ],
+  "coordination": "A108 worker reports its separate 2012 source inspection. This worker received metadata only and does not claim to have inspected that 2012 packet."
+}

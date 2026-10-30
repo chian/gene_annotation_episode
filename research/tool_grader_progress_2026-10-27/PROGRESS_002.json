@@ -1,0 +1,250 @@
+{
+  "record_type": "implementation_progress_evidence",
+  "recorded_at": "2026-10-28T01:46:59.247125+00:00",
+  "historical_status_evidence": {
+    "path": "research/tool_grader_goal_2026-10-24/WORK_STATUS.json",
+    "sha256": "079c0f12201cebde19bed545d0a9e263a20ed6011246d1164370b34a6a8d645e",
+    "current_completion_must_not_be_inferred_from_row_counts": true
+  },
+  "retired_progress_measure": {
+    "display": "114/307 graders",
+    "valid_scientific_grader_fraction": false,
+    "reason": "Numerator contains mixed implementation rows; denominator contains modes, aliases, providers, lifecycle responsibilities, exclusions and resource constraints."
+  },
+  "shared_scientific_grader_counts": {
+    "required_distinct_families": null,
+    "verified_complete_families": null,
+    "reason": "Full operation-to-shared-sheet/calculator mapping is not yet established; null is unknown, not zero."
+  },
+  "deliverables": [
+    {
+      "id": "R1",
+      "status": "open",
+      "confirmed_repair_paths": [
+        "BLAST publication/read",
+        "HMMER coverage publication",
+        "Biopython alignment publication"
+      ],
+      "repaired_and_verified": 0,
+      "evidence": [
+        "verification/tool_graders_shared_scoring_trace_2026-10-27_501/REPORT.md",
+        "verification/tool_graders_shared_scoring_trace_2026-10-27_501/REPAIR_CONTRACT.md"
+      ],
+      "qualification": "Three fresh workers are implementing the separately bounded BLAST, HMMER and Biopython publication repairs. No repair closure is claimed before its verification and review.",
+      "workers": [
+        {
+          "path": "/root/blast_shared_sheet_projection_502",
+          "boundary": "BLAST publication/read/source mapping"
+        },
+        {
+          "path": "/root/hmmer_shared_projection_503",
+          "boundary": "HMMER coverage aliases"
+        },
+        {
+          "path": "/root/biopython_shared_projection_504",
+          "boundary": "Biopython native convenience fields and publication"
+        }
+      ]
+    },
+    {
+      "id": "R2",
+      "status": "open",
+      "named_gap_groups": 8,
+      "existing_components_reused": true,
+      "nmf_original_attempt": {
+        "unit": "gene-local-job-fb22b65698254c09afacf2116ee0bd6a.service",
+        "observed_terminal": true,
+        "systemd_result": "exit-code",
+        "exit_status": 1,
+        "pytest_passed": 2,
+        "pytest_failed": 2,
+        "evidence": "verification/tool_graders_expression_nmf_episode_path_2026-10-27_490/check001/stdout.txt",
+        "final_receipt_collected": true,
+        "receipt_reviewed_by_root": true,
+        "receipt": "verification/tool_graders_expression_nmf_episode_path_2026-10-27_490/check001/receipt.json"
+      },
+      "qualification": "NMF local-mode gap has the stated original-snapshot verification; seven other named groups remain open. Later shared-source edits require their own scoped checks and do not change original observations.",
+      "nmf_retained_verification": {
+        "status": "verified_for_original_frozen_local_mode_snapshot",
+        "unit": "gene-local-job-7d4679397c4a4ab9b5dfcd5a6733e739.service",
+        "returncode": 0,
+        "terminal": true,
+        "quiescent": true,
+        "source_and_runtime_pins_unchanged": true,
+        "retained_inputs_unchanged": true,
+        "original_fit_calls": 1,
+        "followup_fit_calls": 0,
+        "followup_model_calls": 0,
+        "followup_native_workers": 0,
+        "history_tables_preserved": 10,
+        "original_sse": 1.9138191182688943e-08,
+        "native_residual": 0.0001383408514600178,
+        "independent_residual": 0.00013834085146004034,
+        "corrections": "One report dictionary key and an overbroad assertion that incorrectly prohibited recreation of a derived artifact. Original failed test evidence preserved.",
+        "evidence": [
+          "verification/tool_graders_expression_nmf_episode_path_2026-10-27_490/HANDOFF.md",
+          "verification/tool_graders_expression_nmf_episode_path_2026-10-27_490/check002/receipt.json",
+          "verification/tool_graders_expression_nmf_episode_path_2026-10-27_490/check002/retained_checks.json",
+          "tests/test_expression_nmf_episode_path.py"
+        ],
+        "root_review": "Reviewed both receipts, retained checks, complete current four-test file and final handoff. Existing closed-replay and observation tests passed in original check001; corrected retained-data checks passed in check002. This is not a claim that a new full suite was rerun."
+      },
+      "gap_status": [
+        {
+          "name": "Prodigal single-genome publication/return",
+          "status": "open"
+        },
+        {
+          "name": "NMF full scientific-parent delivery, saved calculation and closed replay",
+          "status": "verified_for_original_frozen_local_mode_snapshot"
+        },
+        {
+          "name": "Protein-structure/interval-overlap messages and inputs",
+          "status": "open"
+        },
+        {
+          "name": "Chromatin insulation/weighted-Cooler episode paths and messages",
+          "status": "open"
+        },
+        {
+          "name": "ATAC messages and format/resource gaps",
+          "status": "open"
+        },
+        {
+          "name": "HMMER/Infernal/Rfam messages/resources and declared native formats",
+          "status": "open"
+        },
+        {
+          "name": "Existing BV-BRC messages/resources and MinHash pair metadata",
+          "status": "open"
+        },
+        {
+          "name": "Database BLAST authentic format/configured-resource verification",
+          "status": "open"
+        }
+      ]
+    },
+    {
+      "id": "R3",
+      "status": "open",
+      "named_operations": [
+        "annotate_open_reading_frames",
+        "annotate_plasmid",
+        "annotate_bacterial_genome",
+        "blast_sequence",
+        "align_sequences",
+        "find_sequence_mutations",
+        "analyze_protein_conservation",
+        "analyze_protein_phylogeny",
+        "predict_protein_disorder_regions",
+        "identify_fas_functional_domains",
+        "find_n_glycosylation_motifs",
+        "predict_o_glycosylation_hotspots",
+        "liftover_coordinates",
+        "detect_and_annotate_somatic_mutations",
+        "detect_and_characterize_structural_variations",
+        "analyze_copy_number_purity_ploidy_and_focal_events",
+        "analyze_cas9_mutation_outcomes",
+        "analyze_crispr_genome_editing",
+        "identify_transcription_factor_binding_sites",
+        "perform_chipseq_peak_calling_with_macs2",
+        "find_enriched_motifs_with_homer",
+        "gene_set_enrichment_analysis",
+        "annotate_celltype_with_panhumanpy",
+        "create_scvi_embeddings_scRNA",
+        "create_harmony_embeddings_scRNA",
+        "get_uce_embeddings_scRNA",
+        "map_to_ima_interpret_scRNA",
+        "unsupervised_celltype_transfer_between_scRNA_datasets",
+        "generate_embeddings_with_state",
+        "generate_transcriptformer_embeddings",
+        "generate_gene_embeddings_with_ESM_models",
+        "analyze_circular_dichroism_spectra",
+        "analyze_protease_kinetics",
+        "analyze_itc_binding_thermodynamics",
+        "analyze_arsenic_speciation_hplc_icpms",
+        "analyze_cytokine_production_in_cd4_tcells",
+        "perform_facs_cell_sorting",
+        "perform_flux_balance_analysis",
+        "get_gene_coding_sequence",
+        "get_plasmid_sequence",
+        "find_restriction_sites",
+        "find_restriction_enzymes",
+        "get_rna_seq_archs4",
+        "interspecies_gene_conversion",
+        "get_gene_set_enrichment_analysis_supported_database_list",
+        "download_geo_series",
+        "inspect_file"
+      ],
+      "named_scientific_or_wrapper_operations": 38,
+      "supporting_operations": 9,
+      "shared_family_total": null,
+      "qualification": "47 named operation contracts, not47 distinct graders. Historical rows remain unassessed; underlying implementations must be mapped before coding."
+    },
+    {
+      "id": "R4",
+      "status": "open",
+      "applications": [
+        "GenomeAssembly2",
+        "GenomeAnnotation",
+        "ComprehensiveGenomeAnalysis",
+        "Variation",
+        "TnSeq",
+        "CoreGenomeMLST",
+        "WholeGenomeSNPAnalysis",
+        "TaxonomicClassification",
+        "MetagenomeBinning",
+        "MetagenomicReadMapping",
+        "RNASeq",
+        "ViralAssembly",
+        "SARS2Assembly",
+        "InfluenzaHASubtypeConversion",
+        "SubspeciesClassification"
+      ],
+      "application_count": 15,
+      "preparation_descriptors": "present_in_historical_implementation",
+      "scientific_result_path_closures_verified": 0,
+      "qualification": "No closure for these15 application-specific paths is established by preparation descriptors."
+    },
+    {
+      "id": "R5",
+      "status": "open",
+      "existing_collection_handlers": 22,
+      "existing_query_operation_categories": 11,
+      "remaining": "Combined selections, receiver instructions and requested delivery combinations; reuse recorded handler/host tests."
+    },
+    {
+      "id": "R6",
+      "status": "open",
+      "named_provider_scopes": 46,
+      "matching_wrapper_contracts": 29,
+      "remaining": "Resolve aliases and close missing acquisition/metadata/result bindings. Existing NCBI and UniProt routes are baseline, not new graders."
+    },
+    {
+      "id": "R7",
+      "status": "open",
+      "supporting_utilities": [
+        "dustmasker",
+        "segmasker",
+        "windowmasker",
+        "blast_formatter",
+        "blast_formatter_vdb",
+        "blast_vdb_cmd",
+        "blastdb_aliastool",
+        "blastdbcheck",
+        "blastdbcmd",
+        "convert2blastmask",
+        "makeblastdb",
+        "makembindex",
+        "makeprofiledb"
+      ],
+      "utility_count": 13,
+      "verified_completed_binding_count": null,
+      "qualification": "No completion evidence established for these rows; unassessed is not proof of absent code. No independent confidence graders are required."
+    }
+  ],
+  "previous_progress_record": {
+    "path": "research/tool_grader_progress_2026-10-27/PROGRESS_001.json",
+    "sha256": "85be1bcf8bca29267de5c56e99212d990ad2d8cedb4b1a88a840299691c25449"
+  }
+}

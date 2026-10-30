@@ -1,0 +1,312 @@
+{
+  "status": "research_only_unadopted_arithmetic",
+  "all_assay_inputs_are_synthetic": true,
+  "primary_proposal": "c=max(0,B_joint), explicit one-sided support projection; original S/B retained",
+  "alternative": "c=logistic(logit(0.2)+S), arbitrary declared coordinate anchor, not a prior/probability",
+  "hypervolume_fixture": {
+    "axis_weights": [
+      [
+        "A105",
+        1.0
+      ],
+      [
+        "fixture_other",
+        1.0
+      ]
+    ],
+    "epsilon": 0.2,
+    "fixture_other": 0.6,
+    "formula": "H=0.1+(17/30)*c_A105",
+    "adopted_policy": false
+  },
+  "examples": [
+    {
+      "name": "unknown_evidence",
+      "effect": null,
+      "variance": null,
+      "S": null,
+      "B": null,
+      "proposed_coordinate": null,
+      "illustrative_H": null,
+      "alternative_anchor_0_2_coordinate": null,
+      "reason": "no measured contrast or usable error model"
+    },
+    {
+      "name": "zero_contrast",
+      "effect": 0.0,
+      "variance": 0.11124225,
+      "S": 0.0,
+      "B": 0.0,
+      "proposed_coordinate": 0.0,
+      "illustrative_H": 0.09999999999999998,
+      "alternative_anchor_0_2_coordinate": 0.2
+    },
+    {
+      "name": "positive_contrast",
+      "effect": 0.68,
+      "variance": 0.11124225,
+      "S": 2.078347030916761,
+      "B": 0.7775614860794029,
+      "proposed_coordinate": 0.7775614860794029,
+      "illustrative_H": 0.540618175444995,
+      "alternative_anchor_0_2_coordinate": 0.6664233977001851
+    },
+    {
+      "name": "reversed_specificity",
+      "effect": -0.68,
+      "variance": 0.11124225,
+      "S": -2.078347030916761,
+      "B": -0.7775614860794029,
+      "proposed_coordinate": 0.0,
+      "illustrative_H": 0.09999999999999998,
+      "alternative_anchor_0_2_coordinate": 0.030335208774828617
+    },
+    {
+      "name": "equal_conflict",
+      "effect": 0.0,
+      "variance": 0.055621125,
+      "S": 0.0,
+      "B": 0.0,
+      "proposed_coordinate": 0.0,
+      "illustrative_H": 0.09999999999999998,
+      "alternative_anchor_0_2_coordinate": 0.2,
+      "Q": 8.313388123667043
+    },
+    {
+      "name": "unequal_conflict",
+      "effect": 0.17,
+      "variance": 0.055621125,
+      "S": 0.25979337886459514,
+      "B": 0.12917099814633196,
+      "proposed_coordinate": 0.12917099814633196,
+      "illustrative_H": 0.1731968989495881,
+      "alternative_anchor_0_2_coordinate": 0.24480741014228485,
+      "Q": 4.676280819562711
+    },
+    {
+      "name": "independent_confirmation",
+      "effect": 0.7300000000000001,
+      "variance": 0.055621125,
+      "S": 4.79044607601878,
+      "B": 0.9835194324771918,
+      "proposed_coordinate": 0.9835194324771918,
+      "illustrative_H": 0.657327678403742,
+      "alternative_anchor_0_2_coordinate": 0.9678340349917652,
+      "Q": 0.044946951360656566
+    },
+    {
+      "name": "duplicate_return",
+      "effect": 0.68,
+      "variance": 0.11124225,
+      "S": 2.078347030916761,
+      "B": 0.7775614860794029,
+      "proposed_coordinate": 0.7775614860794029,
+      "illustrative_H": 0.540618175444995,
+      "alternative_anchor_0_2_coordinate": 0.6664233977001851,
+      "representation_count": 2,
+      "original_observation_count": 1
+    },
+    {
+      "name": "shared_calibration_confirmation",
+      "effect": 0.73,
+      "variance": 0.09844225000000001,
+      "S": 2.706663043561072,
+      "B": 0.8748373437886967,
+      "proposed_coordinate": 0.8748373437886967,
+      "illustrative_H": 0.5957411614802615,
+      "alternative_anchor_0_2_coordinate": 0.7892430391330812,
+      "covariance": 0.08564225
+    },
+    {
+      "name": "compound_both_measured_positive",
+      "effect": null,
+      "variance": null,
+      "S": 2.0,
+      "B": 0.7615941559557649,
+      "proposed_coordinate": 0.7615941559557649,
+      "illustrative_H": 0.5315700217082666,
+      "alternative_anchor_0_2_coordinate": 0.6487856442839393,
+      "contrasts": [
+        2.0,
+        3.0
+      ],
+      "covariance": [
+        [
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "compound_one_negative",
+      "effect": null,
+      "variance": null,
+      "S": -2.0,
+      "B": -0.7615941559557649,
+      "proposed_coordinate": 0.0,
+      "illustrative_H": 0.09999999999999998,
+      "alternative_anchor_0_2_coordinate": 0.03272655636538605,
+      "contrasts": [
+        -2.0,
+        3.0
+      ],
+      "covariance": [
+        [
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "narrower_claim_only",
+      "effect": 2.0,
+      "variance": 1.0,
+      "S": 2.0,
+      "B": 0.7615941559557649,
+      "proposed_coordinate": 0.7615941559557649,
+      "illustrative_H": 0.5315700217082666,
+      "alternative_anchor_0_2_coordinate": 0.6487856442839393,
+      "broader_compound_coordinate": null,
+      "broader_missing": "second required molecular endpoint"
+    },
+    {
+      "name": "precise_tiny_preference",
+      "effect": 0.001,
+      "variance": 1.0000000000000002e-10,
+      "S": 4999.999999999999,
+      "B": 1.0,
+      "proposed_coordinate": 1.0,
+      "illustrative_H": 0.6666666666666666,
+      "alternative_anchor_0_2_coordinate": 1.0,
+      "measured_ratio": 1.0010005001667084,
+      "percent_preference": 0.10005001667083417
+    },
+    {
+      "name": "same_tiny_data_twofold_claim_only_for_illustration",
+      "effect": -0.6921471805599453,
+      "variance": 1.0000000000000002e-10,
+      "S": -2395338597.785407,
+      "B": -1.0,
+      "proposed_coordinate": 0.0,
+      "illustrative_H": 0.09999999999999998,
+      "alternative_anchor_0_2_coordinate": 0.0,
+      "required_ratio": 2.0,
+      "warning": "twofold is a synthetic claim boundary, never a default"
+    },
+    {
+      "name": "positive_plus_sensitive_nondetection",
+      "effect": 0.14795850139983446,
+      "variance": null,
+      "S": 0.27172630174561263,
+      "B": 0.1350333206830938,
+      "proposed_coordinate": 0.1350333206830938,
+      "illustrative_H": 0.1765188817204198,
+      "alternative_anchor_0_2_coordinate": 0.2470202422922149,
+      "limit": 0.1,
+      "noise": 0.2,
+      "nondetection_95_percent_upper": 0.42897072539029435
+    }
+  ],
+  "conventional_correspondence": {
+    "source_S": 2.9444389791664403,
+    "source_B": 0.9,
+    "components": {
+      "sequence": 0.7741935483870968,
+      "structure": 0.85,
+      "site": 0.8,
+      "evolution": 0.85,
+      "system": 0.6907343306373547
+    },
+    "equal_family_weights": true,
+    "complete_R": 0.7929855758048903,
+    "signed_complete_index": 0.7136870182244013,
+    "proposed_complete_coordinate": 0.7136870182244013,
+    "partial_R_available": 0.7787319697561128,
+    "observed_weight_fraction": 0.8,
+    "partial_R_full_identification_bounds": [
+      0.6229855758048902,
+      0.8229855758048903
+    ],
+    "signed_partial_conditional_index": 0.7008587727805016,
+    "proposed_partial_conditional_coordinate": 0.7008587727805016,
+    "partial_full_coordinate_bounds": [
+      0.5606870182244013,
+      0.7406870182244013
+    ],
+    "reversed_signed_index": -0.7136870182244013,
+    "reversed_proposed_coordinate": 0.0,
+    "no_measured_correspondence_coordinate": null
+  },
+  "actual_existing_boundary_rejections": {
+    "retired_categorical_projector": {
+      "type": "AnnotationScoringUnavailable",
+      "message": "categorical_annotation_scoring_retired_use_original_snapshot_for_historical_replay"
+    },
+    "hypervolume_without_explicit_policy": {
+      "type": "AnnotationScoringUnavailable",
+      "message": "explicit_numeric_hypervolume_parameters_required"
+    },
+    "hypervolume_missing_axis": {
+      "type": "ValueError",
+      "message": "hypervolume_requires_every_explicit_numeric_component"
+    },
+    "hypervolume_null": {
+      "type": "ValueError",
+      "message": "A105 must be a finite real number"
+    },
+    "hypervolume_negative": {
+      "type": "ValueError",
+      "message": "A105 is outside its numeric domain"
+    },
+    "hypervolume_above_one": {
+      "type": "ValueError",
+      "message": "A105 is outside its numeric domain"
+    },
+    "hypervolume_boolean": {
+      "type": "ValueError",
+      "message": "A105 must be a finite real number"
+    },
+    "hypervolume_nan": {
+      "type": "ValueError",
+      "message": "A105 is outside its numeric domain"
+    },
+    "hypervolume_infinite": {
+      "type": "ValueError",
+      "message": "A105 is outside its numeric domain"
+    },
+    "runtime_scalar_null": {
+      "type": "TypeError",
+      "message": "float() argument must be a string or a real number, not 'NoneType'"
+    },
+    "runtime_scalar_nan": {
+      "type": "ValueError",
+      "message": "finite_scientific_credit_required"
+    }
+  },
+  "scope": "pure arithmetic and in-memory scalar projection; no scientific run or production tests",
+  "source_sha256": {
+    "credit.py": "a0aba9cbdd0d7e8cb8d8509e98e96f86283eb7f29ad83bd2cf6e303d601efde0",
+    "scientific_credit.py": "d510fd1d6f14dcf3f2fe69d8879463433f716b77022a2ba229af58d7bd152255",
+    "evidence_axis_scoring.py": "397c4d26319a52567e6dfe9f3fbdddf0b77e269ef678772f1efcf0a04333466b",
+    "evidence_axis_contracts.py": "0d58fa46bb73e03391f0bf962deba2f198f7034348275979870672a3bec3f439",
+    "evidence_geometry.py": "2bad97f8e5c87d9e556313dd552fdd52bfc0c27166ac4590de6c772a9c88ff18",
+    "default_scientific_binding.py": "618cb1c161a7657f0e8cd8b39439174debffc8331812a12222fcd9380acbe85d",
+    "investigation_policy.py": "adb82253c00a9d47deadabe14487c3ed836d4c7294c1736126379b5fe93de1f5",
+    "investigation_progress.py": "0844a62450fb81d867b05324245ce8d5d3246da48a11d5075c4be59fc149abf7",
+    "runtime.py": "9e706e90ca2a5c0c8508de6f8d79a0e23784bfe200483618adac3095785dc67c",
+    "case_execution.py": "d1b4b9f0b1e7f90047e013d52f2a5313fc4a8d05dc40e4d644b376b39d3b8e59",
+    "independent_execution.py": "af7099bf4ed0dfd8c3e93a170c4266496c383febbd96f0b860c3a9d06868739a",
+    "scientific_support_metadata.py": "f6da8317e00e12886687167b436625bb439848e0ad5ef5598fe4217b3d402051",
+    "episode_services.py": "aa26a76f9fdd71ff7577b410e7382e9378865f21af910daf7872c915e3bd4aee",
+    "decision_context.py": "3ee602d6d557ce5c532a525f2609441422e92063cae761c81ca357a0541a9a09",
+    "domain.py": "6cf6fdface1b3f4c546ddd2213f92bb6a2c19e29c8cd2a9c7e4f43479910b038"
+  }
+}

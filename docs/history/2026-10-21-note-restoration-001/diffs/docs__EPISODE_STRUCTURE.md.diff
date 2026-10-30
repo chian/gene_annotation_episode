@@ -1,0 +1,120 @@
+--- original_as_read/docs/EPISODE_STRUCTURE.md
++++ preserved_modified/docs/EPISODE_STRUCTURE.md
+@@ -13,46 +13,57 @@
+ invoke further problem-solving processes. An episode is a decision point that
+ iterates; a primitive operation remains a tool call within that process.
+ 
+-The information library is a collection of problem-solving processes. Retrieval
+-helps construct the child's decision problem. When an investigation wants to
+-work on something, the library supplies relevant ways of working on it. That
+-process information fills a common mother episode template to construct the
+-child on demand, with a small relevant set of alternatives on each turn. The
+-parent need not hand-design a separate episode implementation for every kind of
+-problem. Tool and resource instructions can support a process, but a collection
+-of those instructions alone does not supply this composition.
+-
+-The implementation boundaries follow that distinction:
++The information library supplies composable inputs to the existing scoped
++bioinformatics scientific episode. The user's slot requirement is:
++
++> there should be 3 slots from our discussion. 1 related to annotation credit axis, 1 related to thought pattern, and 1 with the tools that the child is scoped to
++
++The parent supplies the job, scope, constraints, context and requested typed
++return form. Retrieved annotation-credit-axis information, thought-pattern
++information and multiple actual tools fill that existing episode's decision
++problem. The common mother template is the existing scientific construction
++path; it is not a new episode type or a catalogue of complete episodes. The child
++episode owns its iterative choices within the assigned scope.
++
++The tool retriever selects tools from the actual callable map for the parent's
++desired investigation. Tools are not fixed bundles attached to thought patterns.
++Tool manuals explain operations; they do not replace the thought patterns that
++help the episode interpret outcomes and choose how to investigate.
+ 
+ | Owner | Responsibility |
+ | --- | --- |
+-| Common episode template | Shared iterative machinery, identity, controlled communication, durable execution and the configured continuation interface. |
+-| Library process information | Composable annotation-focus and thought-pattern information for the scientific child's decision problem; actual tools are retrieved separately for the assigned investigation. |
+-| Assigning parent | The requested job, scope, constraints, supplied context and typed information it needs returned. |
+-| Constructed child intelligence | Repeated choices within that decision problem, interpretation of actual outcomes and revision of its approach. |
+-| Primitive execution and state adapters | Actual selected operations, source custody, recorded facts and validation against bound capabilities. |
++| Existing scoped scientific episode and shared loop | Iterative decisions, identity, controlled communication, durable execution and configured continuation. |
++| Information library | Reusable annotation-credit-axis and thought-pattern information plus the actual tool map used to fill the three slots. |
++| Assigning parent | Job, scope, constraints, supplied context and requested typed return form. |
++| Child episode | Choices within its constructed decision problem and interpretation of actual outcomes. |
++| Actual tool implementations and state adapters | Selected operations, recorded facts, source custody and contract validation. |
++
++The former A01–A10 entries are annotation claim-property headings without a
++relationship to scoring axes. They are now background research, excluded from
++the active component catalogue. The active first-slot collection is empty;
++P01–P19 remain available for the thought-pattern slot. The constructor's
++`annotation_ref` field therefore has no accepted first-slot entry to select from
++this source. The user instructed: "Review the scoring axes first". That case-based
++scoring/content review remains open; neither the former headings nor the current
++scoring axes are accepted as the slot design.
++See the permanent requirements and LIB-R1–LIB-R4 in
++[IMPLEMENTATION_CHECKLIST.md](IMPLEMENTATION_CHECKLIST.md#permanent-requirements-and-implementation-handoffs).
++This design correction changes no numerical credit axis, formula or saved history.
++
++Literature episodes are separate from this bioinformatics information library.
++Their specialized literature → strategy → search → page →
++table/ordered/targeted relationships below do not come from the scientific slots.
++There is no library-driven migration of literature, monitoring, launch or results
++episodes and no additional runtime episode to implement for that purpose.
+ 
+ Caller-owned resources, numerical bindings and parent constraints retain their
+-existing owners. Library retrieval supplies process information; it does not
+-make the child's decisions or introduce another autonomous workflow layer.
+-Permitted child relationships limit alternatives without prescribing which
+-children run, in what order, or how many times. The literature hierarchy below
+-is an intentional example of this narrowing.
+-
+-Implementing particular literature processes and implementing library-driven
+-construction from the common template are separate responsibilities. Existing
+-handwritten episode bindings and retrievable manuals alone establish neither a
+-process-definition library nor the on-demand constructor. The later scientific
+-three-slot implementation and outstanding construction boundaries are described in
+-[TOOL_KNOWLEDGE.md](TOOL_KNOWLEDGE.md).
+-
+-For bioinformatics construction, the parent combines an annotation-credit focus,
+-a thought pattern and a retrieved set of actual tools. The tool retriever uses
+-the parent's desired investigation to select multiple operations from the actual
+-tool map. Tool sets and composed scientific episodes are not predefined library
+-entries. A/P options supply reusable components, rather than complete episode
+-designs. The literature relationships below are a separate design responsibility;
+-they do not supply or explain these scientific slots.
++existing owners. Library retrieval supplies construction information; the child
++episode owns its subsequent decisions. Permitted child relationships narrow
++alternatives without prescribing execution order or numbers of children. Scoped
++scientific episodes retain all the branching options of their scientific parents,
++including commissioning a separate literature episode. See
++[TOOL_KNOWLEDGE.md](TOOL_KNOWLEDGE.md) for the current construction contracts and
++verification limits.
+ 
+ ## Episode branching
+ 
+@@ -100,7 +111,7 @@
+ creation establishes neither scientific progress nor successful completion.
+ 
+ Implement independence in shared method_loop and its durable binding, not a
+-private agent loop inside a tool or tasks sharing the mutable nesting stack.
++private decision loop inside a tool or tasks sharing the mutable nesting stack.
+ 
+ ## Controlled communication
+ 
+@@ -186,10 +197,11 @@
+ bound scheme and updates future duration expectations. Preserve original
+ expectation snapshots and closed credit histories.
+ 
+-The scientific three-slot mother retains its original annotation focus,
+-thought pattern and selected actual tool set. process.revise prepares a different
+-thought pattern and/or retrieved tool set for a
+-new child; the existing child action commissions that separate episode. Each
++The scoped scientific episode retains its original `annotation_ref`, thought
++pattern and selected actual tool set. The unresolved credit-axis relationship of
++that first reference is stated above. `process.revise` prepares a different
++thought pattern and/or retrieved tool set for a new child; the existing child
++action commissions that separate episode. Each
+ episode keeps its existing local credit and yield history. Explicit revision
+ provenance identifies which parent prepared the alternative. When higher steering
+ needs these results, the intervening parents request and forward the typed

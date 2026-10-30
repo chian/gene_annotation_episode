@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<title>
+lengths.fastq</title>
+</head>
+<style>
+body {
+	margin: 0 auto;
+	padding: 22px 0;
+	font-family: 'Source Sans Pro', sans-serif;
+	font-weight: normal;
+	width: 940px;
+	background: #F0F0F0;
+}
+h2 {
+	font-weight: 200;
+	font-size: 1.5em;
+	border-bottom: solid 1px black;
+	padding-top: 35px;
+}
+p {
+	line-height:1.4;
+}
+footer {
+	position: absolute;
+	left: 0;
+	width: 100%;
+	background: #222;
+}
+footer div {
+	display: table;
+	margin: 0 auto;
+	padding: 44px 0;
+	width: 940px;
+	color: #777;
+}
+footer div section {
+	display: table-cell;
+	width: 300px;
+}
+footer div #about, footer div #blogroll {
+	padding-right: 20px;
+}
+footer h3 {
+	color: #FFF;
+}
+footer a {
+	color: #999;
+}
+footer a:hover {
+	color: #FFF;
+	text-decoration: none;
+}
+footer ul {
+    margin: 0 0 0 40px;
+	list-style: square;
+    color: #565656;
+}
+footer ul li a {
+    display: block;
+}
+nav {
+left: 0;
+width: 100%%;
+background: #75787B;
+color: #FFF;
+}
+</style>
+<body>
+<h1>lengths.fastq</h1>
+<p>File size: 64 bytes, created 2026-10-25 18:09:22</p><p>(report produced by: SAMStat version 2.2.3)</p><h2>File statistics</h2>
+3 - reads<br><h2>Length distribution</h2>
+<div id="len_R1_target" style="width:100%;max-width:1400px"></div>
+<script>
+var len_R1__Unmapped  = {
+x: ["4.000000","8.000000"],
+y: [0.090324,0.169574],
+name: 'Unmapped',
+type: 'lines',
+visible: true
+};
+var len_R1_data = [len_R1__Unmapped];
+var len_R1_layout = {
+boxmode: 'group',
+barmode: 'stack',
+title: 'Length Distribution',
+xaxis: {
+title: 'Length'
+},
+yaxis: {
+rangemode: "nonnegative",
+title: 'Counts'
+}
+};
+Plotly.newPlot(len_R1_target,len_R1_data,len_R1_layout,
+{toImageButtonOptions : {
+format : 'svg',
+filename : 'Length Distribution',
+height : 600,
+width : 700,
+scale : 1}}
+)
+</script>
+<p>Density plot of read lengths. </p><h2>Base composition</h2><div id="bc_R1_target" style="width:100%;max-width:1400px"></div>
+<script>
+var bc_R1_Unmapped_A  = {
+x: ["1","2","3","4","5","6","7","8"],
+y: [3,0,0,0,2,0,0,0],
+name: 'A',
+type: 'bar',
+visible: true
+};
+var bc_R1_Unmapped_C  = {
+x: ["1","2","3","4","5","6","7","8"],
+y: [0,3,0,0,0,2,0,0],
+name: 'C',
+type: 'bar',
+visible: true
+};
+var bc_R1_Unmapped_G  = {
+x: ["1","2","3","4","5","6","7","8"],
+y: [0,0,3,0,0,0,2,0],
+name: 'G',
+type: 'bar',
+visible: true
+};
+var bc_R1_Unmapped_T  = {
+x: ["1","2","3","4","5","6","7","8"],
+y: [0,0,0,3,0,0,0,2],
+name: 'T',
+type: 'bar',
+visible: true
+};
+var bc_R1_data = [bc_R1_Unmapped_A,bc_R1_Unmapped_C,bc_R1_Unmapped_G,bc_R1_Unmapped_T];
+var bc_R1_layout = {
+boxmode: 'group',
+barmode: 'stack',
+title: 'Base Composition',
+xaxis: {
+title: 'Length'
+},
+yaxis: {
+rangemode: "nonnegative",
+title: 'Counts'
+}
+};
+Plotly.newPlot(bc_R1_target,bc_R1_data,bc_R1_layout,
+{toImageButtonOptions : {
+format : 'svg',
+filename : 'Base Composition',
+height : 600,
+width : 700,
+scale : 1}}
+)
+</script>
+<p>Base composition. Use the toggle box to view composition of reads mapped at different mapping qualities. Soft clipped sequences are excluded.</p><h2>Base quality distribution</h2>
+<div id="bq_R1_target" style="width:100%;max-width:1400px"></div>
+<script>
+var bq_R1_Unmapped_126  = {
+x: ["1","2","3","4","5","6","7","8"],
+y: [38.333333,38.333333,38.333333,38.333333,37.000000,37.000000,37.000000,37.000000],
+error_y: {
+type: 'data',
+array : [2.177324,2.177324,2.177324,2.177324,2.828427,2.828427,2.828427,2.828427],
+visible: true
+},
+name: 'Unmapped',
+type: 'lines',
+visible: true
+};
+var bq_R1_data = [bq_R1_Unmapped_126];
+var bq_R1_layout = {
+boxmode: 'group',
+title: 'Base quality distribution',
+xaxis: {
+title: 'Length'
+},
+yaxis: {
+rangemode: "nonnegative",
+title: 'Base Quality'
+}
+};
+Plotly.newPlot(bq_R1_target,bq_R1_data,bq_R1_layout,
+{toImageButtonOptions : {
+format : 'svg',
+filename : 'Base quality distribution',
+height : 600,
+width : 700,
+scale : 1}}
+)
+</script>
+<p>Base quality distribution.</p><footer>
+<div>
+<section id="about">
+<h3>About</h3>
+<p>SAMStat is a basic quality control program for NGS data. It displays information about mapped and unmapped reads to diagnose mapping and other problems.</p> <p> The plots on this page were draw using <a href="https://plotly.com/graphing-libraries/">Plotly</a>.</p>
+</section>
+<section id="contact">
+<h3>Contact</h3>
+<p>SAMStat was developed by Timo Lassmann.</p>
+<h3>Please cite:</h3>
+<p>Lassmann et al. (2011) "SAMStat: monitoring biases in next generation sequencing data." Bioinformatics doi:10.1093/bioinformatics/btq614 [<a href ="http://www.ncbi.nlm.nih.gov/pubmed/21088025/">PMID: 21088025</a>] </p>
+</section>
+<section id="blogroll">
+<h3>Links</h3>
+<ul>
+<li><a href="https://samtools.github.io/hts-specs/">SAM/BAM specifications</a></li>
+<li><a href="https://github.com/TimoLassmann/SAMStat/">SAMStat</a></li>
+<li><a href="https://github.com/TimoLassmann/kalign/">Kalign</a></li>
+</ul>
+</section>
+</div>
+</footer>
+</body>
+</html>

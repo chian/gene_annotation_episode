@@ -1,0 +1,117 @@
+{
+  "version": "completion_evidence_verification_v1",
+  "recorded_at": "2026-10-21T23:45:36.974720+00:00",
+  "scope": "CE0-CE3 factual current-completion inputs; checkpoint before the separately planned fixed-process correction",
+  "plan": "docs/CURRENT_COMPLETION_INTEGRATION.md",
+  "commands": [
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_method_loop_completion_identity.py tests/test_deferred_episode.py tests/test_independent_episode.py tests/test_durable_episode.py",
+      "passed": 59,
+      "seconds": 45.37,
+      "reported_by": "ce_loop_identity"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_completion_evidence.py tests/test_local_return_history.py",
+      "passed": 77,
+      "seconds": 447.46,
+      "reported_by": "ce_recorded_evidence"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_completion_evidence_runtime.py",
+      "passed": 14,
+      "seconds": 122.45,
+      "reported_by": "ce_runtime_evidence_tests"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_completion_evidence_runtime.py -k 'actual_out_of_order or repeated_actual_progress'",
+      "passed": 2,
+      "deselected": 12,
+      "seconds": 29.27,
+      "reported_by": "ce_runtime_evidence_tests",
+      "note": "Overlapping rerun after globally guarding LocalReturnHistory.capture."
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_resource_receipt_reconstruction.py::test_production_resource_worker_restores_factory_receipts_exact_form_and_units --basetemp=/tmp/ce3-worker-evidence-20261021",
+      "passed": 1,
+      "seconds": 14.47,
+      "reported_by": "ce_runtime_evidence_tests"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_runtime.py tests/test_runtime_history.py tests/test_local_return_inputs.py tests/test_episode_binding_runtime.py tests/test_episode_waiting_runtime.py tests/test_runtime_expectations.py -x",
+      "passed": 63,
+      "failed": 1,
+      "seconds": 546.66,
+      "reported_by": "root",
+      "note": "Stopped at outdated context-count expectation in test_runtime_expectations; do not report command as wholly passing."
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_runtime_expectations.py",
+      "passed": 5,
+      "failed": 1,
+      "seconds": 28.36,
+      "reported_by": "root",
+      "note": "Other five cases pass; revised assertion initially used wrong database field. A second intermediate single-case run used wrong UnitRef field and failed in 7.92 seconds."
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_runtime_expectations.py::test_child_estimator_receives_pinned_statistics_and_raw_changes_without_report_leak",
+      "passed": 1,
+      "seconds": 8.5,
+      "reported_by": "root",
+      "note": "Final corrected assertion matches saved actual observation identity and original decision index."
+    }
+  ],
+  "source_sha256_at_checkpoint": {
+    "method_loop/episode.py": "b1245fa460a706e291685c80ec8f5703846fd29d25c58fa80346db7ce357c72d",
+    "method_loop/runtime.py": "b3cf99047d90836ee6ba8ccd841cf8d4c991a3d86605f34f44da6f8d67f3ef07",
+    "gene_annotation_episode/completion_evidence.py": "25f5195cd5dd7df6953d2ca70b5feb23d11965114d898686b9a2d345366d0542",
+    "gene_annotation_episode/local_return_history.py": "3fc73f919eed4290a28275d58c5ca109bbbc9af9eef29cec1fb150d8a3e95054",
+    "gene_annotation_episode/runtime.py": "c1e62d2280e52477abf2de657ecbcf8756bb10192d2322b404a4e6d8db057942",
+    "gene_annotation_episode/waiting.py": "c0dce4e3e9565760419303d626e1a13ed0dce994fa0822475b2a2db9b0d87c46",
+    "tests/test_method_loop_completion_identity.py": "26795a4bacf94a500141733b536deca4a0f1521833d4a532d246019988a81095",
+    "tests/test_completion_evidence.py": "9503643f02542197be08c1b2ca2eaf411d07a9b4018eb177dda97eb0095cd99c",
+    "tests/test_completion_evidence_runtime.py": "aea8b930bab5badfda03b8da55d15d62f693c945c361b04e5ca1920bce369b99",
+    "tests/test_local_return_inputs.py": "cd4728a389d93e70b379b4f4b05d2feece49ae9500f3950495a9d3335430b472",
+    "tests/test_episode_waiting_runtime.py": "bba672bc5700770ec2ec8124f4d03961e7011a908bd1c55da4f4eb7c427560b6",
+    "tests/test_runtime_expectations.py": "16baa7d56bae2c1812892a2522db840f574ef88aa88c519b7e730067e60dbb96"
+  },
+  "connected_evidence": {
+    "actual_completion_identity": true,
+    "read_only_capture": true,
+    "out_of_order_parent_raw_deltas": [
+      5.25,
+      -3.25,
+      0.125
+    ],
+    "current_admission_still_unobserved_during_estimation": true,
+    "selected_wait_separate_from_child_admission": true,
+    "replay_uses_original_saved_context_without_capture": true,
+    "closed_receiver_no_new_observation_or_context_or_timing": true,
+    "new_binding": "completed_action_inputs_binding_v1",
+    "new_context": "completed_action_estimation_context_v5",
+    "worker_artifacts": "/tmp/ce3-worker-evidence-20261021/test_production_resource_worke0",
+    "worker_run_id": "run_3b6260859553495ba793bc44b0e0d831",
+    "worker_pid": 642814,
+    "worker_raw_deltas": [
+      2.75,
+      0
+    ],
+    "worker_actual_observation_packet_identity_matches": true,
+    "worker_provider": "Scripted ModelConnection RPC fixture; no configured-model inference",
+    "native_execution": "One tiny actual local homology job",
+    "worker_source_limit": "Six production source hashes were held during the worker run; later invalid-input hardening is separately covered, not claimed as worker-tested."
+  },
+  "resolved_defects": [
+    "Late receiver_closed return attempted to checkpoint an unchanged pending action and remeasure closed timing; now acknowledged without changing closed source/history.",
+    "Native returned-record projection applied SQLite JSON functions to bare scalar reference strings; object-only CASE guards now protect each JSON operand."
+  ],
+  "remaining_limits": [
+    "No pending/wait numerical model, scoring unit, stopping rule or scientific action policy selected.",
+    "No native-job event transport, production profile adoption, literature migration or API/HPC deployment.",
+    "No configured-model scientific run or competing parent against preserved investigation_009.",
+    "Historical RI/SL verification records remain their own checkpoints; later fixed-process correction is separate."
+  ],
+  "notes": [
+    "The 63 passing cases and final six-case-module coverage establish 69 distinct existing regressions across commands; overlapping suites are not summed.",
+    "Agent commands/results are reported by their named owners. Root command strings are actual executed commands. An additional passing narrow child-runtime result lacked its retained exact node and is not assigned a guessed command."
+  ]
+}

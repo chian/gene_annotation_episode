@@ -1,0 +1,132 @@
+{
+  "case_id": "context_oarx_thiamin_2024",
+  "epistemic_status": "Post-publication exploration with the paper outcome known in advance. These are actual read-only source/data probes, not blind discovery. No BLAST job, motif search, experimental assay, annotation run, or repository edit was performed.",
+  "primary_paper": "https://doi.org/10.1021/acsomega.4c03514",
+  "routes": [
+    {
+      "route_id": "A_local_regulatory_neighborhood",
+      "starting_information": "The paper proposes thiamin association for a FabG-like reductase and uses C. glutamicum ATCC 14067 experimentally. I asked whether the actual deposited genome supports a local thiamin-linked locus rather than relying on the paper’s schematic.",
+      "probe_1": {
+        "selected_operation": "Retrieve the paper’s deposited protein table and the ATCC 14067 genome CP022614.1 through ENA. Extract CDS translation strings and compare the deposited ATCC 13032 OarX sequence to candidate CDS records at identical indices.",
+        "actual_input_urls": [
+          "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11223231/supplementaryFiles",
+          "https://www.ebi.ac.uk/ena/browser/api/embl/CP022614.1?download=false"
+        ],
+        "observed_result": {
+          "deposited_sequence": "fig|196627.14.peg.708, C. glutamicum ATCC 13032, 263 aa",
+          "genome_candidate": "CEY17_03925 / AST19993.1, ATCC 14067, 251 aa, product 3-oxoacyl-ACP reductase",
+          "comparison": "250 identical residues among the 251 same-index positions compared; index 50 is E in table sequence versus D in genome CDS. Table sequence has an additional 12-residue C-terminal segment. This was a string comparison, not a generated alignment or an independent orthology determination."
+        }
+      },
+      "changed_interpretation_after_probe_1": "The biological target can be localized, but the comparative table and the experimental genome are different strains and nonidentical sequences. I should not merge their auxotrophy or protein-boundary annotations. Next I inspected strand-aware neighbors and the annotated upstream RNA feature of the actual ATCC 14067 candidate.",
+      "probe_2": {
+        "selected_operation": "Inspect CDS and regulatory features surrounding CEY17_03925, using coordinates and strand rather than interpreting nearby gene names alone.",
+        "observed_result": {
+          "candidate_CDS": "complement(810632..811387)",
+          "upstream_regulatory_feature": "TPP riboswitch, complement(811445..811552), bound_moiety thiamine pyrophosphate; inference cmsearch/Rfam RF00059",
+          "downstream_in_transcriptional_direction": "CEY17_03920 / AST19992.1, complement(809316..810632), LLM class flavin-dependent oxidoreductase",
+          "geometric_facts": "The riboswitch is on the same minus strand upstream of the candidate’s 5-prime end, separated by 57 unannotated bases. The two CDS annotations share one coordinate.",
+          "provenance_limit": "The riboswitch is a pre-existing computational annotation in the record, not a newly measured ligand response. A short overlap suggests coupling but does not demonstrate transcription, direct protein interaction, or an enzyme reaction."
+        }
+      },
+      "bounded_annotation_conclusion": "The actual genome context reinforces thiamin-linked regulation of this reductase/oxidoreductase locus. It supports a thiamin-metabolism candidate annotation; it does not assign a particular salvage substrate, reductant, reaction direction, or EC number.",
+      "follow_up_not_performed": "Native transcript measurements or direct enzyme/substrate tests would be experimental work beyond these capabilities. No such result is claimed."
+    },
+    {
+      "route_id": "B_natural_component_contrasts",
+      "starting_information": "The local ATCC 14067 neighborhood contains both a reductase and a flavin-dependent protein. I asked whether the partner is obligatory and whether OarX is restricted to organisms capable of de novo thiamin synthesis.",
+      "probe_1": {
+        "selected_operation": "Parse deposited Supplementary Table 1 and compare exact rows with contrasting component profiles, preserving empty cells as no recorded assignment rather than proving gene absence.",
+        "observed_result": [
+          {
+            "row": 35,
+            "organism": "C. glutamicum ATCC 13032",
+            "author_auxotrophy_assignment": "prototroph",
+            "OarX": "708",
+            "FmnO": "706",
+            "ThiC": "1284",
+            "ThiG": "1940",
+            "ThiE": "1434, 1937"
+          },
+          {
+            "row": 37,
+            "organism": "C. kroppenstedtii DSM 44385",
+            "author_auxotrophy_assignment": "prototroph",
+            "OarX": "1775",
+            "FmnO": "blank",
+            "ThiC": "1765",
+            "ThiG": "1771",
+            "ThiE": "1766"
+          },
+          {
+            "row": 50,
+            "organism": "Gulosibacter massiliensis Marseille-P7157",
+            "author_auxotrophy_assignment": "HMP & THZ auxotroph",
+            "OarX": "2276",
+            "FmnO": "blank",
+            "ThiC": "blank",
+            "ThiG": "blank",
+            "ThiE": "2277",
+            "ThiD": "2275",
+            "ThiM": "2278"
+          },
+          {
+            "row": 95,
+            "organism": "Thermoanaerobacter tengcongensis MB4",
+            "author_auxotrophy_assignment": "THZ auxotroph",
+            "OarX": "2233",
+            "FmnO": "blank",
+            "ThiC": "1564",
+            "ThiG": "blank",
+            "ThiE": "1743, 2232",
+            "ThiD": "1744, 2234",
+            "ThiM": "1742, 2231"
+          }
+        ]
+      },
+      "changed_interpretation_after_probe_1": "A single local two-protein arrangement should not be treated as an obligatory universal pair. OarX is also recorded where the capacity to make one or both thiamin moieties is missing but downstream assembly/salvage entries remain. I next checked whether the first contrast was exceptional across the whole deposited cohort.",
+      "probe_2": {
+        "selected_operation": "Count nonblank FmnO entries across all 87 organism rows and cross-tabulate author-assigned auxotrophy labels.",
+        "observed_result": {
+          "all_OarX_encoding_organism_rows": 87,
+          "FmnO_entry_present": 22,
+          "FmnO_entry_blank": 65,
+          "FmnO_present_profiles": {
+            "prototroph": 9,
+            "HMP auxotroph": 7,
+            "THZ auxotroph": 1,
+            "HMP & THZ auxotroph": 5
+          },
+          "FmnO_blank_profiles": {
+            "prototroph": 36,
+            "HMP auxotroph": 19,
+            "THZ auxotroph": 3,
+            "HMP & THZ auxotroph": 7
+          },
+          "limits": "The cohort was selected for OarX; it cannot estimate OarX association against OarX-negative genomes. Missing assignments in a curated profile are not exhaustive proof of absence. No statistical independence or transfer across taxonomic redundancy was inferred."
+        }
+      },
+      "bounded_annotation_conclusion": "These deposited profiles favor considering salvage/other thiamin-related roles and testing whether FmnO is a conditional partner. They weaken an obligatory de novo biosynthesis assignment and an obligatory universal OarX-FmnO complex, while leaving exact chemistry unresolved.",
+      "follow_up_not_performed": "A matched OarX-negative genome set, independent ortholog search, and native enzyme/activity comparisons were not done."
+    }
+  ],
+  "additional_probe_with_obstacle": {
+    "operation": "Retrieved Thermoanaerobacter tengcongensis MB4 genome AE008691.1 to locate the table OarX sequence independently.",
+    "observed_result": "The retrieved legacy feature table did not yield an exact start-prefix match to the deposited OarX sequence in my simple string scan. Gene names/capitalization and annotation versions differ; no mapping was asserted.",
+    "consequence": "Did not convert successive SEED peg numbers or a historical diagram into an invented coordinate map. The route-B conclusions use only the deposited component table."
+  },
+  "author_experimental_outcome_not_ours": "The authors tested defined thiamin oxidation products and found no physiological-dose rescue supporting the simple five-substrate salvage hypotheses. This limits the molecular annotation while preserving the broad context association; it is not a negative result generated by these read-only probes.",
+  "raw_data_files": [
+    "oarx-supplements.zip",
+    "oarx-table.xlsx",
+    "oarx-cg14067.embl",
+    "oarx-mb4.embl",
+    "oarx-profile-probe.json"
+  ],
+  "operations_tools_last": [
+    "Europe PMC fullTextXML and supplementaryFiles retrieval",
+    "ENA EMBL retrieval",
+    "standard-library XLSX XML parsing",
+    "string comparisons, coordinate/strand inspection, and deposited-profile counts"
+  ]
+}

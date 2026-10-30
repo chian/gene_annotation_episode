@@ -1,0 +1,636 @@
+{
+  "entry_version": "evidence_axis_entry_v1",
+  "id": "A107",
+  "slot": "evidence_axis",
+  "name": "Required partner presence and coexpression",
+  "description": "Score evidence that the partner molecules required by the candidate function are present in the relevant genome and expressed together under the relevant experimental conditions.",
+  "native_measurements": [
+    {
+      "metric_id": "partner_homology_evalue",
+      "name": "Native E-value for an identified required-partner match",
+      "native_field": "evalue",
+      "observation_kinds": [
+        "alignment",
+        "profile_match",
+        "comparison"
+      ],
+      "units": [
+        "native expected-count E-value"
+      ],
+      "direction": "lower",
+      "method_requirements": [
+        "Keep partner identity, query/reference lengths, program/version, database/search size and exact original request.",
+        "The required-partner list must come from the proposed function and cited system definition."
+      ],
+      "comparison_limits": [
+        "An E-value is evidence of a match, not direct proof of assembly or function.",
+        "Scores from different programs/search spaces are not automatically comparable."
+      ],
+      "binding": {
+        "kind": "recorded_measurement",
+        "measurement_name": "evalue",
+        "json_pointer": null
+      },
+      "valid_range": {
+        "minimum": 0,
+        "maximum": null
+      }
+    },
+    {
+      "metric_id": "partner_homology_bitscore",
+      "name": "Native bit score for an identified required-partner match",
+      "native_field": "bitscore",
+      "observation_kinds": [
+        "alignment",
+        "profile_match",
+        "comparison"
+      ],
+      "units": [
+        "bit"
+      ],
+      "direction": "higher",
+      "method_requirements": [
+        "Identify which required partner, matching subject and run produced the score."
+      ],
+      "comparison_limits": [
+        "Do not count multiple representations of the same match as independent partner evidence."
+      ],
+      "binding": {
+        "kind": "recorded_measurement",
+        "measurement_name": "bitscore",
+        "json_pointer": null
+      }
+    },
+    {
+      "metric_id": "partner_query_coverage",
+      "name": "Matched fraction of the actual partner query",
+      "native_field": "query_coverage",
+      "observation_kinds": [
+        "alignment",
+        "profile_match",
+        "comparison"
+      ],
+      "units": [
+        "fraction"
+      ],
+      "direction": "higher",
+      "method_requirements": [
+        "Preserve matched intervals and full query length; partial assemblies stay identified."
+      ],
+      "comparison_limits": [
+        "Full coverage does not establish exact molecular function."
+      ],
+      "binding": {
+        "kind": "recorded_measurement",
+        "measurement_name": "query_coverage",
+        "json_pointer": null
+      },
+      "valid_range": {
+        "minimum": 0,
+        "maximum": 1
+      }
+    },
+    {
+      "metric_id": "coexpression_statistic",
+      "name": "Actual condition-matched coexpression or association statistic",
+      "native_field": null,
+      "observation_kinds": [
+        "context_measurement",
+        "context",
+        "assay_report"
+      ],
+      "units": [
+        "native statistic unit retained from its method"
+      ],
+      "direction": "target_dependent",
+      "method_requirements": [
+        "Name the statistic, samples, conditions, normalization, replicate structure and exact analysis.",
+        "Use one matched experiment; artificial rescue coexpression is not native coexpression."
+      ],
+      "comparison_limits": [
+        "No coexpression extractor is currently bound here; unavailable values stay unknown.",
+        "Adjacency, unmatched expression samples and correlation alone do not establish physical assembly."
+      ],
+      "binding": {
+        "kind": "unbound",
+        "measurement_name": null,
+        "json_pointer": null
+      }
+    },
+    {
+      "metric_id": "coexpression_significance",
+      "name": "Actual reported p/q value for the declared coexpression test",
+      "native_field": null,
+      "observation_kinds": [
+        "context_measurement",
+        "context",
+        "assay_report"
+      ],
+      "units": [
+        "native p-value or q-value, identified explicitly"
+      ],
+      "direction": "target_dependent",
+      "method_requirements": [
+        "Retain the actual null/contrast and whether correction was performed; do not substitute p for q."
+      ],
+      "comparison_limits": [
+        "No p-value is inferred from a correlation coefficient or sample count."
+      ],
+      "binding": {
+        "kind": "unbound",
+        "measurement_name": null,
+        "json_pointer": null
+      },
+      "valid_range": {
+        "minimum": 0,
+        "maximum": 1
+      }
+    },
+    {
+      "metric_id": "required_partner_count",
+      "name": "Number of partners explicitly required by this candidate system",
+      "native_field": null,
+      "observation_kinds": [
+        "context_measurement",
+        "context",
+        "comparison",
+        "assay_report"
+      ],
+      "units": [
+        "partners"
+      ],
+      "direction": "target_dependent",
+      "method_requirements": [
+        "Preserve the actual source experiment, fixed candidate/required set, matched sample/conditions, counting rule and original retained numeric result."
+      ],
+      "comparison_limits": [
+        "This derived quantity requires actual retained analysis or published numeric data; unavailable extraction stays unknown and no count is inferred from missing annotation."
+      ],
+      "binding": {
+        "kind": "unbound",
+        "measurement_name": null,
+        "json_pointer": null
+      },
+      "valid_range": {
+        "minimum": 0,
+        "maximum": null
+      }
+    },
+    {
+      "metric_id": "identified_required_partner_count",
+      "name": "Number of required partners actually identified in the examined genome",
+      "native_field": null,
+      "observation_kinds": [
+        "context_measurement",
+        "context",
+        "comparison",
+        "assay_report"
+      ],
+      "units": [
+        "partners"
+      ],
+      "direction": "target_dependent",
+      "method_requirements": [
+        "Preserve the actual source experiment, fixed candidate/required set, matched sample/conditions, counting rule and original retained numeric result."
+      ],
+      "comparison_limits": [
+        "This derived quantity requires actual retained analysis or published numeric data; unavailable extraction stays unknown and no count is inferred from missing annotation."
+      ],
+      "binding": {
+        "kind": "unbound",
+        "measurement_name": null,
+        "json_pointer": null
+      },
+      "valid_range": {
+        "minimum": 0,
+        "maximum": null
+      }
+    },
+    {
+      "metric_id": "coexpressed_required_partner_count",
+      "name": "Number of required partners meeting the original matched-expression analysis criterion",
+      "native_field": null,
+      "observation_kinds": [
+        "context_measurement",
+        "context",
+        "comparison",
+        "assay_report"
+      ],
+      "units": [
+        "partners"
+      ],
+      "direction": "target_dependent",
+      "method_requirements": [
+        "Preserve the actual source experiment, fixed candidate/required set, matched sample/conditions, counting rule and original retained numeric result."
+      ],
+      "comparison_limits": [
+        "This derived quantity requires actual retained analysis or published numeric data; unavailable extraction stays unknown and no count is inferred from missing annotation."
+      ],
+      "binding": {
+        "kind": "unbound",
+        "measurement_name": null,
+        "json_pointer": null
+      },
+      "valid_range": {
+        "minimum": 0,
+        "maximum": null
+      }
+    },
+    {
+      "metric_id": "examined_absent_required_partner_count",
+      "name": "Number of required partners contradicted by competent, scope-qualified absence evidence",
+      "native_field": null,
+      "observation_kinds": [
+        "context_measurement",
+        "context",
+        "comparison",
+        "assay_report"
+      ],
+      "units": [
+        "partners"
+      ],
+      "direction": "target_dependent",
+      "method_requirements": [
+        "Preserve the actual source experiment, fixed candidate/required set, matched sample/conditions, counting rule and original retained numeric result."
+      ],
+      "comparison_limits": [
+        "This derived quantity requires actual retained analysis or published numeric data; unavailable extraction stays unknown and no count is inferred from missing annotation."
+      ],
+      "binding": {
+        "kind": "unbound",
+        "measurement_name": null,
+        "json_pointer": null
+      },
+      "valid_range": {
+        "minimum": 0,
+        "maximum": null
+      }
+    }
+  ],
+  "judgment_criteria": [
+    {
+      "criterion_id": "required_partners_defined",
+      "question": "Which partners does this proposed function actually require?",
+      "required_metric_ids": [],
+      "required_evidence": [
+        "candidate_function",
+        "required_partner_definition"
+      ],
+      "outcomes": {
+        "met": "A source-grounded system definition identifies each required partner and distinguishes optional components.",
+        "not_met": "The proposed requirement is contradicted by an experimentally demonstrated partner-independent system.",
+        "unknown": "The complex/process or required versus optional components have not been established."
+      },
+      "deterministic_test": null
+    },
+    {
+      "criterion_id": "partner_presence_examined",
+      "question": "Are the required partners identified in the relevant genome?",
+      "required_metric_ids": [],
+      "required_evidence": [
+        "required_partner_definition",
+        "genome_identity",
+        "partner_match_records",
+        "assembly_coverage"
+      ],
+      "outcomes": {
+        "met": "Each reported identification resolves to its actual genome region and native homology evidence under stated detection criteria.",
+        "not_met": "A competent search of the relevant examined genome contradicts a claimed partner identification; report its scope and detection limits.",
+        "unknown": "A partner is unexamined, ambiguously matched, outside an incomplete assembly, or simply lacks annotation; do not equate these with absence."
+      },
+      "deterministic_test": null
+    },
+    {
+      "criterion_id": "coexpression_condition_matched",
+      "question": "Were the target and the required partners measured together under relevant conditions?",
+      "required_metric_ids": [],
+      "required_evidence": [
+        "sample_identity",
+        "condition_identity",
+        "expression_analysis"
+      ],
+      "outcomes": {
+        "met": "The same matched experimental samples contain the target/partner measurements and the original native association statistic or explicit reported result.",
+        "not_met": "Actual matched observations contradict the proposed coexpression in the specified conditions.",
+        "unknown": "Expression data are missing, come from unmatched samples, or concern artificial rescue rather than native conditions."
+      },
+      "deterministic_test": null
+    },
+    {
+      "criterion_id": "partner_evidence_transfers",
+      "question": "Does partner evidence concern this target system or a justified homologous system?",
+      "required_metric_ids": [],
+      "required_evidence": [
+        "source_subject",
+        "correspondence",
+        "target_hypothesis"
+      ],
+      "outcomes": {
+        "met": "The original system is the target system or a separately established correspondence preserves the relevant component requirements.",
+        "not_met": "The observed system has a demonstrated incompatible component relationship.",
+        "unknown": "The connection between source system and target system is not established."
+      },
+      "deterministic_test": null
+    },
+    {
+      "criterion_id": "partner_count_scope_matched",
+      "question": "Do numerator and denominator describe the same fixed required-partner set and examined genome?",
+      "required_metric_ids": [
+        "required_partner_count",
+        "identified_required_partner_count"
+      ],
+      "required_evidence": [
+        "required_partner_definition",
+        "genome_identity",
+        "partner_match_records"
+      ],
+      "outcomes": {
+        "met": "Both counts use the exact same candidate-defined required set and genome; the denominator is positive and each partner occurs once.",
+        "not_met": "The counts use different required sets/genomes, duplicate partners or a nonpositive denominator.",
+        "unknown": "The required set, genome or counting rule cannot be established."
+      },
+      "deterministic_test": null
+    },
+    {
+      "criterion_id": "coexpression_count_scope_matched",
+      "question": "Does the coexpression count use that required set and one matched experiment?",
+      "required_metric_ids": [
+        "required_partner_count",
+        "coexpressed_required_partner_count"
+      ],
+      "required_evidence": [
+        "required_partner_definition",
+        "sample_identity",
+        "condition_identity",
+        "expression_analysis"
+      ],
+      "outcomes": {
+        "met": "The numerator and denominator use the same required set, matched samples/conditions and the actual analysis’s stated association criterion.",
+        "not_met": "The count is from a different set, unmatched samples or an invented threshold.",
+        "unknown": "A required sample, criterion or counting rule is missing."
+      },
+      "deterministic_test": null
+    },
+    {
+      "criterion_id": "coexpression_positive",
+      "question": "Does the actual measured contrast establish the proposed positive coexpression?",
+      "required_metric_ids": [],
+      "required_evidence": [
+        "expression_analysis",
+        "sample_identity",
+        "condition_identity"
+      ],
+      "outcomes": {
+        "met": "The original relevant analysis reports the expected positive association using its declared effect/statistical criterion.",
+        "not_met": "A competent relevant test demonstrates the opposite association or a source-grounded incompatible pattern.",
+        "unknown": "Only adjacency, unmatched data, an unqualified nonsignificant result, or no relevant contrast is available."
+      },
+      "deterministic_test": null
+    },
+    {
+      "criterion_id": "competent_partner_absence",
+      "question": "Is an absent required partner actually supported by competent examined-genome evidence?",
+      "required_metric_ids": [],
+      "required_evidence": [
+        "required_partner_definition",
+        "genome_identity",
+        "assembly_coverage",
+        "partner_match_records"
+      ],
+      "outcomes": {
+        "met": "An explicitly required partner is absent in an examined, appropriately covered genome under the stated detection model and limits.",
+        "not_met": "The proposed absence is contradicted by an identified partner.",
+        "unknown": "The genome/search is incomplete, detection limits are unknown, or only an annotation is missing."
+      },
+      "deterministic_test": null
+    }
+  ],
+  "qualitative_grading": [],
+  "transfer_chain": {
+    "source_subject": "Identify the organism, assayed or analysed protein, preparation and experiment that actually supplied each observation.",
+    "source_property": "Required-partner identities, actual genomic presence and condition-matched expression are separate measured properties.",
+    "correspondence": "For a different source protein or organism retain the actual sequence/structural correspondence and matched region; do not turn that source experiment into a target measurement.",
+    "target_hypothesis": "Identify the particular candidate annotation and the property being evaluated, including its biological conditions.",
+    "limitations": "Presence is not assembly; coexpression is not physical binding. Missing expression remains unknown. Preserve the same underlying experiment when a paper and dataset report it."
+  },
+  "evidence": [
+    {
+      "case_group": "cellular_cdv",
+      "case_id": "cellular_cdv",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2596248/",
+      "source_locator": "research/slotted_process_library/corpus/cellular/verified_cases.jsonl:12#/actual_observations/0/observation[characters 0:85]",
+      "observation": "Cell-cycle induction and shrinking midcell structures connect the operon to division.",
+      "limit": "Both original full primary reports read at Results level; failed mutant interpretations in the PNAS study retained as a limit. Two papers count as one system case. | Group source-use limits: The original observation is a composite of two primary reports and two Sulfolobus species. The selected URL/excerpt identifies the relevant clause; these are one grouped system case, not independent target annotations. Failed mutant interpretations remain limits; homology does not transfer an endosomal function. | This row selects an exact clause from the aggregate retained observation; other source clauses are not attributed to this URL."
+    },
+    {
+      "case_group": "cellular_dolP",
+      "case_id": "cellular_dolP",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8081527/",
+      "source_locator": "research/slotted_process_library/corpus/cellular/verified_cases.jsonl:7#/actual_observations/0/observation[characters 112:202]",
+      "observation": "DolP co-purifies with membrane-assembled BamA and redistributes from midcell under stress.",
+      "limit": "Full Results, selected controls and published peer-review limitations inspected; no new phenotyping. | Group source-use limits: Co-purification is not direct binding or catalysis; genetics, purification and imaging are connected results in one study. | This row selects an exact clause from the aggregate retained observation; other source clauses are not attributed to this URL."
+    },
+    {
+      "case_group": "cellular_ugtP",
+      "case_id": "cellular_ugtP",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1971218/",
+      "source_locator": "research/slotted_process_library/corpus/cellular/verified_cases.jsonl:11#/actual_observations/0/observation",
+      "observation": "UgtP amount and localization depend on nutrients/UDP-glucose pathway state. Mutants alter cell length. Purified UgtP inhibits FtsZ assembly, while localization changes are separable from gross protein abundance.",
+      "limit": "Full Results on nutritional dependence, pathway controls and FtsZ assays inspected. | Group source-use limits: Cellular perturbations and purified FtsZ assays are connected study outputs, not independent proofs of every causal link. Native sensing remains bounded."
+    },
+    {
+      "case_group": "cellular_yneA",
+      "case_id": "cellular_yneA",
+      "source_url": "https://onlinelibrary.wiley.com/doi/full/10.1046/j.1365-2958.2003.03360.x",
+      "source_locator": "research/slotted_process_library/corpus/cellular/verified_cases.jsonl:17#/actual_observations/0/observation",
+      "observation": "dinR loss induces the neighboring yneA-yneB-ynzC operon. Deleting that operon suppresses filamentation; inducible YneA alone reinduces elongation, whereas YneB or YnzC do not. Operon deletion reduces mitomycin-C-induced elongation.",
+      "limit": "Primary publisher full Results inspected, including whole-operon deletion, separate gene re-expression and negative YneB/YnzC controls. The newer 2026 FtsW mechanism paper remains an abstract-only unexamined follow-up; do not treat the 2003 FtsZ inference as current direct mechanism. | Group source-use limits: Connected 2003 controls do not establish direct FtsZ binding. The 2026 FtsW follow-up remains abstract-only and unexamined; it is not upgraded by the older primary-results coverage."
+    },
+    {
+      "case_group": "organism_08_porphyran",
+      "case_id": "organism_08_porphyran",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3511707/",
+      "source_locator": "research/slotted_process_library/corpus/organism/cases.jsonl:8#/actual_observations/0",
+      "observation": "B. plebeius grew on porphyran, not tested agarose/carrageenan preparations; porphyran induced the examined PUL genes. Recombinant GH16B/GH86A cleaved native and purified porphyran with diagnostic products. A neighboring GH16A was agarolytic although intact cells did not grow on agarose.",
+      "limit": "Complete relevant growth/PUL induction/ICE/enzyme Results and methods overview; no human dietary intervention, historical transfer experiment or new enzymology. | Group source-use limits: One study measures induced loci, recombinant reactions and whole-cell growth. No transfer event/donor or human dietary intervention was established; negative growth retains substrate-preparation scope."
+    },
+    {
+      "case_group": "organism_09_huc",
+      "case_id": "organism_09_huc",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6916507/",
+      "source_locator": "research/slotted_process_library/corpus/organism/cases.jsonl:9#/actual_observations/0[characters 0:78]",
+      "observation": "Growth-phase expression/activity separated Huc from sustained-persistence Hhy.",
+      "limit": "2019 relevant full Results and culture methods; 2023 purification/kinetics/quinone Results and methods. Do not read the 2025 heterologous liposome ATP result as direct native-cell ATP quantification. | Group source-use limits: The composite original observation spans 2019 whole-cell and 2023 purified-protein scopes. The later heterologous liposome ATP result is not native ATP quantification; early/late deployment is not an unconditional survival effect. | This row selects an exact clause from the aggregate retained observation; other source clauses are not attributed to this URL."
+    },
+    {
+      "case_group": "organism_19_pyruvate_transport",
+      "case_id": "organism_19_pyruvate_transport",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6349089/",
+      "source_locator": "research/slotted_process_library/corpus/organism/cases.jsonl:19#/actual_observations/0",
+      "observation": "BtsT transported radiolabeled pyruvate specifically; purified proteoliposomes demonstrated proton-coupled uptake. CstA-related mutant selection and extracellular depletion established an additional route. Cold-starved cells accumulated BtsT and rapidly imported pyruvate; sensing-network mutants failed resuscitation under tested conditions.",
+      "limit": "Relevant main Results/transport Methods across three papers, including alternative-transporter and resuscitation controls. Grouped as one investigation, not three cases. | Group source-use limits: Three papers form one connected investigation. No new transport fitting occurred; YhjX specificity remains unresolved. The network resuscitation phenotype is not forced into allele-linked BtsT-only A109."
+    },
+    {
+      "case_group": "organism_21_vcra",
+      "case_id": "organism_21_vcra",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC492378/",
+      "source_locator": "research/slotted_process_library/corpus/organism/cases.jsonl:21#/actual_observations/0",
+      "observation": "Anoxically enriched activity reduced vinyl chloride/DCEs, not PCE and only slowly TCE. Peptide sequencing mapped the major candidate to vcrA; transcripts occurred in VC-grown cultures. Environmental water contained vcrAB DNA.",
+      "limit": "Main purification/substrate/gene-identification/transcription Results and cultivation/assay Methods. GenBank AY322364 reported; no new field dechlorination or sequence analysis. | Group source-use limits: Culture was nonaxenic and protein only partially purified; there was no knockout. Activity, identity and transcripts are connected evidence, not independent proof of unique gene causation."
+    },
+    {
+      "case_group": "reg_iscR_state_target_specificity",
+      "case_id": "reg_iscR_state_target_specificity",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12594620/",
+      "source_locator": "research/slotted_process_library/corpus/root/regulatory_specificity/case_trace.json#/case/actual_observations/10/observation",
+      "observation": "At controlled IscR expression, anaerobic PMS affected type-1 repression but did not reproduce apo-favored type-2 regulation. Aerobic treatment affected both promoter classes.",
+      "limit": "Five primary papers’ relevant complete paths inspected as itemized in sources. One independent published-table/oligo arithmetic probe was run. No biological experiment, new regulon scan, raw-curve fit or IscR structure computation."
+    },
+    {
+      "case_group": "spec_yihu_native_sulfonate",
+      "case_id": "spec_yihu_native_sulfonate",
+      "source_url": "https://www.nature.com/articles/nature12947",
+      "source_locator": "research/slotted_process_library/corpus/specificity/cases.jsonl:2#/actual_observations/2/result",
+      "observation": "SQ-grown cells induced the yih cluster and DHPS oxidation; native active-protein purification/peptide identification and recombinant YihU assigned SLA reductase. SQ dehydrogenase activity was undetected.",
+      "limit": "2009 relevant whole results/discussion and reaction methods; 2014 primary main results, enzyme methods and relevant extended-data legends; 2020 accepted manuscript sequence, kinetics, structure and conclusion sections inspected. Supporting spectra/kinetic fits were not reanalyzed."
+    },
+    {
+      "case_group": "yeag",
+      "case_id": "cellular_yeaG",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4664914/",
+      "source_locator": "research/slotted_process_library/corpus/cellular/verified_cases.jsonl:14#/actual_observations/0/observation",
+      "observation": "yeaG induction after nitrogen exhaustion precedes a sustained-starvation phenotype. Deletion changes recovery/metabolic heterogeneity and accelerates later death; wild-type complementation repairs survival. Transcript/RpoS tests connect the phenotype to stress-program execution.",
+      "limit": "Full primary Results examined, including induction timing versus 72-hour-and-later survival effects. Kinase substrate mechanism remains outside demonstrated scope. | Group source-use limits: cellular_yeaG and organism_06_yeag duplicate the same 2015 study; their source identity must be shared. The 2021 workbook retains its exact original lineage. Keep the further-72h versus 24h caption inconsistency, delta-yeaH/delta-yeaGH labels and 2021 table-count/SodB-SodA inconsistencies. Missing ratios are not zero phosphorylation."
+    }
+  ],
+  "scoring_rubric": {
+    "version": "evidence_axis_scoring_v1",
+    "status": "proposed",
+    "routes": [
+      {
+        "route_id": "partner_native_evalue",
+        "operation": "identity",
+        "metric_ids": [
+          "partner_homology_evalue"
+        ],
+        "eligible_when": [
+          "required_partners_defined",
+          "partner_presence_examined"
+        ],
+        "score_unit": "native expected-count E-value",
+        "direction": "lower",
+        "interpretation": "Native match score for an actually identified required partner; keep program, search space and partner identity. Zero remains a native zero, not an invented infinity.",
+        "polarity": "supporting",
+        "grade_criterion": null,
+        "grade_scores": {},
+        "bands": []
+      },
+      {
+        "route_id": "partner_native_bitscore",
+        "operation": "identity",
+        "metric_ids": [
+          "partner_homology_bitscore"
+        ],
+        "eligible_when": [
+          "required_partners_defined",
+          "partner_presence_examined"
+        ],
+        "score_unit": "bit",
+        "direction": "higher",
+        "interpretation": "Native required-partner match bit score; only like-method/search comparisons are declared comparable.",
+        "polarity": "supporting",
+        "grade_criterion": null,
+        "grade_scores": {},
+        "bands": []
+      },
+      {
+        "route_id": "identified_partner_fraction",
+        "operation": "ratio",
+        "metric_ids": [
+          "identified_required_partner_count",
+          "required_partner_count"
+        ],
+        "eligible_when": [
+          "partner_count_scope_matched"
+        ],
+        "score_unit": "fraction of the fixed required-partner set",
+        "direction": "higher",
+        "interpretation": "Identified required partners divided by the positive required-partner count. Missing partners are not declared absent by this ratio; preserve examined and unknown states.",
+        "polarity": "supporting",
+        "grade_criterion": null,
+        "grade_scores": {},
+        "bands": []
+      },
+      {
+        "route_id": "coexpressed_partner_fraction",
+        "operation": "ratio",
+        "metric_ids": [
+          "coexpressed_required_partner_count",
+          "required_partner_count"
+        ],
+        "eligible_when": [
+          "coexpression_count_scope_matched"
+        ],
+        "score_unit": "fraction of the fixed required-partner set",
+        "direction": "higher",
+        "interpretation": "Partners satisfying the original matched-expression analysis criterion divided by the same required set. No new correlation/p threshold is supplied by this rubric.",
+        "polarity": "supporting",
+        "grade_criterion": null,
+        "grade_scores": {},
+        "bands": []
+      },
+      {
+        "route_id": "native_coexpression_effect",
+        "operation": "identity",
+        "metric_ids": [
+          "coexpression_statistic"
+        ],
+        "eligible_when": [
+          "coexpression_condition_matched"
+        ],
+        "score_unit": "native statistic with original method",
+        "direction": "not_ordered",
+        "interpretation": "Original association effect, not probability of function. It must remain paired with the actual analysis/sample definition.",
+        "polarity": "non_discriminating",
+        "grade_criterion": null,
+        "grade_scores": {},
+        "bands": []
+      },
+      {
+        "route_id": "native_positive_coexpression_test",
+        "operation": "neg_log10",
+        "metric_ids": [
+          "coexpression_significance"
+        ],
+        "eligible_when": [
+          "coexpression_positive"
+        ],
+        "score_unit": "negative log10 of the explicitly identified native p/q value",
+        "direction": "higher",
+        "interpretation": "Numeric strength of the actual positive-association test only. This is not a function probability, and nonsignificance alone is not opposition.",
+        "polarity": "supporting",
+        "grade_criterion": null,
+        "grade_scores": {},
+        "bands": []
+      },
+      {
+        "route_id": "examined_missing_partner_fraction",
+        "operation": "ratio",
+        "metric_ids": [
+          "examined_absent_required_partner_count",
+          "required_partner_count"
+        ],
+        "eligible_when": [
+          "competent_partner_absence"
+        ],
+        "score_unit": "fraction of the fixed required-partner set",
+        "direction": "higher",
+        "interpretation": "Explicitly supported absence of required partners divided by the positive required set; qualify detection limits.",
+        "polarity": "opposing",
+        "grade_criterion": null,
+        "grade_scores": {},
+        "bands": []
+      }
+    ]
+  }
+}

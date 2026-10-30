@@ -1,0 +1,196 @@
+{
+  "version": "a105_research_component_proposal_255_v1",
+  "axis": "A105",
+  "logical_assessment": "one_source_bound_NfnAB_assessment",
+  "comparison_scope": "linked_protocol_comparison_only",
+  "subject_relationship": "same_construct_supported",
+  "sampling_relationship": "unknown",
+  "covariance_status": "unreported",
+  "native_kinetic_parameter": "apparent_Vmax_U_per_mg_not_kcat",
+  "cells": [
+    {
+      "component": "native_Fd_Vmax",
+      "value": 23.0,
+      "unit": "umol_Fd/min/mg",
+      "formula": "selected_source_estimate",
+      "meaning": "Native reported Fd-reduction apparent Vmax",
+      "section": "measurement",
+      "status": "native_report",
+      "origin": "reported_rounded",
+      "approximate": true,
+      "source_selectors": [
+        "Fd_Vmax_with_NAD"
+      ],
+      "dependency_group": "Vmax_pair_once",
+      "scientific_missing_reasons": [],
+      "implementation_status": "research_proposal_not_installed"
+    },
+    {
+      "component": "native_NADH_Vmax",
+      "value": 8.0,
+      "unit": "umol_NADH/min/mg",
+      "formula": "selected_source_estimate",
+      "meaning": "Native reported NADH-formation apparent Vmax",
+      "section": "measurement",
+      "status": "native_report",
+      "origin": "reported_rounded",
+      "approximate": true,
+      "source_selectors": [
+        "NADH_Vmax_with_Fdox"
+      ],
+      "dependency_group": "Vmax_pair_once",
+      "scientific_missing_reasons": [],
+      "implementation_status": "research_proposal_not_installed"
+    },
+    {
+      "component": "linked_protocol_difference",
+      "value": -15.0,
+      "unit": "reaction_umol/min/mg",
+      "formula": "v_NADH/nu_NADH-v_Fd/nu_Fd",
+      "meaning": "Conditional stoichiometrically linked reported-protocol discrepancy",
+      "section": "consistency",
+      "status": "conditional_reported_protocol",
+      "origin": "calculated_from_rounded_reported_values",
+      "approximate": true,
+      "source_selectors": [
+        "Fd_Vmax_with_NAD",
+        "NADH_Vmax_with_Fdox"
+      ],
+      "dependency_group": "Vmax_pair_once",
+      "scientific_missing_reasons": [],
+      "implementation_status": "research_proposal_not_installed"
+    },
+    {
+      "component": "linked_protocol_ratio",
+      "value": 0.34782608695652173,
+      "unit": "dimensionless",
+      "formula": "(v_NADH/nu_NADH)/(v_Fd/nu_Fd)",
+      "meaning": "Alternate representation of same conditional discrepancy",
+      "section": "consistency",
+      "status": "conditional_reported_protocol",
+      "origin": "calculated_from_rounded_reported_values",
+      "approximate": true,
+      "source_selectors": [
+        "Fd_Vmax_with_NAD",
+        "NADH_Vmax_with_Fdox"
+      ],
+      "dependency_group": "Vmax_pair_once",
+      "scientific_missing_reasons": [],
+      "implementation_status": "research_proposal_not_installed"
+    },
+    {
+      "component": "spectral_nuisance_multiplier",
+      "value": 7.166666666666667,
+      "unit": "dimensionless",
+      "formula": "epsilon_Fd380/epsilon_NADH380",
+      "meaning": "Interference coefficient of Fd reduction in NADH-equivalent units",
+      "section": "validity",
+      "status": "native_report",
+      "origin": "calculated_from_rounded_reported_values",
+      "approximate": true,
+      "source_selectors": [
+        "source_results_and_validity",
+        "assay_methods"
+      ],
+      "dependency_group": "spectral_coefficient_once",
+      "scientific_missing_reasons": [],
+      "implementation_status": "research_proposal_not_installed"
+    },
+    {
+      "component": "required_nuisance_rate_scenario",
+      "value": 2.0930232558139537,
+      "unit": "umol_Fd/min/mg",
+      "formula": "(23-8)/(8.6/1.2)",
+      "meaning": "Unobserved nuisance rate required if true380nm flux equals reported430nm flux",
+      "section": "conditional_explanation",
+      "status": "conditional_reported_protocol",
+      "origin": "calculated_from_rounded_reported_values",
+      "approximate": true,
+      "source_selectors": [
+        "Fd_Vmax_with_NAD",
+        "NADH_Vmax_with_Fdox",
+        "source_results_and_validity"
+      ],
+      "dependency_group": "Vmax_pair_once",
+      "scientific_missing_reasons": [],
+      "implementation_status": "research_proposal_not_installed"
+    },
+    {
+      "component": "corrected_NADH_rate",
+      "value": null,
+      "unit": "umol_NADH/min/mg",
+      "formula": "y+alpha*f",
+      "meaning": "Optical mixture-decomposed NADH activity; f unreported",
+      "section": "attribution",
+      "status": "unavailable",
+      "origin": "calculated_from_rounded_reported_values",
+      "approximate": true,
+      "source_selectors": [
+        "source_results_and_validity"
+      ],
+      "dependency_group": "Vmax_pair_once",
+      "scientific_missing_reasons": [
+        "measured_nuisance_rate_unreported"
+      ],
+      "implementation_status": "research_proposal_not_installed"
+    },
+    {
+      "component": "discrepancy_variance",
+      "value": null,
+      "unit": "reaction_umol_squared/min_squared/mg_squared",
+      "formula": "v1+v2-2*cov12",
+      "meaning": "Uncertainty of common-estimand discrepancy; variances/covariance and eligibility unavailable",
+      "section": "uncertainty",
+      "status": "unavailable",
+      "origin": "calculated_from_rounded_reported_values",
+      "approximate": true,
+      "source_selectors": [],
+      "dependency_group": "Vmax_pair_once",
+      "scientific_missing_reasons": [
+        "common_condition_estimand_not_established",
+        "joint_estimator_covariance_unreported"
+      ],
+      "implementation_status": "research_proposal_not_installed"
+    },
+    {
+      "component": "standardized_discrepancy",
+      "value": null,
+      "unit": "dimensionless",
+      "formula": "D/sqrt(Var(D))",
+      "meaning": "Standardized common-estimand discrepancy; unavailable",
+      "section": "consistency",
+      "status": "unavailable",
+      "origin": "calculated_from_rounded_reported_values",
+      "approximate": true,
+      "source_selectors": [],
+      "dependency_group": "Vmax_pair_once",
+      "scientific_missing_reasons": [
+        "common_condition_estimand_not_established",
+        "joint_estimator_covariance_unreported"
+      ],
+      "implementation_status": "research_proposal_not_installed"
+    },
+    {
+      "component": "combined_activity_estimate",
+      "value": null,
+      "unit": "reaction_umol/min/mg",
+      "formula": "(1T*C^-1*x)/(1T*C^-1*1)",
+      "meaning": "Common unbiased activity estimate; model/covariance unavailable",
+      "section": "reliability",
+      "status": "unavailable",
+      "origin": "calculated_from_rounded_reported_values",
+      "approximate": true,
+      "source_selectors": [],
+      "dependency_group": "Vmax_pair_once",
+      "scientific_missing_reasons": [
+        "common_condition_estimand_not_established",
+        "joint_estimator_covariance_unreported"
+      ],
+      "implementation_status": "research_proposal_not_installed"
+    }
+  ],
+  "annotation_credit": null,
+  "universal_grade": null,
+  "source_limit": "No validated common-condition consistency result; report remains qualified.",
+  "implementation_limit": "No reader/calculator/runtime binding delivered by this research proposal."
+}

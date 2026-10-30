@@ -1,0 +1,174 @@
+{
+  "status": "bounded_primary_source_arithmetic_only",
+  "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12051542/",
+  "source_text_sha256": "5f02867de95d1434ac7e578f900d091fabeca0d8c078d3912508256aa37a69ae",
+  "inputs": {
+    "stock_total": {
+      "value": 7,
+      "unit": "mg/ml",
+      "meaning": "total protein estimate",
+      "qualification": "reported_point",
+      "origin": "reported",
+      "source": "primary_read.txt",
+      "start_utf8": 51451,
+      "end_utf8": 51480,
+      "fragment": "7 mg/ml per Bradford analysis"
+    },
+    "stock_hfp": {
+      "value": 5,
+      "unit": "mg/ml",
+      "meaning": "visual SDS-PAGE target estimate",
+      "qualification": "source_qualified_approximate",
+      "origin": "reported",
+      "source": "primary_read.txt",
+      "start_utf8": 51665,
+      "end_utf8": 51705,
+      "fragment": "approximate concentration of 5 mg/ml HFP"
+    },
+    "arm_hfp": {
+      "value": 8.4,
+      "unit": "uM",
+      "meaning": "one-pot nominal HFP concentration",
+      "qualification": "reported_point",
+      "origin": "reported",
+      "source": "primary_read.txt",
+      "start_utf8": 56703,
+      "end_utf8": 56714,
+      "fragment": "8.4 μM HFP"
+    },
+    "arm_imp": {
+      "value": 8.8,
+      "unit": "uM",
+      "meaning": "one-pot nominal IMP concentration",
+      "qualification": "reported_point",
+      "origin": "reported",
+      "source": "primary_read.txt",
+      "start_utf8": 56719,
+      "end_utf8": 56730,
+      "fragment": "8.8 μM IMP"
+    },
+    "ru5p_percent": {
+      "value": 39.7,
+      "unit": "percent",
+      "meaning": "reported equilibrium sugar-phosphate partition",
+      "qualification": "reported_point",
+      "origin": "reported",
+      "source": "primary_read.txt",
+      "start_utf8": 21407,
+      "end_utf8": 21430,
+      "fragment": "39.7% ketose (ribulose)"
+    },
+    "r5p_percent": {
+      "value": 60.3,
+      "unit": "percent",
+      "meaning": "reported equilibrium sugar-phosphate partition",
+      "qualification": "reported_point",
+      "origin": "reported",
+      "source": "primary_read.txt",
+      "start_utf8": 21435,
+      "end_utf8": 21456,
+      "fragment": "60.3% aldose (ribose)"
+    },
+    "cleanup_time": {
+      "value": 18,
+      "unit": "hour",
+      "meaning": "post-cleanup equilibrium completion-time lower bound",
+      "qualification": "gt",
+      "origin": "reported",
+      "source": "primary_read.txt",
+      "start_utf8": 22275,
+      "end_utf8": 22302,
+      "fragment": ">18 h as opposed to <10 min"
+    },
+    "precleanup_time": {
+      "value": 10,
+      "unit": "minute",
+      "meaning": "pre-cleanup equilibrium completion-time upper bound",
+      "qualification": "lt",
+      "origin": "reported",
+      "source": "primary_read.txt",
+      "start_utf8": 21486,
+      "end_utf8": 21512,
+      "fragment": "less than 10 min (Fig. S5)"
+    }
+  },
+  "derived": {
+    "stock_target_over_total_estimate": {
+      "value": 0.7142857142857143,
+      "exact": "5/7",
+      "approximate": true,
+      "meaning": "mass-estimate relationship, not active fraction or contaminant activity"
+    },
+    "conditional_mass_denominator_factor": {
+      "value": 1.4,
+      "exact": "7/5",
+      "approximate": true,
+      "meaning": "multiply a same-stock total-mass-normalized rate only if that rate and denominator are established; not applied"
+    },
+    "nominal_hfp_minus_imp_uM": {
+      "value": -0.4,
+      "exact": "8.4-8.8",
+      "meaning": "between-arm amount difference"
+    },
+    "nominal_hfp_over_imp": {
+      "value": 0.9545454545454546,
+      "exact": "21/22",
+      "meaning": "between-arm amount ratio, not an amount-response calibration"
+    },
+    "reported_r5p_partition": {
+      "value": 0.603,
+      "exact": "60.3/(39.7+60.3)",
+      "meaning": "composition among reported sugar-phosphate species, not HFP attribution or total product recovery"
+    },
+    "reported_ru5p_partition": {
+      "value": 0.397,
+      "exact": "39.7/(39.7+60.3)",
+      "meaning": "same reported composition denominator"
+    },
+    "equilibration_time_ratio": {
+      "threshold": 108,
+      "relation": "gt",
+      "exact": "18*60/10",
+      "meaning": "time after cleanup / time before cleanup; not initial-rate ratio"
+    },
+    "reciprocal_completion_metric_ratio": {
+      "threshold": 0.009259259259259259,
+      "relation": "lt",
+      "exact": "10/(18*60)",
+      "meaning": "reciprocal elapsed completion metric after/before cleanup; not retained HFP activity fraction"
+    }
+  },
+  "observed_panel": {
+    "isomerization_positive_samples": 4,
+    "selected_samples": 5,
+    "probability_or_weight": null
+  },
+  "activity_sheet": {
+    "values": {
+      "q": null,
+      "g": null,
+      "k": null,
+      "E": null,
+      "u": null,
+      "v": null
+    },
+    "covariance": null,
+    "variance_status": "unknown",
+    "observation_model": "none",
+    "distinct_residual_variance": null,
+    "corrected_activity": null,
+    "source_presence_index": null,
+    "reason": "same-preparation net molecular rate, contaminant contribution, recovery, condition-response controls and joint uncertainty not quantified"
+  },
+  "limitations": [
+    "completion times are not initial rates",
+    "cleanup changes construct, purification and heat exposure together",
+    "target recovery after cleanup unreported",
+    "5/7 stock differs from extensively purified NMR stock",
+    "mM_vs_M_source_conflict_not_resolved",
+    "no source-calibrated annotation reliability score"
+  ],
+  "annotation_credit": null,
+  "installed_grader": false,
+  "episode_integration_executed": false
+}

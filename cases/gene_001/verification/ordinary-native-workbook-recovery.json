@@ -1,0 +1,67 @@
+{
+  "version": "ordinary_native_workbook_recovery_verification_v1",
+  "captured_at_utc": "2026-10-21T08:14:20.811489+00:00",
+  "source_sha256": {
+    "gene_annotation_episode/ordinary_execution.py": "973c4d0265647588d10c5db8e1d6c9ff2916b1f0e631b75fd8d9033de43d0eb5",
+    "gene_annotation_episode/execution_recording.py": "b7bf9728421e4c51f586956f5dcc2f420c66950668be128524dada85a59057fd",
+    "gene_annotation_episode/native_timing_information.py": "25db518d709237a9205aa4d3669de3b924aeeafd2c96451627d34204436de524",
+    "gene_annotation_episode/runtime.py": "dc8bdb5bb560d3e7e4d81c5c2bd9eb5da56c211da6481e8b58d550531fdfa716",
+    "gene_annotation_episode/tools.py": "00f7a22c27476b3531fe9aa9cd658e27c919abe3818ccf9cb9fee9f822c8e534",
+    "gene_annotation_episode/domain.py": "ce9aabd0cfc8709836e6c28f9cbae00a774b8cd4f3558ec0c902e51efa8f98ae",
+    "gene_annotation_episode/state.py": "edeeaf60217b47b1b0dc99c2a164aa66d207a5939ea2f4e477f284e3073b9c09",
+    "gene_annotation_episode/spreadsheet_tools.py": "c7b0d121a565d9c1da63c3058b59293ec0d14c478a7b95c49b0df8f5793d97fd",
+    "gene_annotation_episode/episode_receipts.py": "0a6ad26346129bbb0feba717af7f78041dd800a47fd2d64c96eaf968b2cc84fa",
+    "gene_annotation_episode/run_statistics.py": "e3e079c53bf9547cb103bd7f5a5229be2dbb01b12a388b878976de88b8f78298",
+    "gene_annotation_episode/resource_estimation.py": "b3f6fcce8c2993018542ec68fc0e327bb023ac43d619c087d828af999957d19c",
+    "gene_annotation_episode/case_execution.py": "791050252cb364a9b9d9f01a69f56a4be72ea790fdd1e89918ff1a2671d9abd1",
+    "gene_annotation_episode/investigation_policy.py": "1d40424030d361fac785caf3387ba4db102ff41d5a2e9f8ffc4cd1b706b1c93f",
+    "tests/test_spreadsheet_timing_learning.py": "9c5b8b8f51a19a55242951a25c655d219c0fdac45d1711a163eb162e41380728",
+    "tests/test_native_timing_information_runtime.py": "fd74ff6f06f7b64dc8e7ca60dc92b70349a1c35c5b2bf0ce5013ce14c8359ce6",
+    "tests/test_ordinary_execution_statistics.py": "3f922e39e17dede74f64ecbbc614b6ab6949b66f859a6554fa413dd37e384c61"
+  },
+  "verification": [
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_spreadsheet_timing_learning.py tests/test_spreadsheet_tools.py tests/test_native_timing_information_runtime.py tests/test_ordinary_execution_statistics.py tests/test_state.py tests/test_resource_estimation_contract.py tests/test_case_execution.py tests/test_investigation_progress.py tests/test_native_adapter_limits.py --tb=short",
+      "passed": 97,
+      "seconds": 172.75,
+      "scope": "checkpoint_before_pending_export_consumer_and_final_operation_phase_regression"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_spreadsheet_timing_learning.py tests/test_native_timing_information_runtime.py tests/test_execution_recording.py --tb=short",
+      "passed": 24,
+      "seconds": 82.1,
+      "scope": "pending_export_consumer_and_operation_phase_contract"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_ordinary_execution_statistics.py tests/test_spreadsheet_timing_learning.py --tb=short",
+      "passed": 10,
+      "seconds": 33.25,
+      "scope": "current_source_including_lazy_recovery_directory_scan_failure"
+    }
+  ],
+  "counts_overlap_not_additive": true,
+  "configured_models_launched": false,
+  "covered": [
+    "real_workbook_native_duration_receipt_local_information_typed_child_form_parent_global_statistics_forecast",
+    "partial_rows_preserved_independently_of_timing",
+    "failed_sheet_selection_timing_no_completed_failed_action",
+    "operation_phase_and_actual_source_operand_validation",
+    "technical_compatibility_without_biological_filter_labels",
+    "unknown_cpu_and_sequence_fields_not_invented",
+    "pending_history_recovery_before_future_forecast_without_native_rerun",
+    "original_action_retained_identically_after_recovery",
+    "recovery_directory_iteration_failure_informational"
+  ],
+  "not_established": [
+    "configured_model_use_of_current_timing_bindings",
+    "configured_model_functional_handoff_failure_repair",
+    "configured_model_monitor_yield_while_job_continues",
+    "configured_model_parent_timed_recommission",
+    "all_other_native_adapter_families",
+    "interruption_inside_unfinished_ordinary_native_operation"
+  ],
+  "investigation_006_modified": false,
+  "investigation_007_prepared_or_launched": false,
+  "investigation_007_snapshot_files": 84,
+  "policy_or_controller_numeric_values_changed": false
+}

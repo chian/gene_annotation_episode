@@ -1,0 +1,211 @@
+{
+  "version": "fixed_process_verification_v1",
+  "recorded_at": "2026-10-22T00:15:41.652507+00:00",
+  "scope": "FP0-FP7 fixed scientific process, explicit alternative-child provenance and unchanged per-episode scoring",
+  "plan": "docs/FIXED_PROCESS_BOUNDARIES.md",
+  "binding_version": "scientific_process_episodes_v2",
+  "commands": [
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_scientific_process_episodes.py",
+      "passed": 39,
+      "seconds": 1.36,
+      "reported_by": "fp_mother_origin"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_scientific_process_provenance.py",
+      "passed": 33,
+      "seconds": 71.36,
+      "reported_by": "fp_provenance",
+      "note": "Full-file run before adding two final edge cases; production remained unchanged during their follow-up run."
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_scientific_process_provenance.py -k 'widen_saved_immediate_parent_scope or closed_receiver'",
+      "passed": 2,
+      "deselected": 33,
+      "seconds": 3.37,
+      "reported_by": "fp_provenance"
+    },
+    {
+      "command": ".venv/bin/python -m pytest tests/test_scientific_process_reports.py -q",
+      "passed": 42,
+      "seconds": 0.36,
+      "reported_by": "fp_result_facts"
+    },
+    {
+      "command": ".venv/bin/python -m pytest tests/test_episode_yield_reports.py -q",
+      "passed": 10,
+      "seconds": 65.17,
+      "reported_by": "fp_result_facts",
+      "note": "Overlaps the root existing-credit/yield regression group."
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_scientific_child_credit.py tests/test_episode_yield_reports.py",
+      "passed": 17,
+      "seconds": 71.51,
+      "reported_by": "root"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_scientific_process_runtime.py",
+      "passed": 9,
+      "failed": 1,
+      "seconds": 58.54,
+      "reported_by": "fp_connected_returns",
+      "note": "New fixture projector omitted requires_episode_receipts. Its next working-state exposure therefore delivered an unrequested source. Corrected the fixture opt-in, not production code."
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_scientific_process_runtime.py",
+      "passed": 10,
+      "seconds": 78.05,
+      "reported_by": "fp_connected_returns",
+      "note": "After fixture correction, before final fourth nested parameter was collected."
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_scientific_process_reconstruction.py",
+      "passed": 18,
+      "seconds": 64.8,
+      "reported_by": "fp_connected_returns"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_scientific_process_schema_transport.py",
+      "passed": 21,
+      "seconds": 100.66,
+      "reported_by": "fp_connected_returns",
+      "note": "Overlaps root adjacent regression group."
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_scientific_process_runtime.py tests/test_scientific_process_reconstruction.py",
+      "passed": 29,
+      "seconds": 176.27,
+      "reported_by": "fp_connected_returns",
+      "note": "Final two owned files, including all four nested parameters. Reconstruction enters the production factory without inference or Episode execution."
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_scientific_process_detached.py --basetemp=/tmp/fp4-detached-evidence-20261021",
+      "passed": 1,
+      "seconds": 18.68,
+      "reported_by": "fp_detached_returns"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_scientific_process_schema_transport.py tests/test_scientific_process_case_forecasts.py tests/test_scientific_tool_contexts.py tests/test_scientific_process_library.py",
+      "passed": 108,
+      "seconds": 130.97,
+      "reported_by": "root"
+    },
+    {
+      "command": ".venv/bin/python -m py_compile gene_annotation_episode/runtime.py gene_annotation_episode/episode_services.py gene_annotation_episode/episode_bindings.py",
+      "exit_code": 0,
+      "reported_by": "root"
+    }
+  ],
+  "source_sha256_at_checkpoint": {
+    "gene_annotation_episode/runtime.py": "f73725981d641f3f82280de08b1595db9a42e38385596792ac3666e8013d833c",
+    "gene_annotation_episode/episode_services.py": "37e19617a0c686febd77abd2920c198a26c09d34935fa4e29621825c11b083c4",
+    "gene_annotation_episode/episode_bindings.py": "34a9bc08d2f89e479dc1ed633ef3ad55f39a84163351a9cf333203e98bc6402c",
+    "gene_annotation_episode/scientific_process_episodes.py": "f733849d0ffc9f00c616cd4ebe5ff2de48993a165eb9fd68b9084b90c1a127d2",
+    "gene_annotation_episode/scientific_process_records.py": "c3bca610ffcea8f6d34d5060fc1965d0c59085436619eabf7508a41a4f874ccf",
+    "gene_annotation_episode/scientific_process_provenance.py": "9e9f3f15448c6d38264d0d60b27d8388546130f81e2407076c5e9926c3bf18fd",
+    "gene_annotation_episode/scientific_process_reports.py": "3b0f04b292b0f96b5e7d81d0a606aec37f306ae5e9bcc104d02d1d698d340853",
+    "gene_annotation_episode/scientific_process_setup.py": "9b4913401c0e2bcf3b4245041ed2e7c25addc197ee295c570fc47c97e9e73fe8",
+    "gene_annotation_episode/scientific_process_library.py": "549fda9705f617c3489a83e20c7feb4fa81881461bf9fdca45d6165be571edd4",
+    "gene_annotation_episode/scientific_tool_contexts.py": "065a7f9f48ce7704b5a731674ca14b37a152959bd249230b2d8edd757b5302ab",
+    "gene_annotation_episode/episode_admission.py": "cac0fed97a8e25d4612a16e1c01e1b0a59edad3af8f70ba999b762de08aed284",
+    "gene_annotation_episode/independent_execution.py": "136c70984c81a50d97b92a7878b2a0002cf925ccbd5fde1f8878602a1d49aadd",
+    "gene_annotation_episode/episode_receipts.py": "0a7c9430792214d3e008fbb8a08799b20f16177fb11f4236d8aca257eaab5b69",
+    "gene_annotation_episode/episode_reports.py": "15e021b3e5f129cfa0e756d612a76830d2ac38d202d2065a2d5d27ec4e686f40",
+    "tests/test_scientific_process_episodes.py": "5759212f513b0fa2fa6e45cfb13bf417f8f251107be568ae4ab1e83b71352a3c",
+    "tests/test_scientific_process_provenance.py": "1eabd0dd9ce0d3a7b153e298bfc4150e48f32154f310b4d31fb01089cbf5f58d",
+    "tests/test_scientific_process_reports.py": "1d8347cb1aa3273c9211f394568f993e3dac45e102151981b7712997dbef771e",
+    "tests/test_scientific_process_runtime.py": "3e7a33efc0eb17cdffeb079774ccc25d4dd118b1a52b0f19c86a7bdebb5495e6",
+    "tests/test_scientific_process_reconstruction.py": "0aab59556ad83ae5313945680714602cc789823230c7ca7970d9edaa2b177335",
+    "tests/scientific_process_worker_fixture.py": "00e2490554c486da459522e661c4929525af5258e382ebd4958bf5e75e74c35a",
+    "tests/test_scientific_process_detached.py": "1d252daad6cf34b8d2d51f853b03dc8b07f85745417d0209950dc19335098be9",
+    "tests/test_scientific_process_schema_transport.py": "92f5590d73336487bdfd23d0cc04ad6861ed5a04ecd9d1adaddce4e878e36f91",
+    "tests/test_scientific_process_case_forecasts.py": "fb82584367f1a70eec6283349c1c84d4c5282768cf88a5fc2f950cdafa5e068a",
+    "tests/test_scientific_tool_contexts.py": "2b1da4a42359941057d3969968020bafc1bcc1eae694e024dc13e767598eadbe",
+    "tests/test_scientific_process_library.py": "fb699429fca6ab7626a2bdd4e8679037b0ceaed16f18dd626ad3f1b7fc5db371",
+    "tests/test_scientific_child_credit.py": "c39d07428a9cf8a386d6280b8e6264743f5913abe89ceef3f5206a0fda05f2c0",
+    "tests/test_episode_yield_reports.py": "901dc34ca114b45cf7c6bbf7db0fb8dd41266df08fd728932ead2c211250e429"
+  },
+  "historical_artifact_sha256": {
+    "research/slotted_process_library/integration_verification.json": "c9aae27bcc20cd97a6ac124df179caf6791eb6a8e89bdae9290b255e9eee215e",
+    "docs/received_information_verification.json": "453dba90d63b2035246d49cb1a4683ec8d0e7b81ee909db7c4b70b096c1811da",
+    "docs/completion_evidence_verification.json": "9eccbe131cf30c958d8e4cbb32a982947cf08ce0bdf5bafcb53a3a5cf2e1f90d"
+  },
+  "connected_evidence": {
+    "original_apt_fixed": true,
+    "preparation_launches_no_child": true,
+    "new_child_selected_through_existing_episode_child": true,
+    "explicit_origin_authenticated_against_completed_parent_preparation": true,
+    "ordinary_changed_selection_not_inferred_as_revision": true,
+    "existing_initial_and_closing_credit_and_yield_copied": true,
+    "nested_results_cross_only_requested_forms": true,
+    "metadata_alone_no_scientific_credit": true,
+    "local_child_turns_not_expanded_into_parent_observations": true,
+    "inherited_repeated_scientific_information_no_duplicate_gain": true,
+    "signed_and_unavailable_existing_yields_preserved": true,
+    "original_pending_replay_and_source_independent_reconstruction": true,
+    "old_binding_rejected_without_repricing_history": true,
+    "read_only_producer_no_private_form_or_model_or_observation_reads": true
+  },
+  "actual_detached_execution": {
+    "artifacts": "/tmp/fp4-detached-evidence-20261021/test_detached_filled_process_p0",
+    "run_id": "run_600dc2b53f444ba0adaec13ec4e640c1",
+    "worker_pid": 647071,
+    "factory": "tests/scientific_process_worker_fixture.py",
+    "provider": "Scripted fixture; no configured-model inference",
+    "native_scientific_job": false,
+    "separate_parent_worker_processes": true,
+    "parent_work_overlap_and_selected_wait": true,
+    "parent_completed_decision_order": [
+      1,
+      2,
+      0,
+      3
+    ],
+    "parent_raw_deltas": [
+      1,
+      0,
+      1,
+      0
+    ],
+    "child_completed_decision_order": [
+      0,
+      1,
+      2
+    ],
+    "child_raw_deltas": [
+      1,
+      0,
+      0
+    ],
+    "child_original_thoughts": [
+      "P01",
+      "P01",
+      "P01"
+    ],
+    "child_original_tool_contexts": [
+      "T01",
+      "T01",
+      "T01"
+    ],
+    "existing_child_credit": 1,
+    "existing_child_episode_yield": null,
+    "episode_count": 2,
+    "original_request_form_snapshot_mapping_after_source_deletion": true,
+    "archives_readable_and_live_controller_provider_state_released": true,
+    "source_hold": "Production modules and worker fixture held stable through the actual worker run."
+  },
+  "remaining_limits": [
+    "No additional score, referral bonus, subtraction, attribution formula, production numerical units or controller stopping policy selected.",
+    "Real worker uses an explicit fixture factory and custom fixture controller; production factory reconstruction is separately verified without inference or episode execution.",
+    "No numerical pending/wait model, physical native-job event transport, full production profile adoption, literature-library migration or API/HPC deployment established.",
+    "No configured-model scientific demonstration or competing root against preserved investigation_009 ran.",
+    "Historical SL/RI/CE verification artifacts remain separate checkpoints, not assertions that their historical source hashes still match later code."
+  ],
+  "notes": [
+    "Commands and durations reported by named owners are preserved as reported; overlapping groups are not summed.",
+    "Provenance coverage is 33 full-file cases plus two added final edge cases, not a claimed full-file 35-case run.",
+    "Root read the new producer/result modules and changed consumer paths and inspected the connected/detached assertions.",
+    "Initial shell python command was unavailable; all recorded pytest commands used the repository venv."
+  ]
+}

@@ -1,0 +1,57 @@
+.venv/
+.tools/
+_superseded/
+__pycache__/
+.pytest_cache/
+*.pyc
+build/
+dist/
+*.egg-info/
+/runs/
+
+# Machine-local dependencies and external checkouts.
+/reference/
+/resources/software/
+/software/
+.mypy_cache/
+.ruff_cache/
+site-packages/
+uv-cache/
+
+# Credentials and local runtime state.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.sqlite
+*.sqlite3
+*.sqlite-wal
+*.sqlite-shm
+*.sqlite3-wal
+*.sqlite3-shm
+/cases/*/jobs/
+/cases/*/runs/
+/cases/*/workspace/
+
+# Recursive workspace copies and model-service execution logs.
+/verification/**/verification/
+/verification/**/reference/
+/verification/**/resources/software/
+/verification/**/software/
+/verification/**/workspace/
+/verification/**/providers/
+/verification/**/tmp/
+/verification/**/temporary/
+/verification/**/pytest*/
+/verification/**/source_pin/
+/verification/**/dependencies/
+/verification/**/installed/
+/verification/**/conan/
+/verification/**/source_snapshot/
+/verification/**/runtime/
+/verification/**/prepared-software/
+/verification/**/packages/
+
+# Goals are supplied by the user, not repository files.
+GOAL.md

@@ -1,0 +1,1158 @@
+{
+  "version": "native_event_verification_v1",
+  "recorded_at": "2026-10-22T00:48:54.688954+00:00",
+  "scope": "NE0-NE6 opt-in physical native exit-receipt events through existing durable event/wait transport, caller pins and original controlled information",
+  "plan": "docs/NATIVE_EVENT_TRANSPORT.md",
+  "commands": [
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_native_execution_events.py tests/test_durable_episode.py tests/test_episode_waiting.py",
+      "passed": 93,
+      "seconds": 67.86,
+      "reported_by": "native_events_store",
+      "note": "Final NE1 source stable throughout."
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_native_event_publication.py tests/test_native_lifecycle.py tests/test_homology_jobs.py tests/test_homology_episode_runtime.py",
+      "passed": 35,
+      "seconds": 130.62,
+      "reported_by": "native_events_publisher",
+      "note": "Before final small original-ownership guard; final-source focused group follows."
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_native_event_publication.py",
+      "passed": 13,
+      "seconds": 25.18,
+      "reported_by": "native_events_publisher",
+      "note": "Final publication source. Includes tiny actual events-only systemd Python service; overlaps preceding group."
+    },
+    {
+      "command": ".venv/bin/python -m pytest -xq tests/test_native_event_information.py > /tmp/ne3-first-failure.log 2>&1",
+      "passed": 32,
+      "failed": 1,
+      "seconds": 78.09,
+      "reported_by": "native_events_visibility",
+      "note": "Incorrect test assertion forbade all SELECT-star reads, including legitimate Store artifact metadata. Source was still being edited during this run; test assertion corrected."
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q --basetemp=/dev/shm/gene-annotation-ne3-tests tests/test_native_event_information.py tests/test_scientific_process_provenance.py tests/test_scientific_process_reports.py > /tmp/ne3-stable-tests.log 2>&1",
+      "passed": 112,
+      "seconds": 1.37,
+      "reported_by": "native_events_visibility",
+      "note": "Final stable NE3 source and dependency hashes. Overlaps historical FP tests."
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_scientific_process_episodes.py tests/test_case_specialist_setup.py",
+      "passed": 58,
+      "seconds": 31.79,
+      "reported_by": "root",
+      "note": "Adjacent old-mode regression, overlaps caller specialist group."
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_episode_binding_runtime.py tests/test_resource_episode_branches.py",
+      "passed": 17,
+      "seconds": 97.43,
+      "reported_by": "root",
+      "note": "Adjacent binding/resource regression."
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_case_native_events.py",
+      "passed": 24,
+      "failed": 1,
+      "seconds": 46.78,
+      "reported_by": "native_events_caller_tests",
+      "note": "Fixture read execution_backend instead of actual backend attribute; corrected fixture only."
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_case_native_events.py",
+      "passed": 30,
+      "seconds": 125.89,
+      "reported_by": "native_events_caller_tests",
+      "note": "Before final improvement using actual root-published application binding and settings digest."
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_case_native_events.py",
+      "passed": 30,
+      "seconds": 80.11,
+      "reported_by": "native_events_caller_tests",
+      "note": "Final test source. Full application implementation hash matched before/after. Guards forbid inference, Episode loops/controllers, native work and subprocess transport."
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_case_specialist_setup.py",
+      "passed": 19,
+      "seconds": 72.58,
+      "reported_by": "native_events_caller_tests",
+      "note": "Overlaps root 58-case group."
+    },
+    {
+      "command": ".venv/bin/python -m py_compile gene_annotation_episode/runtime.py gene_annotation_episode/episode_bindings.py gene_annotation_episode/episode_services.py gene_annotation_episode/case_execution.py gene_annotation_episode/independent_execution.py gene_annotation_episode/resource_episodes.py gene_annotation_episode/scientific_process_episodes.py gene_annotation_episode/episode_monitoring.py gene_annotation_episode/literature_episodes.py",
+      "exit_code": 0,
+      "reported_by": "root"
+    },
+    {
+      "command": ".venv/bin/python -m py_compile tests/test_case_native_events.py",
+      "exit_code": 0,
+      "reported_by": "native_events_caller_tests"
+    }
+  ],
+  "ne5_test_records": {
+    "version": "native_event_ne5_test_records_v1",
+    "records": [
+      {
+        "command": ".venv/bin/python -m pytest -q tests/test_native_event_runtime.py",
+        "result": {
+          "failed": 1,
+          "interrupted": true,
+          "seconds": 21.2
+        },
+        "boundary": "NE5 harness called nonexistent event_cursor; pending fixture release task then required manual interruption. No production failure."
+      },
+      {
+        "command": ".venv/bin/python -m pytest -q tests/test_native_event_runtime.py",
+        "result": {
+          "passed": 6,
+          "failed": 3,
+          "seconds": 34.51
+        },
+        "boundary": "NE5 harness used different controller lambda identities across resume and blocked every native-information read, including legitimate original child form reference validation. Corrected stable factory and root saved-context guard."
+      },
+      {
+        "command": ".venv/bin/python -m pytest -q tests/test_native_event_runtime.py --tb=short",
+        "result": {
+          "passed": 9,
+          "seconds": 49.74
+        },
+        "boundary": "Corrected initial nine same-host tests; later ten-test run adds exporter host recovery."
+      },
+      {
+        "command": ".venv/bin/python -m pytest -q tests/test_native_event_detached.py --tb=short --basetemp=/tmp/native-event-ne5-physical-20261021",
+        "result": {
+          "failed": 2,
+          "seconds": 82.19
+        },
+        "boundary": "NE5 zero_monitor fixture returned float rather than credit mapping; monitor selection rejected before its dispatch, root fixture waited for absent monitor gate. Real native job and launch receipt/return executed. Both scenarios cleaned up."
+      },
+      {
+        "command": ".venv/bin/python -m pytest -q tests/test_native_event_runtime.py --tb=short --basetemp=/tmp/native-event-ne5-runtime-20261021",
+        "result": {
+          "passed": 10,
+          "seconds": 100.46
+        },
+        "boundary": "Final same-host tests, concurrently with physical checks. Dispatch/receipt are explicit fixtures; no native command dispatched by these tests."
+      },
+      {
+        "command": ".venv/bin/python -m pytest -q tests/test_native_event_detached.py --tb=short --basetemp=/tmp/native-event-ne5-physical-rerun-20261021",
+        "result": {
+          "failed": 2,
+          "seconds": 37.5
+        },
+        "boundary": "Both real native waits and five parent observations succeeded; late monitor closure failed because fixture episode.history selected empty decision_indices. Corrected bounded index query after workers exited."
+      },
+      {
+        "command": ".venv/bin/python -m pytest -q tests/test_native_event_detached.py --tb=short --basetemp=/tmp/native-event-ne5-physical-final-20261021",
+        "result": {
+          "passed": 2,
+          "seconds": 40.52
+        },
+        "boundary": "Final source-pinned physical scenarios; both passed; final fixture remains frozen."
+      }
+    ]
+  },
+  "production_implementation_sha256_at_checkpoint": "ff296eedd792178558903d118a472fa1aa9b178d8114e5138e401e7bfe0941ec",
+  "source_sha256_at_checkpoint": {
+    "method_loop/durable.py": "60f282fefae38811957ca40562b7595d9b73d27c1047686252c290fa00888d29",
+    "gene_annotation_episode/native_events.py": "3ffdc5b2709a9feb93da40c57fd422c2fd08b38519c8a773113ac25d4cc37ff7",
+    "gene_annotation_episode/native_event_information.py": "2349027b72afa3a0ff12110fee3544a5892747a1ae5314f2ec59dd201585fef8",
+    "gene_annotation_episode/native_lifecycle.py": "7956bc4583baa31237106e1358a9e0f5e6e952b07f78c3bca334979fde276195",
+    "gene_annotation_episode/_local_job_worker.py": "7e41d5cbf6976eea0f8d9ffaf3d2387e6a7d9e970494af2d6ef608f24bb06504",
+    "gene_annotation_episode/homology_jobs.py": "e58364a13da8ef27c3f327d7e066b7a356bc0abfd62be149c8b47a96fe2e99b3",
+    "gene_annotation_episode/homology_episodes.py": "64fd4da75554a051509476d4d6a381f6354cad70ab8eb698a6230b663c1d5571",
+    "gene_annotation_episode/runtime.py": "6ba905952a9a869eb49bc88f543d840a79466bced4b610d6c4b610b1f398476f",
+    "gene_annotation_episode/episode_services.py": "c7662fc152389b70df98aca03fb476a07f308865d91987468c282fe55737e0b7",
+    "gene_annotation_episode/episode_bindings.py": "a8e853b94796acde371585bc9ba853a9eee7530d6dcc3abd348c8a87f26d34a1",
+    "gene_annotation_episode/case_execution.py": "bf7eee4ac4cd64aa1e1942513a13aeff9c55fbe5f66aa17c9b368b922854fe7b",
+    "gene_annotation_episode/independent_execution.py": "ad9f1386ae4106012699c9c034b42e6e008a5bba34a128bb9e29639ab819c4b4",
+    "gene_annotation_episode/resource_episodes.py": "46642698ce121a40f0b26685d361a202385d5e6def54d9797db667af2ddb81e3",
+    "gene_annotation_episode/scientific_process_episodes.py": "08398a0efa7cda245899c71bead31d660b09c7d4156616f44541cb2bb5d38dd4",
+    "gene_annotation_episode/literature_episodes.py": "f584a9589af2f4756e4ef78d42a2e29bd9cc7bd34f18088e460e83510281f048",
+    "gene_annotation_episode/episode_monitoring.py": "37430f5a88fb6d126e6ff8aa34988c348adc6a8a940f70d030c888dc1f34bf8c",
+    "tests/test_native_execution_events.py": "6f1807ad12a34a657ee7c9ca38259ee4a2a29f0c7587603553de0b3a3de4684a",
+    "tests/test_native_event_publication.py": "9c06d5a3735871893d6402e2b9712c2f0d94876c0d02125af2b501b0ff0638c7",
+    "tests/test_native_event_information.py": "86137ab88ba50c396fae300627dc1abf3e034c4b6aa7bed858baec63c596bb26",
+    "tests/test_case_native_events.py": "368b5757b486411d37a9d11bb2f10ff1ea23b775e4f1bca7393df4f0da6caa1f",
+    "tests/test_native_event_runtime.py": "ac23c6562188422900dec71f4fc3060bc0c48d14c0c0366c3efa962ecb9c1783",
+    "tests/native_event_worker_fixture.py": "4e479f86aa6099be24179ab9debf27071eae9cc20f45282eebc4ef0f433e3df3",
+    "tests/test_native_event_detached.py": "8867b46e07ffcbd5eeee1ad41a3116b116fb0dd3e8481081eb0d21b747f20d65"
+  },
+  "historical_artifact_sha256": {
+    "research/slotted_process_library/integration_verification.json": "c9aae27bcc20cd97a6ac124df179caf6791eb6a8e89bdae9290b255e9eee215e",
+    "docs/received_information_verification.json": "453dba90d63b2035246d49cb1a4683ec8d0e7b81ee909db7c4b70b096c1811da",
+    "docs/completion_evidence_verification.json": "9eccbe131cf30c958d8e4cbb32a982947cf08ce0bdf5bafcb53a3a5cf2e1f90d",
+    "docs/fixed_process_verification.json": "7cf1c6a105ce76c4a1ec04d3e21905faf8b5e6ffd88c7658380a14f81c868d2c"
+  },
+  "connected_evidence": {
+    "separate_native_targets_not_commissions": true,
+    "registration_emits_no_event": true,
+    "event_means_exit_receipt_commitment_not_readiness_or_episode_return": true,
+    "same_global_cursor_for_episode_and_native_events": true,
+    "original_receipt_bytes_custodied_atomically_and_replayed_once": true,
+    "own_assigned_and_actually_received_targets_only": true,
+    "inherited_cursor_zero_catches_fast_event": true,
+    "unknown_foreign_and_unsupported_native_waits_rejected": true,
+    "original_bound_export_recovery_without_work_selection_resubmission_or_restamping": true,
+    "caller_mode_optional_pinned_and_unchanged_before_worker_provider_entry": true,
+    "caller_binding_unmutated_host_local_view_shared_by_actual_consumers": true,
+    "selected_native_wait_one_own_zero_gain_observation_with_fixture_units": true,
+    "native_event_does_not_complete_or_admit_live_child": true,
+    "original_forms_archives_cleanup_frozen_replay_and_closed_history_preserved": true
+  },
+  "actual_execution": {
+    "limits": "Scripted providers, explicit zero fixture credits/controllers/gates; tiny real phmmer/systemd ExecStopPost; no configured-model scientific investigation/API/HPC/pending numerical model.",
+    "physical_command": ".venv/bin/python -m pytest -q tests/test_native_event_detached.py --tb=short --basetemp=/tmp/native-event-ne5-physical-final-20261021",
+    "physical_result": {
+      "passed": 2,
+      "seconds": 40.52
+    },
+    "production_and_fixture_pin": "fdaa398e246c41e280a6d18218c15a893b73bf93b878889c037ad8d762e2690f",
+    "production_sha256": "ff296eedd792178558903d118a472fa1aa9b178d8114e5138e401e7bfe0941ec",
+    "runtime_command": ".venv/bin/python -m pytest -q tests/test_native_event_runtime.py --tb=short --basetemp=/tmp/native-event-ne5-runtime-20261021",
+    "runtime_result": {
+      "passed": 10,
+      "seconds": 100.46
+    },
+    "scenarios": [
+      {
+        "custodied_receipt_bytes": 460,
+        "custodied_receipt_sha256": "f801b26b23d90b8c964d3c3a2fcc4b2a5986a31af3e5c9f4eee9d218cdde89f2",
+        "directory": "/tmp/native-event-ne5-physical-final-20261021/test_real_native_exit_wakes_se0",
+        "events": [
+          {
+            "cursor": 1,
+            "event": "state_changed",
+            "handle": "execution_673a8220ce458a8219b585825ab5b692cd699ff1ad1aa5a99f7ec9efa860c1f0",
+            "record_ref": "afb6d2e33b54f15096b046153c980fd16063914391a80e21458f3399ead618d9"
+          },
+          {
+            "cursor": 2,
+            "event": "state_changed",
+            "handle": "execution_673a8220ce458a8219b585825ab5b692cd699ff1ad1aa5a99f7ec9efa860c1f0",
+            "record_ref": "afb6d2e33b54f15096b046153c980fd16063914391a80e21458f3399ead618d9"
+          },
+          {
+            "cursor": 3,
+            "event": "progress_committed",
+            "handle": "execution_673a8220ce458a8219b585825ab5b692cd699ff1ad1aa5a99f7ec9efa860c1f0",
+            "record_ref": "progress_publication_74f78ade78d6c3b552c5973e24c13e21d705ae4bc7f8b84066e8237e5acff1c5"
+          },
+          {
+            "cursor": 4,
+            "event": "state_changed",
+            "handle": "native_event_target_c0ac6cd76ea8d58dd086d593",
+            "record_ref": "native_event_record_f801b26b23d90b8c964d3c3a"
+          },
+          {
+            "cursor": 5,
+            "event": "returned",
+            "handle": "execution_673a8220ce458a8219b585825ab5b692cd699ff1ad1aa5a99f7ec9efa860c1f0",
+            "record_ref": "0a78355d2c8df285cd3eeb60238da058f7646c2f1f35c2fe4f07efd2c8c050e7"
+          },
+          {
+            "cursor": 6,
+            "event": "state_changed",
+            "handle": "execution_673a8220ce458a8219b585825ab5b692cd699ff1ad1aa5a99f7ec9efa860c1f0",
+            "record_ref": "0a78355d2c8df285cd3eeb60238da058f7646c2f1f35c2fe4f07efd2c8c050e7"
+          },
+          {
+            "cursor": 7,
+            "event": "state_changed",
+            "handle": "execution_673a8220ce458a8219b585825ab5b692cd699ff1ad1aa5a99f7ec9efa860c1f0",
+            "record_ref": "admission_5fe69e83f8314af089c5921bf067f9d235bb1212278ba74b2ea50e8ecacb32a0"
+          },
+          {
+            "cursor": 8,
+            "event": "state_changed",
+            "handle": "execution_e67275776a0667808c87bf50e08a63fcfbc2adb24b7b1eee99daa36941299a26",
+            "record_ref": "63f146c11d235323a407d7c6539d48329983934f5a0286414d82ab50aa1298a7"
+          },
+          {
+            "cursor": 9,
+            "event": "state_changed",
+            "handle": "execution_e67275776a0667808c87bf50e08a63fcfbc2adb24b7b1eee99daa36941299a26",
+            "record_ref": "63f146c11d235323a407d7c6539d48329983934f5a0286414d82ab50aa1298a7"
+          },
+          {
+            "cursor": 10,
+            "event": "returned",
+            "handle": "execution_e67275776a0667808c87bf50e08a63fcfbc2adb24b7b1eee99daa36941299a26",
+            "record_ref": "76b61cffa74ac6d4165a7b8cfcd145d304f8ea1dcfa1d921563302c1914a7636"
+          },
+          {
+            "cursor": 11,
+            "event": "state_changed",
+            "handle": "execution_e67275776a0667808c87bf50e08a63fcfbc2adb24b7b1eee99daa36941299a26",
+            "record_ref": "76b61cffa74ac6d4165a7b8cfcd145d304f8ea1dcfa1d921563302c1914a7636"
+          }
+        ],
+        "forms": [
+          {
+            "episode_id": "episode_829d5e32835aea902a6d51fccd706a5a89f9df46863c65fde1ab10cdf7cefd14",
+            "form": {
+              "job": "homology_job_730467af547f3ceb8c5a3a57",
+              "notifications": [
+                {
+                  "after_cursor": 0,
+                  "target": {
+                    "cause": "service_exit_receipt_committed",
+                    "event": "state_changed",
+                    "handle": "native_event_target_c0ac6cd76ea8d58dd086d593",
+                    "job_ref": "homology_job_730467af547f3ceb8c5a3a57",
+                    "registry_ref": "execution_registry_3f4f8d72c0e34483ad90a7c4e8dd4ae6",
+                    "resource_id": "native-event-fixture-local",
+                    "version": "native_event_target_v1"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "episode_id": "episode_c1a557025db2fa212d0047fa49aaa33a0a204a032248e1c148940fd64784bdba",
+            "form": {
+              "notifications": [
+                {
+                  "after_cursor": 0,
+                  "target": {
+                    "cause": "service_exit_receipt_committed",
+                    "event": "state_changed",
+                    "handle": "native_event_target_c0ac6cd76ea8d58dd086d593",
+                    "job_ref": "homology_job_730467af547f3ceb8c5a3a57",
+                    "registry_ref": "execution_registry_3f4f8d72c0e34483ad90a7c4e8dd4ae6",
+                    "resource_id": "native-event-fixture-local",
+                    "version": "native_event_target_v1"
+                  }
+                }
+              ],
+              "selected_target": "native_event_target_c0ac6cd76ea8d58dd086d593"
+            }
+          }
+        ],
+        "native_event_cursor": 4,
+        "native_handle_cleanup": true,
+        "native_identity": {
+          "kind": "systemd_user_service",
+          "request_sha256": "19b5315e521c7316aed5889b2958646e146a463adea79406791819b02bbc3a34",
+          "unit": "gene-local-job-18368d9a82b04e8d9ae101f29dfc0b5a.service"
+        },
+        "native_job_events": {
+          "resource_id": "native-event-fixture-local",
+          "version": "native_job_events_v1"
+        },
+        "native_job_ref": "homology_job_730467af547f3ceb8c5a3a57",
+        "native_pid": 651197,
+        "native_stdout_contains_ok": true,
+        "native_stdout_sha256": "aa8b80d7cc971297b79d11993f2bd1b4afcd9d194c06930afc83ef7df92ccfe7",
+        "original_owner_episode_id": "episode_829d5e32835aea902a6d51fccd706a5a89f9df46863c65fde1ab10cdf7cefd14",
+        "publication": {
+          "cause": "service_exit_receipt_committed",
+          "event": "state_changed",
+          "occurred_at": "2026-10-22T00:45:47.466754+00:00",
+          "receipt_sha256": "f801b26b23d90b8c964d3c3a2fcc4b2a5986a31af3e5c9f4eee9d218cdde89f2",
+          "record_ref": "native_event_record_f801b26b23d90b8c964d3c3a",
+          "version": "native_event_publication_v1"
+        },
+        "receipt": {
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "0",
+          "SERVICE_RESULT": "success",
+          "ended": {
+            "at": "2026-10-22T00:45:47.466754+00:00",
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+            "monotonic_ns": 443509164079571
+          },
+          "native_identity": {
+            "kind": "systemd_user_service",
+            "request_sha256": "19b5315e521c7316aed5889b2958646e146a463adea79406791819b02bbc3a34",
+            "unit": "gene-local-job-18368d9a82b04e8d9ae101f29dfc0b5a.service"
+          },
+          "version": "native_service_exit_receipt_v1"
+        },
+        "return_admissions": 1,
+        "root_action_states": [
+          {
+            "decision_index": 0,
+            "status": "completed"
+          },
+          {
+            "decision_index": 1,
+            "status": "completed"
+          },
+          {
+            "decision_index": 2,
+            "status": "completed"
+          },
+          {
+            "decision_index": 3,
+            "status": "pending"
+          },
+          {
+            "decision_index": 4,
+            "status": "completed"
+          },
+          {
+            "decision_index": 5,
+            "status": "completed"
+          }
+        ],
+        "root_archive": {
+          "file": "02b774707d109263a2da5388966a3b680c90cea8cce3c2c46fef45c155dbae76.json",
+          "index_sha256": "356406a8f57c27043d2e8ee703dd621fb566d0b2af3a6e81a7faffb59ed8a6d2",
+          "sha256": "8c3fad4530643a81e7b2dd0330bb3b229f6a85d5b800a600dfe5d9aff4e0edda"
+        },
+        "root_archive_sha256": "8c3fad4530643a81e7b2dd0330bb3b229f6a85d5b800a600dfe5d9aff4e0edda",
+        "root_episode_id": "episode_9bf892027301d01d2fdb2caca996c887fbe1fc6367967da768a22be3ff5afb97",
+        "root_observation_decision_order": [
+          1,
+          2,
+          0,
+          4,
+          5
+        ],
+        "root_observation_deltas": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "run_id": "run_8e61fc2a686e4ed18e02641c7623d7a6",
+        "scenario": "physical-before-delivery",
+        "summary": {
+          "completed_actions": 5,
+          "credit": 0.0,
+          "directory": "/tmp/native-event-ne5-physical-final-20261021/test_real_native_exit_wakes_se0/run",
+          "ended_by": "yield_stop",
+          "episode_count": 3,
+          "pending_handles": [
+            "execution_e67275776a0667808c87bf50e08a63fcfbc2adb24b7b1eee99daa36941299a26"
+          ],
+          "pending_report_deliveries": 0,
+          "run_id": "run_8e61fc2a686e4ed18e02641c7623d7a6",
+          "scientific_completion": "not_established_by_termination",
+          "state": "yielded_with_pending_work"
+        },
+        "waits": [
+          {
+            "outcome": {
+              "condition_sha256": "b08218bdf80598f533ec144080ad2f6c92e9cebc3c3449953fd08c774bb71c74",
+              "duration_measure": "measured_wait_intervals",
+              "measured_duration_seconds": 2.588810049,
+              "started_at": "2026-10-22T00:45:47.086217+00:00",
+              "trigger": {
+                "cursor": 5,
+                "handle": "execution_673a8220ce458a8219b585825ab5b692cd699ff1ad1aa5a99f7ec9efa860c1f0"
+              },
+              "unmeasured_interruption": false,
+              "version": "wait_outcome_v1",
+              "wait_id": "wait_fe32e74701220353091bee039873d8cf5414161d9021338240f031b360a5f14e",
+              "wake_reason": "returned",
+              "woke_at": "2026-10-22T00:45:49.675077+00:00"
+            },
+            "request": {
+              "condition": {
+                "events": [
+                  {
+                    "after_cursor": 0,
+                    "event": "returned",
+                    "handle": "execution_673a8220ce458a8219b585825ab5b692cd699ff1ad1aa5a99f7ec9efa860c1f0"
+                  }
+                ],
+                "reconsider_at": null,
+                "version": "event_condition_v1"
+              },
+              "estimate_snapshot": {
+                "captured_at": "2026-10-22T00:45:47.055170+00:00",
+                "condition": {
+                  "events": [
+                    {
+                      "after_cursor": 0,
+                      "event": "returned",
+                      "handle": "execution_673a8220ce458a8219b585825ab5b692cd699ff1ad1aa5a99f7ec9efa860c1f0"
+                    }
+                  ],
+                  "reconsider_at": null,
+                  "version": "event_condition_v1"
+                },
+                "duration_expectation_refs": [],
+                "event_expectations": [
+                  {
+                    "event": "returned",
+                    "handle": "execution_673a8220ce458a8219b585825ab5b692cd699ff1ad1aa5a99f7ec9efa860c1f0",
+                    "method": "unavailable",
+                    "probability": null,
+                    "support_refs": []
+                  }
+                ],
+                "local_history_refs": [
+                  "unit_fa66e8520d2b86e06c590ab119f539d5c0de48ab25d890af84f13d36c7e37594"
+                ],
+                "monitoring_gain": null,
+                "progress_refs": [],
+                "scientific_gain": null,
+                "unavailable_reasons": [
+                  "scientific_gain_model_unbound",
+                  "monitoring_gain_model_unbound",
+                  "no_compatible_duration_support",
+                  "event_probability_model_unbound"
+                ],
+                "version": "wait_estimate_v1"
+              },
+              "original_decision_index": 2,
+              "parent_episode_id": "episode_9bf892027301d01d2fdb2caca996c887fbe1fc6367967da768a22be3ff5afb97",
+              "version": "wait_request_v1",
+              "wait_id": "wait_fe32e74701220353091bee039873d8cf5414161d9021338240f031b360a5f14e"
+            }
+          },
+          {
+            "outcome": {
+              "condition_sha256": "16e7ec82a642d33fe1199c1f230455afc3b24499d0958f61d96f2160442b6a88",
+              "duration_measure": "measured_wait_intervals",
+              "measured_duration_seconds": 0.042835698,
+              "started_at": "2026-10-22T00:45:52.280610+00:00",
+              "trigger": {
+                "cursor": 4,
+                "handle": "native_event_target_c0ac6cd76ea8d58dd086d593"
+              },
+              "unmeasured_interruption": false,
+              "version": "wait_outcome_v1",
+              "wait_id": "wait_5e6789e6458a899e8f852bb42112003bac38cf51d97098ea79133bb80697ca75",
+              "wake_reason": "state_changed",
+              "woke_at": "2026-10-22T00:45:52.323483+00:00"
+            },
+            "request": {
+              "condition": {
+                "events": [
+                  {
+                    "after_cursor": 0,
+                    "event": "state_changed",
+                    "handle": "native_event_target_c0ac6cd76ea8d58dd086d593"
+                  }
+                ],
+                "reconsider_at": null,
+                "version": "event_condition_v1"
+              },
+              "estimate_snapshot": {
+                "captured_at": "2026-10-22T00:45:52.215412+00:00",
+                "condition": {
+                  "events": [
+                    {
+                      "after_cursor": 0,
+                      "event": "state_changed",
+                      "handle": "native_event_target_c0ac6cd76ea8d58dd086d593"
+                    }
+                  ],
+                  "reconsider_at": null,
+                  "version": "event_condition_v1"
+                },
+                "duration_expectation_refs": [],
+                "event_expectations": [
+                  {
+                    "event": "state_changed",
+                    "handle": "native_event_target_c0ac6cd76ea8d58dd086d593",
+                    "method": "unavailable",
+                    "probability": null,
+                    "support_refs": []
+                  }
+                ],
+                "local_history_refs": [
+                  "unit_fa66e8520d2b86e06c590ab119f539d5c0de48ab25d890af84f13d36c7e37594",
+                  "unit_f7ab32633e755bd46b9d8431c9f301d66f587653c3194cdb653a2df928c477a5",
+                  "unit_4f368af55c47798f5a69cf1ff8f669b550541a983923a867e7c9223fccdef3ba"
+                ],
+                "monitoring_gain": null,
+                "progress_refs": [],
+                "scientific_gain": null,
+                "unavailable_reasons": [
+                  "scientific_gain_model_unbound",
+                  "monitoring_gain_model_unbound",
+                  "selected_handle_not_in_pending_snapshot",
+                  "no_compatible_duration_support",
+                  "event_probability_model_unbound"
+                ],
+                "version": "wait_estimate_v1"
+              },
+              "original_decision_index": 4,
+              "parent_episode_id": "episode_9bf892027301d01d2fdb2caca996c887fbe1fc6367967da768a22be3ff5afb97",
+              "version": "wait_request_v1",
+              "wait_id": "wait_5e6789e6458a899e8f852bb42112003bac38cf51d97098ea79133bb80697ca75"
+            }
+          }
+        ],
+        "workers": [
+          {
+            "commission_sha256": "afb6d2e33b54f15096b046153c980fd16063914391a80e21458f3399ead618d9",
+            "completion": {
+              "end_reason": "",
+              "ended_by": "yield_stop",
+              "units_consumed": 4
+            },
+            "episode_id": "episode_829d5e32835aea902a6d51fccd706a5a89f9df46863c65fde1ab10cdf7cefd14",
+            "execution_identity": {
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "pid": 651159,
+              "start_ticks": "44350397"
+            },
+            "handle": "execution_673a8220ce458a8219b585825ab5b692cd699ff1ad1aa5a99f7ec9efa860c1f0",
+            "lifecycle_state": "admitted",
+            "liveness": "not_live",
+            "retirement": {
+              "active_controllers": 0,
+              "active_episodes": 0,
+              "released": [
+                "episode_829d5e32835aea902a6d51fccd706a5a89f9df46863c65fde1ab10cdf7cefd14",
+                "episode_829d5e32835aea902a6d51fccd706a5a89f9df46863c65fde1ab10cdf7cefd14"
+              ]
+            },
+            "return_form": {
+              "job": "homology_job_730467af547f3ceb8c5a3a57",
+              "notifications": [
+                {
+                  "after_cursor": 0,
+                  "target": {
+                    "cause": "service_exit_receipt_committed",
+                    "event": "state_changed",
+                    "handle": "native_event_target_c0ac6cd76ea8d58dd086d593",
+                    "job_ref": "homology_job_730467af547f3ceb8c5a3a57",
+                    "registry_ref": "execution_registry_3f4f8d72c0e34483ad90a7c4e8dd4ae6",
+                    "resource_id": "native-event-fixture-local",
+                    "version": "native_event_target_v1"
+                  }
+                }
+              ]
+            },
+            "role": "job_launch"
+          },
+          {
+            "commission_sha256": "63f146c11d235323a407d7c6539d48329983934f5a0286414d82ab50aa1298a7",
+            "completion": {
+              "end_reason": "",
+              "ended_by": "yield_stop",
+              "units_consumed": 1
+            },
+            "episode_id": "episode_c1a557025db2fa212d0047fa49aaa33a0a204a032248e1c148940fd64784bdba",
+            "execution_identity": {
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "pid": 651210,
+              "start_ticks": "44351278"
+            },
+            "handle": "execution_e67275776a0667808c87bf50e08a63fcfbc2adb24b7b1eee99daa36941299a26",
+            "lifecycle_state": "returned",
+            "liveness": "not_live",
+            "retirement": {
+              "active_controllers": 0,
+              "active_episodes": 0,
+              "released": [
+                "episode_c1a557025db2fa212d0047fa49aaa33a0a204a032248e1c148940fd64784bdba",
+                "episode_c1a557025db2fa212d0047fa49aaa33a0a204a032248e1c148940fd64784bdba"
+              ]
+            },
+            "return_form": {
+              "notifications": [
+                {
+                  "after_cursor": 0,
+                  "target": {
+                    "cause": "service_exit_receipt_committed",
+                    "event": "state_changed",
+                    "handle": "native_event_target_c0ac6cd76ea8d58dd086d593",
+                    "job_ref": "homology_job_730467af547f3ceb8c5a3a57",
+                    "registry_ref": "execution_registry_3f4f8d72c0e34483ad90a7c4e8dd4ae6",
+                    "resource_id": "native-event-fixture-local",
+                    "version": "native_event_target_v1"
+                  }
+                }
+              ],
+              "selected_target": "native_event_target_c0ac6cd76ea8d58dd086d593"
+            },
+            "role": "monitor"
+          }
+        ]
+      },
+      {
+        "custodied_receipt_bytes": 460,
+        "custodied_receipt_sha256": "48a9c4ee98be454290dc800411bd4fbbb4fece221138ac2acb8eddfa003c7574",
+        "directory": "/tmp/native-event-ne5-physical-final-20261021/test_real_native_exit_wakes_se1",
+        "events": [
+          {
+            "cursor": 1,
+            "event": "state_changed",
+            "handle": "execution_dfbf1b44fb3de5a48ce31c7e59fc27b32e05448d42cd44a22ff5368ecf56671b",
+            "record_ref": "57e2a71edc2725d352ae500baaad511f25335f46ff961f833eef1cc6edb6562f"
+          },
+          {
+            "cursor": 2,
+            "event": "state_changed",
+            "handle": "execution_dfbf1b44fb3de5a48ce31c7e59fc27b32e05448d42cd44a22ff5368ecf56671b",
+            "record_ref": "57e2a71edc2725d352ae500baaad511f25335f46ff961f833eef1cc6edb6562f"
+          },
+          {
+            "cursor": 3,
+            "event": "progress_committed",
+            "handle": "execution_dfbf1b44fb3de5a48ce31c7e59fc27b32e05448d42cd44a22ff5368ecf56671b",
+            "record_ref": "progress_publication_ac630616f9564e1338f9c8116cfcb2a070a9551abbba4e8e36304d7df106aabb"
+          },
+          {
+            "cursor": 4,
+            "event": "returned",
+            "handle": "execution_dfbf1b44fb3de5a48ce31c7e59fc27b32e05448d42cd44a22ff5368ecf56671b",
+            "record_ref": "9f99a84e22ccaa87f2078d18f598f68aa48d5d6ebabc5200d5ed190db0e20db4"
+          },
+          {
+            "cursor": 5,
+            "event": "state_changed",
+            "handle": "execution_dfbf1b44fb3de5a48ce31c7e59fc27b32e05448d42cd44a22ff5368ecf56671b",
+            "record_ref": "9f99a84e22ccaa87f2078d18f598f68aa48d5d6ebabc5200d5ed190db0e20db4"
+          },
+          {
+            "cursor": 6,
+            "event": "state_changed",
+            "handle": "execution_dfbf1b44fb3de5a48ce31c7e59fc27b32e05448d42cd44a22ff5368ecf56671b",
+            "record_ref": "admission_fb870b3b2ab9d45bbbeb6a7067ab522f9298b19c583e9ce06113c24cfaf1b56a"
+          },
+          {
+            "cursor": 7,
+            "event": "state_changed",
+            "handle": "execution_a7ded71ff25eb44ec308f30940b7d1257cf64c57c4c1f54b9f744a4e17600687",
+            "record_ref": "74e422dbd2cc00805baf9eb82543d8c5181e7bfdf6877612ce5297badcde2ccc"
+          },
+          {
+            "cursor": 8,
+            "event": "state_changed",
+            "handle": "execution_a7ded71ff25eb44ec308f30940b7d1257cf64c57c4c1f54b9f744a4e17600687",
+            "record_ref": "74e422dbd2cc00805baf9eb82543d8c5181e7bfdf6877612ce5297badcde2ccc"
+          },
+          {
+            "cursor": 9,
+            "event": "state_changed",
+            "handle": "native_event_target_65f42de172e05265b9afa990",
+            "record_ref": "native_event_record_48a9c4ee98be454290dc8004"
+          },
+          {
+            "cursor": 10,
+            "event": "returned",
+            "handle": "execution_a7ded71ff25eb44ec308f30940b7d1257cf64c57c4c1f54b9f744a4e17600687",
+            "record_ref": "0bb4951eb53a820fa4327ad583d47477bf0db4bfb8bd622c1bc19bba653d5aa4"
+          },
+          {
+            "cursor": 11,
+            "event": "state_changed",
+            "handle": "execution_a7ded71ff25eb44ec308f30940b7d1257cf64c57c4c1f54b9f744a4e17600687",
+            "record_ref": "0bb4951eb53a820fa4327ad583d47477bf0db4bfb8bd622c1bc19bba653d5aa4"
+          }
+        ],
+        "forms": [
+          {
+            "episode_id": "episode_110a5a6937fb054d141835506b5a599679066c853441a6b74aea69340456ba58",
+            "form": {
+              "job": "homology_job_0fa57a3b4d02d6bbccf6fd8c",
+              "notifications": [
+                {
+                  "after_cursor": 0,
+                  "target": {
+                    "cause": "service_exit_receipt_committed",
+                    "event": "state_changed",
+                    "handle": "native_event_target_65f42de172e05265b9afa990",
+                    "job_ref": "homology_job_0fa57a3b4d02d6bbccf6fd8c",
+                    "registry_ref": "execution_registry_d8346e5078fb4ec3ae92ff628a382a72",
+                    "resource_id": "native-event-fixture-local",
+                    "version": "native_event_target_v1"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "episode_id": "episode_901debd9cfc265af60462c45d7263d943221eaf27965db3235b216f54211dcf2",
+            "form": {
+              "notifications": [
+                {
+                  "after_cursor": 0,
+                  "target": {
+                    "cause": "service_exit_receipt_committed",
+                    "event": "state_changed",
+                    "handle": "native_event_target_65f42de172e05265b9afa990",
+                    "job_ref": "homology_job_0fa57a3b4d02d6bbccf6fd8c",
+                    "registry_ref": "execution_registry_d8346e5078fb4ec3ae92ff628a382a72",
+                    "resource_id": "native-event-fixture-local",
+                    "version": "native_event_target_v1"
+                  }
+                }
+              ],
+              "selected_target": "native_event_target_65f42de172e05265b9afa990"
+            }
+          }
+        ],
+        "native_event_cursor": 9,
+        "native_handle_cleanup": true,
+        "native_identity": {
+          "kind": "systemd_user_service",
+          "request_sha256": "2b2b0e4f286939a1fb85e25d7e44cd0f1139ce64922a22c99f65ec8b5bbce449",
+          "unit": "gene-local-job-889d46c402a04322b98a27b7d4f34690.service"
+        },
+        "native_job_events": {
+          "resource_id": "native-event-fixture-local",
+          "version": "native_job_events_v1"
+        },
+        "native_job_ref": "homology_job_0fa57a3b4d02d6bbccf6fd8c",
+        "native_pid": 651266,
+        "native_stdout_contains_ok": true,
+        "native_stdout_sha256": "3648cdf5216aae55ea6765fe82f36d1dc438a9d443aae3bf28b00551044dc2c4",
+        "original_owner_episode_id": "episode_110a5a6937fb054d141835506b5a599679066c853441a6b74aea69340456ba58",
+        "publication": {
+          "cause": "service_exit_receipt_committed",
+          "event": "state_changed",
+          "occurred_at": "2026-10-22T00:46:12.548333+00:00",
+          "receipt_sha256": "48a9c4ee98be454290dc800411bd4fbbb4fece221138ac2acb8eddfa003c7574",
+          "record_ref": "native_event_record_48a9c4ee98be454290dc8004",
+          "version": "native_event_publication_v1"
+        },
+        "receipt": {
+          "EXIT_CODE": "exited",
+          "EXIT_STATUS": "0",
+          "SERVICE_RESULT": "success",
+          "ended": {
+            "at": "2026-10-22T00:46:12.548333+00:00",
+            "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+            "monotonic_ns": 443534245662252
+          },
+          "native_identity": {
+            "kind": "systemd_user_service",
+            "request_sha256": "2b2b0e4f286939a1fb85e25d7e44cd0f1139ce64922a22c99f65ec8b5bbce449",
+            "unit": "gene-local-job-889d46c402a04322b98a27b7d4f34690.service"
+          },
+          "version": "native_service_exit_receipt_v1"
+        },
+        "return_admissions": 1,
+        "root_action_states": [
+          {
+            "decision_index": 0,
+            "status": "completed"
+          },
+          {
+            "decision_index": 1,
+            "status": "completed"
+          },
+          {
+            "decision_index": 2,
+            "status": "completed"
+          },
+          {
+            "decision_index": 3,
+            "status": "pending"
+          },
+          {
+            "decision_index": 4,
+            "status": "completed"
+          },
+          {
+            "decision_index": 5,
+            "status": "completed"
+          }
+        ],
+        "root_archive": {
+          "file": "3bbfe9893850c68400c4a615a04120553886aedab8bb5f0600f2ad7284842051.json",
+          "index_sha256": "0e514658a7c1f6749f5edb1bf926964d9e633697df30a85d2fb3512d3dd44668",
+          "sha256": "4aae64296554764a55f1a1c08d6fdedcd9f1c9926dabaf260b9d80fdd13c59b9"
+        },
+        "root_archive_sha256": "4aae64296554764a55f1a1c08d6fdedcd9f1c9926dabaf260b9d80fdd13c59b9",
+        "root_episode_id": "episode_f1288f1b6be1e9005f26e3d48752c16f79613f5dfabe447ef289011306028c32",
+        "root_observation_decision_order": [
+          1,
+          2,
+          0,
+          4,
+          5
+        ],
+        "root_observation_deltas": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "run_id": "run_26a8fdfc74ec4e469435e7e65d18448a",
+        "scenario": "physical-after-subscription",
+        "summary": {
+          "completed_actions": 5,
+          "credit": 0.0,
+          "directory": "/tmp/native-event-ne5-physical-final-20261021/test_real_native_exit_wakes_se1/run",
+          "ended_by": "yield_stop",
+          "episode_count": 3,
+          "pending_handles": [
+            "execution_a7ded71ff25eb44ec308f30940b7d1257cf64c57c4c1f54b9f744a4e17600687"
+          ],
+          "pending_report_deliveries": 0,
+          "run_id": "run_26a8fdfc74ec4e469435e7e65d18448a",
+          "scientific_completion": "not_established_by_termination",
+          "state": "yielded_with_pending_work"
+        },
+        "waits": [
+          {
+            "outcome": {
+              "condition_sha256": "717a37c21f19dc0f33f21fa26fd238c81d7b5fffca0ae20bae389949b8ecb7f4",
+              "duration_measure": "measured_wait_intervals",
+              "measured_duration_seconds": 1.933788385,
+              "started_at": "2026-10-22T00:46:07.271250+00:00",
+              "trigger": {
+                "cursor": 4,
+                "handle": "execution_dfbf1b44fb3de5a48ce31c7e59fc27b32e05448d42cd44a22ff5368ecf56671b"
+              },
+              "unmeasured_interruption": false,
+              "version": "wait_outcome_v1",
+              "wait_id": "wait_bb4a28c0fb9461fb5c007c4591e55866874a6ea409fcff189aa35fcadba5f131",
+              "wake_reason": "returned",
+              "woke_at": "2026-10-22T00:46:09.205057+00:00"
+            },
+            "request": {
+              "condition": {
+                "events": [
+                  {
+                    "after_cursor": 0,
+                    "event": "returned",
+                    "handle": "execution_dfbf1b44fb3de5a48ce31c7e59fc27b32e05448d42cd44a22ff5368ecf56671b"
+                  }
+                ],
+                "reconsider_at": null,
+                "version": "event_condition_v1"
+              },
+              "estimate_snapshot": {
+                "captured_at": "2026-10-22T00:46:07.247503+00:00",
+                "condition": {
+                  "events": [
+                    {
+                      "after_cursor": 0,
+                      "event": "returned",
+                      "handle": "execution_dfbf1b44fb3de5a48ce31c7e59fc27b32e05448d42cd44a22ff5368ecf56671b"
+                    }
+                  ],
+                  "reconsider_at": null,
+                  "version": "event_condition_v1"
+                },
+                "duration_expectation_refs": [],
+                "event_expectations": [
+                  {
+                    "event": "returned",
+                    "handle": "execution_dfbf1b44fb3de5a48ce31c7e59fc27b32e05448d42cd44a22ff5368ecf56671b",
+                    "method": "unavailable",
+                    "probability": null,
+                    "support_refs": []
+                  }
+                ],
+                "local_history_refs": [
+                  "unit_9e42ab5fe0e8fb839eb41c056424dcfeb31b023b801b2270f8e0c8ee5ecfd74b"
+                ],
+                "monitoring_gain": null,
+                "progress_refs": [],
+                "scientific_gain": null,
+                "unavailable_reasons": [
+                  "scientific_gain_model_unbound",
+                  "monitoring_gain_model_unbound",
+                  "no_compatible_duration_support",
+                  "event_probability_model_unbound"
+                ],
+                "version": "wait_estimate_v1"
+              },
+              "original_decision_index": 2,
+              "parent_episode_id": "episode_f1288f1b6be1e9005f26e3d48752c16f79613f5dfabe447ef289011306028c32",
+              "version": "wait_request_v1",
+              "wait_id": "wait_bb4a28c0fb9461fb5c007c4591e55866874a6ea409fcff189aa35fcadba5f131"
+            }
+          },
+          {
+            "outcome": {
+              "condition_sha256": "7443c865f9aa78a833a3aec4534316ff025eb4e4fe48ec28e44cf8ef80d73c60",
+              "duration_measure": "measured_wait_intervals",
+              "measured_duration_seconds": 0.698861397,
+              "started_at": "2026-10-22T00:46:12.122103+00:00",
+              "trigger": {
+                "cursor": 9,
+                "handle": "native_event_target_65f42de172e05265b9afa990"
+              },
+              "unmeasured_interruption": false,
+              "version": "wait_outcome_v1",
+              "wait_id": "wait_3426dc1f8d006af93caec904c39732444afa1526b1ae4744c53e17c081d9b814",
+              "wake_reason": "state_changed",
+              "woke_at": "2026-10-22T00:46:12.821002+00:00"
+            },
+            "request": {
+              "condition": {
+                "events": [
+                  {
+                    "after_cursor": 0,
+                    "event": "state_changed",
+                    "handle": "native_event_target_65f42de172e05265b9afa990"
+                  }
+                ],
+                "reconsider_at": null,
+                "version": "event_condition_v1"
+              },
+              "estimate_snapshot": {
+                "captured_at": "2026-10-22T00:46:12.077911+00:00",
+                "condition": {
+                  "events": [
+                    {
+                      "after_cursor": 0,
+                      "event": "state_changed",
+                      "handle": "native_event_target_65f42de172e05265b9afa990"
+                    }
+                  ],
+                  "reconsider_at": null,
+                  "version": "event_condition_v1"
+                },
+                "duration_expectation_refs": [],
+                "event_expectations": [
+                  {
+                    "event": "state_changed",
+                    "handle": "native_event_target_65f42de172e05265b9afa990",
+                    "method": "unavailable",
+                    "probability": null,
+                    "support_refs": []
+                  }
+                ],
+                "local_history_refs": [
+                  "unit_9e42ab5fe0e8fb839eb41c056424dcfeb31b023b801b2270f8e0c8ee5ecfd74b",
+                  "unit_12ed78a5e6522f4824e677ac9c4bd28148d8150baf0d33e788bd7aa4470e9b0a",
+                  "unit_1002562714b167551c7a926994a7ae0698ac5d9e88df349a43cd57ffc70469c4"
+                ],
+                "monitoring_gain": null,
+                "progress_refs": [],
+                "scientific_gain": null,
+                "unavailable_reasons": [
+                  "scientific_gain_model_unbound",
+                  "monitoring_gain_model_unbound",
+                  "selected_handle_not_in_pending_snapshot",
+                  "no_compatible_duration_support",
+                  "event_probability_model_unbound"
+                ],
+                "version": "wait_estimate_v1"
+              },
+              "original_decision_index": 4,
+              "parent_episode_id": "episode_f1288f1b6be1e9005f26e3d48752c16f79613f5dfabe447ef289011306028c32",
+              "version": "wait_request_v1",
+              "wait_id": "wait_3426dc1f8d006af93caec904c39732444afa1526b1ae4744c53e17c081d9b814"
+            }
+          }
+        ],
+        "workers": [
+          {
+            "commission_sha256": "57e2a71edc2725d352ae500baaad511f25335f46ff961f833eef1cc6edb6562f",
+            "completion": {
+              "end_reason": "",
+              "ended_by": "yield_stop",
+              "units_consumed": 4
+            },
+            "episode_id": "episode_110a5a6937fb054d141835506b5a599679066c853441a6b74aea69340456ba58",
+            "execution_identity": {
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "pid": 651242,
+              "start_ticks": "44352350"
+            },
+            "handle": "execution_dfbf1b44fb3de5a48ce31c7e59fc27b32e05448d42cd44a22ff5368ecf56671b",
+            "lifecycle_state": "admitted",
+            "liveness": "not_live",
+            "retirement": {
+              "active_controllers": 0,
+              "active_episodes": 0,
+              "released": [
+                "episode_110a5a6937fb054d141835506b5a599679066c853441a6b74aea69340456ba58",
+                "episode_110a5a6937fb054d141835506b5a599679066c853441a6b74aea69340456ba58"
+              ]
+            },
+            "return_form": {
+              "job": "homology_job_0fa57a3b4d02d6bbccf6fd8c",
+              "notifications": [
+                {
+                  "after_cursor": 0,
+                  "target": {
+                    "cause": "service_exit_receipt_committed",
+                    "event": "state_changed",
+                    "handle": "native_event_target_65f42de172e05265b9afa990",
+                    "job_ref": "homology_job_0fa57a3b4d02d6bbccf6fd8c",
+                    "registry_ref": "execution_registry_d8346e5078fb4ec3ae92ff628a382a72",
+                    "resource_id": "native-event-fixture-local",
+                    "version": "native_event_target_v1"
+                  }
+                }
+              ]
+            },
+            "role": "job_launch"
+          },
+          {
+            "commission_sha256": "74e422dbd2cc00805baf9eb82543d8c5181e7bfdf6877612ce5297badcde2ccc",
+            "completion": {
+              "end_reason": "",
+              "ended_by": "yield_stop",
+              "units_consumed": 1
+            },
+            "episode_id": "episode_901debd9cfc265af60462c45d7263d943221eaf27965db3235b216f54211dcf2",
+            "execution_identity": {
+              "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+              "pid": 651269,
+              "start_ticks": "44353257"
+            },
+            "handle": "execution_a7ded71ff25eb44ec308f30940b7d1257cf64c57c4c1f54b9f744a4e17600687",
+            "lifecycle_state": "returned",
+            "liveness": "not_live",
+            "retirement": {
+              "active_controllers": 0,
+              "active_episodes": 0,
+              "released": [
+                "episode_901debd9cfc265af60462c45d7263d943221eaf27965db3235b216f54211dcf2",
+                "episode_901debd9cfc265af60462c45d7263d943221eaf27965db3235b216f54211dcf2"
+              ]
+            },
+            "return_form": {
+              "notifications": [
+                {
+                  "after_cursor": 0,
+                  "target": {
+                    "cause": "service_exit_receipt_committed",
+                    "event": "state_changed",
+                    "handle": "native_event_target_65f42de172e05265b9afa990",
+                    "job_ref": "homology_job_0fa57a3b4d02d6bbccf6fd8c",
+                    "registry_ref": "execution_registry_d8346e5078fb4ec3ae92ff628a382a72",
+                    "resource_id": "native-event-fixture-local",
+                    "version": "native_event_target_v1"
+                  }
+                }
+              ],
+              "selected_target": "native_event_target_65f42de172e05265b9afa990"
+            },
+            "role": "monitor"
+          }
+        ]
+      }
+    ],
+    "test_sources": {
+      "native_event_worker_fixture.py": "4e479f86aa6099be24179ab9debf27071eae9cc20f45282eebc4ef0f433e3df3",
+      "test_native_event_detached.py": "8867b46e07ffcbd5eeee1ad41a3116b116fb0dd3e8481081eb0d21b747f20d65",
+      "test_native_event_runtime.py": "ac23c6562188422900dec71f4fc3060bc0c48d14c0c0366c3efa962ecb9c1783"
+    },
+    "version": "native_event_ne5_engineering_evidence_v1"
+  },
+  "external_evidence_copies": {
+    "/tmp/native-event-ne5-evidence-20261021.json": "d874c3fc61f3dc1f902cfe23d33a32ad8653648836150108c287b92a3345965a",
+    "/tmp/native-event-ne5-test-records-20261021.json": "5ef999517518a049a2f27c2740c5b234db4ff4b9b61bb36f97d2af143ede457a"
+  },
+  "remaining_limits": [
+    "Real native event execution uses scripted providers, explicit zero fixture credits, fixture controller stopping and synchronization gates. It is engineering evidence, not configured-model scientific investigation.",
+    "Physical native tests bind 128 MiB RAM and 4 MiB scratch with no native wall-time budget. Production allocation remains the caller-owned 20 GiB RAM/4 GiB scratch requirement; these tests do not replace it.",
+    "Service exit-receipt commitment does not establish service quiescence, writer closure, results readiness, scientific success or a child return.",
+    "No numerical pending/wait model, event probability or gain formula, extra scoring channel, referral attribution, continuation policy or production profile adoption is selected.",
+    "Native duration support is not episode turnaround or remaining-time support. No fabricated wait estimates or native rows in pending_work_v1 are added.",
+    "No configured-model scientific root, competing root against investigation_009, API/HPC deployment, literature/resource/monitor library migration or complete overall goal is established."
+  ],
+  "notes": [
+    "Owner-reported commands/times and corrected fixture failures are retained; test groups overlap and are not summed.",
+    "Production source was held stable during final caller reconstruction and actual pinned workers. Root independently rechecked production checkpoint hashes, both final ledger BLOBs/cursors, root summaries and archive hashes before recording.",
+    "Checkpoint hashes identify final bytes; they do not assert every earlier command ran against every final test byte. Final physical factory also pins the final fixture; same-host final test preceded the fixture-only bounded history-query correction.",
+    "Historical SL/RI/CE/FP artifacts are unchanged separate checkpoints. Their historical source hashes are not refreshed to represent later code.",
+    "The full retained A-I/LIB/TIME/CREDIT/CASE/SCIENCE/VERIFY checklist remains, including completed items and all open obligations."
+  ]
+}

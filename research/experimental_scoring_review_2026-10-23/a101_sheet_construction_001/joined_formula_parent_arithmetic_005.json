@@ -1,0 +1,150 @@
+{
+  "origin": "fully_synthetic_no_native_run",
+  "inspection_scope": "complete current joined numerical sheet, IO and worked example; no new paper-specific packet",
+  "base": {
+    "regions": [
+      {
+        "start": 1,
+        "end": 100,
+        "tools": {
+          "blast": {
+            "correspondence": 0.731054692601763,
+            "opposition_penalty": 0.3281050106281468,
+            "remaining": 0.40294968197361625
+          },
+          "hmmer": {
+            "correspondence": 0.6400850842077626,
+            "opposition_penalty": 0.18405396053278728,
+            "remaining": 0.45603112367497517
+          }
+        },
+        "combined": 0.42949040282429574
+      }
+    ],
+    "native": 0.42949040282429574,
+    "qualified": 0.3435923222594366
+  },
+  "without_recorded_opposition": {
+    "regions": [
+      {
+        "start": 1,
+        "end": 100,
+        "tools": {
+          "blast": {
+            "correspondence": 0.731054692601763,
+            "opposition_penalty": 0.0,
+            "remaining": 0.731054692601763
+          },
+          "hmmer": {
+            "correspondence": 0.6400850842077626,
+            "opposition_penalty": 0.0,
+            "remaining": 0.6400850842077626
+          }
+        },
+        "combined": 0.6855698884047627
+      }
+    ],
+    "native": 0.6855698884047627,
+    "qualified": 0.5484559107238102
+  },
+  "two_required_regions": {
+    "regions": [
+      {
+        "start": 1,
+        "end": 50,
+        "tools": {
+          "blast": {
+            "correspondence": 0.7781982450870486,
+            "opposition_penalty": 0.5468416843802446,
+            "remaining": 0.23135656070680397
+          },
+          "hmmer": {
+            "correspondence": 0.5267671323571315,
+            "opposition_penalty": 0.36810792106557455,
+            "remaining": 0.15865921129155686
+          }
+        },
+        "combined": 0.1950078859991804
+      },
+      {
+        "start": 51,
+        "end": 100,
+        "tools": {
+          "blast": {
+            "correspondence": 0.6839111401164775,
+            "opposition_penalty": 0.10936833687604892,
+            "remaining": 0.5745428032404285
+          },
+          "hmmer": {
+            "correspondence": 0.7534030360583935,
+            "opposition_penalty": 0.0,
+            "remaining": 0.7534030360583935
+          }
+        },
+        "combined": 0.6639729196494111
+      }
+    ],
+    "native": 0.3598332327919912,
+    "qualified": 0.28786658623359296
+  },
+  "single_tool_profiles": {
+    "blast": 0.322359745578893,
+    "hmmer": 0.36482489893998016
+  },
+  "inverse_bit_scale_sensitivity": {
+    "0.5": 0.27851327497482825,
+    "1.0": 0.3435923222594366,
+    "2.0": 0.363839961812026
+  },
+  "feature_missing_bounds": [
+    0.3435923222594366,
+    0.38654136254186616
+  ],
+  "included_missing_channel_bounds": [
+    0.24,
+    0.6400000000000001
+  ],
+  "ambiguous_membership_bounds": [
+    0.12000000000000002,
+    0.7
+  ],
+  "assertions_passed": 36,
+  "checks": [
+    "equivalent subtraction/direct form blast/1:100/1.0/0.5",
+    "equivalent subtraction/direct form hmmer/1:100/1.0/0.5",
+    "complete synthetic native",
+    "complete synthetic qualified",
+    "equivalent subtraction/direct form blast/1:100/1.0/0.5",
+    "equivalent subtraction/direct form hmmer/1:100/1.0/0.5",
+    "duplicate representation unchanged",
+    "equivalent subtraction/direct form blast/1:100/1.0/0.5",
+    "equivalent subtraction/direct form hmmer/1:100/1.0/0.5",
+    "weaker profile unchanged",
+    "equivalent subtraction/direct form blast/1:100/1.0/0.5",
+    "equivalent subtraction/direct form hmmer/1:100/1.0/0.5",
+    "no recorded opposition fixture",
+    "equivalent subtraction/direct form blast/1:50/1.0/0.5",
+    "equivalent subtraction/direct form hmmer/1:50/1.0/0.5",
+    "equivalent subtraction/direct form blast/51:100/1.0/0.5",
+    "equivalent subtraction/direct form hmmer/51:100/1.0/0.5",
+    "two required regions",
+    "equivalent subtraction/direct form blast/1:100/1.0/0.5",
+    "equivalent subtraction/direct form hmmer/1:100/1.0/0.5",
+    "BLAST-only named profile",
+    "HMMER-only named profile",
+    "equivalent subtraction/direct form blast/1:100/0.5/0.5",
+    "equivalent subtraction/direct form hmmer/1:100/0.5/0.5",
+    "equivalent subtraction/direct form blast/1:100/1.0/0.5",
+    "equivalent subtraction/direct form hmmer/1:100/1.0/0.5",
+    "equivalent subtraction/direct form blast/1:100/2.0/0.5",
+    "equivalent subtraction/direct form hmmer/1:100/2.0/0.5",
+    "half native scales",
+    "double native scales",
+    "feature bound lower",
+    "feature bound upper",
+    "included missing tool lower",
+    "included missing tool upper",
+    "ambiguous F-or-G lower",
+    "ambiguous F-or-G upper"
+  ]
+}

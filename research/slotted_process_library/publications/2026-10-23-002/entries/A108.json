@@ -1,0 +1,440 @@
+{
+  "entry_version": "evidence_axis_entry_v1",
+  "id": "A108",
+  "slot": "evidence_axis",
+  "name": "Organism and sample plausibility",
+  "description": "Score whether the candidate function is compatible with the actual organism, clade, sample and relevant conditions using explicit, source-grounded criteria.",
+  "native_measurements": [
+    {
+      "metric_id": "measured_temperature",
+      "name": "Actual experimental or environmental temperature",
+      "native_field": "temperature",
+      "observation_kinds": [
+        "context_measurement",
+        "context",
+        "growth_assay",
+        "assay_report"
+      ],
+      "units": [
+        "reported temperature unit"
+      ],
+      "direction": "target_dependent",
+      "method_requirements": [
+        "Identify measured sample/experiment, timing, and original unit."
+      ],
+      "comparison_limits": [
+        "A growth optimum and an environmental temperature are different quantities; retain their context."
+      ],
+      "binding": {
+        "kind": "recorded_measurement",
+        "measurement_name": "temperature",
+        "json_pointer": null
+      }
+    },
+    {
+      "metric_id": "measured_ph",
+      "name": "Actual experimental or environmental pH",
+      "native_field": "ph",
+      "observation_kinds": [
+        "context_measurement",
+        "context",
+        "growth_assay",
+        "assay_report"
+      ],
+      "units": [
+        "pH"
+      ],
+      "direction": "target_dependent",
+      "method_requirements": [
+        "Identify the sample, preparation and original measurement."
+      ],
+      "comparison_limits": [
+        "Reported pH does not establish an intracellular pH or a biochemical optimum."
+      ],
+      "binding": {
+        "kind": "recorded_measurement",
+        "measurement_name": "ph",
+        "json_pointer": null
+      }
+    },
+    {
+      "metric_id": "measured_salinity",
+      "name": "Actual experimental or environmental salinity",
+      "native_field": "salinity",
+      "observation_kinds": [
+        "context_measurement",
+        "context",
+        "growth_assay",
+        "assay_report"
+      ],
+      "units": [
+        "reported salinity unit"
+      ],
+      "direction": "target_dependent",
+      "method_requirements": [
+        "Retain concentration basis, sample identity and conditions."
+      ],
+      "comparison_limits": [
+        "Mass fraction, molarity and other salinity conventions are not automatically interchangeable."
+      ],
+      "binding": {
+        "kind": "recorded_measurement",
+        "measurement_name": "salinity",
+        "json_pointer": null
+      }
+    }
+  ],
+  "judgment_criteria": [
+    {
+      "criterion_id": "organism_context_grounded",
+      "question": "Are the organism, clade and sample circumstances actually known?",
+      "required_metric_ids": [],
+      "required_evidence": [
+        "organism_identity",
+        "sample_identity",
+        "source_context"
+      ],
+      "outcomes": {
+        "met": "The relevant identities and circumstances are grounded in the actual sample/organism records.",
+        "not_met": "The proposed interpretation uses an explicitly wrong organism, sample, clade or condition.",
+        "unknown": "The relevant identity or circumstance is unknown or is only an unsupported historical/environmental inference."
+      },
+      "deterministic_test": null
+    },
+    {
+      "criterion_id": "environment_matches_requirements",
+      "question": "Do observed conditions fit the function’s explicitly identified biological requirements?",
+      "required_metric_ids": [],
+      "required_evidence": [
+        "functional_requirements",
+        "observed_conditions"
+      ],
+      "outcomes": {
+        "met": "Actual observed conditions satisfy the identified requirements for this proposed role.",
+        "not_met": "Competent source-grounded observations contradict a required condition for this unconditional role.",
+        "unknown": "A required condition is unmeasured, the relevant state is unspecified, or an alternative context remains unexamined."
+      },
+      "deterministic_test": null
+    },
+    {
+      "criterion_id": "cellular_access_compatible",
+      "question": "Can the proposed substrate, target and machinery meet in the relevant cellular context?",
+      "required_metric_ids": [],
+      "required_evidence": [
+        "functional_requirements",
+        "localization_or_access_evidence"
+      ],
+      "outcomes": {
+        "met": "The required access is supported in the relevant system and conditions, or the function has no such additional access restriction.",
+        "not_met": "Measured access/topology contradicts the proposed encounter under the claimed conditions.",
+        "unknown": "Access is only predicted, unexamined or transferred without a sufficient correspondence."
+      },
+      "deterministic_test": null
+    },
+    {
+      "criterion_id": "biological_requirements_examined",
+      "question": "Are the proposed pathway and biological prerequisites supported in this organism?",
+      "required_metric_ids": [],
+      "required_evidence": [
+        "functional_requirements",
+        "component_evidence"
+      ],
+      "outcomes": {
+        "met": "The explicitly required genes, substrates, products and partner processes have source-grounded evidence appropriate to the proposed role.",
+        "not_met": "A competently established missing prerequisite contradicts the claimed route in these conditions.",
+        "unknown": "A prerequisite or alternative route is not examined; missing annotation alone is not missing biology."
+      },
+      "deterministic_test": null
+    },
+    {
+      "criterion_id": "organism_function_plausibility",
+      "question": "Which explicit biological-coherence grade is warranted by these findings?",
+      "required_metric_ids": [],
+      "required_evidence": [
+        "organism_identity",
+        "sample_identity",
+        "functional_requirements",
+        "observed_conditions"
+      ],
+      "outcomes": {
+        "met": "The recorded observations identify a biologically coherent scenario for the proposed role at the stated scope.",
+        "not_met": "Actual observations contradict a required part of the proposed scenario.",
+        "unknown": "The observations cannot discriminate a coherent scenario from an incompatible or incomplete one."
+      },
+      "deterministic_test": null
+    },
+    {
+      "criterion_id": "context_contradiction_established",
+      "question": "Is an essential requirement of the claimed role contradicted in the actual organism/sample?",
+      "required_metric_ids": [],
+      "required_evidence": [
+        "functional_requirements",
+        "organism_identity",
+        "sample_identity",
+        "observed_conditions"
+      ],
+      "outcomes": {
+        "met": "An actual, competent observation contradicts an explicitly essential requirement of the claimed unconditional role under those conditions.",
+        "not_met": "The allegedly contradictory observation is shown compatible with the requirement or belongs to a different condition/system.",
+        "unknown": "The relevant requirement, observation or context match is missing; unknown does not establish a contradiction."
+      },
+      "deterministic_test": null
+    },
+    {
+      "criterion_id": "biological_scenario_possible",
+      "question": "Is there a defined biologically possible scenario for this candidate role in its stated scope?",
+      "required_metric_ids": [],
+      "required_evidence": [
+        "target_hypothesis",
+        "functional_requirements"
+      ],
+      "outcomes": {
+        "met": "A source-grounded mechanism and explicit requirements describe a possible scenario at the stated scope, without contradicting a known essential condition.",
+        "not_met": "An established essential contradiction makes this unconditional scenario impossible.",
+        "unknown": "The functional scenario or required biological mechanism is unspecified."
+      },
+      "deterministic_test": null
+    },
+    {
+      "criterion_id": "organism_clade_requirements_fit",
+      "question": "Do the actual organism/clade traits fit the identified requirements?",
+      "required_metric_ids": [],
+      "required_evidence": [
+        "organism_identity",
+        "functional_requirements",
+        "source_context"
+      ],
+      "outcomes": {
+        "met": "Actual known organism/clade properties are compatible with the explicitly identified function requirements.",
+        "not_met": "A known organism/clade property contradicts an essential function requirement.",
+        "unknown": "The relevant organism/clade requirement or trait is unknown."
+      },
+      "deterministic_test": null
+    }
+  ],
+  "qualitative_grading": [],
+  "transfer_chain": {
+    "source_subject": "Identify the organism, assayed or analysed protein, preparation and experiment that actually supplied each observation.",
+    "source_property": "Source-grounded organism and sample constraints, including the actual required pathway components, qualify the proposed biological role.",
+    "correspondence": "For a different source protein or organism retain the actual sequence/structural correspondence and matched region; do not turn that source experiment into a target measurement.",
+    "target_hypothesis": "Identify the particular candidate annotation and the property being evaluated, including its biological conditions.",
+    "limitations": "Do not replace measured temperature, pH, expression or other quantities with a plausibility opinion. Qualitative grading concerns the biological scenario, not a hidden likelihood or applicability multiplier."
+  },
+  "evidence": [
+    {
+      "case_group": "archaeal_pibd_flak_recognition_access",
+      "case_id": "archaeal_pibd_flak_recognition_access",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1367262/",
+      "source_locator": "research/slotted_process_library/corpus/spatial/archaeal_processing/investigation.json#/source_observations/1/published_wetlab",
+      "observation": "D23 and D80 substitutions impaired PibD activity. Five- versus six-transmembrane predictions disagreed. Functional single-cysteine reporters in everted E. coli vesicles were tested with impermeant AMS before fluorescent labeling: E28 and S74 accessibility supported cytoplasmic exposure. N50/I236 inaccessibility permitted extracellular or buried positions; T63 labeled poorly even after solubilization. These controls favor six segments and cytoplasmic access near catalytic residues.",
+      "limit": "Qualitative published outcomes, complete relevant Methods/Results and bounded table audit; no wet-lab replication or direct native cleavage-site/topology measurement. | Source observation limit: Topology was probed in heterologous bacterial membranes. Partial blocking, cysteine burial and leakage with harsher AMS treatment limit orientation claims. D187/D188 double-mutant inactivity contrasted with active single mutants; D207A instability contrasted with active D207N, so inactivity alone did not locate a catalytic residue."
+    },
+    {
+      "case_group": "cellular_cdv",
+      "case_id": "cellular_cdv",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2596248/",
+      "source_locator": "research/slotted_process_library/corpus/cellular/verified_cases.jsonl:12#/actual_observations/0/observation[characters 0:85]",
+      "observation": "Cell-cycle induction and shrinking midcell structures connect the operon to division.",
+      "limit": "Both original full primary reports read at Results level; failed mutant interpretations in the PNAS study retained as a limit. Two papers count as one system case. | Group source-use limits: The original observation is a composite of two primary reports and two Sulfolobus species. The selected URL/excerpt identifies the relevant clause; these are one grouped system case, not independent target annotations. Failed mutant interpretations remain limits; homology does not transfer an endosomal function. | This row selects an exact clause from the aggregate retained observation; other source clauses are not attributed to this URL."
+    },
+    {
+      "case_group": "cellular_letB",
+      "case_id": "cellular_letB",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7335425/",
+      "source_locator": "research/slotted_process_library/corpus/cellular/verified_cases.jsonl:8#/actual_observations/0/observation",
+      "observation": "Structure shows a periplasm-length hydrophobic tunnel. Lipid crosslinking places phosphate-bearing material inside it. Length and pore-loop mutants lose ability to complement a sensitized pqiAB/letAB detergent phenotype.",
+      "limit": "Full primary Results on architecture, length threshold, pore-loop mutants and crosslinking read. No structural re-refinement. | Group source-use limits: Cryo-EM, crosslinking and complementation are different connected modalities; they are not three direct transport assays. Lipid identity, direction and net flux remain unresolved."
+    },
+    {
+      "case_group": "cellular_minJ",
+      "case_id": "cellular_minJ",
+      "source_url": "https://onlinelibrary.wiley.com/doi/full/10.1111/j.1365-2958.2008.06469.x",
+      "source_locator": "research/slotted_process_library/corpus/cellular/verified_cases.jsonl:18#/actual_observations/0/observation",
+      "observation": "Independent promoter tests separate minJ from swrA. Seven swarming suppressors hit minC/minD and repair other defects. MinD mislocalizes without MinJ; MinJ localization depends on DivIVA, with corresponding two-hybrid interactions.",
+      "limit": "Full original publisher Results read, including promoter controls, suppressor selection and localization hierarchy. Later MinCDJ mechanism is not treated as already resolved by this 2008 study. | Group source-use limits: Seven selected suppressors are one screen, not seven independent support units. Two-hybrid/localization do not resolve every molecular mechanism or make the historical swarming label primary."
+    },
+    {
+      "case_group": "cellular_popZ",
+      "case_id": "cellular_popZ",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2745220/",
+      "source_locator": "research/slotted_process_library/corpus/cellular/verified_cases.jsonl:15#/actual_observations/0/observation",
+      "observation": "Without PopZ, ParB-origin foci remain mobile; re-expression captures them at emerging polar PopZ. Co-IP includes ParB but not FtsZ. Filamented FtsZ-depleted controls retain polar origins, excluding filamentation alone.",
+      "limit": "Two original full primary Results examined; shared discoveries grouped into one case, not counted as independent gene cases. | Group source-use limits: Two original Cell papers are grouped as one shared discovery. The composite original observation does not attribute each individual experiment to both papers; the selected first-source route is supported in the retained observation. Co-IP does not by itself establish every direct contact."
+    },
+    {
+      "case_group": "organism_10_hpnn",
+      "case_id": "organism_10_hpnn",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3215060/",
+      "source_locator": "research/slotted_process_library/corpus/organism/cases.jsonl:10#/actual_observations/0",
+      "observation": "Deletion retained whole-cell hopanoids but removed outer-membrane hopanoid localization. At 38 C it impaired growth and caused filamentation; hpnN complementation restored phenotypes. Removing hopanoid synthesis suppressed filamentation, separating mislocalization from simple absence.",
+      "limit": "Relevant phylogeny/localization, cell-cycle and temperature Results plus lipid methods; no new localization assay or claim that all RND homologs have this substrate. | Group source-use limits: Connected fractionation, temperature and suppression tests do not measure purified HpnN transport chemistry or justify transfer to every RND homolog."
+    },
+    {
+      "case_group": "spatial_amic_amia_export_septal_access",
+      "case_id": "spatial_amic_amia_export_septal_access",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4428285/",
+      "source_locator": "research/slotted_process_library/corpus/spatial/cases.jsonl:6#/actual_observations/0/observation",
+      "observation": "Functional GFP fusions complemented chaining; Tat loss blocked processing and peripheral localization. Spheroplast release supported periplasmic export.",
+      "limit": "Relevant full Results, fusion-function controls and localization Discussion read. No direct binding target or reason for Tat preference established."
+    },
+    {
+      "case_group": "spatial_dsbd_topology_revision",
+      "case_id": "spatial_dsbd_topology_revision",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC193585/",
+      "source_locator": "research/slotted_process_library/corpus/spatial/cases.jsonl:3#/actual_observations/2/observation",
+      "observation": "Protease-marked vesicle orientation independently associated cysteine accessibility with the cytoplasmic face.",
+      "limit": "Full relevant Methods, Results, Figs. 1–5 legends and Discussion read. Neither a complete dynamic transport cycle nor current topology prediction was reproduced."
+    },
+    {
+      "case_group": "spatial_ftsw_bpbp_job",
+      "case_id": "spatial_ftsw_bpbp_job",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3102273/",
+      "source_locator": "research/slotted_process_library/corpus/spatial/cases.jsonl:2#/actual_observations/0/observation",
+      "observation": "FtsW-containing proteoliposomes increased NBD-lipid-II access to dithionite and labeled vancomycin; lumenal-marker controls argued against simple leakage.",
+      "limit": "Both papers’ relevant main Results and controls inspected; 2019 purification/polymerization methods read. No independent reproduction or resolution of every assay discrepancy."
+    },
+    {
+      "case_group": "spatial_murj_lipidII_access",
+      "case_id": "spatial_murj_lipidII_access",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4163187/",
+      "source_locator": "research/slotted_process_library/corpus/spatial/cases.jsonl:1#/actual_observations/1/observation",
+      "observation": "Removing the outer membrane did not restore cleavage; disrupting the inner membrane did.",
+      "limit": "Full main Results, Fig. 1–3 legends and assay rationale inspected. Supplementary raw measurements and purified transport were not reproduced."
+    },
+    {
+      "case_group": "spatial_trxa_relocation_role",
+      "case_id": "spatial_trxa_relocation_role",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC27967/",
+      "source_locator": "research/slotted_process_library/corpus/spatial/cases.jsonl:5#/actual_observations/0/observation",
+      "observation": "Signal-sequence fusions showed processing, export-reporter activity, oxidized thioredoxin and partial dsbA rescue. Fractionation alone was inconclusive.",
+      "limit": "Both papers’ relevant full Results and correction read. The oxidation-versus-reduction explanation at high expression remains an interpretation of the reported readouts."
+    }
+  ],
+  "scoring_rubric": {
+    "version": "evidence_axis_scoring_v1",
+    "status": "proposed",
+    "routes": [
+      {
+        "route_id": "organism_plausibility_grade",
+        "operation": "ordinal",
+        "metric_ids": [],
+        "eligible_when": [],
+        "score_unit": "proposed ordinal biological-coherence grade, 0 through 4",
+        "direction": "higher",
+        "interpretation": "Highest fully satisfied explicit biological-coherence level computed from criterion outcomes; unknown criteria retain lower/upper possible levels. A model cannot submit a numeric score or choose a grade label to bypass these requirements. This is not probability of function.",
+        "polarity": "supporting",
+        "grade_criterion": null,
+        "grade_scores": {},
+        "bands": [
+          {
+            "score": 0,
+            "requires": []
+          },
+          {
+            "score": 1,
+            "requires": [
+              "biological_scenario_possible"
+            ]
+          },
+          {
+            "score": 2,
+            "requires": [
+              "biological_scenario_possible",
+              "organism_context_grounded",
+              "organism_clade_requirements_fit"
+            ]
+          },
+          {
+            "score": 3,
+            "requires": [
+              "biological_scenario_possible",
+              "organism_context_grounded",
+              "organism_clade_requirements_fit",
+              "environment_matches_requirements"
+            ]
+          },
+          {
+            "score": 4,
+            "requires": [
+              "biological_scenario_possible",
+              "organism_context_grounded",
+              "organism_clade_requirements_fit",
+              "environment_matches_requirements",
+              "cellular_access_compatible",
+              "biological_requirements_examined"
+            ]
+          }
+        ]
+      },
+      {
+        "route_id": "established_context_conflict",
+        "operation": "ordinal",
+        "metric_ids": [],
+        "eligible_when": [],
+        "score_unit": "source-grounded contradiction indicator",
+        "direction": "higher",
+        "interpretation": "A competent explicit context conflict is opposition; missing conditions do not count as opposition.",
+        "polarity": "opposing",
+        "grade_criterion": null,
+        "grade_scores": {},
+        "bands": [
+          {
+            "score": 0,
+            "requires": []
+          },
+          {
+            "score": 1,
+            "requires": [
+              "context_contradiction_established"
+            ]
+          }
+        ]
+      },
+      {
+        "route_id": "reported_temperature",
+        "operation": "identity",
+        "metric_ids": [
+          "measured_temperature"
+        ],
+        "eligible_when": [],
+        "score_unit": "original temperature unit",
+        "direction": "not_ordered",
+        "interpretation": "Retain the actual measurement; higher temperature does not mean stronger functional evidence.",
+        "polarity": "non_discriminating",
+        "grade_criterion": null,
+        "grade_scores": {},
+        "bands": []
+      },
+      {
+        "route_id": "reported_ph",
+        "operation": "identity",
+        "metric_ids": [
+          "measured_ph"
+        ],
+        "eligible_when": [],
+        "score_unit": "pH",
+        "direction": "not_ordered",
+        "interpretation": "Retain the actual measurement and compared biochemical/sample context.",
+        "polarity": "non_discriminating",
+        "grade_criterion": null,
+        "grade_scores": {},
+        "bands": []
+      },
+      {
+        "route_id": "reported_salinity",
+        "operation": "identity",
+        "metric_ids": [
+          "measured_salinity"
+        ],
+        "eligible_when": [],
+        "score_unit": "original salinity unit",
+        "direction": "not_ordered",
+        "interpretation": "Retain the exact concentration convention and measurement.",
+        "polarity": "non_discriminating",
+        "grade_criterion": null,
+        "grade_scores": {},
+        "bands": []
+      }
+    ]
+  }
+}

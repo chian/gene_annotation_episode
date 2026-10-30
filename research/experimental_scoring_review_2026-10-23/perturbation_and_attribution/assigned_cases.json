@@ -1,0 +1,1915 @@
+[
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/21",
+    "case_group": "archaeal_hvo_pilin_processing_assembly",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "archaeal_hvo_pilin_processing_assembly",
+          "record_path": "/tmp/episode-published-cases/spatial/archaeal_processing/investigation.json",
+          "record_format": "json_document",
+          "json_pointer": "/grouped_questions/1",
+          "verification_scope": "Complete relevant Methods/Results and stated observations/captions; no independent filament composition measurement, image analysis, expression quantitation or complete FlaFind rerun.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "archaeal_hvo_pilin_processing_assembly",
+          "gene_protein_organism": "PibD, archaellins FlgA1/FlgA2, PilA1–PilA6, Haloferax volcanii",
+          "primary_source_ids": [
+            "PMC2901708",
+            "PMC3754589"
+          ],
+          "primary_source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC2901708/",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3754589/"
+          ],
+          "DOIs": [
+            "10.1128/JB.00133-10",
+            "10.1128/JB.00572-13"
+          ],
+          "starting_question": "Which native surface-assembly responsibility explains the PibD adhesion phenotype, and does processing a pilin establish assembly competence?",
+          "actual_observations": [
+            "O2010",
+            "O2013"
+          ],
+          "annotation_consequence": "PibD-dependent native adhesion cannot be assigned only to archaellin processing. PilA-family substrates support a distinct pilus/adhesion system, with overlapping and expression-dependent contributions. Cleavage-compatible mature hydrophobic segments can still be incompatible with assembly.",
+          "experiment_dependence": "Sequence motifs and neighborhoods identify plausible class III substrates; differential native deletions, processing controls and structurally resolved assembly readouts are needed to identify the responsible system.",
+          "reasoning_reported_vs_reconstructed": "The 2010-to-2013 phenotype-to-pilin progression and hybrid results are published. Route alternatives below reconstruct choices without asserting that all proposed computational tools were used by the authors.",
+          "verification_scope": "Complete relevant Methods/Results and stated observations/captions; no independent filament composition measurement, image analysis, expression quantitation or complete FlaFind rerun.",
+          "routes": [
+            {
+              "route_id": "B1_partition_phenotype_then_identify_substrates",
+              "steps": [
+                {
+                  "observed_information": [
+                    "O2010"
+                  ],
+                  "changed_question": "Does PibD-dependent adhesion require archaella, or another processed surface component?",
+                  "selected_next_comparison": "Compare ΔpibD with archaellin deletion under matched adhesion/motility conditions and complementation.",
+                  "published_result_ref": "O2010"
+                },
+                {
+                  "observed_information": [
+                    "O2010"
+                  ],
+                  "changed_question": "Which leader-bearing candidates make the retained adhesion machinery?",
+                  "selected_next_comparison": "Combine candidate N termini with native multi-gene deletion, complementation and processing-dependent shifts; remove archaellins for filament interpretation.",
+                  "published_result_ref": "O2013",
+                  "live_analysis_ref": "C2"
+                },
+                {
+                  "observed_information": [
+                    "O2013",
+                    "C2"
+                  ],
+                  "changed_question": "Does a missed motif or unclear band eliminate a functional pilin candidate?",
+                  "selected_next_comparison": "Retain PilA2 as unresolved for the cleavage readout and examine native-versus-plasmid expression context before assigning lack of function.",
+                  "published_result_ref": "O2013"
+                }
+              ],
+              "computational_branch": {
+                "actually_run": "C2 compares only the −2 residue filter against explicit published assignments.",
+                "could_run": "Inspect complete candidate N termini, topology/hydrophobic segments, genomic neighborhood and condition-specific expression; rerun a documented class III signal-peptide predictor on all candidates.",
+                "can_distinguish": "Candidates missed by a restrictive motif and whether competing surface-system genes are present or expressed.",
+                "cannot_distinguish": "Direct cleavage of a candidate from a PibD-deletion phenotype; native expression sufficiency, filament composition, or cleavage hidden by modification."
+              },
+              "bounded_return": "Broaden candidate recognition only with evidence; leave PilA2 processing uncertain and avoid assigning the adhesion phenotype to archaella."
+            },
+            {
+              "route_id": "B2_hydrophobic_compatibility_then_assembly",
+              "steps": [
+                {
+                  "observed_information": [
+                    "O2013"
+                  ],
+                  "changed_question": "Is a shared cleavage-compatible hydrophobic N terminus sufficient for a pilin to enter the native filament?",
+                  "selected_next_comparison": "Exchange the mature hydrophobic domain while preserving an expressed, PibD-processed substrate; measure filaments and adhesion separately.",
+                  "published_result_ref": "O2013"
+                },
+                {
+                  "observed_information": [
+                    "O2013"
+                  ],
+                  "changed_question": "Does a negative hybrid phenotype reflect failed expression, failed cleavage or a later assembly incompatibility?",
+                  "selected_next_comparison": "Use protein-expression/processing controls and an archaellin-free background for EM. Exclude an unexpressed hybrid from the same causal conclusion.",
+                  "published_result_ref": "O2013"
+                },
+                {
+                  "observed_information": [
+                    "O2013"
+                  ],
+                  "changed_question": "Which interactions in the mature hydrophobic domain control assembly?",
+                  "selected_next_comparison": "A future sequence/structure-guided residue panel with matched expression, cleavage and assembly controls could narrow the mechanism.",
+                  "status": "Proposed; not performed here, and no specific interaction partner assigned."
+                }
+              ],
+              "computational_branch": {
+                "actually_run": "No structural packing calculation or hybrid modeling run.",
+                "could_run": "Compare exact mature-domain sequences and hydropathy, then assess experimentally supported filament models or carefully qualified multimer models for incompatible packing candidates.",
+                "can_distinguish": "Simple loss of hydrophobicity versus a retained hydrophobic segment with altered residue pattern; candidate contacts for experimental tests.",
+                "cannot_distinguish": "Actual native incorporation, correct surface exposure, assembly kinetics or adhesive activity from sequence/hydropathy alone."
+              },
+              "bounded_return": "PibD processing is an upstream compatibility check; the mature segment has an additional assembly role that the cleavage assay does not establish."
+            }
+          ]
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/22",
+    "case_group": "archaeal_pibd_flak_recognition_access",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "archaeal_pibd_flak_recognition_access",
+          "record_path": "/tmp/episode-published-cases/spatial/archaeal_processing/investigation.json",
+          "record_format": "json_document",
+          "json_pointer": "/grouped_questions/0",
+          "verification_scope": "Qualitative published outcomes, complete relevant Methods/Results and bounded table audit; no wet-lab replication or direct native cleavage-site/topology measurement.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "archaeal_pibd_flak_recognition_access",
+          "gene_protein_organism": "PibD, Sulfolobus solfataricus; FlaK and FlaB2 substrate panel, Methanococcus voltae; native ΔflaK complementation, Methanococcus maripaludis",
+          "primary_source_ids": [
+            "PMC161584",
+            "PMC1367262",
+            "PMC2795283"
+          ],
+          "primary_source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC161584/",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC1367262/",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC2795283/"
+          ],
+          "DOIs": [
+            "10.1128/JB.185.13.3918-3925.2003",
+            "10.1128/JB.188.4.1437-1443.2006",
+            "10.1128/JB.00673-09"
+          ],
+          "starting_question": "Does a candidate's class III leader and a related peptidase's measurable capacity establish native processing and archaellum assembly?",
+          "actual_observations": [
+            "O2003",
+            "O2006",
+            "O2009"
+          ],
+          "annotation_consequence": "PibD has experimentally broad class III leader-processing capacity; FlaK has a narrower tested recognition profile and is required for native M. maripaludis archaellin processing/archaellation under tested conditions. PibD cleavage capacity or an apparent processed band does not establish interchangeability with native FlaK for assembly.",
+          "experiment_dependence": "Computational leader/topology compatibility can rank candidates and reject inadequate simple rules. Native exposure, exact cleavage, assembly compatibility and functional rescue require experiments beyond prediction.",
+          "reasoning_reported_vs_reconstructed": "Observed comparisons, assay conditions and outcomes are author-reported. Branch points and hypothetical next probes below are reconstructed; the 2009 authors explicitly progressed from PibD activity at lower temperatures to native complementation.",
+          "verification_scope": "Qualitative published outcomes, complete relevant Methods/Results and bounded table audit; no wet-lab replication or direct native cleavage-site/topology measurement.",
+          "routes": [
+            {
+              "route_id": "A1_recognition_then_native_rescue",
+              "steps": [
+                {
+                  "observed_information": [
+                    "O2003"
+                  ],
+                  "changed_question": "Does a common local cleavage motif transfer recognition across different archaeal peptidases?",
+                  "selected_next_comparison": "Hold cleavage-flanking residues constant while varying the upstream leader; compare both enzymes rather than transferring PibD capacity to FlaK.",
+                  "published_result_ref": "O2009",
+                  "live_analysis_ref": "C1"
+                },
+                {
+                  "observed_information": [
+                    "O2009",
+                    "C1"
+                  ],
+                  "changed_question": "If simple recognition rules are insufficient, is PibD nevertheless a functional substitute in the native assembly system?",
+                  "selected_next_comparison": "Use native FlaK rescue as a positive control alongside heterologous PibD; score processing, surface structures and motility separately.",
+                  "published_result_ref": "O2009"
+                },
+                {
+                  "observed_information": [
+                    "O2009"
+                  ],
+                  "changed_question": "Why can an apparent processing readout coexist with failed assembly?",
+                  "selected_next_comparison": "First establish the product N terminus and membrane context; only then test assembly-system association or export/assembly defects.",
+                  "status": "Proposed discriminating follow-up, not performed; the published cause remains unresolved."
+                }
+              ],
+              "computational_branch": {
+                "actually_run": "C1 audits motif-only and leader-length rules on the published panel.",
+                "could_run": "Align complete leaders and mature hydrophobic segments, then compare topology predictions in the same coordinate system; reject inconsistent positions or identify substitutions to test.",
+                "can_distinguish": "Whether a simple sequence rule accounts for the tested observations; whether proposed cleavage positions and membrane-facing segments are geometrically compatible.",
+                "cannot_distinguish": "Native cleavage accuracy, enzyme activity in the archaeal lipid environment, or successful incorporation into the archaellum."
+              },
+              "bounded_return": "Keep catalytic processing support and native assembly responsibility separate; retain the LP6 exception and the unresolved heterologous rescue mechanism."
+            },
+            {
+              "route_id": "A2_topology_before_catalytic_assignment",
+              "steps": [
+                {
+                  "observed_information": [
+                    "O2006"
+                  ],
+                  "changed_question": "Which membrane model puts the candidate catalytic residues where a prepilin leader can be reached?",
+                  "selected_next_comparison": "Compare competing segment models, then use active cysteine reporters and impermeant-blocking controls to test side accessibility.",
+                  "published_result_ref": "O2006"
+                },
+                {
+                  "observed_information": [
+                    "O2006"
+                  ],
+                  "changed_question": "Does lack of labeling locate a residue outside, or could the reporter be buried or unstable?",
+                  "selected_next_comparison": "Check labeling after solubilization and protein abundance/activity; compare single versus double substitutions.",
+                  "published_result_ref": "O2006"
+                },
+                {
+                  "observed_information": [
+                    "O2006"
+                  ],
+                  "changed_question": "Can the heterologous topology be transferred to native archaeal membranes?",
+                  "selected_next_comparison": "A future native membrane accessibility or structural analysis would test this transfer; do not convert the E. coli assay into native orientation proof.",
+                  "status": "Proposed; not performed here."
+                }
+              ],
+              "computational_branch": {
+                "actually_run": "No topology predictor or structural analysis run.",
+                "could_run": "Run multiple membrane-topology predictors and compare predicted catalytic-residue sides to experimentally accessible reporter coordinates; inspect an experimentally supported structure if appropriate.",
+                "can_distinguish": "Model disagreement and consistency with accessibility constraints; prioritize reporters that separate models.",
+                "cannot_distinguish": "Actual orientation in native archaeal lipids, reporter burial versus sidedness without controls, or catalysis from an unexpressed mutant."
+              },
+              "bounded_return": "Six-segment PibD topology is experimentally favored in the tested heterologous system; activity loss and inaccessibility each need independent interpretive controls."
+            }
+          ]
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/23",
+    "case_group": "causal_actS_stress_activation",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "causal_actS_stress_activation",
+          "record_path": "/tmp/episode-published-cases/causal/cases.jsonl",
+          "line": 3,
+          "verification_scope": "Complete primary Results/Discussion/Experimental Procedures inspected. No raw fluorescence, chromatogram or microscopy reanalysis.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "causal_actS_stress_activation",
+          "gene_protein": "ActS",
+          "organism": "Escherichia coli BW25113 derivatives",
+          "primary_source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC8360153/"
+          ],
+          "DOIs": [
+            "10.1111/mmi.14712"
+          ],
+          "starting_question": "Does a stress-associated LytM protein cleave peptidoglycan or alter amidase action?",
+          "actual_observations": [
+            "Authors: ActS alone lacks detected PG cleavage; adding it activates amidases in vitro.",
+            "Authors: overexpression rescues activator-deficient separation but not triple-amidase loss; in-vivo preference is narrower than the in-vitro panel.",
+            "Authors: actS deletion suppresses lysis of an LPS-transport/ldtF perturbation; direct LdtF control remains unproven."
+          ],
+          "annotation_consequence": "Amidase activator with conditional envelope effects. Neither growth rescue nor stress association establishes direct hydrolase activity or universal protection.",
+          "verification_scope": "Complete primary Results/Discussion/Experimental Procedures inspected. No raw fluorescence, chromatogram or microscopy reanalysis.",
+          "reasoning_reported_vs_reconstructed": "Published results known. Authors performed all experiments; our retrieval, table selection and comparison choices are identified in traces. No blind discovery.",
+          "experiment_dependence": "Authors performed the biological experiments; no cultures, mutants, enzymology or microscopy repeated here."
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/24",
+    "case_group": "causal_cas2_spacer_acquisition",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "causal_cas2_spacer_acquisition",
+          "record_path": "/tmp/episode-published-cases/causal/cas2/case_trace.json",
+          "record_format": "json_document",
+          "json_pointer": "",
+          "verification_scope": "Three primary E. coli relevant Results/Methods inspected, with earlier other-species nuclease comparators explicitly limited; new descriptive deposited-coordinate comparison. No biological experiments or new annotation run.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "causal_cas2_spacer_acquisition",
+          "status": "One linked published case used to test reuse of contributor-attribution reasoning; not an active annotation target, new lane, or slot declaration",
+          "known_outcome_disclosed": true,
+          "scope": "E. coli K12 Cas1/Cas2 in the specified overexpression, purified integration, and protospacer-capture studies; earlier nuclease results from other species are separate comparators",
+          "duplicate_check": {
+            "corpus": "/tmp/episode-published-cases",
+            "search": "Case-insensitive cas1, cas2, spacer-acquisition and CRISPR-adaptation searches in existing JSON/JSONL/Markdown/text research records",
+            "result": "No existing Cas1-Cas2 spacer-acquisition case found. Incidental Cas12a use in the IsiA strain-construction methods was not counted as a duplicate."
+          },
+          "primary_sources": [
+            {
+              "source_id": "complex2014",
+              "title": "Cas1-Cas2 complex formation mediates spacer acquisition during CRISPR-Cas adaptive immunity",
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4075942/",
+              "doi_url": "https://doi.org/10.1038/nsmb.2820",
+              "organism_and_system": "cas1/cas2 cloned from E. coli K12 MG1655; acquisition and lysate experiments in E. coli BL21-AI, which lacks the other cas genes",
+              "actual_access": "Complete main Results, Discussion and Online Methods read from NCBI Entrez efetch full author-manuscript XML. Supplementary references and main captions were present; separate uncropped supplementary gels were not downloaded or quantified.",
+              "assay_scope": "Induced Cas1/Cas2 overexpression; PCR-detected array expansion normalized to culture OD; selected expanded clones sequenced; co-immunoprecipitation, purified-complex work and lysate DNA-affinity comparisons. Host factors remain present: only Cas proteins required is not only biological factors required."
+            },
+            {
+              "source_id": "integration2015",
+              "title": "Integrase-mediated spacer acquisition during CRISPR-Cas adaptive immunity",
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4359072/",
+              "doi_url": "https://doi.org/10.1038/nature14237",
+              "organism_and_system": "Purified E. coli K12 MG1655 Cas1/Cas2; synthetic protospacers and supercoiled plasmid targets, including a BL21-AI CRISPR locus inserted into pUC19",
+              "actual_access": "Complete main narrative, Methods and Extended Data captions read from NCBI Entrez efetch full author-manuscript XML; no independent gel densitometry or sequencing reanalysis.",
+              "assay_scope": "Defined in vitro strand-transfer/integration readouts, primarily with Mg2+ unless specified; Cas1-only low integration occurs with Mn2+. In vitro products predominantly trap the first integration step, and completion/repair and in vivo targeting specificity are not fully recapitulated."
+            },
+            {
+              "source_id": "capture2015",
+              "title": "Foreign DNA capture during CRISPR-Cas adaptive immunity",
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4662619/",
+              "doi_url": "https://doi.org/10.1038/nature15760",
+              "organism_and_system": "E. coli K12 MG1655 Cas1/Cas2, synthetic protospacer substrates, in vivo acquisition mutants and purified integration/capture assays",
+              "actual_access": "Complete main narrative, Methods, Extended Data captions and crystallography table read from NCBI Entrez efetch full author-manuscript XML. Deposited 5DS4/5DS5 coordinates were independently downloaded and analysed descriptively.",
+              "assay_scope": "Structures bind donor protospacer DNA rather than a complete authentic integration target; some target-positioning proposals use crystal symmetry contacts/modeling. Cas2 R16/R78 mutations were tested for acquisition; the reported direct fluorescence-polarization mutant binding tests discussed in the main text concern Cas1 R59D/R66D, not an independent measurement of each Cas2 clamp mutant's affinity."
+            },
+            {
+              "source_id": "ssRNase2008_comparator",
+              "title": "A novel family of sequence-specific endoribonucleases associated with the clustered regularly interspaced short palindromic repeats",
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2459268/",
+              "doi_url": "https://doi.org/10.1074/jbc.M803225200",
+              "organism_and_assay": "Purified Cas2 homologs, including SSO1404 from Sulfolobus solfataricus; ssRNA cleavage and SSO1404 mutagenesis, not E. coli array acquisition",
+              "actual_access": "Primary abstract and available indexed HTML including assay-method sections inspected. Entrez efetch supplied metadata rather than body XML because the publisher disallows full XML downloading. Further public-page access became a browser challenge; complete mutation Results were not independently read here.",
+              "bounded_use": "Supports why a Cas2-family acidic-site/nuclease interpretation was plausible. Does not demonstrate that E. coli E9A/E9R/E9Q is nuclease-null in the E. coli acquisition/integration buffers."
+            },
+            {
+              "source_id": "dsDNase2012_comparator",
+              "title": "Double-stranded endonuclease activity in Bacillus halodurans CRISPR-associated Cas2 protein",
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3476262/",
+              "doi_url": "https://doi.org/10.1074/jbc.M112.382598",
+              "organism_and_assay": "Bacillus halodurans subtype I-C Cas2; purified dsDNA-cleavage, metal-binding and acidic-site mutant assays; Thermus thermophilus homolog also examined",
+              "actual_access": "Primary abstract and indexed primary Results passages inspected, including the distinction from ssRNase behavior. Full XML downloading was disallowed by the publisher, PMC page access returned a browser challenge and a publisher full-text request returned 403. Complete Results/Methods were not independently inspected here.",
+              "bounded_use": "Different-species biochemical expectation only; neither the same protein nor a direct test of E. coli spacer-acquisition chemistry."
+            }
+          ],
+          "key_observations": [
+            {
+              "observation_id": "C1",
+              "owner": "authors",
+              "source_id": "complex2014",
+              "source_locator": "Cas1-Cas2 complex formation is required in vivo; Fig. 3 and supplementary stability comparison",
+              "observation": "Cas2 C-terminal beta6-beta7 deletion prevents detectable acquisition and stable co-precipitation with Cas1. Cas1 R252E similarly loses stable complex formation and acquisition, while purified R252E retains the expected Cas1-dimer gel-filtration behavior. Single Cas2 E65R is tolerated; E65R/D84R double substitution abolishes acquisition. Tolerated Cas1-tail deletion and Cas2 E65R retain complex formation.",
+              "limit": "A deletion can affect more than one local contact. The study does not provide a complete independent folding/stability assay for every Cas2 variant, so these are not all proven interface-only perturbations."
+            },
+            {
+              "observation_id": "C2",
+              "owner": "authors",
+              "source_id": "complex2014",
+              "source_locator": "The catalytic activity of Cas2 is dispensable in vivo; Fig. 4c-d,g-h",
+              "observation": "E. coli Cas2 E9A and E9R support PCR-detected spacer acquisition at levels described as similar to wild type; E9 mutation also retains complex formation and lysate CRISPR-bait recognition. Cas2 R14A retains acquisition, whereas interface-associated R18A has low acquisition. Cas1 conserved active-site alanine substitutions abolish acquisition.",
+              "limit": "The directly measured result is acquisition/assembly/bait behavior of E. coli mutants. The loss-of-nuclease expectation relies on the conserved-site interpretation and earlier other-species assays; no direct E. coli E9-mutant nuclease-null assay is demonstrated by this reading. No new quantitative frequency or statistical equivalence was calculated here."
+            },
+            {
+              "observation_id": "C3",
+              "owner": "authors",
+              "source_id": "integration2015",
+              "source_locator": "Protospacer DNA integration by Cas1-Cas2; Fig. 1 and Extended Data Figs. 2-3",
+              "observation": "Purified Cas1/Cas2 joins labelled protospacers covalently to plasmid DNA. Cas1 H208A and D221A are defective; Cas2 E9Q supports integration. Cas2 beta6-beta7 deletion fails to support the reaction. Cas1 alone gives low integration with Mn2+, and Cas2 substantially enhances integration.",
+              "limit": "Cas2 is required for efficient tested complex behavior, not for every detectable Cas1 strand-transfer event under all conditions. These integration assays do not demonstrate every stage of immune protection or protospacer generation."
+            },
+            {
+              "observation_id": "C4",
+              "owner": "authors",
+              "source_id": "integration2015",
+              "source_locator": "Integration and disintegration products; Integration requires 3-prime-OH protospacer ends",
+              "observation": "Radiolabel incorporation and product analysis distinguish integration products from plasmid topoisomers. Band X is not radiolabelled and is interpreted through disintegration/topology experiments. Blocking both protospacer 3-prime hydroxyls prevents integration; Cas1 also catalyses disintegration of a defined half-site substrate.",
+              "limit": "A change in plasmid migration is not automatically covalent spacer integration. Cas1's demonstrated integrase strand-transfer role must not be collapsed into an unsupported requirement that Cas1 or Cas2 cuts donor DNA to generate all prespacers."
+            },
+            {
+              "observation_id": "C5",
+              "owner": "authors",
+              "source_id": "complex2014",
+              "source_locator": "The Cas1-Cas2 complex is essential for CRISPR locus binding",
+              "observation": "Purified complexes were not sequence-specific in the tested EMSA. In lysate CRISPR-target-bait precipitation, Cas1 preference depends on Cas2 and a compatible complex, although Cas2 itself is not detected in washed eluates.",
+              "limit": "No Cas2 in a washed target-bait eluate does not establish absence of all direct Cas2-DNA contacts. This is target-locus DNA in lysate, distinct from the donor protospacer captured in the later structure."
+            },
+            {
+              "observation_id": "C6",
+              "owner": "authors",
+              "source_id": "capture2015",
+              "source_locator": "Main structural analysis and Fig. 2",
+              "observation": "A four-Cas1/two-Cas2 complex positions the central donor duplex over Cas2 and terminal donor 3-prime ends in two Cas1 sites. Cas2 R16/R78 are part of a phosphate-backbone clamp; R16E and R78E strongly reduce in vivo acquisition, whereas R77E is tolerated. Cas1 clamp/channel and end-splaying mutants supply additional functional comparisons.",
+              "limit": "Contact presence alone does not establish functional necessity: R77 is an explicit tolerated contact-site example. Not every Cas2 contact mutant was directly assayed for binding affinity in isolation."
+            },
+            {
+              "observation_id": "C7",
+              "owner": "our_new_descriptive_coordinate_analysis",
+              "source_id": "capture2015",
+              "inputs": [
+                "raw/5DS4.cif",
+                "raw/5DS5.cif"
+              ],
+              "method": "Biopython 1.88 reads model 1, author chain/residue numbering. Euclidean nearest-heavy-atom comparisons within deposited assembly-1 atoms; no added symmetry mates. Polar groups are Glu OE1/OE2, Asp OD1/OD2 and Arg NE/NH1/NH2. DNA phosphate targets are OP1/OP2. Full atom-pair records and file hashes are saved.",
+              "actual_results": [
+                "Across both Cas2 copies and both structures, R16 terminal-polar-group to DNA phosphate oxygen minima are 2.490-2.879 A; R78 minima are 2.378-3.017 A.",
+                "Cas2 R18 side-chain to Cas1 minima are 2.726-3.070 A, consistently at the Cas1 backbone near residue 4. The E9 side-chain to Cas1 minima are 13.834-14.602 A, spatially separating the signature acidic site from this direct inter-protein contact in these models.",
+                "The two donor terminal O3-prime atoms lie 2.879-3.558 A from H208 NE2 in Cas1 chains A/C. Cas2 E9 carboxylate-to-nearest donor terminal O3-prime distances are 47.547-50.240 A.",
+                "E9 is not simply remote from every DNA atom: all-side-chain nearest-DNA distances range from 3.902 to 4.213 A, and terminal-carboxylate to phosphate-oxygen minima range from 4.511 to 5.822 A. Geometry therefore cannot be used as a proof of no DNA interaction or no nuclease chemistry."
+              ],
+              "changed_inference": "The deposited models support spatially distinct contributions: a Cas2 central donor-DNA surface and Cas1-assembly interface versus Cas1 integration-end positioning. This is a positive structural explanation compatible with the functional mutant results, rather than inferring a scaffold solely from a catalytic-site mutant that still works.",
+              "limits": "Static 2.951/3.2-A models, approximate distances, no energetic or hydrogen-bond inference, no density/refinement analysis, no binding measurement, no mutant structural simulation and no independent proof that E9 is catalytically inactive. The two structures are related preparations from one study, not independent biological replications."
+            }
+          ],
+          "two_played_out_evidence_routes": [
+            {
+              "route_id": "A_signature_chemistry_versus_required_assembly",
+              "starting_question": "Does acquisition require a nuclease contribution from each protein named in the system, or does Cas2 contribute differently?",
+              "epistemic_status": "Actual source-selection and comparison performed here, with published outcomes known; laboratory sequence and observations belong to authors",
+              "steps": [
+                {
+                  "question_before": "Can Cas2's required participation be equated with its family-associated nuclease chemistry?",
+                  "our_action": "Locate and read the complete 2014 primary study, comparing the E9 active-site, interface and tolerated-mutant sections rather than only its abstract.",
+                  "observations": [
+                    "C1",
+                    "C2"
+                  ],
+                  "change_in_question": "E9 integrity is dispensable for the tested acquisition endpoint while assembly-disrupting perturbations are not. The next useful question is whether the contrast survives in a defined DNA-integration reaction, rather than whether another homolog can cleave nucleic acid."
+                },
+                {
+                  "question_before": "Could cellular processing or a misleading endpoint hide the actual catalytic contributor?",
+                  "our_action": "Read the complete 2015 reconstitution study, including covalent-product controls, purified mutants, metal conditions and the Cas1-only comparison.",
+                  "observations": [
+                    "C3",
+                    "C4"
+                  ],
+                  "change_in_question": "Cas1 active-site dependence and Cas2 E9Q tolerance are retained in purified integration. Preserve Cas2's contribution to efficient integration while assigning the tested strand-transfer catalysis to Cas1. Do not require Cas2 for every trace Mn2+-supported Cas1 activity or equate Band X with integration."
+                },
+                {
+                  "question_before": "Has the E. coli Cas2 mutant actually been shown nuclease-null, or is that expectation transferred from other species?",
+                  "our_action": "Follow the 2014 paper's nuclease references, retrieve comparator metadata, and inspect available primary abstracts/indexed methods/results for Sulfolobus and Bacillus Cas2.",
+                  "observations": [
+                    "C2"
+                  ],
+                  "change_in_question": "Separate the direct E. coli E9 acquisition/integration result from the cross-species catalytic expectation. No direct E. coli nuclease-null validation was established by this bounded access, so the conclusion concerns the signature residue and supported role, not universal absence of Cas2 chemistry."
+                }
+              ],
+              "bounded_result": "Strongly supports a required non-integrase contribution of Cas2 within the tested E. coli acquisition machinery, with signature E9 dispensable; Cas1 supplies demonstrated strand-transfer catalysis."
+            },
+            {
+              "route_id": "B_positive_DNA_and_interface_contribution",
+              "starting_question": "If signature-site chemistry is dispensable, what positive contribution explains Cas2 participation, and is a direct DNA role actually demonstrated?",
+              "epistemic_status": "Retrospective source inquiry plus a new limited calculation on deposited coordinates; not structure determination or experimental validation",
+              "steps": [
+                {
+                  "question_before": "Does failure to recover Cas2 with a target-locus bait mean Cas2 does not directly contact DNA?",
+                  "our_action": "Read the complete 2014 target-bait experiment with its purified EMSA and washing limitations, then inspect the later donor-protospacer capture study.",
+                  "observations": [
+                    "C5",
+                    "C6"
+                  ],
+                  "change_in_question": "The earlier bait is a different DNA species and experimental context. The captured donor duplex supplies a positive Cas2 contact model, so the next distinction is whether contact, interface and catalytic-site residues occupy separable positions and have separable functional outcomes."
+                },
+                {
+                  "question_before": "Do the deposited models support distinct donor-clamp, assembly-interface and integration-end contributions?",
+                  "our_action": "Retrieve current 5DS4/5DS5 entries and coordinate files; map Cas1/Cas2/DNA chains; run the saved distance analysis on both models instead of merely verifying entry identity.",
+                  "observations": [
+                    "C7"
+                  ],
+                  "change_in_question": "R16/R78 donor-phosphate proximity, R18-Cas1 proximity and terminal donor ends at Cas1 support distinct positive roles. E9 proximity to some DNA atoms cautions against using a simple distance cutoff as proof of catalytic silence."
+                },
+                {
+                  "question_before": "Can every contact now be called essential or every loss-of-acquisition mutant a clean binding defect?",
+                  "our_action": "Return to the published R16/R77/R78 mutant outcomes and to the stated mutant-binding assays and structural limits.",
+                  "observations": [
+                    "C1",
+                    "C6",
+                    "C7"
+                  ],
+                  "change_in_question": "R77E retains acquisition despite a modeled contact. Keep residue necessity separate from contact geometry and Cas2 mutant acquisition separate from directly measured affinity. The case supports a functional scaffold/DNA-capture contribution without attributing every observed phenotype to one exact interaction."
+                }
+              ],
+              "bounded_result": "Positive evidence supports Cas2 as an assembly and donor-DNA-positioning contributor, beyond the negative claim that an E9 mutation is tolerated. Its direct target-locus recruitment mechanism and universal role across species remain outside the demonstrated scope."
+            }
+          ],
+          "modularity_test": {
+            "existing_pattern_under_test": "F01/F03 contributor-attribution pattern requested by parent; no new category or lane is proposed",
+            "parent_scientific_question": "What does Cas2 contribute to spacer acquisition in the specified system? This is the scoped job, not a thought-pattern value.",
+            "reused_thought": "Keep the system's measured acquisition/integration output; distinguish catalytic, assembly and substrate-positioning contributions, and revise only the contribution contradicted by the selective evidence.",
+            "child_choices_this_constrains": [
+              "Select a Cas2 signature-site versus assembly-interface contrast rather than infer two catalytic requirements from two nuclease names.",
+              "Seek a defined integration product and Cas1/Cas2 mutant comparison rather than call any plasmid mobility change integration.",
+              "Seek positive Cas2 substrate/assembly evidence rather than conclude an inert scaffold solely from E9 tolerance.",
+              "Withhold a nuclease-null claim when the direct protein/assay-specific catalytic-loss validation is missing."
+            ],
+            "experimental_layout_not_thought_unit": "Point substitutions, truncation, co-immunoprecipitation, PCR, purified integration and crystallography are author experimental layouts/operations. No wet lab was available here. Our tools retrieved their records and made descriptive coordinate calculations.",
+            "ordinary_metadata_not_thought_unit": "Donor species, recipient strain, metal condition, protein construct, DNA substrate, numbering and deposited model identity must travel with the observation; these are not selectable reasoning patterns.",
+            "analogy_supported": "Like the earlier coupled-reaction/activator cases, a real system endpoint cannot be assigned to every participating protein as the same catalytic contribution. Selectively retained activity distinguishes required participation from requirement for one proposed chemistry. The same inference can guide a source inquiry outside metabolic enzymes.",
+            "where_analogy_breaks": [
+              "Cas2 is not being assigned a replacement metabolic reaction or a consumed-substrate-supply role. Its supported contribution concerns complex assembly and donor-DNA geometry.",
+              "Cas1 catalysis is integrase strand transfer in the defined reaction. The fact that both proteins have been called nucleases does not establish that both must cleave donor nucleic acid during acquisition.",
+              "The E. coli E9 mutant phenotype is direct, but a complete loss of its nuclease chemistry is not directly established here; cross-species Cas2 cleavage results must stay separate.",
+              "Overexpression acquisition, purified half-site/full-site reactions and captured donor complexes are different endpoints. None alone demonstrates complete naturally regulated immunity, prespacer production, gap filling or all CRISPR subtypes.",
+              "Cas2 can have active substrate contacts while contributing noncatalytically to integration; structural contribution does not mean an inert spacer, and contact presence does not guarantee necessity."
+            ],
+            "verdict": "Supports reuse of contributor-attribution reasoning beyond metabolic enzymes, with stronger positive-role evidence from complex/DNA studies. It does not establish a universal Cas2 nuclease-null claim, an automatic episode implementation, or a new slot taxonomy."
+          },
+          "actual_work": [
+            "Duplicate search of the existing research corpus",
+            "Primary web discovery followed by Entrez efetch of three complete E. coli author manuscripts",
+            "Complete relevant primary narratives/Methods and available extended-data captions read for the three E. coli studies",
+            "Bounded comparator-source audit, retaining format/access limits",
+            "Current RCSB entry retrieval plus archival coordinate downloads for 5DS4 and 5DS5",
+            "New reproducible nearest-atom calculations on the two deposited coordinate models using the existing repository virtual-environment Python/Biopython",
+            "One integrated case/trace written under the requested cas2 directory"
+          ],
+          "not_performed": [
+            "No bacteria, viruses, editing, protein expression, nuclease assay, DNA integration experiment or new annotation run",
+            "No gel digitization, new kinetic fitting, raw sequencing reprocessing, crystallographic refinement, density validation, docking or mutant simulation",
+            "No full audit of every Cas2 homolog, other CRISPR subtype or current Cas2 literature",
+            "No additional model agents, repository implementation/design edits, root causal record changes or central-table changes"
+          ],
+          "access_and_record_limits": [
+            "PMC web opens for the main 2014/2015 articles returned browser challenges; ordinary Entrez retrieval supplied complete author manuscripts. No access control was bypassed.",
+            "The two earlier comparator articles supplied metadata-only efetch XML, explicitly noting the publisher's full-XML download restriction. Accessible primary abstract/indexed HTML was used at the stated limited scope; complete comparator Results were not claimed.",
+            "The accessed 2015 integration author manuscript leaves its sequencing GEO accession as XXXXX; no validated raw-read deposition was resolved or reanalysed here.",
+            "The capture manuscript labels 5DS4 with Mg2+ and 5DS5 without, while current coordinate/entry contents are 5DS4 at 3.2 A with no Mg atoms and 5DS5 at 2.951 A with deposited Mg atoms. Calculations use actual files and analyse both; no conclusion about the cause of the mapping discrepancy is asserted.",
+            "The coordinate calculation supplies geometric support, not biochemical proof, and does not substitute for protein-specific catalytic-null validation."
+          ],
+          "artifacts": {
+            "integrated_case": "case_trace.json",
+            "reproducible_analysis": "analyze_coordinates.py",
+            "analysis_command_from_repository": ".venv/bin/python /tmp/episode-published-cases/causal/cas2/analyze_coordinates.py",
+            "new_calculation_results": "raw/coordinate_comparisons.json",
+            "full_primary_source_bundle": "raw/three_primary_articles.xml",
+            "comparator_metadata_only_bundle": "raw/nuclease_comparator_articles.xml",
+            "extracted_full_primary_texts": [
+              "raw/PMC4075942.sections.txt",
+              "raw/PMC4359072.sections.txt",
+              "raw/PMC4662619.sections.txt"
+            ],
+            "coordinates": [
+              "raw/5DS4.cif",
+              "raw/5DS5.cif"
+            ],
+            "entry_metadata": [
+              "raw/5DS4_entry.json",
+              "raw/5DS5_entry.json"
+            ]
+          }
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/25",
+    "case_group": "causal_envC_activation",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "causal_envC_activation",
+          "record_path": "/tmp/episode-published-cases/causal/cases.jsonl",
+          "line": 1,
+          "verification_scope": "2013 complete relevant Results/Discussion/Methods and Table1 read via primary BioC; 2010 primary abstract/targeted indexed results only. Actual PDBe molecule/contact/residue checks and Table1 parsing saved. No new structural alignment or binding assay.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "causal_envC_activation",
+          "gene_protein": "EnvC LytM domain",
+          "organism": "Escherichia coli K-12 MG1655 derivatives",
+          "primary_source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3923381/",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC2868575/"
+          ],
+          "DOIs": [
+            "10.1111/mmi.12304",
+            "10.1038/emboj.2010.36"
+          ],
+          "starting_question": "Does a peptidase-like fold itself hydrolyze cell wall or activate another enzyme?",
+          "actual_observations": [
+            "E1: Authors: the fold resembles active LytM but lacks its Zn-coordinating residues; no catalytic Zn is present.",
+            "E2: Authors: stable, septally localized variants fail normal cell separation and show impaired AmiB activation (Table 1).",
+            "E3: Authors: direct complex detection failed; a proposed regulatory-helix interaction remained a model.",
+            "E4: Root: parsed 20 Table 1 rows and selected 5 stable/localized/function-defective variants; mapped deposited residues and ligand records independently."
+          ],
+          "annotation_consequence": "Supports amidase activation rather than copying metallopeptidase catalysis. Exact binding mechanism remains unestablished by this 2013 study.",
+          "verification_scope": "2013 complete relevant Results/Discussion/Methods and Table1 read via primary BioC; 2010 primary abstract/targeted indexed results only. Actual PDBe molecule/contact/residue checks and Table1 parsing saved. No new structural alignment or binding assay.",
+          "reasoning_reported_vs_reconstructed": "Published results known. Authors performed all experiments; our retrieval, table selection and comparison choices are identified in traces. No blind discovery.",
+          "experiment_dependence": "Authors performed the biological experiments; no cultures, mutants, enzymology or microscopy repeated here."
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/26",
+    "case_group": "causal_nlpI_scaffolding",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "causal_nlpI_scaffolding",
+          "record_path": "/tmp/episode-published-cases/causal/cases.jsonl",
+          "line": 4,
+          "verification_scope": "Relevant full pull-down, affinity, ternary-complex, activity and synthase-association Results; scaffolding Discussion; corresponding MST/denaturation/complex/PG-digestion Methods inspected. Other proteomics/localization Methods not exhaustively read.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "causal_nlpI_scaffolding",
+          "gene_protein": "NlpI",
+          "organism": "Escherichia coli",
+          "primary_source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC7049810/"
+          ],
+          "DOIs": [
+            "10.15252/embj.2019102246"
+          ],
+          "starting_question": "Do multiple associations indicate one proteolytic role, direct hydrolase activity, or scaffolding of distinct partners?",
+          "actual_observations": [
+            "Authors: purified NlpI binds several endopeptidases; pairwise interactions alone do not establish simultaneous binding.",
+            "Authors: preformed partner complexes and controls support ternary assemblies; activity changes vary by hydrolase.",
+            "Authors: PBP1A does not bind NlpI directly in the tested assay but can associate through PBP4."
+          ],
+          "annotation_consequence": "In-vitro scaffolding capacity is supported; the proposed physiological organization and coordination of synthesis remain incompletely demonstrated.",
+          "verification_scope": "Relevant full pull-down, affinity, ternary-complex, activity and synthase-association Results; scaffolding Discussion; corresponding MST/denaturation/complex/PG-digestion Methods inspected. Other proteomics/localization Methods not exhaustively read.",
+          "reasoning_reported_vs_reconstructed": "Published results known. Authors performed all experiments; our retrieval, table selection and comparison choices are identified in traces. No blind discovery.",
+          "experiment_dependence": "Authors performed the biological experiments; no cultures, mutants, enzymology or microscopy repeated here."
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/27",
+    "case_group": "causal_tsaE_turnover",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "causal_tsaE_turnover",
+          "record_path": "/tmp/episode-published-cases/causal/cases.jsonl",
+          "line": 2,
+          "verification_scope": "2018 complete relevant single/multiple-turnover Results/Methods and Discussion; 2019 relevant full Results/Methods/Discussion; 2015 relevant binding/mutant Results, Discussion and full supplementary assay section inspected. No new time-course measurements or kinetic fits.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "causal_tsaE_turnover",
+          "gene_protein": "TsaE/YjeE with TsaB/TsaD",
+          "organism": "Thermotoga maritima; separate Escherichia coli comparison",
+          "primary_source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC5814804/",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC6614819/",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC4330362/"
+          ],
+          "DOIs": [
+            "10.1093/nar/gkx1300",
+            "10.1093/nar/gkz439",
+            "10.1093/nar/gku1397"
+          ],
+          "starting_question": "Is TsaE needed for chemical transfer, product release, or restoring repeated catalytic operation?",
+          "actual_observations": [
+            "T1: Authors 2018: TmTsaBD makes one product per complex without TsaE; product tRNA dissociates. ATPase-deficient TsaE does not sustain turnover.",
+            "T2: Authors 2019: switch variants retain robust ATPase yet lose efficient repeated t6A synthesis, separating hydrolysis from functional coupling.",
+            "T3: Authors 2015: E.coli W109A retains endpoint t6A formation despite low ATPase. Assays and organisms differ; the 2018 paper explicitly leaves reconciliation open."
+          ],
+          "annotation_consequence": "Supports an ATP-hydrolysis-dependent reset contribution in the tested Thermotoga system. Do not equate ATPase capacity with successful coupling or silently generalize across species.",
+          "verification_scope": "2018 complete relevant single/multiple-turnover Results/Methods and Discussion; 2019 relevant full Results/Methods/Discussion; 2015 relevant binding/mutant Results, Discussion and full supplementary assay section inspected. No new time-course measurements or kinetic fits.",
+          "reasoning_reported_vs_reconstructed": "Published results known. Authors performed all experiments; our retrieval, table selection and comparison choices are identified in traces. No blind discovery.",
+          "experiment_dependence": "Authors performed the biological experiments; no cultures, mutants, enzymology or microscopy repeated here."
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/28",
+    "case_group": "cellular_cdv",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "cellular_cdv",
+          "record_path": "/tmp/episode-published-cases/cellular/verified_cases.jsonl",
+          "line": 12,
+          "verification_scope": "Both original full primary reports read at Results level; failed mutant interpretations in the PNAS study retained as a limit. Two papers count as one system case.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "cellular_cdv",
+          "gene_protein": "CdvA, CdvB, CdvC/Vps4 (one division-system case)",
+          "organism": "Sulfolobus acidocaldarius; S. solfataricus",
+          "primary_source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC2596248/",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC4121953/"
+          ],
+          "primary_source_DOIs": [
+            "10.1073/pnas.0809467105",
+            "10.1126/science.1165322"
+          ],
+          "starting_question": "What do archaeal ESCRT-like proteins do in cells without endosomes or the usual FtsZ division machinery?",
+          "actual_observations": [
+            {
+              "origin": "author_reported",
+              "observation": "Cell-cycle induction and shrinking midcell structures connect the operon to division. ESCRT/Vps4 proteins interact; dominant-negative ATPase perturbs cell size/division in an independent study."
+            }
+          ],
+          "annotation_consequence": "Supports archaeal cell-division machinery participation, without transferring an endosomal function from eukaryotic homology.",
+          "experiment_dependence": "Synchronized expression, immunolocalization, structural/binding work and dominant-negative perturbation.",
+          "reasoning_reported_vs_reconstructed": "The cited authors report the experiments and infer the cellular participation. My source selection and the compact annotation boundary are retrospective reconstruction; I did not perform their experiments.",
+          "verification_scope": "Both original full primary reports read at Results level; failed mutant interpretations in the PNAS study retained as a limit. Two papers count as one system case.",
+          "collection_status": "verified_primary_results_examined"
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/29",
+    "case_group": "cellular_cetZ",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "cellular_cetZ",
+          "record_path": "/tmp/episode-published-cases/cellular/verified_cases.jsonl",
+          "line": 13,
+          "verification_scope": "Full paper results and extended-data controls inspected; rod/motility relationship is condition dependent.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "cellular_cetZ",
+          "gene_protein": "CetZ1 (CetZ2 comparative perturbation)",
+          "organism": "Haloferax volcanii",
+          "primary_source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC4369195/"
+          ],
+          "primary_source_DOIs": [
+            "10.1038/nature13983"
+          ],
+          "starting_question": "Do divergent tubulin/FtsZ-related proteins divide cells, shape them, or serve another role?",
+          "actual_observations": [
+            {
+              "origin": "author_reported",
+              "observation": "CetZ inactivation does not yield the FtsZ-like division defect. cetZ1 deletion prevents rods at motile halo edges; GTPase-mutant expression and envelope-associated dynamic structures reinforce shape participation."
+            }
+          ],
+          "annotation_consequence": "Supports rod-shape differentiation required for efficient swimming rather than a default division annotation from sequence similarity.",
+          "experiment_dependence": "Deletion, dominant mutant, soft-agar motility, morphology, superresolution and cryotomography.",
+          "reasoning_reported_vs_reconstructed": "The cited authors report the experiments and infer the cellular participation. My source selection and the compact annotation boundary are retrospective reconstruction; I did not perform their experiments.",
+          "verification_scope": "Full paper results and extended-data controls inspected; rod/motility relationship is condition dependent.",
+          "collection_status": "verified_primary_results_examined"
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/30",
+    "case_group": "cellular_dolP",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "cellular_dolP",
+          "record_path": "/tmp/episode-published-cases/cellular/verified_cases.jsonl",
+          "line": 7,
+          "verification_scope": "Full Results, selected controls and published peer-review limitations inspected; no new phenotyping.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "cellular_dolP",
+          "gene_protein": "DolP (YraP)",
+          "organism": "Escherichia coli",
+          "primary_source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC8081527/"
+          ],
+          "primary_source_DOIs": [
+            "10.7554/eLife.67817"
+          ],
+          "starting_question": "Why is a sigma-E-induced outer-membrane lipoprotein important under envelope stress?",
+          "actual_observations": [
+            {
+              "origin": "author_reported",
+              "observation": "CRISPRi interactions identify envelope dependencies; bamB/dolP double deletion impairs growth and reduces BamA. DolP co-purifies with membrane-assembled BamA and redistributes from midcell under stress."
+            }
+          ],
+          "annotation_consequence": "Supports a stress-dependent contribution to BamA/outer-membrane homeostasis. Does not establish that DolP directly catalyzes OMP folding or fully explain its division connection.",
+          "experiment_dependence": "CRISPRi genetics, rescue, affinity purification, heat-modifiability and microscopy.",
+          "reasoning_reported_vs_reconstructed": "The cited authors report the experiments and infer the cellular participation. My source selection and the compact annotation boundary are retrospective reconstruction; I did not perform their experiments.",
+          "verification_scope": "Full Results, selected controls and published peer-review limitations inspected; no new phenotyping.",
+          "collection_status": "verified_primary_results_examined"
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/31",
+    "case_group": "cellular_letB",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "cellular_letB",
+          "record_path": "/tmp/episode-published-cases/cellular/verified_cases.jsonl",
+          "line": 8,
+          "verification_scope": "Full primary Results on architecture, length threshold, pore-loop mutants and crosslinking read. No structural re-refinement.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "cellular_letB",
+          "gene_protein": "LetB (YebT) with LetA; one system case",
+          "organism": "Escherichia coli",
+          "primary_source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC7335425/"
+          ],
+          "primary_source_DOIs": [
+            "10.1016/j.cell.2020.03.030"
+          ],
+          "starting_question": "What cellular task is served by a long repeated MCE-domain protein?",
+          "actual_observations": [
+            {
+              "origin": "author_reported",
+              "observation": "Structure shows a periplasm-length hydrophobic tunnel. Lipid crosslinking places phosphate-bearing material inside it. Length and pore-loop mutants lose ability to complement a sensitized pqiAB/letAB detergent phenotype."
+            }
+          ],
+          "annotation_consequence": "Supports lipid-associated envelope maintenance and a tunnel-transport model. Physiology, lipid contact and shape are convergent; this paper does not directly measure net lipid transport through the tunnel.",
+          "experiment_dependence": "Cryo-EM, engineered truncations, in-cell crosslinking and genetic complementation.",
+          "reasoning_reported_vs_reconstructed": "The cited authors report the experiments and infer the cellular participation. My source selection and the compact annotation boundary are retrospective reconstruction; I did not perform their experiments.",
+          "verification_scope": "Full primary Results on architecture, length threshold, pore-loop mutants and crosslinking read. No structural re-refinement.",
+          "collection_status": "verified_primary_results_examined"
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/32",
+    "case_group": "cellular_minJ",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "cellular_minJ",
+          "record_path": "/tmp/episode-published-cases/cellular/verified_cases.jsonl",
+          "line": 18,
+          "verification_scope": "Full original publisher Results read, including promoter controls, suppressor selection and localization hierarchy. Later MinCDJ mechanism is not treated as already resolved by this 2008 study.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "cellular_minJ",
+          "gene_protein": "MinJ (YvjD / historical SwrAB)",
+          "organism": "Bacillus subtilis",
+          "primary_source_urls": [
+            "https://onlinelibrary.wiley.com/doi/full/10.1111/j.1365-2958.2008.06469.x"
+          ],
+          "primary_source_DOIs": [
+            "10.1111/j.1365-2958.2008.06469.x"
+          ],
+          "starting_question": "Does a motility-associated gene primarily control swarming, recombination, or cell-division topology?",
+          "actual_observations": [
+            {
+              "origin": "author_reported",
+              "observation": "Independent promoter tests separate minJ from swrA. Seven swarming suppressors hit minC/minD and repair other defects. MinD mislocalizes without MinJ; MinJ localization depends on DivIVA, with corresponding two-hybrid interactions."
+            }
+          ],
+          "annotation_consequence": "Supports a division-site-selection intermediary; motility/recombination phenotypes are subordinate under tested conditions. Historical swarming-operon assignment was misleading.",
+          "experiment_dependence": "Promoter reporters, suppressor genetics, localization and bacterial two-hybrid.",
+          "reasoning_reported_vs_reconstructed": "The cited authors report the experiments and infer the cellular participation. My source selection and the compact annotation boundary are retrospective reconstruction; I did not perform their experiments.",
+          "verification_scope": "Full original publisher Results read, including promoter controls, suppressor selection and localization hierarchy. Later MinCDJ mechanism is not treated as already resolved by this 2008 study.",
+          "collection_status": "verified_primary_results_examined"
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/33",
+    "case_group": "cellular_popZ",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "cellular_popZ",
+          "record_path": "/tmp/episode-published-cases/cellular/verified_cases.jsonl",
+          "line": 15,
+          "verification_scope": "Two original full primary Results examined; shared discoveries grouped into one case, not counted as independent gene cases.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "cellular_popZ",
+          "gene_protein": "PopZ",
+          "organism": "Caulobacter crescentus",
+          "primary_source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC2745220/",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC2614312/"
+          ],
+          "primary_source_DOIs": [
+            "10.1016/j.cell.2008.07.015",
+            "10.1016/j.cell.2008.07.016"
+          ],
+          "starting_question": "What keeps segregated chromosome origins at poles and organizes polar functions?",
+          "actual_observations": [
+            {
+              "origin": "author_reported",
+              "observation": "Without PopZ, ParB-origin foci remain mobile; re-expression captures them at emerging polar PopZ. Co-IP includes ParB but not FtsZ. Filamented FtsZ-depleted controls retain polar origins, excluding filamentation alone."
+            }
+          ],
+          "annotation_consequence": "Supports chromosome-origin anchoring and polar organization; time-resolved capture and controls discriminate tethering from simple colocalization.",
+          "experiment_dependence": "Live imaging, depletion/re-expression, interaction controls and oligomerization/EM.",
+          "reasoning_reported_vs_reconstructed": "The cited authors report the experiments and infer the cellular participation. My source selection and the compact annotation boundary are retrospective reconstruction; I did not perform their experiments.",
+          "verification_scope": "Two original full primary Results examined; shared discoveries grouped into one case, not counted as independent gene cases.",
+          "collection_status": "verified_primary_results_examined"
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/34",
+    "case_group": "cellular_ugtP",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "cellular_ugtP",
+          "record_path": "/tmp/episode-published-cases/cellular/verified_cases.jsonl",
+          "line": 11,
+          "verification_scope": "Full Results on nutritional dependence, pathway controls and FtsZ assays inspected.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "cellular_ugtP",
+          "gene_protein": "UgtP",
+          "organism": "Bacillus subtilis",
+          "primary_source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC1971218/"
+          ],
+          "primary_source_DOIs": [
+            "10.1016/j.cell.2007.05.043"
+          ],
+          "starting_question": "Can an established glucolipid enzyme also connect nutrient conditions to division timing?",
+          "actual_observations": [
+            {
+              "origin": "author_reported",
+              "observation": "UgtP amount and localization depend on nutrients/UDP-glucose pathway state. Mutants alter cell length. Purified UgtP inhibits FtsZ assembly, while localization changes are separable from gross protein abundance."
+            }
+          ],
+          "annotation_consequence": "Supports a nutrient-responsive division-regulatory role in addition to known glucosyltransferase function; avoid inferring such a second role from enzyme family alone.",
+          "experiment_dependence": "Nutrient shifts, genetic pathway perturbation, localization, immunoblot and purified FtsZ assays.",
+          "reasoning_reported_vs_reconstructed": "The cited authors report the experiments and infer the cellular participation. My source selection and the compact annotation boundary are retrospective reconstruction; I did not perform their experiments.",
+          "verification_scope": "Full Results on nutritional dependence, pathway controls and FtsZ assays inspected.",
+          "collection_status": "verified_primary_results_examined"
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/35",
+    "case_group": "cellular_y_complex",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "cellular_y_complex",
+          "record_path": "/tmp/episode-published-cases/cellular/verified_cases.jsonl",
+          "line": 2,
+          "verification_scope": "Three full primary papers inspected. Downloaded 76-file GEO processed-track archive and exact reference feature table; interrogated selected tracks in known cggR/gapA, glnR/glnA, rpoB and rnpB windows. No raw-read realignment or formal replication statistics.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "cellular_y_complex",
+          "gene_protein": "YlbF, YmcA, YaaT (one linked complex case)",
+          "organism": "Bacillus subtilis 3610; Staphylococcus aureus comparative test",
+          "primary_source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC4989519/",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC6004469/",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC4978174/"
+          ],
+          "primary_source_DOIs": [
+            "10.1111/mmi.13240",
+            "10.1073/pnas.1803283115",
+            "10.1111/mmi.13411"
+          ],
+          "starting_question": "Do developmental phenotypes reflect direct phosphorelay activation, or RNA processing through RNase Y?",
+          "actual_observations": [
+            {
+              "origin": "author_reported",
+              "source": "2016 mmi.13240",
+              "observation": "SinR increases with little promoter effect; lowering SinR translation repairs biofilm formation. RNase Y association and cggR-gapA processing support an RNA-level route."
+            },
+            {
+              "origin": "author_reported_conflicting",
+              "source": "2016 mmi.13411",
+              "observation": "A separate group reports phosphorelay bypass and strain-dependent effects and disputes sinR stabilization."
+            },
+            {
+              "origin": "live_deposited_data_inspection",
+              "source": "GSE108295",
+              "observation": "cggR/gapA 5-prime end at NC_000964.3:3482769 has WT 341.61 normalized signal, versus deletion ylbF 7.52, ymcA 8.93, rny 2.39. rnpB mature 3-prime signal remains high in Y-complex mutants while reduced in rny."
+            }
+          ],
+          "annotation_consequence": "Supports an RNase Y accessory role in selected transcript maturation. Do not equate it with all RNase Y activity or declare the historical direct-phosphorelay disagreement resolved.",
+          "experiment_dependence": "Genetics, reporters, Northern blots, protein association, membrane flotation, Rend-seq and exonuclease treatment are authors experiments; live work reads deposited tracks.",
+          "reasoning_reported_vs_reconstructed": "The cited authors report the experiments and infer the cellular participation. My source selection and the compact annotation boundary are retrospective reconstruction; I did not perform their experiments.",
+          "verification_scope": "Three full primary papers inspected. Downloaded 76-file GEO processed-track archive and exact reference feature table; interrogated selected tracks in known cggR/gapA, glnR/glnA, rpoB and rnpB windows. No raw-read realignment or formal replication statistics.",
+          "collection_status": "verified_primary_results_examined"
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/36",
+    "case_group": "cellular_yabA",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "cellular_yabA",
+          "record_path": "/tmp/episode-published-cases/cellular/verified_cases.jsonl",
+          "line": 19,
+          "verification_scope": "Primary full Results examined, including mutant fold/function controls and the mixed-complex repair experiment.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "cellular_yabA",
+          "gene_protein": "YabA",
+          "organism": "Bacillus subtilis",
+          "primary_source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC1413692/"
+          ],
+          "primary_source_DOIs": [
+            "10.1073/pnas.0506914103"
+          ],
+          "starting_question": "Which interactions give a multipartner protein its replication-control role?",
+          "actual_observations": [
+            {
+              "origin": "author_reported",
+              "observation": "Mutations selectively disrupting DnaA or DnaN interaction cause dispersed YabA and overinitiation. Coexpressing complementary defective variants restores foci and initiation control; runout DNA-content and origin-focus assays agree."
+            }
+          ],
+          "annotation_consequence": "Supports negative control of replication initiation coupled to replication machinery. This study does not settle every molecular model for YabA action on DnaA.",
+          "experiment_dependence": "Interaction separation mutants, flow cytometry, origin/replisome localization and cross-complementation.",
+          "reasoning_reported_vs_reconstructed": "The cited authors report the experiments and infer the cellular participation. My source selection and the compact annotation boundary are retrospective reconstruction; I did not perform their experiments.",
+          "verification_scope": "Primary full Results examined, including mutant fold/function controls and the mixed-complex repair experiment.",
+          "collection_status": "verified_primary_results_examined"
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/37",
+    "case_group": "cellular_ybeY",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "cellular_ybeY",
+          "record_path": "/tmp/episode-published-cases/cellular/verified_cases.jsonl",
+          "line": 3,
+          "verification_scope": "Both primary full texts obtained through PMC BioC and relevant Results/figure descriptions examined. Linked homolog case: cellular_yqfG, not independent evidence for an arbitrary protein.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "cellular_ybeY",
+          "gene_protein": "YbeY",
+          "organism": "Escherichia coli",
+          "primary_source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC2959132/",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3570609/"
+          ],
+          "primary_source_DOIs": [
+            "10.1111/j.1365-2958.2010.07351.x",
+            "10.1016/j.molcel.2012.11.025"
+          ],
+          "starting_question": "Which cellular defect explains pleiotropic loss of a conserved protein without an established cellular role?",
+          "actual_observations": [
+            {
+              "origin": "author_reported",
+              "source": "2010 study",
+              "observation": "Deletion changes rRNA termini, ribosome profiles and translational fidelity; interactions with rnc, rnr and pnp connect the phenotype to RNA metabolism."
+            },
+            {
+              "origin": "author_reported",
+              "source": "2013 study, Fig 4",
+              "observation": "Reconstituted 70S particles become degradation substrates when the 30S subunit is mutant-derived; a mutant 50S plus normal 30S does not suffice."
+            }
+          ],
+          "annotation_consequence": "Supports rRNA maturation and defective-ribosome quality-control participation; a pleiotropic stress phenotype alone would not specify that role.",
+          "experiment_dependence": "rRNA end mapping, mutant genetics, purified ribosomes/RNases and reconstitution; not feasible as live software-only validation.",
+          "reasoning_reported_vs_reconstructed": "The cited authors report the experiments and infer the cellular participation. My source selection and the compact annotation boundary are retrospective reconstruction; I did not perform their experiments.",
+          "verification_scope": "Both primary full texts obtained through PMC BioC and relevant Results/figure descriptions examined. Linked homolog case: cellular_yqfG, not independent evidence for an arbitrary protein.",
+          "collection_status": "verified_primary_results_examined"
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/38",
+    "case_group": "cellular_yejM",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "cellular_yejM",
+          "record_path": "/tmp/episode-published-cases/cellular/verified_cases.jsonl",
+          "line": 9,
+          "verification_scope": "Publisher full Results examined, including 10/12 suppressors and turnover controls.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "cellular_yejM",
+          "gene_protein": "YejM (PbgA/LapC)",
+          "organism": "Escherichia coli",
+          "primary_source_urls": [
+            "https://journals.asm.org/doi/10.1128/mbio.00939-20"
+          ],
+          "primary_source_DOIs": [
+            "10.1128/mBio.00939-20"
+          ],
+          "starting_question": "What essential function underlies an envelope phenotype previously associated with cardiolipin transport?",
+          "actual_observations": [
+            {
+              "origin": "author_reported",
+              "observation": "Suppressors map to lpxC/lapB; LpxC overproduction permits complete yejM deletion. Translation-shutoff blots show excessive LpxC loss without YejM. A polar recruitment assay detects LapB association."
+            }
+          ],
+          "annotation_consequence": "Supports regulation of LPS synthesis via LpxC turnover. Cardiolipin binding/abundance effects alone did not establish a transporter role.",
+          "experiment_dependence": "Suppressor selection/sequencing, depletion-rescue, protein turnover and recruitment assays.",
+          "reasoning_reported_vs_reconstructed": "The cited authors report the experiments and infer the cellular participation. My source selection and the compact annotation boundary are retrospective reconstruction; I did not perform their experiments.",
+          "verification_scope": "Publisher full Results examined, including 10/12 suppressors and turnover controls.",
+          "collection_status": "verified_primary_results_examined"
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/39",
+    "case_group": "cellular_yfgM",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "cellular_yfgM",
+          "record_path": "/tmp/episode-published-cases/cellular/verified_cases.jsonl",
+          "line": 6,
+          "verification_scope": "2014 primary full Results/Discussion and 2019 full primary article inspected. Detergent-dependent detection limits retained.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "cellular_yfgM",
+          "gene_protein": "YfgM",
+          "organism": "Escherichia coli",
+          "primary_source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC4081946/",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC6916481/"
+          ],
+          "primary_source_DOIs": [
+            "10.1074/jbc.M113.541672",
+            "10.1074/jbc.RA119.010686"
+          ],
+          "starting_question": "Does an unassigned inner-membrane protein act in secretory trafficking?",
+          "actual_observations": [
+            {
+              "origin": "author_reported",
+              "observation": "Digitonin co-IP/BN-PAGE links YfgM-PpiD with SecYEG. Deletion worsens surA/skp envelope phenotypes; YfgM alone did not reproduce PpiD anti-aggregation activity. Later quantitative/crosslinking experiments confirm frequent Sec association."
+            }
+          ],
+          "annotation_consequence": "Supports an ancillary Sec-associated role overlapping the periplasmic folding network; direct chaperone activity or a universal substrate handoff mechanism is not established.",
+          "experiment_dependence": "Detergent-sensitive complex purification, genetic sensitization and protein aggregation/crosslinking assays.",
+          "reasoning_reported_vs_reconstructed": "The cited authors report the experiments and infer the cellular participation. My source selection and the compact annotation boundary are retrospective reconstruction; I did not perform their experiments.",
+          "verification_scope": "2014 primary full Results/Discussion and 2019 full primary article inspected. Detergent-dependent detection limits retained.",
+          "collection_status": "verified_primary_results_examined"
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/40",
+    "case_group": "cellular_yhcB",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "cellular_yhcB",
+          "record_path": "/tmp/episode-published-cases/cellular/verified_cases.jsonl",
+          "line": 1,
+          "verification_scope": "2021 JBC and PLOS full Results/tables inspected; original 2005 indexed primary text inspected; 2006 negative result checked at primary abstract only. Six original PLOS spreadsheets downloaded; S4/S6 rows parsed.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "cellular_yhcB",
+          "gene_protein": "YhcB / ZapG / LapD",
+          "organism": "Escherichia coli K-12",
+          "primary_source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC8163987/",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC8741058/",
+            "https://doi.org/10.1074/jbc.M506479200",
+            "https://pubmed.ncbi.nlm.nih.gov/16863643/"
+          ],
+          "primary_source_DOIs": [
+            "10.1074/jbc.M506479200",
+            "10.1016/j.bbabio.2006.05.043",
+            "10.1016/j.jbc.2021.100700",
+            "10.1371/journal.pgen.1009586"
+          ],
+          "starting_question": "Does co-migration with cytochrome bd establish a subunit role, or does YhcB participate in envelope growth/division?",
+          "actual_observations": [
+            {
+              "origin": "author_reported",
+              "source": "2005 and 2006 papers",
+              "observation": "Blue-native co-migration motivated a third-subunit proposal; subsequent purification reported normal oxidase assembly/heme/kinetics without YhcB and no stable YhcB association."
+            },
+            {
+              "origin": "live_source_table_extraction",
+              "source": "JBC Table 1",
+              "observation": "Abnormal FtsZ pattern: WT 2% of 675 cells versus deletion 12.2% of 793 cells; reported uncertainty retained in raw extract."
+            },
+            {
+              "origin": "live_dataset_extraction",
+              "source": "PLOS S4/S6",
+              "observation": "rodZ and mrcB transposon fitness logFC are negative; fabF positive. fabF and mlaA are suppressor candidates under both vancomycin and SDS/EDTA selections."
+            }
+          ],
+          "annotation_consequence": "Supports participation in coordinated envelope growth and division. Co-migration did not establish oxidase membership; exact direct molecular connector remains unresolved.",
+          "experiment_dependence": "Published cell imaging, bacterial two-hybrid, mutagenesis, chemical genetics, lipid/envelope analyses; our work extracts their records.",
+          "reasoning_reported_vs_reconstructed": "The cited authors report the experiments and infer the cellular participation. My source selection and the compact annotation boundary are retrospective reconstruction; I did not perform their experiments.",
+          "verification_scope": "2021 JBC and PLOS full Results/tables inspected; original 2005 indexed primary text inspected; 2006 negative result checked at primary abstract only. Six original PLOS spreadsheets downloaded; S4/S6 rows parsed.",
+          "collection_status": "verified_primary_results_examined"
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/41",
+    "case_group": "cellular_yhdP",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "cellular_yhdP",
+          "record_path": "/tmp/episode-published-cases/cellular/verified_cases.jsonl",
+          "line": 10,
+          "verification_scope": "Published full Results and lipid/depletion controls examined. The separate 2023 preprint was identified and excluded from published-case evidence.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "cellular_yhdP",
+          "gene_protein": "YhdP, TamB, YdbH (one redundancy-system case)",
+          "organism": "Escherichia coli",
+          "primary_source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC8912898/"
+          ],
+          "primary_source_DOIs": [
+            "10.1371/journal.pgen.1010096"
+          ],
+          "starting_question": "Does antibiotic sensitivity arise from failed lipid-A modification or a different envelope process?",
+          "actual_observations": [
+            {
+              "origin": "author_reported",
+              "observation": "Lipid-A modification profiles remain unchanged without yhdP. Combined depletion of three AsmA-like proteins is lethal and alters GPL partitioning; adding induced yhdP restores growth. Double mutants release LPS-enriched vesicles."
+            }
+          ],
+          "annotation_consequence": "Supports redundant participation in envelope lipid homeostasis and GPL trafficking. The authors transport interpretation exceeds what antibiotic sensitivity alone shows.",
+          "experiment_dependence": "Tn-seq, radiolabeled lipid fractionation, membrane-purity controls, double/triple mutants and inducible rescue.",
+          "reasoning_reported_vs_reconstructed": "The cited authors report the experiments and infer the cellular participation. My source selection and the compact annotation boundary are retrospective reconstruction; I did not perform their experiments.",
+          "verification_scope": "Published full Results and lipid/depletion controls examined. The separate 2023 preprint was identified and excluded from published-case evidence.",
+          "collection_status": "verified_primary_results_examined"
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/42",
+    "case_group": "cellular_yihI",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "cellular_yihI",
+          "record_path": "/tmp/episode-published-cases/cellular/verified_cases.jsonl",
+          "line": 16,
+          "verification_scope": "2010 primary abstract and indexed Results snippets checked; 2013 primary full Results, rescue and competition experiments examined. Original full 2010 article not obtained.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "cellular_yihI",
+          "gene_protein": "YihI",
+          "organism": "Escherichia coli",
+          "primary_source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3754568/"
+          ],
+          "primary_source_DOIs": [
+            "10.1016/j.jmb.2010.04.040",
+            "10.1128/JB.00464-13"
+          ],
+          "starting_question": "Does Der binding/stimulation connect an unassigned protein to ribosome assembly?",
+          "actual_observations": [
+            {
+              "origin": "author_reported",
+              "observation": "Original two-hybrid/GTPase assays connect YihI to Der; overexpression yields precursor/ribosome defects. A later study finds moderate extra YihI partially rescues derT57I growth, yet does not restore its GTPase defect."
+            }
+          ],
+          "annotation_consequence": "Supports modulation of a ribosome-assembly GTPase; growth rescue does not establish biochemical repair of the measured catalytic defect.",
+          "experiment_dependence": "Interaction/GTPase assays, overexpression, ribosome profiles and allele-specific genetic rescue.",
+          "reasoning_reported_vs_reconstructed": "The cited authors report the experiments and infer the cellular participation. My source selection and the compact annotation boundary are retrospective reconstruction; I did not perform their experiments.",
+          "verification_scope": "2010 primary abstract and indexed Results snippets checked; 2013 primary full Results, rescue and competition experiments examined. Original full 2010 article not obtained.",
+          "collection_status": "verified_primary_results_examined"
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/43",
+    "case_group": "cellular_yjgA",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "cellular_yjgA",
+          "record_path": "/tmp/episode-published-cases/cellular/verified_cases.jsonl",
+          "line": 5,
+          "verification_scope": "Primary full Results and Fig 1 inspected. No EM image reprocessing.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "cellular_yjgA",
+          "gene_protein": "YjgA",
+          "organism": "Escherichia coli BL21",
+          "primary_source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC11260487/"
+          ],
+          "primary_source_DOIs": [
+            "10.1093/nar/gkae469"
+          ],
+          "starting_question": "Does association with 50S reflect an assembly role, and which assembly states depend on it?",
+          "actual_observations": [
+            {
+              "origin": "author_reported",
+              "observation": "Deletion is cold-sensitive and accumulates pre50S; cryo-EM resolves immature PTC/H68-H69 states. Domain/loop perturbations and uL16 association distinguish contributions."
+            }
+          ],
+          "annotation_consequence": "Supports participation in late large-subunit maturation, with specific structural defects. Association alone would support less.",
+          "experiment_dependence": "Cold-growth phenotyping, gradient fractionation, cryo-EM and mutant/interaction experiments.",
+          "reasoning_reported_vs_reconstructed": "The cited authors report the experiments and infer the cellular participation. My source selection and the compact annotation boundary are retrospective reconstruction; I did not perform their experiments.",
+          "verification_scope": "Primary full Results and Fig 1 inspected. No EM image reprocessing.",
+          "collection_status": "verified_primary_results_examined"
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/44",
+    "case_group": "cellular_yneA",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "cellular_yneA",
+          "record_path": "/tmp/episode-published-cases/cellular/verified_cases.jsonl",
+          "line": 17,
+          "verification_scope": "Primary publisher full Results inspected, including whole-operon deletion, separate gene re-expression and negative YneB/YnzC controls. The newer 2026 FtsW mechanism paper remains an abstract-only unexamined follow-up; do not treat the 2003 FtsZ inference as current direct mechanism.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "cellular_yneA",
+          "gene_protein": "YneA",
+          "organism": "Bacillus subtilis",
+          "primary_source_urls": [
+            "https://onlinelibrary.wiley.com/doi/full/10.1046/j.1365-2958.2003.03360.x"
+          ],
+          "primary_source_DOIs": [
+            "10.1046/j.1365-2958.2003.03360.x"
+          ],
+          "starting_question": "Which SOS-induced gene inhibits division in a bacterium without a SulA homolog?",
+          "actual_observations": [
+            {
+              "origin": "author_reported",
+              "observation": "dinR loss induces the neighboring yneA-yneB-ynzC operon. Deleting that operon suppresses filamentation; inducible YneA alone reinduces elongation, whereas YneB or YnzC do not. Operon deletion reduces mitomycin-C-induced elongation."
+            }
+          ],
+          "annotation_consequence": "Supports an SOS division-inhibitor role. The 2003 FtsZ-localization effect did not establish direct binding to FtsZ.",
+          "experiment_dependence": "Regulatory mutant/Northern, double-deletion epistasis, inducible expression and microscopy.",
+          "reasoning_reported_vs_reconstructed": "The cited authors report the experiments and infer the cellular participation. My source selection and the compact annotation boundary are retrospective reconstruction; I did not perform their experiments.",
+          "verification_scope": "Primary publisher full Results inspected, including whole-operon deletion, separate gene re-expression and negative YneB/YnzC controls. The newer 2026 FtsW mechanism paper remains an abstract-only unexamined follow-up; do not treat the 2003 FtsZ inference as current direct mechanism.",
+          "collection_status": "verified_primary_results_examined"
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/45",
+    "case_group": "cellular_yqfG",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "cellular_yqfG",
+          "record_path": "/tmp/episode-published-cases/cellular/verified_cases.jsonl",
+          "line": 4,
+          "verification_scope": "Full Results examined, including specificity controls and rescue. Same protein-family investigation group as cellular_ybeY; not independent replication of all E. coli claims.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "cellular_yqfG",
+          "gene_protein": "YqfG (YbeY homolog)",
+          "organism": "Bacillus subtilis",
+          "primary_source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC6144821/"
+          ],
+          "primary_source_DOIs": [
+            "10.1093/nar/gky488"
+          ],
+          "starting_question": "Does a YbeY homolog share all RNA effects seen in E. coli, and why is it essential here?",
+          "actual_observations": [
+            {
+              "origin": "author_reported",
+              "observation": "Depletion specifically disrupts 16S 3-prime processing; other tested rRNA ends remain normal. 70S particles fall; deletion of rnr permits loss of yqfG."
+            }
+          ],
+          "annotation_consequence": "Supports 16S 3-prime maturation and a genetic relationship to ribosome turnover; homologous cellular effects are narrower than those reported for E. coli YbeY.",
+          "experiment_dependence": "Conditional depletion, end mapping/Northern, polysome gradients and double-mutant rescue.",
+          "reasoning_reported_vs_reconstructed": "The cited authors report the experiments and infer the cellular participation. My source selection and the compact annotation boundary are retrospective reconstruction; I did not perform their experiments.",
+          "verification_scope": "Full Results examined, including specificity controls and rescue. Same protein-family investigation group as cellular_ybeY; not independent replication of all E. coli claims.",
+          "collection_status": "verified_primary_results_examined"
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/126",
+    "case_group": "spatial_amic_amia_export_septal_access",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "spatial_amic_amia_export_septal_access",
+          "record_path": "/tmp/episode-published-cases/spatial/cases.jsonl",
+          "line": 6,
+          "verification_scope": "Relevant full Results, fusion-function controls and localization Discussion read. No direct binding target or reason for Tat preference established.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "spatial_amic_amia_export_septal_access",
+          "gene_protein": "AmiC and AmiA amidases; AmiB comparison grouped",
+          "organism": "Escherichia coli",
+          "primary_source_urls+DOIs": [
+            {
+              "source_id": "amic2003",
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4428285/",
+              "doi": "10.1046/j.1365-2958.2003.03511.x"
+            }
+          ],
+          "starting_question": "Which export and targeting features place active amidases where cell separation occurs?",
+          "actual_observations": [
+            {
+              "observation_id": "A1",
+              "origin": "author_reported_experiment",
+              "source_id": "amic2003",
+              "observation": "Functional GFP fusions complemented chaining; Tat loss blocked processing and peripheral localization. Spheroplast release supported periplasmic export.",
+              "source_locator": "Results, Figs. 2–5"
+            },
+            {
+              "observation_id": "A2",
+              "origin": "author_reported_experiment",
+              "source_id": "amic2003",
+              "observation": "AmiC accumulated at constrictions; N-terminal targeting fragments localized without catalytic regions. An exported catalytic-region-containing deletion lacked septal concentration yet suppressed chaining when induced.",
+              "source_locator": "Figs. 1, 6, 8"
+            },
+            {
+              "observation_id": "A3",
+              "origin": "author_reported_experiment",
+              "source_id": "amic2003",
+              "observation": "AmiB-GFP suppressed Tat-mutant chaining but its degradation prevented reliable localization.",
+              "source_locator": "Fig. 9; Other amidases Results"
+            }
+          ],
+          "annotation_consequence": "Supports Tat-dependent export and separable AmiC septal targeting. Targeting, export and catalysis are distinct properties; overexpression rescue does not establish that septal concentration is essential.",
+          "experiment_dependence": "Functional fusions, microscopy, export processing/release and deletion constructs; all author experiments.",
+          "reasoning_reported_vs_reconstructed": "Published outcomes were known during selection. Observations are authors’ experiments; the question sequence and compact inference boundaries are retrospective reconstruction. No new biological experiment was performed.",
+          "verification_scope": "Relevant full Results, fusion-function controls and localization Discussion read. No direct binding target or reason for Tat preference established.",
+          "cross_lane_link": "Root causal-role investigation examines EnvC/NlpD-mediated amidase activation; not repeated here.",
+          "collection_status": "primary_results_examined",
+          "primary_source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC4428285/"
+          ],
+          "primary_source_DOIs": [
+            "10.1046/j.1365-2958.2003.03511.x"
+          ]
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/127",
+    "case_group": "spatial_ccda_dsbd_acceptor_range",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "spatial_ccda_dsbd_acceptor_range",
+          "record_path": "/tmp/episode-published-cases/spatial/cases.jsonl",
+          "line": 4,
+          "verification_scope": "Main Results and Discussion plus relevant assay methods read. Direct CcdA–HelX chemistry and all homolog functions were inferred, not established by these assays.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "spatial_ccda_dsbd_acceptor_range",
+          "gene_protein": "CcdA versus DsbD; donor/acceptor partners treated as one specificity investigation",
+          "organism": "Rhodobacter capsulatus and Escherichia coli",
+          "primary_source_urls+DOIs": [
+            {
+              "source_id": "ccda2002",
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC126151/",
+              "doi": "10.1093/emboj/cdf405"
+            }
+          ],
+          "starting_question": "Does membrane-core homology confer the same periplasmic acceptor range as multidomain DsbD?",
+          "actual_observations": [
+            {
+              "observation_id": "C1",
+              "origin": "author_reported_experiment",
+              "source_id": "ccda2002",
+              "observation": "Reciprocal complementation restored cytochrome-c-related functions; CcdA rescue required TrxB and CcmG/HelX.",
+              "source_locator": "Figs. 2–4; Results"
+            },
+            {
+              "observation_id": "C2",
+              "origin": "author_reported_experiment",
+              "source_id": "ccda2002",
+              "observation": "CcdA did not reduce DsbC or DsbD-γ, including when DsbD accessory domains were coexpressed.",
+              "source_locator": "Fig. 2B–C; Roles of α and γ Results"
+            }
+          ],
+          "annotation_consequence": "Supports a transmembrane reducing pathway shared with DsbD while restricting demonstrated acceptor scope. Exported partners and appended domains cannot be assumed functionally interchangeable.",
+          "experiment_dependence": "Heterologous complementation, heme staining, growth/oxidase assays and thiol-redox measurements; all author experiments.",
+          "reasoning_reported_vs_reconstructed": "Published outcomes were known during selection. Observations are authors’ experiments; the question sequence and compact inference boundaries are retrospective reconstruction. No new biological experiment was performed.",
+          "verification_scope": "Main Results and Discussion plus relevant assay methods read. Direct CcdA–HelX chemistry and all homolog functions were inferred, not established by these assays.",
+          "investigation_group": "trace_redox_encounter_topology",
+          "collection_status": "primary_results_examined",
+          "primary_source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC126151/"
+          ],
+          "primary_source_DOIs": [
+            "10.1093/emboj/cdf405"
+          ]
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/128",
+    "case_group": "spatial_dsbd_topology_revision",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "spatial_dsbd_topology_revision",
+          "record_path": "/tmp/episode-published-cases/spatial/cases.jsonl",
+          "line": 3,
+          "verification_scope": "Full relevant Methods, Results, Figs. 1–5 legends and Discussion read. Neither a complete dynamic transport cycle nor current topology prediction was reproduced.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "spatial_dsbd_topology_revision",
+          "gene_protein": "DsbD; β membrane domain and α/γ domains grouped",
+          "organism": "Escherichia coli",
+          "primary_source_urls+DOIs": [
+            {
+              "source_id": "dsbd2003",
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC193585/",
+              "doi": "10.1073/pnas.1334136100"
+            }
+          ],
+          "starting_question": "Can the two essential membrane-domain cysteines form a disulfide if predicted on opposite membrane faces?",
+          "actual_observations": [
+            {
+              "observation_id": "D1",
+              "origin": "author_reported_experiment",
+              "source_id": "dsbd2003",
+              "observation": "Redox-sensitive alkylation and engineered cleavage supported an intramolecular Cys163–Cys285 disulfide.",
+              "source_locator": "Results, Figs. 2–3; paper’s mature-protein numbering"
+            },
+            {
+              "observation_id": "D2",
+              "origin": "author_reported_experiment",
+              "source_id": "dsbd2003",
+              "observation": "Intact spheroplasts protected both cysteines; membrane disruption exposed them, with cytoplasmic and periplasmic controls.",
+              "source_locator": "Fig. 4"
+            },
+            {
+              "observation_id": "D3",
+              "origin": "author_reported_experiment",
+              "source_id": "dsbd2003",
+              "observation": "Protease-marked vesicle orientation independently associated cysteine accessibility with the cytoplasmic face.",
+              "source_locator": "Fig. 5"
+            }
+          ],
+          "annotation_consequence": "Refines the transmembrane electron-transfer mechanism and rejects the earlier static opposite-face cysteine model. Cytoplasmic accessibility permits a cavity interpretation; the periplasmic γ-domain encounter remained unresolved.",
+          "experiment_dependence": "Alkylation, site-directed proteolysis, spheroplasts and orientation-resolved vesicles; all author experiments.",
+          "reasoning_reported_vs_reconstructed": "Published outcomes were known during selection. Observations are authors’ experiments; the question sequence and compact inference boundaries are retrospective reconstruction. No new biological experiment was performed.",
+          "verification_scope": "Full relevant Methods, Results, Figs. 1–5 legends and Discussion read. Neither a complete dynamic transport cycle nor current topology prediction was reproduced.",
+          "investigation_group": "trace_redox_encounter_topology",
+          "collection_status": "primary_results_examined",
+          "primary_source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC193585/"
+          ],
+          "primary_source_DOIs": [
+            "10.1073/pnas.1334136100"
+          ]
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/129",
+    "case_group": "spatial_ftsw_bpbp_job",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "spatial_ftsw_bpbp_job",
+          "record_path": "/tmp/episode-published-cases/spatial/cases.jsonl",
+          "line": 2,
+          "verification_scope": "Both papers’ relevant main Results and controls inspected; 2019 purification/polymerization methods read. No independent reproduction or resolution of every assay discrepancy.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "spatial_ftsw_bpbp_job",
+          "gene_protein": "FtsW with cognate divisome bPBP; complex members and orthologs grouped",
+          "organism": "Escherichia coli (2011); Streptococcus thermophilus, Staphylococcus aureus, Pseudomonas aeruginosa and Streptococcus pneumoniae (2019)",
+          "primary_source_urls+DOIs": [
+            {
+              "source_id": "ftsw2011",
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3102273/",
+              "doi": "10.1038/emboj.2011.61"
+            },
+            {
+              "source_id": "ftsw2019",
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6430707/",
+              "doi": "10.1038/s41564-018-0345-x"
+            }
+          ],
+          "starting_question": "Is FtsW a lipid II transporter, a polymerase, or an enzyme requiring a spatially compatible partner?",
+          "actual_observations": [
+            {
+              "observation_id": "F1",
+              "origin": "author_reported_experiment",
+              "source_id": "ftsw2011",
+              "observation": "FtsW-containing proteoliposomes increased NBD-lipid-II access to dithionite and labeled vancomycin; lumenal-marker controls argued against simple leakage.",
+              "source_locator": "Results, Figs. 5–7; leakage control described in main text"
+            },
+            {
+              "observation_id": "F2",
+              "origin": "author_reported_experiment",
+              "source_id": "ftsw2019",
+              "observation": "Purified FtsW alone lacked detectable polymerization; cognate bPBP addition restored it. FtsW catalytic substitution abolished product despite inactive bPBP transpeptidase retaining stimulation.",
+              "source_locator": "Fig. 1; Results"
+            },
+            {
+              "observation_id": "F3",
+              "origin": "author_reported_experiment",
+              "source_id": "ftsw2019",
+              "observation": "Removing the bPBP membrane helix prevented stimulation; helix swaps and compensatory interface substitutions changed activity. Catalytic variants failed cellular complementation.",
+              "source_locator": "Figs. 1–2; main Results; supplementary findings discussed"
+            }
+          ],
+          "annotation_consequence": "Assigns partner-dependent peptidoglycan polymerase activity to FtsW. The 2011 access observations remain recorded; 2019 authors explicitly did not formally exclude additional flippase activity.",
+          "experiment_dependence": "Reconstitution/access assays, purified polymerization, interface perturbations and cellular genetics; all author experiments.",
+          "reasoning_reported_vs_reconstructed": "Published outcomes were known during selection. Observations are authors’ experiments; the question sequence and compact inference boundaries are retrospective reconstruction. No new biological experiment was performed.",
+          "verification_scope": "Both papers’ relevant main Results and controls inspected; 2019 purification/polymerization methods read. No independent reproduction or resolution of every assay discrepancy.",
+          "investigation_group": "trace_lipidII_transport_vs_polymerization",
+          "collection_status": "primary_results_examined",
+          "primary_source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3102273/",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC6430707/"
+          ],
+          "primary_source_DOIs": [
+            "10.1038/emboj.2011.61",
+            "10.1038/s41564-018-0345-x"
+          ]
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/130",
+    "case_group": "spatial_murj_lipidII_access",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "spatial_murj_lipidII_access",
+          "record_path": "/tmp/episode-published-cases/spatial/cases.jsonl",
+          "line": 1,
+          "verification_scope": "Full main Results, Fig. 1–3 legends and assay rationale inspected. Supplementary raw measurements and purified transport were not reproduced.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "spatial_murj_lipidII_access",
+          "gene_protein": "MurJ (MviN)",
+          "organism": "Escherichia coli",
+          "primary_source_urls+DOIs": [
+            {
+              "source_id": "murj2014",
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4163187/",
+              "doi": "10.1126/science.1254522"
+            }
+          ],
+          "starting_question": "Does MurJ enable lipid II to reach the periplasmic leaflet, or cause another peptidoglycan defect?",
+          "actual_observations": [
+            {
+              "observation_id": "M1",
+              "origin": "author_reported_experiment",
+              "source_id": "murj2014",
+              "observation": "MTSES specifically inhibited functional MurJ-A29C; periplasmic ColM cleavage declined while lipid-linked label accumulated.",
+              "source_locator": "Figs. 1–2; main Results"
+            },
+            {
+              "observation_id": "M2",
+              "origin": "author_reported_experiment",
+              "source_id": "murj2014",
+              "observation": "Removing the outer membrane did not restore cleavage; disrupting the inner membrane did.",
+              "source_locator": "Fig. 3"
+            },
+            {
+              "observation_id": "M3",
+              "origin": "author_reported_experiment",
+              "source_id": "murj2014",
+              "observation": "Flipping persisted after FtsW depletion in a rodA deletion background; residual FtsW remained a stated caveat.",
+              "source_locator": "Final Results; supplementary Figs. S8–S9 discussed, not independently reanalyzed"
+            }
+          ],
+          "annotation_consequence": "Supports MurJ-dependent lipid II translocation in vivo. The access control distinguishes substrate sequestration from failed ColM import or activity.",
+          "experiment_dependence": "Chemical genetics, radiolabel/HPLC, spheroplast access and membrane disruption; all author experiments.",
+          "reasoning_reported_vs_reconstructed": "Published outcomes were known during selection. Observations are authors’ experiments; the question sequence and compact inference boundaries are retrospective reconstruction. No new biological experiment was performed.",
+          "verification_scope": "Full main Results, Fig. 1–3 legends and assay rationale inspected. Supplementary raw measurements and purified transport were not reproduced.",
+          "investigation_group": "trace_lipidII_transport_vs_polymerization",
+          "collection_status": "primary_results_examined",
+          "primary_source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC4163187/"
+          ],
+          "primary_source_DOIs": [
+            "10.1126/science.1254522"
+          ]
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/131",
+    "case_group": "spatial_trxa_relocation_role",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "spatial_trxa_relocation_role",
+          "record_path": "/tmp/episode-published-cases/spatial/cases.jsonl",
+          "line": 5,
+          "verification_scope": "Both papers’ relevant full Results and correction read. The oxidation-versus-reduction explanation at high expression remains an interpretation of the reported readouts.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "spatial_trxa_relocation_role",
+          "gene_protein": "TrxA/thioredoxin 1, experimentally exported variants; DsbB partner",
+          "organism": "Escherichia coli",
+          "primary_source_urls+DOIs": [
+            {
+              "source_id": "trxa1998",
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC27967/",
+              "doi": "10.1073/pnas.95.18.10751"
+            },
+            {
+              "source_id": "trxa2000",
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC94335/",
+              "doi": "10.1128/jb.182.3.723-727.2000"
+            }
+          ],
+          "starting_question": "Does relocating a cytoplasmic reductant change its cellular reaction direction?",
+          "actual_observations": [
+            {
+              "observation_id": "T1",
+              "origin": "author_reported_experiment",
+              "source_id": "trxa1998",
+              "observation": "Signal-sequence fusions showed processing, export-reporter activity, oxidized thioredoxin and partial dsbA rescue. Fractionation alone was inconclusive.",
+              "source_locator": "Results: Export of thioredoxin; Fig. 2–3; Tables 2–3"
+            },
+            {
+              "observation_id": "T2",
+              "origin": "author_reported_experiment",
+              "source_id": "trxa2000",
+              "observation": "Pulse-chase OmpA oxidation accelerated with exported TrxA. Reconstructed genotypes established DsbB dependence, correcting the 1998 strain error; a DsbB–TrxA mixed disulfide was trapped.",
+              "source_locator": "Fig. 1–2; Table 2; Mechanism of oxidation Results"
+            },
+            {
+              "observation_id": "T3",
+              "origin": "author_reported_experiment",
+              "source_id": "trxa2000",
+              "observation": "Higher exported-TrxA expression reduced alkaline-phosphatase recovery; authors proposed saturation of reoxidation capacity.",
+              "source_locator": "Table 3 and Discussion"
+            }
+          ],
+          "annotation_consequence": "Demonstrates conditional oxidant activity after engineered relocation, dependent on partner access and abundance. It does not annotate native TrxA as a naturally exported oxidant.",
+          "experiment_dependence": "Engineered targeting, export reporters, complementation, redox trapping and pulse-chase; all author experiments.",
+          "reasoning_reported_vs_reconstructed": "Published outcomes were known during selection. Observations are authors’ experiments; the question sequence and compact inference boundaries are retrospective reconstruction. No new biological experiment was performed.",
+          "verification_scope": "Both papers’ relevant full Results and correction read. The oxidation-versus-reduction explanation at high expression remains an interpretation of the reported readouts.",
+          "collection_status": "primary_results_examined",
+          "primary_source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC27967/",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC94335/"
+          ],
+          "primary_source_DOIs": [
+            "10.1073/pnas.95.18.10751",
+            "10.1128/jb.182.3.723-727.2000"
+          ]
+        }
+      }
+    ],
+    "trace_extensions": []
+  },
+  {
+    "source_locator": "research/slotted_process_library/case_records.json#/140",
+    "case_group": "yeag",
+    "best_coverage": "relevant_primary_sections",
+    "records": [
+      {
+        "index_reference": {
+          "case_id": "cellular_yeaG",
+          "record_path": "/tmp/episode-published-cases/cellular/verified_cases.jsonl",
+          "line": 14,
+          "verification_scope": "Full primary Results examined, including induction timing versus 72-hour-and-later survival effects. Kinase substrate mechanism remains outside demonstrated scope.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "cellular_yeaG",
+          "gene_protein": "YeaG (YeaGH context)",
+          "organism": "Escherichia coli",
+          "primary_source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC4664914/"
+          ],
+          "primary_source_DOIs": [
+            "10.1038/srep17524"
+          ],
+          "starting_question": "Which physiological program uses a stress-induced kinase?",
+          "actual_observations": [
+            {
+              "origin": "author_reported",
+              "observation": "yeaG induction after nitrogen exhaustion precedes a sustained-starvation phenotype. Deletion changes recovery/metabolic heterogeneity and accelerates later death; wild-type complementation repairs survival. Transcript/RpoS tests connect the phenotype to stress-program execution."
+            }
+          ],
+          "annotation_consequence": "Supports adaptation to sustained nitrogen starvation. Early induction alone would not show the delayed survival role or identify phosphorylation substrates.",
+          "experiment_dependence": "Timed starvation/recovery, single-cell reporters, transcript/protein assays and survival rescue.",
+          "reasoning_reported_vs_reconstructed": "The cited authors report the experiments and infer the cellular participation. My source selection and the compact annotation boundary are retrospective reconstruction; I did not perform their experiments.",
+          "verification_scope": "Full primary Results examined, including induction timing versus 72-hour-and-later survival effects. Kinase substrate mechanism remains outside demonstrated scope.",
+          "collection_status": "verified_primary_results_examined"
+        }
+      },
+      {
+        "index_reference": {
+          "case_id": "organism_06_yeag",
+          "record_path": "/tmp/episode-published-cases/organism/cases.jsonl",
+          "line": 6,
+          "verification_scope": "Relevant complete Results subsections on induction/recovery, viability and heterogeneity; culture and CFU methods. No reanalysis of cytometry files.",
+          "coverage": "relevant_primary_sections"
+        },
+        "record": {
+          "case_id": "organism_06_yeag",
+          "gene_protein_organism": "YeaG; Escherichia coli K-12",
+          "primary_source_urls/DOIs": [
+            {
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4664914/",
+              "doi": "10.1038/srep17524"
+            }
+          ],
+          "starting_question": "What does a starvation-induced kinase do when it is dispensable before nitrogen runout?",
+          "actual_observations": [
+            "Ammonium-limited cultures showed yeaG induction. Deletion shortened recovery lag and reduced metabolic heterogeneity yet accelerated viability loss after prolonged starvation; wild-type complementation restored survival. Catalytic-domain variants failed to rescue."
+          ],
+          "annotation_consequence": "Adaptation and survival during sustained nitrogen starvation; faster immediate regrowth does not imply improved long-term fitness. Physiological substrate(s) remain unresolved.",
+          "experiment_dependence": "Authors' timed nitrogen depletion, flow cytometry, CFU and complementation; the complete signaling mechanism is not inferred from induction.",
+          "reasoning_reported_vs_reconstructed": "Published answer was known during retrieval. Listed experiments and findings are authors' reports; connecting questions and annotation boundaries are our reconstruction unless explicitly identified as authors' rationale.",
+          "verification_scope": "Relevant complete Results subsections on induction/recovery, viability and heterogeneity; culture and CFU methods. No reanalysis of cytometry files."
+        }
+      }
+    ],
+    "trace_extensions": [
+      "/tmp/episode-published-cases/organism/yeag/trace.json"
+    ]
+  }
+]

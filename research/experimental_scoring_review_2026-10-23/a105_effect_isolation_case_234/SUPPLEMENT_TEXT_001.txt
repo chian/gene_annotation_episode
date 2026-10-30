@@ -1,0 +1,180 @@
+P0: Identification of the phosphatase that catalyzes the essential substrate dephosphorylation step of riboflavin biosynthesis in Aquifex aeolicus 
+P1: Zoe A. Hoffpauir and Audrey L. Lamb
+P2: Department of Chemistry, University of Texas at San Antonio, San Antonio, TX
+P5: Supporting Information
+P7: Contents
+P8: Script S1: Python script for identifying consensus sequencesPage S-2
+P9: Table S1:  Enzymes used in this studyPage S-4
+P10: Table S2:  Model components for IMP structurePage S-5
+P11: Table S3:  Model components for HFP structurePage S-5
+P12: Figure S1: SDS-PAGE gel showing expression of phosphatasesPage S-6
+P13: Figure S2: SDS-PAGE gel of purified IMP and HFPPage S-7
+P14: Figure S3:  31P-NMR of prolonged incubation samples demonstratesPage S-8
+P15: GTP dephosphorylation
+P16: Figure S4: 13C-NMR to confirm Ru5P/R5P isomerizationPage S-9
+P17: Figure S5: Equilibrium mixture of ribose and ribulose 5-phosphatePage S-10
+P18: established by HFP sample
+P19: Figure S6: His-tagged HFP sample isomerization of Ru5PPage S-11
+P20: Figure S7: Isomerase activity by 31P-NMRPage S-12
+P21: Figure S8: Mass Spectrometry Confirmation of RpiAPage S-13
+P22: Figure S9: HFP asymmetric composition and biological assemblyPage S-14
+P23: Figure S10: FMN phosphatase activity by 31P-NMRPage S-15
+P24: Figure S11: Structural comparison of HFP to RpiA and RpiBPage S-16
+P25: Figure S12: Electron density comparison in IMP monomersPage S-17
+P43: Script S1.  Python Script for identifying consensus sequences. The published proteins for Aquifex aeolicus 14 (text file) were imported into Microsoft Excel and saved as a CSV file with each protein being on its own row. 
+P45: #import packages
+P46: import pandas as pd#define functionsdef check_IV(sequence):    a=1    hits=[]    for i in range(len(sequence)-5):        if sequence[i]=='G' and sequence[i+1]=='D' and sequence[i+5]=='D':            hits.append(a)        a=a+1    for i in range(len(sequence)-6):        if sequence[i]=='G' and sequence[i+1]=='D' and sequence[i+6]=='D':            hits.append(a)        a=a+1    for i in range(len(sequence)-1):        if sequence[i]=='D' and sequence[i+1]=='D':            hits.append(a)        a=a+1    return sorted(hits)def mark_pos(Hits):    if len(Hits)>0: return 1    else: return 0def check_I(sequence):    hits=[]    a=1    for i in range(len(sequence)-6):        if sequence[i]=='D' and sequence[i+2]=='D' and ((sequence[i+4]==('T' or 'V')) and (sequence[i+5])==('L'or'I')):            hits.append(a)        a=a+1    return hitsdef mark_Ipos(Hits):    if len(Hits)>0: return 1    else: return 0
+P47: #construct dataframedf= pd.read_csv(path to data, names=['ProteinID'])df[['ProteinID','Sequence']]=df['ProteinID'].str.split(']',1,expand=True)
+P48: df['Sequence']=[str(ele) for ele in df.Sequence]df['IV_Hits']= [check_IV(ele1) for ele1 in df.Sequence]df['IV_Positive']= [mark_pos(ele1) for ele1 in df.IV_Hits]df=df.loc[df.IV_Positive==1]df['I_Hits']= [check_I(ele1) for ele1 in df.Sequence]df['NumberI']=[len(ele) for ele in df.I_Hits]df['I_Positive']= [mark_pos(ele1) for ele1 in df.I_Hits]df['Sum']=df.IV_Positive+df.I_Positive
+P49: df=df.loc[df.Sum==2]
+P50: #create CSV with hitsdf.to_csv('Aacuratedhits.csv')
+P67: Table S1: Enzymes used in this study
+P68: Name
+P69: Genomic Annotation
+P70: Code
+P71: RibBA
+P72: bifunctional 3,4-dihydroxy-2-butanone-4-phosphate synthase/GTP cyclohydrolase II
+P73: WP_010880177.1
+P74: RibE
+P75: riboflavin synthase
+P76: WP_010881107.1
+P77: RibD
+P78: bifunctional diaminohydroxyphosphoribosyl-aminopyrimidine deaminase/ 5-amino-6-(5-phosphoribosylamino) uracil reductase
+P79: WP_010880032.1
+P80: RibH
+P81: 6,7-dimethyl-8-ribityllumazine synthase (lumazine synthase)
+P82: WP_010880027.1
+P83: PP1
+P84: dUTP diphosphatase
+P85: WP_010880090.1
+P86: PP2
+P87: phosphatidylglycerophosphatase A
+P88: WP_010880153.1
+P89: PP3
+P90: serine/threonine-protein phosphatase
+P91: WP_010880576.1
+P92: PP4
+P93: inorganic diphosphatase
+P94: WP_010881004.1
+P95: PP5
+P96: phosphohistidine phosphatase SixA
+P97: WP_010880736.1
+P98: PP6
+P99: bifunctional oligoribonuclease/PAP phosphatase NrnA
+P100: WP_010881055.1
+P101: PP7
+P102: lipid A 1-phosphatase LpxE
+P103: WP_010881106.1
+P104: PP8
+P105: nucleoside triphosphate pyrophosphatase
+P106: WP_010881116.1
+P107: PP10
+P108: bifunctional phosphoribosyl-AMP cyclohydrolase/ phosphoribosyl-ATP diphosphatase HisIE
+P109: WP_010881285.1
+P110: PP11 (IMP)
+P111: inositol monophosphatase family protein
+P112: WP_010881296.1
+P113: PP12
+P114: histidine phosphatase family protein
+P115: WP_010881302.1
+P116: PP13*
+P117: undecaprenyl-diphosphatase UppP
+P118: WP_010881444.1
+P119: PP14
+P120: acylphosphatase
+P121: WP_164930633.1
+P122: PP15
+P123: 1 Ppx/GppA phosphatase family protein
+P124: WP_164930648.1
+P125: PP16
+P126: UDP-2,3-diacylglucosamine diphosphatase LpxI
+P127: WP_164930695.1
+P128: PP17 (HFP)
+P129: histidine phosphatase family protein
+P130: WP_164930753.1
+P131: PP18
+P132: RdgB/HAM1 family non-canonical purine NTP pyrophosphatase
+P133: WP_010880078.1
+P134: PP20
+P135: low molecular weight phosphatase family protein
+P136: WP_010880379.1
+P137: PP21
+P138: acireductone synthase
+P139: WP_010881291.1
+P140: PP22
+P141: HAD family hydrolase
+P142: WP_010880861.1
+P143: PP23
+P144: HAD hydrolase-like protein
+P145: WP_010880597.1
+P146: PP24
+P147: HAD hydrolase-like protein
+P148: WP_164930629.1
+P149: PP25
+P150: nucleoside hydrolase
+P151: WP_010880610.1
+P152:  * = The protein did not express adequately for subsequent screening, see Figure S1 gel.  
+P153: ** = PP9 and PP19 were removed because they were open reading frame duplicates from the RefSeq and GenBank predicted proteomes.
+P158: Table S2: IMP Structure Components
+P160: Total Residues
+P161: 992
+P162: Total Waters
+P163: 323
+P164: Chain A
+P165: 260 Residues: 3-262
+P166: 1 Phosphate
+P167: 2 Magnesium Atoms
+P168: 4 MPD
+P169: Chain B
+P170: 261 Residues: 3-263
+P171: 1 Phosphate
+P172: 2 Magnesium Atoms
+P173: 4 MPD
+P174: Chain C
+P175: 233 Residues: 4-29, 42-74, 79-160, 167-258
+P176: 2 Magnesium Atoms
+P177: 1 MPD
+P178: Chain D
+P179: 238 Residues: 4-34, 42-160, 168-255
+P180: 2 Magnesium Atom
+P182: Table S3: HFP Structure Components
+P184: Total Residues
+P185: 812
+P186: Total Waters
+P187: 395
+P188: Chain A
+P189: 203 Residues: 1-203
+P190: Chain B
+P191: 203 Residues: 1-203
+P192: Chain C
+P193: 203 Residues: 1-203
+P194: Chain D
+P195: 203 Residues: 1-203
+P196: Chain E
+P197: 11 sulfates
+P218:  [IMAGES: media/image1.emf]
+P219: Figure S1: SDS-PAGE showing expression of phosphatases. Boxes highlight presence of putative phosphatase. Samples noted with * were diluted 1:10 prior to loading on to the gel for clarity as undiluted sample overloaded the lane.  PP9 and PP19 were removed because they were open reading frame duplicates from the RefSeq and GenBank predicted proteomes.
+P237:  [IMAGES: media/image2.emf]
+P238: Figure S2: SDS-PAGE gel showing purified IMP and HFP used for assays. Note that there are two faint bands visible in the HFP sample between 48 and 63 kDa. Neither of these bands are the E. coli Rpi contaminants responsible for the observed isomerase activity of the sample. The molecular weights of E. coli RpiA and RpiB are ~22,860 and 16,073 Da, respectively. Because HFP is close in molecular weight to RpiA, the contaminant band may not be visible by SDS-PAGE.
+P264:  [IMAGES: media/image3.emf]
+P265: Figure S3: 31P-NMR of prolonged incubation samples demonstrates GTP dephosphorylation. Overnight incubation of enzymes with GTP does show that GTP is dephosphorylated by HFP and IMP after prolonged incubation at 55˚ C.  In particular, note the formation of the peak at 2.1 ppm which is free phosphate (highlighted by the gray box). A free phosphate peak is absent in the GTP standard, which was subjected to identical temperature and duration of incubation. 
+P278:  [IMAGES: media/image4.emf]
+P279: Figure S4: 13C-NMR to confirm Ru5P/R5P isomerization. Top black trace shows labeled Ru5P and R5P generated by 13C-Ru5P isomerization by HFP. Blue trace shows chemical shifts of carbons in 13C-Ru5P. Unlabeled R5P was used to determine chemical shifts of the carbons in R5P (bottom red trace). 
+P288:  [IMAGES: media/image5.emf]
+P289: Figure S5: Equilibrium mixture of ribose and ribulose 5-phosphate established by HFP sample.  Integration of 31P peaks showing an equilibrium mixture of 39.7% ketose (ribulose) and 60.3% aldose (ribose) stereoisomer 5-phosphates established by HFP sample during a 10 min incubation at room temperature. Calculation of equilibrium concentrations of Ru5P and R5P was performed in MestReNova.  
+P298:  [IMAGES: media/image6.emf]
+P299: Figure S6: His-tagged HFP sample isomerization of Ru5P. After affinity chromatography, gel filtration, and heating to 90 C for 2 minutes (until protein began to visibly fall out of solution), HFP sample still isomerizes Ru5P to R5P, but it takes longer for the 40:60 equilibrium to be reached. The top panel shows the sample after being incubated for 1 hour with Ru5P vs 18 hours. Only after a prolonged incubation time is equilibrium reached, suggesting significantly less contaminant Rpi present. 
+P310:  [IMAGES: media/image7.png]
+P311: Figure S7:  Isomerase activity by 31P-NMR.  Four out of five randomly selected putative phosphate samples demonstrated isomerase activity, as evident from the new peak at 3.5 ppm.
+P326:  [IMAGES: media/image8.png]
+P327: Figure S8.  Mass spectrometry confirmation of RpiA Sequence coverage from mass spectrometry analysis. A, HFP (Aquifex aeolicus); B, ribose-5-phosphate isomerase A (Escherichia coli). Sequences highlighted in gold were detected after applying the criteria described below. Detected modifications of amino acids are indicated in green: M, methionine oxidation; Q, glutamine deamidation; N asparagine deamidation. [Note: the modifications were detected on a percentage of residues—i.e., they are not all modified.]
+P329: MS Method. Digests were analyzed by HPLC-electrospray ionization tandem mass spectrometry on a Thermo Scientific Orbitrap Fusion Lumos mass spectrometer using a data-dependent acquisition scan strategy. Mascot (v2.8.3; Matrix Science, London UK) was used to search the spectra against a combination of the following databases: UniProt_E_coli_ref; a “local” database that includes the sequences of recombinant and target proteins; common contaminants (not including Bos taurus proteins). Cysteine carbamidomethylation was set as a fixed modification and methionine oxidation and deamidation of glutamine and asparagine were considered as variable modifications; trypsin was specified as the proteolytic enzyme, with two missed cleavages allowed. The Mascot search results were imported into Scaffold (version 5.3.3, Proteome Software Inc., Portland, OR): peptide threshold, 95%; protein threshold, 99%;  minimum peptides, 2. The settings used resulted in a protein-level FDR of ~0%.
+P338:  [IMAGES: media/image9.emf]
+P340: Figure S9:  HFP asymmetric unit and biological assembly.  A. HFP crystals contained 4 chains in the asymmetric unit colored as follows: A, dark orange, B, bright orange, C, wheat, D, gray. Chains A and B form the dimer while chains C and D form dimers with adjacent unit cells. B. The biological assembly has high homology to PDB:4IJ6, shown in cyan, and the active sites are highlighted by the green spheres. 
+P349:  [IMAGES: media/image10.emf]
+P350: Figure S10:  FMN phosphatase activity by 31P-NMR. 31P-NMR indicates that both EcYigB, in agreement with previously published reports, and HFP dephosphorylate FMN. 
+P362: S-15
+P363:  [IMAGES: media/image11.emf]
+P364: Figure S11:  Structural comparison of HFP (orange) to RpiB (green, PDB: 3K7S) and RpiA (pink, PDB: 1LK7). 
+P379:   [IMAGES: media/image12.emf]
+P380: Figure S12: Electron density comparison in IMP monomers. The density for residues 151-160, 183-186, and 203-298 is shown for both the A and D chains. The 2Fo-Fc map is contoured to 1.5 σ. 

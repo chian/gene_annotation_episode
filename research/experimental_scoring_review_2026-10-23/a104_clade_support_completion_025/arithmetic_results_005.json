@@ -1,0 +1,1942 @@
+{
+  "status": "all assertions passed; finite research arithmetic only",
+  "base_inputs": {
+    "backbone": "((a:.3,b:.3)C:.2,c:.5)root;",
+    "placements": [
+      [
+        "a",
+        {
+          "exact": "1/5",
+          "decimal": 0.2
+        },
+        {
+          "exact": "1/10",
+          "decimal": 0.1
+        },
+        {
+          "exact": "3/5",
+          "decimal": 0.6
+        }
+      ],
+      [
+        "b",
+        {
+          "exact": "1/5",
+          "decimal": 0.2
+        },
+        {
+          "exact": "1/10",
+          "decimal": 0.1
+        },
+        {
+          "exact": "1/5",
+          "decimal": 0.2
+        }
+      ],
+      [
+        "C",
+        {
+          "exact": "1/10",
+          "decimal": 0.1
+        },
+        {
+          "exact": "1/10",
+          "decimal": 0.1
+        },
+        {
+          "exact": "1/10",
+          "decimal": 0.1
+        }
+      ],
+      [
+        "c",
+        {
+          "exact": "1/5",
+          "decimal": 0.2
+        },
+        {
+          "exact": "1/10",
+          "decimal": 0.1
+        },
+        {
+          "exact": "1/10",
+          "decimal": 0.1
+        }
+      ]
+    ],
+    "intended_taxa": [
+      "q",
+      "a",
+      "b",
+      "c"
+    ],
+    "functions": {
+      "a": [
+        "f"
+      ],
+      "b": [
+        "f"
+      ]
+    }
+  },
+  "base_rows": [
+    {
+      "function": {
+        "n": 2,
+        "k_f": 2,
+        "unknown": 0,
+        "known_classes": [
+          "f"
+        ],
+        "mixed_for_claim": false,
+        "C": {
+          "exact": "1",
+          "decimal": 1.0
+        }
+      },
+      "concordance": {
+        "N": 4,
+        "match": 4,
+        "conflict": 0,
+        "unresolved": 0,
+        "supported": {
+          "exact": "1",
+          "decimal": 1.0
+        },
+        "native_fraction_defined": true,
+        "completion_bounds": [
+          {
+            "exact": "1",
+            "decimal": 1.0
+          },
+          {
+            "exact": "1",
+            "decimal": 1.0
+          }
+        ],
+        "comparisons": [
+          {
+            "tips": [
+              "a",
+              "b",
+              "c"
+            ],
+            "gene": [
+              "a",
+              "b"
+            ],
+            "organism": [
+              "a",
+              "b"
+            ],
+            "state": "match"
+          },
+          {
+            "tips": [
+              "a",
+              "b",
+              "q"
+            ],
+            "gene": [
+              "a",
+              "q"
+            ],
+            "organism": [
+              "a",
+              "q"
+            ],
+            "state": "match"
+          },
+          {
+            "tips": [
+              "a",
+              "c",
+              "q"
+            ],
+            "gene": [
+              "a",
+              "q"
+            ],
+            "organism": [
+              "a",
+              "q"
+            ],
+            "state": "match"
+          },
+          {
+            "tips": [
+              "b",
+              "c",
+              "q"
+            ],
+            "gene": [
+              "b",
+              "q"
+            ],
+            "organism": [
+              "b",
+              "q"
+            ],
+            "state": "match"
+          }
+        ]
+      },
+      "membership": [
+        {
+          "exact": "1",
+          "decimal": 1.0
+        },
+        {
+          "exact": "1",
+          "decimal": 1.0
+        },
+        "inside"
+      ],
+      "locality": {
+        "b": {
+          "exact": "3/5",
+          "decimal": 0.6
+        },
+        "d": {
+          "exact": "3/10",
+          "decimal": 0.3
+        },
+        "O": {
+          "exact": "1",
+          "decimal": 1.0
+        }
+      },
+      "a": {
+        "exact": "1",
+        "decimal": 1.0
+      }
+    },
+    {
+      "function": {
+        "n": 2,
+        "k_f": 2,
+        "unknown": 0,
+        "known_classes": [
+          "f"
+        ],
+        "mixed_for_claim": false,
+        "C": {
+          "exact": "1",
+          "decimal": 1.0
+        }
+      },
+      "concordance": {
+        "N": 4,
+        "match": 3,
+        "conflict": 1,
+        "unresolved": 0,
+        "supported": {
+          "exact": "3/4",
+          "decimal": 0.75
+        },
+        "native_fraction_defined": true,
+        "completion_bounds": [
+          {
+            "exact": "3/4",
+            "decimal": 0.75
+          },
+          {
+            "exact": "3/4",
+            "decimal": 0.75
+          }
+        ],
+        "comparisons": [
+          {
+            "tips": [
+              "a",
+              "b",
+              "c"
+            ],
+            "gene": [
+              "a",
+              "b"
+            ],
+            "organism": [
+              "a",
+              "b"
+            ],
+            "state": "match"
+          },
+          {
+            "tips": [
+              "a",
+              "b",
+              "q"
+            ],
+            "gene": [
+              "b",
+              "q"
+            ],
+            "organism": [
+              "a",
+              "q"
+            ],
+            "state": "conflict"
+          },
+          {
+            "tips": [
+              "a",
+              "c",
+              "q"
+            ],
+            "gene": [
+              "a",
+              "q"
+            ],
+            "organism": [
+              "a",
+              "q"
+            ],
+            "state": "match"
+          },
+          {
+            "tips": [
+              "b",
+              "c",
+              "q"
+            ],
+            "gene": [
+              "b",
+              "q"
+            ],
+            "organism": [
+              "b",
+              "q"
+            ],
+            "state": "match"
+          }
+        ]
+      },
+      "membership": [
+        {
+          "exact": "1",
+          "decimal": 1.0
+        },
+        {
+          "exact": "1",
+          "decimal": 1.0
+        },
+        "inside"
+      ],
+      "locality": {
+        "b": {
+          "exact": "3/5",
+          "decimal": 0.6
+        },
+        "d": {
+          "exact": "3/10",
+          "decimal": 0.3
+        },
+        "O": {
+          "exact": "1",
+          "decimal": 1.0
+        }
+      },
+      "a": {
+        "exact": "3/4",
+        "decimal": 0.75
+      }
+    },
+    {
+      "function": {
+        "n": 2,
+        "k_f": 2,
+        "unknown": 0,
+        "known_classes": [
+          "f"
+        ],
+        "mixed_for_claim": false,
+        "C": {
+          "exact": "1",
+          "decimal": 1.0
+        }
+      },
+      "concordance": {
+        "N": 4,
+        "match": 3,
+        "conflict": 1,
+        "unresolved": 0,
+        "supported": {
+          "exact": "3/4",
+          "decimal": 0.75
+        },
+        "native_fraction_defined": true,
+        "completion_bounds": [
+          {
+            "exact": "3/4",
+            "decimal": 0.75
+          },
+          {
+            "exact": "3/4",
+            "decimal": 0.75
+          }
+        ],
+        "comparisons": [
+          {
+            "tips": [
+              "a",
+              "b",
+              "c"
+            ],
+            "gene": [
+              "a",
+              "b"
+            ],
+            "organism": [
+              "a",
+              "b"
+            ],
+            "state": "match"
+          },
+          {
+            "tips": [
+              "a",
+              "b",
+              "q"
+            ],
+            "gene": [
+              "a",
+              "b"
+            ],
+            "organism": [
+              "a",
+              "q"
+            ],
+            "state": "conflict"
+          },
+          {
+            "tips": [
+              "a",
+              "c",
+              "q"
+            ],
+            "gene": [
+              "a",
+              "q"
+            ],
+            "organism": [
+              "a",
+              "q"
+            ],
+            "state": "match"
+          },
+          {
+            "tips": [
+              "b",
+              "c",
+              "q"
+            ],
+            "gene": [
+              "b",
+              "q"
+            ],
+            "organism": [
+              "b",
+              "q"
+            ],
+            "state": "match"
+          }
+        ]
+      },
+      "membership": [
+        {
+          "exact": "0",
+          "decimal": 0.0
+        },
+        {
+          "exact": "0",
+          "decimal": 0.0
+        },
+        "stem"
+      ],
+      "locality": {
+        "b": {
+          "exact": "3/5",
+          "decimal": 0.6
+        },
+        "d": {
+          "exact": "1/2",
+          "decimal": 0.5
+        },
+        "O": {
+          "exact": "1",
+          "decimal": 1.0
+        }
+      },
+      "a": {
+        "exact": "0",
+        "decimal": 0.0
+      }
+    },
+    {
+      "function": {
+        "n": 2,
+        "k_f": 2,
+        "unknown": 0,
+        "known_classes": [
+          "f"
+        ],
+        "mixed_for_claim": false,
+        "C": {
+          "exact": "1",
+          "decimal": 1.0
+        }
+      },
+      "concordance": {
+        "N": 4,
+        "match": 1,
+        "conflict": 3,
+        "unresolved": 0,
+        "supported": {
+          "exact": "1/4",
+          "decimal": 0.25
+        },
+        "native_fraction_defined": true,
+        "completion_bounds": [
+          {
+            "exact": "1/4",
+            "decimal": 0.25
+          },
+          {
+            "exact": "1/4",
+            "decimal": 0.25
+          }
+        ],
+        "comparisons": [
+          {
+            "tips": [
+              "a",
+              "b",
+              "c"
+            ],
+            "gene": [
+              "a",
+              "b"
+            ],
+            "organism": [
+              "a",
+              "b"
+            ],
+            "state": "match"
+          },
+          {
+            "tips": [
+              "a",
+              "b",
+              "q"
+            ],
+            "gene": [
+              "a",
+              "b"
+            ],
+            "organism": [
+              "a",
+              "q"
+            ],
+            "state": "conflict"
+          },
+          {
+            "tips": [
+              "a",
+              "c",
+              "q"
+            ],
+            "gene": [
+              "c",
+              "q"
+            ],
+            "organism": [
+              "a",
+              "q"
+            ],
+            "state": "conflict"
+          },
+          {
+            "tips": [
+              "b",
+              "c",
+              "q"
+            ],
+            "gene": [
+              "c",
+              "q"
+            ],
+            "organism": [
+              "b",
+              "q"
+            ],
+            "state": "conflict"
+          }
+        ]
+      },
+      "membership": [
+        {
+          "exact": "0",
+          "decimal": 0.0
+        },
+        {
+          "exact": "0",
+          "decimal": 0.0
+        },
+        "outside"
+      ],
+      "locality": {
+        "b": {
+          "exact": "3/5",
+          "decimal": 0.6
+        },
+        "d": {
+          "exact": "9/10",
+          "decimal": 0.9
+        },
+        "O": {
+          "exact": "2/3",
+          "decimal": 0.6666666666666666
+        }
+      },
+      "a": {
+        "exact": "0",
+        "decimal": 0.0
+      }
+    }
+  ],
+  "base_region": {
+    "exact": "3/4",
+    "decimal": 0.75
+  },
+  "incorrect_product_of_means": {
+    "exact": "493/750",
+    "decimal": 0.6573333333333333
+  },
+  "EDPL": {
+    "attachment_distances": [
+      [
+        {
+          "exact": "0",
+          "decimal": 0.0
+        },
+        {
+          "exact": "1/5",
+          "decimal": 0.2
+        },
+        {
+          "exact": "1/5",
+          "decimal": 0.2
+        },
+        {
+          "exact": "3/5",
+          "decimal": 0.6
+        }
+      ],
+      [
+        {
+          "exact": "1/5",
+          "decimal": 0.2
+        },
+        {
+          "exact": "0",
+          "decimal": 0.0
+        },
+        {
+          "exact": "1/5",
+          "decimal": 0.2
+        },
+        {
+          "exact": "3/5",
+          "decimal": 0.6
+        }
+      ],
+      [
+        {
+          "exact": "1/5",
+          "decimal": 0.2
+        },
+        {
+          "exact": "1/5",
+          "decimal": 0.2
+        },
+        {
+          "exact": "0",
+          "decimal": 0.0
+        },
+        {
+          "exact": "2/5",
+          "decimal": 0.4
+        }
+      ],
+      [
+        {
+          "exact": "3/5",
+          "decimal": 0.6
+        },
+        {
+          "exact": "3/5",
+          "decimal": 0.6
+        },
+        {
+          "exact": "2/5",
+          "decimal": 0.4
+        },
+        {
+          "exact": "0",
+          "decimal": 0.0
+        }
+      ]
+    ],
+    "total_length": {
+      "exact": "13/10",
+      "decimal": 1.3
+    },
+    "value": {
+      "exact": "46/325",
+      "decimal": 0.14153846153846153
+    }
+  },
+  "outlier_rows": [
+    {
+      "function": {
+        "n": 2,
+        "k_f": 2,
+        "unknown": 0,
+        "known_classes": [
+          "f"
+        ],
+        "mixed_for_claim": false,
+        "C": {
+          "exact": "1",
+          "decimal": 1.0
+        }
+      },
+      "concordance": {
+        "N": 4,
+        "match": 4,
+        "conflict": 0,
+        "unresolved": 0,
+        "supported": {
+          "exact": "1",
+          "decimal": 1.0
+        },
+        "native_fraction_defined": true,
+        "completion_bounds": [
+          {
+            "exact": "1",
+            "decimal": 1.0
+          },
+          {
+            "exact": "1",
+            "decimal": 1.0
+          }
+        ],
+        "comparisons": [
+          {
+            "tips": [
+              "a",
+              "b",
+              "c"
+            ],
+            "gene": [
+              "a",
+              "b"
+            ],
+            "organism": [
+              "a",
+              "b"
+            ],
+            "state": "match"
+          },
+          {
+            "tips": [
+              "a",
+              "b",
+              "q"
+            ],
+            "gene": [
+              "a",
+              "q"
+            ],
+            "organism": [
+              "a",
+              "q"
+            ],
+            "state": "match"
+          },
+          {
+            "tips": [
+              "a",
+              "c",
+              "q"
+            ],
+            "gene": [
+              "a",
+              "q"
+            ],
+            "organism": [
+              "a",
+              "q"
+            ],
+            "state": "match"
+          },
+          {
+            "tips": [
+              "b",
+              "c",
+              "q"
+            ],
+            "gene": [
+              "b",
+              "q"
+            ],
+            "organism": [
+              "b",
+              "q"
+            ],
+            "state": "match"
+          }
+        ]
+      },
+      "membership": [
+        {
+          "exact": "1",
+          "decimal": 1.0
+        },
+        {
+          "exact": "1",
+          "decimal": 1.0
+        },
+        "inside"
+      ],
+      "locality": {
+        "b": {
+          "exact": "3/5",
+          "decimal": 0.6
+        },
+        "d": {
+          "exact": "6",
+          "decimal": 6.0
+        },
+        "O": {
+          "exact": "1/10",
+          "decimal": 0.1
+        }
+      },
+      "a": {
+        "exact": "1/10",
+        "decimal": 0.1
+      }
+    },
+    {
+      "function": {
+        "n": 2,
+        "k_f": 2,
+        "unknown": 0,
+        "known_classes": [
+          "f"
+        ],
+        "mixed_for_claim": false,
+        "C": {
+          "exact": "1",
+          "decimal": 1.0
+        }
+      },
+      "concordance": {
+        "N": 4,
+        "match": 3,
+        "conflict": 1,
+        "unresolved": 0,
+        "supported": {
+          "exact": "3/4",
+          "decimal": 0.75
+        },
+        "native_fraction_defined": true,
+        "completion_bounds": [
+          {
+            "exact": "3/4",
+            "decimal": 0.75
+          },
+          {
+            "exact": "3/4",
+            "decimal": 0.75
+          }
+        ],
+        "comparisons": [
+          {
+            "tips": [
+              "a",
+              "b",
+              "c"
+            ],
+            "gene": [
+              "a",
+              "b"
+            ],
+            "organism": [
+              "a",
+              "b"
+            ],
+            "state": "match"
+          },
+          {
+            "tips": [
+              "a",
+              "b",
+              "q"
+            ],
+            "gene": [
+              "b",
+              "q"
+            ],
+            "organism": [
+              "a",
+              "q"
+            ],
+            "state": "conflict"
+          },
+          {
+            "tips": [
+              "a",
+              "c",
+              "q"
+            ],
+            "gene": [
+              "a",
+              "q"
+            ],
+            "organism": [
+              "a",
+              "q"
+            ],
+            "state": "match"
+          },
+          {
+            "tips": [
+              "b",
+              "c",
+              "q"
+            ],
+            "gene": [
+              "b",
+              "q"
+            ],
+            "organism": [
+              "b",
+              "q"
+            ],
+            "state": "match"
+          }
+        ]
+      },
+      "membership": [
+        {
+          "exact": "1",
+          "decimal": 1.0
+        },
+        {
+          "exact": "1",
+          "decimal": 1.0
+        },
+        "inside"
+      ],
+      "locality": {
+        "b": {
+          "exact": "3/5",
+          "decimal": 0.6
+        },
+        "d": {
+          "exact": "6",
+          "decimal": 6.0
+        },
+        "O": {
+          "exact": "1/10",
+          "decimal": 0.1
+        }
+      },
+      "a": {
+        "exact": "3/40",
+        "decimal": 0.075
+      }
+    },
+    {
+      "function": {
+        "n": 2,
+        "k_f": 2,
+        "unknown": 0,
+        "known_classes": [
+          "f"
+        ],
+        "mixed_for_claim": false,
+        "C": {
+          "exact": "1",
+          "decimal": 1.0
+        }
+      },
+      "concordance": {
+        "N": 4,
+        "match": 3,
+        "conflict": 1,
+        "unresolved": 0,
+        "supported": {
+          "exact": "3/4",
+          "decimal": 0.75
+        },
+        "native_fraction_defined": true,
+        "completion_bounds": [
+          {
+            "exact": "3/4",
+            "decimal": 0.75
+          },
+          {
+            "exact": "3/4",
+            "decimal": 0.75
+          }
+        ],
+        "comparisons": [
+          {
+            "tips": [
+              "a",
+              "b",
+              "c"
+            ],
+            "gene": [
+              "a",
+              "b"
+            ],
+            "organism": [
+              "a",
+              "b"
+            ],
+            "state": "match"
+          },
+          {
+            "tips": [
+              "a",
+              "b",
+              "q"
+            ],
+            "gene": [
+              "a",
+              "b"
+            ],
+            "organism": [
+              "a",
+              "q"
+            ],
+            "state": "conflict"
+          },
+          {
+            "tips": [
+              "a",
+              "c",
+              "q"
+            ],
+            "gene": [
+              "a",
+              "q"
+            ],
+            "organism": [
+              "a",
+              "q"
+            ],
+            "state": "match"
+          },
+          {
+            "tips": [
+              "b",
+              "c",
+              "q"
+            ],
+            "gene": [
+              "b",
+              "q"
+            ],
+            "organism": [
+              "b",
+              "q"
+            ],
+            "state": "match"
+          }
+        ]
+      },
+      "membership": [
+        {
+          "exact": "0",
+          "decimal": 0.0
+        },
+        {
+          "exact": "0",
+          "decimal": 0.0
+        },
+        "stem"
+      ],
+      "locality": {
+        "b": {
+          "exact": "3/5",
+          "decimal": 0.6
+        },
+        "d": {
+          "exact": "31/5",
+          "decimal": 6.2
+        },
+        "O": {
+          "exact": "3/31",
+          "decimal": 0.0967741935483871
+        }
+      },
+      "a": {
+        "exact": "0",
+        "decimal": 0.0
+      }
+    },
+    {
+      "function": {
+        "n": 2,
+        "k_f": 2,
+        "unknown": 0,
+        "known_classes": [
+          "f"
+        ],
+        "mixed_for_claim": false,
+        "C": {
+          "exact": "1",
+          "decimal": 1.0
+        }
+      },
+      "concordance": {
+        "N": 4,
+        "match": 1,
+        "conflict": 3,
+        "unresolved": 0,
+        "supported": {
+          "exact": "1/4",
+          "decimal": 0.25
+        },
+        "native_fraction_defined": true,
+        "completion_bounds": [
+          {
+            "exact": "1/4",
+            "decimal": 0.25
+          },
+          {
+            "exact": "1/4",
+            "decimal": 0.25
+          }
+        ],
+        "comparisons": [
+          {
+            "tips": [
+              "a",
+              "b",
+              "c"
+            ],
+            "gene": [
+              "a",
+              "b"
+            ],
+            "organism": [
+              "a",
+              "b"
+            ],
+            "state": "match"
+          },
+          {
+            "tips": [
+              "a",
+              "b",
+              "q"
+            ],
+            "gene": [
+              "a",
+              "b"
+            ],
+            "organism": [
+              "a",
+              "q"
+            ],
+            "state": "conflict"
+          },
+          {
+            "tips": [
+              "a",
+              "c",
+              "q"
+            ],
+            "gene": [
+              "c",
+              "q"
+            ],
+            "organism": [
+              "a",
+              "q"
+            ],
+            "state": "conflict"
+          },
+          {
+            "tips": [
+              "b",
+              "c",
+              "q"
+            ],
+            "gene": [
+              "c",
+              "q"
+            ],
+            "organism": [
+              "b",
+              "q"
+            ],
+            "state": "conflict"
+          }
+        ]
+      },
+      "membership": [
+        {
+          "exact": "0",
+          "decimal": 0.0
+        },
+        {
+          "exact": "0",
+          "decimal": 0.0
+        },
+        "outside"
+      ],
+      "locality": {
+        "b": {
+          "exact": "3/5",
+          "decimal": 0.6
+        },
+        "d": {
+          "exact": "33/5",
+          "decimal": 6.6
+        },
+        "O": {
+          "exact": "1/11",
+          "decimal": 0.09090909090909091
+        }
+      },
+      "a": {
+        "exact": "0",
+        "decimal": 0.0
+      }
+    }
+  ],
+  "outlier_region": {
+    "exact": "3/40",
+    "decimal": 0.075
+  },
+  "function_coverage": {
+    "large_tree": "((((q:.1,a:.1):.1,b:.2):.1,u:.3)C:.2,c:.5)root;",
+    "partial": {
+      "function": {
+        "n": 3,
+        "k_f": 2,
+        "unknown": 1,
+        "known_classes": [
+          "f"
+        ],
+        "mixed_for_claim": false,
+        "C": {
+          "exact": "2/3",
+          "decimal": 0.6666666666666666
+        }
+      },
+      "concordance": {
+        "N": 10,
+        "match": 10,
+        "conflict": 0,
+        "unresolved": 0,
+        "supported": {
+          "exact": "1",
+          "decimal": 1.0
+        },
+        "native_fraction_defined": true,
+        "completion_bounds": [
+          {
+            "exact": "1",
+            "decimal": 1.0
+          },
+          {
+            "exact": "1",
+            "decimal": 1.0
+          }
+        ],
+        "comparisons": [
+          {
+            "tips": [
+              "a",
+              "b",
+              "c"
+            ],
+            "gene": [
+              "a",
+              "b"
+            ],
+            "organism": [
+              "a",
+              "b"
+            ],
+            "state": "match"
+          },
+          {
+            "tips": [
+              "a",
+              "b",
+              "q"
+            ],
+            "gene": [
+              "a",
+              "q"
+            ],
+            "organism": [
+              "a",
+              "q"
+            ],
+            "state": "match"
+          },
+          {
+            "tips": [
+              "a",
+              "b",
+              "u"
+            ],
+            "gene": [
+              "a",
+              "b"
+            ],
+            "organism": [
+              "a",
+              "b"
+            ],
+            "state": "match"
+          },
+          {
+            "tips": [
+              "a",
+              "c",
+              "q"
+            ],
+            "gene": [
+              "a",
+              "q"
+            ],
+            "organism": [
+              "a",
+              "q"
+            ],
+            "state": "match"
+          },
+          {
+            "tips": [
+              "a",
+              "c",
+              "u"
+            ],
+            "gene": [
+              "a",
+              "u"
+            ],
+            "organism": [
+              "a",
+              "u"
+            ],
+            "state": "match"
+          },
+          {
+            "tips": [
+              "a",
+              "q",
+              "u"
+            ],
+            "gene": [
+              "a",
+              "q"
+            ],
+            "organism": [
+              "a",
+              "q"
+            ],
+            "state": "match"
+          },
+          {
+            "tips": [
+              "b",
+              "c",
+              "q"
+            ],
+            "gene": [
+              "b",
+              "q"
+            ],
+            "organism": [
+              "b",
+              "q"
+            ],
+            "state": "match"
+          },
+          {
+            "tips": [
+              "b",
+              "c",
+              "u"
+            ],
+            "gene": [
+              "b",
+              "u"
+            ],
+            "organism": [
+              "b",
+              "u"
+            ],
+            "state": "match"
+          },
+          {
+            "tips": [
+              "b",
+              "q",
+              "u"
+            ],
+            "gene": [
+              "b",
+              "q"
+            ],
+            "organism": [
+              "b",
+              "q"
+            ],
+            "state": "match"
+          },
+          {
+            "tips": [
+              "c",
+              "q",
+              "u"
+            ],
+            "gene": [
+              "q",
+              "u"
+            ],
+            "organism": [
+              "q",
+              "u"
+            ],
+            "state": "match"
+          }
+        ]
+      },
+      "membership": [
+        {
+          "exact": "1",
+          "decimal": 1.0
+        },
+        {
+          "exact": "1",
+          "decimal": 1.0
+        },
+        "inside"
+      ],
+      "locality": {
+        "b": {
+          "exact": "2/5",
+          "decimal": 0.4
+        },
+        "d": {
+          "exact": "1/5",
+          "decimal": 0.2
+        },
+        "O": {
+          "exact": "1",
+          "decimal": 1.0
+        }
+      },
+      "a": {
+        "exact": "2/3",
+        "decimal": 0.6666666666666666
+      }
+    },
+    "complete_f": {
+      "exact": "1",
+      "decimal": 1.0
+    },
+    "known_g": {
+      "exact": "0",
+      "decimal": 0.0
+    },
+    "broader_h": {
+      "exact": "1",
+      "decimal": 1.0
+    }
+  },
+  "single_reference": {
+    "operands": {
+      "b": null,
+      "d": {
+        "exact": "3/10",
+        "decimal": 0.3
+      },
+      "O": null
+    },
+    "observed_region_bounds": [
+      {
+        "exact": "0",
+        "decimal": 0.0
+      },
+      {
+        "exact": "3/8",
+        "decimal": 0.375
+      }
+    ]
+  },
+  "zero_distance_conventions": {
+    "1:0": {
+      "exact": "1",
+      "decimal": 1.0
+    },
+    "0:1": {
+      "exact": "0",
+      "decimal": 0.0
+    },
+    "0:0": {
+      "exact": "1",
+      "decimal": 1.0
+    },
+    "None:1": null,
+    "None:0": {
+      "exact": "1",
+      "decimal": 1.0
+    }
+  },
+  "intended_missing_taxon": {
+    "fixed_scope": {
+      "N": 4,
+      "match": 1,
+      "conflict": 0,
+      "unresolved": 3,
+      "supported": {
+        "exact": "1/4",
+        "decimal": 0.25
+      },
+      "native_fraction_defined": true,
+      "completion_bounds": [
+        {
+          "exact": "1/4",
+          "decimal": 0.25
+        },
+        {
+          "exact": "1",
+          "decimal": 1.0
+        }
+      ],
+      "comparisons": [
+        {
+          "tips": [
+            "a",
+            "b",
+            "c"
+          ],
+          "gene": [
+            "a",
+            "b"
+          ],
+          "organism": null,
+          "state": "unresolved"
+        },
+        {
+          "tips": [
+            "a",
+            "b",
+            "q"
+          ],
+          "gene": [
+            "a",
+            "q"
+          ],
+          "organism": [
+            "a",
+            "q"
+          ],
+          "state": "match"
+        },
+        {
+          "tips": [
+            "a",
+            "c",
+            "q"
+          ],
+          "gene": [
+            "a",
+            "q"
+          ],
+          "organism": null,
+          "state": "unresolved"
+        },
+        {
+          "tips": [
+            "b",
+            "c",
+            "q"
+          ],
+          "gene": [
+            "b",
+            "q"
+          ],
+          "organism": null,
+          "state": "unresolved"
+        }
+      ]
+    },
+    "native_common_leaf": {
+      "N": 1,
+      "match": 1,
+      "conflict": 0,
+      "unresolved": 0,
+      "supported": {
+        "exact": "1",
+        "decimal": 1.0
+      },
+      "native_fraction_defined": true,
+      "completion_bounds": [
+        {
+          "exact": "1",
+          "decimal": 1.0
+        },
+        {
+          "exact": "1",
+          "decimal": 1.0
+        }
+      ],
+      "comparisons": [
+        {
+          "tips": [
+            "a",
+            "b",
+            "q"
+          ],
+          "gene": [
+            "a",
+            "q"
+          ],
+          "organism": [
+            "a",
+            "q"
+          ],
+          "state": "match"
+        }
+      ]
+    }
+  },
+  "unrooted": {
+    "rows": [
+      {
+        "N": 1,
+        "match": 1,
+        "conflict": 0,
+        "unresolved": 0,
+        "supported": {
+          "exact": "1",
+          "decimal": 1.0
+        },
+        "native_fraction_defined": true,
+        "completion_bounds": [
+          {
+            "exact": "1",
+            "decimal": 1.0
+          },
+          {
+            "exact": "1",
+            "decimal": 1.0
+          }
+        ],
+        "comparisons": [
+          {
+            "tips": [
+              "a",
+              "b",
+              "c",
+              "q"
+            ],
+            "gene": [
+              [
+                "a",
+                "q"
+              ],
+              [
+                "b",
+                "c"
+              ]
+            ],
+            "organism": [
+              [
+                "a",
+                "q"
+              ],
+              [
+                "b",
+                "c"
+              ]
+            ],
+            "state": "match"
+          }
+        ]
+      },
+      {
+        "N": 1,
+        "match": 0,
+        "conflict": 1,
+        "unresolved": 0,
+        "supported": {
+          "exact": "0",
+          "decimal": 0.0
+        },
+        "native_fraction_defined": true,
+        "completion_bounds": [
+          {
+            "exact": "0",
+            "decimal": 0.0
+          },
+          {
+            "exact": "0",
+            "decimal": 0.0
+          }
+        ],
+        "comparisons": [
+          {
+            "tips": [
+              "a",
+              "b",
+              "c",
+              "q"
+            ],
+            "gene": [
+              [
+                "a",
+                "c"
+              ],
+              [
+                "b",
+                "q"
+              ]
+            ],
+            "organism": [
+              [
+                "a",
+                "q"
+              ],
+              [
+                "b",
+                "c"
+              ]
+            ],
+            "state": "conflict"
+          }
+        ]
+      },
+      {
+        "N": 1,
+        "match": 0,
+        "conflict": 1,
+        "unresolved": 0,
+        "supported": {
+          "exact": "0",
+          "decimal": 0.0
+        },
+        "native_fraction_defined": true,
+        "completion_bounds": [
+          {
+            "exact": "0",
+            "decimal": 0.0
+          },
+          {
+            "exact": "0",
+            "decimal": 0.0
+          }
+        ],
+        "comparisons": [
+          {
+            "tips": [
+              "a",
+              "b",
+              "c",
+              "q"
+            ],
+            "gene": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "c",
+                "q"
+              ]
+            ],
+            "organism": [
+              [
+                "a",
+                "q"
+              ],
+              [
+                "b",
+                "c"
+              ]
+            ],
+            "state": "conflict"
+          }
+        ]
+      },
+      {
+        "N": 1,
+        "match": 0,
+        "conflict": 1,
+        "unresolved": 0,
+        "supported": {
+          "exact": "0",
+          "decimal": 0.0
+        },
+        "native_fraction_defined": true,
+        "completion_bounds": [
+          {
+            "exact": "0",
+            "decimal": 0.0
+          },
+          {
+            "exact": "0",
+            "decimal": 0.0
+          }
+        ],
+        "comparisons": [
+          {
+            "tips": [
+              "a",
+              "b",
+              "c",
+              "q"
+            ],
+            "gene": [
+              [
+                "a",
+                "b"
+              ],
+              [
+                "c",
+                "q"
+              ]
+            ],
+            "organism": [
+              [
+                "a",
+                "q"
+              ],
+              [
+                "b",
+                "c"
+              ]
+            ],
+            "state": "conflict"
+          }
+        ]
+      }
+    ],
+    "region": {
+      "exact": "3/5",
+      "decimal": 0.6
+    }
+  },
+  "unresolved_boundary": {
+    "membership": [
+      {
+        "exact": "0",
+        "decimal": 0.0
+      },
+      {
+        "exact": "1",
+        "decimal": 1.0
+      },
+      "boundary"
+    ],
+    "refinement_scores": [
+      {
+        "exact": "0",
+        "decimal": 0.0
+      },
+      {
+        "exact": "1",
+        "decimal": 1.0
+      },
+      {
+        "exact": "3/4",
+        "decimal": 0.75
+      }
+    ]
+  },
+  "missing_included_mass_bounds": [
+    {
+      "exact": "3/5",
+      "decimal": 0.6
+    },
+    {
+      "exact": "4/5",
+      "decimal": 0.8
+    }
+  ],
+  "candidate": {
+    "with_constant_required_region": {
+      "exact": "8/25",
+      "decimal": 0.32
+    },
+    "paired_opposite_regions": {
+      "exact": "0",
+      "decimal": 0.0
+    },
+    "unknown_coupling_bounds": [
+      0,
+      {
+        "exact": "1/2",
+        "decimal": 0.5
+      }
+    ],
+    "included_missing_required_region_bounds": [
+      0,
+      {
+        "exact": "3/4",
+        "decimal": 0.75
+      }
+    ],
+    "never_included_function_alternative": {
+      "exact": "3/4",
+      "decimal": 0.75
+    },
+    "shared_function_completion_values": [
+      {
+        "exact": "2/5",
+        "decimal": 0.4
+      },
+      {
+        "exact": "0",
+        "decimal": 0.0
+      }
+    ],
+    "not_applicable_broad_HGT": null
+  },
+  "paper_arithmetic": {
+    "Wege2010_ratio_of_reported_current_ratios": {
+      "exact": "40/9",
+      "decimal": 4.444444444444445
+    },
+    "Stockbridge2012_successful_transport_panel_fraction": {
+      "exact": "8/29",
+      "decimal": 0.27586206896551724
+    },
+    "Stockbridge2012_exact_stoichiometry_in_transport_panel": {
+      "exact": "1/8",
+      "decimal": 0.125
+    }
+  },
+  "range_grid_checks": 256,
+  "limits": [
+    "No native phylogenetic program, biological dataset or production reader executed.",
+    "Current checked fixture004 does not validate historical proposals001/002.",
+    "No calibration, adopted-policy, axis-completion or goal-completion claim."
+  ]
+}

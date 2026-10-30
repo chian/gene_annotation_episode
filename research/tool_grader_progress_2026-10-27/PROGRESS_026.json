@@ -1,0 +1,2203 @@
+{
+  "record_type": "implementation_progress_evidence",
+  "recorded_at": "2026-10-28T13:27:15.177806+00:00",
+  "historical_status_evidence": {
+    "path": "research/tool_grader_goal_2026-10-24/WORK_STATUS.json",
+    "sha256": "079c0f12201cebde19bed545d0a9e263a20ed6011246d1164370b34a6a8d645e",
+    "current_completion_must_not_be_inferred_from_row_counts": true
+  },
+  "retired_progress_measure": {
+    "display": "114/307 graders",
+    "valid_scientific_grader_fraction": false,
+    "reason": "Numerator contains mixed implementation rows; denominator contains modes, aliases, providers, lifecycle responsibilities, exclusions and resource constraints."
+  },
+  "shared_scientific_grader_counts": {
+    "required_distinct_families": null,
+    "verified_complete_families": null,
+    "reason": "Source census establishes35analysis rows,34with named operation links and1RNAcomparison with generic results binding.2additionalRfam implementations duplicate calculations and are not progress. Total required grader denominator and full goal-level completion remain unestablished; source links do not verify all modes/resources.",
+    "current_source_census": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/ROOT_REVIEW_002.json",
+    "implemented_analysis_rows": 35,
+    "named_tool_linked_graders": 34,
+    "grader_to_tool_name_links": 73,
+    "distinct_public_tool_names": 65,
+    "additional_duplicate_rfam_implementations": 2
+  },
+  "deliverables": [
+    {
+      "id": "R1",
+      "status": "open",
+      "confirmed_repair_paths": [
+        "BLAST publication/read",
+        "HMMER coverage publication",
+        "Biopython alignment publication"
+      ],
+      "repaired_and_verified": 3,
+      "evidence": [
+        "verification/tool_graders_shared_scoring_trace_2026-10-27_501/REPORT.md",
+        "verification/tool_graders_shared_scoring_trace_2026-10-27_501/REPAIR_CONTRACT.md"
+      ],
+      "qualification": "All three named publication repairs are verified: BLAST, HMMER and Biopython. R1 remains open for equivalent-analysis consolidation encountered during the remaining goal work. This is not a count of all completed tool graders.",
+      "workers": [
+        {
+          "path": "/root/blast_shared_sheet_projection_502",
+          "boundary": "BLAST publication/read/source mapping"
+        },
+        {
+          "path": "/root/hmmer_shared_projection_503",
+          "boundary": "HMMER coverage aliases"
+        },
+        {
+          "path": "/root/biopython_shared_projection_504",
+          "boundary": "Biopython native convenience fields and publication"
+        }
+      ],
+      "repair_status": [
+        {
+          "name": "BLAST publication/read",
+          "status": "verified",
+          "evidence": "verification/tool_graders_blast_shared_sheet_projection_2026-10-27_502/REPORT.md",
+          "initial_suite": {
+            "passed": 352,
+            "failed": 1,
+            "failure": "Synthetic historical-fixture setup used _source outside tool publication context."
+          },
+          "focused_corrected_suite": {
+            "passed": 20,
+            "failed": 0
+          },
+          "counts_overlap": true,
+          "numerical_example": {
+            "reported_identity_count": 4,
+            "traceback_identical_pairs": 3,
+            "alignment_columns": 4,
+            "shared_published_read_and_returned_identity": 0.75,
+            "whole_hsp_calculator_calls_at_publication": 1,
+            "whole_hsp_calculator_calls_during_read": 0
+          },
+          "root_review": "Read publisher, source address map, retained-grading helper, reader/facts, shared spans, optional typed marker and site-input binding; reviewed both receipts/audits and final report; verified key publisher/helper functions match tested snapshot.",
+          "qualification": "No new live API/native database search. R2 BLAST native/resource work remains open. No separate pre-edit snapshot was captured."
+        },
+        {
+          "name": "HMMER coverage publication",
+          "status": "verified",
+          "shared_sheet": "hmmer_search_sheet_v1",
+          "shared_calculator": "calculate_hmmer_search_scores",
+          "calculator_unchanged": true,
+          "evidence": "verification/tool_graders_hmmer_shared_projection_2026-10-27_503/REPORT.md",
+          "attempts": [
+            {
+              "name": "check001",
+              "scope": "API publication and returns",
+              "passed": 42
+            },
+            {
+              "name": "native001",
+              "scope": "Native binding and returns before final cached-qualification fix",
+              "passed": 23
+            },
+            {
+              "name": "replay001",
+              "scope": "Final cached-qualification and historical-cache checks",
+              "passed": 2,
+              "deselected": 19
+            }
+          ],
+          "counts_overlap": true,
+          "numerical_example": {
+            "native_target_paired_coverage": 0.98828125,
+            "native_target_span_coverage": 1,
+            "api_query_span_coverage": "89/253",
+            "api_query_paired_coverage": "88/253"
+          },
+          "missingness": "Calculated aliases absent when shared grading unavailable; native scores retained. Cached new failures preserve exact status/feedback; historical recorded values and identities unchanged.",
+          "root_review": "Read scoped production diff and API/native return tests, final cache fix/tests, full report and original receipts/audits; current owned-function hashes and unchanged shared calculators match verified snapshots.",
+          "verification_limits": "Authentic retained API output plus controlled API transport; actual small local phmmer searches. No new live API or HPC test; R2 messages/resource/native-format gaps remain open."
+        },
+        {
+          "name": "Biopython alignment publication",
+          "status": "verified",
+          "initial_checks": {
+            "passed": 90,
+            "failed": 5,
+            "setup_errors": 1
+          },
+          "remaining": "No outstanding work in this bounded R1 repair. R2 messages, input handling, other formats/resources remain separately open.",
+          "worker": "/root/biopython_shared_projection_504",
+          "focused_checks": {
+            "check002_passed": 18,
+            "structure_setup_errors": 1,
+            "check003": "Same nested NumPy software identity mismatch; collected original failed handle",
+            "check004": "1 passed in 2696.54 seconds; original handle collected, exit 0, terminal/quiescent; all source/runtime/native pins unchanged and import audit clean."
+          },
+          "final_evidence": "verification/tool_graders_biopython_shared_projection_2026-10-27_504/REPORT.md",
+          "distinct_cases_with_latest_passing_outcome": 106,
+          "count_qualification": "Aggregate of retained targeted attempts; no claim of a fresh single 106-case run.",
+          "structure_workflow": {
+            "episodes_closed": 14,
+            "requested_child_forms": 13,
+            "successful_native_result_receipts": 4,
+            "unit": "gene-local-job-3f93748b244b49b2b2d18e4c74b91aec.service",
+            "receipt": "verification/tool_graders_biopython_shared_projection_2026-10-27_504/check004/receipt.json",
+            "native_alignment_score": 19,
+            "paired_residues": 4,
+            "fit_pairs": 3,
+            "original_evaluation_pairs": 1,
+            "original_rmsd_angstrom_approximately": 2,
+            "saved_recalculation_evaluation_pairs": 4,
+            "saved_rmsd_angstrom_approximately": 1
+          },
+          "conflict_example": {
+            "paired_positions": 5,
+            "identical_positions": 4,
+            "paired_identity": 0.8,
+            "alignment_identity": "4/7",
+            "query_aligned_coverage": 0.6,
+            "reference_aligned_coverage": 0.5,
+            "query_paired_coverage": 0.5,
+            "reference_paired_coverage": "5/12",
+            "scope": "Synthetic conflict fixture, not a new annotation finding. Exact shared values projected through publication and requested child returns."
+          },
+          "root_review": "Read complete scoped diff/tests/report and final receipt/audit/JUnit; independently matched all recorded owned function/type/test hashes to frozen check004 and confirmed historical before/after pins equal. Shared calculators unchanged. Read current goal and operating principles before acceptance."
+        }
+      ],
+      "additional_demonstrated_duplication": [
+        {
+          "status": "shared_authority_verified_for_explicit_alphabet_stockholm_pfam_new_weight_branches",
+          "name": "alimask alignment-to-model reconstruction in native execution driver duplicates the shared alignment-preparation calculator",
+          "source": "gene_annotation_episode/native_hmmer_preparation_driver.py",
+          "worker": "/root/hmmer_alignment_map_boundary_516",
+          "qualification": "252 distinct selected tests plus34subtests passed across529/check002..005;57native-source comparisons and3actual alignment-to-model Workflow returns/replays. Other grammars/alphabet inference/messages/resources remain open.",
+          "additional_calculation_defect": "Single native Kahan/divide/scale normalizer verified against original Easel source.",
+          "evidence": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/BOUNDED_VERIFICATION_REPORT.md"
+        },
+        {
+          "name": "MinHash shared-hash-fraction calculation repeated in projection validation",
+          "status": "common_fraction_and_selected_metadata_result_replay_verified",
+          "source": "gene_annotation_episode/bvbrc_minhash_grader.py and bvbrc_minhash_views.py",
+          "worker": "/root/minhash_metadata_contracts_519",
+          "qualification": "427 retained component passes;19fullWorkflow cases passedcheck004 and originalfailedWorkflow+31newfocused+15fixturecases passedcheck005. Message/live-service and orphan recovery limits explicit.",
+          "evidence": "verification/tool_graders_minhash_metadata_verification_2026-10-27_523/INTEGRATION_VERIFICATION_002.md"
+        }
+      ],
+      "current_source_census_findings": {
+        "evidence": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/ROOT_REVIEW_002.json",
+        "unclosed": [
+          "Rfam JSON/report repeat calculations outside Infernal shared authority",
+          "legacy rna.cmsearch directly calculates query coverage instead of using shared Infernal grader"
+        ],
+        "consolidation_review_needed": [
+          "GeneTree/CodonTree separate top-level sheets share common calculation components",
+          "reference-position and BLAST-column analyses retain separate sheets/calculators with overlapping selected-alignment measurements"
+        ]
+      }
+    },
+    {
+      "id": "R2",
+      "status": "open",
+      "named_gap_groups": 8,
+      "existing_components_reused": true,
+      "nmf_original_attempt": {
+        "unit": "gene-local-job-fb22b65698254c09afacf2116ee0bd6a.service",
+        "observed_terminal": true,
+        "systemd_result": "exit-code",
+        "exit_status": 1,
+        "pytest_passed": 2,
+        "pytest_failed": 2,
+        "evidence": "verification/tool_graders_expression_nmf_episode_path_2026-10-27_490/check001/stdout.txt",
+        "final_receipt_collected": true,
+        "receipt_reviewed_by_root": true,
+        "receipt": "verification/tool_graders_expression_nmf_episode_path_2026-10-27_490/check001/receipt.json"
+      },
+      "qualification": "Prodigal single-genome local publication/return and the NMF original frozen local-mode snapshot gap are verified. Six other named gap groups remain open.",
+      "nmf_retained_verification": {
+        "status": "verified_for_original_frozen_local_mode_snapshot",
+        "unit": "gene-local-job-7d4679397c4a4ab9b5dfcd5a6733e739.service",
+        "returncode": 0,
+        "terminal": true,
+        "quiescent": true,
+        "source_and_runtime_pins_unchanged": true,
+        "retained_inputs_unchanged": true,
+        "original_fit_calls": 1,
+        "followup_fit_calls": 0,
+        "followup_model_calls": 0,
+        "followup_native_workers": 0,
+        "history_tables_preserved": 10,
+        "original_sse": 1.9138191182688943e-08,
+        "native_residual": 0.0001383408514600178,
+        "independent_residual": 0.00013834085146004034,
+        "corrections": "One report dictionary key and an overbroad assertion that incorrectly prohibited recreation of a derived artifact. Original failed test evidence preserved.",
+        "evidence": [
+          "verification/tool_graders_expression_nmf_episode_path_2026-10-27_490/HANDOFF.md",
+          "verification/tool_graders_expression_nmf_episode_path_2026-10-27_490/check002/receipt.json",
+          "verification/tool_graders_expression_nmf_episode_path_2026-10-27_490/check002/retained_checks.json",
+          "tests/test_expression_nmf_episode_path.py"
+        ],
+        "root_review": "Reviewed both receipts, retained checks, complete current four-test file and final handoff. Existing closed-replay and observation tests passed in original check001; corrected retained-data checks passed in check002. This is not a claim that a new full suite was rerun."
+      },
+      "gap_status": [
+        {
+          "name": "Prodigal single-genome publication/return",
+          "status": "verified_for_existing_local_scientific_child_path",
+          "shared_sheet": "prodigal_sheet_v1",
+          "shared_calculator": "calculate_prodigal_scores",
+          "production_changes": false,
+          "evidence": "verification/tool_graders_prodigal_single_delivery_2026-10-27_505/REPORT.md",
+          "test_result": {
+            "passed": 1,
+            "seconds": 37.74
+          },
+          "native_executions": 1,
+          "candidate_count": 103,
+          "returned_record_references": 311,
+          "union_coding_bases": 85743,
+          "submitted_length_nt": 100000,
+          "coding_coverage": 0.85743,
+          "partial_candidates": 2,
+          "child_actions": 1,
+          "parent_child_actions": 1,
+          "saved_recalculation_equal": true,
+          "replay_and_redelivery_preserve_histories": true,
+          "root_review": "Read complete test/report and original receipt/audit. Checked current test, predictor, grader, worker and relevant ToolRegistry functions equal frozen tested source.",
+          "verification_limits": "Scientific_process child selects local native sequence worker; not launch_local or API/HPC gene prediction, R3 wrappers or W05."
+        },
+        {
+          "name": "NMF full scientific-parent delivery, saved calculation and closed replay",
+          "status": "verified_for_original_frozen_local_mode_snapshot"
+        },
+        {
+          "name": "Protein-structure/interval-overlap messages and inputs",
+          "status": "open_boundary_contracts_and_display_drafts_prepared",
+          "evidence": [
+            "verification/tool_graders_protein_receiver_boundary_2026-10-27_506/CONTRACT_001.md",
+            "verification/tool_graders_overlap_receiver_boundary_2026-10-27_507/CONTRACT_DRAFT.md",
+            "verification/tool_graders_overlap_receiver_boundary_2026-10-27_507/ROOT_INTERFACE_CLARIFICATION_001.md"
+          ],
+          "verified_existing_behavior": "Explicit complete input files and received saved-sheet authority, native calculations and requested typed return paths exist; these are not new missing algorithms.",
+          "remaining_boundaries": [
+            "Source-aware grouping from admitted values plus actual source schema before model presentation",
+            "Parent receiving display and forwarded higher-parent display, preserving full own TASK",
+            "Results episode TASK/STEERING and actual status/collect meanings",
+            "Launch/local-child supplied-input presentation",
+            "Valid explicit selection of received inputs for unchanged existing action schemas",
+            "Requested artifact-table read operation where only artifact grant is currently exposed",
+            "Focused actual model-text/next-action verification after implementation"
+          ],
+          "feedback": "Two small illustrative requested-measurement displays printed in conversation; async user feedback requested. They are proposals, not accepted or coded. Retained synthetic-fixture numerical results were reused without new scientific calculations.",
+          "root_review": "Read complete506 contract,507 report/drafts/ownership interface and root clarification; independently read runtime.next/model_inputs provider dispatch, operation/return contract lookup and current scientific/RNA rendering. No production edit or new resolver made."
+        },
+        {
+          "name": "Chromatin insulation/weighted-Cooler episode paths and messages",
+          "status": "open"
+        },
+        {
+          "name": "ATAC messages and format/resource gaps",
+          "status": "open"
+        },
+        {
+          "name": "HMMER/Infernal/Rfam messages/resources and declared native formats",
+          "status": "open_messages_resource_presentation_and_remaining_authentic_format_coverage_selected_alignment_input_integration_verified",
+          "format_work": {
+            "contract": "verification/tool_graders_hmmer_model_format_boundary_2026-10-27_508/IMPLEMENTATION_CONTRACT.md",
+            "coding_handoff": "verification/tool_graders_hmmer_model_formats_2026-10-27_511/CODING_HANDOFF_001.md",
+            "historical_saved_unsupported_results": "preserved; no silent re-extraction",
+            "scoped_review_findings": 7,
+            "review_findings_owner_status": "Repairs included in passing check002 source/consumer tests; metadata fixture assumption subsequently corrected and verified in check004.",
+            "root_additions": [
+              "Frozen verification runner",
+              "Two new nested Workflow format cases with original typed returns, saved-only recalculation and unchanged replay",
+              "Current-production tests updated for decoded output; original tests snapshotted"
+            ],
+            "remaining_outside_this_change": [
+              "HMMER/Infernal/Rfam TASK/STEERING and resource presentation",
+              "Other declared resource verification",
+              "Authentic older binary-revision and big-endian producer coverage not established by synthetic grammar cases",
+              "Historical HMMER2 binary and EVD interpretation remain explicitly unestablished"
+            ],
+            "verified_implementation": [
+              "HMMER3 a-f binary parser and public dispatch",
+              "HMMER2 ASCII parser",
+              "Shared source-cell decoding/validation and model/artifact/statistics/emission consumers"
+            ],
+            "scoped_verification_status": "verified_for_supported_binary_and_HMMER2_ASCII_boundary",
+            "report": "verification/tool_graders_hmmer_model_formats_2026-10-27_511/REPORT.md",
+            "completed_subsequent_alignment_map_work": "Specified selected native map weighting, eight-format parsing, original alphabet inference and requested returns verified separately by529 and553; limits remain explicit."
+          },
+          "current_verification": {
+            "attempt": "check002",
+            "handle": "verification/tool_graders_hmmer_model_formats_2026-10-27_511/check002/handle.json",
+            "unit": "gene-local-job-7fa29e4e3d8f4ffdb8f323ae55f49154.service",
+            "last_observed_state": "returned",
+            "terminal": true,
+            "quiescent": true,
+            "failed_cases_visible_in_progress": true,
+            "final_counts": {
+              "passed": 1022,
+              "failed": 80,
+              "errors": 0,
+              "seconds": 562.42
+            },
+            "earlier_staging_attempt": "check001 failed on archived named pipes before any handle/test/native execution; failure retained and copier corrected to record skipped special fixtures/aliases.",
+            "returncode": 1,
+            "receipt": "verification/tool_graders_hmmer_model_formats_2026-10-27_511/check002/receipt.json",
+            "source_runtime_native_pins_unchanged": true,
+            "outside_imports": [],
+            "unbound_mappings": [],
+            "failure_classification": [
+              {
+                "cases": 78,
+                "cause": "Archived producer267/check002/temporary was not staged; native acquisition test helpers depend on its 26 plan fixtures and partial-conversion fixture.",
+                "repair": "Supply the unchanged retained tree to the next frozen check; do not rerun its native producers."
+              },
+              {
+                "cases": 1,
+                "cause": "Statistics test still expected retained supported binary fixture to be unsupported.",
+                "repair": "Update supported-format expectation and preserve unknown-layout coverage separately; test-only change written, not yet executed."
+              },
+              {
+                "cases": 1,
+                "cause": "Selected authentic native fixtures have no COM; old test incorrectly required it. Binary COM length is zero.",
+                "repair": "Verified test-only correction plus synthetic ordered-log equivalence/changed-text/order/line-boundary coverage; production unchanged."
+              }
+            ],
+            "nested_format_workflow": {
+              "passed": 2,
+              "actual_small_native_conversions": 2,
+              "formats": [
+                "hmmer3_binary",
+                "hmmer2_ascii"
+              ],
+              "decoded_models_each": 1,
+              "model_positions_each": 12,
+              "binary_compared_probability_cells": 611,
+              "binary_max_absolute_probability_difference": 9.008887857930858e-09,
+              "hmmer2_compared_probability_cells": 526,
+              "hmmer2_whole_model_equivalence": "not_asserted_compatible",
+              "requested_return_equality": true,
+              "saved_recalculation_equal": true,
+              "replay_preserves_observations": true,
+              "qualification": "Scripted episode decisions with real local native work and production return paths; does not close the overall R2 gap group or historical format/resource coverage."
+            },
+            "status": "collected_original_failure_and_successful_targeted_followups",
+            "followup_attempts": [
+              {
+                "attempt": "check003",
+                "unit": "gene-local-job-0b1c01b436374764b42d8f612a071de2.service",
+                "passed": 80,
+                "failed": 0,
+                "seconds": 415.73,
+                "returncode": 0,
+                "terminal": true,
+                "quiescent": true,
+                "scope": "78 original missing-fixture cases plus supported/unsupported statistics cases; retained native producers not rerun"
+              },
+              {
+                "attempt": "check004",
+                "unit": "gene-local-job-b365b56d33f842038c6c23c3f97754cb.service",
+                "passed": 10,
+                "failed": 0,
+                "seconds": 2.51,
+                "returncode": 0,
+                "terminal": true,
+                "quiescent": true,
+                "scope": "Native metadata in both directions and eight explicitly synthetic command-log cases"
+              }
+            ],
+            "distinct_current_cases_with_passing_outcomes": 1112,
+            "count_qualification": "Nonoverlapping passing nodes across check002/003/004; no claim of one fresh 1112-case run. Original failed evidence retained; two obsolete failed tests replaced with explicit new coverage.",
+            "production_changes_for_failure_repairs": false,
+            "final_current_source_check": "All affected HMMER production modules match check002; repaired test files match follow-up snapshots. Two unrelated literature files changed outside this workload; no fresh check of those current bytes is claimed."
+          },
+          "alignment_map_work": {
+            "tool_information": "existing operations retained; presentation remains unfinished",
+            "sheet": "hmmer_alignment_preparation_sheet_v1 reused; optional recorded map context",
+            "parser_metadata_extraction": "Original Stockholm/Pfam plus the eight selected declared grammars and original-source alphabet inference now feed the same sheet; initial data and saved validation verified in check014 and requested Workflow cases in check015.",
+            "calculator": "one shared GSC/BLOSUM/PB map authority and normalizer; exact native-source conformance verified",
+            "result_binding": "Earlier three GSC/BLOSUM/PB actual local branch cases retained; nine additional format/inferred-alphabet cases pass actual production acquisition/publication/parent return and closed replay.",
+            "numerical_verification": {
+              "distinct_tests_passed": 252,
+              "subtests_passed": 34,
+              "native_oracle_cases": 57,
+              "one_fresh_suite": false
+            },
+            "episode_verification": "Earlier GSC, BLOSUM, sampled PB N50001 cases retained. check015 verifies eight format cases and one inferred-alphabet case, exact saved-value returns, saved-only recalculation and immutable replay.",
+            "live_resource_verification": "actual pinned local alimask; no newAPI/HPC/model-service invocation",
+            "remaining": [
+              "TASK/STEERING and resource-instruction presentation",
+              "Remaining declared resource checks",
+              "Explicit native undefined/unestablished source corners remain excluded; no blanket native-format claim"
+            ],
+            "evidence": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/BOUNDED_RESULTS_002.json",
+            "earlier_remaining_items_with_current_status": [
+              {
+                "item": "native alphabet inference",
+                "status": "verified_for_selected_declared_input_paths"
+              },
+              {
+                "item": "A2M,PSI-BLAST,SELEX,aligned FASTA,Clustal/Clustal-like,PHYLIP/PHYLIPS",
+                "status": "verified_for_selected_declared_input_paths"
+              },
+              {
+                "item": "TASK/STEERING and resource-instruction presentation",
+                "status": "open"
+              },
+              {
+                "item": "remaining declared resource checks",
+                "status": "open"
+              }
+            ],
+            "additional_evidence": "verification/tool_graders_hmmer_input_format_routing_2026-10-28_553/ROOT_VERIFICATION_001.md"
+          },
+          "native_input_extension": {
+            "shared_sheet": "hmmer_alignment_preparation_sheet_v1",
+            "shared_calculator": "calculate_hmmer_alignment_preparation_components",
+            "new_scoring_definition": false,
+            "pure_formats_verified": [
+              "afa",
+              "a2m",
+              "psiblast",
+              "selex",
+              "clustal",
+              "clustallike",
+              "phylip",
+              "phylips"
+            ],
+            "native_conformance_verified": {
+              "classifier_cases": 36,
+              "alphabet_scan_cases": 116,
+              "afa_a2m_open_read_cases": 49,
+              "block_phylip_read_cases": 177,
+              "total_selected_native_comparison_cases": 378
+            },
+            "checks": [
+              {
+                "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check007_input_alphabet",
+                "passed_tests": 27,
+                "passed_unittest_subtests": 117,
+                "seconds": 0.2,
+                "terminal": true,
+                "quiescent": true,
+                "collected": true,
+                "returncode": 0,
+                "audit": {
+                  "pytest_returncode": 0,
+                  "outside_modules": [],
+                  "unbound_mappings": [],
+                  "native_unchanged": true,
+                  "original_retained_fixtures_unchanged": true
+                },
+                "scope": "pure reader and retained-input checks"
+              },
+              {
+                "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check008_input_fasta",
+                "passed_tests": 86,
+                "passed_unittest_subtests": 0,
+                "seconds": 0.26,
+                "terminal": true,
+                "quiescent": true,
+                "collected": true,
+                "returncode": 0,
+                "audit": {
+                  "pytest_returncode": 0,
+                  "outside_modules": [],
+                  "unbound_mappings": [],
+                  "native_unchanged": true,
+                  "original_retained_fixtures_unchanged": true
+                },
+                "scope": "pure reader and retained-input checks"
+              },
+              {
+                "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check009_input_native",
+                "passed_tests": 201,
+                "passed_unittest_subtests": 0,
+                "seconds": 4.17,
+                "terminal": true,
+                "quiescent": true,
+                "collected": true,
+                "returncode": 0,
+                "audit": {
+                  "pytest_returncode": 0,
+                  "outside_modules": [],
+                  "unbound_mappings": [],
+                  "native_unchanged": true,
+                  "original_retained_fixtures_unchanged": true
+                },
+                "scope": "original-source native conformance"
+              },
+              {
+                "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check010_input_blocks",
+                "passed_tests": 110,
+                "passed_unittest_subtests": 0,
+                "seconds": 0.29,
+                "terminal": true,
+                "quiescent": true,
+                "collected": true,
+                "returncode": 0,
+                "audit": {
+                  "pytest_returncode": 0,
+                  "outside_modules": [],
+                  "unbound_mappings": [],
+                  "native_unchanged": true,
+                  "original_retained_fixtures_unchanged": true
+                },
+                "scope": "pure reader and retained-input checks"
+              },
+              {
+                "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check011_input_phylip",
+                "passed_tests": 26,
+                "passed_unittest_subtests": 61,
+                "seconds": 0.19,
+                "terminal": true,
+                "quiescent": true,
+                "collected": true,
+                "returncode": 0,
+                "audit": {
+                  "pytest_returncode": 0,
+                  "outside_modules": [],
+                  "unbound_mappings": [],
+                  "native_unchanged": true,
+                  "original_retained_fixtures_unchanged": true
+                },
+                "scope": "pure reader and retained-input checks"
+              },
+              {
+                "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check012_input_block_phylip_native",
+                "passed_tests": 177,
+                "passed_unittest_subtests": 0,
+                "seconds": 3.43,
+                "terminal": true,
+                "quiescent": true,
+                "collected": true,
+                "returncode": 0,
+                "audit": {
+                  "pytest_returncode": 0,
+                  "outside_modules": [],
+                  "unbound_mappings": [],
+                  "native_unchanged": true,
+                  "original_retained_fixtures_unchanged": true
+                },
+                "scope": "original-source native block/PHYLIP conformance; first-record and prefix-only limits retained"
+              },
+              {
+                "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration",
+                "scope": "Initial assembled integration; failures preserved",
+                "passed_tests": 242,
+                "failed_tests": 25,
+                "errors": 0,
+                "seconds": 17.341,
+                "terminal": true,
+                "quiescent": true,
+                "collected": true,
+                "returncode": 1,
+                "unit": "gene-local-job-ed604ad5d5204b16a7d8583dd57abdef.service",
+                "source_runtime_native_pins_unchanged": true,
+                "audit": {
+                  "pytest_returncode": 1,
+                  "outside_modules": [],
+                  "unbound_mappings": [],
+                  "native_unchanged": true,
+                  "original_retained_fixtures_unchanged": true
+                }
+              },
+              {
+                "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check014_input_repairs",
+                "scope": "Targeted repaired integration and saved regrading; original native builds reused",
+                "passed_tests": 295,
+                "failed_tests": 0,
+                "errors": 0,
+                "seconds": 6.262,
+                "terminal": true,
+                "quiescent": true,
+                "collected": true,
+                "returncode": 0,
+                "unit": "gene-local-job-6c460d6fe67645f889faac33176899bf.service",
+                "source_runtime_native_pins_unchanged": true,
+                "audit": {
+                  "pytest_returncode": 0,
+                  "outside_modules": [],
+                  "unbound_mappings": [],
+                  "native_unchanged": true,
+                  "original_retained_fixtures_unchanged": true
+                }
+              },
+              {
+                "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check015_input_workflow",
+                "scope": "Nine actual local selected Workflow returns, saved recalculation and closed replay",
+                "passed_tests": 9,
+                "failed_tests": 0,
+                "errors": 0,
+                "seconds": 232.398,
+                "terminal": true,
+                "quiescent": true,
+                "collected": true,
+                "returncode": 0,
+                "unit": "gene-local-job-0667cc550275402490ae6f1c261eda76.service",
+                "source_runtime_native_pins_unchanged": true,
+                "audit": {
+                  "pytest_returncode": 0,
+                  "outside_modules": [],
+                  "unbound_mappings": [],
+                  "native_unchanged": true,
+                  "original_retained_fixtures_unchanged": true
+                }
+              }
+            ],
+            "root_verified_current_files_match_test_snapshots": true,
+            "example": {
+              "basis": "unchanged retained native A2M emission with original-source observer comparison",
+              "rows": 5,
+              "columns": 17,
+              "RF": "xx.xxx.xxx..xxx.x",
+              "insertions": "internal; leading/trailing cases are separately authored"
+            },
+            "remaining": [
+              "Overall HMMER/Infernal/Rfam TASK/STEERING and resource-instruction presentation",
+              "Additional declared resource verification",
+              "Authentic older binary-revision and big-endian producer coverage",
+              "Historical HMMER2 binary and EVD interpretation unestablished",
+              "Source-contract unsafe/unestablished corners remain explicit limits"
+            ],
+            "integration_complete": true,
+            "resource_completion_claimed": false,
+            "native_conformance_limits": "Declared safe cases only. Native observer inspects first record; selected malformed PHYLIPS prefix remains invalid. Byte cursors partly source-derived, undefined native cases excluded. Nine selected local Workflow paths verified, no new API/HPC/model-service execution.",
+            "integration_complete_scope": "Frozen542 adapter/validator/consumer contract, targeted repair verification, selected eight-format local alignment_to_model Workflow cases and original-source inferred-alphabet case. Not whole HMMER family/resource completion.",
+            "integration_checklist": [
+              {
+                "item": "Source-to-existing-sheet adaptation and saved-data validation",
+                "status": "verified_for_selected_contract_and_cases",
+                "evidence": "verification/tool_graders_hmmer_input_format_routing_2026-10-28_553/ROOT_VERIFICATION_001.md"
+              },
+              {
+                "item": "Actual alphabet consumption by existing calculations and native execution",
+                "status": "verified_for_selected_contract_and_cases",
+                "evidence": "verification/tool_graders_hmmer_input_format_routing_2026-10-28_553/ROOT_VERIFICATION_001.md"
+              },
+              {
+                "item": "Lossless persistence of reversible non-UTF-8 bytes",
+                "status": "verified_for_selected_contract_and_cases",
+                "evidence": "verification/tool_graders_hmmer_input_format_routing_2026-10-28_553/ROOT_VERIFICATION_001.md"
+              },
+              {
+                "item": "Saved-only recalculation and requested episode-return verification",
+                "status": "verified_for_selected_contract_and_cases",
+                "evidence": "verification/tool_graders_hmmer_input_format_routing_2026-10-28_553/ROOT_VERIFICATION_001.md"
+              }
+            ],
+            "current_source_and_tests_equal_final_snapshot": true,
+            "current_source_pin_evidence": "verification/tool_graders_hmmer_input_format_routing_2026-10-28_553/CHECK015_CURRENT_PINS.json",
+            "workflow_case_count": 9,
+            "workflow_examples": [
+              {
+                "source": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check015_input_workflow/temporary/pytest/test_declared_input_format_rea0/INPUT_FORMAT_NUMERICAL_EXAMPLE.json",
+                "source_sha256": "7db46e6855e041c45a9589d428c99f191cf16ba6f9383e42230b3517d7cb4294",
+                "declared_format": "afa",
+                "inference_requested": false,
+                "returned_quantities": [
+                  {
+                    "path": "components.input_sequence_count",
+                    "state": "present",
+                    "unit": "sequence_count",
+                    "value": 3
+                  },
+                  {
+                    "path": "components.input_column_count",
+                    "state": "present",
+                    "unit": "alignment_column_count",
+                    "value": 4
+                  },
+                  {
+                    "path": "components.mapped_model_position_count",
+                    "state": "present",
+                    "unit": "model_position_count",
+                    "value": 2
+                  },
+                  {
+                    "path": "components.native_mapping_row_count",
+                    "state": "present",
+                    "unit": "decoded_mapping_row_count",
+                    "value": 1
+                  }
+                ],
+                "checks": [
+                  {
+                    "name": "native_mapping",
+                    "occurrences": [],
+                    "outcome": "pass"
+                  },
+                  {
+                    "name": "requested_ranges",
+                    "occurrences": [],
+                    "outcome": "pass"
+                  }
+                ],
+                "saved_only_recalculation_equal": true,
+                "closed_replay_equal": true,
+                "closed_histories_unchanged": true,
+                "scientific_observation_count": 0
+              },
+              {
+                "source": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check015_input_workflow/temporary/pytest/test_declared_input_format_rea1/INPUT_FORMAT_NUMERICAL_EXAMPLE.json",
+                "source_sha256": "b0c17a7a1216c74c2348b260f22258f636379aa2f79a080c99ba118ef12f4950",
+                "declared_format": "a2m",
+                "inference_requested": false,
+                "returned_quantities": [
+                  {
+                    "path": "components.input_sequence_count",
+                    "state": "present",
+                    "unit": "sequence_count",
+                    "value": 3
+                  },
+                  {
+                    "path": "components.input_column_count",
+                    "state": "present",
+                    "unit": "alignment_column_count",
+                    "value": 4
+                  },
+                  {
+                    "path": "components.mapped_model_position_count",
+                    "state": "present",
+                    "unit": "model_position_count",
+                    "value": 2
+                  },
+                  {
+                    "path": "components.native_mapping_row_count",
+                    "state": "present",
+                    "unit": "decoded_mapping_row_count",
+                    "value": 1
+                  }
+                ],
+                "checks": [
+                  {
+                    "name": "native_mapping",
+                    "occurrences": [],
+                    "outcome": "pass"
+                  },
+                  {
+                    "name": "requested_ranges",
+                    "occurrences": [],
+                    "outcome": "pass"
+                  }
+                ],
+                "saved_only_recalculation_equal": true,
+                "closed_replay_equal": true,
+                "closed_histories_unchanged": true,
+                "scientific_observation_count": 0
+              },
+              {
+                "source": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check015_input_workflow/temporary/pytest/test_declared_input_format_rea2/INPUT_FORMAT_NUMERICAL_EXAMPLE.json",
+                "source_sha256": "f2d04554194dab6fbe5f9b95069c1c0e92257ef265f2a5012448f50fb5dd0635",
+                "declared_format": "psiblast",
+                "inference_requested": false,
+                "returned_quantities": [
+                  {
+                    "path": "components.input_sequence_count",
+                    "state": "present",
+                    "unit": "sequence_count",
+                    "value": 3
+                  },
+                  {
+                    "path": "components.input_column_count",
+                    "state": "present",
+                    "unit": "alignment_column_count",
+                    "value": 4
+                  },
+                  {
+                    "path": "components.mapped_model_position_count",
+                    "state": "present",
+                    "unit": "model_position_count",
+                    "value": 2
+                  },
+                  {
+                    "path": "components.native_mapping_row_count",
+                    "state": "present",
+                    "unit": "decoded_mapping_row_count",
+                    "value": 1
+                  }
+                ],
+                "checks": [
+                  {
+                    "name": "native_mapping",
+                    "occurrences": [],
+                    "outcome": "pass"
+                  },
+                  {
+                    "name": "requested_ranges",
+                    "occurrences": [],
+                    "outcome": "pass"
+                  }
+                ],
+                "saved_only_recalculation_equal": true,
+                "closed_replay_equal": true,
+                "closed_histories_unchanged": true,
+                "scientific_observation_count": 0
+              },
+              {
+                "source": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check015_input_workflow/temporary/pytest/test_declared_input_format_rea3/INPUT_FORMAT_NUMERICAL_EXAMPLE.json",
+                "source_sha256": "b55ac6aff3a712ab1702b8e8c8225027a12455ced75bae2652afddd93147217b",
+                "declared_format": "selex",
+                "inference_requested": false,
+                "returned_quantities": [
+                  {
+                    "path": "components.input_sequence_count",
+                    "state": "present",
+                    "unit": "sequence_count",
+                    "value": 3
+                  },
+                  {
+                    "path": "components.input_column_count",
+                    "state": "present",
+                    "unit": "alignment_column_count",
+                    "value": 4
+                  },
+                  {
+                    "path": "components.mapped_model_position_count",
+                    "state": "present",
+                    "unit": "model_position_count",
+                    "value": 2
+                  },
+                  {
+                    "path": "components.native_mapping_row_count",
+                    "state": "present",
+                    "unit": "decoded_mapping_row_count",
+                    "value": 1
+                  }
+                ],
+                "checks": [
+                  {
+                    "name": "native_mapping",
+                    "occurrences": [],
+                    "outcome": "pass"
+                  },
+                  {
+                    "name": "requested_ranges",
+                    "occurrences": [],
+                    "outcome": "pass"
+                  }
+                ],
+                "saved_only_recalculation_equal": true,
+                "closed_replay_equal": true,
+                "closed_histories_unchanged": true,
+                "scientific_observation_count": 0
+              },
+              {
+                "source": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check015_input_workflow/temporary/pytest/test_declared_input_format_rea4/INPUT_FORMAT_NUMERICAL_EXAMPLE.json",
+                "source_sha256": "e9bbe8027640062544a41718729fe4c636574252b2574be92f0ba35307d26b4e",
+                "declared_format": "clustal",
+                "inference_requested": false,
+                "returned_quantities": [
+                  {
+                    "path": "components.input_sequence_count",
+                    "state": "present",
+                    "unit": "sequence_count",
+                    "value": 3
+                  },
+                  {
+                    "path": "components.input_column_count",
+                    "state": "present",
+                    "unit": "alignment_column_count",
+                    "value": 4
+                  },
+                  {
+                    "path": "components.mapped_model_position_count",
+                    "state": "present",
+                    "unit": "model_position_count",
+                    "value": 2
+                  },
+                  {
+                    "path": "components.native_mapping_row_count",
+                    "state": "present",
+                    "unit": "decoded_mapping_row_count",
+                    "value": 1
+                  }
+                ],
+                "checks": [
+                  {
+                    "name": "native_mapping",
+                    "occurrences": [],
+                    "outcome": "pass"
+                  },
+                  {
+                    "name": "requested_ranges",
+                    "occurrences": [],
+                    "outcome": "pass"
+                  }
+                ],
+                "saved_only_recalculation_equal": true,
+                "closed_replay_equal": true,
+                "closed_histories_unchanged": true,
+                "scientific_observation_count": 0
+              },
+              {
+                "source": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check015_input_workflow/temporary/pytest/test_declared_input_format_rea5/INPUT_FORMAT_NUMERICAL_EXAMPLE.json",
+                "source_sha256": "6ef828077febd39307916fd64d9c2cdb9ba1a408f0e5e62973881d1401a02734",
+                "declared_format": "clustallike",
+                "inference_requested": false,
+                "returned_quantities": [
+                  {
+                    "path": "components.input_sequence_count",
+                    "state": "present",
+                    "unit": "sequence_count",
+                    "value": 3
+                  },
+                  {
+                    "path": "components.input_column_count",
+                    "state": "present",
+                    "unit": "alignment_column_count",
+                    "value": 4
+                  },
+                  {
+                    "path": "components.mapped_model_position_count",
+                    "state": "present",
+                    "unit": "model_position_count",
+                    "value": 2
+                  },
+                  {
+                    "path": "components.native_mapping_row_count",
+                    "state": "present",
+                    "unit": "decoded_mapping_row_count",
+                    "value": 1
+                  }
+                ],
+                "checks": [
+                  {
+                    "name": "native_mapping",
+                    "occurrences": [],
+                    "outcome": "pass"
+                  },
+                  {
+                    "name": "requested_ranges",
+                    "occurrences": [],
+                    "outcome": "pass"
+                  }
+                ],
+                "saved_only_recalculation_equal": true,
+                "closed_replay_equal": true,
+                "closed_histories_unchanged": true,
+                "scientific_observation_count": 0
+              },
+              {
+                "source": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check015_input_workflow/temporary/pytest/test_declared_input_format_rea6/INPUT_FORMAT_NUMERICAL_EXAMPLE.json",
+                "source_sha256": "a246f1140236beb760d7e99850f38a683789a856dd524a123d356030b84f6073",
+                "declared_format": "phylip",
+                "inference_requested": false,
+                "returned_quantities": [
+                  {
+                    "path": "components.input_sequence_count",
+                    "state": "present",
+                    "unit": "sequence_count",
+                    "value": 3
+                  },
+                  {
+                    "path": "components.input_column_count",
+                    "state": "present",
+                    "unit": "alignment_column_count",
+                    "value": 4
+                  },
+                  {
+                    "path": "components.mapped_model_position_count",
+                    "state": "present",
+                    "unit": "model_position_count",
+                    "value": 2
+                  },
+                  {
+                    "path": "components.native_mapping_row_count",
+                    "state": "present",
+                    "unit": "decoded_mapping_row_count",
+                    "value": 1
+                  }
+                ],
+                "checks": [
+                  {
+                    "name": "native_mapping",
+                    "occurrences": [],
+                    "outcome": "pass"
+                  },
+                  {
+                    "name": "requested_ranges",
+                    "occurrences": [],
+                    "outcome": "pass"
+                  }
+                ],
+                "saved_only_recalculation_equal": true,
+                "closed_replay_equal": true,
+                "closed_histories_unchanged": true,
+                "scientific_observation_count": 0
+              },
+              {
+                "source": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check015_input_workflow/temporary/pytest/test_declared_input_format_rea7/INPUT_FORMAT_NUMERICAL_EXAMPLE.json",
+                "source_sha256": "51bb90871d79c190396fd2a666d22285043ebd4bb113d14013b3095c4ee897e0",
+                "declared_format": "phylips",
+                "inference_requested": false,
+                "returned_quantities": [
+                  {
+                    "path": "components.input_sequence_count",
+                    "state": "present",
+                    "unit": "sequence_count",
+                    "value": 3
+                  },
+                  {
+                    "path": "components.input_column_count",
+                    "state": "present",
+                    "unit": "alignment_column_count",
+                    "value": 4
+                  },
+                  {
+                    "path": "components.mapped_model_position_count",
+                    "state": "present",
+                    "unit": "model_position_count",
+                    "value": 2
+                  },
+                  {
+                    "path": "components.native_mapping_row_count",
+                    "state": "present",
+                    "unit": "decoded_mapping_row_count",
+                    "value": 1
+                  }
+                ],
+                "checks": [
+                  {
+                    "name": "native_mapping",
+                    "occurrences": [],
+                    "outcome": "pass"
+                  },
+                  {
+                    "name": "requested_ranges",
+                    "occurrences": [],
+                    "outcome": "pass"
+                  }
+                ],
+                "saved_only_recalculation_equal": true,
+                "closed_replay_equal": true,
+                "closed_histories_unchanged": true,
+                "scientific_observation_count": 0
+              },
+              {
+                "source": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check015_input_workflow/temporary/pytest/test_original_source_alphabet_0/INPUT_FORMAT_NUMERICAL_EXAMPLE.json",
+                "source_sha256": "f3908ab4927d051a81a384ef239e2e0624369904f874fdcfad89b3b1be99ce60",
+                "declared_format": "afa",
+                "inference_requested": true,
+                "returned_quantities": [
+                  {
+                    "path": "components.input_sequence_count",
+                    "state": "present",
+                    "unit": "sequence_count",
+                    "value": 3
+                  },
+                  {
+                    "path": "components.input_column_count",
+                    "state": "present",
+                    "unit": "alignment_column_count",
+                    "value": 12
+                  },
+                  {
+                    "path": "components.mapped_model_position_count",
+                    "state": "present",
+                    "unit": "model_position_count",
+                    "value": 6
+                  },
+                  {
+                    "path": "components.native_mapping_row_count",
+                    "state": "present",
+                    "unit": "decoded_mapping_row_count",
+                    "value": 1
+                  }
+                ],
+                "checks": [
+                  {
+                    "name": "native_mapping",
+                    "occurrences": [],
+                    "outcome": "pass"
+                  },
+                  {
+                    "name": "requested_ranges",
+                    "occurrences": [],
+                    "outcome": "pass"
+                  }
+                ],
+                "saved_only_recalculation_equal": true,
+                "closed_replay_equal": true,
+                "closed_histories_unchanged": true,
+                "scientific_observation_count": 0
+              }
+            ],
+            "saved_native_build_regrading": {
+              "original_attempt": "check013_input_integration",
+              "successful_followup": "check014_input_repairs",
+              "new_native_builds_for_repair": 0,
+              "a2m_return": [
+                5,
+                12
+              ],
+              "clustal_return": [
+                3,
+                12
+              ]
+            },
+            "initial_failure_resolution_evidence": "verification/tool_graders_hmmer_input_format_routing_2026-10-28_553/INTEGRATION_RESULTS_001.json",
+            "integration_report": "verification/tool_graders_hmmer_input_format_routing_2026-10-28_553/ROOT_VERIFICATION_001.md"
+          }
+        },
+        {
+          "name": "Existing BV-BRC messages/resources and MinHash pair metadata",
+          "status": "open_messages_live_resource_and_recorded_recovery_limit",
+          "minhash_components": {
+            "tool_information": "Implemented and verified the narrow factual correction for native-result/saved-sheet choices and explicit pair inputs.5existing library construction/discovery/frozen-information checks passed in529/check006_tool_information. Generic episode TASK/STEERING rendering remains unfinished.",
+            "sheet": "existing bvbrc_minhash_sheet_v1 reused",
+            "parser_metadata_extraction": "Actual selected material.parse and source custody passed both genome/FASTA full Workflow cases. Frozen numerical inputs retain source/field/pointer/value associations.",
+            "calculator": "existing calculate_minhash_components retained; common fraction helper and projection consistency verified",
+            "result_binding": "Selected native/saved-sheet metadata custody and original commission replay verified by523/check004 pluscheck005; exact original scopes normalized without rewriting records.",
+            "numerical_verification": "427 distinct passing cases across check001/check002; initial four missing-fixture failures retained and resolved",
+            "episode_verification": "19of20fullWorkflow cases passedcheck004; the originalfailedcase plus31newfocused commissioncases and15fixture-only failures allpassedcheck005. Counts span different frozen snapshots; nofresh all-familyrun.",
+            "live_resource_verification": "no new live service or remote sketch-parameter evidence",
+            "evidence": "verification/tool_graders_minhash_metadata_verification_2026-10-27_523/INTEGRATION_VERIFICATION_002.md",
+            "latest_attempt": "verification/tool_graders_minhash_metadata_verification_2026-10-27_523/check005",
+            "message_presentation": "Confirmed generic MinHash launch/API/results ModelConnection path still falls back to JSON context; detailed TASK/concise STEERING renderer and exact wording review remain.",
+            "recovery_limit": "Existing saved-child-before-parent-commission interruption remains commission_action_missing; no orphan recovery added.",
+            "tool_information_evidence": {
+              "diff": "verification/tool_graders_minhash_tool_information_2026-10-28_535/SCOPED_DIFF.patch",
+              "receipt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check006_tool_information/receipt.json",
+              "audit": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check006_tool_information/execution_audit.json",
+              "passed": 5,
+              "seconds": 10.8,
+              "source_runtime_pins_unchanged": true,
+              "all_three_changed_files_equal_tested_snapshot": true,
+              "numerical_code_changed": false,
+              "model_template_changed": false
+            }
+          }
+        },
+        {
+          "name": "Database BLAST authentic format/configured-resource verification",
+          "status": "open"
+        }
+      ],
+      "verified_gap_groups": 2
+    },
+    {
+      "id": "R3",
+      "status": "open",
+      "named_operations": [
+        "annotate_open_reading_frames",
+        "annotate_plasmid",
+        "annotate_bacterial_genome",
+        "blast_sequence",
+        "align_sequences",
+        "find_sequence_mutations",
+        "analyze_protein_conservation",
+        "analyze_protein_phylogeny",
+        "predict_protein_disorder_regions",
+        "identify_fas_functional_domains",
+        "find_n_glycosylation_motifs",
+        "predict_o_glycosylation_hotspots",
+        "liftover_coordinates",
+        "detect_and_annotate_somatic_mutations",
+        "detect_and_characterize_structural_variations",
+        "analyze_copy_number_purity_ploidy_and_focal_events",
+        "analyze_cas9_mutation_outcomes",
+        "analyze_crispr_genome_editing",
+        "identify_transcription_factor_binding_sites",
+        "perform_chipseq_peak_calling_with_macs2",
+        "find_enriched_motifs_with_homer",
+        "gene_set_enrichment_analysis",
+        "annotate_celltype_with_panhumanpy",
+        "create_scvi_embeddings_scRNA",
+        "create_harmony_embeddings_scRNA",
+        "get_uce_embeddings_scRNA",
+        "map_to_ima_interpret_scRNA",
+        "unsupervised_celltype_transfer_between_scRNA_datasets",
+        "generate_embeddings_with_state",
+        "generate_transcriptformer_embeddings",
+        "generate_gene_embeddings_with_ESM_models",
+        "analyze_circular_dichroism_spectra",
+        "analyze_protease_kinetics",
+        "analyze_itc_binding_thermodynamics",
+        "analyze_arsenic_speciation_hplc_icpms",
+        "analyze_cytokine_production_in_cd4_tcells",
+        "perform_facs_cell_sorting",
+        "perform_flux_balance_analysis",
+        "get_gene_coding_sequence",
+        "get_plasmid_sequence",
+        "find_restriction_sites",
+        "find_restriction_enzymes",
+        "get_rna_seq_archs4",
+        "interspecies_gene_conversion",
+        "get_gene_set_enrichment_analysis_supported_database_list",
+        "download_geo_series",
+        "inspect_file"
+      ],
+      "named_scientific_or_wrapper_operations": 38,
+      "supporting_operations": 9,
+      "shared_family_total": null,
+      "qualification": "47 named operation contracts, not 47 distinct graders. 29 source/shared-analysis/consumer mappings reviewed; mapping does not establish completed operations.",
+      "mapped_operation_count": 29,
+      "mapping_evidence": [
+        "verification/tool_graders_sequence_operation_mapping_2026-10-27_509/MAPPING.md",
+        "verification/tool_graders_sequence_operation_mapping_2026-10-27_509/CODING_BOUNDARIES.md",
+        "verification/tool_graders_protein_sequence_mapping_2026-10-27_510/MAPPING.md",
+        "verification/tool_graders_variant_coordinate_mapping_2026-10-27_518/MAPPING.md",
+        "verification/tool_graders_regulatory_enrichment_boundaries_2026-10-28_530/MAPPING.md",
+        "verification/tool_graders_regulatory_enrichment_boundaries_2026-10-28_530/CODING_BOUNDARIES.md",
+        "verification/tool_graders_biochemical_measurement_boundaries_2026-10-28_532/README.md",
+        "verification/tool_graders_biochemical_measurement_boundaries_2026-10-28_532/BOUNDARY_CONTRACT.md",
+        "verification/tool_graders_fluorescence_shared_boundary_2026-10-28_548/BOUNDARY.md",
+        "verification/tool_graders_fluorescence_shared_boundary_2026-10-28_548/ROOT_REVIEW_001.json",
+        "verification/tool_graders_flux_balance_boundary_2026-10-28_556/ROOT_REVIEW_001.json"
+      ],
+      "mapping_qualification": "29/47 source/shared-analysis mappings reviewed;18 representation/support mappings still await full root review. Mapping establishes no completed operation. Two fluorescence operations share a verified numerical core; encoded FCS and affected shared validators now pass229 tests, including24 actual-decoder cases. Preprocessing, actual invocation/software binding, result capture, requested episode delivery and closed replay remain unfinished.",
+      "delivered_mapping_pending_root_review": {
+        "operation_count": 6,
+        "path": "verification/tool_graders_variant_coordinate_mapping_2026-10-27_518/MAPPING.md",
+        "qualification": "Root now reviewed complete mapping and inspection receipt; no new native or scientific execution.",
+        "status": "reviewed"
+      },
+      "unreviewed_operation_mappings": 18,
+      "current_parallel_mapping_work": [
+        {
+          "worker": "/root/representation_boundaries_554",
+          "operations": 9,
+          "status": "mapping_delivered_pending_root_review_no_production_changes",
+          "implemented_operations_claimed": 0
+        },
+        {
+          "worker": "/root/support_operation_boundaries_555",
+          "operations": 9,
+          "status": "mapping_delivered_pending_root_review_no_production_changes",
+          "implemented_operations_claimed": 0
+        },
+        {
+          "worker": "/root/flux_balance_boundary_556",
+          "operations": 1,
+          "status": "mapping_reviewed_no_production_changes",
+          "implemented_operations_claimed": 0
+        }
+      ],
+      "current_shared_core_verification": {
+        "operations": [
+          "perform_facs_cell_sorting",
+          "analyze_cytokine_production_in_cd4_tcells"
+        ],
+        "sheet": "fluorescence_event_population_sheet_v1",
+        "calculator": "calculate_fluorescence_sheet",
+        "passed_tests": 168,
+        "evidence": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/ROOT_CORE_VERIFICATION_001.json",
+        "full_operation_completion": false
+      },
+      "operation_stage_updates": [
+        {
+          "operation": "perform_facs_cell_sorting",
+          "tool_information": "shared_wording_printed_for_user_review_not_yet_implemented",
+          "sheet": "implemented_core_verified",
+          "parser_metadata_extraction": "CSV_and_frozen_table_verified_encoded_FCS_verified_for_exercised_native_fixtures_selected_preparation_unfinished",
+          "calculator": "implemented_core_verified",
+          "result_binding": "producer_worker_receipt_return_components_implemented_and_checked_local_dispatch_verified_full_episode_dispatch_under_integration",
+          "numerical_verification": "180_retained_prefix_core_then169_binding_components_then151_support_core_worker_then103_local_followup_cases_overlap_do_not_add",
+          "episode_verification": "full_Workflow_test_being_written_not_run",
+          "live_resource_verification": "actual_bounded_calculation_worker_tests_passed_original_fluorescence_native_job_not_yet_verified",
+          "shared_sheet": "fluorescence_event_population_sheet_v1",
+          "shared_calculator": "calculate_fluorescence_sheet",
+          "fcs_verification_evidence": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/ROOT_FCS_VERIFICATION_002.json",
+          "current_binding_evidence": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/ROOT_BINDING_VERIFICATION_003.json"
+        },
+        {
+          "operation": "analyze_cytokine_production_in_cd4_tcells",
+          "tool_information": "shared_wording_printed_for_user_review_not_yet_implemented",
+          "sheet": "implemented_core_verified",
+          "parser_metadata_extraction": "CSV_and_frozen_table_verified_encoded_FCS_verified_for_exercised_native_fixtures_selected_preparation_unfinished",
+          "calculator": "implemented_core_verified",
+          "result_binding": "producer_worker_receipt_return_components_implemented_and_checked_local_dispatch_verified_full_episode_dispatch_under_integration",
+          "numerical_verification": "180_retained_prefix_core_then169_binding_components_then151_support_core_worker_then103_local_followup_cases_overlap_do_not_add",
+          "episode_verification": "full_Workflow_test_being_written_not_run",
+          "live_resource_verification": "actual_bounded_calculation_worker_tests_passed_original_fluorescence_native_job_not_yet_verified",
+          "shared_sheet": "fluorescence_event_population_sheet_v1",
+          "shared_calculator": "calculate_fluorescence_sheet",
+          "fcs_verification_evidence": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/ROOT_FCS_VERIFICATION_002.json",
+          "current_binding_evidence": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/ROOT_BINDING_VERIFICATION_003.json"
+        }
+      ],
+      "current_fcs_verification": {
+        "evidence": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/ROOT_FCS_VERIFICATION_002.json",
+        "passed_tests": 229,
+        "native_format_cases": 24,
+        "controlled_fcs_cases": 81,
+        "affected_core_cases": 124,
+        "full_operation_completion": false
+      },
+      "current_binding_verification": {
+        "evidence": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/ROOT_BINDING_VERIFICATION_003.json",
+        "checks": [
+          {
+            "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check019_fluorescence_partial_primary",
+            "tests": 0,
+            "returncode": 4
+          },
+          {
+            "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check020_fluorescence_partial_primary",
+            "tests": 180,
+            "returncode": 0
+          },
+          {
+            "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check021_fluorescence_bindings",
+            "tests": 169,
+            "returncode": 0
+          },
+          {
+            "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check022_fluorescence_support",
+            "tests": 151,
+            "returncode": 0
+          },
+          {
+            "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check023_fluorescence_local",
+            "tests": 103,
+            "returncode": 0
+          }
+        ],
+        "counts_overlap": true,
+        "full_operation_completion": false
+      }
+    },
+    {
+      "id": "R4",
+      "status": "open",
+      "applications": [
+        "GenomeAssembly2",
+        "GenomeAnnotation",
+        "ComprehensiveGenomeAnalysis",
+        "Variation",
+        "TnSeq",
+        "CoreGenomeMLST",
+        "WholeGenomeSNPAnalysis",
+        "TaxonomicClassification",
+        "MetagenomeBinning",
+        "MetagenomicReadMapping",
+        "RNASeq",
+        "ViralAssembly",
+        "SARS2Assembly",
+        "InfluenzaHASubtypeConversion",
+        "SubspeciesClassification"
+      ],
+      "application_count": 15,
+      "preparation_descriptors": "present_in_historical_implementation",
+      "scientific_result_path_closures_verified": 0,
+      "qualification": "No closure for these15 application-specific paths is established by preparation descriptors.",
+      "application_scope_notes": {
+        "GenomeAnnotation": "Includes applicable viral annotation exactly as the original goal requires; abbreviated application ID never removes that requirement."
+      }
+    },
+    {
+      "id": "R5",
+      "status": "open",
+      "existing_collection_handlers": 22,
+      "existing_query_operation_categories": 11,
+      "remaining": "Combined selections, receiver instructions and requested delivery combinations; reuse recorded handler/host tests."
+    },
+    {
+      "id": "R6",
+      "status": "open",
+      "named_provider_scopes": 46,
+      "matching_wrapper_contracts": 29,
+      "remaining": "Resolve aliases and close missing acquisition/metadata/result bindings. Existing NCBI and UniProt routes are baseline, not new graders."
+    },
+    {
+      "id": "R7",
+      "status": "open",
+      "supporting_utilities": [
+        "dustmasker",
+        "segmasker",
+        "windowmasker",
+        "blast_formatter",
+        "blast_formatter_vdb",
+        "blast_vdb_cmd",
+        "blastdb_aliastool",
+        "blastdbcheck",
+        "blastdbcmd",
+        "convert2blastmask",
+        "makeblastdb",
+        "makembindex",
+        "makeprofiledb"
+      ],
+      "utility_count": 13,
+      "verified_completed_binding_count": 0,
+      "qualification": "All13requiredutilityclosures remain open.572verified reusablecomponents, including blast_vdb_cmd member-sequence parsing and historical66passing componentcases; not completed utility-specific invocation/output/requested-return boundaries.",
+      "current_accounting_evidence": "verification/tool_graders_blast_utility_accounting_2026-10-28_572/R7_ACCOUNTING_001.json"
+    }
+  ],
+  "previous_progress_record": "research/tool_grader_progress_2026-10-27/PROGRESS_025.json",
+  "shared_regression_evidence": {
+    "purpose": "After previously authorized barcode removal; no scope change or new grader",
+    "status": "passed",
+    "tests": 50,
+    "seconds": 157.12,
+    "receipt": "verification/tool_graders_barcode_removal_2026-10-27_499/check001/receipt.json",
+    "audit": "verification/tool_graders_barcode_removal_2026-10-27_499/check001/execution_audit.json",
+    "report": "verification/tool_graders_barcode_removal_2026-10-27_499/REGRESSION_RESULT.md",
+    "source_runtime_and_native_pins_unchanged": true,
+    "outside_imports": [],
+    "unbound_native_mappings": [],
+    "qualification": "PBS is a local fixture; NMF cases verify bindings without another fit. Not a claim of verifying independent R1 changes."
+  },
+  "previous_turn_classification": {
+    "classification": "progress",
+    "basis": "Read active user goal and printed full R1–R7 accounting before continuing; reviewed FBA mapping (29/47), corrected two concrete FCS parser defects, collected original failed bounded attempt, and verified229 cases with a clean runtime audit using retained fixtures. No whole tool operation was newly closed."
+  },
+  "current_workloads": [
+    {
+      "worker": "/root/biopython_shared_projection_504",
+      "scope": "Bounded R1 repair and affected structure-format compatibility",
+      "status": "verified_complete"
+    },
+    {
+      "worker": "/root/hmmer_model_format_boundary_508",
+      "scope": "R2 binary/HMMER2 model parser contract feeding existing shared sheet/calculator; source and authentic fixtures first",
+      "status": "bounded_contract_or_mapping_complete_no_scientific_tests"
+    },
+    {
+      "worker": "/root/sequence_operation_mapping_509",
+      "scope": "R3 first eight sequence-operation contracts mapped to actual underlying algorithms and existing numerical authorities",
+      "status": "bounded_contract_or_mapping_complete_no_scientific_tests"
+    },
+    {
+      "worker": "/root/protein_sequence_mapping_510",
+      "scope": "Read-only R3 mapping for predict_protein_disorder_regions, identify_fas_functional_domains, find_n_glycosylation_motifs, predict_o_glycosylation_hotspots; exact existing shared-analysis reuse and missing handoffs before coding",
+      "status": "bounded_contract_or_mapping_complete_no_scientific_tests"
+    },
+    {
+      "worker": "/root/hmmer_shared_model_consumers_511",
+      "scope": "Shared source-cell/validator and consumer implementation",
+      "status": "verified_for_bounded_model_format_contract"
+    },
+    {
+      "worker": "/root/hmmer_binary_decoder_512",
+      "scope": "Binary decoder and shared dispatch",
+      "status": "verified_for_bounded_model_format_contract"
+    },
+    {
+      "worker": "/root/hmmer_legacy_decoder_513",
+      "scope": "HMMER2 ASCII decoder",
+      "status": "verified_for_bounded_model_format_contract"
+    },
+    {
+      "worker": "/root/hmmer_decoder_boundary_review_514",
+      "scope": "Exact new parser/shared-validator/consumer boundary review",
+      "status": "review_complete_seven_findings_sent_to_owner"
+    },
+    {
+      "worker": "/root/hmmer_optional_metadata_repair_515",
+      "scope": "Exact failed optional metadata fixture/comparison boundary",
+      "status": "test_only_repair_verified_by_root_check004"
+    },
+    {
+      "worker": "/root/hmmer_alignment_map_boundary_516",
+      "scope": "Read-only native weighting/map and duplicate-driver calculation contract",
+      "status": "complete_contract_reviewed_root_defined_parallel_coding_boundaries"
+    },
+    {
+      "worker": "/root/minhash_pair_metadata_boundary_517",
+      "scope": "Read-only exact supplied metadata/acquisition/return integration contract",
+      "status": "read_only_contract_complete_root_reviewed_with_additive_interface_clarification",
+      "evidence": [
+        "verification/tool_graders_minhash_pair_metadata_boundary_2026-10-27_517/CONTRACT.md",
+        "verification/tool_graders_minhash_pair_metadata_boundary_2026-10-27_517/ROOT_INTERFACE_CLARIFICATION_001.md"
+      ]
+    },
+    {
+      "worker": "/root/variant_coordinate_operation_mapping_518",
+      "scope": "Read-only mapping of six named R3 variant/coordinate operations to existing shared analyses and precise missing bindings",
+      "status": "source_mapping_reviewed_no_execution_or_completion_claim"
+    },
+    {
+      "worker": "/root/minhash_metadata_contracts_519",
+      "scope": "Pure typed selector/metadata/publication-input shapes and single fraction helper in existing grader; no host/service/views/execution/prompt changes",
+      "status": "bounded_metadata_binding_and_closed_replay_verified_523_check004_and005_messages_live_and_recovery_limits_explicit"
+    },
+    {
+      "worker": "/root/minhash_metadata_projection_520",
+      "scope": "MinHash v1/v2 saved-value validation and requested calculation/diagnostic families; shared fraction-helper consumption",
+      "status": "bounded_metadata_binding_and_closed_replay_verified_523_check004_and005_messages_live_and_recovery_limits_explicit"
+    },
+    {
+      "worker": "/root/minhash_metadata_binding_521",
+      "scope": "MinHash selected metadata custody, original saved-result selection, service publication, acquisition identity and exact diagnostics schema registration",
+      "status": "bounded_metadata_binding_and_closed_replay_verified_523_check004_and005_messages_live_and_recovery_limits_explicit"
+    },
+    {
+      "worker": "/root/minhash_metadata_workflow_tests_522",
+      "scope": "Complete selected MinHash metadata and saved-sheet Workflow tests against fixed interfaces; no production edits",
+      "status": "bounded_metadata_binding_and_closed_replay_verified_523_check004_and005_messages_live_and_recovery_limits_explicit"
+    },
+    {
+      "worker": "root523",
+      "scope": "Frozen A/C contracts, numerical and saved projection verification",
+      "status": "bounded_metadata_binding_and_closed_replay_verified_523_check004_and005_messages_live_and_recovery_limits_explicit",
+      "evidence": "verification/tool_graders_minhash_metadata_verification_2026-10-27_523/REPORT.md"
+    },
+    {
+      "worker": "/root/hmmer_tree_weights_524",
+      "scope": "Pure GSC/BLOSUM raw weights and shared pair identity; no normalization/sheet/driver",
+      "status": "bounded_numerical_native_and_selected_episode_paths_verified_529"
+    },
+    {
+      "worker": "/root/hmmer_pb_sampling_525",
+      "scope": "Pure exact MT19937-64/Vitter D/A row sampler and diagnostic oracle source",
+      "status": "bounded_numerical_native_and_selected_episode_paths_verified_529"
+    },
+    {
+      "worker": "/root/hmmer_map_integration_526",
+      "scope": "Shared HMMER map calculation/normalization/context/driver/retained publication integration against516 and fixed helper ports",
+      "status": "bounded_numerical_native_and_selected_episode_paths_verified_529"
+    },
+    {
+      "worker": "/root/minhash_prospective_custody_tests_527",
+      "scope": "Independent regression tests of original recorded selection before commission and strict committed proof afterward",
+      "status": "bounded_metadata_binding_and_closed_replay_verified_523_check004_and005_messages_live_and_recovery_limits_explicit"
+    },
+    {
+      "worker": "/root/hmmer_native_weight_oracles_528",
+      "scope": "Native source-linked GSC/BLOSUM normalization/tree/cluster and sampler conformance fixtures only",
+      "status": "bounded_numerical_native_and_selected_episode_paths_verified_529"
+    },
+    {
+      "worker": "/root/regulatory_enrichment_boundaries_530",
+      "scope": "Map4R3regulatory/enrichment wrappers to actual shared analyses and exact futurecodingports",
+      "status": "four_operation_mapping_reviewed_no_implementation_completion"
+    },
+    {
+      "worker": "/root/minhash_commission_replay_531",
+      "scope": "Exact recorded results commission replay must avoid fresh metadata extraction; narrowhost/binding and focusedregressions",
+      "status": "bounded_metadata_binding_and_closed_replay_verified_523_check004_and005_messages_live_and_recovery_limits_explicit"
+    },
+    {
+      "worker": "/root/biochemical_measurement_boundaries_532",
+      "scope": "Map4R3quantitative molecular operations to truthful calibration/measurement inputs and existing numericalowners",
+      "status": "four_operation_mapping_reviewed_no_implementation_completion"
+    },
+    {
+      "worker": "/root/minhash_metadata_instruction_boundary_533",
+      "scope": "Exact MinHash tool-information drafts and actual TASK/STEERING rendering boundary trace",
+      "status": "drafts_and_trace_reviewed_library_correction_implemented_by535_model_templates_unsettled"
+    },
+    {
+      "worker": "/root/hmmer_remaining_map_inputs_534",
+      "scope": "Remaining native alphabet inference and declared alignment-grammar contracts feeding same sheet/map",
+      "status": "contract_reviewed_first_parallel_parser_ports_frozen536_no_format_completion_claim"
+    },
+    {
+      "worker": "/root/minhash_tool_information_535",
+      "scope": "Three factual library-information edits only; existing service contract and calculator retained",
+      "status": "implemented_and_five_existing_library_checks_passed_by_root"
+    },
+    {
+      "worker": "root536",
+      "scope": "Freeze byte/diagnostic/record/probe ports and source-domain corrections for independent HMMER readers",
+      "status": "frozen_ports_integrated_and_selected_paths_verified_in529_checks013_to015"
+    },
+    {
+      "worker": "/root/hmmer_input_alphabet_537",
+      "scope": "Pure original-byte format scanners and native alphabet classifier; shared primitive API",
+      "status": "retained_parser_and_native_conformance_plus_selected_shared_sheet_and_Workflow_integration_verified_in529_checks014_015",
+      "previous_status": "27_tests_and117_subtests_passed_plus_native_comparisons_in539_integration_pending"
+    },
+    {
+      "worker": "/root/hmmer_input_fasta_538",
+      "scope": "Pure AFA/A2M reader and shared byte/diagnostic primitives; no numerical implementation",
+      "status": "retained_parser_and_native_conformance_plus_selected_shared_sheet_and_Workflow_integration_verified_in529_checks014_015",
+      "previous_status": "86_parser_cases_passed_plus49_native_open_read_comparisons_in539_integration_pending"
+    },
+    {
+      "worker": "/root/hmmer_input_native_oracle_539",
+      "scope": "Independent original-Easel classifier/scanner/reader conformance observer and tests; verification only",
+      "status": "201_native_comparisons_passed_original_handle_collected_sources_unchanged"
+    },
+    {
+      "worker": "/root/hmmer_input_blocks_540",
+      "scope": "Four native block grammars using frozen byte/diagnostic ports; no numerical scoring",
+      "status": "retained_parser_and_native_conformance_plus_selected_shared_sheet_and_Workflow_integration_verified_in529_checks014_015",
+      "previous_status": "110_parser_cases_and_selected543_native_conformance_passed_integration_pending"
+    },
+    {
+      "worker": "/root/hmmer_input_phylip_541",
+      "scope": "Strict PHYLIP/PHYLIPS readers using same frozen ports",
+      "status": "retained_parser_and_native_conformance_plus_selected_shared_sheet_and_Workflow_integration_verified_in529_checks014_015",
+      "previous_status": "26_tests61_subtests_and_selected543_native_conformance_passed_integration_pending"
+    },
+    {
+      "worker": "/root/hmmer_input_adapter_boundary_542",
+      "scope": "Exact source-to-existing-sheet, saved validation, actual-alphabet and persistence handoffs",
+      "status": "complete_contract_root_reviewed_corrected_and_frozen_for_three_coding_owners"
+    },
+    {
+      "worker": "/root/hmmer_block_phylip_native_checks_543",
+      "scope": "Native block/PHYLIP conformance tests reusing539 observer; no production edits",
+      "status": "177_native_comparisons_passed_original_handle_collected_and_current_files_match_snapshot"
+    },
+    {
+      "worker": "/root/hmmer_new_input_episode_tests_544",
+      "scope": "Nine selected new-format and inferred-alphabet Workflow cases; saved calculation and closed replay",
+      "status": "nine_actual_local_Workflow_return_saved_calculation_and_closed_replay_cases_passed529_check015"
+    },
+    {
+      "worker": "/root/hmmer_saved_input_validation_545",
+      "scope": "New pure shared validation module and tests; exact five frozen ports",
+      "status": "integrated_with551_552_553_repairs_verified_by529_checks014_015",
+      "previous_status": "coding_in_progress"
+    },
+    {
+      "worker": "/root/hmmer_input_data_adapter_546",
+      "scope": "Existing data module shared enrichment and exact three reader/alphabet ports",
+      "status": "integrated_with551_552_553_repairs_verified_by529_checks014_015",
+      "previous_status": "coding_in_progress"
+    },
+    {
+      "worker": "/root/hmmer_input_calculation_consumers_547",
+      "scope": "Existing calculator, driver, saved views and numerical result writer consume frozen ports",
+      "status": "integrated_with551_552_553_repairs_verified_by529_checks014_015",
+      "previous_status": "assigned_and_started"
+    },
+    {
+      "worker": "/root/fluorescence_shared_boundary_548",
+      "scope": "Two R3 fluorescence source/shared-analysis mappings",
+      "status": "mapping_reviewed_zero_implemented_operations"
+    },
+    {
+      "worker": "/root/hmmer_input_validator_review_549",
+      "scope": "Read-only validator and data boundary review",
+      "status": "review_complete_demonstrated_findings_repaired_by551"
+    },
+    {
+      "worker": "/root/hmmer_existing_input_test_fixtures_550",
+      "scope": "Existing engineered data-test contexts only",
+      "status": "fixture_context_changes_verified_check013"
+    },
+    {
+      "worker": "/root/hmmer_saved_validation_repairs_551",
+      "scope": "Saved population, qualification and native format-case validation",
+      "status": "repaired_and_verified_checks014_015"
+    },
+    {
+      "worker": "/root/hmmer_numerical_writer_repair_552",
+      "scope": "Canonical numerical bytes and exact retained native build regrading",
+      "status": "repaired_and_verified_checks014_015"
+    },
+    {
+      "worker": "root553",
+      "scope": "Declared-format dispatch, regression contexts, integration and exact actual completion accounting",
+      "status": "selected_contract_verified_report_written_no_overall_R2_closure"
+    },
+    {
+      "worker": "/root/representation_boundaries_554",
+      "scope": "Nine R3 representation/cell-assignment source and shared-analysis mappings",
+      "status": "mapping_delivered_pending_root_review_no_production_changes"
+    },
+    {
+      "worker": "/root/support_operation_boundaries_555",
+      "scope": "Nine R3 supporting operations mapped to existing acquisitions and typed contracts",
+      "status": "mapping_delivered_pending_root_review_no_production_changes"
+    },
+    {
+      "worker": "/root/flux_balance_boundary_556",
+      "scope": "One R3 flux-balance analysis source and shared numerical boundary",
+      "status": "mapping_reviewed_no_production_changes",
+      "evidence": "verification/tool_graders_flux_balance_boundary_2026-10-28_556/ROOT_REVIEW_001.json"
+    },
+    {
+      "worker": "/root/fluorescence_sheet_contracts_558",
+      "scope": "Shared fluorescence sheet and validation",
+      "status": "core_code_reviewed_and_combined_168_tests_passed",
+      "evidence": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/ROOT_CORE_VERIFICATION_001.json",
+      "full_operation_completion": false
+    },
+    {
+      "worker": "/root/fluorescence_event_readers_559",
+      "scope": "CSV and frozen-table fluorescence parsing",
+      "status": "core_code_reviewed_and_combined_168_tests_passed",
+      "evidence": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/ROOT_CORE_VERIFICATION_001.json",
+      "full_operation_completion": false
+    },
+    {
+      "worker": "/root/fluorescence_calculations_560",
+      "scope": "Shared fluorescence calculations and requested-cell selection",
+      "status": "core_code_reviewed_and_combined_168_tests_passed",
+      "evidence": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/ROOT_CORE_VERIFICATION_001.json",
+      "full_operation_completion": false
+    },
+    {
+      "worker": "/root/fluorescence_fcs_reader_562",
+      "scope": "Encoded FCS parser into existing EventParseResult and shared sheet; neutral request-validation extraction only",
+      "status": "encoded_FCS_parser_reviewed_and_bounded_verification_passed",
+      "evidence": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/ROOT_FCS_VERIFICATION_002.json",
+      "full_operation_completion": false
+    },
+    {
+      "worker": "/root/fluorescence_fcs_native_563",
+      "scope": "Actual FCS writer and retained upstream format verification using the same numerical core",
+      "status": "24_actual_decoder_cases_passed_with_retained_original_fixtures",
+      "evidence": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/ROOT_FCS_VERIFICATION_002.json",
+      "full_operation_completion": false
+    },
+    {
+      "worker": "/root/fluorescence_local_boundary_564",
+      "scope": "Read-only existing local operation/artifact/result/episode-return boundaries for later integration",
+      "status": "source_consumer_proposal_delivered_and_root_reviewed_missing_cross_owner_contracts_explicit_not_frozen",
+      "evidence": [
+        "verification/tool_graders_fluorescence_local_boundary_2026-10-28_564/INTEGRATION_PROPOSAL_001.md",
+        "verification/tool_graders_fluorescence_local_boundary_2026-10-28_564/OPEN_BOUNDARIES_002.md"
+      ]
+    },
+    {
+      "worker": "/root/fluorescence_execution_565",
+      "scope": "Original selected producer, parsing and authenticated capture",
+      "status": "components_implemented_verified_declared_test_boundary",
+      "full_operation_completion": false
+    },
+    {
+      "worker": "/root/fluorescence_result_worker_566",
+      "scope": "Shared calculation worker, requested projection/context and bounded worker lifecycle",
+      "status": "components_implemented_verified_including011_support_custody",
+      "full_operation_completion": false
+    },
+    {
+      "worker": "/root/fluorescence_delivery_567",
+      "scope": "Original result receipts, inherited returns, replay and acquisition ownership",
+      "status": "components_implemented_verified_full_Workflow_pending",
+      "full_operation_completion": false
+    },
+    {
+      "worker": "/root/fluorescence_local_routing_569",
+      "scope": "Configured local original-job lifecycle and monitor/read routing",
+      "status": "controlled_routing_tests_passed_full_native_workflow_pending",
+      "full_operation_completion": false
+    },
+    {
+      "worker": "/root/fluorescence_episode_routing_570",
+      "scope": "Shared episode/result/credit/return routing",
+      "status": "production_code_under_review_tests_being_written",
+      "full_operation_completion": false
+    },
+    {
+      "worker": "/root/fluorescence_workflow_verification_571",
+      "scope": "Actual original native execution and full Workflow requested returns/recalculation/replay",
+      "status": "verification_code_being_written_no_run",
+      "full_operation_completion": false
+    },
+    {
+      "worker": "/root/blast_utility_accounting_572",
+      "scope": "R7 thirteen existing supporting utility paths and closure evidence",
+      "status": "read_only_accounting_in_progress",
+      "full_operation_completion": false
+    }
+  ],
+  "current_update_evidence": {
+    "source_census": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/ROOT_REVIEW_002.json",
+    "verification_directory": "verification/tool_graders_hmmer_map_verification_2026-10-28_529",
+    "checks": [
+      "check024_fluorescence_routing_native",
+      "check025_fluorescence_routing_followup",
+      "check026_fluorescence_workflow",
+      "check027_fluorescence_library_alternatives"
+    ]
+  },
+  "accounting_review": "R1–R7remainopen. Source census:34linkedgraders,65distincttoolnames,73links;1additionalRNAcomparison has no dedicated alias.2duplicateRfamimplementations excluded from progress. Fluorescence shared grader has2namedlinks; actualnative+independentrouting checks passed; fullWorkflow verificationfailed and remainsopen. No new wholetooloperationclosed.",
+  "current_native_verification": {
+    "completed_minhash_attempts": [
+      {
+        "attempt": "verification/tool_graders_minhash_metadata_verification_2026-10-27_523/check003",
+        "passed": 149,
+        "failed": 28,
+        "errors": 4,
+        "terminal": true,
+        "quiescent": true,
+        "collected": true,
+        "classification": "CHECK003_CLASSIFICATION.json"
+      },
+      {
+        "attempt": "verification/tool_graders_minhash_metadata_verification_2026-10-27_523/check004",
+        "passed": 82,
+        "failed": 16,
+        "errors": 0,
+        "terminal": true,
+        "quiescent": true,
+        "collected": true,
+        "classification": "CHECK004_CLASSIFICATION.json",
+        "remaining": "15fixture serialization cases;1production closed-replay case"
+      },
+      {
+        "attempt": "verification/tool_graders_minhash_metadata_verification_2026-10-27_523/check005",
+        "passed": 47,
+        "failed": 0,
+        "errors": 0,
+        "terminal": true,
+        "quiescent": true,
+        "collected": true,
+        "scope": "oneoriginalfailedWorkflow+31newcommissioncases+15fixturefailures"
+      }
+    ],
+    "full_path_completion_claimed": false,
+    "completed_hmmer_alignment_map_attempts": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/BOUNDED_RESULTS_002.json",
+    "completed_hmmer_input_attempts": [
+      {
+        "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check007_input_alphabet",
+        "passed_tests": 27,
+        "passed_unittest_subtests": 117,
+        "seconds": 0.2,
+        "terminal": true,
+        "quiescent": true,
+        "collected": true,
+        "returncode": 0,
+        "audit": {
+          "pytest_returncode": 0,
+          "outside_modules": [],
+          "unbound_mappings": [],
+          "native_unchanged": true,
+          "original_retained_fixtures_unchanged": true
+        },
+        "scope": "pure reader and retained-input checks"
+      },
+      {
+        "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check008_input_fasta",
+        "passed_tests": 86,
+        "passed_unittest_subtests": 0,
+        "seconds": 0.26,
+        "terminal": true,
+        "quiescent": true,
+        "collected": true,
+        "returncode": 0,
+        "audit": {
+          "pytest_returncode": 0,
+          "outside_modules": [],
+          "unbound_mappings": [],
+          "native_unchanged": true,
+          "original_retained_fixtures_unchanged": true
+        },
+        "scope": "pure reader and retained-input checks"
+      },
+      {
+        "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check009_input_native",
+        "passed_tests": 201,
+        "passed_unittest_subtests": 0,
+        "seconds": 4.17,
+        "terminal": true,
+        "quiescent": true,
+        "collected": true,
+        "returncode": 0,
+        "audit": {
+          "pytest_returncode": 0,
+          "outside_modules": [],
+          "unbound_mappings": [],
+          "native_unchanged": true,
+          "original_retained_fixtures_unchanged": true
+        },
+        "scope": "original-source native conformance"
+      },
+      {
+        "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check010_input_blocks",
+        "passed_tests": 110,
+        "passed_unittest_subtests": 0,
+        "seconds": 0.29,
+        "terminal": true,
+        "quiescent": true,
+        "collected": true,
+        "returncode": 0,
+        "audit": {
+          "pytest_returncode": 0,
+          "outside_modules": [],
+          "unbound_mappings": [],
+          "native_unchanged": true,
+          "original_retained_fixtures_unchanged": true
+        },
+        "scope": "pure reader and retained-input checks"
+      },
+      {
+        "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check011_input_phylip",
+        "passed_tests": 26,
+        "passed_unittest_subtests": 61,
+        "seconds": 0.19,
+        "terminal": true,
+        "quiescent": true,
+        "collected": true,
+        "returncode": 0,
+        "audit": {
+          "pytest_returncode": 0,
+          "outside_modules": [],
+          "unbound_mappings": [],
+          "native_unchanged": true,
+          "original_retained_fixtures_unchanged": true
+        },
+        "scope": "pure reader and retained-input checks"
+      },
+      {
+        "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check012_input_block_phylip_native",
+        "passed_tests": 177,
+        "passed_unittest_subtests": 0,
+        "seconds": 3.43,
+        "terminal": true,
+        "quiescent": true,
+        "collected": true,
+        "returncode": 0,
+        "audit": {
+          "pytest_returncode": 0,
+          "outside_modules": [],
+          "unbound_mappings": [],
+          "native_unchanged": true,
+          "original_retained_fixtures_unchanged": true
+        },
+        "scope": "original-source native block/PHYLIP conformance; first-record and prefix-only limits retained"
+      },
+      {
+        "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check013_input_integration",
+        "scope": "Initial assembled integration; failures preserved",
+        "passed_tests": 242,
+        "failed_tests": 25,
+        "errors": 0,
+        "seconds": 17.341,
+        "terminal": true,
+        "quiescent": true,
+        "collected": true,
+        "returncode": 1,
+        "unit": "gene-local-job-ed604ad5d5204b16a7d8583dd57abdef.service",
+        "source_runtime_native_pins_unchanged": true,
+        "audit": {
+          "pytest_returncode": 1,
+          "outside_modules": [],
+          "unbound_mappings": [],
+          "native_unchanged": true,
+          "original_retained_fixtures_unchanged": true
+        }
+      },
+      {
+        "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check014_input_repairs",
+        "scope": "Targeted repaired integration and saved regrading; original native builds reused",
+        "passed_tests": 295,
+        "failed_tests": 0,
+        "errors": 0,
+        "seconds": 6.262,
+        "terminal": true,
+        "quiescent": true,
+        "collected": true,
+        "returncode": 0,
+        "unit": "gene-local-job-6c460d6fe67645f889faac33176899bf.service",
+        "source_runtime_native_pins_unchanged": true,
+        "audit": {
+          "pytest_returncode": 0,
+          "outside_modules": [],
+          "unbound_mappings": [],
+          "native_unchanged": true,
+          "original_retained_fixtures_unchanged": true
+        }
+      },
+      {
+        "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check015_input_workflow",
+        "scope": "Nine actual local selected Workflow returns, saved recalculation and closed replay",
+        "passed_tests": 9,
+        "failed_tests": 0,
+        "errors": 0,
+        "seconds": 232.398,
+        "terminal": true,
+        "quiescent": true,
+        "collected": true,
+        "returncode": 0,
+        "unit": "gene-local-job-0667cc550275402490ae6f1c261eda76.service",
+        "source_runtime_native_pins_unchanged": true,
+        "audit": {
+          "pytest_returncode": 0,
+          "outside_modules": [],
+          "unbound_mappings": [],
+          "native_unchanged": true,
+          "original_retained_fixtures_unchanged": true
+        }
+      }
+    ],
+    "fluorescence_core": {
+      "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check016_fluorescence_core",
+      "passed": 168,
+      "failed": 0,
+      "errors": 0,
+      "collected": true,
+      "terminal": true,
+      "quiescent": true,
+      "scope": "Synthetic CSV/table/shared numerical core and saved-cell projection; no authentic FCS or whole-operation path",
+      "evidence": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/ROOT_CORE_VERIFICATION_001.json"
+    },
+    "fluorescence_fcs": {
+      "attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check018_fluorescence_fcs",
+      "evidence": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/ROOT_FCS_VERIFICATION_002.json",
+      "verification": {
+        "tests": 229,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "audit": {
+        "pytest_returncode": 0,
+        "outside_modules": [],
+        "unbound_mappings": [],
+        "native_unchanged": true,
+        "original_retained_fixtures_unchanged": true
+      },
+      "original_upstream_files_reused": 3,
+      "full_operation_completion": false
+    }
+  },
+  "inventory_accounting": {
+    "historical_fixed_rows_retained": 308,
+    "active_rows_after_previously_authorized_barcode_removal": 307,
+    "historical_row": "B-L130-analyze_barcode_sequencing_data",
+    "active_group_counts": {
+      "A": 78,
+      "B": 54,
+      "C": 37,
+      "D": 33,
+      "E": 79,
+      "X": 13,
+      "R": 13
+    },
+    "qualification": "Historical WORK_STATUS.json remains an evidence snapshot with stale barcode and114/308 status. Current barcode removal is supported by499; no historical row is deleted.307 remains a mixed inventory count, not the denominator of distinct graders.",
+    "barcode_removal_evidence": "verification/tool_graders_barcode_removal_2026-10-27_499/REGRESSION_RESULT.md"
+  },
+  "previous_progress_sha256": "7bf3e8cc69036dbbfaadd2e953143807fa1fe7c0b53b6f760645671cc84c7052",
+  "fluorescence_current_boundary": {
+    "contracts": [
+      {
+        "path": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/FCS_ENCODED_CONTRACT_006.md",
+        "sha256": "8993342f4596d5800863eeebc6aea6117de0e7b580a8c7b61d4997d05c4ca78b"
+      },
+      {
+        "path": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/FCS_METADATA_CLARIFICATION_007.md",
+        "sha256": "0b0a15e16ac951b9e199ddbe0259ee669bc7548c6ed2a97e69eaae43d1be72d9"
+      }
+    ],
+    "existing_core_verified_attempt": "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check016_fluorescence_core",
+    "core_passed": 168,
+    "new_fcs_tests_run": true,
+    "new_operation_paths_complete": false,
+    "qualification": "Shared numerical core, supplied-format parser and execution/result components verified at stated boundaries. Local lifecycle routing controlled tests passed. Full Workflow/native original run and tool-information presentation remain unfinished; neither operation complete.",
+    "metadata_read_defect": {
+      "observed": "Actual FlowIO constructor sets header/text then reads ANALYSIS before returning even with only_text=True. Current caller retains metadata before checking _segments; invalid ANALYSIS may therefore be consumed before rejection.",
+      "repair_boundary": "Guard subsequent in-memory reads using the same _segments validation once native.header/text are established; retain valid pre-error facts and issue code; no second metadata parser or changed scoring.",
+      "production_runtime_verified": true,
+      "resolution": "Guarded existing decoder reads; native valid/beyond-EOF/later-dataset ANALYSIS cases pass. Original strict decoder failures retained before later segment checks."
+    },
+    "new_fcs_tests_passed": 229,
+    "native_format_cases_passed": 24,
+    "remaining_integration_contracts": [
+      "Tool-information wording and receiver presentation",
+      "Full episode integration verification",
+      "Actual selected preprocessing and native-report extraction/authentication"
+    ],
+    "previous_remaining_integration_contracts": [
+      "Exact producer manifest/authenticated capture fields and allowed parser-observed changes",
+      "Subprocess WorkerResult versus host prepare/validate capture interfaces",
+      "Exact durable result receipt and received-prefix/replay fields",
+      "Requested context projection and substantive tool information/receiver text",
+      "Selected preparation and native-report extraction/authentication"
+    ],
+    "execution_result_contracts_frozen": [
+      "verification/tool_graders_fluorescence_implementation_2026-10-28_557/EXECUTION_RESULT_CONTRACT_008.md",
+      "verification/tool_graders_fluorescence_implementation_2026-10-28_557/INTEGRATION_CLARIFICATIONS_009.md",
+      "verification/tool_graders_fluorescence_implementation_2026-10-28_557/PRACTICAL_RESULT_OWNERSHIP_010.md",
+      "verification/tool_graders_fluorescence_implementation_2026-10-28_557/CONTROL_SUPPORT_CUSTODY_011.md"
+    ],
+    "current_binding_verification": "verification/tool_graders_fluorescence_implementation_2026-10-28_557/ROOT_BINDING_VERIFICATION_003.json"
+  },
+  "current_turn_accounting": {
+    "record_type": "source_binding_census_review",
+    "recorded_at": "2026-10-28T13:27:15.177806+00:00",
+    "census": "verification/tool_graders_shared_grader_link_count_2026-10-28_575/census.json",
+    "census_sha256": "2139da426353da0432fab32fd4dfb10f33f543dd635198bf37af95eaced9a14c",
+    "reviewed_source_hashes": {
+      "gene_annotation_episode/native_blast_tool_info.py": "36429616f92edfd44becdebd1906df9cf302070901509f5d29c4a7845d85c076",
+      "gene_annotation_episode/native_blast_result_worker.py": "5cd76486988ffe7bf0970dac2bce6218df022d91bb37082e8f75eb4095fe05fc",
+      "gene_annotation_episode/bvbrc_homology_grader.py": "9b43538ba7702c93960e939ce4af3af7a1b44ecbc48052e32e33b57d38fb39a6",
+      "gene_annotation_episode/bvbrc_homology_tool_info.py": "8c7ce66150cd7bae5f67ddf205d88ded037f98e8522ff31e313c4945b6e5d7e3",
+      "gene_annotation_episode/native_blast_standard_database_tool_info.py": "bf14df0c787068e9035d080627ff41041e3f35bcee516eca5de9c4e26c149427",
+      "gene_annotation_episode/blast_sequence_database.py": "8d5baac2eb1fce6f3359e0f668e48e91a0401736efbe0b92868e2fa65bb96c9a",
+      "gene_annotation_episode/blast_iteration_calculators.py": "2a2ab90c03f27bb745bb10fe4fd1e2bfe361f3b758d48eac3f0c2a7ddbec77b0",
+      "gene_annotation_episode/api_blast.py": "ea87df000cae8822f22d149ee11af09df9dbdc03265bfed09cb9e732e323d2af",
+      "gene_annotation_episode/native_blast_database_tool_info.py": "18f49a615f865bd5ef5671ffe3e7003f59e0e26870ca3ea455df851a31af8958",
+      "gene_annotation_episode/native_blast_database_result_worker.py": "de6d17d20188129142e7d8a6c94581dc89418a6312ab17f42983fcae2a5f980f",
+      "gene_annotation_episode/blast_vdb_calculators.py": "5c47851f0d5e8987631cf022fac540d2a6d5268b1a30520ea7944ec4fce4d011",
+      "gene_annotation_episode/blast_vdb_function_inputs.py": "5be7856ab70a589365b908fce3ccb6e2d910d4026d445b4ef6ce15a0f263116c",
+      "gene_annotation_episode/native_hmmer_tool_info.py": "8e67772296dea55168701dfeea6f8c9ca6aa6b6246f1d61283dbf5c19e9ad811",
+      "gene_annotation_episode/hmmer_graders.py": "1150cde36a6c01171619d3b7c77b71de838f40fd94f0277a69739ec14768b46c",
+      "gene_annotation_episode/api_execution.py": "0e7ede521ef791147ed1ee3b2d2c3ad543d5df26d63a291ed82bff2a300cfe60",
+      "gene_annotation_episode/homology_episodes.py": "e0f16c2643f6c1bb75e60e8b0f985a12ad9e2860f7746cb83b2d8b2776262a4c",
+      "gene_annotation_episode/phmmer_grading_worker.py": "f78102115959985efb42d6eae823b656e912cc1b187e11f239a93a3f004799d3",
+      "gene_annotation_episode/native_infernal_tool_info.py": "d6a28231b1f67b9968c1122039492820aca7758338340acf8d868615a77e22cc",
+      "gene_annotation_episode/native_infernal_result_worker.py": "94d14d96d87e6f67b39d2c47db5496e3595e0bc97ef86136ddb1f7c7b5b80f41",
+      "gene_annotation_episode/api_rfam.py": "752624cddc25df4ca6e32e90743dc30a2e415486c0d860510e503090c7cf268b",
+      "gene_annotation_episode/rfam_batch_table_grader.py": "84761c68e461e94a6573c279ac1e5be01c7e3a03ff833115f5b8e040813e3e99",
+      "gene_annotation_episode/rna_structure_contracts.py": "084edbd7294e18b896481f1a6d1334c8ed5555cc789abaf88b7d8e8c54c1b4ba",
+      "gene_annotation_episode/native_rna_structure_result_worker.py": "d377116ee18dca6cf97a4706cacf6e998503257e52affc667a96041e09ea90ef",
+      "gene_annotation_episode/rna_structure_calculations.py": "111e3d5ff39326804643b7120d727982599f2529c456c6c346b6c177f7af5f3b",
+      "gene_annotation_episode/rna_structure_comparison_results.py": "2e1a4dfe2ac409018dc87073ea7897399b30904f8d7140a12adcf754304a5bcc",
+      "gene_annotation_episode/rna_structure_comparison_publication.py": "ee54376a99a7482df7bcdfe06c2175ea3759ff183524f76b3d1b97c19680ac7b",
+      "gene_annotation_episode/native_protein_structure_tool_info.py": "fa358a9c27fe80fcb4c23ac6d73b80c823f85d7d7ee29f7457740fe79c344993",
+      "gene_annotation_episode/native_protein_structure_worker.py": "f71733a8a0b208e4282edd081d3003ddddaf5316c99c0cbe6b75ad33325eb1f8",
+      "gene_annotation_episode/native_genomic_overlap_tool_info.py": "669b61bdf1ced1d7cf670b0b82288c1fb414013bc11ead9e6cd5cb331b1a282a",
+      "gene_annotation_episode/genomic_overlap_result_worker.py": "7d3a73e22c6f85dd93f9819a8d89a1dcd27a2b838884d77dee1dfe1b810a9e56",
+      "gene_annotation_episode/native_chromatin_interaction_tool_info.py": "0663a80b86b39e635afb06a211515ec2f490e0b7d37ed93821b11473760ace1e",
+      "gene_annotation_episode/chromatin_interaction_result_worker.py": "a05b85814556929b555771a573183b1eb2ee3c1623c4034fe0899c84cc713dae",
+      "gene_annotation_episode/native_atac_differential_tool_info.py": "6673ba36f39aaaf339a4c4870221700dfa11958a931fa177a901e553d5dbfa91",
+      "gene_annotation_episode/atac_differential_result_worker.py": "73a6972dfd228526d37d11b0b55d8f9c4472a02b98631aaafd346fc16d327bce",
+      "gene_annotation_episode/native_expression_nmf_tool_info.py": "02e3b7e4b585e97b3850f18b74118f820db86fbd68c40b81585647f6d59becfc",
+      "gene_annotation_episode/expression_nmf_result_worker.py": "7e1eaaac7de127701b025482e56be221447b233f17f3b3c7673ae28818ce0408",
+      "gene_annotation_episode/native_fluorescence_tool_info.py": "e4a6d8ccd6c55b912556ac43d9ff222645964c55f4cbcee9e5bdb78d0efa6638",
+      "gene_annotation_episode/fluorescence_result_worker.py": "3e1a6c7a846384cf8ef59679e09ee2c58fbb1338ce89c7f2b1b292a45a6c4e33",
+      "gene_annotation_episode/bvbrc_phylogeny_tool_info.py": "83921b25268ad0f8b9028c8695d32b4999603b45cfeafe5a8d679dcb62eda96a",
+      "gene_annotation_episode/bvbrc_phylogeny_bundle_projection.py": "c3193cd38503fe221f5846620c738f5100d9f7ac0b5da8f42a619a72d5fc9ae1",
+      "gene_annotation_episode/bvbrc_gene_tree_grader.py": "f3f382822d3f589295bdde68bb3d2a2e9d07efa59a4468bf82850fdac17d7ac9",
+      "gene_annotation_episode/bvbrc_codon_tree_grader.py": "5393d24a52e255fb1d1027082218dadc9165e1f4a0a7f279bc14cb2db82f83be",
+      "gene_annotation_episode/bvbrc_alignment_tool_info.py": "f40810106c0b74c6556f8acf5f566e19af2831338a3c1c5496214a2d63625489",
+      "gene_annotation_episode/bvbrc_alignment_bundle_resolution.py": "7d9bc53bbf5fd65135a059f942113c60721435f54bbb4b77adcf837270b7ccf2",
+      "gene_annotation_episode/bvbrc_genome_alignment_tool_info.py": "55643297379cd8e8ce7f5ddc7a19d5d698aa1990e54be6ee77f464016bbefd49",
+      "gene_annotation_episode/bvbrc_genome_alignment_bundle_resolution.py": "842abe69e542b6863ed6b6c6b52f081f7fafd036bff688a4192fad1cda1fea33",
+      "gene_annotation_episode/bvbrc_proteome_tool_info.py": "ca897c3322c4d04255ccaa3e24cd4e45c410f52ea9c8599e1fe2ac66c3066ed6",
+      "gene_annotation_episode/bvbrc_proteome_bundle_v2_resolution.py": "ac30d79eb9bd11267035bc65b6c509123e116c6804b57f66bcbf534424ab5056",
+      "gene_annotation_episode/bvbrc_comparative_systems_tool_info.py": "a9fb1499416f72773605a9d38fadd34bf47fca22cb52aae25faa068030c17bde",
+      "gene_annotation_episode/bvbrc_comparative_systems_bundle_resolution.py": "f82da3e2e5cf77a382780ed51b05ea39e652cfc9aa4de665d136a12a4c5c4229",
+      "gene_annotation_episode/bvbrc_fastqutils_tool_info.py": "b7ae7564b9900820062f2e7d140d20cbc271e9b32781d1282d83564065756b93",
+      "gene_annotation_episode/bvbrc_fastqutils_bundle_adapter.py": "c271cc48cb4c5309a73a53e10ad3df586fc7c5ae50e670a2059cc62f0e4aecc1",
+      "gene_annotation_episode/api_bvbrc_minhash.py": "307bab268a62b2921d5691089d334eb8341865f0de367638a08ed329fe5d49e1",
+      "gene_annotation_episode/rfam_batch_publication.py": "ff13d94e1d9503ed2f55515e062ba9426f36f996e12bb641d07c8f29641227aa",
+      "gene_annotation_episode/rfam_batch_grader.py": "85bb49b8b23122a9dbe7a496c78e77fd5e48c9d1cfdd53b5ca37bd16fe9c02cb",
+      "gene_annotation_episode/rfam_batch_report_grader.py": "e69e58cee81b93eca6101b39dd8333bfa50fb434d2af9ff54b03a6facfa2bef1",
+      "gene_annotation_episode/tools.py": "2188ad870ad128ef335f0066f28a7c41ca383fed64977240304f7c8a02c32932",
+      "gene_annotation_episode/sequence_composition_grader.py": "884dcb1591e6fe2028d3a460b7d813e2bf9834eca983291c6bf6984d231c61b6",
+      "gene_annotation_episode/biopython_pairwise_grader.py": "c37388da3c5bd28e3f0ff23af3f8923e26fd9ab7bd792b4b71dbd74a7f70dec5",
+      "gene_annotation_episode/minimap2_grader.py": "bf1b6106e8bba137ac6e43e8b27b0a61bc731515858f25fa0ab27619e62ac81f",
+      "gene_annotation_episode/alignment_site_native.py": "55ea30e2e499e6907a1cc00560c495928db9fffeb16fde9a990fcd8dd54ddcab",
+      "gene_annotation_episode/alignment_site_calculators.py": "479265e41021f04b243a65d0cc1c2623c7dbc5841c44a36b12797b0618cfc73a",
+      "gene_annotation_episode/blast_result_views.py": "aefb5f566be95812cee9318860c6218e392ec69fc9aaf13088e6a91ef6d00d5e",
+      "gene_annotation_episode/blast_hsp_site_calculators.py": "afc96eb2b9793e65cf6540f11747e608dd3ef073130aa05f095a663b408a734e",
+      "gene_annotation_episode/sequence_extraction_grader.py": "ac8640c621bbd961919035237ec0707c95661493c25f87beab3ed4922ea459bf",
+      "gene_annotation_episode/sequence_translation_grader.py": "59c9376f8c077543cc8c15b5779777648120b4a2e75ee2859baf1edb24af2b50",
+      "gene_annotation_episode/prodigal_grader.py": "98b33272b6181f05266edc622b67604436eb6951a725e75a01280411314b029d"
+    },
+    "main_analysis_rows": 35,
+    "named_tool_linked_graders": 34,
+    "grader_to_tool_name_links": 73,
+    "distinct_public_tool_names": 65,
+    "distribution": {
+      "0": 1,
+      "1": 18,
+      "2": 8,
+      "3": 4,
+      "5": 2,
+      "6": 1,
+      "11": 1
+    },
+    "separate_duplicate_rfam_implementations": 2,
+    "all_implementations_including_duplicates": 37,
+    "all_links_including_duplicates": 75,
+    "not_counted": [
+      "acquisition/status/preparation validators",
+      "internal component sheets",
+      "literature graders"
+    ],
+    "verification_level": "Source wiring; not whole-operation completion, configured deployment or live-resource verification.",
+    "current_fluorescence_verification": {
+      "check024": "30passed,3fixture assertion failures; included2actualnativeproducer checks",
+      "check025": "3correctedfixturecasespassed;31independent routing cases pass across024/025",
+      "check026": "8passed,1tool-info fixturefailure,12Workflowsetup errors from2sharedfixture runs",
+      "check027": "1correctedtool-info fixturecasepassed; fullWorkflow remains unverified"
+    },
+    "current_work": "Fresh576diagnoses exact Workflow report-redelivery failure; no wholeoperation newlyclosed."
+  }
+}

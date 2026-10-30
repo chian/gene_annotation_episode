@@ -1,0 +1,67 @@
+{
+  "slot": "thought_pattern",
+  "id": "P06",
+  "name": "Retain the system output and revise who contributes what",
+  "description": "Keep a real aggregate output separate from its attribution. Compare direct chemistry, substrate/cofactor supply, enabling a complex, downstream filtering and production of an observable signal.",
+  "use_when": "A mixture, complex or cellular endpoint is being used to assign the intended component a molecular job.",
+  "live_alternatives": [
+    "The nominated component performs the transformation.",
+    "It enables or supplies another contributor.",
+    "A partner or contaminant creates/filters the signal.",
+    "The output is real but its source remains unresolved."
+  ],
+  "decision_guidance": [
+    "Choose a comparison separating the live contributor assignments while preserving relevant system competence.",
+    "Independent preparation, selective partner changes, defined systems or positive structural roles can update attribution; no layout is mandatory.",
+    "Keep the genuine output after attribution fails, and seek a positive contribution rather than an empty scaffold label."
+  ],
+  "outcome_contingencies": [
+    {
+      "if_observed": "Changing a downstream partner changes apparent upstream specificity",
+      "then_consider": "Bound the result to the coupled pair."
+    },
+    {
+      "if_observed": "Activity follows an identified host protein instead of the intended construct",
+      "then_consider": "Reassign the activity while leaving the original candidate unresolved."
+    },
+    {
+      "if_observed": "Positive evidence separates catalytic and enabling roles",
+      "then_consider": "Assign bounded distinct contributions; unvalidated catalytic-null labels cannot prove dispensability."
+    }
+  ],
+  "boundary": "Attribution is a scientific uncertainty, not routine provenance. It does not choose energy accounts (P10), identify a proxy product (P14) or establish contact necessity (P02/P17).",
+  "evidence": [
+    {
+      "case_group": "seq_codA_isoguanine_failed_candidate",
+      "case_id": "seq_codA_isoguanine_failed_candidate",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3138507/",
+      "source_locator": "Case-record observation; inspected scope: Primary complete indexed narrative, purification table, peptide-ID results and recombinant assays inspected. No wet-lab work performed.",
+      "observation": "Extract activity lacked the intended archaeal candidate’s expected behavior; purification and independently prepared CodA identified a host contribution.",
+      "limit": "Insolubility was not a negative activity measurement for the archaeal protein."
+    },
+    {
+      "case_group": "chem_f420_precursor_partner",
+      "case_id": "chem_f420_precursor_partner",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8764529/",
+      "source_locator": "Role of CofD in substrate specificity Results, combined-assay Methods and Discussion.",
+      "observation": "Changing only CofD/FbiA changed the coupled system’s apparent precursor preference.",
+      "limit": "The published assays were not rerun; upstream specificity cannot be isolated from final product alone."
+    },
+    {
+      "case_group": "causal_cas2_spacer_acquisition",
+      "case_id": "causal_cas2_spacer_acquisition",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4359072/",
+      "source_locator": "Protospacer integration Results, Fig. 1 and Extended Data Figs. 2–3; C3 in causal/cas2/case_trace.json.",
+      "observation": "Defined integration and complex comparisons distinguish Cas1 chemistry from Cas2 enabling contributions.",
+      "limit": "E. coli E9 mutants were not directly validated nuclease-null; coordinate geometry alone proves neither necessity nor energy."
+    },
+    {
+      "case_group": "spec_aquifex_hfp_coupling_contamination",
+      "case_id": "spec_aquifex_hfp_coupling_contamination",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12051542/",
+      "source_locator": "Case-record observation; inspected scope: Primary relevant complete results/discussion and reconstitution/NMR/purification methods inspected. Supplement MS identification accepted as reported; its underlying spectra were not reanalyzed. Current PDB polymer records bind HFP to aq_1744/O67630; gpmA is a record label, not independent mutase evidence.",
+      "observation": "Apparent HFP isomerase also appeared in other preparations and host RpiA was detected; phosphatase-compatible activity survived.",
+      "limit": "Supplement MS identification is author-reported; native essentiality was not established."
+    }
+  ]
+}

@@ -1,0 +1,2645 @@
+{
+  "slot": "thought_pattern",
+  "status": "Source-grounded library content; no runtime implementation, scoring-schema adoption or credit award.",
+  "scope": {
+    "groups_reviewed": 142,
+    "review_basis": "Questions, recorded observations and consequences across all 142 groups; relevant original traces and complete modularity findings for selected entries. This curation is not a fresh reread of all primary papers.",
+    "selection_meaning": "One selected entry narrows a concrete decision problem and can guide several evolving turns. The child owns its choices and can retrieve another entry when the scientific relation changes.",
+    "not_a_pipeline": true,
+    "known_outcomes_disclosed": true,
+    "experimental_owner": "All biological experiments are author-reported; actual earlier research operations retain their recorded limits.",
+    "overlap_policy": "Entries may bear on the same case but distinguish competing relations. No mandatory order or universal compatibility is implied."
+  },
+  "options": [
+    {
+      "id": "P01",
+      "name": "Choose a relevant analogue and bound what transfers",
+      "description": "Use similarity to a characterized system to form bounded explanations. Choose which sequence, local structural machinery, domain architecture, genomic context or organismal circumstance makes the reference informative for the disputed property; revise misleading comparators.",
+      "use_when": "A nearest hit, fold, motif or similar biological context suggests an annotation, but exact chemistry, recognition or role remains open.",
+      "live_alternatives": [
+        "A relevant shared relationship supports transfer of the disputed property.",
+        "Only a partial core is shared; recognition, partners or role differ.",
+        "The comparator or short match is uninformative for this question."
+      ],
+      "decision_guidance": [
+        "Prefer references that separate plausible alternatives, not simply the most familiar name or highest global score. Alignments, structures and context searches are ways to inspect a chosen relationship.",
+        "When a comparison is weak, consider a biologically better reference before treating it as evidence against all relationship.",
+        "Keep catalytic compatibility, target recognition and native role as separate transfer claims; absent catalytic machinery can overturn an inherited chemistry."
+      ],
+      "outcome_contingencies": [
+        {
+          "if_observed": "Relevant machinery corresponds but specificity differs",
+          "then_consider": "Retain the supported relationship and investigate the differing recognition or contextual features."
+        },
+        {
+          "if_observed": "Expected catalytic machinery is incompatible",
+          "then_consider": "Reopen chemistry and preserve only the relationship actually supported."
+        },
+        {
+          "if_observed": "No informative correspondence is found",
+          "then_consider": "Keep function unresolved; absence of an informative match is not absence of function."
+        }
+      ],
+      "boundary": "Analogy interpretation is the thought; executing a similarity search is a tool operation. P02 deliberately seeks a counterexample to an explicit predictor; P03 compares rival inputs to a fixed system. Raw scores are not automatically significance.",
+      "evidence": [
+        {
+          "case_group": "hemk_prmc",
+          "case_id": "seq_hemk_prmc_ecoli",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2713863/",
+          "source_locator": "Primary active-site comparison; sequence/hemk_live_routes.json A1–A3.",
+          "observation": "Dam supplied a poor motif comparison; the more relevant M.TaqI comparison supported related active-site geometry without specifying DNA versus protein substrate.",
+          "limit": "Fresh raw scores were uncalibrated and answer-aware; the structural comparison is author-reported."
+        },
+        {
+          "case_group": "TM0936_Hermann_2007",
+          "case_id": "TM0936_Hermann_2007",
+          "source_url": "https://doi.org/10.1038/nature05981",
+          "source_locator": "Case-record observation; inspected scope: Read relevant primary results and methods; live deposited binding-site API retrievals. Original API URLs lacking entity ID returned 404 and were repaired using current PDBe documentation. No repository changes or scientific-case runs.",
+          "observation": "Cytosine-deaminase-like machinery supported a coarse relationship; substrate tests established another specificity.",
+          "limit": "The fold and contact queries do not identify the dominant physiological substrate."
+        },
+        {
+          "case_group": "seq_hisZ_lactococcus",
+          "case_id": "seq_hisZ_lactococcus",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC17719/",
+          "source_locator": "Case-record observation; inspected scope: Primary abstract, genetic results, direct-subunit investigation and discussion inspected through indexed full-text sections. No new comparative genomics run.",
+          "observation": "HisRS-like ancestry did not imply tRNA charging: HisZ instead contributed with HisG to histidine biosynthesis.",
+          "limit": "Genetics/biochemistry are author-performed; no new evolutionary reconstruction."
+        },
+        {
+          "case_group": "seq_yadB_gluQRS_ecoli",
+          "case_id": "seq_yadB_gluQRS_ecoli",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC419609/",
+          "source_locator": "Case-record observation; inspected scope: Primary PNAS abstract plus NAR substrate-preparation methods and Q34 comparison results inspected. No live tRNA or protein calculation.",
+          "observation": "Missing recognition architecture and matched tRNA tests redirected a GluRS-like comparison toward queuosine modification.",
+          "limit": "PNAS source was abstract-level; matched Q34 tests were read in the NAR paper."
+        }
+      ]
+    },
+    {
+      "id": "P02",
+      "name": "Seek cases that break a proposed predictor",
+      "description": "Treat an implication as something that can fail. Prefer feature/function discordance: feature without function challenges sufficiency; function without feature challenges necessity.",
+      "use_when": "An annotation is extended using a residue, motif, similarity rank, genomic partner or contact as a predictor.",
+      "live_alternatives": [
+        "The feature is sufficient, necessary, both or merely correlated in the relevant domain.",
+        "Discordance is a real exception.",
+        "Apparent discordance reflects incomplete measurement or an inapplicable assay."
+      ],
+      "decision_guidance": [
+        "Name the feature-to-function implication before selecting a comparison. Seek informative discordance rather than additional concordant relatives.",
+        "Keep blank genomic fields, assay limits and failed complementation distinct; none can silently become another kind of negative.",
+        "Compare alternative recognition or contextual explanations after an exception, without treating a post-hoc explanation as a validated replacement rule."
+      ],
+      "outcome_contingencies": [
+        {
+          "if_observed": "Feature-positive/function-negative is established",
+          "then_consider": "Narrow sufficiency without automatically rejecting necessity."
+        },
+        {
+          "if_observed": "Feature-negative/function-positive is established",
+          "then_consider": "Narrow necessity while retaining uncertainty about alternative mechanisms."
+        },
+        {
+          "if_observed": "The supposed negative is unmeasured or inapplicable",
+          "then_consider": "Retain unresolved status and seek an informative comparator."
+        }
+      ],
+      "boundary": "Counterexamples can defeat broad claims without measuring classifier accuracy. P17 additionally requires selective causal perturbations; P02 can use natural relatives or retained system functions.",
+      "evidence": [
+        {
+          "case_group": "seq_hisn_impase_discrimination",
+          "case_id": "seq_hisn_impase_discrimination",
+          "source_url": "https://link.springer.com/article/10.1186/s12866-017-1069-4",
+          "source_locator": "Primary Table 3 and motif Results; comparison/counterexample_calculations.json.",
+          "observation": "A higher-scoring motif-deficient candidate failed complementation while lower-scoring motif-bearing candidates succeeded.",
+          "limit": "Selected comparisons are not a classifier benchmark; expression and host effects remain alternatives."
+        },
+        {
+          "case_group": "BC1793_Hitchcock_2013",
+          "case_id": "BC1793_Hitchcock_2013",
+          "source_url": "https://doi.org/10.1021/ja4066078",
+          "source_locator": "Primary Table 1 and SAH discussion; comparison/counterexample_calculations.json.",
+          "observation": "Arginine-positive Bc1793 lacked measured SAH activity; Tvn0515 lacked template arginines yet had SAH activity.",
+          "limit": "Censored efficiencies remain bounds; loop/contact explanations were modeled."
+        },
+        {
+          "case_group": "seq_triA_atzA_near_identity",
+          "case_id": "seq_triA_atzA_near_identity",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC95154/",
+          "source_locator": "Case-record observation; inspected scope: Primary introduction, sequence results, substrate table and competition methods/results inspected through indexed full text. Historical organism name preserved explicitly.",
+          "observation": "Nine differences in 475 residues accompanied different substrate chemistry, defeating near identity as a sufficient specificity rule.",
+          "limit": "The study did not establish a universal specificity rule for the nine substitutions."
+        },
+        {
+          "case_group": "cellular_y_complex",
+          "case_id": "cellular_y_complex",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6004469/",
+          "source_locator": "Selected-transcript processing Results; cellular/detailed_traces.json route B.",
+          "observation": "Selected RNA ends were lost while rnpB behaved differently from the rny mutant, challenging a uniform RNase Y dependency.",
+          "limit": "Processed tracks were extracted descriptively; end-chemistry validation was author-performed."
+        }
+      ]
+    },
+    {
+      "id": "P03",
+      "name": "Discriminate competing inputs by their predicted chemistry",
+      "description": "Keep the candidate system explicit while choosing substrates, co-substrates or acceptors that distinguish competing recognition hypotheses. Refine the candidate space using identified products and bounded non-products.",
+      "use_when": "Several chemically plausible inputs remain and another family match will not distinguish them.",
+      "live_alternatives": [
+        "Candidate inputs differ at a recognized chemical feature.",
+        "A side reaction is being mistaken for the preferred reaction.",
+        "Apparent specificity belongs to another preparation component or coupled partner."
+      ],
+      "decision_guidance": [
+        "Choose contrasts changing the feature on which the hypotheses disagree, including close analogues and plausible pathway inputs.",
+        "Positives may motivate adjacent candidates omitted from the initial library; unavailable compounds remain untested.",
+        "Interpret the profile at the level of the assayed preparation with conditions and product identity retained; component attribution may need P06."
+      ],
+      "outcome_contingencies": [
+        {
+          "if_observed": "A coherent product pattern supports one recognition hypothesis",
+          "then_consider": "Narrow the tested profile and choose an informative untested boundary."
+        },
+        {
+          "if_observed": "An attractive input fails under competent conditions",
+          "then_consider": "Revise input recognition without discarding every supported catalytic relationship."
+        },
+        {
+          "if_observed": "Comparative kinetics or products are missing",
+          "then_consider": "Report bounded capacity rather than rank untested native inputs."
+        }
+      ],
+      "boundary": "This chooses a discriminating comparison, not an assay sequence. It does not establish native use (P11) or isolate a component in a coupled system (P06).",
+      "evidence": [
+        {
+          "case_group": "TM0936_Hermann_2007",
+          "case_id": "TM0936_Hermann_2007",
+          "source_url": "https://doi.org/10.1038/nature05981",
+          "source_locator": "Case-record observation; inspected scope: Read relevant primary results and methods; live deposited binding-site API retrievals. Original API URLs lacking entity ID returned 404 and were repaired using current PDBe documentation. No repository changes or scientific-case runs.",
+          "observation": "Cytosine derivatives failed while SAH/MTA/adenosine reacted; AMP was a docking false positive and SAM did not turn over.",
+          "limit": "Published author assays; no docking or screening rerun."
+        },
+        {
+          "case_group": "context_archaeal_shikimate_kinase_2001",
+          "case_id": "context_archaeal_shikimate_kinase_2001",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC94878/",
+          "source_locator": "Case-record observation; inspected scope: Complete main paper, genome-analysis methods, results, and substrate-assay methods read. No WIT reconstruction, alignment, or enzyme assay rerun. Historical WIT identifier retained without an unverified modern-locus mapping.",
+          "observation": "Shikimate-versus-homoserine panels distinguished two GHMP-like paralogs despite family resemblance.",
+          "limit": "Context prioritized candidates; author assays established the specificity."
+        },
+        {
+          "case_group": "spec_cysq_pap_not_imp",
+          "case_id": "spec_cysq_pap_not_imp",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2711008/",
+          "source_locator": "Case-record observation; inspected scope: 2008 primary relevant full methods/results/discussion inspected. 2010 CysQ deletion, extract-activity and discussion sections inspected; no genome analysis of putative suppressors.",
+          "observation": "PAP kinetics contrasted with over 1,000-fold weaker IMP/FBP efficiencies, exposing a preferred substrate omitted from the old interpretation.",
+          "limit": "PAP/PAPS assay limits remain; native flux was not measured."
+        },
+        {
+          "case_group": "sulfoglycolysis_selectivity",
+          "case_id": "sulfoglycolysis_selectivity",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8006165/",
+          "source_locator": "Case-record observation; inspected scope: 2021 primary full text inspected, 2014 and 2008 references screened at primary abstract level; raw 2021 XML retained.",
+          "observation": "Sulfosugar versus ordinary-sugar/phosphosugar comparisons constrained cross-use despite parallel pathway organization.",
+          "limit": "Cross-paper comparisons retain organism/assay context; spectra were not independently reprocessed."
+        }
+      ]
+    },
+    {
+      "id": "P04",
+      "name": "Revise the failed attachment while retaining independent constraints",
+      "description": "After a competent negative or contradiction, separate the part of the explanation that failed from independently supported constraints. Reopen alternatives within surviving constraints without either preserving the whole annotation or discarding everything.",
+      "use_when": "A reaction or familiar-function assignment fails while pathway placement or another biological association remains supported.",
+      "live_alternatives": [
+        "The reaction was wrong but independent placement survives.",
+        "The association itself was misleading.",
+        "The test was not competent to evaluate the proposed function."
+      ],
+      "decision_guidance": [
+        "Identify independent support for each part of the old explanation before deciding what survives.",
+        "Use surviving branch boundaries, required chemistry and distribution to construct a limited alternative set.",
+        "Preserve association-only wording when no exact replacement reaction is established."
+      ],
+      "outcome_contingencies": [
+        {
+          "if_observed": "Reaction fails but independent placement survives",
+          "then_consider": "Investigate a different compatible transformation."
+        },
+        {
+          "if_observed": "A new identified product establishes an alternative",
+          "then_consider": "Replace the failed reaction while retaining unresolved mechanism/native-use questions."
+        },
+        {
+          "if_observed": "No alternative is established",
+          "then_consider": "Return the supported association and explicit unresolved claims."
+        }
+      ],
+      "boundary": "Nothing survives merely because it was in an old annotation. Failed expression/retrieval is not a negative activity result. P01 handles analogue transfer; P05 begins from a system requirement rather than a failed assignment.",
+      "evidence": [
+        {
+          "case_group": "quef",
+          "case_id": "seq_queF_not_folE",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC555470/",
+          "source_locator": "Case-record observation; inspected scope: Primary Results and Discussion plus alignment and assay descriptions inspected through indexed full-text sections. No sequence alignment or experiments rerun here.",
+          "observation": "Controlled cyclohydrolase negatives led authors to later queuosine reductions; branch placement survived and preQ0 reduction was established.",
+          "limit": "Sequence/context records are one case; motif absence did not identify the product."
+        },
+        {
+          "case_group": "context_mj0044_ip_kinase_2006",
+          "case_id": "context_mj0044_ip_kinase_2006",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1447442/",
+          "source_locator": "Case-record observation; inspected scope: Complete primary methods/results and pathway caveats read. No assay or genomic analysis rerun; historical whole-pathway claims not promoted to a current confirmed pathway.",
+          "observation": "Mevalonate/phosphomevalonate negatives left isoprenoid context intact and motivated a different reaction order.",
+          "limit": "The historical proposed complete pathway remained a separate hypothesis."
+        },
+        {
+          "case_group": "context_oarx_thiamin_2024",
+          "case_id": "context_oarx_thiamin_2024",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11223231/",
+          "source_locator": "Case-record observation; inspected scope: Complete primary methods/results read through Europe PMC XML; deposited XLSX parsed; actual ENA genome record retrieved. No annotation run or experiment performed. Table and experimental strains were kept distinct.",
+          "observation": "Thiamin-linked context survived tested salvage failures while exact substrate/reaction stayed unassigned.",
+          "limit": "Read-only context probes were descriptive; blank FmnO assignments are not proven absence."
+        },
+        {
+          "case_group": "spec_frsa_disputed_pdc_native_unknown",
+          "case_id": "spec_frsa_disputed_pdc_native_unknown",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3788570/",
+          "source_locator": "Case-record observation; inspected scope: 2013 main narrative, modeling assumptions and stated assay outcomes inspected; detailed supplementary assay protocols not independently checked. 2019 complete relevant activity/results/discussion and assay conditions inspected. Original 2011 paper not newly verified.",
+          "observation": "Failure to reproduce PDC justified dropping that established-function claim without declaring a native esterase solution.",
+          "limit": "Later artificial-ester activity did not settle native function."
+        }
+      ]
+    },
+    {
+      "id": "P05",
+      "name": "Constrain missing-function hypotheses by what the system must accomplish",
+      "description": "Use a supported output or requirement to distinguish loss of function, unfamiliar replacement, different route and changed demand. Evaluate candidate similarities and context against these system explanations.",
+      "use_when": "A familiar enzyme is missing or a required conversion has no assigned protein despite evidence that the output exists or is needed.",
+      "live_alternatives": [
+        "Capability is absent or supplied environmentally.",
+        "An unfamiliar protein supplies the same contribution.",
+        "A different route reaches the output or bypasses the requirement.",
+        "The presumed system requirement is wrong here."
+      ],
+      "decision_guidance": [
+        "Specify the required input/output or demand before choosing families.",
+        "Prefer distribution, domain combinations and context distinguishing explanations, including pathway-negative organisms when available.",
+        "Allow an alternative to change the reaction boundary; replacement need not copy every activity of the familiar protein."
+      ],
+      "outcome_contingencies": [
+        {
+          "if_observed": "Candidate tracks the contribution and functional evidence agrees",
+          "then_consider": "Support the demonstrated contribution; association alone remains a candidate assignment."
+        },
+        {
+          "if_observed": "Output persists without the familiar route",
+          "then_consider": "Retain replacement and bypass alternatives."
+        },
+        {
+          "if_observed": "Only a missing label or textbook gap exists",
+          "then_consider": "Keep completion provisional instead of assigning a gene to fill a diagram."
+        }
+      ],
+      "boundary": "This is system abduction, not a gene-search task or one-gene-per-step rule. P19 starts from residual output after perturbation; P04 starts from a failed assignment.",
+      "evidence": [
+        {
+          "case_group": "context_archaeal_shikimate_kinase_2001",
+          "case_id": "context_archaeal_shikimate_kinase_2001",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC94878/",
+          "source_locator": "Case-record observation; inspected scope: Complete main paper, genome-analysis methods, results, and substrate-assay methods read. No WIT reconstruction, alignment, or enzyme assay rerun. Historical WIT identifier retained without an unverified modern-locus mapping.",
+          "observation": "Missing recognizable kinase, contrasting pathway-bearing archaea and contextual GHMP paralogs narrowed a nonorthologous replacement.",
+          "limit": "Context and direct substrate assays support different claims."
+        },
+        {
+          "case_group": "context_ribk_mj0056_2008",
+          "case_id": "context_ribk_mj0056_2008",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2293203/",
+          "source_locator": "Case-record observation; inspected scope: Complete short primary paper and methods read. No ribB-neighborhood retrieval or enzymatic measurement repeated.",
+          "observation": "A CTP-preferring archaeal kinase supplied missing riboflavin phosphorylation despite no recognizable canonical sequence.",
+          "limit": "Auxotroph occurrence also permits salvage; fold/CDP binding alone would not establish the assignment."
+        },
+        {
+          "case_group": "seq_ygbP_ispD_ecoli",
+          "case_id": "seq_ygbP_ispD_ecoli",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC18359/",
+          "source_locator": "Case-record observation; inspected scope: Primary results for purification, nucleotide preference, NMR and the database-search narrative inspected through indexed full-text sections; no live pathway analysis.",
+          "observation": "Observed CTP-dependent pathway chemistry guided a chemical-class/domain search followed by recombinant product validation.",
+          "limit": "The search rationale is author-reported; no new pathway analysis or assay."
+        },
+        {
+          "case_group": "replacement_queH",
+          "case_id": "replacement_queH",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5495094/",
+          "source_locator": "Case-record observation; inspected scope: Full relevant primary results/methods in both papers; independent read-only 7LC5 coordinate probe recorded separately. No cultures, mass-spectrometric assays or mechanism reconstruction rerun.",
+          "observation": "Q persisted despite missing QueG; distributions, context and cellular product tests identified an alternative contribution.",
+          "limit": "Cellular evidence does not settle isolated productive catalysis or native cofactors."
+        }
+      ]
+    },
+    {
+      "id": "P06",
+      "name": "Retain the system output and revise who contributes what",
+      "description": "Keep a real aggregate output separate from its attribution. Compare direct chemistry, substrate/cofactor supply, enabling a complex, downstream filtering and production of an observable signal.",
+      "use_when": "A mixture, complex or cellular endpoint is being used to assign the intended component a molecular job.",
+      "live_alternatives": [
+        "The nominated component performs the transformation.",
+        "It enables or supplies another contributor.",
+        "A partner or contaminant creates/filters the signal.",
+        "The output is real but its source remains unresolved."
+      ],
+      "decision_guidance": [
+        "Choose a comparison separating the live contributor assignments while preserving relevant system competence.",
+        "Independent preparation, selective partner changes, defined systems or positive structural roles can update attribution; no layout is mandatory.",
+        "Keep the genuine output after attribution fails, and seek a positive contribution rather than an empty scaffold label."
+      ],
+      "outcome_contingencies": [
+        {
+          "if_observed": "Changing a downstream partner changes apparent upstream specificity",
+          "then_consider": "Bound the result to the coupled pair."
+        },
+        {
+          "if_observed": "Activity follows an identified host protein instead of the intended construct",
+          "then_consider": "Reassign the activity while leaving the original candidate unresolved."
+        },
+        {
+          "if_observed": "Positive evidence separates catalytic and enabling roles",
+          "then_consider": "Assign bounded distinct contributions; unvalidated catalytic-null labels cannot prove dispensability."
+        }
+      ],
+      "boundary": "Attribution is a scientific uncertainty, not routine provenance. It does not choose energy accounts (P10), identify a proxy product (P14) or establish contact necessity (P02/P17).",
+      "evidence": [
+        {
+          "case_group": "seq_codA_isoguanine_failed_candidate",
+          "case_id": "seq_codA_isoguanine_failed_candidate",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3138507/",
+          "source_locator": "Case-record observation; inspected scope: Primary complete indexed narrative, purification table, peptide-ID results and recombinant assays inspected. No wet-lab work performed.",
+          "observation": "Extract activity lacked the intended archaeal candidate’s expected behavior; purification and independently prepared CodA identified a host contribution.",
+          "limit": "Insolubility was not a negative activity measurement for the archaeal protein."
+        },
+        {
+          "case_group": "chem_f420_precursor_partner",
+          "case_id": "chem_f420_precursor_partner",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8764529/",
+          "source_locator": "Role of CofD in substrate specificity Results, combined-assay Methods and Discussion.",
+          "observation": "Changing only CofD/FbiA changed the coupled system’s apparent precursor preference.",
+          "limit": "The published assays were not rerun; upstream specificity cannot be isolated from final product alone."
+        },
+        {
+          "case_group": "causal_cas2_spacer_acquisition",
+          "case_id": "causal_cas2_spacer_acquisition",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4359072/",
+          "source_locator": "Protospacer integration Results, Fig. 1 and Extended Data Figs. 2–3; C3 in causal/cas2/case_trace.json.",
+          "observation": "Defined integration and complex comparisons distinguish Cas1 chemistry from Cas2 enabling contributions.",
+          "limit": "E. coli E9 mutants were not directly validated nuclease-null; coordinate geometry alone proves neither necessity nor energy."
+        },
+        {
+          "case_group": "spec_aquifex_hfp_coupling_contamination",
+          "case_id": "spec_aquifex_hfp_coupling_contamination",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12051542/",
+          "source_locator": "Case-record observation; inspected scope: Primary relevant complete results/discussion and reconstitution/NMR/purification methods inspected. Supplement MS identification accepted as reported; its underlying spectra were not reanalyzed. Current PDB polymer records bind HFP to aq_1744/O67630; gpmA is a record label, not independent mutase evidence.",
+          "observation": "Apparent HFP isomerase also appeared in other preparations and host RpiA was detected; phosphatase-compatible activity survived.",
+          "limit": "Supplement MS identification is author-reported; native essentiality was not established."
+        }
+      ]
+    },
+    {
+      "id": "P07",
+      "name": "Distinguish restoration from bypass, compensation and reduced demand",
+      "description": "An improved endpoint can repair the proposed molecular relationship, use another route, reduce demand or change downstream consequences. Compare those explanations before treating rescue as mechanistic equivalence.",
+      "use_when": "Complementation, suppressors, adaptive recovery or supplementation improve an endpoint after a focal loss.",
+      "live_alternatives": [
+        "The original molecular contribution is restored.",
+        "Another route reaches the endpoint.",
+        "Demand for the contribution is reduced.",
+        "Only a downstream consequence improves."
+      ],
+      "decision_guidance": [
+        "Name the molecular defect rescue is supposed to repair, then seek a comparison separating repair from endpoint compensation.",
+        "Multi-step bypass, reintroduced lost functions and separate molecular readouts can distinguish the alternatives.",
+        "Restrict equivalence to the contribution/conditions restored; donor expression does not establish ordinary native role."
+      ],
+      "outcome_contingencies": [
+        {
+          "if_observed": "Endpoint recovers while proposed catalytic defect persists",
+          "then_consider": "Retain compensation or bypass rather than claim molecular repair."
+        },
+        {
+          "if_observed": "Replacement bypasses several steps or changes cofactor demand",
+          "then_consider": "Assign the alternative route instead of copying the missing-enzyme name."
+        },
+        {
+          "if_observed": "Only some outcomes are restored",
+          "then_consider": "Represent partial/conditional substitution."
+        }
+      ],
+      "boundary": "Rescue is the outcome, not the thought pattern. P06 asks who supplies an output; P07 asks what relationship the improving intervention restores. Positive complementation need not identify isolated chemistry.",
+      "evidence": [
+        {
+          "case_group": "replacement_bioZ",
+          "case_id": "replacement_bioZ",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7645780/",
+          "source_locator": "Case-record observation; inspected scope: Main relevant Results/Methods read; no independent raw spectral or isotope analysis.",
+          "observation": "BioZ bypassed both BioC and BioH through another pimeloyl-ACP entry route.",
+          "limit": "All native and biochemical tests are author-performed."
+        },
+        {
+          "case_group": "replacement_folA_bypass",
+          "case_id": "replacement_folA_bypass",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6828540/",
+          "source_locator": "Case-record observation; inspected scope: Relevant full Results/Methods and figure descriptions read; no evolution, raw sequencing or omics reanalysis.",
+          "observation": "Some trajectories partially restored DHFR; others changed thyA/deoB and retained supplement dependence.",
+          "limit": "Suppressor lineages were not all supplement-independent; evolution was not rerun."
+        },
+        {
+          "case_group": "cellular_yihI",
+          "case_id": "cellular_yihI",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3754568/",
+          "source_locator": "Case-record observation; inspected scope: 2010 primary abstract and indexed Results snippets checked; 2013 primary full Results, rescue and competition experiments examined. Original full 2010 article not obtained.",
+          "observation": "YihI improved derT57I growth without restoring the tested purified GTPase defect.",
+          "limit": "No unique compensating mechanism was established."
+        },
+        {
+          "case_group": "replacement_cobY",
+          "case_id": "replacement_cobY",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC101920/",
+          "source_locator": "Case-record observation; inspected scope: Complete main Results and relevant Methods read; reported assay negatives remain condition-bounded.",
+          "observation": "CobY replaced guanylyltransferase demand but not the kinase demand of the tested salvage route.",
+          "limit": "This does not establish bifunctional CobU equivalence."
+        }
+      ]
+    },
+    {
+      "id": "P08",
+      "name": "Test the missing prerequisite behind conditional function",
+      "description": "Investigate which enabling resource or molecular state permits a supported capability to matter. Distinguish that prerequisite from correlated stress, altered protein amount and reporter failure.",
+      "use_when": "A preparation is inactive or a gene dispensable in one setting despite evidence for a contribution elsewhere.",
+      "live_alternatives": [
+        "A missing cofactor, partner, nutrient, acceptor or resource context enables the function.",
+        "The capability is absent or irrelevant.",
+        "The condition changes abundance, another route or reporter competence instead."
+      ],
+      "decision_guidance": [
+        "Choose a motivated prerequisite for which the competing explanations predict different outcomes; arbitrary condition variation is insufficient.",
+        "Contrast focal genotype/protein state across independently varied prerequisite states with identity and competence controls.",
+        "A successful addition needs molecular/identity evidence before being called direct catalysis or sensing."
+      ],
+      "outcome_contingencies": [
+        {
+          "if_observed": "Independent resource-generating changes alter both resource and genotype-specific benefit",
+          "then_consider": "Support resource-conditioned contribution."
+        },
+        {
+          "if_observed": "Cofactor-complete preparation gains identified activity",
+          "then_consider": "Do not use incomplete preparation as functional falsification; keep native delivery unknown."
+        },
+        {
+          "if_observed": "Only abundance or reporter competence changes",
+          "then_consider": "Retain indirect alternatives."
+        }
+      ],
+      "boundary": "Resource identity is a biological parameter, not another slot. No wet-lab availability or mandatory experiment is implied. P11 asks whether a capability is used; P12 addresses duration/outcome changes.",
+      "evidence": [
+        {
+          "case_group": "organism_01_ttr",
+          "case_id": "organism_01_ttr",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2946174/",
+          "source_locator": "Case-record observation; inspected scope: 1999 Results and experimental descriptions; 2010 main Results/Methods Summary and figure captions; live AJ224978.1 metadata verified LT2 ttr locus, 12,121 bp. No raw LC-MS or animal reanalysis.",
+          "observation": "Systemic nonphenotype contrasts with intestinal benefit, tetrathionate measurements and host-context perturbations.",
+          "limit": "No animal or chemical experiment was repeated."
+        },
+        {
+          "case_group": "organism_12_nitrate",
+          "case_id": "organism_12_nitrate",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4004111/",
+          "source_locator": "Case-record observation; inspected scope: Main Results and figure/method descriptions; no nitrate chemistry or animal experiment repeated. Cofactor moaA phenotype alone was not taken as nitrate-specific evidence.",
+          "observation": "Nos2 loss or iNOS inhibition removed the nitrate-respiration advantage despite inflammation.",
+          "limit": "Combined reductase mutants do not isolate each paralog."
+        },
+        {
+          "case_group": "chem_queg",
+          "case_id": "chem_queg",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4753064/",
+          "source_locator": "Case-record observation; inspected scope: Relevant purification, reconstitution, activity/complementation methods, cofactor results and EPR interpretation inspected; raw spectra not reprocessed.",
+          "observation": "Iron/sulfide alone failed; cobalamin addition restored oQ-to-Q conversion in reconstituted QueG.",
+          "limit": "Assay reductants do not identify native electron delivery."
+        },
+        {
+          "case_group": "organism_02_xoxf",
+          "case_id": "organism_02_xoxf",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4859578/",
+          "source_locator": "Case-record observation; inspected scope: 2012 Results/Methods; 2016 MeDH Results/growth/glassware/assay methods and ExaF Results, tables and assay details. Published curves/tables inspected; no numerical raw OD data reanalysis.",
+          "observation": "Metal-conditioned growth required protein identity, metal-content and activity evidence to support lanthanide-dependent oxidation.",
+          "limit": "Metal rescue alone would not distinguish regulation from catalysis."
+        }
+      ]
+    },
+    {
+      "id": "P09",
+      "name": "Separate physical access from chemical competence",
+      "description": "Explain a missing cellular reaction by contrasting inaccessible substrate/partner, absent substrate, failed catalyst and failed reporter delivery. Prefer changes that discriminate the relevant barrier.",
+      "use_when": "Isolated capability disagrees with cellular function or a compartment-specific readout disappears.",
+      "live_alternatives": [
+        "Catalyst is competent but cannot contact its substrate/partner.",
+        "Substrate is missing or sequestered on the wrong side.",
+        "Reporter fails to reach/detect available substrate.",
+        "Catalyst itself is defective."
+      ],
+      "decision_guidance": [
+        "Name the barrier and entities whose contact is disputed; fractionation alone cannot settle it.",
+        "Different barriers/targeting regions are separate alternatives; global disruption does not identify every native route.",
+        "Relocation or targeting contrasts can test whether partner/compartment access changes the supported outcome."
+      ],
+      "outcome_contingencies": [
+        {
+          "if_observed": "Removing one barrier fails but exposing across another restores the readout",
+          "then_consider": "Narrow the access explanation while retaining reporter controls."
+        },
+        {
+          "if_observed": "Export/cleavage succeeds but native output fails",
+          "then_consider": "Only upstream access is established; downstream compatibility can become P15."
+        },
+        {
+          "if_observed": "Only prediction or growth is available",
+          "then_consider": "Keep access provisional; neither establishes direct flux or orientation."
+        }
+      ],
+      "boundary": "This is not a topology-prediction task and does not infer transport from membrane association. Access and chemical transformation remain different relations.",
+      "evidence": [
+        {
+          "case_group": "spatial_murj_lipidII_access",
+          "case_id": "spatial_murj_lipidII_access",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4163187/",
+          "source_locator": "Figs. 1–3 and final Results, chemical-genetic and barrier controls.",
+          "observation": "Outer-membrane removal failed to restore ColM cleavage after MurJ inhibition; inner-membrane disruption restored it.",
+          "limit": "Residual FtsW remained a caveat; no experimental repetition."
+        },
+        {
+          "case_group": "spatial_amic_amia_export_septal_access",
+          "case_id": "spatial_amic_amia_export_septal_access",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4428285/",
+          "source_locator": "Results Figs. 2–6,8 and functional-fusion controls.",
+          "observation": "Export, targeting and catalysis separated; induced exported AmiC lacking septal concentration could suppress chaining.",
+          "limit": "Induction rescue does not establish native targeting dispensability."
+        },
+        {
+          "case_group": "spatial_trxa_relocation_role",
+          "case_id": "spatial_trxa_relocation_role",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC94335/",
+          "source_locator": "2000 reconstructed-genotype, DsbB-dependence and mixed-disulfide Results; Figs. 1–2 and Table 2.",
+          "observation": "Exported TrxA supported oxidation with DsbB dependence, showing that changed access can alter direction.",
+          "limit": "Engineered export is not a native exported-TrxA annotation."
+        },
+        {
+          "case_group": "organism_03_tau_ssu",
+          "case_id": "organism_03_tau_ssu",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC101965/",
+          "source_locator": "Case-record observation; inspected scope: 2000 complete substrate-specificity, deletion-control and complementation Results/Discussion plus Methods descriptions; 1999 biochemical abstract only. 1996 discovery paper is a separate abstract-level lead.",
+          "observation": "Some TauD-reactive compounds entered through SsuABC, separating enzyme and intact-cell substrate boundaries.",
+          "limit": "Transport and desulfonation are different author-measured contributions."
+        }
+      ]
+    },
+    {
+      "id": "P10",
+      "name": "Account for the coupled chemical system",
+      "description": "Choose an explicit account of matter, electrons, cofactors and energy needed for a conversion. Reopen incomplete boundaries when an isolated reaction is implausible or replacement changes metabolic demand.",
+      "use_when": "Output conflicts with a redox/stoichiometric account, or routes with the same product may require different support.",
+      "live_alternatives": [
+        "A consumed partner or favorable coupled reaction is missing.",
+        "Partial uncoupling or another conversion alters the account.",
+        "Same output hides changed input/cofactor recycling demand.",
+        "Chemistry remains unsupported under stated assumptions."
+      ],
+      "decision_guidance": [
+        "Choose the boundary and track relevant atoms/electrons/cofactors before calculating.",
+        "Kinetic activation does not supply missing thermodynamic driving force.",
+        "Keep measured balances distinct from ideal fully coupled ratios and preserve unknown potentials/recovery.",
+        "Use route-specific demands to identify which biological comparison distinguishes apparent output equivalence."
+      ],
+      "outcome_contingencies": [
+        {
+          "if_observed": "A coupled account resolves the isolated energy deficit",
+          "then_consider": "Retain feasibility under assumptions; occurrence requires separate evidence (P11)."
+        },
+        {
+          "if_observed": "Measured ratio differs from the ideal",
+          "then_consider": "Preserve measurement and consider uncoupling/incomplete recovery."
+        },
+        {
+          "if_observed": "Replacement changes a recycled product/cofactor",
+          "then_consider": "Expose the changed demand instead of asserting full interchangeability."
+        }
+      ],
+      "boundary": "The episode chooses the account; arithmetic tools do not choose coupled chemistry. Standard-potential feasibility is not cellular free energy or native flux. No credit weights are supplied.",
+      "evidence": [
+        {
+          "case_group": "chem_bcd_etf",
+          "case_id": "chem_bcd_etf",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2223550/",
+          "source_locator": "Case-record observation; inspected scope: Full relevant introduction, purification/assay methods, results, tables and discussion inspected; raw HTML and parsed paragraphs saved.",
+          "observation": "Low-potential ferredoxin output needs the crotonyl-CoA reduction account; measured H2-assay ratios differ from the fully coupled extrapolation.",
+          "limit": "Illustrative standard-potential arithmetic is not measured intracellular free energy or the microscopic mechanism."
+        },
+        {
+          "case_group": "chem_nfnab",
+          "case_id": "chem_nfnab",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2944534/",
+          "source_locator": "Case-record observation; inspected scope: Relevant expression/reconstitution/assay methods, results, stoichiometry figures and discussion inspected; supplements not independently reanalyzed.",
+          "observation": "Reactant/product stoichiometry supports coupled transhydrogenation rather than NAD+ allostery alone.",
+          "limit": "Reversibility does not establish physiological direction."
+        },
+        {
+          "case_group": "replacement_thyX",
+          "case_id": "replacement_thyX",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2168944/",
+          "source_locator": "Table 2 and Figs. 3–4; replacement route-bookkeeping trace.",
+          "observation": "ThyA imposes folate recycling demand; ThyA plus FolA restored growth better than ThyA alone.",
+          "limit": "Donor assumptions remain explicit; authors’ simulations were inspected, not rerun."
+        },
+        {
+          "case_group": "replacement_bioZ",
+          "case_id": "replacement_bioZ",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7645780/",
+          "source_locator": "Primary Figs. 3–9; replacement/raw/route_bookkeeping_probe.json.",
+          "observation": "BioZ and BioC/BioH carbon-entry accounts expose different reaction and reducing-step boundaries.",
+          "limit": "Four versus two reducing steps is not four versus two NADPH; upstream costs stay outside the declared boundary."
+        }
+      ]
+    },
+    {
+      "id": "P11",
+      "name": "Distinguish a possible route from the route actually used",
+      "description": "Keep feasibility or measured capacity separate from native use. Contrast ordinary use, conditional backup, side activity and unused capacity without forcing a single-role explanation.",
+      "use_when": "A reaction, model, structure or environmental gene detection is being promoted to main native role or actual flux.",
+      "live_alternatives": [
+        "Capacity supplies the proposed native contribution.",
+        "It supplies a conditional backup/secondary role.",
+        "It is side activity or possible chemistry without demonstrated use.",
+        "Another route supplies the native output."
+      ],
+      "decision_guidance": [
+        "Select observations with different expected consequences for native use and mere capacity: endogenous products, demand-specific perturbations or competing routes.",
+        "Retain genuine earlier side activity when a better native role appears; compatible conditional roles need not be exclusive.",
+        "Compare plausible exposure/kinetics without inventing concentrations or native substrates."
+      ],
+      "outcome_contingencies": [
+        {
+          "if_observed": "Independent native observations agree",
+          "then_consider": "Support use under those conditions, not total flux or exclusivity."
+        },
+        {
+          "if_observed": "Only overexpression/high-dose/artificial activity is positive",
+          "then_consider": "Retain bounded capacity with ordinary responsibility unresolved."
+        },
+        {
+          "if_observed": "A stronger native explanation is established",
+          "then_consider": "Revise priority/scope without deleting genuine prior chemistry."
+        }
+      ],
+      "boundary": "This supplies a discriminating question, not an acceptance gate. P08 tests prerequisites and P10 feasibility; a stronger library label cannot replace native evidence.",
+      "evidence": [
+        {
+          "case_group": "spec_yihu_native_sulfonate",
+          "case_id": "spec_yihu_native_sulfonate",
+          "source_url": "https://doi.org/10.1021/acscatal.9b04427",
+          "source_locator": "Case-record observation; inspected scope: 2009 relevant whole results/discussion and reaction methods; 2014 primary main results, enzyme methods and relevant extended-data legends; 2020 accepted manuscript sequence, kinetics, structure and conclusion sections inspected. Supporting spectra/kinetic fits were not reanalyzed.",
+          "observation": "Real SSA reduction coexists with stronger native sulfoglycolysis evidence and much higher SLA efficiency.",
+          "limit": "An earlier secondary stress role is not categorically excluded; no flux recomputation."
+        },
+        {
+          "case_group": "replacement_folM",
+          "case_id": "replacement_folM",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2805310/",
+          "source_locator": "Case-record observation; inspected scope: Complete relevant main texts/methods. P. aeruginosa validation deletes folX, not folM; natural E. coli use of exported monapterin remains unresolved in this study.",
+          "observation": "Perturbed-system DHFR rescue coexists with stronger monapterin-pathway evidence and substrate preference.",
+          "limit": "Natural E. coli use of exported monapterin remained unresolved."
+        },
+        {
+          "case_group": "spec_yigl_conditional_b6",
+          "case_id": "spec_yigl_conditional_b6",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11409668/",
+          "source_locator": "Case-record observation; inspected scope: 2024 relevant complete results/discussion and assay/genotype methods inspected; 2013 relevant regulation, competition and growth results inspected. Supplements not independently analyzed. Fresh public-record probe documented in raw/live_probe_summary.json.",
+          "observation": "Direct PNP hydrolysis plus native load/deletion contrasts supports conditional protection, not primary normal-state catabolism.",
+          "limit": "Established sugar-stress participation is retained."
+        },
+        {
+          "case_group": "organism_21_vcra",
+          "case_id": "organism_21_vcra",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC492378/",
+          "source_locator": "Case-record observation; inspected scope: Main purification/substrate/gene-identification/transcription Results and cultivation/assay Methods. GenBank AY322364 reported; no new field dechlorination or sequence analysis.",
+          "observation": "Activity-linked peptide identity supports VcrA; field vcrAB DNA alone is capacity evidence, not field flux.",
+          "limit": "Partial purification and absence of knockout retain assignment limits."
+        }
+      ]
+    },
+    {
+      "id": "P12",
+      "name": "Compare biological consequences over the time that matters",
+      "description": "Choose time/phase contrasts distinguishing transient acceleration, repeated function, adaptation and survival. An early benefit or first product need not predict later outcomes.",
+      "use_when": "Interpretation depends on when an effect appears, how long function is needed or whether operation must repeat.",
+      "live_alternatives": [
+        "Effect is durably beneficial.",
+        "Early acceleration carries a later maintenance/survival cost.",
+        "First event succeeds but repeated operation fails.",
+        "Original observation window missed the relevant phase."
+      ],
+      "decision_guidance": [
+        "Choose intervals from biological alternatives rather than a universal cadence.",
+        "Keep lag, growth, viability and repeated turnover as distinct outcomes.",
+        "Preserve differing early/late conclusions and investigate explanations that predict both."
+      ],
+      "outcome_contingencies": [
+        {
+          "if_observed": "Recovery improves but later survival falls",
+          "then_consider": "Represent both outcomes in their windows."
+        },
+        {
+          "if_observed": "One product forms but repeated turnover fails",
+          "then_consider": "Narrow the missing contribution toward sustained operation."
+        },
+        {
+          "if_observed": "A later phase exposes a phenotype",
+          "then_consider": "Restrict the early nonphenotype without pretending it observed the later result."
+        }
+      ],
+      "boundary": "Timing is always metadata; this pattern makes temporal explanation the scientific competition. It supplies no execution timers or stopping rule. P08 concerns prerequisites rather than duration alone.",
+      "evidence": [
+        {
+          "case_group": "yeag",
+          "case_id": "cellular_yeaG",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4664914/",
+          "source_locator": "Recovery, heterogeneity, survival Results; organism/yeag/trace.json route 1.",
+          "observation": "Mutant recovery lag was shorter after starvation, yet prolonged-starvation CFU survival was worse.",
+          "limit": "No raw FCS/CFU reanalysis; internal 24 h/72 h follow-up inconsistency is preserved."
+        },
+        {
+          "case_group": "organism_20_isia",
+          "case_id": "organism_20_isia",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8545134/",
+          "source_locator": "Case-record observation; inspected scope: Complete relevant mutant/spectroscopy/growth Results and growth conditions. No new fluorescence-lifetime analysis.",
+          "observation": "Quenching-defective cells initially grew quickly then bleached/declined under stringent iron deficiency/high light.",
+          "limit": "Other iron/light states differ; no spectroscopy reanalysis."
+        },
+        {
+          "case_group": "causal_tsaE_turnover",
+          "case_id": "causal_tsaE_turnover",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5814804/",
+          "source_locator": "Single/multiple-turnover Results, Methods and Discussion, 2018.",
+          "observation": "Single product and release occur without TsaE; repeated Thermotoga operation needs productive ATPase coupling.",
+          "limit": "Different E. coli endpoint evidence remains unreconciled."
+        },
+        {
+          "case_group": "organism_18_dsdapm",
+          "case_id": "organism_18_dsdapm",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6393727/",
+          "source_locator": "Case-record observation; inspected scope: Relevant growth/urine/motility/CAUTI Results and protocols; no inference that ex-vivo nonphenotype disproves an in-host role.",
+          "observation": "Six-hour ex-vivo urine nonphenotype contrasts with 96-hour infection fitness loss.",
+          "limit": "Both biological setting and duration change, so this is not an isolated time experiment."
+        }
+      ]
+    },
+    {
+      "id": "P13",
+      "name": "Resolve an aggregate claim at the biological level that separates explanations",
+      "description": "Ask whether pooled change reflects uniform effects, selective subsets or changed mixtures. Choose biologically meaningful units whose contrasts separate those explanations.",
+      "use_when": "A population, protein or process label pools outcomes with potentially different biological meanings.",
+      "live_alternatives": [
+        "Units change similarly.",
+        "A subset changes while others retain function.",
+        "Mixture/baseline changes rather than each unit’s response.",
+        "Missing/censored/differently normalized measurements leave quantification open."
+      ],
+      "decision_guidance": [
+        "Choose resolution from the competing biological explanations, not just because finer data exist.",
+        "Compare affected/retained units while preserving baseline versus response and readout definition.",
+        "When needed resolution was not measured, qualify the aggregate claim rather than impute cell fates, occupancy or missing values."
+      ],
+      "outcome_contingencies": [
+        {
+          "if_observed": "Retained units contradict uniform loss",
+          "then_consider": "Bound dependence to the affected subset."
+        },
+        {
+          "if_observed": "Distributions differ beyond a simple average shift",
+          "then_consider": "Retain heterogeneous-state explanations; fate needs independent evidence."
+        },
+        {
+          "if_observed": "Site/condition records do not support pooling",
+          "then_consider": "Return separate records; missing ratios are not zero abundance."
+        }
+      ],
+      "boundary": "Record identity/normalization is always required. This pattern is selected when biological heterogeneity changes the explanation; a changed phosphosite does not establish direct catalysis.",
+      "evidence": [
+        {
+          "case_group": "yeag",
+          "case_id": "cellular_yeaG",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4664914/",
+          "source_locator": "Gated distributions and flow Methods; organism/yeag/trace.json route 1.",
+          "observation": "WT and mutant recovery had different GFP distributions, making a uniform population-shift explanation inadequate.",
+          "limit": "GFP is a proxy; no joint cell-lineage/survival data."
+        },
+        {
+          "case_group": "yeag",
+          "case_id": "cellular_yeaG",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8055822/",
+          "source_locator": "Phospho sites table rows 3–6,53,128; workbook_probe in organism/yeag/trace.json.",
+          "observation": "Actual XLSX extraction separated AceA sites and response ratios from occupancy, exposing incompatible records under a pooled AceA label.",
+          "limit": "Selected descriptive rows, unequal replicate coverage, no raw spectra or zero imputation."
+        },
+        {
+          "case_group": "cellular_y_complex",
+          "case_id": "cellular_y_complex",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6004469/",
+          "source_locator": "Selected RNA Results; recorded GEO extraction in cellular/detailed_traces.json.",
+          "observation": "Selected processing ends fell while rnpB behaved differently from rny loss, limiting uniform RNase Y dependence.",
+          "limit": "Processed tracks are descriptive and do not resolve the historical mechanism disagreement."
+        },
+        {
+          "case_group": "cellular_yqfG",
+          "case_id": "cellular_yqfG",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6144821/",
+          "source_locator": "Case-record observation; inspected scope: Full Results examined, including specificity controls and rescue. Same protein-family investigation group as cellular_ybeY; not independent replication of all E. coli claims.",
+          "observation": "16S3-prime processing changed while other tested rRNA ends stayed normal.",
+          "limit": "A selected end panel is not all RNA processing."
+        }
+      ]
+    },
+    {
+      "id": "P14",
+      "name": "Distinguish the transformation from its proxy readout",
+      "description": "Treat bands, cofactor changes, substrate loss and downstream signals as compatible with several transformations. Prefer evidence separating intended chemistry from half-reactions, spontaneous conversion or artifacts.",
+      "use_when": "A proxy is naming a reaction without establishing what actually changed.",
+      "live_alternatives": [
+        "Proxy reflects identified intended product.",
+        "A half-reaction/alternative creates the same proxy.",
+        "A spontaneous downstream step follows different enzyme chemistry.",
+        "Disappearance/migration changes without productive conversion."
+      ],
+      "decision_guidance": [
+        "Name rival transformations before selecting product, labeling, temporal or chemical-competence evidence.",
+        "Keep genuine partial chemistry when full product is absent.",
+        "Structural plausibility can guide discrimination but cannot identify the chemistry alone."
+      ],
+      "outcome_contingencies": [
+        {
+          "if_observed": "Identified products/labeled atoms distinguish the event",
+          "then_consider": "Assign that transformation at tested scope."
+        },
+        {
+          "if_observed": "Proxy persists without expected product",
+          "then_consider": "Reopen partial/alternative chemistry."
+        },
+        {
+          "if_observed": "Only disappearance or band shift is observed",
+          "then_consider": "Record it specifically; productive synthesis stays open."
+        }
+      ],
+      "boundary": "P14 asks what occurred; P06 asks who caused an established output. It is not routine record validation and does not assume new experiments are available.",
+      "evidence": [
+        {
+          "case_group": "EUBREC2651_Fleischman_2014",
+          "case_id": "EUBREC2651_Fleischman_2014",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4116655/",
+          "source_locator": "Case-record observation; inspected scope: Relevant indexed primary results/limitations inspected; no new experiments.",
+          "observation": "PLP-to-PMP conversion lacked expected glutamate; phosphate elimination limited a PSAT conclusion.",
+          "limit": "Physiological-direction substrate was unavailable; trapping remained proposed."
+        },
+        {
+          "case_group": "seq_ptmvd_m3k_picrophilus",
+          "case_id": "seq_ptmvd_m3k_picrophilus",
+          "source_url": "https://journals.asm.org/doi/full/10.1128/aem.04033-14",
+          "source_locator": "Case-record observation; inspected scope: Primary sequence-analysis methods/results, abstract and product-analysis conclusion inspected; no new sequence search or biochemical experiment.",
+          "observation": "Isobutene followed spontaneous decomposition after phosphorylation rather than direct enzymatic decarboxylation.",
+          "limit": "No new product assay."
+        },
+        {
+          "case_group": "causal_cas2_spacer_acquisition",
+          "case_id": "causal_cas2_spacer_acquisition",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4359072/",
+          "source_locator": "Integration/disintegration and3-prime-OH Results; C4 in causal/cas2/case_trace.json.",
+          "observation": "Radiolabel and disintegration controls separate covalent integration from plasmid topoisomer migration including BandX.",
+          "limit": "Defined assays do not recapitulate every cellular repair/acquisition step."
+        },
+        {
+          "case_group": "sulfoglycolysis_selectivity",
+          "case_id": "spec_yihs_sulfosugar_selectivity",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8006165/",
+          "source_locator": "YihS product Results and relevant figure legends, 2021; specificity record yihs.3.",
+          "observation": "NMR, isotope exchange and authentic reference identified an additional sulforhamnose product instead of assuming one isomerization product.",
+          "limit": "Supporting spectra were not independently reprocessed."
+        }
+      ]
+    },
+    {
+      "id": "P15",
+      "name": "Hold upstream success while investigating downstream failure",
+      "description": "Preserve demonstrated recognition, binding, cleavage or delivery when productive output fails. Compare the additional compatibility or coupling explanations rather than repeat upstream positives.",
+      "use_when": "Binding/processing is being treated as sufficient for catalysis, assembly, regulation or organismal output.",
+      "live_alternatives": [
+        "Upstream engagement is sufficient here.",
+        "Another structural/chemical/partner constraint blocks progression.",
+        "Upstream readout differs or was misidentified.",
+        "Downstream measurement is incompetent."
+      ],
+      "decision_guidance": [
+        "Seek contrasts with upstream competence but differing downstream outcomes.",
+        "Separate unexpressed constructs from expressed/processed variants.",
+        "If progression remains unexplained, return separated outcomes instead of inventing a mechanism."
+      ],
+      "outcome_contingencies": [
+        {
+          "if_observed": "Both substrates bind but only one converts",
+          "then_consider": "Narrow productive recognition beyond binding."
+        },
+        {
+          "if_observed": "Expressed processed variant fails assembly",
+          "then_consider": "Support an additional compatibility requirement without assigning its mechanism."
+        },
+        {
+          "if_observed": "Only upstream event is known",
+          "then_consider": "Leave final role unresolved."
+        }
+      ],
+      "boundary": "No recognize→process→assemble itinerary follows; inquiry can start at the failed endpoint. P17 tests a selectively perturbed required relation; P15 can preserve a downstream unknown without causal isolation.",
+      "evidence": [
+        {
+          "case_group": "seq_yadB_gluQRS_ecoli",
+          "case_id": "seq_yadB_gluQRS_ecoli",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC419609/",
+          "source_locator": "Case-record observation; inspected scope: Primary PNAS abstract plus NAR substrate-preparation methods and Q34 comparison results inspected. No live tRNA or protein calculation.",
+          "observation": "Both Q-containing/lacking tRNA-Asp bound YadB, but only Q-containing substrate was glutamylated.",
+          "limit": "Matched tests are author-performed; binding alone does not locate the modified atom."
+        },
+        {
+          "case_group": "seq_queFL_archaeosine",
+          "case_id": "seq_queFL_archaeosine",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5485725/",
+          "source_locator": "Case-record observation; inspected scope: 2012 comparative alignment and tRNA-analysis results plus 2017 substrate/adduct methods and discussion inspected through indexed primary text. No new enzyme experiments.",
+          "observation": "Free preQ0 and preQ0-tRNA formed adducts; productive synthesis used tRNA-bound precursor.",
+          "limit": "Physiological ammonia-delivery partner remained open."
+        },
+        {
+          "case_group": "MJ0577_Zarembinski_1998",
+          "case_id": "MJ0577_Zarembinski_1998",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC28018/",
+          "source_locator": "Case-record observation; inspected scope: Full primary text and live 1MJH contact record checked; published answer known.",
+          "observation": "Retained ATP coexisted with little isolated ATPase; native extract enabled hydrolysis.",
+          "limit": "The enabling factor and cellular role remained unknown."
+        },
+        {
+          "case_group": "archaeal_hvo_pilin_processing_assembly",
+          "case_id": "archaeal_hvo_pilin_processing_assembly",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3754589/",
+          "source_locator": "Figs. 8–9 and hybrid Results; spatial/archaeal_processing/investigation.json B2.",
+          "observation": "Expressed, processed PilA1 hybrid lacked pili/adhesion; an unexpressed PilA3 hybrid could not support that same conclusion.",
+          "limit": "No native packing or specific interaction mechanism established."
+        }
+      ]
+    },
+    {
+      "id": "P16",
+      "name": "Distinguish direct input action from indirect response and feedback",
+      "description": "Environmental responses can arise through direct ligand recognition, cofactor chemistry, changed abundance or system-demand feedback. Choose contrasts distinguishing those routes before assigning a direct sensor or regulatory sign.",
+      "use_when": "Induction, binding or physiology is being treated as proof of direct signal recognition.",
+      "live_alternatives": [
+        "Input binds the regulator.",
+        "Input changes a cofactor/state without selective ligand binding.",
+        "Partner demand/feedback mediates the response.",
+        "Abundance or another regulator explains it."
+      ],
+      "decision_guidance": [
+        "Keep signal, molecular state, amount, DNA recognition and productive regulation distinct.",
+        "Choose contrasts controlling the relevant alternatives, including target classes and feedback demand.",
+        "Direct binding addresses recognition; promoter binding alone proves neither signal binding nor transcriptional sign."
+      ],
+      "outcome_contingencies": [
+        {
+          "if_observed": "Purified protein binds input with informative controls",
+          "then_consider": "Support assay-specific binding without claiming the whole native mechanism."
+        },
+        {
+          "if_observed": "State controls distinguish cofactor chemistry from feedback",
+          "then_consider": "Retain compatible supported routes; do not call a chemical input a selective ligand."
+        },
+        {
+          "if_observed": "Response is known but direct action untested",
+          "then_consider": "Report response with sensing route unresolved."
+        }
+      ],
+      "boundary": "This concerns input-to-response explanations rather than general attribution. Motif scanning does not predict regulatory sign; not every regulator must be a direct metabolite sensor.",
+      "evidence": [
+        {
+          "case_group": "pxpT_pxpR_access_and_sensing",
+          "case_id": "pxpT_pxpR_access_and_sensing",
+          "source_url": "https://journals.asm.org/doi/10.1128/aem.02181-25",
+          "source_locator": "Case-record observation; inspected scope: Indexed complete relevant regulatory Results, transport Discussion, figure descriptions and culture/purification Methods inspected. Direct publisher fetch 403; raw binding data not obtained. Current published 2026 article used, not 2025 preprint.",
+          "observation": "Repression tests and direct 5-OP ITC with competitors establish different parts of the sensing/control claim.",
+          "limit": "Growth rescue of pxpT did not measure purified transport."
+        },
+        {
+          "case_group": "organism_16_malr",
+          "case_id": "organism_16_malr",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3911195/",
+          "source_locator": "Case-record observation; inspected scope: Relevant Results including deletion, reporter rescue and sugar-independent DNA binding; growth/deletion/purification Methods inspected.",
+          "observation": "Promoter binding and maltose-utilization regulation coexisted with no maltose-induced EMSA change.",
+          "limit": "Direct maltose sensing was not established."
+        },
+        {
+          "case_group": "reg_iscR_state_target_specificity",
+          "case_id": "reg_iscR_state_target_specificity",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12594620/",
+          "source_locator": "Figs. 1–6 and relevant redox/binding/reporter Results; I9–I12 in root/regulatory_specificity/case_trace.json.",
+          "observation": "PMS/state and target controls separate anaerobic redox effects from cluster loss and indirect Fe-S-demand explanations.",
+          "limit": "No selective PMS pocket or complete intracellular state trajectory was measured."
+        },
+        {
+          "case_group": "context_rbkr_regulator_kinase_2017",
+          "case_id": "context_rbkr_regulator_kinase_2017",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5397151/",
+          "source_locator": "Case-record observation; inspected scope: Complete genomic reconstruction, dual-function results, evolutionary caveats, and relevant bioinformatics/DNA-binding/kinase methods read. Structure section not exhaustively inspected; no motif scan or assay repeated.",
+          "observation": "FMN disrupted fusion-protein DNA binding; operator placement suggested but did not measure activation.",
+          "limit": "Do not convert site geometry into observed transcriptional sign."
+        }
+      ]
+    },
+    {
+      "id": "P17",
+      "name": "Separate linked functions through selective dissociation",
+      "description": "Seek comparisons preserving one property while changing another. Use their dissociation to distinguish a required functional relation from amount, delivery, stability or another linked activity.",
+      "use_when": "A mutant phenotype is assigned to one molecular function despite several potentially affected properties.",
+      "live_alternatives": [
+        "Named function is required.",
+        "Amount/localization/assembly/another function explains the effect.",
+        "Distinct connections jointly contribute but can reside on different molecules.",
+        "The measured activity and native role dissociate."
+      ],
+      "decision_guidance": [
+        "Prefer positive evidence that alternative properties survive; a failed construct is not automatically selective.",
+        "Reciprocal/complementary contrasts are informative when their predicted results differ, without requiring them universally.",
+        "Keep incomplete perturbation validation as a limit rather than claiming a specific null from its label."
+      ],
+      "outcome_contingencies": [
+        {
+          "if_observed": "Function fails despite retained amount/delivery",
+          "then_consider": "Exclude simple instability/mislocalization without inventing direct binding."
+        },
+        {
+          "if_observed": "Complementary defects restore function but same-defect controls do not",
+          "then_consider": "Support joint contribution of distinct connections."
+        },
+        {
+          "if_observed": "Endpoint survives a supposed catalytic-null mutation without null validation",
+          "then_consider": "Do not infer catalytic dispensability from the label."
+        }
+      ],
+      "boundary": "This is an inference pattern, not mutagenesis instructions. P02 tests predictors and can use natural variation; P17 adds causal perturbation selectivity. Ordinary suppressors are not reciprocal separation-of-function evidence.",
+      "evidence": [
+        {
+          "case_group": "cellular_yabA",
+          "case_id": "cellular_yabA",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1413692/",
+          "source_locator": "Case-record observation; inspected scope: Primary full Results examined, including mutant fold/function controls and the mixed-complex repair experiment.",
+          "observation": "DnaA- or DnaN-interaction defects complemented in trans with same-defect controls, restoring foci/initiation control.",
+          "limit": "The result does not settle every molecular YabA model."
+        },
+        {
+          "case_group": "causal_envC_activation",
+          "case_id": "causal_envC_activation",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3923381/",
+          "source_locator": "Primary Table 1 and functional/localization Results; EnvC detailed trace.",
+          "observation": "Stable septally localized variants lost cell separation and AmiB activation.",
+          "limit": "The proposed direct helix interaction remained uncaptured."
+        },
+        {
+          "case_group": "causal_tsaE_turnover",
+          "case_id": "causal_tsaE_turnover",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6614819/",
+          "source_locator": "Switch-mutant/turnover Results, Methods and Discussion, 2019.",
+          "observation": "Switch variants retained ATPase yet lost efficient repeated t6A synthesis.",
+          "limit": "Tested Thermotoga result does not resolve the E. coli endpoint comparison."
+        },
+        {
+          "case_group": "spec_suhb_catalysis_vs_rrna",
+          "case_id": "spec_suhb_catalysis_vs_rrna",
+          "source_url": "https://pubs.acs.org/doi/10.1021/bi992424f",
+          "source_locator": "Primary abstract only, 2000; inspection boundary in specificity case record.",
+          "observation": "Active heterologous IMPases failed rescue while inactive native D87N retained it.",
+          "limit": "This 2000 comparison was abstract-only; later rRNA/Nus results were inspected more fully."
+        }
+      ]
+    },
+    {
+      "id": "P18",
+      "name": "Reconcile conflict by testing scope-specific explanations",
+      "description": "Compare apparently conflicting claims without choosing a paper or averaging them. Ask whether a tested difference in organism, state, assay window, relation or construct explains disagreement; preserve unresolved conflict where no discriminating match exists.",
+      "use_when": "Studies or assays appear to support incompatible assignments or dependencies.",
+      "live_alternatives": [
+        "Results genuinely conflict under comparable conditions.",
+        "Both hold in different states/organisms/windows.",
+        "A proxy has been given a stronger interpretation.",
+        "A specific construct or record error explains a result."
+      ],
+      "decision_guidance": [
+        "State the contradictory relation and the matching conditions needed for a true contradiction.",
+        "Seek evidence testing the proposed explanation, not just metadata differences.",
+        "Plausible scope differences are not resolutions until a discriminating comparison exists."
+      ],
+      "outcome_contingencies": [
+        {
+          "if_observed": "A corrected construct/condition is linked to the discrepancy",
+          "then_consider": "Revise only the interpretation supported by the correction."
+        },
+        {
+          "if_observed": "Scope explanation remains untested",
+          "then_consider": "Retain conflict and the missing comparison."
+        },
+        {
+          "if_observed": "Records concern different outputs/phases",
+          "then_consider": "Restrict claims without calling them equivalent replications."
+        }
+      ],
+      "boundary": "Provenance is always required; P18 is selected when explaining conflict is the scientific problem. No rewriting observations or saved credit is authorized.",
+      "evidence": [
+        {
+          "case_group": "cellular_y_complex",
+          "case_id": "cellular_y_complex",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4978174/",
+          "source_locator": "Reported disagreement/strain effects; three-paper comparison in cellular detailed trace.",
+          "observation": "One study disputed the sinR explanation and reported strain-dependent phosphorelay effects while other data supported RNA-processing participation.",
+          "limit": "Later selected RNA evidence did not resolve the direct-phosphorelay dispute."
+        },
+        {
+          "case_group": "causal_tsaE_turnover",
+          "case_id": "causal_tsaE_turnover",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4330362/",
+          "source_locator": "2015 mutant Results/supplementary assays and 2018 discussion of unresolved comparison.",
+          "observation": "E. coli endpoint formation despite low ATPase differed from Thermotoga repeated-turnover evidence, explicitly left unreconciled.",
+          "limit": "Organism and assay differences are limits, not demonstrated solutions."
+        },
+        {
+          "case_group": "replacement_lysU",
+          "case_id": "replacement_lysU",
+          "source_url": "https://febs.onlinelibrary.wiley.com/doi/10.1111/febs.14113",
+          "source_locator": "Case-record observation; inspected scope: 1990 abstract plus complete relevant 2017 primary Results subsection read; conflicting conditions were not experimentally reconciled.",
+          "observation": "A later K12 study found no temperature/media growth difference despite an earlier heat requirement.",
+          "limit": "Older source was abstract-level; conditions were not experimentally reconciled."
+        },
+        {
+          "case_group": "spec_yjjg_conditional_salvage_cleanup",
+          "case_id": "spec_yjjg_conditional_salvage_cleanup",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3195379/",
+          "source_locator": "Case-record observation; inspected scope: 2007 salvage relevant whole results and media methods; 2011 relevant dgt/yjjG comparisons, discussion and medium composition inspected. 2007 housecleaning primary abstract only; publisher PDF access failed.",
+          "observation": "Later work reproduced salvage contribution in enriched medium but found little effect in unenriched minimal medium and an alternative dgt route.",
+          "limit": "This bounds the phenotype rather than making salvage and housecleaning mutually exclusive."
+        }
+      ]
+    },
+    {
+      "id": "P19",
+      "name": "Investigate the route behind residual function",
+      "description": "Preserve reproducible output after a focal loss while distinguishing another contributor from incomplete perturbation, imported product or reduced demand. Revise exclusivity without erasing the lost route’s genuine contribution.",
+      "use_when": "Knockout/depletion leaves growth, product or activity unaccounted for by the current explanation.",
+      "live_alternatives": [
+        "Another contributor supplies residual output.",
+        "Perturbation is incomplete or a suppressor restores original activity.",
+        "Environmental supply or bypass reduces demand.",
+        "Residual readout is an artifact or different output."
+      ],
+      "decision_guidance": [
+        "Choose a contrast within the residual-function background separating an alternative contributor from remaining original activity or supply.",
+        "Restoration/independent activity can clarify attribution without settling every native route/cofactor.",
+        "Combined perturbations are recorded evidence or candidate work, not an automatic requirement for new experiments."
+      ],
+      "outcome_contingencies": [
+        {
+          "if_observed": "Additional loss removes residual output and restoration recovers it",
+          "then_consider": "Support overlap at measured scope, not universal exclusivity."
+        },
+        {
+          "if_observed": "Output depends on supply or unremoved activity",
+          "then_consider": "Restrict redundancy to the actual bypass/perturbation."
+        },
+        {
+          "if_observed": "Residual route cannot be assigned",
+          "then_consider": "Return retained function with its source unknown."
+        }
+      ],
+      "boundary": "P05 starts from a missing assignment, P07 asks what rescue restores, and P19 starts from output that never disappeared. Combined-gene evidence does not isolate every member.",
+      "evidence": [
+        {
+          "case_group": "organism_02_xoxf",
+          "case_id": "organism_02_xoxf",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5075040/",
+          "source_locator": "Case-record observation; inspected scope: 2012 Results/Methods; 2016 MeDH Results/growth/glassware/assay methods and ExaF Results, tables and assay details. Published curves/tables inspected; no numerical raw OD data reanalysis.",
+          "observation": "Residual mutant growth led to ExaF loss/restoration and independent activity rather than XoxF exclusivity.",
+          "limit": "No cultures or raw growth-curve fitting repeated."
+        },
+        {
+          "case_group": "replacement_queH",
+          "case_id": "replacement_queH",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5495094/",
+          "source_locator": "2017 DUF208 Is Needed, Fig. 3; replacement QueH trace.",
+          "observation": "Single deletions retained Q; double loss accumulated oQ and lost Q.",
+          "limit": "Cellular overlap does not settle isolated catalysis, metal or donor."
+        },
+        {
+          "case_group": "seq_hisn_impase_discrimination",
+          "case_id": "seq_hisn_impase_discrimination",
+          "source_url": "https://link.springer.com/article/10.1186/s12866-017-1069-4",
+          "source_locator": "Case-record observation; inspected scope: Full 2017 methods/results page inspected, including genetic, sequence and structural sections. 2014 primary abstract inspected. No new sequence calculation or wet-lab work.",
+          "observation": "hisN loss retained slow growth; cg0911 overexpression rescued but native loss did not explain the residual.",
+          "limit": "Residual native route remained unresolved; side activity was not native responsibility."
+        },
+        {
+          "case_group": "cellular_yhdP",
+          "case_id": "cellular_yhdP",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8912898/",
+          "source_locator": "Case-record observation; inspected scope: Published full Results and lipid/depletion controls examined. The separate 2023 preprint was identified and excluded from published-case evidence.",
+          "observation": "Combined AsmA-like depletion exposed lethal envelope/lipid-partition defects masked in simpler backgrounds.",
+          "limit": "Physiological overlap is supported; direct purified net transport is not established."
+        }
+      ]
+    }
+  ],
+  "case_mapping": [
+    {
+      "case_group": "AF2372_Stieglitz_2002",
+      "option_ids": [
+        "P01"
+      ],
+      "role": "limited_inspection",
+      "note": "Abstract/introduction only; comparative differences suggest bounded transfer, without a full reasoning trace."
+    },
+    {
+      "case_group": "Arad3529_Fan_2013",
+      "option_ids": [
+        "P01",
+        "P03"
+      ],
+      "role": "direct_support",
+      "note": "Shared machinery but changed contacts prompted alternative models and expanded pterin candidates."
+    },
+    {
+      "case_group": "BC0371_Song_2007",
+      "option_ids": [
+        "P01",
+        "P03"
+      ],
+      "role": "limited_inspection",
+      "note": "Abstract/structure identity only; separate reported approaches have no verified serial dependence."
+    },
+    {
+      "case_group": "BC1793_Hitchcock_2013",
+      "option_ids": [
+        "P02",
+        "P03"
+      ],
+      "role": "direct_support",
+      "note": "Arginine/SAH discordance tests a predictor while the profile distinguishes rival inputs."
+    },
+    {
+      "case_group": "Cc0300_Xiang_2009",
+      "option_ids": [
+        "P01",
+        "P03"
+      ],
+      "role": "direct_support",
+      "note": "Missing recognition motif and contrasting peptide panel narrow specificity."
+    },
+    {
+      "case_group": "Cc2672_Cc3125_Xiang_2009",
+      "option_ids": [
+        "P01",
+        "P03"
+      ],
+      "role": "direct_support",
+      "note": "Xaa-Pro negatives and terminal Arg/Lys positives overturn over-specific transfer."
+    },
+    {
+      "case_group": "DUF1537_Zhang_2016",
+      "option_ids": [
+        "P01",
+        "P03"
+      ],
+      "role": "direct_support",
+      "note": "Uninformative structure matches were not promoted to specificity; activity-guided complexes constrain interpretation."
+    },
+    {
+      "case_group": "EF1143_Vorontsov_2011_2014",
+      "option_ids": [
+        "P03",
+        "P08"
+      ],
+      "role": "direct_support",
+      "note": "Metal/effector conditions and mixed inputs distinguish catalytic from regulatory interpretations."
+    },
+    {
+      "case_group": "EUBREC0560_PG1327_Fleischman_2014",
+      "option_ids": [
+        "P01",
+        "P03"
+      ],
+      "role": "direct_support",
+      "note": "Shared PLP fold required distinct activity/kinetic comparisons."
+    },
+    {
+      "case_group": "EUBREC2651_Fleischman_2014",
+      "option_ids": [
+        "P14"
+      ],
+      "role": "direct_support",
+      "note": "Cofactor half-reaction lacked expected complete product; unavailable substrate remains untested."
+    },
+    {
+      "case_group": "HpbD_Zhao_2013",
+      "option_ids": [
+        "P03",
+        "P11"
+      ],
+      "role": "direct_support",
+      "note": "Neighboring binding-protein hypothesis refined inputs; native genetics/metabolomics addressed use separately."
+    },
+    {
+      "case_group": "Lmo2620_Bh0225_Xiang_2012",
+      "option_ids": [
+        "P01",
+        "P03"
+      ],
+      "role": "direct_support",
+      "note": "Recognition clues exposed omitted phosphorylated inputs; unsynthesized compounds stay unknown."
+    },
+    {
+      "case_group": "MJ0109_Johnson_2001",
+      "option_ids": [
+        "P01"
+      ],
+      "role": "limited_inspection",
+      "note": "Primary abstract only; structure explains known dual activity without dominant native-role proof."
+    },
+    {
+      "case_group": "MJ0226_Hwang_1999",
+      "option_ids": [
+        "P01",
+        "P03"
+      ],
+      "role": "limited_inspection",
+      "note": "Primary abstract only; detailed structural/choice arguments were not independently inspected."
+    },
+    {
+      "case_group": "MJ0577_Zarembinski_1998",
+      "option_ids": [
+        "P01",
+        "P08",
+        "P15"
+      ],
+      "role": "direct_support",
+      "note": "Uninformative fold hits, ATP binding, isolated inactivity and extract-enabled hydrolysis constrain different claims."
+    },
+    {
+      "case_group": "MS53_0025_MAG6390_Korczynska_2014",
+      "option_ids": [
+        "P01",
+        "P03"
+      ],
+      "role": "context_only",
+      "note": "Methods/introduction and abstract support context, but deeper PDF access failed."
+    },
+    {
+      "case_group": "TM0936_Hermann_2007",
+      "option_ids": [
+        "P01",
+        "P02",
+        "P03"
+      ],
+      "role": "direct_support",
+      "note": "Resemblance, substrate contrasts and discordant relatives support distinct bounded comparisons."
+    },
+    {
+      "case_group": "TT1927b_Handa_2005",
+      "option_ids": [
+        "P01",
+        "P15"
+      ],
+      "role": "context_only",
+      "note": "Ligand evidence supports binding; a complete subsequent decision process is not demonstrated."
+    },
+    {
+      "case_group": "TenA_Toms_2005",
+      "option_ids": [
+        "P01",
+        "P06"
+      ],
+      "role": "limited_inspection",
+      "note": "Primary abstract only; enzyme activity differs from an earlier regulatory phenotype without a full trace."
+    },
+    {
+      "case_group": "TenI_Toms_2005",
+      "option_ids": [
+        "P01"
+      ],
+      "role": "limited_inspection",
+      "note": "Primary abstract only; predicted blocking residue limits synthase transfer without assigning new activity."
+    },
+    {
+      "case_group": "YwlE_Fuhrmann_2013",
+      "option_ids": [
+        "P01",
+        "P03"
+      ],
+      "role": "limited_inspection",
+      "note": "Abstract/summary and structural records only; full-text access failed."
+    },
+    {
+      "case_group": "archaeal_hvo_pilin_processing_assembly",
+      "option_ids": [
+        "P06",
+        "P15",
+        "P17"
+      ],
+      "role": "direct_support",
+      "note": "Surface-system losses and expressed/processed hybrid controls separate attribution from downstream assembly."
+    },
+    {
+      "case_group": "archaeal_pibd_flak_recognition_access",
+      "option_ids": [
+        "P02",
+        "P09",
+        "P15"
+      ],
+      "role": "direct_support",
+      "note": "Leader exception, sidedness controls and apparent processing without rescue constrain different relations."
+    },
+    {
+      "case_group": "causal_actS_stress_activation",
+      "option_ids": [
+        "P06",
+        "P07",
+        "P08"
+      ],
+      "role": "direct_support",
+      "note": "Defined activation and background-dependent rescue separate catalysis from enabling/conditional roles."
+    },
+    {
+      "case_group": "causal_cas2_spacer_acquisition",
+      "option_ids": [
+        "P06",
+        "P14",
+        "P17"
+      ],
+      "role": "direct_support",
+      "note": "Integration identity and complex/site contrasts support attribution with catalytic-null validation limits."
+    },
+    {
+      "case_group": "causal_envC_activation",
+      "option_ids": [
+        "P01",
+        "P06",
+        "P17"
+      ],
+      "role": "direct_support",
+      "note": "Missing ligands and stable/localized functional defects distinguish fold transfer from activation."
+    },
+    {
+      "case_group": "causal_nlpI_scaffolding",
+      "option_ids": [
+        "P06",
+        "P15"
+      ],
+      "role": "direct_support",
+      "note": "Ternary tests add information beyond pairwise association; activity varies by partner."
+    },
+    {
+      "case_group": "causal_tsaE_turnover",
+      "option_ids": [
+        "P12",
+        "P17",
+        "P18"
+      ],
+      "role": "direct_support",
+      "note": "Single/repeated turnover, retained ATPase and unresolved cross-species endpoints constrain different explanations."
+    },
+    {
+      "case_group": "cellular_cdv",
+      "option_ids": [
+        "P01",
+        "P11"
+      ],
+      "role": "direct_support",
+      "note": "ESCRT homology plus timing and perturbation supports division instead of endosomal transfer."
+    },
+    {
+      "case_group": "cellular_cetZ",
+      "option_ids": [
+        "P01",
+        "P02",
+        "P11"
+      ],
+      "role": "direct_support",
+      "note": "No FtsZ-like division defect and conditional shape/motility effects distinguish family-role alternatives."
+    },
+    {
+      "case_group": "cellular_dolP",
+      "option_ids": [
+        "P06",
+        "P08"
+      ],
+      "role": "context_only",
+      "note": "Stress-dependent interactions support participation; direct BamA-folding attribution remains unestablished."
+    },
+    {
+      "case_group": "cellular_letB",
+      "option_ids": [
+        "P09",
+        "P11"
+      ],
+      "role": "context_only",
+      "note": "Tunnel, lipid contact and sensitized rescue converge without directly measuring net transport."
+    },
+    {
+      "case_group": "cellular_minJ",
+      "option_ids": [
+        "P04",
+        "P06",
+        "P07"
+      ],
+      "role": "direct_support",
+      "note": "Promoter separation, suppressors and localization revise historical operon/motility attribution."
+    },
+    {
+      "case_group": "cellular_popZ",
+      "option_ids": [
+        "P06",
+        "P17"
+      ],
+      "role": "direct_support",
+      "note": "Re-expression capture and filamentation controls distinguish anchoring from colocalization or shape effects."
+    },
+    {
+      "case_group": "cellular_ugtP",
+      "option_ids": [
+        "P08",
+        "P16",
+        "P17"
+      ],
+      "role": "direct_support",
+      "note": "Nutrient-linked localization, amount controls and defined FtsZ inhibition separate coupled properties."
+    },
+    {
+      "case_group": "cellular_y_complex",
+      "option_ids": [
+        "P02",
+        "P13",
+        "P18"
+      ],
+      "role": "direct_support",
+      "note": "Retained RNA controls, selective end loss and historical disagreement remain distinct."
+    },
+    {
+      "case_group": "cellular_yabA",
+      "option_ids": [
+        "P17"
+      ],
+      "role": "direct_support",
+      "note": "Selective interaction loss and complementary/same-defect restoration test joint connections."
+    },
+    {
+      "case_group": "cellular_ybeY",
+      "option_ids": [
+        "P06",
+        "P13",
+        "P17"
+      ],
+      "role": "direct_support",
+      "note": "Mutant/WT hybrid subunits localize degradation susceptibility to mutant-derived 30S."
+    },
+    {
+      "case_group": "cellular_yejM",
+      "option_ids": [
+        "P04",
+        "P06",
+        "P07"
+      ],
+      "role": "direct_support",
+      "note": "LpxC/LapB suppressor, turnover and association evidence redirect a transporter interpretation."
+    },
+    {
+      "case_group": "cellular_yfgM",
+      "option_ids": [
+        "P06",
+        "P15"
+      ],
+      "role": "context_only",
+      "note": "Association/sensitized phenotypes support ancillary participation without demonstrated direct chaperone or handoff mechanism."
+    },
+    {
+      "case_group": "cellular_yhcB",
+      "option_ids": [
+        "P04",
+        "P06",
+        "P07"
+      ],
+      "role": "direct_support",
+      "note": "Failed oxidase-membership inference leaves real envelope/division effects without a unique direct connector."
+    },
+    {
+      "case_group": "cellular_yhdP",
+      "option_ids": [
+        "P04",
+        "P19"
+      ],
+      "role": "direct_support",
+      "note": "Unchanged lipid-A modification redirects explanation; combined depletion exposes overlap."
+    },
+    {
+      "case_group": "cellular_yihI",
+      "option_ids": [
+        "P07"
+      ],
+      "role": "direct_support",
+      "note": "Growth rescue without tested GTPase repair separates endpoint improvement from restoration."
+    },
+    {
+      "case_group": "cellular_yjgA",
+      "option_ids": [
+        "P13",
+        "P17"
+      ],
+      "role": "context_only",
+      "note": "Pre50S states/domain effects support maturation, but the condensed record lacks a complete selective trace."
+    },
+    {
+      "case_group": "cellular_yneA",
+      "option_ids": [
+        "P06",
+        "P17"
+      ],
+      "role": "direct_support",
+      "note": "Operon loss and individual-gene reinduction assign inhibition without direct FtsZ-binding proof."
+    },
+    {
+      "case_group": "cellular_yqfG",
+      "option_ids": [
+        "P01",
+        "P13",
+        "P19"
+      ],
+      "role": "direct_support",
+      "note": "Narrow RNA-end effects limit homology transfer; rnr bypass does not settle the mechanism."
+    },
+    {
+      "case_group": "chem_bcd_etf",
+      "option_ids": [
+        "P06",
+        "P10",
+        "P11"
+      ],
+      "role": "direct_support",
+      "note": "Substrate-supply bypass and defined attribution differ from energetic feasibility and ideal coupling."
+    },
+    {
+      "case_group": "chem_bioc",
+      "option_ids": [
+        "P03",
+        "P11"
+      ],
+      "role": "direct_support",
+      "note": "Carrier/concentration contrasts separate plausible native input from high-dose side capacity."
+    },
+    {
+      "case_group": "chem_dsr_terminal",
+      "option_ids": [
+        "P06",
+        "P10",
+        "P14"
+      ],
+      "role": "direct_support",
+      "note": "Dependencies and DsrC/sulfide products assign a terminal contribution with incomplete recovery retained."
+    },
+    {
+      "case_group": "chem_f420_precursor_partner",
+      "option_ids": [
+        "P01",
+        "P06"
+      ],
+      "role": "direct_support",
+      "note": "Partner swaps defeat universal upstream specificity transfer without erasing pair-level output."
+    },
+    {
+      "case_group": "chem_hemq",
+      "option_ids": [
+        "P01",
+        "P03",
+        "P10",
+        "P14"
+      ],
+      "role": "direct_support",
+      "note": "Metal/oxidant alternatives and sequential products revise chlorite-dismutase transfer."
+    },
+    {
+      "case_group": "chem_hydabc",
+      "option_ids": [
+        "P08",
+        "P10",
+        "P14"
+      ],
+      "role": "direct_support",
+      "note": "Dual-donor/cofactor needs differ from artificial-acceptor activity and carryover artifacts."
+    },
+    {
+      "case_group": "chem_mvh_hdr",
+      "option_ids": [
+        "P08",
+        "P10",
+        "P14"
+      ],
+      "role": "direct_support",
+      "note": "Heterodisulfide dependence supports coupling; dye artifacts and potential uncertainty remain explicit."
+    },
+    {
+      "case_group": "chem_nfnab",
+      "option_ids": [
+        "P06",
+        "P10"
+      ],
+      "role": "direct_support",
+      "note": "Reactant/product balances distinguish coupling from allosteric stimulation alone."
+    },
+    {
+      "case_group": "chem_queg",
+      "option_ids": [
+        "P08"
+      ],
+      "role": "direct_support",
+      "note": "Cofactor restoration distinguishes an inactive preparation from unsupported function."
+    },
+    {
+      "case_group": "chem_ubiuv_oxygen_donor",
+      "option_ids": [
+        "P10",
+        "P14"
+      ],
+      "role": "direct_support",
+      "note": "Isotope and pathway controls identify atom source without isolated hydroxylation/electron-acceptor proof."
+    },
+    {
+      "case_group": "chem_ubix",
+      "option_ids": [
+        "P06",
+        "P15"
+      ],
+      "role": "direct_support",
+      "note": "Protein-free filtrate activation assigns cofactor supply rather than direct decarboxylation."
+    },
+    {
+      "case_group": "context_archaeal_shikimate_kinase_2001",
+      "option_ids": [
+        "P01",
+        "P03",
+        "P05"
+      ],
+      "role": "direct_support",
+      "note": "Gap, distribution and paralog substrate contrasts identify an unfamiliar contribution."
+    },
+    {
+      "case_group": "context_bioy_optional_module_2007",
+      "option_ids": [
+        "P02",
+        "P08",
+        "P12"
+      ],
+      "role": "direct_support",
+      "note": "Standalone uptake and initial-rate titrations narrow module necessity beyond accumulation endpoints."
+    },
+    {
+      "case_group": "context_cfbb_f430_ringf_2017",
+      "option_ids": [
+        "P01",
+        "P03",
+        "P05"
+      ],
+      "role": "direct_support",
+      "note": "Required chemistry/context revise MurF resemblance; substrate contrasts distinguish the preferred intermediate."
+    },
+    {
+      "case_group": "context_comf_mmp16_2025",
+      "option_ids": [
+        "P05",
+        "P08",
+        "P19"
+      ],
+      "role": "direct_support",
+      "note": "Removing supplied sulfide exposes CoM demand while residual growth permits unproved backup explanations."
+    },
+    {
+      "case_group": "context_mj0044_ip_kinase_2006",
+      "option_ids": [
+        "P04",
+        "P05"
+      ],
+      "role": "direct_support",
+      "note": "Failed assumed substrates with retained pathway context motivate a different order."
+    },
+    {
+      "case_group": "context_oarx_thiamin_2024",
+      "option_ids": [
+        "P02",
+        "P04",
+        "P11"
+      ],
+      "role": "direct_support",
+      "note": "Optional partner profiles and failed tested salvage inputs support bounded unresolved chemistry."
+    },
+    {
+      "case_group": "context_poxa_yjek_efp_2010_2011",
+      "option_ids": [
+        "P01",
+        "P05",
+        "P14"
+      ],
+      "role": "direct_support",
+      "note": "Target/context constraints and free-beta-lysine tests distinguish proposed reaction orders."
+    },
+    {
+      "case_group": "context_rbkr_regulator_kinase_2017",
+      "option_ids": [
+        "P05",
+        "P15",
+        "P16"
+      ],
+      "role": "direct_support",
+      "note": "Fusion, target motifs and FMN-modulated binding support regulation with sign still inferential."
+    },
+    {
+      "case_group": "context_ribk_mj0056_2008",
+      "option_ids": [
+        "P01",
+        "P05"
+      ],
+      "role": "direct_support",
+      "note": "Unfamiliar kinase structure/context and CTP preference coexist with salvage-compatible distribution."
+    },
+    {
+      "case_group": "csiD_glutarate_hydroxylase",
+      "option_ids": [
+        "P03",
+        "P11",
+        "P14"
+      ],
+      "role": "direct_support",
+      "note": "Input/product stereochemistry and starvation accumulation connect capacity with conditional use."
+    },
+    {
+      "case_group": "fluc_fluoride_channel",
+      "option_ids": [
+        "P01",
+        "P03",
+        "P14"
+      ],
+      "role": "direct_support",
+      "note": "Ion/current contrasts establish channel function beyond resistance; label correction is retained."
+    },
+    {
+      "case_group": "hemk_prmc",
+      "option_ids": [
+        "P01",
+        "P03",
+        "P04"
+      ],
+      "role": "direct_support",
+      "note": "Reference repair, shared core and distinct substrates limit historical heme/DNA attachments."
+    },
+    {
+      "case_group": "lhgO_electron_acceptor_correction",
+      "option_ids": [
+        "P03",
+        "P04",
+        "P14"
+      ],
+      "role": "direct_support",
+      "note": "Active enzyme without O2 consumption motivated quinone tests and an oxidase correction."
+    },
+    {
+      "case_group": "organism_01_ttr",
+      "option_ids": [
+        "P08",
+        "P11",
+        "P18"
+      ],
+      "role": "direct_support",
+      "note": "Conditional intestinal resource use explains benefit despite systemic nonphenotype."
+    },
+    {
+      "case_group": "organism_02_xoxf",
+      "option_ids": [
+        "P08",
+        "P11",
+        "P19"
+      ],
+      "role": "direct_support",
+      "note": "Metal/activity and residual-route tests distinguish regulation, catalysis and exclusivity."
+    },
+    {
+      "case_group": "organism_03_tau_ssu",
+      "option_ids": [
+        "P03",
+        "P09"
+      ],
+      "role": "direct_support",
+      "note": "Transporter and enzyme matrices differ; expression dose limits rescue interpretation."
+    },
+    {
+      "case_group": "organism_04_gcsr",
+      "option_ids": [
+        "P04",
+        "P06",
+        "P16",
+        "P18"
+      ],
+      "role": "direct_support",
+      "note": "Clean-deletion and promoter evidence narrow older transposon-based broad regulation."
+    },
+    {
+      "case_group": "organism_05_tcu",
+      "option_ids": [
+        "P05",
+        "P07",
+        "P09"
+      ],
+      "role": "direct_support",
+      "note": "Transporter-only citrate rescue contrasts with full-locus tricarballylate demand."
+    },
+    {
+      "case_group": "organism_07_xyg",
+      "option_ids": [
+        "P07",
+        "P08",
+        "P09"
+      ],
+      "role": "direct_support",
+      "note": "Oligosaccharide bypass identifies access contribution and diet alternatives condition benefit."
+    },
+    {
+      "case_group": "organism_08_porphyran",
+      "option_ids": [
+        "P03",
+        "P09",
+        "P11"
+      ],
+      "role": "direct_support",
+      "note": "Diagnostic glycan products support use while neighboring agarase activity lacks corresponding cell growth."
+    },
+    {
+      "case_group": "organism_09_huc",
+      "option_ids": [
+        "P08",
+        "P11",
+        "P12"
+      ],
+      "role": "direct_support",
+      "note": "Phase-specific roles and respiratory/purified activity distinguish scavenging from induction alone."
+    },
+    {
+      "case_group": "organism_10_hpnn",
+      "option_ids": [
+        "P06",
+        "P07",
+        "P09"
+      ],
+      "role": "direct_support",
+      "note": "Retained bulk lipid, localization loss and biosynthesis suppression separate mislocalization from absence."
+    },
+    {
+      "case_group": "organism_11_fucp",
+      "option_ids": [
+        "P06",
+        "P08",
+        "P11"
+      ],
+      "role": "direct_support",
+      "note": "Direct uptake and host/context-dependent benefit constrain strain-specific use."
+    },
+    {
+      "case_group": "organism_12_nitrate",
+      "option_ids": [
+        "P08",
+        "P11"
+      ],
+      "role": "direct_support",
+      "note": "Host resource perturbations distinguish nitrate-enabled expansion from inflammation alone."
+    },
+    {
+      "case_group": "organism_13_icl",
+      "option_ids": [
+        "P07",
+        "P10",
+        "P12"
+      ],
+      "role": "direct_support",
+      "note": "Rerouting separates survival from growth and exposes toxic-intermediate consequences."
+    },
+    {
+      "case_group": "organism_14_rut",
+      "option_ids": [
+        "P05",
+        "P08",
+        "P09"
+      ],
+      "role": "direct_support",
+      "note": "Transport, nitrogen release and toxicity distinguish causes of failed growth."
+    },
+    {
+      "case_group": "organism_15_nifi",
+      "option_ids": [
+        "P12",
+        "P15",
+        "P16"
+      ],
+      "role": "direct_support",
+      "note": "Rapid reversible output regulation differs from transcript/protein changes and direct catalysis."
+    },
+    {
+      "case_group": "organism_16_malr",
+      "option_ids": [
+        "P15",
+        "P16"
+      ],
+      "role": "direct_support",
+      "note": "Promoter binding/output does not establish direct maltose sensing."
+    },
+    {
+      "case_group": "organism_17_ybts",
+      "option_ids": [
+        "P06",
+        "P08",
+        "P11"
+      ],
+      "role": "direct_support",
+      "note": "Unoccupied/preloaded ligand and chelator comparisons support conditional copper protection."
+    },
+    {
+      "case_group": "organism_18_dsdapm",
+      "option_ids": [
+        "P08",
+        "P11",
+        "P12",
+        "P18"
+      ],
+      "role": "direct_support",
+      "note": "Short ex-vivo and later infection outcomes differ in both time and setting."
+    },
+    {
+      "case_group": "organism_19_pyruvate_transport",
+      "option_ids": [
+        "P03",
+        "P09",
+        "P19"
+      ],
+      "role": "direct_support",
+      "note": "Direct coupling/uptake plus alternatives distinguish transporter and sensing-network contributions."
+    },
+    {
+      "case_group": "organism_20_isia",
+      "option_ids": [
+        "P08",
+        "P12",
+        "P17"
+      ],
+      "role": "direct_support",
+      "note": "Spectroscopy and conditional early/late tradeoffs narrow photoprotection."
+    },
+    {
+      "case_group": "organism_21_vcra",
+      "option_ids": [
+        "P03",
+        "P06",
+        "P11"
+      ],
+      "role": "direct_support",
+      "note": "Activity-linked identity differs from field gene detection; partial purification remains a limit."
+    },
+    {
+      "case_group": "organism_22_eutc",
+      "option_ids": [
+        "P08",
+        "P11",
+        "P18"
+      ],
+      "role": "direct_support",
+      "note": "Respiratory/resource contrasts explain intestinal benefit despite systemic nonphenotype."
+    },
+    {
+      "case_group": "organism_23_pdu",
+      "option_ids": [
+        "P01",
+        "P08",
+        "P11"
+      ],
+      "role": "direct_support",
+      "note": "Microbiota/respiration contrasts defeat copying another nutrient pathway’s acceptor requirement."
+    },
+    {
+      "case_group": "organism_24_sdha",
+      "option_ids": [
+        "P04",
+        "P08",
+        "P11"
+      ],
+      "role": "direct_support",
+      "note": "Nitrate and microbiota-derived succinate expose use hidden by an assumed anaerobic model."
+    },
+    {
+      "case_group": "pa0142",
+      "option_ids": [
+        "P01",
+        "P03"
+      ],
+      "role": "direct_support",
+      "note": "Pocket-subgroup differences motivate oxidized-base alternatives, validated by bounded chemistry."
+    },
+    {
+      "case_group": "pxpABC_oxoproline_disposal",
+      "option_ids": [
+        "P05",
+        "P08",
+        "P10"
+      ],
+      "role": "direct_support",
+      "note": "Spontaneous substrate generation and ATP-dependent reconstitution challenge familiar-route assumptions."
+    },
+    {
+      "case_group": "pxpT_pxpR_access_and_sensing",
+      "option_ids": [
+        "P06",
+        "P09",
+        "P16"
+      ],
+      "role": "direct_support",
+      "note": "Growth, repression and direct binding separate access, catabolism and sensing."
+    },
+    {
+      "case_group": "quef",
+      "option_ids": [
+        "P01",
+        "P04",
+        "P05"
+      ],
+      "role": "direct_support",
+      "note": "Failed family chemistry leaves pathway constraints that narrow a different reaction."
+    },
+    {
+      "case_group": "reg_iscR_state_target_specificity",
+      "option_ids": [
+        "P02",
+        "P15",
+        "P16",
+        "P17",
+        "P18"
+      ],
+      "role": "direct_support",
+      "note": "State, affinity/specificity, productive binding and redox interpretations remain separate."
+    },
+    {
+      "case_group": "replacement_bioG",
+      "option_ids": [
+        "P03",
+        "P07",
+        "P11"
+      ],
+      "role": "direct_support",
+      "note": "Rescue and isolated chemistry support bounded substitution with dose/promiscuity limits."
+    },
+    {
+      "case_group": "replacement_bioJ",
+      "option_ids": [
+        "P07",
+        "P08",
+        "P11"
+      ],
+      "role": "direct_support",
+      "note": "Biotin relief and catalytic/native comparisons explain host phenotypes through nutrient demand."
+    },
+    {
+      "case_group": "replacement_bioK",
+      "option_ids": [
+        "P05",
+        "P07",
+        "P08"
+      ],
+      "role": "direct_support",
+      "note": "Conditional heterologous rescue supports substitution; insolubility leaves direct chemistry untested."
+    },
+    {
+      "case_group": "replacement_bioV",
+      "option_ids": [
+        "P06",
+        "P07",
+        "P11"
+      ],
+      "role": "direct_support",
+      "note": "Subcloning/product tests assign esterase contribution; failed deletion does not establish essentiality."
+    },
+    {
+      "case_group": "replacement_bioZ",
+      "option_ids": [
+        "P05",
+        "P07",
+        "P10"
+      ],
+      "role": "direct_support",
+      "note": "Multi-step bypass and alternative carbon entry defeat esterase-equivalence inference."
+    },
+    {
+      "case_group": "replacement_cobY",
+      "option_ids": [
+        "P03",
+        "P07"
+      ],
+      "role": "direct_support",
+      "note": "Guanylylation without kinase and route-specific rescue limit functional replacement."
+    },
+    {
+      "case_group": "replacement_folA_bypass",
+      "option_ids": [
+        "P07",
+        "P19"
+      ],
+      "role": "direct_support",
+      "note": "Adaptation separates catalytic partial restoration from demand reduction/salvage compensation."
+    },
+    {
+      "case_group": "replacement_folE2",
+      "option_ids": [
+        "P05",
+        "P08",
+        "P19"
+      ],
+      "role": "direct_support",
+      "note": "Genetic backgrounds expose zinc-conditioned replacement without native-metal occupancy proof."
+    },
+    {
+      "case_group": "replacement_folM",
+      "option_ids": [
+        "P07",
+        "P11"
+      ],
+      "role": "direct_support",
+      "note": "DHFR capacity/rescue differ from the better-supported monapterin contribution."
+    },
+    {
+      "case_group": "replacement_hemJ",
+      "option_ids": [
+        "P07",
+        "P08",
+        "P15"
+      ],
+      "role": "direct_support",
+      "note": "Context-limited replacement and inactive purified preparations preserve a bounded cellular role."
+    },
+    {
+      "case_group": "replacement_lysU",
+      "option_ids": [
+        "P08",
+        "P18"
+      ],
+      "role": "direct_support",
+      "note": "Later nonphenotypes conflict with an abstract-level earlier heat requirement without reconciliation."
+    },
+    {
+      "case_group": "replacement_purT",
+      "option_ids": [
+        "P05",
+        "P08",
+        "P19"
+      ],
+      "role": "limited_inspection",
+      "note": "Primary abstract only; double-mutant dependence and formate suggest a replacement route."
+    },
+    {
+      "case_group": "replacement_queH",
+      "option_ids": [
+        "P05",
+        "P14",
+        "P19"
+      ],
+      "role": "direct_support",
+      "note": "Gap, retained product, double-loss and substrate disappearance constrain distinct claims."
+    },
+    {
+      "case_group": "replacement_thyX",
+      "option_ids": [
+        "P07",
+        "P10"
+      ],
+      "role": "direct_support",
+      "note": "Same output hides changed folate-recycling demand during replacement."
+    },
+    {
+      "case_group": "rida",
+      "option_ids": [
+        "P01",
+        "P03",
+        "P14"
+      ],
+      "role": "direct_support",
+      "note": "Generated intermediates and product release establish chemistry while variants qualify residue claims."
+    },
+    {
+      "case_group": "seq_codA_isoguanine_failed_candidate",
+      "option_ids": [
+        "P04",
+        "P06"
+      ],
+      "role": "direct_support",
+      "note": "Failed intended expression and host activity attribution remain distinct results."
+    },
+    {
+      "case_group": "seq_hisZ_lactococcus",
+      "option_ids": [
+        "P01",
+        "P05",
+        "P06"
+      ],
+      "role": "direct_support",
+      "note": "Synthetase ancestry redirects toward a complex contribution instead of tRNA charging."
+    },
+    {
+      "case_group": "seq_hisn_impase_discrimination",
+      "option_ids": [
+        "P02",
+        "P03",
+        "P19"
+      ],
+      "role": "direct_support",
+      "note": "Motif/rank discordance and unexplained residual growth constrain transfer and native responsibility."
+    },
+    {
+      "case_group": "seq_hutW_vibrio",
+      "option_ids": [
+        "P01",
+        "P03",
+        "P10"
+      ],
+      "role": "direct_support",
+      "note": "Broad heme degradation transfers while product redox state and reducing support differ."
+    },
+    {
+      "case_group": "seq_ptmvd_m3k_picrophilus",
+      "option_ids": [
+        "P01",
+        "P04",
+        "P14"
+      ],
+      "role": "direct_support",
+      "note": "Changed recognition and products replace decarboxylase transfer with phosphorylation."
+    },
+    {
+      "case_group": "seq_pucM_transthyretin_like",
+      "option_ids": [
+        "P01",
+        "P05",
+        "P06"
+      ],
+      "role": "direct_support",
+      "note": "Pathway-intermediate activity and a failing human comparator limit family-name transfer."
+    },
+    {
+      "case_group": "seq_queFL_archaeosine",
+      "option_ids": [
+        "P01",
+        "P03",
+        "P15"
+      ],
+      "role": "direct_support",
+      "note": "Homology/adducts do not specify chemistry; productive synthesis requires tRNA-bound precursor."
+    },
+    {
+      "case_group": "seq_triA_atzA_near_identity",
+      "option_ids": [
+        "P01",
+        "P02",
+        "P03"
+      ],
+      "role": "direct_support",
+      "note": "Near identity aids discovery but contrasting substrate profiles defeat specificity transfer."
+    },
+    {
+      "case_group": "seq_yadB_gluQRS_ecoli",
+      "option_ids": [
+        "P01",
+        "P03",
+        "P15",
+        "P17"
+      ],
+      "role": "direct_support",
+      "note": "Architecture and Q34-matched substrates distinguish binding from productive modification."
+    },
+    {
+      "case_group": "seq_ygbP_ispD_ecoli",
+      "option_ids": [
+        "P01",
+        "P05",
+        "P14"
+      ],
+      "role": "direct_support",
+      "note": "Chemical/nucleotide identity guides a domain analogue search and recombinant validation."
+    },
+    {
+      "case_group": "seq_yggH_trmB_ecoli",
+      "option_ids": [
+        "P01",
+        "P03",
+        "P17"
+      ],
+      "role": "direct_support",
+      "note": "Positional substrate/disruption contrasts turn coarse compatibility into site specificity."
+    },
+    {
+      "case_group": "seq_yjeH_exporter_ecoli",
+      "option_ids": [
+        "P01",
+        "P03",
+        "P14"
+      ],
+      "role": "direct_support",
+      "note": "Family/model support gains substrate/direction meaning from direct export contrasts."
+    },
+    {
+      "case_group": "seq_yrdC_tsaC_ecoli",
+      "option_ids": [
+        "P01",
+        "P02",
+        "P05"
+      ],
+      "role": "direct_support",
+      "note": "Required modification prioritizes a family while paralog failure limits transfer."
+    },
+    {
+      "case_group": "spatial_amic_amia_export_septal_access",
+      "option_ids": [
+        "P09",
+        "P15",
+        "P17"
+      ],
+      "role": "direct_support",
+      "note": "Validated constructs separate export, targeting and catalytic contribution."
+    },
+    {
+      "case_group": "spatial_ccda_dsbd_acceptor_range",
+      "option_ids": [
+        "P01",
+        "P03",
+        "P07",
+        "P09"
+      ],
+      "role": "direct_support",
+      "note": "Shared reducing task does not transfer all acceptors or accessory compatibility."
+    },
+    {
+      "case_group": "spatial_dsbd_topology_revision",
+      "option_ids": [
+        "P04",
+        "P09",
+        "P14"
+      ],
+      "role": "direct_support",
+      "note": "Disulfide/access controls revise opposite-face topology without solving the encounter mechanism."
+    },
+    {
+      "case_group": "spatial_ftsw_bpbp_job",
+      "option_ids": [
+        "P06",
+        "P08",
+        "P15",
+        "P17",
+        "P18"
+      ],
+      "role": "direct_support",
+      "note": "Catalytic/partner/interface tests assign polymerase while earlier access results remain recorded."
+    },
+    {
+      "case_group": "spatial_murj_lipidII_access",
+      "option_ids": [
+        "P09",
+        "P14"
+      ],
+      "role": "direct_support",
+      "note": "Barrier-specific reporter recovery separates sequestration from import/activity failure."
+    },
+    {
+      "case_group": "spatial_trxa_relocation_role",
+      "option_ids": [
+        "P08",
+        "P09",
+        "P18"
+      ],
+      "role": "direct_support",
+      "note": "Relocation and corrected genotypes establish conditional reaction direction/partner dependence."
+    },
+    {
+      "case_group": "spec_aquifex_hfp_coupling_contamination",
+      "option_ids": [
+        "P06",
+        "P11",
+        "P14"
+      ],
+      "role": "direct_support",
+      "note": "Compatible phosphatase activity survives rejection of contaminant isomerase attribution."
+    },
+    {
+      "case_group": "spec_cysq_pap_not_imp",
+      "option_ids": [
+        "P01",
+        "P03",
+        "P11"
+      ],
+      "role": "direct_support",
+      "note": "Preferred omitted substrate revises IMPase/FBPase interpretation with native limits preserved."
+    },
+    {
+      "case_group": "spec_frsa_disputed_pdc_native_unknown",
+      "option_ids": [
+        "P04",
+        "P11",
+        "P14"
+      ],
+      "role": "direct_support",
+      "note": "PDC failure plus artificial-ester capacity does not force a native-function solution."
+    },
+    {
+      "case_group": "spec_suhb_catalysis_vs_rrna",
+      "option_ids": [
+        "P06",
+        "P11",
+        "P17"
+      ],
+      "role": "direct_support",
+      "note": "Abstract-only activity/rescue dissociation and fuller later native RNA evidence retain different scopes."
+    },
+    {
+      "case_group": "spec_yigl_conditional_b6",
+      "option_ids": [
+        "P03",
+        "P08",
+        "P11",
+        "P19"
+      ],
+      "role": "direct_support",
+      "note": "Direct/indirect PNP alternatives and load-dependent effects constrain principal-role claims."
+    },
+    {
+      "case_group": "spec_yihu_native_sulfonate",
+      "option_ids": [
+        "P03",
+        "P04",
+        "P11"
+      ],
+      "role": "direct_support",
+      "note": "Genuine SSA side capacity survives stronger native sulfolactaldehyde evidence."
+    },
+    {
+      "case_group": "spec_yjjg_conditional_salvage_cleanup",
+      "option_ids": [
+        "P08",
+        "P11",
+        "P18",
+        "P19"
+      ],
+      "role": "direct_support",
+      "note": "Media-dependent salvage and alternative dgt route preserve compatible conditional roles."
+    },
+    {
+      "case_group": "sulfoglycolysis_selectivity",
+      "option_ids": [
+        "P01",
+        "P03",
+        "P14",
+        "P15"
+      ],
+      "role": "direct_support",
+      "note": "Ordinary-sugar binding, sulfosugar preference and additional product identity address different relations."
+    },
+    {
+      "case_group": "yeag",
+      "option_ids": [
+        "P06",
+        "P08",
+        "P12",
+        "P13"
+      ],
+      "role": "direct_support",
+      "note": "Time tradeoff, cell heterogeneity and site response remain distinct from direct-substrate evidence."
+    },
+    {
+      "case_group": "yjef_nnr",
+      "option_ids": [
+        "P01",
+        "P04",
+        "P05",
+        "P10"
+      ],
+      "role": "direct_support",
+      "note": "Fusion/epimer constraints suggest linked function; failed ATP regeneration exposes ADP coupling."
+    }
+  ]
+}

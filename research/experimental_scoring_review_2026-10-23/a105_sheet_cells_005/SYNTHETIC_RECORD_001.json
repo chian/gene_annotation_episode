@@ -1,0 +1,151 @@
+{
+  "status": "unadopted_synthetic_sheet_interface",
+  "axis": "A105",
+  "scope": {
+    "target_material": "hypothetical complete supplied sequence; no biological name or actual sequence asserted",
+    "source_material": "distinct hypothetical assayed molecule",
+    "endpoint": "attributable formation of the specified product per amount of source molecule per minute at the source reference assay state",
+    "source_inference": "positive physical activity versus zero activity",
+    "source_parameter_space": "a >= 0",
+    "comparison_regions": {"positive": "a > 0, evaluated by supremum", "opposed": "a = 0"},
+    "target_inference": "conventional support for the same molecular capability using measured correspondence",
+    "tree_placement": "target lies in the predefined group containing characterized source references rather than the predefined alternative group",
+    "site_scope": "ten functional sites predefined before the hypothetical target comparison",
+    "target_assay_supplied": false,
+    "target_endpoint_calibration_supplied": false,
+    "requires_initial_candidate_function": false,
+    "input_boundary": "corrected source activity and propagated variance are upstream derived inputs; correspondence scores/counts and descriptor differences are separately supplied inputs"
+  },
+  "input": {
+    "assay": {
+      "corrected_activity": 0.68,
+      "effect_unit": "min^-1",
+      "effect_denominator": "minute times amount of assayed source molecule",
+      "propagated_variance": {
+        "measurement": 0.0256,
+        "recovery_calibration": 0.001156,
+        "experimental_comparability": 0.00296225,
+        "effect_isolation": 0.0144,
+        "protein_amount": 0.004624,
+        "distinct_between_preparation": 0.0625
+      },
+      "covariance_cross_term_sum": 0.0,
+      "variance_unit": "min^-2",
+      "origin": "upstream_derived_synthetic_inputs"
+    },
+    "sequence": {
+      "pair_raw_score": 240.0,
+      "source_self_raw_score": 300.0,
+      "target_self_raw_score": 320.0,
+      "unit": "common_raw_local_alignment_score",
+      "origin": "synthetic_raw_scores"
+    },
+    "structure": {
+      "tm_source_normalized": 0.9,
+      "tm_target_normalized": 0.85,
+      "unit": "dimensionless",
+      "origin": "synthetic_native_normalized_scores"
+    },
+    "site": {
+      "declared_count": 10,
+      "observed_count": 10,
+      "exact_match_count": 8,
+      "unit": "site_count",
+      "origin": "synthetic_counts"
+    },
+    "evolution": {
+      "eligible_tree_replicates": 100,
+      "supporting_tree_replicates": 85,
+      "unit": "tree_replicate_count",
+      "origin": "synthetic_counts"
+    },
+    "system": {
+      "descriptor_order": ["temperature", "pH"],
+      "descriptor_difference": [7.0, 0.5],
+      "descriptor_units": ["degrees_C", "pH_unit"],
+      "difference_direction": "target_minus_source",
+      "reference_scale_covariance": [[100.0, 0.0], [0.0, 1.0]],
+      "matrix_entry_units": [["degrees_C^2", "degrees_C*pH_unit"], ["degrees_C*pH_unit", "pH_unit^2"]],
+      "origin": "synthetic_supplied_differences_and_proposed_reference_scale"
+    },
+    "family_weights": {"sequence": 1.0, "structure": 1.0, "site": 1.0, "evolution": 1.0, "system": 1.0}
+  },
+  "declared_conventions": {
+    "adoption": "unadopted",
+    "source_likelihood": "normal_observation_with_fixed_synthetic_variance_and_nonnegative_physical_activity",
+    "variance_cross_terms": "explicit_synthetic_zero_assumption",
+    "source_profile_calculation": "max(0,a)^2/(2*V)",
+    "bounded_source_transform": "tanh(S/2)",
+    "sequence_score_requirements": "nonnegative local score, nonpositive gap penalties, positive self-substitution scores, s(x,y)<=(s(x,x)+s(y,y))/2, each residue used at most once",
+    "sequence_conversion": "2*pair_raw_score/(source_self_raw_score+target_self_raw_score)",
+    "structure_conversion": "min(TM_source_normalized,TM_target_normalized)",
+    "site_conversion": "exact_match_count/declared_count when fully observed",
+    "evolution_conversion": "supporting_tree_replicates/eligible_tree_replicates",
+    "system_conversion": "exp(-0.5*delta^T*inverse(reference_scale_covariance)*delta)",
+    "correspondence_combination": "available-family arithmetic mean with the five explicitly equal weights",
+    "target_index": "D=R*B; conventional_index_not_likelihood",
+    "coordinate_projection": "c=null_if_D_unknown_else_max(0,D)",
+    "missing_family_policy": "conditional_available_point_plus_full_mean_identification_bounds",
+    "new_annotation_axis_or_library_slot": false
+  },
+  "derived": {
+    "assay": {
+      "total_variance": 0.11124225,
+      "standard_uncertainty": 0.3335299836596404,
+      "constrained_activity": 0.68
+    },
+    "source": {
+      "profile_log_ratio": 2.078347030916761,
+      "profile_log_ratio_unit": "nat",
+      "bounded_profile_contrast": 0.7775614860794029
+    },
+    "correspondence": {
+      "sequence": 0.7741935483870968,
+      "structure": 0.85,
+      "site": 0.8,
+      "evolution": 0.85,
+      "system_distance_squared": 0.74,
+      "system": 0.6907343306373547,
+      "available_mean": 0.7929855758048903,
+      "observed_weight_fraction": 1.0,
+      "full_mean_identification_bounds": [0.7929855758048903, 0.7929855758048903]
+    },
+    "target": {
+      "conventional_signed_index": 0.6165950427623814,
+      "proposed_support_coordinate": 0.6165950427623814,
+      "full_index_identification_bounds": [0.6165950427623814, 0.6165950427623814],
+      "full_coordinate_identification_bounds": [0.6165950427623814, 0.6165950427623814]
+    }
+  },
+  "uncertainty": {
+    "source_kind": "conditional_standard_uncertainty_under_stated_fixed_normal_variance",
+    "source_finite_sample_degrees_of_freedom": null,
+    "independent_preparation_count": null,
+    "missing_count_reason": "not supplied in the inherited synthetic variance summary; not needed for its explicitly fixed-variance arithmetic",
+    "native_correspondence_sampling_uncertainty": null,
+    "native_correspondence_sampling_uncertainty_reason": "not supplied; no zero error or functional probability inferred",
+    "R_D_c_sampling_interval": null,
+    "bound_kind": "missing-family identification bounds only; not confidence or prediction intervals",
+    "system_matrix_role": "proposed reference scale, not sampling-error covariance",
+    "unquantified_extra_bias_in_real_assays": "not established by this synthetic fixture"
+  },
+  "dependencies": {
+    "source_assay_block": "one supplied upstream finding; six propagated variance components do not create six independent experiments",
+    "target_correspondence": "five possibly dependent measurements; fixed-weight average makes no independence claim",
+    "comparability_and_isolation": "separate components already propagated into source activity and variance; no second quality multiplier",
+    "source_condition_vs_target_system": "declared nonoverlapping quantities in this synthetic fixture",
+    "duplicate_policy": "established original measurement identity is counted once; equality of numeric values alone is insufficient",
+    "multiple_source_combination": "outside this single-source contract; assigned separately"
+  },
+  "provenance": {
+    "record_kind": "synthetic_arithmetic_fixture_not_published_measurements",
+    "source_effect_and_variance": "../a105_contribution_math_003/CONTRIBUTION_PROPOSAL_001.md",
+    "signed_index_limit": "../a105_contribution_math_003/ANNOTATION_INTERFACE_ADDENDUM_001.md",
+    "correspondence_interface": "../a105_target_relevance_003/TARGET_RELEVANCE_INTERFACE_002.md",
+    "correspondence_convention": "../a105_target_relevance_003/UNCALIBRATED_CORRESPONDENCE_CONVENTION_002.md",
+    "coordinate_projection": "../a105_annotation_coordinate_004/ANNOTATION_COORDINATE_PROPOSAL_001.md",
+    "primary_papers_or_paper_packets_read": 0,
+    "production_reader_or_scorer_implemented": false,
+    "annotation_credit_wiring_completed": false
+  }
+}

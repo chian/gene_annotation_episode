@@ -1,0 +1,337 @@
+{
+  "status": "all calculations synthetic; unadopted; no empirical calibration",
+  "original_observations": [
+    {
+      "original_observation": "h1-preparation-1",
+      "source": "H1",
+      "effect": 2.0,
+      "variance": 1.0
+    },
+    {
+      "original_observation": "h1-preparation-2",
+      "source": "H1",
+      "effect": 2.0,
+      "variance": 1.0
+    },
+    {
+      "original_observation": "h2-preparation-1",
+      "source": "H2",
+      "effect": -2.0,
+      "variance": 1.0
+    }
+  ],
+  "source_H1": {
+    "effect": 2.0,
+    "variance": 0.5,
+    "S": 4.0,
+    "B": 0.9640275800758169
+  },
+  "source_H2": {
+    "effect": -2,
+    "variance": 1,
+    "S": -2.0,
+    "B": -0.7615941559557649
+  },
+  "native_ratios": {
+    "H1": 7.38905609893065,
+    "H2": 0.1353352832366127
+  },
+  "correspondence_native_inputs": {
+    "H1": {
+      "pair_score": 240,
+      "source_self_score": 300,
+      "target_self_score": 300,
+      "TM_directions": [
+        0.92,
+        0.9
+      ],
+      "matching_sites": 7,
+      "declared_sites": 10,
+      "placement_support": 60,
+      "tree_replicates": 100,
+      "temperature_source_C": 25,
+      "temperature_target_C": 25,
+      "temperature_variance_scale_C_squared": 100
+    },
+    "H2": {
+      "pair_score": 90,
+      "source_self_score": 300,
+      "target_self_score": 300,
+      "TM_directions": [
+        0.45,
+        0.4
+      ],
+      "matching_sites": 2,
+      "declared_sites": 10,
+      "placement_support": 10,
+      "tree_replicates": 100,
+      "temperature_source_C": 25,
+      "temperature_target_C": 25,
+      "temperature_variance_scale_C_squared": 100
+    }
+  },
+  "correspondence_H1": {
+    "components": {
+      "sequence": 0.8,
+      "structure": 0.9,
+      "site": 0.7,
+      "evolution": 0.6,
+      "system": 1.0
+    },
+    "weights": {
+      "sequence": 1,
+      "structure": 1,
+      "site": 1,
+      "evolution": 1,
+      "system": 1
+    },
+    "R": 0.8
+  },
+  "correspondence_H2": {
+    "components": {
+      "sequence": 0.3,
+      "structure": 0.4,
+      "site": 0.2,
+      "evolution": 0.1,
+      "system": 1.0
+    },
+    "weights": {
+      "sequence": 1,
+      "structure": 1,
+      "site": 1,
+      "evolution": 1,
+      "system": 1
+    },
+    "R": 0.4
+  },
+  "main_opposition": {
+    "D": [
+      0.7712220640606535,
+      -0.30463766238230594
+    ],
+    "mean_M": 0.2332922008391738,
+    "cumulative_K": 0.6098690379571442
+  },
+  "positive_projection_after_combination": 0.2332922008391738,
+  "incorrect_per_source_clipping": 0.38561103203032676,
+  "concordant": {
+    "D": [
+      0.7712220640606535,
+      0.30463766238230594
+    ],
+    "mean_M": 0.5379298632214797,
+    "cumulative_K": 0.8711814849847719
+  },
+  "one_H1_preparation": {
+    "D": [
+      0.6092753247646119,
+      -0.30463766238230594
+    ],
+    "mean_M": 0.15231883119115297,
+    "cumulative_K": 0.37406769859257244
+  },
+  "unequal_same_source_estimates_check": {
+    "effect": 2.5,
+    "variance": 0.5,
+    "S": 6.25,
+    "B": 0.996146530673345
+  },
+  "duplicate_originals_unchanged": true,
+  "conflicting_representation_detected": true,
+  "shared_calibration": {
+    "common_calibration_variance": 0.75,
+    "independent_noise_variance": 0.25,
+    "original_observation_covariance": [
+      [
+        1,
+        0.75,
+        0.75
+      ],
+      [
+        0.75,
+        1,
+        0.75
+      ],
+      [
+        0.75,
+        0.75,
+        1
+      ]
+    ],
+    "source_H1": {
+      "effect": 2.0,
+      "variance": 0.875,
+      "S": 2.2857142857142856,
+      "B": 0.815373942495404
+    },
+    "source_H2": {
+      "effect": -2,
+      "variance": 1,
+      "S": -2.0,
+      "B": -0.7615941559557649
+    },
+    "candidates": {
+      "D": [
+        0.6522991539963232,
+        -0.30463766238230594
+      ],
+      "mean_M": 0.17383074580700864,
+      "cumulative_K": 0.4338798849940608
+    },
+    "pooled_source_covariance": [
+      [
+        0.875,
+        0.75
+      ],
+      [
+        0.75,
+        1
+      ]
+    ],
+    "delta_gradient": [
+      0.15321843835405788,
+      0.08399486832280523
+    ],
+    "delta_variance_without_cross_covariance": 0.027596541524764595,
+    "delta_variance_with_cross_covariance": 0.046900885356027
+  },
+  "weak_source": {
+    "assay": {
+      "effect": 1.4823038073675112,
+      "variance": 1,
+      "S": 1.09861228866811,
+      "B": 0.5000000000000001
+    },
+    "native_correspondence_inputs": {
+      "pair_score": 60,
+      "source_self_score": 300,
+      "target_self_score": 300,
+      "TM_directions": [
+        0.2,
+        0.2
+      ],
+      "matching_sites": 2,
+      "declared_sites": 10,
+      "placement_support": 20,
+      "tree_replicates": 100,
+      "temperature_source_C": 25,
+      "temperature_target_C": 42.941225779941014,
+      "temperature_variance_scale_C_squared": 100
+    },
+    "correspondence": {
+      "components": {
+        "sequence": 0.2,
+        "structure": 0.2,
+        "site": 0.2,
+        "evolution": 0.2,
+        "system": 0.2
+      },
+      "weights": {
+        "sequence": 1,
+        "structure": 1,
+        "site": 1,
+        "evolution": 1,
+        "system": 1
+      },
+      "R": 0.2
+    },
+    "ten_sources": {
+      "D": [
+        0.10000000000000003,
+        0.10000000000000003,
+        0.10000000000000003,
+        0.10000000000000003,
+        0.10000000000000003,
+        0.10000000000000003,
+        0.10000000000000003,
+        0.10000000000000003,
+        0.10000000000000003,
+        0.10000000000000003
+      ],
+      "mean_M": 0.10000000000000005,
+      "cumulative_K": 0.7629989373197429
+    }
+  },
+  "dense_cluster": {
+    "positive_cluster_size": 10,
+    "negative_cluster_size": 1,
+    "candidates": {
+      "D": [
+        0.7712220640606535,
+        0.7712220640606535,
+        0.7712220640606535,
+        0.7712220640606535,
+        0.7712220640606535,
+        0.7712220640606535,
+        0.7712220640606535,
+        0.7712220640606535,
+        0.7712220640606535,
+        0.7712220640606535,
+        -0.30463766238230594
+      ],
+      "mean_M": 0.6734166343840209,
+      "cumulative_K": 0.9999999951502431
+    },
+    "leave_positive_cluster_out_mean": -0.30463766238230594,
+    "leave_negative_cluster_out_mean": 0.7712220640606535
+  },
+  "zero_relevance_dilution": {
+    "H1_alone": 0.7712220640606535,
+    "with_zero_R_source": 0.38561103203032676
+  },
+  "missing_R2": {
+    "full_point": null,
+    "D2_domain_bounds": [
+      -0.7615941559557649,
+      -0.0
+    ],
+    "complete_roster_mean_bounds": [
+      0.004813954052444336,
+      0.38561103203032676
+    ],
+    "known_source_subset_mean": 0.7712220640606535
+  },
+  "missing_H2_uncertainty": {
+    "full_point": null,
+    "B2": null,
+    "complete_roster_mean_domain_bounds": [
+      0.18561103203032675,
+      0.5856110320303267
+    ]
+  },
+  "missing_H1_evolution": {
+    "R_available": 0.85,
+    "R_full_bounds": [
+      0.6799999999999999,
+      0.8800000000000001
+    ],
+    "conditional_mean": 0.2573928903410692,
+    "hypothetical_full_mean_bounds": [
+      0.17545054603462473,
+      0.27185330404220653
+    ]
+  },
+  "partial_target": {
+    "inputs": {
+      "source_full_length": 200,
+      "source_compared_span": 50,
+      "target_supplied_span": 50,
+      "target_full_length": null,
+      "pair_score": 90,
+      "source_span_self_score": 100,
+      "target_span_self_score": 100,
+      "declared_source_sites": 10,
+      "observed_mapped_sites": 3,
+      "exact_matches": 3
+    },
+    "sequence_snippet": 0.9,
+    "observed_site_fraction": 1.0,
+    "full_site_bounds": [
+      0.3,
+      1.0
+    ],
+    "R_snippet": 0.95,
+    "D_snippet": 0.9158262010720261,
+    "R_whole_molecule": null
+  }
+}

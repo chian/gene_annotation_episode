@@ -1,0 +1,115 @@
+{
+  "cleaned_at": "2026-10-20T14:00:48.035116+00:00",
+  "authorization": "User requested deletion of files from the last runs to free space.",
+  "root": "/home/chia/repos/gene_annotation_episode",
+  "deleted": [
+    {
+      "path": "validation",
+      "allocated_bytes_before": 1514205184,
+      "files_before": 14987
+    },
+    {
+      "path": "_superseded/2026-10-19-genome-runner/workspaces",
+      "allocated_bytes_before": 414126080,
+      "files_before": 650
+    },
+    {
+      "path": "_superseded/2026-10-19-genome-runner/validation",
+      "allocated_bytes_before": 54669312,
+      "files_before": 84
+    },
+    {
+      "path": "_superseded/2026-10-19-genome-runner/data",
+      "allocated_bytes_before": 8392704,
+      "files_before": 7
+    },
+    {
+      "path": "_superseded/2026-10-19-genome-runner/build",
+      "allocated_bytes_before": 1843200,
+      "files_before": 90
+    },
+    {
+      "path": "_superseded/2026-10-19-genome-runner/.pytest_cache",
+      "allocated_bytes_before": 36864,
+      "files_before": 5
+    },
+    {
+      "path": "build",
+      "allocated_bytes_before": 679936,
+      "files_before": 34
+    },
+    {
+      "path": "dist",
+      "allocated_bytes_before": 159744,
+      "files_before": 1
+    },
+    {
+      "path": ".pytest_cache",
+      "allocated_bytes_before": 49152,
+      "files_before": 5
+    }
+  ],
+  "deleted_generated_files": 15863,
+  "deleted_allocated_bytes": 1994162176,
+  "removed_bytecode_directories": 8,
+  "filesystem_free_before": 16803243462656,
+  "filesystem_free_after": 16805240614912,
+  "free_space_change_bytes": 1997152256,
+  "local_experimental_processes_before_deletion": [],
+  "preserved": [
+    "canonical source and tests including test fixtures",
+    "design/research documentation",
+    "installed Python/native tools",
+    "archived superseded source/design"
+  ],
+  "operational_incident": {
+    "selected_work": "Full-genome1,308,759nt global pairwise Bio.Align alignment",
+    "observed_host_rss_kib": 29187572,
+    "observed_host_virtual_peak_kib": 3346185268,
+    "signals_requested": "SIGINT",
+    "terminal_cause": "Not established; host was absent and saved run state still running before deletion.",
+    "scientific_completion": false
+  },
+  "run_outputs_retained": false,
+  "no_workflow_relaunched": true,
+  "latest_memory_check": {
+    "checked_at": "2026-10-20T14:15:34.231401+00:00",
+    "MemTotal_kib": 49117360,
+    "MemFree_kib": 40820976,
+    "MemAvailable_kib": 44582660,
+    "SwapTotal_kib": 8388604,
+    "SwapFree_kib": 7614876
+  },
+  "selected_native_job_limits": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null,
+    "source": "User selected 20 GiB RAM, 4 GiB scratch; time deferred for separate yield/credit discussion.",
+    "scratch_enforcement": "aggregate allocated-byte monitor with possible overshoot; hard per-file limit",
+    "memory_enforcement": "verified isolated cgroup memory.max; no job swap"
+  },
+  "desktop_notice_investigation": {
+    "recent_oom_entries": "isolated Python enforcement-test workers limited to 32 MiB",
+    "most_recent_observed_test_kill_local_time": "2026-10-20T09:12:59-05:00",
+    "pid": 479600,
+    "desktop_notification_correlation": "Likely related; exact notification contents not established from logs.",
+    "further_oom_tests": "None; test now requires explicit GENE_EPISODE_TEST_OOM=1"
+  },
+  "verification_caches_removed": [
+    "gene_annotation_episode/vendor/__pycache__",
+    "gene_annotation_episode/__pycache__",
+    "method_loop/__pycache__",
+    "tests/__pycache__",
+    ".pytest_cache"
+  ],
+  "safety_verification": {
+    "shared_boundary_checks_passed": 11,
+    "caller_configuration_checks_passed": 7,
+    "adapter_checks_passed_across_invocations": 15,
+    "worker_and_state_group_checks_passed": 47,
+    "worker_checks_after_final_refinement_passed": 4,
+    "counts_overlap": true,
+    "full_suite_rerun": false,
+    "biological_workflow_relaunched": false
+  }
+}

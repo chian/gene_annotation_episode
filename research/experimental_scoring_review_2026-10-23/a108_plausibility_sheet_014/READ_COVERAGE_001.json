@@ -1,0 +1,90 @@
+{
+  "recorded_at_utc": "2026-10-24T03:09:11.204550+00:00",
+  "meaning": "Read coverage is from actual tool-visible complete contents; hashes recorded now for file identity, not retroactive timestamps.",
+  "runs": [
+    {
+      "name": "INITIAL_READ",
+      "complete_full_set": true,
+      "order": "Attachment and entire review AGENTS first; complete authority set thereafter; review AGENTS, attachment, latest human reminder last",
+      "truncation": "Initial combined 3-batch output truncated. Repaired by full individual/small grouped reads of AGENTS+GOAL; EPISODE_STRUCTURE; TIME_AWARE; TOOL_KNOWLEDGE+TASK_AND_STEERING+two amendments; both VERBATIM files; library instructions+numeric sheet+source corrections+assignments; review AGENTS+attachment. Latest reminder printed/read last."
+    },
+    {
+      "name": "HUC_POST_READ_01",
+      "complete_full_set": true,
+      "completed_before": "Written HUC_CONVERSION_001 and opening second primary",
+      "truncation": "Combined reset output retained full AGENTS+GOAL+EPISODE_STRUCTURE but truncated TIME_AWARE/TOOL_KNOWLEDGE block. Repaired with full separate TIME_AWARE and full TOOL_KNOWLEDGE group. Remaining authority files read completely. Review AGENTS, attachment, local goal/criteria and latest reminder read last."
+    },
+    {
+      "name": "TTR_POST_READ_02",
+      "complete_full_set": true,
+      "completed_before": "Written TTR_CONVERSION_001 and current numerical sheet",
+      "truncation": "None in this reset; seven complete manageable reads, with latest reminder last."
+    }
+  ],
+  "latest_human_reminder": "Remember a goal is a goal - so you have to set the goal and the goal criteria more than the instructions",
+  "current_commission": "Read in conversation; all-ten scope, A108 definition, retained separate A110 and no production changes override historical A105-only assignment.",
+  "corpus_coverage": {
+    "path": "research/slotted_process_library/case_records.json",
+    "group_count_observed": 142,
+    "read_scope": "JSON shape plus organism/source URL/DOI metadata only for organism_01_ttr and organism_09_huc",
+    "retained_evidence_packet_bodies_read": false,
+    "other_corpus_sources_not_read": [
+      "10.1046/j.1365-2958.1999.01345.x",
+      "10.1074/jbc.RA119.011076"
+    ]
+  },
+  "primary_sources": [
+    {
+      "doi": "10.1038/s41586-023-05781-7",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10017518/fullTextXML",
+      "saved": "huc_2023_primary.xml",
+      "read_text": "huc_2023_primary_read.txt",
+      "complete_read_ranges_in_derived_text": [
+        "1-18",
+        "32-46",
+        "60-69",
+        "75-76"
+      ],
+      "coverage": "Main Huc gas-consumption result and Fig.1 textual caption; selected context; relevant statistics, strains, purification, amperometry and gas Methods. Other structural text incidentally visible but not used for scoring.",
+      "truncation": "Initial 1-55 request truncated. Required scoring sections subsequently read in complete bounded ranges; entire 1-55 is not claimed read.",
+      "not_read": [
+        "figure images",
+        "supplementary tables and notes",
+        "raw source-data workbooks",
+        "entire article including all structural methods"
+      ],
+      "access_failures": [
+        "PMC web browser challenge",
+        "Nature redirect inaccessible"
+      ]
+    },
+    {
+      "doi": "10.1038/nature09415",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC2946174/fullTextXML",
+      "saved": "ttr_2010_primary.xml",
+      "read_text": "ttr_2010_primary_read.txt",
+      "complete_read_ranges_in_derived_text": [
+        "1-21"
+      ],
+      "coverage": "Complete main body plus Methods Summary; all four main figure captions separately extracted from XML floats; Figure1 image viewed.",
+      "figure1_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/8d32/2946174/050e9569361f/nihms225970f1.jpg",
+      "figure1_saved": "ttr_fig1.jpg",
+      "not_read": [
+        "Supplementary Methods DOC",
+        "supplementary figures PDF",
+        "exact raw LC-MS measurements",
+        "references as primary papers"
+      ],
+      "access_failures": [
+        "PMC web browser challenge; urllib later obtained article HTML used only to find asset links",
+        "EuropePMC figure route returned 403",
+        "EuropePMC supplementary ZIP contained a zero-byte image only",
+        "NCBI OA route attempted returned 404",
+        "PMC supplementary DOC and PDF routes returned HTML rather than documents"
+      ],
+      "plot_value_origin": "Manual visual approximation; not claimed as precise reported number"
+    }
+  ],
+  "runtime_work": "No scientific episode, HPC job, new experiment, production reader/scorer/prompt/library change.",
+  "arithmetic_check": "python3 check_arithmetic_001.py; exit 0; ARITHMETIC_RESULTS_001.json reports passed."
+}

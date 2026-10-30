@@ -1,0 +1,120 @@
+{
+  "slot": "annotation_distinction",
+  "id": "A06",
+  "name": "Contribution within a biological system",
+  "description": "Represent a target’s specific responsibility in a multi-component process: execution, activation, cofactor supply, assembly, positioning, reset or another bounded contribution.",
+  "claim_scope": "A causal contribution to a named cellular/biochemical system, distinct from whole-system output and association alone.",
+  "distinctions": [
+    "Required component versus performer of headline chemistry.",
+    "Enzyme-like fold versus activation of another catalyst.",
+    "Pairwise binding versus simultaneous scaffolding/productive assembly.",
+    "ATPase versus reset enabling repeated product formation.",
+    "A real phenotype versus an unresolved physical connector."
+  ],
+  "example_structured_values": {
+    "status": "illustrative_only_not_an_adopted_schema",
+    "fields": {
+      "system_contribution": [
+        "direct_product_chemistry",
+        "activation_of_other_catalyst",
+        "cofactor_supply",
+        "assembly_or_target_positioning",
+        "reset_for_repeated_operation",
+        "substrate_access",
+        "RNA_processing_accessory",
+        "unresolved"
+      ],
+      "contribution_resolution": [
+        "association_only",
+        "defined_component_requirement",
+        "specific_contribution_discriminated",
+        "unresolved"
+      ],
+      "catalytic_capacity_explains_system_role": [
+        "yes_under_test",
+        "not_required_for_tested_role",
+        "not_established"
+      ]
+    },
+    "required_typed_references": [
+      "target_entity_ref",
+      "system_or_process_ref",
+      "partner_refs",
+      "specific_output_ref",
+      "perturbation_and_control_refs",
+      "observation_refs"
+    ],
+    "meaning": "Finite examples of declared values/reference types, not a complete ontology, numerical credit scale, adopted scoring axis or claim of existing runtime compatibility."
+  },
+  "not_established": [
+    "Association/co-migration does not establish direct chemistry or stable membership.",
+    "A family-site expectation does not prove the target mutant catalytically null.",
+    "One endpoint does not establish every stage of system operation.",
+    "Participation can be supported while the connector is unresolved."
+  ],
+  "follow_up_lane_ids": [
+    "F02",
+    "F03",
+    "F04",
+    "F05"
+  ],
+  "boundary": "A01 describes direct operation; A06 its system responsibility. A08 gives physiological consequences and A09 necessity given alternatives.",
+  "evidence": [
+    {
+      "case_group": "causal_envC_activation",
+      "case_id": "causal_envC_activation",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3923381/",
+      "source_locator": "2013 relevant Results/Methods; Table 1; active-site and stable/localized variant comparisons.",
+      "observation": "Absent active-LytM zinc coordination and stable septal activation-defective variants support amidase activation instead of copied peptidase chemistry.",
+      "limit": "Direct complex detection failed and helix-contact mechanism remains proposed."
+    },
+    {
+      "case_group": "causal_cas2_spacer_acquisition",
+      "case_id": "causal_cas2_spacer_acquisition",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4359072/",
+      "source_locator": "Protospacer integration Results; Fig. 1 and Extended Data Figs. 2–3.",
+      "observation": "Cas2 E9Q supports integration while an assembly-interface deletion does not; Cas1 active-site variants fail.",
+      "limit": "No directly demonstrated E. coli Cas2 nuclease-null assay; low Cas1-only Mn2+ activity bounds absolute necessity."
+    },
+    {
+      "case_group": "causal_cas2_spacer_acquisition",
+      "case_id": "causal_cas2_spacer_acquisition",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4662619/",
+      "source_locator": "Protospacer-capture Results/Methods; trace descriptive 5DS4/5DS5 coordinate analysis.",
+      "observation": "Donor-DNA structures and acquisition variants assign a positive DNA-positioning/assembly contribution rather than an absence-only passive label.",
+      "limit": "Static geometry is not necessity/binding affinity; not every clamp variant has an independent affinity assay."
+    },
+    {
+      "case_group": "chem_ubix",
+      "case_id": "chem_ubix",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4988493/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Relevant primary body and methods, including substrate tests, filtrate reconstitution and structure work, inspected.",
+      "observation": "Protein-free reaction filtrate activates apo-Fdc1, assigning cofactor-supply chemistry to UbiX rather than downstream decarboxylation.",
+      "limit": "Native DMAP source and universal precursor specificity remain unestablished."
+    },
+    {
+      "case_group": "causal_tsaE_turnover",
+      "case_id": "causal_tsaE_turnover",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5814804/",
+      "source_locator": "2018 single/multiple-turnover Results/Methods and Discussion; trace T1.",
+      "observation": "TmTsaBD makes/releases one product without TsaE, but ATPase-defective TsaE fails sustained turnover, locating a reset contribution.",
+      "limit": "Species/assay discrepancy with E. coli endpoint evidence remains open."
+    },
+    {
+      "case_group": "cellular_y_complex",
+      "case_id": "cellular_y_complex",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6004469/",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Three full primary papers inspected. Downloaded 76-file GEO processed-track archive and exact reference feature table; interrogated selected tracks in known cggR/gapA, glnR/glnA, rpoB and rnpB windows. No raw-read realignment or formal replication statistics.",
+      "observation": "Selected transcript-processing defects support a bounded RNase Y accessory contribution rather than all RNase Y activity or resolved direct phosphorelay action.",
+      "limit": "Conflicting historical studies remain; selected deposited-track windows were inspected without raw-read realignment."
+    },
+    {
+      "case_group": "cellular_yejM",
+      "case_id": "cellular_yejM",
+      "source_url": "https://journals.asm.org/doi/10.1128/mbio.00939-20",
+      "source_locator": "Case-record actual_observations and annotation_consequence; recorded inspection scope: Publisher full Results examined, including 10/12 suppressors and turnover controls.",
+      "observation": "LpxC turnover, suppressors and LapB association support LPS-synthesis regulation; lipid effects alone did not establish cardiolipin transport.",
+      "limit": "Does not settle every molecular contact or every YejM function."
+    }
+  ]
+}

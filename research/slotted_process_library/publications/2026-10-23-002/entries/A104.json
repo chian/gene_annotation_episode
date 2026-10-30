@@ -1,0 +1,453 @@
+{
+  "description": "Native tree/placement support and explicit clade, organism-history and outlier-explanation criteria for annotation evidence.",
+  "entry_version": "evidence_axis_entry_v1",
+  "evidence": [
+    {
+      "case_group": "seq_yjeH_exporter_ecoli",
+      "case_id": "seq_yjeH_exporter_ecoli",
+      "limit": "Primary sequence-modeling methods, phylogenetic results and functional assays inspected through indexed full-text sections. No transport experiment rerun.",
+      "observation": "Authors compared YjeH with AdiC, PotE and CadB and constructed an APC-transporter tree; YjeH grouped with the amino-acid efflux branch.",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:4#/actual_observations/0",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4616930/"
+    },
+    {
+      "case_group": "context_oarx_thiamin_2024",
+      "case_id": "context_oarx_thiamin_2024",
+      "limit": "Complete primary methods/results read through Europe PMC XML; deposited XLSX parsed; actual ENA genome record retrieved. No annotation run or experiment performed. Table and experimental strains were kept distinct. | Group source-use limits: The original workbook-derived 87/22/65 counts and ENA inspection are preserved in coverage but not extra biological replications. ATCC13032 table and ATCC14067 experiments remain different.",
+      "observation": "OarX coexists with canonical FabG and belongs to a separate clade. Neighborhoods connect it to thiamin enzymes/transporters and TPP riboswitches; FmnO occurs only in a subset. Canonical thiamin biosynthesis is already accounted for. Physiological-dose growth tests failed to support salvage of PCA, MTA, oxo-HET, oxo-thiamin, or thiamin acetic acid.",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:1#/actual_observations/paper_reported",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11223231/"
+    },
+    {
+      "case_group": "context_archaeal_shikimate_kinase_2001",
+      "case_id": "context_archaeal_shikimate_kinase_2001",
+      "limit": "Complete main paper, genome-analysis methods, results, and substrate-assay methods read. No WIT reconstruction, alignment, or enzyme assay rerun. Historical WIT identifier retained without an unverified modern-locus mapping. | Group source-use limits: Related genome occurrences are not asserted independent tests. The historical WIT/gi identity is preserved without an invented modern locus mapping; none of the analyses was rerun.",
+      "observation": "The target genome has dispersed chorismate genes. In Aeropyrum pernix and Pyrococcus abyssi, an unknown GHMP-kinase-like gene lies immediately downstream of shikimate dehydrogenase. Its homologs occur in pathway-bearing archaea but not the pathway-lacking P. horikoshii comparison. A separate GHMP paralog, RMJ01903, tracks threonine-biosynthesis genes in other archaeal genomes.",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:2#/actual_observations",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC94878/"
+    },
+    {
+      "case_group": "quef",
+      "case_id": "context_quef_nitrile_reductase_2005",
+      "limit": "Primary introduction, bioinformatics comparisons, relevant complete results, and assay/product-analysis methods read. Earlier 2004 discovery paper not fully inspected and not counted separately; no searches or assays rerun.",
+      "observation": "The authors\u2019 preceding genomic search associated QueCDEF with queuosine. QueF lacks an archaeal counterpart, unlike QueCDE. Cyclohydrolase assays were negative with positive controls. Reconsidering the distribution placed QueF after preQ0, the shared queuosine/archaeosine intermediate. Lack of a B12-binding motif favored testing preQ0 reduction before epoxyqueuosine reduction.",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:4#/actual_observations",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC555470/"
+    },
+    {
+      "case_group": "replacement_queH",
+      "case_id": "replacement_queH",
+      "limit": "Full relevant primary results/methods in both papers; independent read-only 7LC5 coordinate probe recorded separately. No cultures, mass-spectrometric assays or mechanism reconstruction rerun.",
+      "observation": "Authors found inverse QueG/DUF208 distribution, Q-pathway neighborhoods and QueA fusions.",
+      "source_locator": "research/slotted_process_library/corpus/replacement/cases.jsonl:1#/actual_observations/0/observation",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5495094/"
+    },
+    {
+      "case_group": "seq_hisZ_lactococcus",
+      "case_id": "seq_hisZ_lactococcus",
+      "limit": "Primary abstract, genetic results, direct-subunit investigation and discussion inspected through indexed full-text sections. No new comparative genomics run.",
+      "observation": "Comparative genomics linked HisZ occurrence to systematic HisG length differences.",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:16#/actual_observations/0",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC17719/"
+    },
+    {
+      "case_group": "seq_ygbP_ispD_ecoli",
+      "case_id": "seq_ygbP_ispD_ecoli",
+      "limit": "Primary results for purification, nucleotide preference, NMR and the database-search narrative inspected through indexed full-text sections; no live pathway analysis.",
+      "observation": "Homolog occurrence correlated with the nonmevalonate pathway in the examined genomes.",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:8#/actual_observations/2",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC18359/"
+    }
+  ],
+  "id": "A104",
+  "judgment_criteria": [
+    {
+      "criterion_id": "phylogeny_actually_reconstructed",
+      "deterministic_test": null,
+      "outcomes": {
+        "met": "The received result identifies homologs/taxa, method and an actual tree or placement for the relevant target and comparators, retaining the reported uncertainty.",
+        "not_met": "A nearest sequence hit or a presence/absence list is presented as a reconstructed tree, or the cited tree does not include the target/comparison claimed.",
+        "unknown": "No actual relevant tree/placement, homolog sampling, method or necessary taxon mapping has been received."
+      },
+      "question": "Does the evidence provide an actual relevant phylogenetic analysis?",
+      "required_evidence": [
+        "homolog_taxon_inventory",
+        "alignment_and_tree_method",
+        "actual_tree_or_placement"
+      ],
+      "required_metric_ids": []
+    },
+    {
+      "criterion_id": "placement_matches_characterized_clade",
+      "deterministic_test": null,
+      "outcomes": {
+        "met": "The actual topology/placement locates the target among source-characterized members bearing the candidate property, with the reported branch/placement uncertainty and exceptions retained.",
+        "not_met": "The actual placement lies in a characterized clade with an incompatible property, or an asserted target membership is contradicted by the cited topology.",
+        "unknown": "The relevant members\u2019 functions, target membership or placement support are unresolved; clustering by label alone does not settle the candidate property."
+      },
+      "question": "Is the target placed in a functionally characterized clade relevant to the candidate annotation?",
+      "required_evidence": [
+        "actual_tree_or_placement",
+        "characterized_clade_members",
+        "target_clade_assignment"
+      ],
+      "required_metric_ids": []
+    },
+    {
+      "criterion_id": "organism_history_congruence_examined",
+      "deterministic_test": null,
+      "outcomes": {
+        "met": "The received gene/organism comparison is compatible with the expected history at the assessed scope, with relevant duplication, loss and sampling alternatives retained.",
+        "not_met": "A received comparison demonstrates incongruence or an outlying placement inconsistent with the claimed unqualified vertical-history interpretation.",
+        "unknown": "The organismal history, gene-tree comparison, paralog identity or informative sampling is absent or too uncertain to decide."
+      },
+      "question": "Does the inferred gene history fit the organismal evolutionary context?",
+      "required_evidence": [
+        "actual_tree_or_placement",
+        "organism_history",
+        "paralog_and_sampling_context"
+      ],
+      "required_metric_ids": []
+    },
+    {
+      "criterion_id": "hgt_outlier_explanation",
+      "deterministic_test": null,
+      "outcomes": {
+        "met": "The proposed transfer explanation is consistent with the actual outlying placement, a plausible source/recipient relationship and independent received context or sequence/genomic support, while unresolved alternatives are retained.",
+        "not_met": "Received placement, source/recipient context or independent evidence contradicts the proposed transfer explanation; shared environment alone is treated as proof despite that contradiction.",
+        "unknown": "Transfer has not been established as a relevant alternative, the source/recipient context is missing, or placement/alternative explanations remain insufficiently constrained."
+      },
+      "question": "If horizontal transfer is proposed, is there a source-grounded explanation for the outlying placement?",
+      "required_evidence": [
+        "outlying_gene_placement",
+        "possible_source_context",
+        "recipient_context",
+        "independent_transfer_evidence_or_alternative"
+      ],
+      "required_metric_ids": []
+    }
+  ],
+  "name": "Evolutionary history and phylogenetic placement",
+  "native_measurements": [
+    {
+      "binding": {
+        "json_pointer": null,
+        "kind": "unbound",
+        "measurement_name": null
+      },
+      "comparison_limits": [
+        "No tree-support extractor is claimed by this unbound descriptor. A nearest-hit score or distribution list is not branch support.",
+        "Different support statistics and gene/sample sets are not automatically comparable or independent."
+      ],
+      "direction": "higher",
+      "method_requirements": [
+        "An actual tree or placement result identifies homologs, the alignment, model/method, relevant branch and the reported support statistic.",
+        "Retain whether the quantity is bootstrap support, posterior support or another actual statistic and preserve its native scale."
+      ],
+      "metric_id": "clade_support",
+      "name": "Native support for the relevant branch or placement",
+      "native_field": null,
+      "observation_kinds": [
+        "comparison",
+        "context",
+        "context_measurement"
+      ],
+      "units": [
+        "percent",
+        "probability",
+        "native_support_unit"
+      ]
+    },
+    {
+      "binding": {
+        "json_pointer": null,
+        "kind": "unbound",
+        "measurement_name": null
+      },
+      "comparison_limits": [
+        "A long branch or outlying placement is not automatically a functional contradiction or proof of horizontal transfer. Missing taxa, paralogs and tree uncertainty remain alternatives."
+      ],
+      "direction": "target_dependent",
+      "method_requirements": [
+        "An actual phylogenetic result identifies the target placement, relevant branches, native distance definition and model."
+      ],
+      "metric_id": "placement_branch_length",
+      "name": "Native branch length or placement distance",
+      "native_field": null,
+      "observation_kinds": [
+        "comparison",
+        "context_measurement"
+      ],
+      "units": [
+        "substitutions_per_site",
+        "native_branch_length_unit"
+      ]
+    },
+    {
+      "binding": {
+        "json_pointer": null,
+        "kind": "unbound",
+        "measurement_name": null
+      },
+      "comparison_limits": [
+        "Do not invent a universal tree-congruence score, infer an unmeasured transfer event or silently equate duplication/loss with horizontal transfer."
+      ],
+      "direction": "target_dependent",
+      "method_requirements": [
+        "An actual comparison specifies the gene tree, organismal history, taxon mapping and its native congruence/reconciliation statistic."
+      ],
+      "metric_id": "gene_species_congruence_statistic",
+      "name": "Native gene-versus-organism history comparison",
+      "native_field": null,
+      "observation_kinds": [
+        "comparison",
+        "context_measurement"
+      ],
+      "units": [
+        "native_congruence_statistic"
+      ]
+    },
+    {
+      "binding": {
+        "json_pointer": null,
+        "kind": "unbound",
+        "measurement_name": null
+      },
+      "comparison_limits": [
+        "Bootstrap support measures support for a split under a procedure, not annotation-function probability. Standard and ultrafast bootstrap percentages are not interchangeable calibrations.",
+        "A native support extractor is not bound by this definition."
+      ],
+      "direction": "higher",
+      "method_requirements": [
+        "Retain actual tree/placement, relevant branch, sampled homologs, alignment/model, support method (standard or ultrafast) and replicate count.",
+        "Use the exact recorded support value in percent; preserve method-specific meaning and uncertainty."
+      ],
+      "metric_id": "bootstrap_clade_support_percent",
+      "name": "Native bootstrap percentage for the relevant target clade",
+      "native_field": "bootstrap_support",
+      "observation_kinds": [
+        "comparison",
+        "context_measurement"
+      ],
+      "units": [
+        "percent"
+      ],
+      "valid_range": {
+        "maximum": 100,
+        "minimum": 0
+      }
+    },
+    {
+      "binding": {
+        "json_pointer": null,
+        "kind": "unbound",
+        "measurement_name": null
+      },
+      "comparison_limits": [
+        "A model-conditioned probability for the clade is not a posterior probability of the candidate annotation and is not interchangeable with bootstrap frequency.",
+        "No Bayesian phylogeny operation/extractor is bound by this definition."
+      ],
+      "direction": "higher",
+      "method_requirements": [
+        "Retain actual sampled tree analysis, relevant branch, model, alignment, taxa and diagnostic/method context."
+      ],
+      "metric_id": "posterior_clade_probability",
+      "name": "Native posterior probability of the relevant clade under a declared phylogenetic model",
+      "native_field": "posterior_support",
+      "observation_kinds": [
+        "comparison",
+        "context_measurement"
+      ],
+      "units": [
+        "probability"
+      ],
+      "valid_range": {
+        "maximum": 1,
+        "minimum": 0
+      }
+    },
+    {
+      "binding": {
+        "json_pointer": null,
+        "kind": "unbound",
+        "measurement_name": null
+      },
+      "comparison_limits": [
+        "Do not recover counts by rounding a displayed percentage or treat phylogenetic replicates as independent biological experiments."
+      ],
+      "direction": "higher",
+      "method_requirements": [
+        "Use an actual counted number of the specified generated replicate trees containing the exact split of interest."
+      ],
+      "metric_id": "supported_clade_replicates",
+      "name": "Bootstrap replicates containing the target clade",
+      "native_field": "supporting_replicate_count",
+      "observation_kinds": [
+        "comparison",
+        "context_measurement"
+      ],
+      "units": [
+        "replicate"
+      ],
+      "valid_range": {
+        "maximum": null,
+        "minimum": 0
+      }
+    },
+    {
+      "binding": {
+        "json_pointer": null,
+        "kind": "unbound",
+        "measurement_name": null
+      },
+      "comparison_limits": [
+        "A zero or missing denominator leaves bootstrap fraction unavailable."
+      ],
+      "direction": "not_ordered",
+      "method_requirements": [
+        "Use the same actual tree sample and split definition as the supporting replicate count."
+      ],
+      "metric_id": "evaluable_clade_replicates",
+      "name": "Actual phylogenetic bootstrap replicate count",
+      "native_field": "replicate_count",
+      "observation_kinds": [
+        "comparison",
+        "context_measurement"
+      ],
+      "units": [
+        "replicate"
+      ],
+      "valid_range": {
+        "maximum": null,
+        "minimum": 0
+      }
+    }
+  ],
+  "qualitative_grading": [
+    {
+      "criterion_id": "hgt_outlier_explanation",
+      "kind": "hgt_environment_explanation",
+      "ordered_levels": [
+        {
+          "code": "contradicted",
+          "meaning": "Received biological or sequence/genomic evidence contradicts the stated transfer explanation."
+        },
+        {
+          "code": "plausible_only",
+          "meaning": "Source/recipient circumstances are compatible with transfer, but independent evidence does not distinguish it from retained alternatives."
+        },
+        {
+          "code": "corroborated",
+          "meaning": "The explanation is compatible with the outlying placement and source/recipient circumstances and has independent received supporting evidence; retain remaining uncertainty."
+        }
+      ],
+      "reason_no_native_metric": "Native tree support and congruence are retained above. The biological plausibility of a particular transfer explanation from source/recipient environments and other evidence has no universal native numerical statistic; the user explicitly permitted a pseudo-grader for this explanation."
+    }
+  ],
+  "scoring_rubric": {
+    "routes": [
+      {
+        "bands": [],
+        "direction": "higher",
+        "eligible_when": [
+          "phylogeny_actually_reconstructed",
+          "placement_matches_characterized_clade"
+        ],
+        "grade_criterion": null,
+        "grade_scores": {},
+        "interpretation": "s=reported bootstrap support percent on the relevant branch;92 remains92percent. Keep bootstrap method, tree and sampling scope separate. No cutoff turns this into proof of function; node support is not a score for compatibility with organism history.",
+        "metric_ids": [
+          "bootstrap_clade_support_percent"
+        ],
+        "operation": "identity",
+        "polarity": "supporting",
+        "route_id": "phylogeny_bootstrap_percent",
+        "score_unit": "percent"
+      },
+      {
+        "bands": [],
+        "direction": "higher",
+        "eligible_when": [
+          "phylogeny_actually_reconstructed",
+          "placement_matches_characterized_clade"
+        ],
+        "grade_criterion": null,
+        "grade_scores": {},
+        "interpretation": "s=k/n for actual supporting replicate count k and actual total n,0<=k<=n,n>0. Example920/1000 gives0.92. This is a unit-scale representation of one tree support statistic; it is not extra evidence beyond the percent route.",
+        "metric_ids": [
+          "supported_clade_replicates",
+          "evaluable_clade_replicates"
+        ],
+        "operation": "ratio",
+        "polarity": "supporting",
+        "route_id": "phylogeny_bootstrap_fraction",
+        "score_unit": "bootstrap_fraction"
+      },
+      {
+        "bands": [],
+        "direction": "higher",
+        "eligible_when": [
+          "phylogeny_actually_reconstructed",
+          "placement_matches_characterized_clade"
+        ],
+        "grade_criterion": null,
+        "grade_scores": {},
+        "interpretation": "s=actual model-conditioned clade posterior;0.97 remains0.97. Preserve model and sampling. It does not assign97percent probability to the annotation, and it is not averaged with bootstrap support.",
+        "metric_ids": [
+          "posterior_clade_probability"
+        ],
+        "operation": "identity",
+        "polarity": "supporting",
+        "route_id": "phylogeny_posterior_clade",
+        "score_unit": "clade_posterior_probability"
+      },
+      {
+        "bands": [],
+        "direction": "not_ordered",
+        "eligible_when": [
+          "phylogeny_actually_reconstructed",
+          "organism_history_congruence_examined"
+        ],
+        "grade_criterion": null,
+        "grade_scores": {},
+        "interpretation": "Retain the actual method-specific gene-versus-organism congruence/reconciliation score with its null/model and sign convention. A contradiction of unqualified vertical inheritance does not itself refute function or prove HGT. No native statistic is invented from an environmental narrative.",
+        "metric_ids": [
+          "gene_species_congruence_statistic"
+        ],
+        "operation": "identity",
+        "polarity": "supporting",
+        "route_id": "phylogeny_native_history_comparison",
+        "score_unit": "native_congruence_statistic"
+      },
+      {
+        "bands": [],
+        "direction": "higher",
+        "eligible_when": [
+          "phylogeny_actually_reconstructed"
+        ],
+        "grade_criterion": "hgt_outlier_explanation",
+        "grade_scores": {
+          "contradicted": 0,
+          "corroborated": 2,
+          "plausible_only": 1
+        },
+        "interpretation": "PROPOSED ordinal evidence grade only for the user-permitted biological explanation of an actual phylogenetic outlier: contradicted=0, plausible_only=1, corroborated=2. Unknown remains unavailable. These numbers are ordered rubric levels, not probabilities, likelihoods, referral credit or multiplicative weights on the native tree score. The grade does not manufacture a phylogenetic tree or target-clade support.",
+        "metric_ids": [],
+        "operation": "grade",
+        "polarity": "supporting",
+        "route_id": "hgt_explanation_grade",
+        "score_unit": "ordinal_evidence_level"
+      }
+    ],
+    "status": "proposed",
+    "version": "evidence_axis_scoring_v1"
+  },
+  "slot": "evidence_axis",
+  "transfer_chain": {
+    "correspondence": "Connect the target\u2019s actual tree placement to those members and compare gene history with organismal history, preserving native reported support.",
+    "limitations": "Retain taxon sampling, paralog identity, duplication/loss, tree uncertainty and environmental/source limits. A biological explanation grade is not a replacement for tree evidence or an invented numeric weight.",
+    "source_property": "Retain the experimentally characterized clade-member properties separately from copied labels or occurrence patterns.",
+    "source_subject": "Identify the actual gene/homolog sequences and taxa represented in the phylogenetic comparison.",
+    "target_hypothesis": "Identify the candidate function supported or challenged by that placement, and separately identify any proposed transfer explanation."
+  }
+}

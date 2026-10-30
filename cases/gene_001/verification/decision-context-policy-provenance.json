@@ -1,0 +1,51 @@
+{
+  "version": "decision_context_policy_provenance_verification_v1",
+  "captured_at_utc": "2026-10-21T08:40:10.598822+00:00",
+  "observed_source": {
+    "run_id": "run_78b9a04b050d48518b0fdfa9341345a6",
+    "episode_id": "episode_158c821c47c441bc33c31b1b5125832e1e3b503ec6257dcaa4833a6ec0ea4d19",
+    "call_index": 6,
+    "context_bytes_compact_json": 137233,
+    "binding_bytes": {
+      "credit_binding": 39745,
+      "controller_binding": 42621
+    },
+    "parameter_document_copies": 2,
+    "inherited_reference_count": 747
+  },
+  "corrected_projection_of_same_context": {
+    "context_bytes_compact_json": 59277,
+    "binding_bytes": {
+      "credit_binding": 767,
+      "controller_binding": 3643
+    },
+    "configured_model_delivery": false
+  },
+  "verification": {
+    "command": ".venv/bin/python -m pytest -q tests/test_case_execution.py --tb=short",
+    "passed": 9,
+    "seconds": 34.78,
+    "checks": [
+      "actual_scripted_parent_launch_child_parent_contexts_contain_provenance_fingerprint_not_full_parameters",
+      "complete_configuration_retained_in_policy_binding_file",
+      "effective_credit_and_controller_settings_still_supplied",
+      "same_completed_actions_observations_on_resume",
+      "no_native_submission_for_this_fixture"
+    ]
+  },
+  "current_main_source_sha256": {
+    "gene_annotation_episode/case_execution.py": "b3d5bc216fd8ed575d2d3ce1e6eddef83ed0861cbd014080ddffb6b61e3b244e",
+    "tests/test_case_execution.py": "c51f9f8c38c6bd001f8bd412638ab9fe5fb6cb9ca2dffef0506dea7f126ac1f0"
+  },
+  "live_run_implementation_changed": false,
+  "current_call_latency_cause_established": false,
+  "actual_configured_model_delivery": {
+    "run_id": "run_948c9e402c444ec0923ff7034db2cc50",
+    "call_index": 0,
+    "credit_binding_bytes": 1261,
+    "controller_binding_bytes": 3643,
+    "complete_parameter_copies": 0,
+    "scientific_credit": 15.0,
+    "controller_initial_credit": 15.0
+  }
+}

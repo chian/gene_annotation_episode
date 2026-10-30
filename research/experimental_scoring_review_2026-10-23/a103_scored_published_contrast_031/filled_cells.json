@@ -1,0 +1,359 @@
+{
+  "artifact_kind": "research_filled_reference_example_not_production_input",
+  "context_questions": [
+    {
+      "question_ref": "bioy_bion_reference_neighborhood",
+      "scope_ref": "Rhodobacter_capsulatus_SB1003_reference_loci",
+      "metric_route": "native_neighborhood_score",
+      "metric_selection_basis": "specified_native_channel",
+      "predicate": {
+        "relation": "native_neighborhood_association",
+        "subject_ref": "272942.RCAP_rcc03249",
+        "anchor_or_module_ref": "272942.RCAP_rcc03250",
+        "expected_pattern_ref": "FILLED_CONTRAST.md#what-was-investigated",
+        "direction_evidence_ref": "SOURCE_AND_IDENTITY_TRACE.md#published-bioy-case-inspected-scope-and-denominator-diagnosis",
+        "spatial_rule": null
+      },
+      "native": {
+        "program": "STRING",
+        "program_version": "12.5_observed_same_session",
+        "database_version": "12.5_observed_same_session",
+        "definition_ref": "https://string-db.org/help/api/#retrieving-interaction-network",
+        "pair_ids": [
+          "272942.RCAP_rcc03249",
+          "272942.RCAP_rcc03250"
+        ],
+        "taxon_ref": "ncbitaxon:272942",
+        "target_mapping_status": "exact_scored_entity",
+        "mapping_evidence_refs": [
+          "string_bioy_mapping_001.json",
+          "uniprot_locus_aliases_001.json"
+        ],
+        "channel": "neighborhood",
+        "field_name": "nscore",
+        "raw_value": 0.844,
+        "raw_scale": "unit_interval",
+        "score": {
+          "state": "point",
+          "point": 0.844,
+          "lower": 0.844,
+          "upper": 0.844,
+          "units": "fraction",
+          "origin": "dataset_observed",
+          "input_refs": [
+            "string_bioy_bion_network_002.json#/0/nscore"
+          ],
+          "calculation_ref": "identity",
+          "missing_reason": null,
+          "identification_uncertainty": "none",
+          "sampling_interval": null,
+          "calibration_uncertainty": "unreported",
+          "calibration_ref": null
+        },
+        "direction": "supports_context_predicate",
+        "direction_evidence_ref": "FILLED_CONTRAST.md#what-was-investigated",
+        "calibration_endpoint": "functional_association",
+        "calibration_population_ref": null,
+        "included_evidence": {
+          "direct": null,
+          "transferred": null,
+          "source_genome_refs": null
+        },
+        "retrieval": {
+          "record_ref": "string_bioy_bion_network_002.json#/0",
+          "timestamp": "request_manifest.json#network_002.response_saved_utc",
+          "network_type": "functional",
+          "cutoff": 0,
+          "limit": null,
+          "returned_rows": 1,
+          "selected_pair_rows": 1,
+          "truncated": false
+        },
+        "auxiliary_channel_values": [
+          {
+            "field_name": "score",
+            "raw_value": 0.999,
+            "units": "unit_interval",
+            "source_ref": "string_bioy_bion_network_002.json#/0/score"
+          },
+          {
+            "field_name": "fscore",
+            "raw_value": 0.0,
+            "units": "unit_interval",
+            "source_ref": "string_bioy_bion_network_002.json#/0/fscore"
+          },
+          {
+            "field_name": "pscore",
+            "raw_value": 0.766,
+            "units": "unit_interval",
+            "source_ref": "string_bioy_bion_network_002.json#/0/pscore"
+          },
+          {
+            "field_name": "ascore",
+            "raw_value": 0.064,
+            "units": "unit_interval",
+            "source_ref": "string_bioy_bion_network_002.json#/0/ascore"
+          },
+          {
+            "field_name": "escore",
+            "raw_value": 0.655,
+            "units": "unit_interval",
+            "source_ref": "string_bioy_bion_network_002.json#/0/escore"
+          },
+          {
+            "field_name": "dscore",
+            "raw_value": 0.8,
+            "units": "unit_interval",
+            "source_ref": "string_bioy_bion_network_002.json#/0/dscore"
+          },
+          {
+            "field_name": "tscore",
+            "raw_value": 0.892,
+            "units": "unit_interval",
+            "source_ref": "string_bioy_bion_network_002.json#/0/tscore"
+          }
+        ]
+      }
+    }
+  ],
+  "result": {
+    "axis_id": "A103",
+    "sheet_version": "a103_complete_deliverable_023",
+    "candidate_ref": "BioY_BioN_reference_neighborhood_association",
+    "context_predicate_refs": [
+      "bioy_bion_reference_neighborhood"
+    ],
+    "question_results": [
+      {
+        "question_ref": "bioy_bion_reference_neighborhood",
+        "weight": 1,
+        "metric_route": "native_neighborhood_score",
+        "C": {
+          "state": "not_applicable",
+          "point": null,
+          "lower": null,
+          "upper": null,
+          "units": "fraction",
+          "origin": "proposed_policy",
+          "input_refs": [],
+          "calculation_ref": "../a103_complete_deliverable_023/NUMERICAL_SHEET.md#the-numerical-sheet",
+          "missing_reason": "not_this_route",
+          "identification_uncertainty": "not_applicable",
+          "sampling_interval": null,
+          "calibration_uncertainty": "not_applicable",
+          "calibration_ref": null
+        },
+        "E": {
+          "state": "not_applicable",
+          "point": null,
+          "lower": null,
+          "upper": null,
+          "units": "fraction",
+          "origin": "proposed_policy",
+          "input_refs": [],
+          "calculation_ref": "../a103_complete_deliverable_023/NUMERICAL_SHEET.md#the-numerical-sheet",
+          "missing_reason": "not_this_route",
+          "identification_uncertainty": "not_applicable",
+          "sampling_interval": null,
+          "calibration_uncertainty": "not_applicable",
+          "calibration_ref": null
+        },
+        "t": {
+          "state": "point",
+          "point": 0.844,
+          "lower": 0.844,
+          "upper": 0.844,
+          "units": "signed_index",
+          "origin": "proposed_policy",
+          "input_refs": [
+            "string_bioy_bion_network_002.json#/0/nscore",
+            "direction=+1"
+          ],
+          "calculation_ref": "t=d*s",
+          "missing_reason": null,
+          "identification_uncertainty": "none",
+          "sampling_interval": null,
+          "calibration_uncertainty": "unreported",
+          "calibration_ref": null
+        },
+        "native_score": {
+          "state": "point",
+          "point": 0.844,
+          "lower": 0.844,
+          "upper": 0.844,
+          "units": "fraction",
+          "origin": "dataset_observed",
+          "input_refs": [
+            "string_bioy_bion_network_002.json#/0/nscore"
+          ],
+          "calculation_ref": "identity",
+          "missing_reason": null,
+          "identification_uncertainty": "none",
+          "sampling_interval": null,
+          "calibration_uncertainty": "unreported",
+          "calibration_ref": null
+        },
+        "stratum_results": []
+      }
+    ],
+    "supporting_total": {
+      "state": "point",
+      "point": 0.844,
+      "lower": 0.844,
+      "upper": 0.844,
+      "units": "fraction",
+      "origin": "proposed_policy",
+      "input_refs": [
+        "t",
+        "w=1"
+      ],
+      "calculation_ref": "sum(w*max(t,0))",
+      "missing_reason": null,
+      "identification_uncertainty": "none",
+      "sampling_interval": null,
+      "calibration_uncertainty": "unreported",
+      "calibration_ref": null
+    },
+    "opposing_total": {
+      "state": "point",
+      "point": 0.0,
+      "lower": 0.0,
+      "upper": 0.0,
+      "units": "fraction",
+      "origin": "proposed_policy",
+      "input_refs": [
+        "t",
+        "w=1"
+      ],
+      "calculation_ref": "sum(w*max(-t,0))",
+      "missing_reason": null,
+      "identification_uncertainty": "none",
+      "sampling_interval": null,
+      "calibration_uncertainty": "unreported",
+      "calibration_ref": null
+    },
+    "coordinate": {
+      "state": "point",
+      "point": 0.844,
+      "lower": 0.844,
+      "upper": 0.844,
+      "units": "fraction",
+      "origin": "proposed_policy",
+      "input_refs": [
+        "S",
+        "O"
+      ],
+      "calculation_ref": "S*(1-O)",
+      "missing_reason": null,
+      "identification_uncertainty": "none",
+      "sampling_interval": null,
+      "calibration_uncertainty": "unreported",
+      "calibration_ref": null
+    },
+    "projection_status": "point",
+    "calibration_status": "support_index_not_exact_function_probability",
+    "missing_input_paths": [],
+    "failures": [],
+    "duplicate_observation_refs": [
+      "string_bioy_bion_network_001.json#/34"
+    ],
+    "excluded_member_refs": [],
+    "dependency_question_refs": [],
+    "source_component_links": [
+      {
+        "source_ref": "string_bioy_bion_network_002.json",
+        "locator_ref": "#/0/nscore",
+        "component_paths": [
+          "native.score",
+          "t",
+          "supporting_total",
+          "coordinate"
+        ],
+        "coverage": "own_dated_native_result_read"
+      }
+    ],
+    "scenario_results": []
+  },
+  "separate_unknowns_not_used_as_zero": {
+    "historical_BioY_count_route": {
+      "C": {
+        "state": "bounded",
+        "point": null,
+        "lower": 0.0,
+        "upper": 1.0,
+        "units": "fraction",
+        "origin": "proposed_policy",
+        "input_refs": [],
+        "calculation_ref": "../a103_complete_deliverable_023/NUMERICAL_SHEET.md#the-numerical-sheet",
+        "missing_reason": "not_reported",
+        "identification_uncertainty": "outer_bounds",
+        "sampling_interval": null,
+        "calibration_uncertainty": "unreported",
+        "calibration_ref": null
+      },
+      "E": {
+        "state": "bounded",
+        "point": null,
+        "lower": -1.0,
+        "upper": 1.0,
+        "units": "signed_index",
+        "origin": "proposed_policy",
+        "input_refs": [],
+        "calculation_ref": "../a103_complete_deliverable_023/NUMERICAL_SHEET.md#the-numerical-sheet",
+        "missing_reason": "not_reported",
+        "identification_uncertainty": "outer_bounds",
+        "sampling_interval": null,
+        "calibration_uncertainty": "unreported",
+        "calibration_ref": null
+      },
+      "t": {
+        "state": "bounded",
+        "point": null,
+        "lower": -1.0,
+        "upper": 1.0,
+        "units": "signed_index",
+        "origin": "proposed_policy",
+        "input_refs": [],
+        "calculation_ref": "../a103_complete_deliverable_023/NUMERICAL_SHEET.md#the-numerical-sheet",
+        "missing_reason": "not_reported",
+        "identification_uncertainty": "outer_bounds",
+        "sampling_interval": null,
+        "calibration_uncertainty": "unreported",
+        "calibration_ref": null
+      },
+      "coordinate": {
+        "state": "bounded",
+        "point": null,
+        "lower": 0.0,
+        "upper": 1.0,
+        "units": "fraction",
+        "origin": "proposed_policy",
+        "input_refs": [],
+        "calculation_ref": "../a103_complete_deliverable_023/NUMERICAL_SHEET.md#the-numerical-sheet",
+        "missing_reason": "not_reported",
+        "identification_uncertainty": "outer_bounds",
+        "sampling_interval": null,
+        "calibration_uncertainty": "unreported",
+        "calibration_ref": null
+      }
+    },
+    "unmapped_supplied_target_coordinate": {
+      "state": "bounded",
+      "point": null,
+      "lower": 0.0,
+      "upper": 1.0,
+      "units": "fraction",
+      "origin": "proposed_policy",
+      "input_refs": [],
+      "calculation_ref": "../a103_complete_deliverable_023/NUMERICAL_SHEET.md#the-numerical-sheet",
+      "missing_reason": "unmapped_target",
+      "identification_uncertainty": "outer_bounds",
+      "sampling_interval": null,
+      "calibration_uncertainty": "unreported",
+      "calibration_ref": null
+    },
+    "biological_calibration_interval": null,
+    "historical_assayed_construct_sequence_identity": null
+  },
+  "scope": "Exact reference pair only; no supplied target material or assayed construct was mapped."
+}

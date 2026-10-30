@@ -1,0 +1,119 @@
+{
+  "status": "research arithmetic checks only; not reader implementation or axis completion",
+  "checks_passed": 150,
+  "nfn_source_derived_conditional": {
+    "reverse_signed_contrast": {
+      "exact_arithmetic": "143/145",
+      "nominal": 0.9862068965517241
+    },
+    "forward_signed_contrast": {
+      "exact_arithmetic": "99/101",
+      "nominal": 0.9801980198019802
+    },
+    "complete_reaction_compilation": {
+      "exact_arithmetic": "14399/14645",
+      "nominal": 0.9832024581768521,
+      "unconditional_bound_with_unconstrained_nuisance": [
+        -1,
+        1
+      ]
+    },
+    "broad_pathway_bound_conditional_on_nominal_stoichiometry": [
+      -0.3389325139410493,
+      0.9944008193922841
+    ],
+    "author_model_allocation_residual": 0.0,
+    "author_scenario_ATP_ceiling": [
+      1.25,
+      1.6666666666666667
+    ]
+  },
+  "ubi_source_parameter_derived_predictions": {
+    "supplied_precursor_fraction": 0.64,
+    "binomial_distributions": {
+      "2": [
+        0.1296,
+        0.4608,
+        0.4096
+      ],
+      "3": [
+        0.046656,
+        0.248832,
+        0.442368,
+        0.262144
+      ],
+      "4": [
+        0.01679616,
+        0.11943936,
+        0.31850496,
+        0.37748736,
+        0.16777216
+      ]
+    },
+    "three_oxygen_expected_count": 1.92,
+    "technical_sensitivity_only": 0.036
+  },
+  "ubi_plot_derived_restricted_statistic": {
+    "not_final_full_pattern_score": true,
+    "baseline_ratio": 0.2111111111111111,
+    "labeled_ratio": 3.875,
+    "m_model_predictions": {
+      "0": 0.2111111111111111,
+      "2": 3.7666666666666666,
+      "3": 5.544444444444444,
+      "4": 7.322222222222222
+    },
+    "scores_against_m": {
+      "0": {
+        "exact_arithmetic": "689280/1050481",
+        "nominal": 0.6561565606612589,
+        "conservative_extraction_and_technical_sensitivity_bounds_only": [
+          -0.1877297914198683,
+          1.0
+        ]
+      },
+      "2": {
+        "exact_arithmetic": "-179840/181361",
+        "nominal": -0.9916134119242836,
+        "conservative_extraction_and_technical_sensitivity_bounds_only": [
+          -1.0,
+          1.0
+        ]
+      },
+      "4": {
+        "exact_arithmetic": "589440/950641",
+        "nominal": 0.6200447908306079,
+        "conservative_extraction_and_technical_sensitivity_bounds_only": [
+          -0.714185513432178,
+          1.0
+        ]
+      }
+    },
+    "missing_uncertainty": [
+      "biological replicate values/covariance",
+      "intracellular donor enrichment",
+      "isotope-specific recovery",
+      "full baseline and labeled vectors"
+    ]
+  },
+  "synthetic_arithmetic_checks": {
+    "source_evidence": false,
+    "perfect_match": 1,
+    "perfect_alternative_match": -1,
+    "equal_error": 0,
+    "resource_z": 2.0,
+    "resource_coverage_f": 0.5,
+    "resource_signed_cell": 0.0,
+    "checked_properties": [
+      "unit scaling",
+      "claim/alternative sign reversal",
+      "zero-error handling",
+      "interval enclosure",
+      "replicate residual identity",
+      "duplicate portrayal no increase",
+      "signed bounds",
+      "conservation normalization",
+      "unknown bound retained"
+    ]
+  }
+}

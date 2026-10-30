@@ -1,0 +1,431 @@
+{
+  "scope": "Entirely synthetic research arithmetic. No adopted formula, papers, readers, prompts, production edits or scientific runs.",
+  "conditioning": {
+    "comparison": "Explicitly hypothetical nonnegative activity model versus fixed zero activity, at the supplied positive corrected activity and supplied fixed variance.",
+    "S": "a^2/(2V), evaluated only at this positive a; reversing ordered model comparison negates S.",
+    "B": "tanh(S/2), a bounded signed transform; not a probability or calibrated evidence strength.",
+    "uncertainty": "Six supplied additive variance terms on the corrected activity scale; covariance must already be accounted for or zero. Their experimental derivation is not supplied or validated here.",
+    "negative_activity": "The positive-a squared expression must not be applied as positive evidence after observing a negative activity under a nonnegative-activity alternative.",
+    "missing_evolution": "No five-family point estimate. Four-family point is conditional on measured families; five-family bounds use only the allowed missing-component range [0,1]. No midpoint, zero imputation or confidence coverage claim.",
+    "weights": "Equal family weights and shifted-harmonic shape 0.1 are unadopted, uncalibrated arithmetic proposals.",
+    "coordinate": "c=max(0,D) is an unadopted proposed nonnegative coordinate. Signed D is retained."
+  },
+  "inputs": {
+    "sample_rate": {
+      "value": 1.2,
+      "decimal": "1.2",
+      "units": "uM min^-1",
+      "exact_fraction": "6/5"
+    },
+    "blank_rate": {
+      "value": 0.2,
+      "decimal": "0.2",
+      "units": "uM min^-1",
+      "exact_fraction": "1/5"
+    },
+    "contaminant_rate": {
+      "value": 0.15,
+      "decimal": "0.15",
+      "units": "uM min^-1",
+      "exact_fraction": "3/20"
+    },
+    "recovery": {
+      "value": 1.0,
+      "decimal": "1",
+      "units": "dimensionless",
+      "exact_fraction": "1"
+    },
+    "protein": {
+      "value": 1.0,
+      "decimal": "1",
+      "units": "uM",
+      "exact_fraction": "1"
+    },
+    "condition_response": {
+      "value": 1.25,
+      "decimal": "1.25",
+      "units": "dimensionless",
+      "exact_fraction": "5/4"
+    },
+    "unit_convention": "uM rate/protein convention is declared only for this synthetic calculation; no source supplied physical concentration units.",
+    "variance_contributions": [
+      {
+        "value": 0.0256,
+        "decimal": "0.0256",
+        "units": "min^-2",
+        "exact_fraction": "16/625"
+      },
+      {
+        "value": 0.001156,
+        "decimal": "0.001156",
+        "units": "min^-2",
+        "exact_fraction": "289/250000"
+      },
+      {
+        "value": 0.00296225,
+        "decimal": "0.00296225",
+        "units": "min^-2",
+        "exact_fraction": "11849/4000000"
+      },
+      {
+        "value": 0.0144,
+        "decimal": "0.0144",
+        "units": "min^-2",
+        "exact_fraction": "9/625"
+      },
+      {
+        "value": 0.004624,
+        "decimal": "0.004624",
+        "units": "min^-2",
+        "exact_fraction": "289/62500"
+      },
+      {
+        "value": 0.0625,
+        "decimal": "0.0625",
+        "units": "min^-2",
+        "exact_fraction": "1/16"
+      }
+    ],
+    "sequence_pair_raw": 240,
+    "sequence_self_raw": [
+      300,
+      320
+    ],
+    "structure_comparison_scores": [
+      0.9,
+      0.85
+    ],
+    "site_numerator_denominator": [
+      8,
+      10
+    ],
+    "evolution_numerator_denominator": [
+      85,
+      100
+    ],
+    "system_difference_and_squared_scale": [
+      [
+        7,
+        100
+      ],
+      [
+        0.5,
+        1
+      ]
+    ],
+    "system_units": "Each squared difference must match its denominator's squared units; the specific dimensions and calibration are unspecified.",
+    "harmonic_shift": {
+      "value": 0.1,
+      "decimal": "0.1",
+      "units": "dimensionless",
+      "exact_fraction": "1/10"
+    },
+    "missing_evolution_input": null
+  },
+  "derived": {
+    "corrected_activity": {
+      "value": 0.68,
+      "decimal": "0.68",
+      "units": "min^-1",
+      "exact_fraction": "17/25"
+    },
+    "V": {
+      "value": 0.11124225,
+      "decimal": "0.11124225",
+      "units": "min^-2",
+      "exact_fraction": "444969/4000000"
+    },
+    "S": {
+      "value": 2.0783470309167607,
+      "decimal": "2.07834703091676049342763203728799084880070297031928066899042",
+      "units": "dimensionless",
+      "exact_fraction": "924800/444969"
+    },
+    "B": {
+      "value": 0.7775614860794028,
+      "decimal": "0.777561486079402784935204756095524538044506312620012272514904",
+      "units": "dimensionless"
+    },
+    "r_sequence": {
+      "value": 0.7741935483870968,
+      "decimal": "0.774193548387096774193548387096774193548387096774193548387097",
+      "units": "dimensionless",
+      "exact_fraction": "24/31"
+    },
+    "r_structure": {
+      "value": 0.85,
+      "decimal": "0.85",
+      "units": "dimensionless",
+      "exact_fraction": "17/20"
+    },
+    "r_site": {
+      "value": 0.8,
+      "decimal": "0.8",
+      "units": "dimensionless",
+      "exact_fraction": "4/5"
+    },
+    "r_evolution": {
+      "value": 0.85,
+      "decimal": "0.85",
+      "units": "dimensionless",
+      "exact_fraction": "17/20"
+    },
+    "system_squared_standardized_distance": {
+      "value": 0.74,
+      "decimal": "0.74",
+      "units": "dimensionless",
+      "exact_fraction": "37/50"
+    },
+    "r_system": {
+      "value": 0.6907343306373547,
+      "decimal": "0.690734330637354659554939964239451452854958864323392096694243",
+      "units": "dimensionless"
+    },
+    "activity_per_second": {
+      "value": 0.011333333333333334,
+      "decimal": "0.0113333333333333333333333333333333333333333333333333333333333",
+      "units": "s^-1",
+      "exact_fraction": "17/1500"
+    },
+    "variance_per_second_squared": {
+      "value": 3.0900625e-05,
+      "decimal": "0.000030900625",
+      "units": "s^-2",
+      "exact_fraction": "49441/1600000000"
+    }
+  },
+  "aggregates": {
+    "arithmetic": {
+      "full_five_family_R": {
+        "value": 0.7929855758048903,
+        "decimal": "0.792985575804890286749697670267245129280669192219517129016268",
+        "units": "dimensionless"
+      },
+      "full_five_family_D": {
+        "value": 0.6165950427623814,
+        "decimal": "0.616595042762381400564416242134102951058512564970385142952857",
+        "units": "dimensionless"
+      },
+      "full_five_family_c_unadopted": {
+        "value": 0.6165950427623814,
+        "decimal": "0.616595042762381400564416242134102951058512564970385142952857",
+        "units": "dimensionless"
+      },
+      "missing_evolution_conditional_four_family_R": {
+        "value": 0.7787319697561128,
+        "decimal": "0.778731969756112858437122087834056411600836490274396411270335",
+        "units": "dimensionless"
+      },
+      "missing_evolution_conditional_four_family_D": {
+        "value": 0.6055119876611037,
+        "decimal": "0.605511987661103658906789291997329724488683114781228820781654",
+        "units": "dimensionless"
+      },
+      "missing_evolution_conditional_four_family_c_unadopted": {
+        "value": 0.6055119876611037,
+        "decimal": "0.605511987661103658906789291997329724488683114781228820781654",
+        "units": "dimensionless"
+      },
+      "missing_evolution_full_five_family_R_bounds": [
+        {
+          "value": 0.6229855758048903,
+          "decimal": "0.622985575804890286749697670267245129280669192219517129016268",
+          "units": "dimensionless"
+        },
+        {
+          "value": 0.8229855758048903,
+          "decimal": "0.822985575804890286749697670267245129280669192219517129016268",
+          "units": "dimensionless"
+        }
+      ],
+      "missing_evolution_full_five_family_D_bounds": [
+        {
+          "value": 0.4844095901288829,
+          "decimal": "0.484409590128882927125431433597863779590946491824983056625323",
+          "units": "dimensionless"
+        },
+        {
+          "value": 0.6399218873447635,
+          "decimal": "0.639921887344763484112472384816968687199847754348985511128304",
+          "units": "dimensionless"
+        }
+      ],
+      "missing_evolution_full_five_family_c_bounds_unadopted": [
+        {
+          "value": 0.4844095901288829,
+          "decimal": "0.484409590128882927125431433597863779590946491824983056625323",
+          "units": "dimensionless"
+        },
+        {
+          "value": 0.6399218873447635,
+          "decimal": "0.639921887344763484112472384816968687199847754348985511128304",
+          "units": "dimensionless"
+        }
+      ],
+      "reversed_comparison_full_five_family_D": {
+        "value": -0.6165950427623814,
+        "decimal": "-0.616595042762381400564416242134102951058512564970385142952857",
+        "units": "dimensionless"
+      },
+      "reversed_comparison_full_five_family_c_unadopted": {
+        "value": 0.0,
+        "decimal": "0",
+        "units": "dimensionless"
+      },
+      "reversed_comparison_missing_evolution_D_bounds": [
+        {
+          "value": -0.6399218873447635,
+          "decimal": "-0.639921887344763484112472384816968687199847754348985511128304",
+          "units": "dimensionless"
+        },
+        {
+          "value": -0.4844095901288829,
+          "decimal": "-0.484409590128882927125431433597863779590946491824983056625323",
+          "units": "dimensionless"
+        }
+      ],
+      "reversed_comparison_missing_evolution_c_bounds_unadopted": [
+        {
+          "value": 0.0,
+          "decimal": "0",
+          "units": "dimensionless"
+        },
+        {
+          "value": 0.0,
+          "decimal": "0",
+          "units": "dimensionless"
+        }
+      ],
+      "rejected_extra_0_85_times_0_8_D_for_check_only": {
+        "value": 0.41928462907841935,
+        "decimal": "0.419284629078419352383803044651190006719788544179861897207942",
+        "units": "dimensionless"
+      }
+    },
+    "shifted_harmonic": {
+      "full_five_family_R": {
+        "value": 0.7888994826322313,
+        "decimal": "0.788899482632231361870407553355181440906143416772796594695373",
+        "units": "dimensionless"
+      },
+      "full_five_family_D": {
+        "value": 0.6134178540827898,
+        "decimal": "0.613417854082789825186699203116062401097188140215719283986660",
+        "units": "dimensionless"
+      },
+      "full_five_family_c_unadopted": {
+        "value": 0.6134178540827898,
+        "decimal": "0.613417854082789825186699203116062401097188140215719283986660",
+        "units": "dimensionless"
+      },
+      "missing_evolution_conditional_four_family_R": {
+        "value": 0.7748329702395943,
+        "decimal": "0.774832970239594268778697749667893227235040193213670028627800",
+        "units": "dimensionless"
+      },
+      "missing_evolution_conditional_four_family_D": {
+        "value": 0.6024802758028166,
+        "decimal": "0.602480275802816591365288038295786526692349718772375338033022",
+        "units": "dimensionless"
+      },
+      "missing_evolution_conditional_four_family_c_unadopted": {
+        "value": 0.6024802758028166,
+        "decimal": "0.602480275802816591365288038295786526692349718772375338033022",
+        "units": "dimensionless"
+      },
+      "missing_evolution_full_five_family_R_bounds": [
+        {
+          "value": 0.2431167026042544,
+          "decimal": "0.243116702604254374534355390957757589039476997385074972165551",
+          "units": "dimensionless"
+        },
+        {
+          "value": 0.8121770041752082,
+          "decimal": "0.812177004175208242844272560924623538198641674925637192620822",
+          "units": "dimensionless"
+        }
+      ],
+      "missing_evolution_full_five_family_D_bounds": [
+        {
+          "value": 0.18903818456768826,
+          "decimal": "0.189038184567688244635975679989191363454276896665478422277036",
+          "units": "dimensionless"
+        },
+        {
+          "value": 0.6315175583259922,
+          "decimal": "0.631517558325992241657284394419228571277112815460715352523969",
+          "units": "dimensionless"
+        }
+      ],
+      "missing_evolution_full_five_family_c_bounds_unadopted": [
+        {
+          "value": 0.18903818456768826,
+          "decimal": "0.189038184567688244635975679989191363454276896665478422277036",
+          "units": "dimensionless"
+        },
+        {
+          "value": 0.6315175583259922,
+          "decimal": "0.631517558325992241657284394419228571277112815460715352523969",
+          "units": "dimensionless"
+        }
+      ],
+      "reversed_comparison_full_five_family_D": {
+        "value": -0.6134178540827898,
+        "decimal": "-0.613417854082789825186699203116062401097188140215719283986660",
+        "units": "dimensionless"
+      },
+      "reversed_comparison_full_five_family_c_unadopted": {
+        "value": 0.0,
+        "decimal": "0",
+        "units": "dimensionless"
+      },
+      "reversed_comparison_missing_evolution_D_bounds": [
+        {
+          "value": -0.6315175583259922,
+          "decimal": "-0.631517558325992241657284394419228571277112815460715352523969",
+          "units": "dimensionless"
+        },
+        {
+          "value": -0.18903818456768826,
+          "decimal": "-0.189038184567688244635975679989191363454276896665478422277036",
+          "units": "dimensionless"
+        }
+      ],
+      "reversed_comparison_missing_evolution_c_bounds_unadopted": [
+        {
+          "value": 0.0,
+          "decimal": "0",
+          "units": "dimensionless"
+        },
+        {
+          "value": 0.0,
+          "decimal": "0",
+          "units": "dimensionless"
+        }
+      ],
+      "rejected_extra_0_85_times_0_8_D_for_check_only": {
+        "value": 0.41712414077629706,
+        "decimal": "0.417124140776297081126955458118922432746087935346689113110929",
+        "units": "dimensionless"
+      }
+    }
+  },
+  "checks": {
+    "exact_activity_and_variance": "passed",
+    "independent_float_recalculation": "passed",
+    "ordered_comparison_sign_reversal": "passed",
+    "units_invariance": "passed",
+    "all_equal_harmonic_identity_10_exact_cases": "passed",
+    "missing_component_bounds_and_no_imputation": "passed",
+    "duplicate_measurement_unique_count": 1,
+    "duplicate_measurement_unchanged_variance_and_S": "passed",
+    "each_original_variance_contribution_used_once": "passed",
+    "no_extra_0_85_attribution_or_0_8_similarity_multiplier": "passed"
+  },
+  "provenance": {
+    "paper_reads": 0,
+    "source_packets_read": 0,
+    "arithmetic_inputs_source": "Parent's bounded assignment for a105_joined_arithmetic_005; all numbers synthetic.",
+    "independence": "Checker written from supplied formulas without inspecting prior arithmetic implementations."
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "status": "research arithmetic; all calibration observations and target example are synthetic",
+  "published_derived_arithmetic": {
+    "TriA_identity": 0.9810526315789474,
+    "TriA_two_substrate_preference_lower_bound": 0.9999591853393739,
+    "FolE2_Zn_Mn_recipe_response_ratio": 0.14,
+    "FolE2_log_Zn_Mn_recipe_ratio": -1.9661128563728327,
+    "FolE2_saturation_50uM": 0.835142809420411,
+    "FolE2_saturation_10uM": 0.5032712632108707,
+    "FolE2_response_ratio_10_to_50uM": 0.6026170105686965,
+    "FolE2_turnover_50uM_per_s": 0.000918657090362452,
+    "FolE2_turnover_10uM_per_s": 0.0005535983895319579,
+    "FolE2_log_ratio_dKm_per_uM": -0.03362427013267885,
+    "FolE2_log_ratio_Km_variance_coefficient": 0.001130591541955359
+  },
+  "synthetic_calibration": [
+    {
+      "bit_score": 60.0,
+      "site_rmsd_A": 0.0,
+      "observed_contrast_differences": [
+        -0.41231056256176607,
+        -0.41231056256176607,
+        0.41231056256176607,
+        0.41231056256176607
+      ],
+      "known_measurement_variance": 0.01,
+      "ML_total_variance": 0.17,
+      "ML_residual_variance": 0.16
+    },
+    {
+      "bit_score": 120.0,
+      "site_rmsd_A": 0.0,
+      "observed_contrast_differences": [
+        -0.22360679774997896,
+        -0.22360679774997896,
+        0.22360679774997896,
+        0.22360679774997896
+      ],
+      "known_measurement_variance": 0.01,
+      "ML_total_variance": 0.05,
+      "ML_residual_variance": 0.04
+    },
+    {
+      "bit_score": 60.0,
+      "site_rmsd_A": 2.0,
+      "observed_contrast_differences": [
+        -0.6082762530298219,
+        -0.6082762530298219,
+        0.6082762530298219,
+        0.6082762530298219
+      ],
+      "known_measurement_variance": 0.01,
+      "ML_total_variance": 0.37,
+      "ML_residual_variance": 0.36
+    },
+    {
+      "bit_score": 120.0,
+      "site_rmsd_A": 2.0,
+      "observed_contrast_differences": [
+        -0.31622776601683794,
+        -0.31622776601683794,
+        0.31622776601683794,
+        0.31622776601683794
+      ],
+      "known_measurement_variance": 0.01,
+      "ML_total_variance": 0.09999999999999999,
+      "ML_residual_variance": 0.09
+    }
+  ],
+  "fitted_centered_variance_model": {
+    "mean_beta": 0.0,
+    "mean_beta_variance": 0.006479192418623815,
+    "gamma": [
+      -2.120263536200091,
+      -0.6931471805599453,
+      0.4054651081081644
+    ],
+    "gamma_information": [
+      [
+        6.5649791098495855,
+        -0.7649791098495857,
+        0.4617265146938765
+      ],
+      [
+        -0.7649791098495857,
+        6.5649791098495855,
+        0.21827348530612412
+      ],
+      [
+        0.4617265146938765,
+        0.21827348530612412,
+        6.5649791098495855
+      ]
+    ],
+    "gamma_covariance": [
+      [
+        0.1552879360640021,
+        0.01847835884641816,
+        -0.011536044824172692
+      ],
+      [
+        0.018478358846418165,
+        0.15469079701973612,
+        -0.006442800034845583
+      ],
+      [
+        -0.011536044824172692,
+        -0.0064428000348455815,
+        0.1533489708563322
+      ]
+    ]
+  },
+  "synthetic_prediction": {
+    "q_star": [
+      1.0,
+      0.0,
+      -0.5
+    ],
+    "intrinsic_bridge_variance_conditional": 0.09797958971132711,
+    "variance_of_log_bridge_variance": 0.20516122360225783,
+    "intrinsic_bridge_variance_Laplace_averaged": 0.10856399345331827,
+    "total_molecular_bridge_variance": 0.11504318587194208,
+    "source_log_specificity_contrast": 1.3862943611198906,
+    "source_variance": 0.04,
+    "source_signed_profile_log_likelihood": 24.02265069591007,
+    "system_log_response_difference": -0.5108256237659907,
+    "system_difference_variance": 0.0025,
+    "target_specificity_ratio": 2.4,
+    "target_log_specificity_contrast": 0.8754687373538999,
+    "target_variance_conditional_parameters": 0.14047958971132712,
+    "target_variance_Laplace_averaged": 0.15754318587194208,
+    "target_standard_uncertainty": 0.3969171020149448,
+    "target_standardized_statistic": 2.2056714938953084,
+    "target_signed_profile_log_likelihood": 2.4324933694911812,
+    "target_bounded_directional_index": 0.8385435244857183,
+    "retained_precision_diagnostic": 0.2538986359747335
+  },
+  "shared_measurement_cancellation": {
+    "source_variance": 0.04,
+    "measured_bridge_variance": 0.13,
+    "source_bridge_covariance": -0.04,
+    "target_variance_after_cancellation": 0.09000000000000001
+  }
+}

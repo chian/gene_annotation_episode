@@ -1,0 +1,170 @@
+{
+  "as_of_utc": "2026-10-21T21:40:37.477144+00:00",
+  "status": "Research snapshot: F04 archaeal coverage, F01/F03 IscR regulation and existing YeaG extension integrated. Three slots and all five named follow-up lanes retained; no implementation/design changes.",
+  "included_record_count": 149,
+  "unique_case_groups": 142,
+  "duplicate_records_linked": 7,
+  "coverage_counts": {
+    "abstract_or_summary": 8,
+    "relevant_primary_sections": 134
+  },
+  "preliminary_root_screens_excluded": 5,
+  "lane_counts": {
+    "sequence": {
+      "records": 17,
+      "included": 17,
+      "preliminary_excluded": 0
+    },
+    "context": {
+      "records": 12,
+      "included": 12,
+      "preliminary_excluded": 0
+    },
+    "cellular": {
+      "records": 19,
+      "included": 19,
+      "preliminary_excluded": 0
+    },
+    "structure": {
+      "records": 23,
+      "included": 23,
+      "preliminary_excluded": 0
+    },
+    "organism": {
+      "records": 24,
+      "included": 24,
+      "preliminary_excluded": 0
+    },
+    "root": {
+      "records": 12,
+      "included": 7,
+      "preliminary_excluded": 5
+    },
+    "chemistry": {
+      "records": 11,
+      "included": 11,
+      "preliminary_excluded": 0
+    },
+    "spatial": {
+      "records": 8,
+      "included": 8,
+      "preliminary_excluded": 0,
+      "files": [
+        "/tmp/episode-published-cases/spatial/cases.jsonl",
+        "/tmp/episode-published-cases/spatial/archaeal_processing/investigation.json"
+      ]
+    },
+    "replacement": {
+      "records": 14,
+      "included": 14,
+      "preliminary_excluded": 0
+    },
+    "specificity": {
+      "records": 8,
+      "included": 8,
+      "preliminary_excluded": 0
+    },
+    "causal": {
+      "records": 5,
+      "included": 5,
+      "preliminary_excluded": 0,
+      "files": [
+        "/tmp/episode-published-cases/causal/cases.jsonl",
+        "/tmp/episode-published-cases/causal/cas2/case_trace.json"
+      ]
+    },
+    "regulatory_specificity": {
+      "records": 1,
+      "included": 1,
+      "preliminary_excluded": 0,
+      "files": [
+        "/tmp/episode-published-cases/root/regulatory_specificity/case_trace.json"
+      ],
+      "source_collection_only": "Trace grouping, not a sixth follow-up lane or credit axis."
+    }
+  },
+  "counting_rules": [
+    "Seven known cross-lane duplicate records are linked by named case groups, including the YihS overlap; they are not independent case groups.",
+    "Different gene/function questions in a shared paper remain distinct. Complex members and follow-up papers retain lane grouping.",
+    "Related homolog investigations are linked in source records; they are not automatically independent replication.",
+    "Primary-section coverage is not reproduction, confirmation of every claim, or complete methods/supplement coverage. Exact scope stays attached to every record.",
+    "Seven abstract/summary structural cases and abstract-only PurT remain marked; five preliminary root screens are excluded. A case with relevant sections read may still have auxiliary sources examined only at abstract level; exact scope stays in its record.",
+    "Other lanes retain separate unexamined-lead files; those leads are not included.",
+    "Most indexed records identify a JSONL line. Integrated documents use record_format=json_document plus a JSON pointer identifying the single case record; trace extensions enrich an existing group without adding a counted case."
+  ],
+  "files": {
+    "index": "/tmp/episode-published-cases/case_index.jsonl",
+    "preliminary_screens": "/tmp/episode-published-cases/preliminary_root_screens.jsonl",
+    "follow_up_lanes": "/tmp/episode-published-cases/follow_up_lanes.md"
+  },
+  "trace_targets": [
+    "HemK",
+    "HisN (published reconstruction)",
+    "QueF (published reconstruction; two lanes linked)",
+    "CodA (published reconstruction)",
+    "OarX",
+    "archaeal shikimate kinase (published reconstruction)",
+    "YhcB",
+    "Y-complex",
+    "TM0936",
+    "MJ0577",
+    "Ttr",
+    "XoxF",
+    "Bcd/Etf",
+    "F420 precursor/partner specificity",
+    "EnvC",
+    "TsaE",
+    "MurJ/FtsW",
+    "DsbD/CcdA",
+    "QueH",
+    "FolM",
+    "YihU",
+    "SuhB",
+    "YigL (bounded)",
+    "Aquifex HFP (bounded)",
+    "BioZ",
+    "ThyX/ThyA",
+    "Cas1–Cas2",
+    "IscR",
+    "PibD/FlaK recognition and native assembly",
+    "Haloferax PilA processing versus assembly"
+  ],
+  "trace_limit": "Depth differs. Principal actual read-only sequence/data/record probes are distinct from author-reported experiments; no blind discovery or wet-lab reproduction claimed.",
+  "follow_up_lane_registry": [
+    {
+      "id": "F01",
+      "name": "Molecular function and specificity",
+      "records": "/tmp/episode-published-cases/specificity/cases.jsonl",
+      "additional_case_documents": [
+        "/tmp/episode-published-cases/root/regulatory_specificity/case_trace.json"
+      ]
+    },
+    {
+      "id": "F02",
+      "name": "Reaction feasibility and coupling",
+      "records": "/tmp/episode-published-cases/chemistry/cases.jsonl"
+    },
+    {
+      "id": "F03",
+      "name": "Causal roles within a system",
+      "records": "/tmp/episode-published-cases/causal/cases.jsonl",
+      "additional_case_documents": [
+        "/tmp/episode-published-cases/causal/cas2/case_trace.json",
+        "/tmp/episode-published-cases/root/regulatory_specificity/case_trace.json"
+      ]
+    },
+    {
+      "id": "F04",
+      "name": "Spatial access and topology",
+      "records": "/tmp/episode-published-cases/spatial/cases.jsonl",
+      "additional_case_documents": [
+        "/tmp/episode-published-cases/spatial/archaeal_processing/investigation.json"
+      ]
+    },
+    {
+      "id": "F05",
+      "name": "Functional replacement and conditional necessity",
+      "records": "/tmp/episode-published-cases/replacement/cases.jsonl"
+    }
+  ]
+}

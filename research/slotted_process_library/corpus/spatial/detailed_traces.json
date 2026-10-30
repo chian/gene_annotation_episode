@@ -1,0 +1,201 @@
+{
+  "lane_name": "Spatial access and topology",
+  "status": "Bounded follow-up research question suggested by existing cases; no proposed credit axis or slot taxonomy.",
+  "question": "Can protein, substrate and partners meet in the relevant compartment and membrane orientation, and does relocation distinguish the assigned job?",
+  "outcome_knowledge": "Published conclusions were visible before retrieval; these are retrospective reconstructions, not blinded annotation predictions.",
+  "observation_location": "cases.jsonl; routes below reference observation IDs to avoid duplicating the paper summaries.",
+  "contrasting_investigations": [
+    {
+      "trace_id": "trace_lipidII_transport_vs_polymerization",
+      "case_ids": [
+        "spatial_murj_lipidII_access",
+        "spatial_ftsw_bpbp_job"
+      ],
+      "contrast": "Different assays of substrate accessibility versus synthesis with a membrane-bound partner.",
+      "author_experimental_routes": [
+        {
+          "source_id": "murj2014",
+          "route": "Rapid selective inhibition plus an external cleavage reporter",
+          "observation_refs": [
+            "M1"
+          ],
+          "choice_revision": "A blocked pathway does not yet identify which side retains substrate.",
+          "next_question": "Is the negative reporter caused by inaccessible lipid II or failure to deliver active ColM?",
+          "reasoning_status": "Alternative explicitly stated by authors."
+        },
+        {
+          "source_id": "murj2014",
+          "route": "Remove the outer barrier, then disrupt the inner barrier",
+          "observation_refs": [
+            "M2"
+          ],
+          "choice_revision": "Inner-membrane integrity explains protection; ColM remains capable of cleavage.",
+          "next_question": "Does eliminating the competing SEDS machinery remove flipping?",
+          "reasoning_status": "Access-control logic reported; compact transition reconstructed."
+        },
+        {
+          "source_id": "murj2014",
+          "route": "Competing-candidate depletion",
+          "observation_refs": [
+            "M3"
+          ],
+          "choice_revision": "Robust flipping disfavors SEDS dependence, subject to incomplete depletion.",
+          "reasoning_status": "Author inference and caveat."
+        },
+        {
+          "source_id": "ftsw2011",
+          "route": "Purified reconstitution with two accessibility readouts and leakage controls",
+          "observation_refs": [
+            "F1"
+          ],
+          "choice_revision": "Preserve an in-vitro access result without making it identical to physiological job assignment.",
+          "reasoning_status": "Experiments reported; boundary reconstructed."
+        },
+        {
+          "source_id": "ftsw2019",
+          "route": "Add the cognate partner after negative FtsW-alone polymerization",
+          "observation_refs": [
+            "F2"
+          ],
+          "choice_revision": "A negative isolated-protein assay prompted a partner-requirement test.",
+          "next_question": "Is a compatible membrane interface required?",
+          "reasoning_status": "Author sequence of experiments reported."
+        },
+        {
+          "source_id": "ftsw2019",
+          "route": "Remove/swap the partner membrane helix and perturb the interface",
+          "observation_refs": [
+            "F3"
+          ],
+          "choice_revision": "Polymerase assignment depends on the assembled context; transport was not formally excluded.",
+          "reasoning_status": "Author experiments and explicit final caveat."
+        }
+      ],
+      "what_changed_annotation": "M1–M2 resolve membrane-sided substrate access; F2–F3 establish a catalytic job only after restoring the appropriate partner interface.",
+      "not_resolved": "No claim that the collected papers fully explain disagreement between labeled-lipid reconstitution and intact-cell assays. No new flux measurement."
+    },
+    {
+      "trace_id": "trace_redox_encounter_topology",
+      "case_ids": [
+        "spatial_dsbd_topology_revision",
+        "spatial_ccda_dsbd_acceptor_range"
+      ],
+      "contrast": "Access by catalytic residues and specificity of the partner encountered across the membrane.",
+      "author_experimental_routes": [
+        {
+          "source_id": "dsbd2003",
+          "route": "Redox alkylation followed by engineered cleavage",
+          "observation_refs": [
+            "D1"
+          ],
+          "choice_revision": "Disulfide formation makes the predicted opposite-face placement problematic.",
+          "next_question": "Which membrane face exposes each cysteine?",
+          "reasoning_status": "Authors explicitly revisited their earlier model."
+        },
+        {
+          "source_id": "dsbd2003",
+          "route": "Intact-versus-lysed spheroplast accessibility with compartment controls",
+          "observation_refs": [
+            "D2"
+          ],
+          "choice_revision": "Periplasmic inaccessibility supports cytoplasmic exposure, but a complementary orientation test is needed.",
+          "reasoning_status": "Author rationale and experiments."
+        },
+        {
+          "source_id": "dsbd2003",
+          "route": "Vesicle accessibility with protease marking of orientation",
+          "observation_refs": [
+            "D3"
+          ],
+          "choice_revision": "Two independent preparations support same-side accessibility.",
+          "next_question": "How can periplasmic γ reach the membrane-domain reactive site?",
+          "reasoning_status": "Author conclusion and unresolved question; no complete cycle established."
+        },
+        {
+          "source_id": "ccda2002",
+          "route": "Reciprocal rescue and donor/acceptor deletions",
+          "observation_refs": [
+            "C1"
+          ],
+          "choice_revision": "Shared cytochrome rescue motivates testing whether acceptor range also transfers.",
+          "next_question": "Can CcdA supply DsbC or replace the DsbD core within its domain relay?",
+          "reasoning_status": "Experiment order and questions reported."
+        },
+        {
+          "source_id": "ccda2002",
+          "route": "Measure acceptor redox states with alternate domain combinations",
+          "observation_refs": [
+            "C2"
+          ],
+          "choice_revision": "Shared transmembrane task does not imply interchangeable periplasmic routes.",
+          "reasoning_status": "Author observations; compact annotation boundary reconstructed."
+        }
+      ],
+      "what_changed_annotation": "D1–D3 revise a mechanistic topology claim without erasing the electron-transfer role. C1–C2 constrain functional transfer between related membrane cores.",
+      "not_resolved": "Static topology does not reveal the complete access cycle. Genetic requirements do not independently prove every direct electron-transfer pair."
+    }
+  ],
+  "live_read_only_probe": {
+    "probe_id": "murj_5T77_entity_audit",
+    "performed_utc_date": "2026-10-21",
+    "origin": "Our read-only deposited-record check; not an author experiment or independent structural solution.",
+    "initial_question": "Does the deposited MurJ structure contain lipid II that could locate the substrate-facing side directly?",
+    "requests": [
+      "https://data.rcsb.org/rest/v1/core/entry/5T77",
+      "https://data.rcsb.org/rest/v1/core/polymer_entity/5T77/1",
+      "https://data.rcsb.org/rest/v1/core/nonpolymer_entity/5T77/2",
+      "https://data.rcsb.org/rest/v1/core/nonpolymer_entity/5T77/3",
+      "https://data.rcsb.org/rest/v1/core/nonpolymer_entity/5T77/4",
+      "https://data.rcsb.org/rest/v1/core/nonpolymer_entity/5T77/5",
+      "https://data.rcsb.org/rest/v1/core/nonpolymer_entity/5T77/6",
+      "https://data.rcsb.org/rest/v1/core/nonpolymer_entity/5T77/7",
+      "https://data.rcsb.org/rest/v1/core/nonpolymer_entity/5T77/8"
+    ],
+    "observations": {
+      "experimental_method": "X-RAY DIFFRACTION",
+      "resolution_A": 2.0,
+      "source_organism": "Thermosipho africanus TCF52B",
+      "expression_host": "Escherichia coli",
+      "polymer_entity_count": 1,
+      "nonpolymer_comp_ids": [
+        "CL",
+        "ZN",
+        "CA",
+        "NA",
+        "1PE",
+        "OLB",
+        "OLC"
+      ],
+      "lipid_II_listed": false,
+      "primary_citation_doi": "10.1038/nsmb.3346"
+    },
+    "actual_followup_change": "The lipid-containing entry prompted component-identity queries; absence of deposited lipid II shifted the next check to whether the paper’s substrate placement was modeled. The publisher preview labels Fig. 3 as a model of binding. I retained the intact-cell barrier controls as evidence for sided access, and did not use this deposit as a substrate-bound E. coli transport structure.",
+    "inference_boundary": "The deposition supports identity/content and a structural context. Ligand absence does not refute binding or transport. No coordinates, density, membrane orientation or docking were independently reanalyzed.",
+    "primary_links": [
+      "https://www.rcsb.org/structure/5T77",
+      "https://www.nature.com/articles/nsmb.3346"
+    ],
+    "raw_paths": [
+      "raw/5T77-entry.json",
+      "raw/5T77-core-polymer_entity-5T77-1.json",
+      "raw/5T77-core-nonpolymer_entity-5T77-2.json",
+      "raw/5T77-core-nonpolymer_entity-5T77-3.json",
+      "raw/5T77-core-nonpolymer_entity-5T77-4.json",
+      "raw/5T77-core-nonpolymer_entity-5T77-5.json",
+      "raw/5T77-core-nonpolymer_entity-5T77-6.json",
+      "raw/5T77-core-nonpolymer_entity-5T77-7.json",
+      "raw/5T77-core-nonpolymer_entity-5T77-8.json",
+      "raw/MurJ-2017-preview.html"
+    ]
+  },
+  "additional_source_correction": {
+    "case_id": "spatial_trxa_relocation_role",
+    "observation_refs": [
+      "T1",
+      "T2",
+      "T3"
+    ],
+    "reconstructed_question_update": "Relocation first raised the reaction-direction question. The later corrected strain comparison requires asking which accessible redox partner maintains that direction, rather than assigning it from compartment alone.",
+    "scope": "Engineered variants; no claim of a natural export role."
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "version": "ordinary_native_timing_repair_verification_v1",
+  "captured_at": "2026-10-21T06:59:17.206984+00:00",
+  "source_sha256": {
+    "gene_annotation_episode/execution_recording.py": "b7bf9728421e4c51f586956f5dcc2f420c66950668be128524dada85a59057fd",
+    "gene_annotation_episode/native_lifecycle.py": "410a4cc28b526b3c1b38f4014cb99a69550116e63acbc0e1ae830d9c94cdf92d",
+    "gene_annotation_episode/local_jobs.py": "4f31bc4713353356fbbf31af4063e77e87aa1bd869be6c145d3f001a268c5452",
+    "gene_annotation_episode/run_statistics.py": "dd0150d047364f52712cfeaca9c9b79c4540ff99527b6865de26e3166bc622b8",
+    "gene_annotation_episode/resource_estimation.py": "94c84c72997a897f7fa16e618fd7d1abca1449518ee3a9d08017dff595abb7ce",
+    "gene_annotation_episode/ordinary_execution.py": "00fcfdd26f43ba350f6ee2df18e63775174cc13342887e5354fc495553411ef9",
+    "gene_annotation_episode/tools.py": "dc5a6f0895b988d632d4ba53677f2ddfa0fb7ea7d48717ac5edb5751399e37b0",
+    "gene_annotation_episode/tool_configuration.py": "b169211a4075382f6538ef23b22d147e143404b1cc08861ca9b3bf934bb50646",
+    "tests/test_execution_recording.py": "a2ab1de3d47ca58882e47fad727ff329641d26e50ad4fa12f8b6f15e53904fff",
+    "tests/test_ordinary_execution_statistics.py": "d38de244bcd97c5013484f8eb614d1cc0b2754a4f7bf77b8b8b7695910a49ae7",
+    "tests/test_sequence_worker_limits.py": "50dc6e009d30ad234a78b7aa327eb26c1ca55977c6f37b8c60ec423cdc5a1b22"
+  },
+  "checks": [
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_execution_recording.py tests/test_local_jobs.py tests/test_native_lifecycle.py tests/test_run_statistics.py tests/test_resource_estimation_contract.py --tb=short",
+      "passed": 46,
+      "skipped": 1,
+      "seconds": 41.94,
+      "skip": "explicit_opt_in_cgroup_oom_test"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_ordinary_execution_statistics.py --tb=short",
+      "passed": 3,
+      "skipped": 0,
+      "seconds": 5.05
+    }
+  ],
+  "coverage": [
+    "actual_common_native_completion_publisher",
+    "typed_physical_attempt_receipt",
+    "receipt_survives_blocking_cleanup_and_missing_or_busy_history",
+    "original_start_condition_preserved",
+    "idempotent_recovery_without_native_service_calls",
+    "conflicting_measurements_preserve_prior_record",
+    "recovery_storage_failure_does_not_block_native_result_or_available_history",
+    "actual_ordinary_pairwise_tool_binding",
+    "replayed_operation_starts_no_new_job",
+    "repeated_measurement_has_distinct_timing_and_same_scientific_content",
+    "qualified_scientific_finding_deduplication",
+    "future_compatible_duration_forecast",
+    "unknown_cpu_retained"
+  ],
+  "not_verified": [
+    "separate_monitoring_information_projection_for_ordinary_native_tools",
+    "ordinary_native_receipt_delivery_through_parent_forms",
+    "predecision_ordinary_tool_forecasts",
+    "all_other_ordinary_native_tools",
+    "configured_model_use_of_new_bindings",
+    "ordinary_native_interruption_recovery"
+  ],
+  "active_investigation_006_implementation_changed": false,
+  "investigation_007_prepared_or_launched": false
+}

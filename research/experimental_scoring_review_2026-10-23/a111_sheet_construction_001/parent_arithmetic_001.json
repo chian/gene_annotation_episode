@@ -1,0 +1,75 @@
+{
+  "purpose": "research arithmetic only",
+  "checks_passed": 20,
+  "checks": [
+    "atom row has all declared columns",
+    "two Mn sites",
+    "six oxygen neighbors at each deposited site",
+    "example distance predicates 6/6",
+    "example angle predicates 15/15",
+    "two ATP copies in validation",
+    "native ATP RSCCs",
+    "model occupancy one for both ATP copies",
+    "ATP-only mean proposed fit",
+    "invented A contribution",
+    "invented B contribution",
+    "invented calibrated nondetection contribution",
+    "invented second family",
+    "first family signed mean",
+    "axis signed example",
+    "positive minus negative reconstructs one contribution",
+    "axis lower enclosure",
+    "axis upper enclosure",
+    "nominal lies inside enclosure",
+    "current-roster mean halves with one added zero-target group"
+  ],
+  "source": {
+    "pdb": "1MJH",
+    "ATP_copy_mean_fit_proposal": 0.9225664999999998,
+    "Mn_sites": [
+      {
+        "chain": "A",
+        "oxygen_count": 6,
+        "distance_range_A": [
+          2.2554185864269196,
+          2.3823056059204486
+        ],
+        "distance_mean_A": 2.326082036148334,
+        "distance_2_to_2_6_passes": 6,
+        "angle_count": 15,
+        "angle_90_or_180_within_15_passes": 15
+      },
+      {
+        "chain": "B",
+        "oxygen_count": 6,
+        "distance_range_A": [
+          2.276454480107168,
+          2.3807078779220263
+        ],
+        "distance_mean_A": 2.3458608799753247,
+        "distance_2_to_2_6_passes": 6,
+        "angle_count": 15,
+        "angle_90_or_180_within_15_passes": 15
+      }
+    ]
+  },
+  "synthetic": {
+    "rows": [
+      0.3655125000000001,
+      0.2885625,
+      -0.4860000000000001,
+      0.19200000000000003
+    ],
+    "positive": 0.20501250000000004,
+    "negative": 0.08100000000000002,
+    "signed_axis": 0.12401250000000001,
+    "axis_bounds": [
+      0.04375448749999999,
+      0.23371100416666662
+    ]
+  },
+  "averaging_tradeoff": {
+    "one_group": 0.3655125000000001,
+    "added_zero_target_group": 0.18275625000000004
+  }
+}

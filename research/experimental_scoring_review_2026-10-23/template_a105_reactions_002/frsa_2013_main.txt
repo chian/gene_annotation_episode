@@ -1,0 +1,523 @@
+Biochemistry
+. Author manuscript; available in PMC: 2014 Mar 19.
+Published in final edited form as:
+Biochemistry. 2013 Mar 5;52(11):1842–1844. doi:
+10.1021/bi400093y
+Search in PMC
+Search in PubMed
+View in NLM Catalog
+Add to search
+Computational, Structural and Kinetic Evidence that
+Vibrio vulnificus
+FrsA is not a Cofactor-Independent Pyruvate Decarboxylase
+Whitney F Kellett
+Whitney F Kellett
+‡
+Department of Chemistry, University of Florida, Gainesville, FL 32611, United States
+Find articles by
+Whitney F Kellett
+‡,
+§
+,
+Elizabeth Brunk
+Elizabeth Brunk
+†
+Laboratory of Computational Chemistry and Biochemistry, Ecole Polytechnique Fédérale Lausanne, CH-1015 Lausanne, Switzerland
+Find articles by
+Elizabeth Brunk
+†
+,
+Bijoy J Desai
+Bijoy J Desai
+¶
+Departments of Biochemistry and Chemistry, Institute for Genomic Biology, University of Illinois at Urbana-Champaign, Urbana, Illinois 61801, United States
+Find articles by
+Bijoy J Desai
+¶
+,
+Alexander A Fedorov
+Alexander A Fedorov
+#
+Albert Einstein College of Medicine, 1300 Morris Park Avenue, Bronx, NY 10461, United States
+Find articles by
+Alexander A Fedorov
+#
+,
+Steven C Almo
+Steven C Almo
+#
+Albert Einstein College of Medicine, 1300 Morris Park Avenue, Bronx, NY 10461, United States
+Find articles by
+Steven C Almo
+#
+,
+John A Gerlt
+John A Gerlt
+¶
+Departments of Biochemistry and Chemistry, Institute for Genomic Biology, University of Illinois at Urbana-Champaign, Urbana, Illinois 61801, United States
+Find articles by
+John A Gerlt
+¶
+,
+Ursula Rothlisberger
+Ursula Rothlisberger
+†
+Laboratory of Computational Chemistry and Biochemistry, Ecole Polytechnique Fédérale Lausanne, CH-1015 Lausanne, Switzerland
+Find articles by
+Ursula Rothlisberger
+†,
+*
+,
+Nigel G J Richards
+Nigel G J Richards
+‡
+Department of Chemistry, University of Florida, Gainesville, FL 32611, United States
+Find articles by
+Nigel G J Richards
+‡,
+*,
+§
+Author information
+Article notes
+Copyright and License information
+‡
+Department of Chemistry, University of Florida, Gainesville, FL 32611, United States
+†
+Laboratory of Computational Chemistry and Biochemistry, Ecole Polytechnique Fédérale Lausanne, CH-1015 Lausanne, Switzerland
+¶
+Departments of Biochemistry and Chemistry, Institute for Genomic Biology, University of Illinois at Urbana-Champaign, Urbana, Illinois 61801, United States
+#
+Albert Einstein College of Medicine, 1300 Morris Park Avenue, Bronx, NY 10461, United States
+*
+Corresponding Authors:
+ursula.roethlisberger@epfl.ch
+;
+ngrichar@iupui.edu
+§
+Present Addresses
+Department of Chemistry & Chemical Biology, 402. N. Blackford. St., Indiana University Purdue University Indianapolis (IUPUI), Indianapolis, IN 46202, United States. Tel: (317) 274 6875.
+Issue date 2013 Mar 19.
+PMC Copyright notice
+PMCID: PMC3788570  NIHMSID: NIHMS452793  PMID:
+23452154
+The publisher's version of this article is available at
+Biochemistry
+Abstract
+The fermentation-respiration switch (FrsA) protein in
+Vibrio vulnificus
+was recently reported to catalyze the cofactor-independent decarboxylation of pyruvate. We now report QM/MM calculations that examine the energetics of C-C bond cleavage for a pyruvate molecule bound within the putative active site of FrsA. These calculations suggest that the barrier to C-C bond cleavage in the bound substrate is 28 kcal/mol, which is similar to that estimated for the uncatalyzed decarboxylation of pyruvate in water at 25 °C. In agreement with the theoretical predictions, no pyruvate decarboxylase activity was detected for recombinant FrsA protein that could be crystallized and structurally characterized. These results suggest that the functional annotation of FrsA as a cofactor-independent pyruvate decarboxylase is incorrect.
+A recent report identified the fermentation-respiration switch (FrsA) protein in
+Vibrio vulnificus
+to be a cofactor-independent pyruvate decarboxylase (
+Scheme 1
+).
+1
+Indeed, FrsA was reported to exhibit a
+k
+cat
+of approximately 1400 s
+−1
+at 37 °C, which is considerably greater than the value observed for the turnover number of the thiamin-dependent pyruvate decarboxylase from
+Saccharomyces cerevisiae
+.
+2
+This remarkable finding, if correct, would imply a significant shift from the current paradigm that Nature evolved the thiamin co-factor to generate resonance-stabilized acyl carbanion equivalents in
+all
+kingdoms of life when catalyzing the oxidative and non-oxidative decarboxylation of α-ketoacids, The X-ray crystal structure of unliganded FrsA,
+1
+which revealed a putative active site containing similar residues to those present in orotidine 5′-monophosphate decarboxylase (OMPDC),
+3
+–
+5
+provided a chemical rationale for the unexpected functional assignment of FrsA. Thus, it was argued that the catalytic power of the enzyme derived from electrostatic repulsion between pyruvate and the negatively charged side chain of Asp-203 in FrsA.
+1
+We were intrigued by these conclusions for two reasons. First, the three-dimensional fold of FrsA places it within the α,β-hydrolase superfamily of enzymes,
+6
+which are known to catalyze a diverse array of reactions
+7
+including the decarboxylation of β-ketoacids to yield methylketones.
+8
+OMPDC has a different fold, however, and this lack of structural similarity precludes any direct evolutionary relationship between the two enzymes.
+5
+Second, considerable evidence exists to suggest that stabilization of the carbanion intermediate formed in the OMPDC-catalyzed reaction is enabled by binding energy obtained from the extensive set of interactions of the protein and the sugar-phosphate moiety of the OMP substrate.
+9
+,
+10
+On the other hand, the energy released by the interaction of the methyl substituent with FrsA and the small number of hydrogen bonds to the carbonyl group seems insufficient for stabilization of any acyl anion intermediate formed during FrsA-catalyzed decarboxylation. We therefore used advanced computational methods to evaluate the energetics of the proposed mechanism for FrsA-catalyzed conversion of pyruvate to acetaldehyde, and also prepared and assayed recombinant
+Vibrio vulnificus
+FrsA to determine whether the reported activity could be reproduced.
+Scheme 1.
+Open in a new tab
+Cofactor-independent decarboxylation of pyruvate showing the putative acyl anion intermediate.
+The model of the FrsA/pyruvate complex used in our computational studies was based upon the “open” monomer in the crystal structure of the free enzyme (3MVE). After adding hydrogen atoms, the protein was placed in a box of TIP3P water molecules
+11
+containing two chloride ions to yield a neutral system. The resulting structure was energy minimized and equilibrated by molecular dynamics (MD) simulation. Parameters for pyruvate were obtained from the generalized AMBER force field
+12
+–
+14
+and the substrate was docked into the putative enzyme active site using GLIDE.
+15
+Energy minimization and MD equilibration of several model complexes with pyruvate in different orientations within the putative active site all gave the same final position for the substrate (
+Figure 1
+). The final equilibrated structure of the pyruvate/FrsA complex resembled the one proposed previously,
+1
+with pyruvate forming hydrogen bonds to the side chains of the backbone NH of Leu-202, and the side chains of Arg-272 and Tyr-316. In addition, three active site water molecules associated strongly with bound pyruvate throughout these MD simulations. This solvated model of the pyruvate/FrsA complex proved to be stable in an unconstrained NPT MD simulation over a period of 20 ns, and so was used in a series of QM/MM simulations of the C-C bond cleavage reaction employing an extension of the Car-Parinello MD (CPMD) methodology.
+16
+The QM region consisted of pyruvate, the Tyr-316 side chain up to the C
+β
+atom, and three active site waters. These atoms were described by the BLYP functional
+17
+,
+18
+and norm-conserving Martins-Trouiller pseudopoten-tials
+19
+with dispersion-corrected atom-centered dispersion potentials.
+20
+–
+22
+The remaining atoms, comprising the rest of the protein and explicit water molecules, were described by the classical AMBER99 force field.
+13
+,
+14
+The side chains of the hypothetical “catalytic residues, Asp-203 and Arg-272, were not included in the QM region because their putative electrostatic contributions to catalysis could be adequately represented using an MM description. In the CPMD calculations, the C1-C2 bond distance in pyruvate was chosen as the reaction coordinate; hence, constraints were employed at distances spanning 1.55 to 4.24 Å (in increments of 25 pm). The QM/MM system was equilibrated for 2 ps at constant pressure and temperature before performing constrained MD simulations for thermodynamic integration
+23
+,
+24
+in the NPT ensemble. Each system was sampled for 1 ps and the free energy profile was computed by integrating the constraint forces over the respective distances (
+Figure 2
+). These simulations gave an estimated free energy barrier of 28.1 ± 0.2 kcal/mol for the conversion of FrsA-bound pyruvate into acetaldehyde and CO
+2
+, corresponding to a first-order rate constant of 1.1 × 10
+−9
+s
+−1
+at 25 °C, assuming transition state theory and the absence of recrossing.
+25
+This value is very similar to the experimental estimate of the first order rate constant for the uncatalyzed decarboxylation of pyruvate, which has an upper limit of approximately 10
+−9
+s
+−1
+at this temperature and pH 7.
+26
+The calculated value should be considered as a lower bound given that BLYP is known to underestimate activation barriers, especially those for proton transfer steps.
+29
+For example, “benchmark” studies give an estimate of 23.0 ± 3.1 kcal/mol for the uncatalyzed reaction in water, which is consistent with that for the putative FrsA-catalyzed reaction when error estimation is taken into account. Certainly both computed barriers are inconsistent with the reported
+1
+turnover number of 1400 s
+−1
+for FrsA-catalyzed decarboxylation. Furthermore, the notion that the FrsA protein environment does not catalyze C-C bond cleavage is consistent with the fact that the QM/MM simulations suggest that a nearby tyrosine residue (Tyr-316) protonates pyruvate during the reaction mechanism (
+Figure 3
+and
+supporting information
+). This proton is subsequently transferred to a nearby water molecule at the transition state (C-C bond length of 3.1 Å). The resulting hydronium ion stabilizes the developing anionic charge on the central carbon atom when the C-C bond length in the substrate is elongated to 3.3 Å, and protonates the acyl anion, thereby giving acetaldehyde (
+Figure 3
+). Both the initial deprotonation of tyrosine by substrate and the subsequent proton transfer to water are counter-intuitive on the basis of standard pK
+a
+values, and calculations
+28
+do not support any large pK
+a
+shifts for either Tyr-316 or bound pyruvic acid (
+supporting information
+). These computational findings again a that FrsA is unlikely to be a cofactor independent decarboxylase.
+Figure 1.
+Open in a new tab
+Equilibrated model of pyruvate (orange) docked into the putative active site of FrsA. Pyruvate is hydrogen bonding to the backbone NH of Leu-202 and the side chains of Tyr-316 and Arg-272. Color scheme: C – cyan; H – white; N – blue; O – red. Active site water oxygen atoms are rendered as red spheres.
+Figure 2.
+Open in a new tab
+Free energy profile (kcal/mol) for cleavage of the C1-C2 bond in FrsA-bound pyruvate, as computed by thermodynamic integration. Error bars show the statistical sum of errors associated with the calculated free energy. The inset shows the active site configuration at the transition state (C-C = 3.3 Å) and the transfer of a proton from a hydronium ion to the acyl anion.
+Figure 3.
+Open in a new tab
+Molecular events observed during the cleavage of the C1-C2 bond in FrsA-bound pyruvate. (a) Protonation of the substrate carboxylate by the side chain of Tyr-316. (b) Deprotonation of the carboxylic acid via a nearby water molecule. (c) Formation of a hydronium ion during decarboxylation, which then acts to quench the developing anionic charge on C2 thereby yielding acetaldehyde (d). Atoms in the QM and MM regions are rendered as “ball-and-stick” and licorice representations, respectively. Proton transfers are shown using “dynamic bonds”. Color scheme for the QM atoms: C, grey; H, white; O, red.
+To evaluate the conclusions of the QM/MM and pK
+a
+shift calculations, the gene encoding
+Vibrio vulnificus
+FrsA was expressed in
+Escherichia coli
+and purified
+via
+two different procedures. In agreement with the computational results, neither preparation exhibited detectable pyruvate decarboxylase activity (acetaldehyde production or CO
+2
+evolution) in a coupled-enzyme spectro-photometric assay (alcohol dehydrogenase), by
+1
+H NMR spectroscopy, or by membrane-inlet mass spectrometry (
+supporting information
+).
+29
+The purified protein was, however, crystallized and its structure determined at 1.95 Å resolution; our structure was essentially identical to that reported earlier except an unknown ligand, modeled as hexanoate, was located in the putative active site (
+Figure 4
+). Given that α, β-hydrolase superfamily members are functionally diverse,
+8
+it is difficult to predict
+in vitro
+activity solely from sequence homology. However, these computational, structural, and experimental results do not support the claim that FrsA is a cofactor-independent pyruvate decarboxylase.
+Figure 4.
+Open in a new tab
+Close-up of the putative FrsA active site with unknown ligand density, approximated by hexanoate (rendered in PYMOL). The omit electron density map
+(F
+o
+−F
+c
+)
+is contoured at 3.5σ.
+Supplementary Material
+1_si_001
+NIHMS452793-supplement-1_si_001.pdf
+(382.2KB, pdf)
+Acknowledgments
+Funding Sources
+These studies were funded by the Swiss National Science Foundation (U.R.), the National Institutes of Health (DK061666 to N.G.J.R., and GM065155 to J.A.G. and S. C. A.), and a Center for Synchrotron Biosciences grant (P30-EB-009998) from the National Institute of Biomedical Imaging and Bioengineering. Use of the National Synchrotron Light Source, Brookhaven National Laboratory, was supported by the U.S. Department of Energy (contract DE-AC02-98CH1088). The University of Florida also provided an Alumni Fellowship (W.F.K.).
+We thank Richard Wolfenden for discussions concerning the rate of uncatalyzed pyruvate decarboxylation in water, and Sun-Shin Cha who provided the pQE-FrsA plasmid and useful information about FrsA protein production and assay methods. We are also grateful to the staff of NSLS beamline X29A for their help with diffraction data collection.
+Footnotes
+Notes
+The authors declare no competing financial interests.
+Supporting Information
+Procedures for the CMPD simulations and pK
+a
+estimates, details of the purification, assays, and details of the new X-ray crystal structure of FrsA (15 pages). This material is available free of charge via the Internet at
+http://pubs.acs.org
+.
+References
+1.
+Lee KJ, Jeong CS, An KJ, Lee HJ, park SJ, Seok YJ, Kim P, Lee JH, Lee KH, Cha SS. Nat Chem Biol. 2011;7:434–436. doi: 10.1038/nchembio.589.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+2.
+Sergienko EA, Jordan F. Biochemistry. 2001;40:7369–7381. doi: 10.1021/bi002856m.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+3.
+Miller BG, Wolfenden R. Annu Rev Biochem. 2002;71:847–885. doi: 10.1146/annurev.biochem.71.110601.135446.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+4.
+Chan KK, Wood BM, Fedorov AA, Fedorov EV, Imker HJ, Amyes TL, Richard JP, Almo SC, Gerlt JA. Biochemistry. 2009;48:5518–5531. doi: 10.1021/bi900623r.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+5.
+Wu N, Mo YR, Gao JL, Pai EF. Proc Natl Acad Sci, USA. 2000;97:2017–2022. doi: 10.1073/pnas.050417797.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+6.
+Ollis DL, Cheah E, Cygler M, Dijkstra B, Frolow F, Franken SM, Harel M, Remington SJ, Silman I, Schrag J, Sussman JL, Verschueren KHG, Goldman A. Prot Eng. 1992;5:197–211. doi: 10.1093/protein/5.3.197.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+7.
+Bugg TDH. Bioorg Chem. 2004;32:367–375. doi: 10.1016/j.bioorg.2004.05.005.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+8.
+Auldridge ME, Guo Y, Austin MB, Ramsey J, Fridman E, Pichersky E, Noel JP. Plant Cell. 2012;24:1596–1607. doi: 10.1105/tpc.111.093997.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+9.
+Goryanova B, Amyes TL, Gerlt JA, Richard JP. J Am Chem Soc. 2011;133:6545–6548. doi: 10.1021/ja201734z.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+10.
+Amyes TL, Richard JP, Tait JJ. J Am Chem Soc. 2005;127:15708–15709. doi: 10.1021/ja055493s.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+11.
+Jorgensen WL, Chandrasekhar J, Madura JD, Impey RW, Klein ML. J Chem Phys. 1983;79:926–935.
+[
+Google Scholar
+]
+12.
+Hornak V, Abel R, Okur A, Strockbine B, Roitberg A, Simmerling C. Proteins. 2006;61:712–725. doi: 10.1002/prot.21123.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+13.
+Wang J, Wolf RM, Caldwell JW, Kollman PA, Case DA. J Comput Chem. 2004;25:1157–1174. doi: 10.1002/jcc.20035.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+14.
+Wang J, Cieplak P, Kollman PA. J Comput Chem. 2000;21:1049–1074.
+[
+Google Scholar
+]
+15.
+Friesner RA, Banks JL, Murphy RB, Halgren TA, Klicic JJ, Mainz DT, Repasky MP, Knoll EH, Shaw DE, Shelley M, Perry JK, Francis P, Shenkin PS. J Med Chem. 2004;47:1739–1749. doi: 10.1021/jm0306430.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+16.
+Laio A, VandeVondele J, Rothlisberger U. J Chem Phys. 2002;116:6941–6948.
+[
+Google Scholar
+]
+17.
+Lee C, Yang W, Parr RG. Phys Rev B. 1988;37:785–789. doi: 10.1103/physrevb.37.785.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+18.
+Becke AD. Phys Rev A. 1988;38:3098–3100. doi: 10.1103/physreva.38.3098.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+19.
+Trouiller N, Martins JL. Phys Rev B. 1991;43:8861–8869. doi: 10.1103/physrevb.43.8861.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+20.
+Arey JS, Aeberhard PC, Lin IC, Rothlisberger U. J Phys Chem B. 2009;113:4726–4732. doi: 10.1021/jp810323m.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+21.
+Lin IC, Coutinho-Neto MD, Felsenheimer C, von Lilienfeld OA, Tavernelli I, Rothlisberger U. Phys Rev B. 2007;75:205131.
+[
+Google Scholar
+]
+22.
+von Lilienfeld OA, Tavernelli I, Rothlisberger U, Sebastiani D. Phys Rev Lett. 2007;93:153004. doi: 10.1103/PhysRevLett.93.153004.
+[
+DOI
+] [
+PubMed
+] [
+Google Scholar
+]
+23.
+Sprik M, Ciccotti G. J Chem Phys. 1998;109:1739–1749.
+[
+Google Scholar
+]
+24.
+Kirkwood JG. J Chem Phys. 1935;3:300–313.
+[
+Google Scholar
+]
+25.
+Himo F. Theor Chem Acc. 2006;116:232–240.
+[
+Google Scholar
+]
+26.
+Lewis CA, Jr, Wolfenden RV. Personal communication.
+27.
+Barone V, Orlandini C, Adamo C. Chem Phys Lett. 1994;231:295–300.
+[
+Google Scholar
+]
+28.
+Baker NA, Sept D, Joseph S, Holst MJ, McCammon JA. Proc Natl Acad Sci, USA. 2001;98:10037–10041. doi: 10.1073/pnas.181342398.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+29.
+Moral MEG, Tu CK, Richards NGJ, Silverman DN. Analyt Biochem. 2011;418:73–77. doi: 10.1016/j.ab.2011.06.031.
+[
+DOI
+] [
+PMC free article
+] [
+PubMed
+] [
+Google Scholar
+]
+Associated Data
+This section collects any data citations, data availability statements, or supplementary materials included in this article.
+Supplementary Materials
+1_si_001
+NIHMS452793-supplement-1_si_001.pdf
+(382.2KB, pdf)

@@ -1,0 +1,3 @@
+# Additive corrections for this owned research packet
+
+2026-10-23 local date: `calculate_research_cells_001.py` is preserved as an **unexecuted draft**, superseded by `calculate_research_cells_002.py`. Inspection before execution found the synthetic expected result inconsistent with its operands, and clarified that target/source sequence correspondence belongs in the expression operand, not outside the entire genomic-plus-expression coordinate. Revision 002 defines `s = G (0.5 + 0.5 H0 D R)`. H0 is a shared correspondence operand, not an independent evidence event. The complete synthetic result is 0.4722. Outputs named `_001` are the first actual outputs, produced by script revision 002. No historical biological measurement is changed.
